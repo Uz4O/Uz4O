@@ -4,11 +4,11 @@ struct HomeView: View {
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
     let onOpenAI: () -> Void
-    let onOpenCompatibility: () -> Void
+    let onOpenUpgrade: () -> Void
     let onOpenGuide: () -> Void
     let onOpenDIY: () -> Void
+    let onOpenConfigReview: () -> Void
     private let designWidth: CGFloat = 328
-    private let cardWidth: CGFloat = 156
 
     var body: some View {
         VStack(spacing: 12) {
@@ -34,30 +34,13 @@ struct HomeView: View {
 
                     VStack(spacing: 14) {
                         HStack(spacing: 14) {
-                            HomeFeatureCard(title: "配件兼容性检测", subtitle: "检测硬件兼容性", systemImage: "cpu", action: onOpenCompatibility)
+                            HomeFeatureCard(title: "升级建议", subtitle: "按预算给出升级顺序", systemImage: "arrow.up.forward.circle", action: onOpenUpgrade)
                             HomeFeatureCard(title: "装机指南", subtitle: "从入门到精通", systemImage: "book.closed", action: onOpenGuide)
                         }
 
                         HStack(spacing: 14) {
                             HomeFeatureCard(title: "自由 DIY 装机", subtitle: "自定义专属配置", systemImage: "screwdriver", action: onOpenDIY)
-
-                            SoftCard(radius: 18) {
-                                ZStack {
-                                    LinearGradient(
-                                        colors: [Color(red: 0.97, green: 0.98, blue: 1.0), Color(red: 0.90, green: 0.93, blue: 0.96)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-
-                                    Image("PCTower")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 132, height: 132)
-                                        .offset(x: 5, y: 2)
-                                }
-                                .frame(width: cardWidth, height: cardWidth)
-                                .clipShape(RoundedRectangle(cornerRadius: 18))
-                            }
+                            HomeFeatureCard(title: "配置单诊断", subtitle: "判断能不能买", systemImage: "doc.text.magnifyingglass", action: onOpenConfigReview)
                         }
                     }
                     .frame(width: designWidth)
@@ -194,5 +177,5 @@ private struct HomeFeatureCard: View {
 }
 
 #Preview {
-    HomeView(selectedTab: .constant(.home), onSelectTab: { _ in }, onOpenAI: {}, onOpenCompatibility: {}, onOpenGuide: {}, onOpenDIY: {})
+    HomeView(selectedTab: .constant(.home), onSelectTab: { _ in }, onOpenAI: {}, onOpenUpgrade: {}, onOpenGuide: {}, onOpenDIY: {}, onOpenConfigReview: {})
 }

@@ -65,14 +65,6 @@ enum RiskLevel {
     }
 }
 
-struct ToolItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let subtitle: String
-    let icon: String
-    let level: RiskLevel
-}
-
 enum AppMockData {
     static let parts = [
         PCPart(category: "CPU", model: "Intel Core i5-14600K", price: "¥ 1499", icon: "cpu", accent: .blue, reason: "游戏和生产力都够用，避免 i7 级别预算浪费。", alternative: "Ryzen 5 7500F"),
@@ -113,13 +105,6 @@ enum AppMockData {
         samplePlan,
         BuildPlan(name: "5000 办公剪辑配置", budget: "5000 档", totalPrice: "¥ 5188", useCase: "办公 / 轻剪辑", createdAt: "昨天 21:08", parts: parts, risks: samplePlan.risks),
         BuildPlan(name: "万元 4K 游戏配置", budget: "10000+ 档", totalPrice: "¥ 10880", useCase: "4K 游戏 / 直播", createdAt: "5 月 29 日", parts: parts, risks: samplePlan.risks)
-    ]
-
-    static let toolItems = [
-        ToolItem(title: "配置排雷", subtitle: "检查商家配置单是否有坑", icon: "exclamationmark.shield", level: .warning),
-        ToolItem(title: "高 U 低显检测", subtitle: "识别 CPU 和显卡预算失衡", icon: "cpu", level: .warning),
-        ToolItem(title: "电源功率检测", subtitle: "估算功耗和电源余量", icon: "bolt", level: .pass),
-        ToolItem(title: "CPU 主板检测", subtitle: "检查平台和供电是否匹配", icon: "memorychip", level: .pass)
     ]
 
     static let beginnerTopics = [

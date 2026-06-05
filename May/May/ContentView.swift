@@ -14,6 +14,8 @@ enum AppScreen: Hashable {
     case tools
     case builds
     case profile
+    case upgrade
+    case configReview
     case compatibility
     case guide
     case diy
@@ -41,14 +43,22 @@ struct ContentView: View {
                         selectedTab: $selectedTab,
                         onSelectTab: handleTabSelection,
                         onOpenAI: { openAI() },
-                        onOpenCompatibility: { selectedScreen = .compatibility },
+                        onOpenUpgrade: { selectedScreen = .upgrade },
                         onOpenGuide: { selectedScreen = .guide },
-                        onOpenDIY: { selectedScreen = .diy }
+                        onOpenDIY: { selectedScreen = .diy },
+                        onOpenConfigReview: { selectedScreen = .configReview }
                     )
                 case .aiBuild:
                     AIBuildView(onBack: { selectedScreen = .home }, onShowResult: { selectedScreen = .buildResult })
                 case .tools:
-                    ToolsView(selectedTab: $selectedTab, onSelectTab: handleTabSelection)
+                    ToolsView(
+                        selectedTab: $selectedTab,
+                        onSelectTab: handleTabSelection,
+                        onOpenCompatibility: {
+                            selectedTab = .tools
+                            selectedScreen = .compatibility
+                        }
+                    )
                 case .builds:
                     MyBuildsView(selectedTab: $selectedTab, onSelectTab: handleTabSelection, onOpenPlan: { selectedScreen = .buildResult }, onCreate: { openAI() })
                 case .profile:
@@ -56,8 +66,12 @@ struct ContentView: View {
                         selectedTab = .builds
                         selectedScreen = .builds
                     })
+                case .upgrade:
+                    UpgradePlanView(onBack: { selectedScreen = .home })
+                case .configReview:
+                    ConfigReviewView(onBack: { selectedScreen = .home })
                 case .compatibility:
-                    CompatibilityView(onBack: { selectedScreen = .home })
+                    CompatibilityView(onBack: { selectedScreen = .tools })
                 case .guide:
                     GuideView(onBack: { selectedScreen = .home })
                 case .diy:

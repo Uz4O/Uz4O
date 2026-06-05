@@ -155,7 +155,7 @@ private enum AIBuildStep: Int, CaseIterable {
         case .budget:
             return "先确定大方向，AI 会按预算控制配置。"
         case .scenario:
-            return "选择常玩的游戏和常用软件，配置会更贴近真实负载。"
+            return "选择常用场景。"
         case .purchase:
             return "选择你能接受的购买方式和主机外观。"
         case .hardware:
@@ -365,7 +365,7 @@ private struct GameCategory: Identifiable {
         GameCategory(
             id: "FPS",
             title: "FPS",
-            subtitle: "高帧率优先",
+            subtitle: "高帧率",
             symbol: "scope",
             examples: [
                 GameExample(title: "无畏契约", symbol: "scope"),
@@ -376,7 +376,7 @@ private struct GameCategory: Identifiable {
         GameCategory(
             id: "3A",
             title: "3A",
-            subtitle: "画质和显卡优先",
+            subtitle: "高画质",
             symbol: "gamecontroller",
             examples: [
                 GameExample(title: "黑神话：悟空", symbol: "flame"),
@@ -387,7 +387,7 @@ private struct GameCategory: Identifiable {
         GameCategory(
             id: "腾讯全家桶",
             title: "腾讯全家桶",
-            subtitle: "网游和多人开黑",
+            subtitle: "多人网游",
             symbol: "person.3",
             examples: [
                 GameExample(title: "英雄联盟", symbol: "shield"),
@@ -398,7 +398,7 @@ private struct GameCategory: Identifiable {
         GameCategory(
             id: "大战场",
             title: "大战场",
-            subtitle: "CPU 和内存压力更高",
+            subtitle: "大地图",
             symbol: "map",
             examples: [
                 GameExample(title: "战地 2042", symbol: "airplane"),
@@ -444,7 +444,7 @@ private struct ScenarioSelectionSection: View {
             if showsOfficeApps {
                 MultiChoiceChipSection(
                     title: "常用办公软件",
-                    subtitle: "可多选，剪辑、设计和建模软件会影响 CPU、内存和显卡选择。",
+                    subtitle: "可多选",
                     options: officeAppOptions,
                     selected: $selectedOfficeApps
                 )
@@ -469,10 +469,6 @@ private struct GameCategorySection: View {
                 Text("游戏类型")
                     .font(.appSubheadline)
                     .foregroundStyle(AppTheme.primaryText)
-                Text("可多选，AI 会按这些类型优先分配 CPU 和显卡预算。")
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
             }
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
@@ -584,7 +580,7 @@ private struct GameExamplesSheet: View {
                     .background(AppTheme.primaryText, in: RoundedRectangle(cornerRadius: 10))
             }
 
-            Text("这些只是代表游戏，AI 会按同类游戏的性能压力来估算配置。")
+            Text("代表游戏")
                 .font(.appBody)
                 .foregroundStyle(AppTheme.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
