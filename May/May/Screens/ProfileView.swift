@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct ProfileView: View {
+    let hardwareProfile: HardwareProfile
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
     let onOpenBuilds: () -> Void
+    let onOpenComputerProfile: () -> Void
 
     private let items = [
         ("我的配置单", "doc.text", "查看保存过的方案"),
+        ("我的电脑档案", "desktopcomputer", "查看或补充当前电脑配置"),
         ("我的反馈", "bubble.left.and.bubble.right", "查看和补充反馈"),
         ("公益说明", "heart", "无广告、不卖货、只帮你避坑"),
         ("价格透明说明", "tag", "参考价来自公开信息"),
@@ -28,9 +31,10 @@ struct ProfileView: View {
                         Text("AI 装机助手")
                             .font(.appHeadline)
                             .foregroundStyle(AppTheme.primaryText)
-                        Text("登录后可保存配置单和反馈")
+                        Text(hardwareProfile.wasSkipped ? "可在这里补充电脑档案" : hardwareProfile.summary)
                             .font(.appBody)
                             .foregroundStyle(AppTheme.secondaryText)
+                            .lineLimit(2)
                     }
 
                     Spacer()
@@ -42,7 +46,7 @@ struct ProfileView: View {
             SoftCard(radius: 18) {
                 VStack(spacing: 0) {
                     ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                        Button(action: item.0 == "我的配置单" ? onOpenBuilds : {}) {
+                        Button(action: action(for: item.0)) {
                             HStack(spacing: 12) {
                                 Image(systemName: item.1)
                                     .font(.system(size: 16, weight: .semibold))
@@ -83,8 +87,25 @@ struct ProfileView: View {
         .padding(.horizontal, AppTheme.screenPadding)
         .padding(.bottom, 14)
     }
+
+    private func action(for title: String) -> () -> Void {
+        switch title {
+        case "我的配置单":
+            return onOpenBuilds
+        case "我的电脑档案":
+            return onOpenComputerProfile
+        default:
+            return {}
+        }
+    }
 }
 
 #Preview {
-    ProfileView(selectedTab: .constant(.profile), onSelectTab: { _ in }, onOpenBuilds: {})
+    ProfileView(
+        hardwareProfile: .skipped,
+        selectedTab: .constant(.profile),
+        onSelectTab: { _ in },
+        onOpenBuilds: {},
+        onOpenComputerProfile: {}
+    )
 }

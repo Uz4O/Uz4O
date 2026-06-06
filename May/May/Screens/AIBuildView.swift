@@ -3,7 +3,7 @@ import SwiftUI
 struct AIBuildView: View {
     @State private var currentStep: AIBuildStep = .budget
     @State private var isChangingStep = false
-    @State private var budget: Double = 0.55
+    @State private var budget: Double = 6850
     @State private var selectedUseCase = "游戏"
     @State private var selectedGameCategories: Set<String> = ["FPS"]
     @State private var presentedGameCategory: GameCategory?
@@ -323,8 +323,12 @@ private struct WizardBottomBar: View {
 private struct BudgetSection: View {
     @Binding var budget: Double
 
+    private let minimumBudget: Double = 3000
+    private let maximumBudget: Double = 50000
+    private let budgetStep: Double = 100
+
     private var valueText: String {
-        let value = Int(3000 + budget * 7000)
+        let value = Int(budget)
         return "¥ \(value)"
     }
 
@@ -343,14 +347,47 @@ private struct BudgetSection: View {
             HStack {
                 Text("¥ 3000")
                 Spacer()
-                Text("10000+")
+                Text("¥ 50000")
             }
             .font(.system(size: 11, weight: .semibold))
             .foregroundStyle(AppTheme.secondaryText)
 
-            Slider(value: $budget)
-                .tint(AppTheme.primaryText)
+            HStack(spacing: 12) {
+                BudgetStepButton(systemName: "minus", isEnabled: budget > minimumBudget) {
+                    updateBudget(by: -budgetStep)
+                }
+
+                Slider(value: $budget, in: minimumBudget...maximumBudget, step: budgetStep)
+                    .tint(AppTheme.primaryText)
+
+                BudgetStepButton(systemName: "plus", isEnabled: budget < maximumBudget) {
+                    updateBudget(by: budgetStep)
+                }
+            }
         }
+    }
+
+    private func updateBudget(by amount: Double) {
+        budget = min(max(budget + amount, minimumBudget), maximumBudget)
+    }
+}
+
+private struct BudgetStepButton: View {
+    let systemName: String
+    let isEnabled: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(isEnabled ? AppTheme.primaryText : AppTheme.mutedText)
+                .frame(width: 34, height: 34)
+                .background(AppTheme.surface, in: Circle())
+                .overlay(Circle().stroke(AppTheme.border, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .disabled(!isEnabled)
     }
 }
 

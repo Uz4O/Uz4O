@@ -9,11 +9,13 @@ import SwiftUI
 
 enum AppScreen: Hashable {
     case login
+    case onboarding
     case home
     case aiBuild
     case tools
     case builds
     case profile
+    case computerProfile
     case upgrade
     case configReview
     case compatibility
@@ -25,6 +27,7 @@ enum AppScreen: Hashable {
 struct ContentView: View {
     @State private var selectedScreen: AppScreen = .login
     @State private var selectedTab: AppTab = .home
+    @State private var onboardingProfile: OnboardingProfile = .skipped
 
     var body: some View {
         ZStack {
@@ -35,18 +38,32 @@ struct ContentView: View {
                 switch selectedScreen {
                 case .login:
                     LoginView {
+                        selectedScreen = .onboarding
+                    }
+                case .onboarding:
+                    OnboardingChoiceView { profile in
+                        onboardingProfile = profile
                         selectedScreen = .home
                         selectedTab = .home
                     }
                 case .home:
                     HomeView(
+                        profile: onboardingProfile,
                         selectedTab: $selectedTab,
                         onSelectTab: handleTabSelection,
                         onOpenAI: { openAI() },
                         onOpenUpgrade: { selectedScreen = .upgrade },
                         onOpenGuide: { selectedScreen = .guide },
                         onOpenDIY: { selectedScreen = .diy },
-                        onOpenConfigReview: { selectedScreen = .configReview }
+                        onOpenConfigReview: { selectedScreen = .configReview },
+                        onOpenBuilds: {
+                            selectedTab = .builds
+                            selectedScreen = .builds
+                        },
+                        onOpenCompatibility: {
+                            selectedTab = .tools
+                            selectedScreen = .compatibility
+                        }
                     )
                 case .aiBuild:
                     AIBuildView(onBack: { selectedScreen = .home }, onShowResult: { selectedScreen = .buildResult })
@@ -62,10 +79,26 @@ struct ContentView: View {
                 case .builds:
                     MyBuildsView(selectedTab: $selectedTab, onSelectTab: handleTabSelection, onOpenPlan: { selectedScreen = .buildResult }, onCreate: { openAI() })
                 case .profile:
-                    ProfileView(selectedTab: $selectedTab, onSelectTab: handleTabSelection, onOpenBuilds: {
-                        selectedTab = .builds
-                        selectedScreen = .builds
-                    })
+                    ProfileView(
+                        hardwareProfile: onboardingProfile.hardwareProfile,
+                        selectedTab: $selectedTab,
+                        onSelectTab: handleTabSelection,
+                        onOpenBuilds: {
+                            selectedTab = .builds
+                            selectedScreen = .builds
+                        },
+                        onOpenComputerProfile: {
+                            selectedScreen = .computerProfile
+                        }
+                    )
+                case .computerProfile:
+                    ComputerProfileView(
+                        hardwareProfile: onboardingProfile.hardwareProfile,
+                        onBack: {
+                            selectedTab = .profile
+                            selectedScreen = .profile
+                        }
+                    )
                 case .upgrade:
                     UpgradePlanView(onBack: { selectedScreen = .home })
                 case .configReview:

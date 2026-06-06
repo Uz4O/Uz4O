@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    let profile: OnboardingProfile
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
     let onOpenAI: () -> Void
@@ -8,6 +9,8 @@ struct HomeView: View {
     let onOpenGuide: () -> Void
     let onOpenDIY: () -> Void
     let onOpenConfigReview: () -> Void
+    let onOpenBuilds: () -> Void
+    let onOpenCompatibility: () -> Void
     private let designWidth: CGFloat = 328
 
     var body: some View {
@@ -27,20 +30,18 @@ struct HomeView: View {
                     .padding(.top, 8)
 
                     Button(action: onOpenAI) {
-                        HeroBuildCard()
+                        HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
                     }
                     .buttonStyle(.plain)
                     .frame(width: designWidth)
 
                     VStack(spacing: 14) {
-                        HStack(spacing: 14) {
-                            HomeFeatureCard(title: "升级建议", subtitle: "按预算给出升级顺序", systemImage: "arrow.up.forward.circle", action: onOpenUpgrade)
-                            HomeFeatureCard(title: "装机指南", subtitle: "从入门到精通", systemImage: "book.closed", action: onOpenGuide)
-                        }
-
-                        HStack(spacing: 14) {
-                            HomeFeatureCard(title: "自由 DIY 装机", subtitle: "自定义专属配置", systemImage: "screwdriver", action: onOpenDIY)
-                            HomeFeatureCard(title: "配置单诊断", subtitle: "判断能不能买", systemImage: "doc.text.magnifyingglass", action: onOpenConfigReview)
+                        ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
+                            HStack(spacing: 14) {
+                                ForEach(row, id: \.kind) { feature in
+                                    HomeFeatureCard(feature: feature, action: action(for: feature.kind))
+                                }
+                            }
                         }
                     }
                     .frame(width: designWidth)
@@ -59,6 +60,31 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 14)
+    }
+
+    private var featureRows: [[HomeFeatureDisplay]] {
+        stride(from: 0, to: profile.homeFeatureOrder.count, by: 2).map { index in
+            Array(profile.homeFeatureOrder[index..<min(index + 2, profile.homeFeatureOrder.count)])
+        }
+    }
+
+    private func action(for kind: HomeFeatureKind) -> () -> Void {
+        switch kind {
+        case .aiBuild:
+            return onOpenAI
+        case .configReview:
+            return onOpenConfigReview
+        case .guide:
+            return onOpenGuide
+        case .builds:
+            return onOpenBuilds
+        case .upgrade:
+            return onOpenUpgrade
+        case .compatibility:
+            return onOpenCompatibility
+        case .diy:
+            return onOpenDIY
+        }
     }
 }
 
@@ -88,6 +114,9 @@ private struct BeginnerStrip: View {
 }
 
 private struct HeroBuildCard: View {
+    let subtitle: String
+    let buttonTitle: String
+
     var body: some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 22)
@@ -101,11 +130,13 @@ private struct HeroBuildCard: View {
                 Text("AI 一键装机")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundStyle(.white)
-                Text("智能推荐最佳配置方案")
+                Text(subtitle)
                     .font(.system(size: 13))
                     .foregroundStyle(.white.opacity(0.62))
+                    .lineLimit(2)
+                    .frame(width: 178, alignment: .leading)
                 HStack(spacing: 8) {
-                    Text("开始装机")
+                    Text(buttonTitle)
                     Image(systemName: "arrow.right")
                 }
                 .font(.system(size: 13, weight: .bold))
@@ -130,30 +161,30 @@ private struct HeroBuildCard: View {
 }
 
 private struct HomeFeatureCard: View {
-    let title: String
-    let subtitle: String
-    let systemImage: String
+    let feature: HomeFeatureDisplay
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             SoftCard(radius: 18) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(title)
+                    Text(feature.title)
                         .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(AppTheme.primaryText)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text(subtitle)
+                    Text(feature.subtitle)
                         .font(.system(size: 12))
                         .foregroundStyle(AppTheme.secondaryText)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
 
                     Spacer()
 
                     HStack {
                         Spacer()
-                        Image(systemName: systemImage)
+                        Image(systemName: feature.icon)
                             .font(.system(size: 24, weight: .semibold))
                             .foregroundStyle(AppTheme.primaryText)
                             .frame(width: 58, height: 58)
@@ -177,5 +208,16 @@ private struct HomeFeatureCard: View {
 }
 
 #Preview {
-    HomeView(selectedTab: .constant(.home), onSelectTab: { _ in }, onOpenAI: {}, onOpenUpgrade: {}, onOpenGuide: {}, onOpenDIY: {}, onOpenConfigReview: {})
+    HomeView(
+        profile: OnboardingProfile(preference: .balanced),
+        selectedTab: .constant(.home),
+        onSelectTab: { _ in },
+        onOpenAI: {},
+        onOpenUpgrade: {},
+        onOpenGuide: {},
+        onOpenDIY: {},
+        onOpenConfigReview: {},
+        onOpenBuilds: {},
+        onOpenCompatibility: {}
+    )
 }

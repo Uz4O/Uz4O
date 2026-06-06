@@ -1,0 +1,121 @@
+import Foundation
+
+@main
+struct OnboardingProfileRulesTests {
+    static func main() {
+        assertEqual(
+            OnboardingProfile.skipped.homeFeatureOrder.map(\.title),
+            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            "Skipped users should see the default home priority."
+        )
+
+        let balancedProfile = OnboardingProfile(preference: .balanced)
+        assertEqual(
+            balancedProfile.homeFeatureOrder.map(\.title),
+            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            "Onboarding should not segment users into different home priorities."
+        )
+
+        let performanceProfile = OnboardingProfile(preference: .performance)
+        assertEqual(
+            performanceProfile.homeFeatureOrder.map(\.title),
+            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            "Preference should not segment users into different home priorities."
+        )
+
+        let aestheticProfile = OnboardingProfile(preference: .aesthetic)
+        assertEqual(
+            aestheticProfile.homeFeatureOrder.map(\.title),
+            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            "Aesthetic preference should not change home functions."
+        )
+
+        assertEqual(
+            performanceProfile.homeHeroButtonTitle,
+            "开始装机",
+            "Hero button copy should not change based on preference."
+        )
+
+        assertEqual(
+            performanceProfile.homeHeroSubtitle,
+            "智能推荐最佳配置方案",
+            "Hero subtitle should keep the original copy."
+        )
+
+        let skippedHardwareProfile = OnboardingProfile(
+            preference: .balanced,
+            hardwareProfile: .skipped
+        )
+        assertEqual(
+            skippedHardwareProfile.hardwareProfile.wasSkipped,
+            true,
+            "Existing computer users can skip hardware profile collection before entering the app."
+        )
+
+        let completedHardwareProfile = OnboardingProfile(
+            preference: .balanced,
+            hardwareProfile: HardwareProfile(
+                cpu: HardwareProfileOptions.cpu[0],
+                gpu: HardwareProfileOptions.gpu[1],
+                memory: HardwareProfileOptions.memory[2],
+                storage: HardwareProfileOptions.storage[1],
+                powerSupply: HardwareProfileOptions.powerSupply[2]
+            )
+        )
+        assertEqual(
+            completedHardwareProfile.hardwareProfile.summary,
+            "CPU 不知道 · 显卡 RTX 4060 · 内存 32GB · 硬盘 1TB SSD · 电源 650W",
+            "Hardware profile summary should preserve user-entered config before entering the app."
+        )
+
+        assertEqual(
+            completedHardwareProfile.homeFeatureOrder.map(\.title),
+            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            "Hardware selections should not change home functions."
+        )
+
+        assertEqual(
+            HardwareProfileOptions.categories.map(\.title),
+            ["CPU", "显卡", "内存", "硬盘", "电源"],
+            "Hardware profile collection should only ask for component configuration."
+        )
+
+        assertEqual(
+            HardwareProfileOptions.categories.allSatisfy { $0.options.contains("不知道") },
+            true,
+            "Every hardware selection category should allow the user to choose unknown."
+        )
+
+        assertEqual(
+            ComputerOwnershipChoice.hasComputer.shouldCollectHardwareAfterPreference,
+            true,
+            "Users with an existing computer should choose their preference before hardware collection."
+        )
+
+        assertEqual(
+            ComputerOwnershipChoice.noComputer.shouldCollectHardwareAfterPreference,
+            false,
+            "Users without an existing computer should choose their preference and then enter the app."
+        )
+
+        assertEqual(
+            balancedProfile.preferenceLabel,
+            "均衡推荐",
+            "Balanced preference should keep the default label."
+        )
+
+        assertEqual(
+            performanceProfile.preferenceLabel,
+            "性能优先",
+            "Performance preference should use the chosen label."
+        )
+
+        print("OnboardingProfileRulesTests passed")
+    }
+
+    private static func assertEqual<T: Equatable>(_ actual: T, _ expected: T, _ message: String) {
+        guard actual == expected else {
+            fatalError("\(message)\nExpected: \(expected)\nActual: \(actual)")
+        }
+    }
+}
