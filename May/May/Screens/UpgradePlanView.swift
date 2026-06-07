@@ -7,7 +7,7 @@ struct UpgradePlanView: View {
 
     @State private var step = 1
     @State private var budget: Double = 3000
-    @State private var selectedNeeds: Set<String> = ["提升游戏性能"]
+    @State private var selectedNeed = "提升游戏性能"
     @State private var selectedGames: Set<String> = ["CS2", "PUBG", "无畏契约"]
     @State private var selectedPart: UpgradeCurrentPart?
 
@@ -40,9 +40,9 @@ struct UpgradePlanView: View {
                 case 2:
                     UpgradeBudgetStep(budget: $budget)
                 case 3:
-                    UpgradeNeedStep(needs: needs, selectedNeeds: $selectedNeeds)
-                case 4:
                     GameSelectionStep(games: games, selectedGames: $selectedGames)
+                case 4:
+                    UpgradeNeedStep(needs: needs, selectedNeed: $selectedNeed)
                 default:
                     UpgradeResultStep()
                 }
@@ -172,10 +172,14 @@ private struct UpgradeBudgetStep: View {
                     .font(.appSubheadline)
                     .foregroundStyle(AppTheme.primaryText)
 
-                VStack(spacing: 10) {
-                    UpgradeBudgetHintRow(title: "小修小补", subtitle: "适合补内存、换散热、加电源余量", range: "¥500-1500")
-                    UpgradeBudgetHintRow(title: "核心升级", subtitle: "适合优先换显卡或补齐主要短板", range: "¥1500-5000")
-                    UpgradeBudgetHintRow(title: "大幅升级", subtitle: "适合显卡、内存、电源一起升级", range: "¥5000+")
+                SoftCard(radius: 18) {
+                    VStack(spacing: 0) {
+                        UpgradeBudgetHintRow(title: "小修小补", subtitle: "适合补内存、换散热、加电源余量", range: "¥500-1500")
+                        BudgetHintDivider()
+                        UpgradeBudgetHintRow(title: "核心升级", subtitle: "适合优先换显卡或补齐主要短板", range: "¥1500-5000")
+                        BudgetHintDivider()
+                        UpgradeBudgetHintRow(title: "大幅升级", subtitle: "适合显卡、内存、电源一起升级", range: "¥5000+")
+                    }
                 }
             }
 
@@ -186,59 +190,28 @@ private struct UpgradeBudgetStep: View {
 
 private struct UpgradeNeedStep: View {
     let needs: [UpgradeNeed]
-    @Binding var selectedNeeds: Set<String>
+    @Binding var selectedNeed: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 18) {
             UpgradeStepTitle(
                 title: "选择升级需求",
-                subtitle: "选择这次最想改善的体验，可以多选。"
+                subtitle: "选择这次最想改善的体验，AI 会按这个方向安排升级顺序。"
             )
 
-            SoftCard(radius: 18) {
-                HStack(spacing: 12) {
-                    Image(systemName: "list.bullet.clipboard")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 34, height: 34)
-                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+            VStack(alignment: .leading, spacing: 12) {
+                Text("主要诉求")
+                    .font(.appHeadline)
+                    .foregroundStyle(AppTheme.primaryText)
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("按优先级选择")
-                            .font(.appSubheadline)
-                            .foregroundStyle(AppTheme.primaryText)
-                        Text("建议 1-3 项")
-                            .font(.appCaption)
-                            .foregroundStyle(AppTheme.secondaryText)
-                    }
-
-                    Spacer()
-
-                    Text("\(selectedNeeds.count) 项")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .padding(.horizontal, 10)
-                        .frame(height: 28)
-                        .background(AppTheme.softSurface, in: Capsule())
-                }
-                .padding(14)
+                UpgradeNeedSegmentedPicker(needs: needs, selectedNeed: $selectedNeed)
             }
 
-            ScrollView(showsIndicators: false) {
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                    ForEach(needs) { need in
-                        UpgradeNeedCard(
-                            need: need,
-                            isSelected: selectedNeeds.contains(need.title)
-                        ) {
-                            withAnimation(.spring(response: 0.32, dampingFraction: 0.84)) {
-                                toggle(need.title, in: &selectedNeeds)
-                            }
-                        }
-                    }
-                }
-                .padding(.bottom, 10)
+            if let need = needs.first(where: { $0.title == selectedNeed }) {
+                UpgradeNeedSummary(need: need)
             }
+
+            Spacer(minLength: 0)
         }
     }
 }
@@ -295,23 +268,17 @@ private struct UpgradeResultStep: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        Text("AI 生成升级建议")
-                            .font(.appTitle)
-                            .foregroundStyle(AppTheme.primaryText)
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text("AI 生成升级建议")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
 
-                        Text("智能推荐")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 5)
-                            .background(AppTheme.softSurface, in: Capsule())
-                    }
-
-                    Text("基于你的配置和需求生成")
-                        .font(.appBody)
-                        .foregroundStyle(AppTheme.secondaryText)
+                    Text("智能推荐")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .padding(.horizontal, 7)
+                        .frame(height: 22)
+                        .background(AppTheme.softSurface, in: Capsule())
                 }
 
                 UpgradeOverviewCard()
@@ -322,18 +289,14 @@ private struct UpgradeResultStep: View {
 
                 UpgradeRecommendationCard(
                     category: "显卡 (GPU)",
-                    current: "当前：NVIDIA GeForce GTX 1660 Super",
                     recommend: "推荐：NVIDIA GeForce RTX 4060",
-                    gain: "+65%",
                     price: "¥1899",
                     icon: "display"
                 )
 
                 UpgradeRecommendationCard(
                     category: "内存 (RAM)",
-                    current: "当前：16GB (8GB x 2) DDR4 2666MHz",
                     recommend: "推荐：32GB (16GB x 2) DDR4 3200MHz",
-                    gain: "+25%",
                     price: "¥399",
                     icon: "memorychip"
                 )
@@ -529,10 +492,10 @@ private struct UpgradeBudgetHintRow: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.appSubheadline)
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
                 Text(subtitle)
-                    .font(.appCaption)
+                    .font(.system(size: 10, weight: .regular))
                     .foregroundStyle(AppTheme.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -542,13 +505,21 @@ private struct UpgradeBudgetHintRow: View {
             Text(range)
                 .font(.system(size: 11, weight: .bold))
                 .foregroundStyle(AppTheme.primaryText)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 11)
                 .frame(height: 28)
                 .background(AppTheme.softSurface, in: Capsule())
         }
-        .padding(12)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
+        .padding(.horizontal, 14)
+        .frame(height: 72)
+    }
+}
+
+private struct BudgetHintDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(AppTheme.border.opacity(0.7))
+            .frame(height: 1)
+            .padding(.leading, 14)
     }
 }
 
@@ -597,10 +568,131 @@ private struct UpgradeNeedCard: View {
             .padding(11)
             .frame(maxWidth: .infinity, minHeight: 124, alignment: .topLeading)
             .background(isSelected ? AppTheme.softSurface : AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 1.3 : 1))
-            .shadow(color: isSelected ? Color.black.opacity(0.08) : Color.clear, radius: 12, x: 0, y: 7)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: 1.2)
+            )
         }
         .buttonStyle(.plain)
+    }
+}
+
+private struct UpgradeNeedSegmentedPicker: View {
+    let needs: [UpgradeNeed]
+    @Binding var selectedNeed: String
+    @Namespace private var selectionNamespace
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(needs) { need in
+                Button {
+                    withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
+                        selectedNeed = need.title
+                    }
+                } label: {
+                    ZStack {
+                        if selectedNeed == need.title {
+                            Capsule()
+                                .fill(AppTheme.surface)
+                                .matchedGeometryEffect(id: "upgradeNeedSelection", in: selectionNamespace)
+                                .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 10)
+                        }
+
+                        Text(need.title)
+                            .font(.system(size: 13, weight: selectedNeed == need.title ? .bold : .semibold))
+                            .foregroundStyle(selectedNeed == need.title ? AppTheme.primaryText : AppTheme.secondaryText)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.68)
+                            .padding(.horizontal, 5)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(4)
+        .background(AppTheme.softSurface, in: Capsule())
+        .overlay(
+            Capsule()
+                .stroke(AppTheme.border.opacity(0.75), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.04), radius: 14, x: 0, y: 8)
+    }
+}
+
+private struct UpgradeNeedSummary: View {
+    let need: UpgradeNeed
+
+    var body: some View {
+        SoftCard(radius: 18) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .top, spacing: 11) {
+                    Image(systemName: need.icon)
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 34, height: 34)
+                        .background(AppTheme.primaryText, in: RoundedRectangle(cornerRadius: 10))
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(need.tagline)
+                            .font(.appSubheadline)
+                            .foregroundStyle(AppTheme.primaryText)
+                        Text(need.subtitle)
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    Spacer(minLength: 0)
+                }
+
+                Rectangle()
+                    .fill(AppTheme.border.opacity(0.7))
+                    .frame(height: 1)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("升级侧重点")
+                        .font(.appSubheadline)
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    ForEach(need.focusItems, id: \.self) { item in
+                        HStack(alignment: .top, spacing: 9) {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(AppTheme.success)
+                                .frame(width: 18, height: 18)
+                                .background(AppTheme.success.opacity(0.12), in: Circle())
+                                .padding(.top, 1)
+
+                            Text(item)
+                                .font(.appCaption)
+                                .foregroundStyle(AppTheme.secondaryText)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "lightbulb")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .frame(width: 22, height: 22)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 7))
+
+                    Text(need.hint)
+                        .font(.appCaption)
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(11)
+                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .transition(.opacity.combined(with: .move(edge: .bottom)))
+        .animation(.easeInOut(duration: 0.18), value: need.title)
     }
 }
 
@@ -656,148 +748,81 @@ private struct ManualAddGameCard: View {
 
 private struct UpgradeOverviewCard: View {
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(LinearGradient(
-                    colors: [Color(red: 0.07, green: 0.10, blue: 0.15), Color(red: 0.13, green: 0.16, blue: 0.24)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
+        VStack(alignment: .leading, spacing: 12) {
+            Text("升级总览")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
 
-            HStack(spacing: 14) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("升级总览")
-                        .font(.appHeadline)
-                        .foregroundStyle(.white)
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("性能提升")
-                            .font(.appCaption)
-                            .foregroundStyle(.white.opacity(0.66))
-                        Text("42% ↑")
-                            .font(.system(size: 26, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("预计总花费")
-                            .font(.appCaption)
-                            .foregroundStyle(.white.opacity(0.66))
-                        Text("约 2896 元")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-
-                Spacer()
-
-                UpgradeRadarChart()
-                    .frame(width: 112, height: 112)
+            HStack(spacing: 10) {
+                UpgradeOverviewMetric(title: "提升", value: "42%")
+                UpgradeOverviewMetric(title: "预算", value: "¥2896")
+                UpgradeOverviewMetric(title: "优先", value: "显卡")
             }
-            .padding(16)
         }
-        .frame(height: 150)
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.07, green: 0.10, blue: 0.15), Color(red: 0.13, green: 0.16, blue: 0.24)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: 12)
+        )
     }
 }
 
-private struct UpgradeRadarChart: View {
-    private let labels = ["游戏性能", "生产力", "散热表现", "稳定性", "性价比"]
-    private let values: [CGFloat] = [0.86, 0.66, 0.52, 0.72, 0.61]
+private struct UpgradeOverviewMetric: View {
+    let title: String
+    let value: String
 
     var body: some View {
-        GeometryReader { proxy in
-            let size = min(proxy.size.width, proxy.size.height)
-            let center = CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2)
-            let radius = size * 0.34
-
-            ZStack {
-                ForEach(1...4, id: \.self) { ring in
-                    radarPath(center: center, radius: radius * CGFloat(ring) / 4, values: Array(repeating: 1, count: 5))
-                        .stroke(.white.opacity(0.18), lineWidth: 1)
-                }
-
-                ForEach(0..<5, id: \.self) { index in
-                    Path { path in
-                        path.move(to: center)
-                        path.addLine(to: point(index: index, total: 5, center: center, radius: radius))
-                    }
-                    .stroke(.white.opacity(0.14), lineWidth: 1)
-
-                    Text(labels[index])
-                        .font(.system(size: 8, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.68))
-                        .position(point(index: index, total: 5, center: center, radius: radius + 21))
-                }
-
-                radarPath(center: center, radius: radius, values: values)
-                    .fill(.white.opacity(0.22))
-
-                radarPath(center: center, radius: radius, values: values)
-                    .stroke(.white.opacity(0.72), lineWidth: 1.2)
-            }
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(.white.opacity(0.62))
+            Text(value)
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
         }
-    }
-
-    private func radarPath(center: CGPoint, radius: CGFloat, values: [CGFloat]) -> Path {
-        Path { path in
-            for index in values.indices {
-                let target = point(index: index, total: values.count, center: center, radius: radius * values[index])
-                if index == 0 {
-                    path.move(to: target)
-                } else {
-                    path.addLine(to: target)
-                }
-            }
-            path.closeSubpath()
-        }
-    }
-
-    private func point(index: Int, total: Int, center: CGPoint, radius: CGFloat) -> CGPoint {
-        let angle = -CGFloat.pi / 2 + 2 * CGFloat.pi * CGFloat(index) / CGFloat(total)
-        return CGPoint(x: center.x + cos(angle) * radius, y: center.y + sin(angle) * radius)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 9)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.white.opacity(0.10), in: RoundedRectangle(cornerRadius: 10))
     }
 }
 
 private struct UpgradeRecommendationCard: View {
     let category: String
-    let current: String
     let recommend: String
-    let gain: String
     let price: String
     let icon: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(AppTheme.primaryText)
+                .frame(width: 38, height: 38)
+                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(category)
-                    .font(.appSubheadline)
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                Text(current)
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
                 Text(recommend)
-                    .font(.appSubheadline)
+                    .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
             }
 
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 62, height: 34)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
+            Spacer()
 
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: 6) {
-                    Text(gain)
-                        .font(.appCaption)
-                        .foregroundStyle(AppTheme.secondaryText)
-                    Text("预计：\(price)")
-                        .font(.appSubheadline)
-                        .foregroundStyle(AppTheme.primaryText)
-                }
-            }
+            Text(price)
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(AppTheme.primaryText)
         }
         .padding(12)
         .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
@@ -807,29 +832,23 @@ private struct UpgradeRecommendationCard: View {
 
 private struct UpgradeTotalCard: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("总计预算")
-                .font(.appSubheadline)
-                .foregroundStyle(AppTheme.primaryText)
-
-            HStack(alignment: .lastTextBaseline) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("预计总花费")
-                        .font(.appCaption)
-                        .foregroundStyle(AppTheme.secondaryText)
-                    Text("价格仅供参考，实际以市场为准")
-                        .font(.system(size: 9))
-                        .foregroundStyle(AppTheme.mutedText)
-                }
-
-                Spacer()
-
-                Text("约 ¥ 2896")
-                    .font(.system(size: 22, weight: .bold))
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("总计预算")
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
+                Text("价格仅供参考")
+                    .font(.system(size: 9))
+                    .foregroundStyle(AppTheme.mutedText)
             }
+
+            Spacer()
+
+            Text("约 ¥ 2896")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(AppTheme.primaryText)
         }
-        .padding(16)
+        .padding(14)
         .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
     }
 }
@@ -904,13 +923,34 @@ private struct UpgradeNeed: Identifiable {
     let tagline: String
     let subtitle: String
     let icon: String
+    let focusItems: [String]
+    let hint: String
 
     static let samples = [
-        UpgradeNeed(title: "提升游戏性能", tagline: "帧率优先", subtitle: "让热门游戏更稳、更流畅。", icon: "gamecontroller"),
-        UpgradeNeed(title: "提升生产力", tagline: "效率优先", subtitle: "剪辑、渲染、建模更顺手。", icon: "scissors"),
-        UpgradeNeed(title: "提升整体流畅度", tagline: "日常优先", subtitle: "减少卡顿，打开软件更快。", icon: "speedometer"),
-        UpgradeNeed(title: "外观和灯光效果", tagline: "颜值优先", subtitle: "兼顾灯效、整洁和观感。", icon: "sparkles"),
-        UpgradeNeed(title: "其他需求", tagline: "自定义", subtitle: "后续按你的补充再细化。", icon: "ellipsis.message")
+        UpgradeNeed(
+            title: "提升游戏性能",
+            tagline: "帧率优先",
+            subtitle: "让热门游戏更稳、更流畅，预算优先投入显卡、CPU 和内存。",
+            icon: "gamecontroller",
+            focusItems: ["当前显卡是否是主要瓶颈", "CPU 是否会拖累游戏帧率", "电源和散热能不能支撑升级"],
+            hint: "适合更在意帧率和画质的用户，外观升级会放到性能短板之后。"
+        ),
+        UpgradeNeed(
+            title: "均衡提升",
+            tagline: "体验优先",
+            subtitle: "同时考虑游戏流畅度、日常响应速度、噪音和后续升级空间。",
+            icon: "scale.3d",
+            focusItems: ["哪些配件升级收益最高", "内存、硬盘和电源是否需要补齐", "是否保留后续升级空间"],
+            hint: "适合不知道先换什么的用户，系统会优先避开只提升单项、整体体验不明显的方案。"
+        ),
+        UpgradeNeed(
+            title: "外观和灯光效果",
+            tagline: "颜值优先",
+            subtitle: "兼顾机箱、灯效、散热和桌面观感，但避免牺牲关键性能。",
+            icon: "sparkles",
+            focusItems: ["机箱和散热是否适合展示", "是否需要白色、灯效或海景房风格", "颜值升级会不会压缩核心性能预算"],
+            hint: "适合更重视桌面观感的用户，AI 会提醒哪些外观升级不值得优先花钱。"
+        )
     ]
 }
 
