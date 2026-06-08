@@ -12,7 +12,6 @@ enum AppScreen: Hashable {
     case onboarding
     case home
     case aiBuild
-    case tools
     case community
     case builds
     case profile
@@ -66,21 +65,11 @@ struct ContentView: View {
                             selectedScreen = .builds
                         },
                         onOpenCompatibility: {
-                            selectedTab = .tools
                             selectedScreen = .compatibility
                         }
                     )
                 case .aiBuild:
                     AIBuildView(onBack: { selectedScreen = .home }, onShowResult: { selectedScreen = .buildResult })
-                case .tools:
-                    ToolsView(
-                        selectedTab: $selectedTab,
-                        onSelectTab: handleTabSelection,
-                        onOpenCompatibility: {
-                            selectedTab = .tools
-                            selectedScreen = .compatibility
-                        }
-                    )
                 case .community:
                     CommunityView(selectedTab: $selectedTab, onSelectTab: handleTabSelection)
                 case .builds:
@@ -111,7 +100,7 @@ struct ContentView: View {
                 case .configReview:
                     ConfigReviewView(onBack: { selectedScreen = .home })
                 case .compatibility:
-                    CompatibilityView(onBack: { selectedScreen = .tools })
+                    CompatibilityView(onBack: { selectedScreen = .home })
                 case .guide:
                     GuideView(onBack: { selectedScreen = .home })
                 case .diy:
@@ -134,8 +123,6 @@ struct ContentView: View {
         switch tab {
         case .home:
             selectedScreen = .home
-        case .tools:
-            selectedScreen = .tools
         case .community:
             selectedScreen = .community
         case .builds:

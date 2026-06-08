@@ -5,8 +5,8 @@ struct CommunityContentRulesTests {
     static func main() {
         assertEqual(
             AppTab.allCases.map(\.rawValue),
-            ["首页", "工具", "社区", "配置", "我的"],
-            "Bottom navigation should replace AI with Community without adding a sixth tab."
+            ["首页", "社区", "配置", "我的"],
+            "Bottom navigation should remove Tools and keep Community as a primary tab."
         )
 
         assertEqual(

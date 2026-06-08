@@ -148,7 +148,6 @@ struct PartRow: View {
 
 enum AppTab: String, CaseIterable {
     case home = "首页"
-    case tools = "工具"
     case community = "社区"
     case builds = "配置"
     case profile = "我的"
@@ -157,8 +156,6 @@ enum AppTab: String, CaseIterable {
         switch self {
         case .home:
             return "house.fill"
-        case .tools:
-            return "wrench.and.screwdriver"
         case .community:
             return "bubble.left.and.bubble.right.fill"
         case .builds:
