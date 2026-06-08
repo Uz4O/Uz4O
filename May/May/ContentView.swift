@@ -13,6 +13,7 @@ enum AppScreen: Hashable {
     case home
     case aiBuild
     case tools
+    case community
     case builds
     case profile
     case computerProfile
@@ -56,6 +57,10 @@ struct ContentView: View {
                         onOpenGuide: { selectedScreen = .guide },
                         onOpenDIY: { selectedScreen = .diy },
                         onOpenConfigReview: { selectedScreen = .configReview },
+                        onOpenCommunity: {
+                            selectedTab = .community
+                            selectedScreen = .community
+                        },
                         onOpenBuilds: {
                             selectedTab = .builds
                             selectedScreen = .builds
@@ -76,6 +81,8 @@ struct ContentView: View {
                             selectedScreen = .compatibility
                         }
                     )
+                case .community:
+                    CommunityView(selectedTab: $selectedTab, onSelectTab: handleTabSelection)
                 case .builds:
                     MyBuildsView(selectedTab: $selectedTab, onSelectTab: handleTabSelection, onOpenPlan: { selectedScreen = .buildResult }, onCreate: { openAI() })
                 case .profile:
@@ -119,7 +126,6 @@ struct ContentView: View {
     }
 
     private func openAI() {
-        selectedTab = .ai
         selectedScreen = .aiBuild
     }
 
@@ -130,8 +136,8 @@ struct ContentView: View {
             selectedScreen = .home
         case .tools:
             selectedScreen = .tools
-        case .ai:
-            selectedScreen = .aiBuild
+        case .community:
+            selectedScreen = .community
         case .builds:
             selectedScreen = .builds
         case .profile:

@@ -149,7 +149,7 @@ struct PartRow: View {
 enum AppTab: String, CaseIterable {
     case home = "首页"
     case tools = "工具"
-    case ai = "AI"
+    case community = "社区"
     case builds = "配置"
     case profile = "我的"
 
@@ -159,8 +159,8 @@ enum AppTab: String, CaseIterable {
             return "house.fill"
         case .tools:
             return "wrench.and.screwdriver"
-        case .ai:
-            return "sparkles"
+        case .community:
+            return "bubble.left.and.bubble.right.fill"
         case .builds:
             return "doc.text"
         case .profile:
@@ -182,19 +182,12 @@ struct BottomTabBar: View {
                 } label: {
                     VStack(spacing: 4) {
                         Image(systemName: tab.icon)
-                            .font(.system(size: tab == .ai ? 20 : 17, weight: .semibold))
-                            .frame(width: tab == .ai ? 34 : 24, height: tab == .ai ? 24 : 20)
+                            .font(.system(size: 17, weight: .semibold))
+                            .frame(width: 24, height: 20)
                         Text(tab.rawValue)
                             .font(.system(size: 10, weight: .medium))
                     }
-                    .padding(.vertical, tab == .ai ? 8 : 0)
-                    .padding(.horizontal, tab == .ai ? 10 : 0)
-                    .background(
-                        tab == .ai
-                        ? AppTheme.softSurface
-                        : Color.clear,
-                        in: Capsule()
-                    )
+                    .padding(.vertical, 0)
                     .foregroundStyle(selectedTab == tab ? AppTheme.primaryText : AppTheme.secondaryText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)

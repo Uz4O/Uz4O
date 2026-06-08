@@ -5,28 +5,28 @@ struct OnboardingProfileRulesTests {
     static func main() {
         assertEqual(
             OnboardingProfile.skipped.homeFeatureOrder.map(\.title),
-            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Skipped users should see the default home priority."
         )
 
         let balancedProfile = OnboardingProfile(preference: .balanced)
         assertEqual(
             balancedProfile.homeFeatureOrder.map(\.title),
-            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Onboarding should not segment users into different home priorities."
         )
 
         let performanceProfile = OnboardingProfile(preference: .performance)
         assertEqual(
             performanceProfile.homeFeatureOrder.map(\.title),
-            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Preference should not segment users into different home priorities."
         )
 
         let aestheticProfile = OnboardingProfile(preference: .aesthetic)
         assertEqual(
             aestheticProfile.homeFeatureOrder.map(\.title),
-            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Aesthetic preference should not change home functions."
         )
 
@@ -70,7 +70,7 @@ struct OnboardingProfileRulesTests {
 
         assertEqual(
             completedHardwareProfile.homeFeatureOrder.map(\.title),
-            ["自由 DIY 装机", "配置排雷", "升级建议", "装机指南"],
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Hardware selections should not change home functions."
         )
 

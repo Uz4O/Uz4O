@@ -172,9 +172,9 @@ private extension HomeFeatureDisplay {
 
     static let diy = HomeFeatureDisplay(
         kind: .diy,
-        title: "自由 DIY 装机",
-        subtitle: "自定义专属配置",
-        icon: "screwdriver"
+        title: "游戏性能测试",
+        subtitle: "测测游戏帧率表现",
+        icon: "gamecontroller"
     )
 
     static let configReview = HomeFeatureDisplay(

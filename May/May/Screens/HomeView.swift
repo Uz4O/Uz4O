@@ -9,57 +9,93 @@ struct HomeView: View {
     let onOpenGuide: () -> Void
     let onOpenDIY: () -> Void
     let onOpenConfigReview: () -> Void
+    let onOpenCommunity: () -> Void
     let onOpenBuilds: () -> Void
     let onOpenCompatibility: () -> Void
     private let designWidth: CGFloat = 328
+    @State private var visibleCommunityPostIDs: Set<String> = []
+    @State private var isComposerPresented = false
 
     var body: some View {
-        VStack(spacing: 12) {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 14) {
-                    HStack {
-                        Text("AI 装机助手")
-                            .font(.system(size: 23, weight: .bold))
-                            .foregroundStyle(AppTheme.primaryText)
-                        Spacer()
-                        Image(systemName: "bell")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(AppTheme.primaryText)
-                    }
-                    .frame(width: designWidth)
-                    .padding(.top, 8)
-
-                    Button(action: onOpenAI) {
-                        HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
-                    }
-                    .buttonStyle(.plain)
-                    .frame(width: designWidth)
-
+        ZStack(alignment: .bottomTrailing) {
+            VStack(spacing: 12) {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: 14) {
-                        ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
-                            HStack(spacing: 14) {
-                                ForEach(row, id: \.kind) { feature in
-                                    HomeFeatureCard(feature: feature, action: action(for: feature.kind))
+                        HStack {
+                            Text("AI 装机助手")
+                                .font(.system(size: 23, weight: .bold))
+                                .foregroundStyle(AppTheme.primaryText)
+                            Spacer()
+                            Image(systemName: "bell")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(AppTheme.primaryText)
+                        }
+                        .frame(width: designWidth)
+                        .padding(.top, 8)
+
+                        Button(action: onOpenAI) {
+                            HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
+                        }
+                        .buttonStyle(.plain)
+                        .frame(width: designWidth)
+
+                        VStack(spacing: 14) {
+                            ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
+                                HStack(spacing: 14) {
+                                    ForEach(row, id: \.kind) { feature in
+                                        HomeFeatureCard(feature: feature, action: action(for: feature.kind))
+                                    }
                                 }
                             }
                         }
-                    }
-                    .frame(width: designWidth)
-
-                    BeginnerStrip()
                         .frame(width: designWidth)
-                        .padding(.bottom, 8)
+
+                        HomeCommunitySection(
+                            onOpenCommunity: onOpenCommunity,
+                            onPostVisibilityChanged: updateCommunityPostVisibility
+                        )
+                            .frame(width: designWidth)
+
+                        BeginnerStrip()
+                            .frame(width: designWidth)
+                            .padding(.bottom, 8)
+                    }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+
+                Spacer(minLength: 0)
+
+                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
+                    .frame(width: designWidth)
             }
 
-            Spacer(minLength: 0)
-
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
-                .frame(width: designWidth)
+            if showsCommunityFloatingButton {
+                HomeCommunityFloatingButton {
+                    isComposerPresented = true
+                }
+                    .padding(.trailing, AppTheme.screenPadding + 8)
+                    .padding(.bottom, 88)
+                    .transition(.opacity.combined(with: .scale(scale: 0.92)))
+            }
         }
         .frame(maxWidth: .infinity)
         .padding(.bottom, 14)
+        .animation(.easeInOut(duration: 0.16), value: showsCommunityFloatingButton)
+        .sheet(isPresented: $isComposerPresented) {
+            CommunityComposerView()
+        }
+    }
+
+    private var showsCommunityFloatingButton: Bool {
+        visibleCommunityPostIDs.contains { $0 != CommunityPost.featuredFeed.first?.id }
+    }
+
+    private func updateCommunityPostVisibility(id: String, isVisible: Bool) {
+        if isVisible {
+            visibleCommunityPostIDs.insert(id)
+        } else {
+            visibleCommunityPostIDs.remove(id)
+        }
     }
 
     private var featureRows: [[HomeFeatureDisplay]] {
@@ -85,6 +121,78 @@ struct HomeView: View {
         case .diy:
             return onOpenDIY
         }
+    }
+}
+
+private struct HomeCommunitySection: View {
+    let onOpenCommunity: () -> Void
+    let onPostVisibilityChanged: (String, Bool) -> Void
+
+    private let posts = CommunityPost.featuredFeed
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("硬件讨论社区")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text("交流心得 · 分享配置 · 解决问题")
+                        .font(.system(size: 11))
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
+
+                Spacer()
+
+                Button(action: onOpenCommunity) {
+                    HStack(spacing: 4) {
+                        Text("进入社区")
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                }
+                .buttonStyle(.plain)
+            }
+
+            LazyVStack(spacing: 0) {
+                ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
+                    Button(action: onOpenCommunity) {
+                        CommunityForumRow(post: post, style: .home)
+                            .padding(.vertical, 14)
+                    }
+                    .buttonStyle(.plain)
+                    .onAppear {
+                        onPostVisibilityChanged(post.id, true)
+                    }
+                    .onDisappear {
+                        onPostVisibilityChanged(post.id, false)
+                    }
+
+                    if index != posts.count - 1 {
+                        Divider()
+                            .padding(.leading, 42)
+                            .padding(.vertical, 2)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct HomeCommunityFloatingButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "plus")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 52, height: 52)
+                .background(AppTheme.primaryButton, in: Circle())
+                .shadow(color: Color.black.opacity(0.18), radius: 16, x: 0, y: 8)
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -217,6 +325,7 @@ private struct HomeFeatureCard: View {
         onOpenGuide: {},
         onOpenDIY: {},
         onOpenConfigReview: {},
+        onOpenCommunity: {},
         onOpenBuilds: {},
         onOpenCompatibility: {}
     )

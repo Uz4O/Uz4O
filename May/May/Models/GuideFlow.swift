@@ -39,6 +39,11 @@ struct GuideFlow {
         currentIndex < Self.steps.count - 1
     }
 
+    var progressFraction: Double {
+        guard Self.steps.count > 1 else { return 1 }
+        return Double(currentIndex) / Double(Self.steps.count - 1)
+    }
+
     mutating func goPrevious() {
         currentIndex = max(currentIndex - 1, 0)
     }

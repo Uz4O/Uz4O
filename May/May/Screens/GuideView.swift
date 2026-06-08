@@ -14,7 +14,7 @@ struct GuideView: View {
 
             stepHeader
 
-            StepJumpStrip(flow: $flow)
+            ProgressTrack(flow: $flow)
 
             Spacer(minLength: 2)
 
@@ -97,50 +97,108 @@ struct GuideView: View {
     }
 }
 
-private struct StepJumpStrip: View {
+private struct ProgressTrack: View {
     @Binding var flow: GuideFlow
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(Array(GuideFlow.steps.enumerated()), id: \.element.id) { index, step in
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.22)) {
-                                flow.jump(to: index)
+        VStack(spacing: 10) {
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(AppTheme.border)
+                        .frame(height: 3)
+                        .padding(.horizontal, 11)
+
+                    Capsule()
+                        .fill(AppTheme.primaryText)
+                        .frame(width: trackFillWidth(totalWidth: proxy.size.width), height: 3)
+                        .padding(.leading, 11)
+
+                    HStack(spacing: 0) {
+                        ForEach(Array(GuideFlow.steps.enumerated()), id: \.element.id) { index, step in
+                            Button {
+                                withAnimation(.easeInOut(duration: 0.22)) {
+                                    flow.jump(to: index)
+                                }
+                            } label: {
+                                TrackNode(
+                                    number: step.number,
+                                    isPast: index < flow.currentIndex,
+                                    isCurrent: index == flow.currentIndex
+                                )
                             }
-                        } label: {
-                            VStack(spacing: 4) {
-                                Text(String(format: "%02d", step.number))
-                                    .font(.system(size: 11, weight: .bold))
-                                Text(step.title)
-                                    .font(.system(size: 9, weight: .semibold))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.72)
-                            }
-                            .foregroundStyle(index == flow.currentIndex ? .white : AppTheme.primaryText)
-                            .frame(width: 58, height: 46)
-                            .background(
-                                index == flow.currentIndex ? AppTheme.primaryButton : AppTheme.surface,
-                                in: RoundedRectangle(cornerRadius: 12)
-                            )
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(index == flow.currentIndex ? Color.clear : AppTheme.border, lineWidth: 1)
-                            }
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity)
+                            .accessibilityLabel("跳转到第 \(step.number) 步，\(step.title)")
                         }
-                        .buttonStyle(.plain)
-                        .id(index)
                     }
                 }
-                .padding(.vertical, 2)
             }
-            .onChange(of: flow.currentIndex) { _, newValue in
-                withAnimation(.easeInOut(duration: 0.22)) {
-                    proxy.scrollTo(newValue, anchor: .center)
-                }
+            .frame(height: 34)
+
+            HStack(spacing: 8) {
+                Text("当前步骤")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+
+                Text(flow.currentStep.title)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Spacer()
+
+                Text("\(Int((flow.progressFraction * 100).rounded()))%")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(AppTheme.secondaryText)
             }
         }
+        .padding(.horizontal, 2)
+    }
+
+    private func trackFillWidth(totalWidth: CGFloat) -> CGFloat {
+        let availableWidth = max(totalWidth - 22, 0)
+        return availableWidth * CGFloat(flow.progressFraction)
+    }
+}
+
+private struct TrackNode: View {
+    let number: Int
+    let isPast: Bool
+    let isCurrent: Bool
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(backgroundColor)
+                .frame(width: isCurrent ? 23 : 14, height: isCurrent ? 23 : 14)
+                .shadow(color: isCurrent ? AppTheme.primaryText.opacity(0.20) : .clear, radius: 8, x: 0, y: 4)
+
+            Circle()
+                .stroke(borderColor, lineWidth: isCurrent ? 2 : 1)
+                .frame(width: isCurrent ? 23 : 14, height: isCurrent ? 23 : 14)
+
+            if isCurrent {
+                Text(String(format: "%02d", number))
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(.white)
+            } else if isPast {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 4, height: 4)
+            }
+        }
+        .frame(height: 34)
+    }
+
+    private var backgroundColor: Color {
+        if isCurrent { return AppTheme.primaryText }
+        if isPast { return AppTheme.primaryText }
+        return AppTheme.surface
+    }
+
+    private var borderColor: Color {
+        if isCurrent || isPast { return AppTheme.primaryText }
+        return AppTheme.border
     }
 }
 
