@@ -80,11 +80,12 @@ struct PerformanceTestResult: Equatable {
 struct PerformanceTestFlow: Equatable {
     var currentStep: PerformanceTestStep = .hardware
     var hardwareProfile: HardwareProfile = HardwareProfile(
-        cpu: "Intel i5 / Ryzen 5",
-        gpu: "RTX 4060 Ti / RTX 4070",
+        cpu: "i5-14600K",
+        gpu: "RTX 4070",
+        motherboard: "B760M AORUS ELITE GEN5",
         memory: "16GB",
-        storage: "1TB SSD",
-        powerSupply: "650W"
+        storage: "Western Digital WD Black SN850X · 1TB · PCIe 4.0",
+        powerSupply: "Corsair RM750e · 750W · 80+ Gold"
     )
     var selectedResolution: PerformanceResolution = .twoK
     var selectedGames: [PerformanceGame] = [.cyberpunk]

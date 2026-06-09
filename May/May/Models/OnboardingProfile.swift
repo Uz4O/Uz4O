@@ -100,15 +100,17 @@ struct HardwareOptionCategory: Equatable, Identifiable {
 }
 
 enum HardwareProfileOptions {
-    static let cpu = ["不知道", "Intel i5 / Ryzen 5", "Intel i7 / Ryzen 7", "Intel i9 / Ryzen 9"]
-    static let gpu = ["不知道", "RTX 4060", "RTX 4060 Ti / RTX 4070", "RTX 4070 Super 及以上", "核显 / 独显很弱"]
-    static let memory = ["不知道", "16GB", "32GB", "64GB 及以上"]
-    static let storage = ["不知道", "1TB SSD", "2TB SSD", "机械硬盘 / 混合硬盘"]
-    static let powerSupply = ["不知道", "500W 以下", "650W", "750W 及以上"]
+    static let cpu = HardwareCatalog.cpuOptions
+    static let gpu = HardwareCatalog.gpuOptions
+    static let motherboard = HardwareCatalog.motherboardOptions
+    static let memory = HardwareCatalog.memoryOptions
+    static let storage = HardwareCatalog.storageOptions
+    static let powerSupply = HardwareCatalog.powerSupplyOptions
 
     static let categories = [
         HardwareOptionCategory(title: "CPU", icon: "cpu", options: cpu),
         HardwareOptionCategory(title: "显卡", icon: "display", options: gpu),
+        HardwareOptionCategory(title: "主板", icon: "menucard", options: motherboard),
         HardwareOptionCategory(title: "内存", icon: "rectangle.stack", options: memory),
         HardwareOptionCategory(title: "硬盘", icon: "externaldrive", options: storage),
         HardwareOptionCategory(title: "电源", icon: "bolt", options: powerSupply)
@@ -118,6 +120,7 @@ enum HardwareProfileOptions {
 struct HardwareProfile: Equatable {
     var cpu: String
     var gpu: String
+    var motherboard: String
     var memory: String
     var storage: String
     var powerSupply: String
@@ -126,6 +129,7 @@ struct HardwareProfile: Equatable {
     init(
         cpu: String,
         gpu: String,
+        motherboard: String = "不知道",
         memory: String,
         storage: String,
         powerSupply: String,
@@ -133,6 +137,7 @@ struct HardwareProfile: Equatable {
     ) {
         self.cpu = cpu
         self.gpu = gpu
+        self.motherboard = motherboard
         self.memory = memory
         self.storage = storage
         self.powerSupply = powerSupply
@@ -142,6 +147,7 @@ struct HardwareProfile: Equatable {
     static let skipped = HardwareProfile(
         cpu: "不知道",
         gpu: "不知道",
+        motherboard: "不知道",
         memory: "不知道",
         storage: "不知道",
         powerSupply: "不知道",
@@ -149,7 +155,7 @@ struct HardwareProfile: Equatable {
     )
 
     var summary: String {
-        "CPU \(cpu) · 显卡 \(gpu) · 内存 \(memory) · 硬盘 \(storage) · 电源 \(powerSupply)"
+        "CPU \(cpu) · 显卡 \(gpu) · 主板 \(motherboard) · 内存 \(memory) · 硬盘 \(storage) · 电源 \(powerSupply)"
     }
 }
 

@@ -57,6 +57,7 @@ struct OnboardingProfileRulesTests {
             hardwareProfile: HardwareProfile(
                 cpu: HardwareProfileOptions.cpu[0],
                 gpu: HardwareProfileOptions.gpu[1],
+                motherboard: HardwareProfileOptions.motherboard[1],
                 memory: HardwareProfileOptions.memory[2],
                 storage: HardwareProfileOptions.storage[1],
                 powerSupply: HardwareProfileOptions.powerSupply[2]
@@ -64,7 +65,7 @@ struct OnboardingProfileRulesTests {
         )
         assertEqual(
             completedHardwareProfile.hardwareProfile.summary,
-            "CPU 不知道 · 显卡 RTX 4060 · 内存 32GB · 硬盘 1TB SSD · 电源 650W",
+            "CPU 不知道 · 显卡 RTX 5090 D · 主板 B860 DS3H · 内存 芝奇/海盗船 DDR5-6000 CL30 · DDR5 · 32GB (16GBx2) · 6000MHz · CL30 · 硬盘 Western Digital WD Black SN850X · 1TB · PCIe 4.0 · 电源 Corsair RM750e · 750W · 80+ Gold",
             "Hardware profile summary should preserve user-entered config before entering the app."
         )
 
@@ -76,7 +77,7 @@ struct OnboardingProfileRulesTests {
 
         assertEqual(
             HardwareProfileOptions.categories.map(\.title),
-            ["CPU", "显卡", "内存", "硬盘", "电源"],
+            ["CPU", "显卡", "主板", "内存", "硬盘", "电源"],
             "Hardware profile collection should only ask for component configuration."
         )
 

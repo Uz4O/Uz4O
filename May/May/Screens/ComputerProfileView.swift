@@ -31,6 +31,8 @@ struct ComputerProfileView: View {
                     Divider().padding(.leading, 42)
                     ComputerProfileRow(title: "显卡", value: hardwareProfile.gpu, icon: "display")
                     Divider().padding(.leading, 42)
+                    ComputerProfileRow(title: "主板", value: hardwareProfile.motherboard, icon: "menucard")
+                    Divider().padding(.leading, 42)
                     ComputerProfileRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack")
                     Divider().padding(.leading, 42)
                     ComputerProfileRow(title: "硬盘", value: hardwareProfile.storage, icon: "externaldrive")

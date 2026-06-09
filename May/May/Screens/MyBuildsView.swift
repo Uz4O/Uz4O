@@ -11,11 +11,11 @@ struct MyBuildsView: View {
     @State private var selectedSection = ConfigHubSection.defaultSelection
 
     var body: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 16) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text("配置")
-                        .font(.system(size: 28, weight: .heavy))
+                        .font(.system(size: 29, weight: .heavy))
                         .foregroundStyle(AppTheme.primaryText)
                     Text("管理 AI 生成的配置和现在自己的配置")
                         .font(.system(size: 12, weight: .regular))
@@ -28,18 +28,22 @@ struct MyBuildsView: View {
                     Image(systemName: "plus")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 42, height: 42)
-                        .background(AppTheme.surface, in: Circle())
-                        .modifier(AppTheme.cardShadow)
+                        .frame(width: 40, height: 40)
+                        .background(AppTheme.surface.opacity(0.92), in: RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(AppTheme.border.opacity(0.9), lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.06), radius: 14, x: 0, y: 8)
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.top, 10)
+            .padding(.top, 12)
 
             ConfigHubSegmentedPicker(selectedSection: $selectedSection)
 
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
+                VStack(spacing: 14) {
                     switch selectedSection {
                     case .aiBuilds:
                         AIBuildsSection(
@@ -82,10 +86,10 @@ private struct ConfigHubSegmentedPicker: View {
                 } label: {
                     ZStack {
                         if selectedSection == section {
-                            Capsule()
+                            RoundedRectangle(cornerRadius: 13)
                                 .fill(AppTheme.surface)
                                 .matchedGeometryEffect(id: "configHubSectionSelection", in: animation)
-                                .shadow(color: Color.black.opacity(0.08), radius: 18, x: 0, y: 10)
+                                .shadow(color: Color.black.opacity(0.06), radius: 12, x: 0, y: 6)
                         }
 
                         Text(section.title)
@@ -96,18 +100,18 @@ private struct ConfigHubSegmentedPicker: View {
                             .padding(.horizontal, 5)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 42)
+                    .frame(height: 38)
                 }
                 .buttonStyle(.plain)
             }
         }
         .padding(3)
-        .background(AppTheme.softSurface.opacity(0.72), in: Capsule())
+        .background(AppTheme.softSurface.opacity(0.74), in: RoundedRectangle(cornerRadius: 16))
         .overlay(
-            Capsule()
+            RoundedRectangle(cornerRadius: 16)
                 .stroke(AppTheme.border.opacity(0.75), lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.03), radius: 14, x: 0, y: 8)
+        .shadow(color: Color.black.opacity(0.025), radius: 10, x: 0, y: 6)
         .animation(.spring(response: 0.34, dampingFraction: 0.86), value: selectedSection)
     }
 }
@@ -118,7 +122,7 @@ private struct AIBuildsSection: View {
     let onCreate: () -> Void
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             if plans.isEmpty {
                 EmptyBuildState(onCreate: onCreate)
             } else {
@@ -133,34 +137,70 @@ private struct ConfigPlanList: View {
     let onOpenPlan: () -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 7) {
-                    Text("AI 配置单")
-                        .font(.system(size: 20, weight: .heavy))
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text(ConfigHubSection.aiBuilds.subtitle)
-                        .font(.system(size: 12, weight: .regular))
+        ConfigPanel {
+            VStack(spacing: 0) {
+                ConfigSectionHeader(
+                    title: "AI 配置单",
+                    subtitle: ConfigHubSection.aiBuilds.subtitle,
+                    trailing: "\(plans.count) 个"
+                )
+                .padding(.bottom, 6)
+
+                ForEach(Array(plans.enumerated()), id: \.element.id) { index, plan in
+                    SavedPlanRow(plan: plan, onOpen: onOpenPlan)
+
+                    if index != plans.count - 1 {
+                        ConfigDivider(leftPadding: 48)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct ConfigPanel<Content: View>: View {
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        content
+            .padding(14)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .stroke(AppTheme.border.opacity(0.8), lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.04), radius: 18, x: 0, y: 10)
+    }
+}
+
+private struct ConfigSectionHeader: View {
+    let title: String
+    let subtitle: String?
+    var trailing: String?
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                if let subtitle {
+                    Text(subtitle)
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(AppTheme.secondaryText)
                 }
-
-                Spacer()
-
-                Text("\(plans.count) 个")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .padding(.horizontal, 14)
-                    .frame(height: 28)
-                    .background(AppTheme.softSurface, in: Capsule())
             }
-            .padding(.bottom, 12)
 
-            ForEach(Array(plans.enumerated()), id: \.element.id) { index, plan in
-                SavedPlanRow(plan: plan, onOpen: onOpenPlan)
+            Spacer()
 
-                if index != plans.count - 1 {
-                    ConfigDivider(leftPadding: 50)
-                }
+            if let trailing {
+                Text(trailing)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .padding(.horizontal, 9)
+                    .frame(height: 24)
+                    .background(AppTheme.softSurface, in: Capsule())
             }
         }
     }
@@ -197,12 +237,12 @@ private struct SavedPlanRow: View {
         Button(action: onOpen) {
             HStack(alignment: .center, spacing: 12) {
                 Image(systemName: "doc.text")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 34, height: 34)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+                    .frame(width: 32, height: 32)
+                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
 
-                VStack(alignment: .leading, spacing: 7) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text(plan.name)
                         .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(AppTheme.primaryText)
@@ -218,7 +258,7 @@ private struct SavedPlanRow: View {
 
                 Spacer(minLength: 8)
 
-                VStack(alignment: .trailing, spacing: 7) {
+                VStack(alignment: .trailing, spacing: 5) {
                     Text(plan.totalPrice)
                         .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(AppTheme.primaryText)
@@ -235,7 +275,7 @@ private struct SavedPlanRow: View {
                     .foregroundStyle(AppTheme.secondaryText)
             }
             .contentShape(Rectangle())
-            .padding(.vertical, 14)
+            .padding(.vertical, 12)
         }
         .buttonStyle(.plain)
     }
@@ -247,32 +287,33 @@ private struct CurrentComputerSection: View {
     let onCreate: () -> Void
 
     var body: some View {
-        VStack(spacing: 16) {
-            VStack(spacing: 0) {
-                ComputerConfigRow(title: "CPU", value: hardwareProfile.cpu, icon: "cpu", action: onEdit)
-                ConfigDivider(leftPadding: 50)
-                ComputerConfigRow(title: "显卡", value: hardwareProfile.gpu, icon: "display", action: onEdit)
-                ConfigDivider(leftPadding: 50)
-                ComputerConfigRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack", action: onEdit)
-                ConfigDivider(leftPadding: 50)
-                ComputerConfigRow(title: "电源", value: hardwareProfile.powerSupply, icon: "bolt", action: onEdit)
+        VStack(spacing: 12) {
+            ConfigPanel {
+                VStack(spacing: 0) {
+                    ConfigSectionHeader(title: "当前电脑", subtitle: nil, trailing: hardwareProfile.wasSkipped ? "待补充" : "已记录")
+                        .padding(.bottom, 6)
+
+                    ComputerConfigRow(title: "CPU", value: hardwareProfile.cpu, icon: "cpu", action: onEdit)
+                    ConfigDivider(leftPadding: 48)
+                    ComputerConfigRow(title: "显卡", value: hardwareProfile.gpu, icon: "display", action: onEdit)
+                    ConfigDivider(leftPadding: 48)
+                    ComputerConfigRow(title: "主板", value: hardwareProfile.motherboard, icon: "menucard", action: onEdit)
+                    ConfigDivider(leftPadding: 48)
+                    ComputerConfigRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack", action: onEdit)
+                    ConfigDivider(leftPadding: 48)
+                    ComputerConfigRow(title: "电源", value: hardwareProfile.powerSupply, icon: "bolt", action: onEdit)
+                }
             }
 
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 8) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(Color(red: 0.36, green: 0.47, blue: 0.78))
-                    Text("可以用它做什么")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                }
-
+            ConfigPanel {
                 VStack(spacing: 0) {
+                    ConfigSectionHeader(title: "可以用它做什么", subtitle: nil, trailing: nil)
+                        .padding(.bottom, 6)
+
                     ConfigUseCaseRow(icon: "chart.bar.xaxis", title: "看升级短板", subtitle: "判断当前电脑最该先换什么")
-                    ConfigDivider(leftPadding: 50)
+                    ConfigDivider(leftPadding: 48)
                     ConfigUseCaseRow(icon: "gamecontroller", title: "测游戏表现", subtitle: "结合分辨率和游戏估算体验")
-                    ConfigDivider(leftPadding: 50)
+                    ConfigDivider(leftPadding: 48)
                     ConfigUseCaseRow(icon: "arrow.left.arrow.right", title: "对比 AI 配置", subtitle: "看新配置相比当前电脑提升在哪")
                 }
             }
@@ -292,10 +333,10 @@ private struct ComputerConfigRow: View {
         Button(action: action) {
             HStack(spacing: 14) {
                 Image(systemName: icon)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 34, height: 34)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+                    .frame(width: 30, height: 30)
+                    .background(AppTheme.softSurface.opacity(0.9), in: RoundedRectangle(cornerRadius: 8))
 
                 Text(title)
                     .font(.system(size: 15, weight: .bold))
@@ -314,7 +355,7 @@ private struct ComputerConfigRow: View {
                     .foregroundStyle(AppTheme.secondaryText)
             }
             .contentShape(Rectangle())
-            .padding(.vertical, 10)
+            .padding(.vertical, 9)
         }
         .buttonStyle(.plain)
     }
@@ -328,10 +369,10 @@ private struct ConfigUseCaseRow: View {
     var body: some View {
         HStack(spacing: 14) {
             Image(systemName: icon)
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 34, height: 34)
-                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+                .frame(width: 30, height: 30)
+                .background(AppTheme.softSurface.opacity(0.9), in: RoundedRectangle(cornerRadius: 8))
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
@@ -350,7 +391,7 @@ private struct ConfigUseCaseRow: View {
                 .font(.system(size: 13, weight: .bold))
                 .foregroundStyle(AppTheme.secondaryText)
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 9)
     }
 }
 
@@ -368,11 +409,12 @@ private struct ConfigDivider: View {
 #Preview {
     MyBuildsView(
         hardwareProfile: HardwareProfile(
-            cpu: "Intel i7 / Ryzen 7",
-            gpu: "RTX 4060 Ti / RTX 4070",
+            cpu: "i7-14700K",
+            gpu: "RTX 4070",
+            motherboard: "B760M AORUS ELITE GEN5",
             memory: "32GB",
-            storage: "1TB SSD",
-            powerSupply: "650W"
+            storage: "Samsung 990 PRO · 1TB · PCIe 4.0",
+            powerSupply: "Corsair RM750e · 750W · 80+ Gold"
         ),
         selectedTab: .constant(.builds),
         onSelectTab: { _ in },

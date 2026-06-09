@@ -79,6 +79,7 @@ struct OnboardingChoiceView: View {
                         let savedProfile = HardwareProfile(
                             cpu: hardwareProfile.cpu,
                             gpu: hardwareProfile.gpu,
+                            motherboard: hardwareProfile.motherboard,
                             memory: hardwareProfile.memory,
                             storage: hardwareProfile.storage,
                             powerSupply: hardwareProfile.powerSupply
@@ -284,11 +285,13 @@ private struct HardwareProfileStep: View {
         .frame(width: designWidth)
         .frame(maxWidth: .infinity)
         .sheet(item: $selectedCategory) { category in
-            HardwareOptionSheet(
-                category: category,
+            HardwarePickerSheet(
+                title: category.title,
+                icon: category.icon,
+                filters: HardwareCatalog.filters(for: category.title),
                 selectedValue: binding(for: category.title)
             )
-            .presentationDetents([.medium])
+            .presentationDetents([.large])
         }
     }
 
@@ -298,6 +301,8 @@ private struct HardwareProfileStep: View {
             return $hardwareProfile.cpu
         case "显卡":
             return $hardwareProfile.gpu
+        case "主板":
+            return $hardwareProfile.motherboard
         case "内存":
             return $hardwareProfile.memory
         case "硬盘":
@@ -343,71 +348,6 @@ private struct HardwareChoiceRow: View {
             }
         }
         .buttonStyle(.plain)
-    }
-}
-
-private struct HardwareOptionSheet: View {
-    let category: HardwareOptionCategory
-    @Binding var selectedValue: String
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Capsule()
-                .fill(AppTheme.border)
-                .frame(width: 42, height: 5)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 10)
-
-            HStack(spacing: 10) {
-                Image(systemName: category.icon)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 34, height: 34)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
-
-                Text("选择\(category.title)")
-                    .font(.appHeadline)
-                    .foregroundStyle(AppTheme.primaryText)
-
-                Spacer()
-            }
-
-            VStack(spacing: 10) {
-                ForEach(category.options, id: \.self) { option in
-                    Button {
-                        selectedValue = option
-                        dismiss()
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(option)
-                                .font(.appBody)
-                                .foregroundStyle(AppTheme.primaryText)
-
-                            Spacer()
-
-                            if selectedValue == option {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundStyle(AppTheme.success)
-                            }
-                        }
-                        .padding(.horizontal, 14)
-                        .frame(height: 44)
-                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(selectedValue == option ? AppTheme.primaryText : AppTheme.border, lineWidth: selectedValue == option ? 1.4 : 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-
-            Spacer()
-        }
-        .padding(.horizontal, 20)
-        .background(AppTheme.background)
     }
 }
 

@@ -10,10 +10,11 @@ struct UpgradePlanView: View {
     @State private var selectedNeed = "提升游戏性能"
     @State private var selectedGames: Set<String> = ["CS2", "PUBG", "无畏契约"]
     @State private var selectedPart: UpgradeCurrentPart?
+    @State private var editableParts = UpgradeCurrentPart.samples
+    @State private var selectedPartValue = ""
 
     private let designWidth: CGFloat = 328
     private let needs = UpgradeNeed.samples
-    private let parts = UpgradeCurrentPart.samples
     private let games = UpgradeGame.samples
 
     var body: some View {
@@ -36,7 +37,7 @@ struct UpgradePlanView: View {
             Group {
                 switch step {
                 case 1:
-                    CurrentConfigStep(parts: parts, selectedPart: $selectedPart)
+                    CurrentConfigStep(parts: editableParts, selectedPart: $selectedPart)
                 case 2:
                     UpgradeBudgetStep(budget: $budget)
                 case 3:
@@ -65,8 +66,23 @@ struct UpgradePlanView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .sheet(item: $selectedPart) { part in
-            UpgradePartOptionSheet(part: part)
-                .presentationDetents([.medium])
+            HardwarePickerSheet(
+                title: part.title,
+                icon: part.icon,
+                filters: HardwareCatalog.filters(for: part.title),
+                fallbackOptions: part.options,
+                selectedValue: $selectedPartValue
+            )
+            .presentationDetents([.large])
+        }
+        .onChange(of: selectedPart) { _, part in
+            selectedPartValue = part?.value ?? ""
+        }
+        .onChange(of: selectedPartValue) { _, value in
+            guard let part = selectedPart, !value.isEmpty else { return }
+            guard let index = editableParts.firstIndex(where: { $0.id == part.id }) else { return }
+            editableParts[index].value = value
+            selectedPart = nil
         }
     }
 }
@@ -289,15 +305,15 @@ private struct UpgradeResultStep: View {
 
                 UpgradeRecommendationCard(
                     category: "显卡 (GPU)",
-                    recommend: "推荐：NVIDIA GeForce RTX 4060",
-                    price: "¥1899",
+                    recommend: "推荐：RTX 4060",
+                    note: "优先升级",
                     icon: "display"
                 )
 
                 UpgradeRecommendationCard(
                     category: "内存 (RAM)",
                     recommend: "推荐：32GB (16GB x 2) DDR4 3200MHz",
-                    price: "¥399",
+                    note: "可选升级",
                     icon: "memorychip"
                 )
 
@@ -796,7 +812,7 @@ private struct UpgradeOverviewMetric: View {
 private struct UpgradeRecommendationCard: View {
     let category: String
     let recommend: String
-    let price: String
+    let note: String
     let icon: String
 
     var body: some View {
@@ -820,9 +836,9 @@ private struct UpgradeRecommendationCard: View {
 
             Spacer()
 
-            Text(price)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(AppTheme.primaryText)
+            Text(note)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(AppTheme.secondaryText)
         }
         .padding(12)
         .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
@@ -834,18 +850,18 @@ private struct UpgradeTotalCard: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("总计预算")
+                Text("升级顺序")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                Text("价格仅供参考")
+                Text("先处理影响体验最大的短板")
                     .font(.system(size: 9))
                     .foregroundStyle(AppTheme.mutedText)
             }
 
             Spacer()
 
-            Text("约 ¥ 2896")
-                .font(.system(size: 18, weight: .bold))
+            Text("显卡优先")
+                .font(.system(size: 15, weight: .bold))
                 .foregroundStyle(AppTheme.primaryText)
         }
         .padding(14)
@@ -853,67 +869,20 @@ private struct UpgradeTotalCard: View {
     }
 }
 
-private struct UpgradePartOptionSheet: View {
-    let part: UpgradeCurrentPart
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Capsule()
-                .fill(AppTheme.border)
-                .frame(width: 42, height: 5)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 10)
-
-            Text("选择\(part.title)")
-                .font(.appHeadline)
-                .foregroundStyle(AppTheme.primaryText)
-
-            VStack(spacing: 10) {
-                ForEach(part.options, id: \.self) { option in
-                    Button {
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Text(option)
-                                .font(.appBody)
-                                .foregroundStyle(AppTheme.primaryText)
-                            Spacer()
-                            if option == part.value {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(AppTheme.success)
-                            }
-                        }
-                        .padding(.horizontal, 14)
-                        .frame(height: 44)
-                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(option == part.value ? AppTheme.primaryText : AppTheme.border, lineWidth: option == part.value ? 1.3 : 1))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-
-            Spacer()
-        }
-        .padding(.horizontal, 20)
-        .background(AppTheme.background)
-    }
-}
-
-private struct UpgradeCurrentPart: Identifiable {
-    let id = UUID()
+private struct UpgradeCurrentPart: Equatable, Identifiable {
+    let id: String
     let title: String
-    let value: String
+    var value: String
     let icon: String
     let options: [String]
 
     static let samples = [
-        UpgradeCurrentPart(title: "处理器 (CPU)", value: "Intel Core i5-10400F", icon: "cpu", options: ["不知道", "Intel Core i5-10400F", "Intel Core i7-10700F", "Ryzen 5 5600"]),
-        UpgradeCurrentPart(title: "显卡 (GPU)", value: "NVIDIA GeForce GTX 1660 Super", icon: "display", options: ["不知道", "NVIDIA GeForce GTX 1660 Super", "RTX 4060", "RTX 4070 Super"]),
-        UpgradeCurrentPart(title: "主板", value: "B460M Mortar", icon: "menucard", options: ["不知道", "B460M Mortar", "B560M", "B760M"]),
-        UpgradeCurrentPart(title: "内存 (RAM)", value: "16GB (8GB x 2) DDR4 2666MHz", icon: "memorychip", options: ["不知道", "16GB DDR4", "32GB DDR4", "64GB DDR4"]),
-        UpgradeCurrentPart(title: "电源 (PSU)", value: "550W", icon: "bolt", options: ["不知道", "500W", "550W", "650W", "750W"]),
-        UpgradeCurrentPart(title: "散热器", value: "原装散热器", icon: "fan", options: ["不知道", "原装散热器", "塔式风冷", "240 水冷"])
+        UpgradeCurrentPart(id: "cpu", title: "处理器 (CPU)", value: "i5-10400F", icon: "cpu", options: HardwareCatalog.cpuOptions),
+        UpgradeCurrentPart(id: "gpu", title: "显卡 (GPU)", value: "GTX 1660 Super", icon: "display", options: HardwareCatalog.gpuOptions),
+        UpgradeCurrentPart(id: "motherboard", title: "主板", value: "B460M Mortar", icon: "menucard", options: HardwareCatalog.motherboardOptions),
+        UpgradeCurrentPart(id: "memory", title: "内存 (RAM)", value: "16GB DDR4", icon: "memorychip", options: HardwareCatalog.memoryOptions),
+        UpgradeCurrentPart(id: "power", title: "电源 (PSU)", value: "550W", icon: "bolt", options: HardwareCatalog.powerSupplyOptions),
+        UpgradeCurrentPart(id: "cooler", title: "散热器", value: "原装散热器", icon: "fan", options: ["不知道", "原装散热器", "塔式风冷", "240 水冷"])
     ]
 }
 
