@@ -7,27 +7,11 @@
 
 import SwiftUI
 
-enum AppScreen: Hashable {
-    case login
-    case onboarding
-    case home
-    case aiBuild
-    case community
-    case builds
-    case profile
-    case computerProfile
-    case upgrade
-    case configReview
-    case compatibility
-    case guide
-    case diy
-    case buildResult
-}
-
 struct ContentView: View {
     @State private var selectedScreen: AppScreen = .login
     @State private var selectedTab: AppTab = .home
     @State private var onboardingProfile: OnboardingProfile = .skipped
+    @State private var buildResultReturnTarget: BuildResultReturnTarget = .fromAIBuild
 
     var body: some View {
         ZStack {
@@ -69,11 +53,27 @@ struct ContentView: View {
                         }
                     )
                 case .aiBuild:
-                    AIBuildView(onBack: { selectedScreen = .home }, onShowResult: { selectedScreen = .buildResult })
+                    AIBuildView(
+                        onBack: { selectedScreen = .home },
+                        onShowResult: {
+                            buildResultReturnTarget = .fromAIBuild
+                            selectedScreen = .buildResult
+                        }
+                    )
                 case .community:
                     CommunityView(selectedTab: $selectedTab, onSelectTab: handleTabSelection)
                 case .builds:
-                    MyBuildsView(selectedTab: $selectedTab, onSelectTab: handleTabSelection, onOpenPlan: { selectedScreen = .buildResult }, onCreate: { openAI() })
+                    MyBuildsView(
+                        hardwareProfile: onboardingProfile.hardwareProfile,
+                        selectedTab: $selectedTab,
+                        onSelectTab: handleTabSelection,
+                        onOpenPlan: {
+                            buildResultReturnTarget = .fromConfigTab
+                            selectedScreen = .buildResult
+                        },
+                        onCreate: { openAI() },
+                        onOpenComputerProfile: { selectedScreen = .computerProfile }
+                    )
                 case .profile:
                     ProfileView(
                         hardwareProfile: onboardingProfile.hardwareProfile,
@@ -106,7 +106,15 @@ struct ContentView: View {
                 case .diy:
                     DIYBuildView(onBack: { selectedScreen = .home })
                 case .buildResult:
-                    BuildResultView(plan: AppMockData.samplePlan, onBack: { selectedScreen = .home })
+                    BuildResultView(
+                        plan: AppMockData.samplePlan,
+                        onBack: {
+                            selectedScreen = buildResultReturnTarget.destination
+                            if selectedScreen == .builds {
+                                selectedTab = .builds
+                            }
+                        }
+                    )
                 }
             }
             .transition(.opacity)

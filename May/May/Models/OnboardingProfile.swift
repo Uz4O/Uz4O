@@ -1,5 +1,36 @@
 import Foundation
 
+enum AppScreen: Hashable {
+    case login
+    case onboarding
+    case home
+    case aiBuild
+    case community
+    case builds
+    case profile
+    case computerProfile
+    case upgrade
+    case configReview
+    case compatibility
+    case guide
+    case diy
+    case buildResult
+}
+
+enum BuildResultReturnTarget: Equatable {
+    case fromAIBuild
+    case fromConfigTab
+
+    var destination: AppScreen {
+        switch self {
+        case .fromAIBuild:
+            return .home
+        case .fromConfigTab:
+            return .builds
+        }
+    }
+}
+
 enum BuildPreference: String, CaseIterable, Identifiable {
     case balanced
     case performance
