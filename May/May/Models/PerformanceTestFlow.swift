@@ -126,6 +126,10 @@ struct PerformanceTestFlow: Equatable {
         currentStep = previous
     }
 
+    mutating func apply(_ profile: HardwareProfile) {
+        hardwareProfile = profile
+    }
+
     mutating func toggleGame(_ game: PerformanceGame) {
         if selectedGames.contains(game) {
             if selectedGames.count > 1 {

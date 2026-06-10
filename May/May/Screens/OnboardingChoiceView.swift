@@ -4,11 +4,16 @@ struct OnboardingChoiceView: View {
     let onFinish: (OnboardingProfile) -> Void
 
     @State private var selectedPreference: BuildPreference = .balanced
-    @State private var hardwareProfile = HardwareProfile.skipped
+    @State private var hardwareProfile: HardwareProfile
     @State private var computerOwnership: ComputerOwnershipChoice = .noComputer
     @State private var step: OnboardingStep = .computerOwnership
 
     private let designWidth: CGFloat = 328
+
+    init(initialHardwareProfile: HardwareProfile = .skipped, onFinish: @escaping (OnboardingProfile) -> Void) {
+        self.onFinish = onFinish
+        _hardwareProfile = State(initialValue: initialHardwareProfile)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -288,7 +293,8 @@ private struct HardwareProfileStep: View {
             HardwarePickerSheet(
                 title: category.title,
                 icon: category.icon,
-                filters: HardwareCatalog.filters(for: category.title),
+                filters: filters(for: category),
+                contextMessage: contextMessage(for: category),
                 selectedValue: binding(for: category.title)
             )
             .presentationDetents([.large])
@@ -296,20 +302,21 @@ private struct HardwareProfileStep: View {
     }
 
     private func binding(for title: String) -> Binding<String> {
-        switch title {
-        case "CPU":
-            return $hardwareProfile.cpu
-        case "显卡":
-            return $hardwareProfile.gpu
-        case "主板":
-            return $hardwareProfile.motherboard
-        case "内存":
-            return $hardwareProfile.memory
-        case "硬盘":
-            return $hardwareProfile.storage
-        default:
-            return $hardwareProfile.powerSupply
-        }
+        Binding(
+            get: { hardwareProfile.value(for: title) },
+            set: { hardwareProfile.setValue($0, for: title) }
+        )
+    }
+
+    private func filters(for category: HardwareOptionCategory) -> [HardwareCatalogFilter] {
+        category.title == "主板"
+            ? HardwareCatalog.motherboardFilters(compatibleWithCPU: hardwareProfile.cpu)
+            : HardwareCatalog.filters(for: category.title)
+    }
+
+    private func contextMessage(for category: HardwareOptionCategory) -> String? {
+        guard category.title == "主板", let socket = HardwareCatalog.cpuSocket(for: hardwareProfile.cpu) else { return nil }
+        return "已根据 \(hardwareProfile.cpu) 筛选 \(socket) 兼容主板"
     }
 }
 

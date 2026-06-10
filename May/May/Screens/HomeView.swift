@@ -18,16 +18,16 @@ struct HomeView: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            VStack(spacing: 12) {
+            VStack(spacing: 10) {
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 14) {
+                    VStack(spacing: 18) {
                         HStack {
                             Text("AI 装机助手")
-                                .font(.system(size: 23, weight: .bold))
+                                .font(.system(size: 25, weight: .heavy))
                                 .foregroundStyle(AppTheme.primaryText)
                             Spacer()
                             Image(systemName: "bell")
-                                .font(.system(size: 20, weight: .semibold))
+                                .font(.system(size: 21, weight: .medium))
                                 .foregroundStyle(AppTheme.primaryText)
                         }
                         .frame(width: designWidth)
@@ -39,7 +39,7 @@ struct HomeView: View {
                         .buttonStyle(.plain)
                         .frame(width: designWidth)
 
-                        VStack(spacing: 14) {
+                        VStack(spacing: 16) {
                             ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
                                 HStack(spacing: 14) {
                                     ForEach(row, id: \.kind) { feature in
@@ -56,9 +56,7 @@ struct HomeView: View {
                         )
                             .frame(width: designWidth)
 
-                        BeginnerStrip()
-                            .frame(width: designWidth)
-                            .padding(.bottom, 8)
+                        Color.clear.frame(height: 2)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -73,13 +71,13 @@ struct HomeView: View {
                 HomeCommunityFloatingButton {
                     isComposerPresented = true
                 }
-                    .padding(.trailing, AppTheme.screenPadding + 8)
+                    .padding(.trailing, AppTheme.screenPadding + 2)
                     .padding(.bottom, 88)
                     .transition(.opacity.combined(with: .scale(scale: 0.92)))
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, 14)
+        .padding(.bottom, -12)
         .animation(.easeInOut(duration: 0.16), value: showsCommunityFloatingButton)
         .sheet(isPresented: $isComposerPresented) {
             CommunityComposerView()
@@ -155,25 +153,17 @@ private struct HomeCommunitySection: View {
                 .buttonStyle(.plain)
             }
 
-            LazyVStack(spacing: 0) {
-                ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
-                    Button(action: onOpenCommunity) {
-                        CommunityForumRow(post: post, style: .home)
-                            .padding(.vertical, 14)
-                    }
-                    .buttonStyle(.plain)
-                    .onAppear {
-                        onPostVisibilityChanged(post.id, true)
-                    }
-                    .onDisappear {
-                        onPostVisibilityChanged(post.id, false)
-                    }
-
-                    if index != posts.count - 1 {
-                        Divider()
-                            .padding(.leading, 42)
-                            .padding(.vertical, 2)
-                    }
+            if let post = posts.first {
+                Button(action: onOpenCommunity) {
+                    CommunityForumRow(post: post, style: .home)
+                        .padding(.vertical, 4)
+                }
+                .buttonStyle(.plain)
+                .onAppear {
+                    onPostVisibilityChanged(post.id, true)
+                }
+                .onDisappear {
+                    onPostVisibilityChanged(post.id, false)
                 }
             }
         }
@@ -227,12 +217,11 @@ private struct HeroBuildCard: View {
 
     var body: some View {
         ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 22)
-                .fill(LinearGradient(
-                    colors: [Color(red: 0.07, green: 0.10, blue: 0.15), Color(red: 0.13, green: 0.16, blue: 0.24)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
+            Image("HomeHeroCharacter")
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity)
+                .frame(height: 184)
 
             VStack(alignment: .leading, spacing: 12) {
                 Text("AI 一键装机")
@@ -240,7 +229,7 @@ private struct HeroBuildCard: View {
                     .foregroundStyle(.white)
                 Text(subtitle)
                     .font(.system(size: 13))
-                    .foregroundStyle(.white.opacity(0.62))
+                    .foregroundStyle(.white.opacity(0.82))
                     .lineLimit(2)
                     .frame(width: 178, alignment: .leading)
                 HStack(spacing: 8) {
@@ -256,14 +245,8 @@ private struct HeroBuildCard: View {
             }
             .padding(.leading, 24)
 
-            Image("RobotMascot")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 126, height: 126)
-                .shadow(color: Color(red: 0.50, green: 0.56, blue: 0.82).opacity(0.35), radius: 18, y: 12)
-                .offset(x: 198, y: 8)
         }
-        .frame(height: 172)
+        .frame(height: 184)
         .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 }
@@ -308,7 +291,7 @@ private struct HomeFeatureCard: View {
                     }
                 }
                 .padding(18)
-                .frame(width: 156, height: 156, alignment: .topLeading)
+                .frame(width: 156, height: 164, alignment: .topLeading)
             }
         }
         .buttonStyle(.plain)

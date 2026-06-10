@@ -7,80 +7,51 @@ struct ProfileView: View {
     let onOpenBuilds: () -> Void
     let onOpenComputerProfile: () -> Void
 
-    private let items = [
-        ("我的配置单", "doc.text", "查看保存过的方案"),
-        ("我的电脑档案", "desktopcomputer", "查看或补充当前电脑配置"),
-        ("我的反馈", "bubble.left.and.bubble.right", "查看和补充反馈"),
-        ("公益说明", "heart", "无广告、不卖货、只帮你避坑"),
-        ("价格透明说明", "tag", "参考价来自公开信息"),
-        ("用户协议", "doc.plaintext", "使用规则"),
-        ("隐私政策", "lock.shield", "数据如何被保护"),
-        ("意见反馈", "paperplane", "告诉我们哪里不好用"),
-        ("关于我们", "info.circle", "项目定位与版本信息")
+    private let accountItems = [
+        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案"),
+        ProfileItem(title: "我的电脑档案", icon: "desktopcomputer", subtitle: "查看或补充当前电脑配置")
+    ]
+
+    private let helpItems = [
+        ProfileItem(title: "用户协议", icon: "doc.plaintext", subtitle: "使用规则与条款"),
+        ProfileItem(title: "隐私政策", icon: "lock.shield", subtitle: "数据如何被保护"),
+        ProfileItem(title: "意见反馈", icon: "paperplane", subtitle: "告诉我们哪里不好用"),
+        ProfileItem(title: "关于我们", icon: "info.circle", subtitle: "版本与项目介绍")
     ]
 
     var body: some View {
-        VStack(spacing: 16) {
-            SoftCard(radius: 22) {
-                HStack(spacing: 14) {
-                    Image(systemName: "person.crop.circle.fill")
-                        .font(.system(size: 46))
-                        .foregroundStyle(AppTheme.primaryText)
-
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("AI 装机助手")
-                            .font(.appHeadline)
-                            .foregroundStyle(AppTheme.primaryText)
-                        Text(hardwareProfile.wasSkipped ? "可在这里补充电脑档案" : hardwareProfile.summary)
-                            .font(.appBody)
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineLimit(2)
-                    }
-
-                    Spacer()
-                }
-                .padding(18)
-            }
-            .padding(.top, 8)
-
-            SoftCard(radius: 18) {
-                VStack(spacing: 0) {
-                    ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                        Button(action: action(for: item.0)) {
-                            HStack(spacing: 12) {
-                                Image(systemName: item.1)
-                                    .font(.system(size: 16, weight: .semibold))
+        VStack(spacing: 14) {
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 20) {
+                    Button(action: onOpenComputerProfile) {
+                        HStack(spacing: 18) {
+                            MascotAvatar(size: 82)
+                            VStack(alignment: .leading, spacing: 7) {
+                                Text("AI 装机助手")
+                                    .font(.system(size: 22, weight: .bold))
                                     .foregroundStyle(AppTheme.primaryText)
-                                    .frame(width: 28, height: 28)
-                                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
-
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text(item.0)
-                                        .font(.appSubheadline)
-                                        .foregroundStyle(AppTheme.primaryText)
-                                    Text(item.2)
-                                        .font(.appCaption)
-                                        .foregroundStyle(AppTheme.secondaryText)
-                                }
-
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 11, weight: .bold))
+                                Text(hardwareProfile.wasSkipped ? "可在这里补充电脑档案" : hardwareProfile.summary)
+                                    .font(.system(size: 13))
                                     .foregroundStyle(AppTheme.secondaryText)
+                                    .lineLimit(2)
                             }
-                            .padding(.vertical, 13)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundStyle(AppTheme.secondaryText)
                         }
-                        .buttonStyle(.plain)
-
-                        if index != items.count - 1 {
-                            Divider().padding(.leading, 40)
-                        }
+                        .padding(20)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
+                        .modifier(AppTheme.cardShadow)
                     }
-                }
-                .padding(.horizontal, 16)
-            }
+                    .buttonStyle(.plain)
 
-            Spacer(minLength: 0)
+                    ProfileSection(title: "我的方案与档案", items: accountItems, action: action)
+                    ProfileSection(title: "设置与帮助", items: helpItems, action: action)
+                }
+                .padding(.top, 12)
+                .padding(.bottom, 4)
+            }
 
             BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
         }
@@ -88,14 +59,74 @@ struct ProfileView: View {
         .padding(.bottom, 14)
     }
 
-    private func action(for title: String) -> () -> Void {
+    private func action(for title: String) {
         switch title {
         case "我的配置单":
-            return onOpenBuilds
+            onOpenBuilds()
         case "我的电脑档案":
-            return onOpenComputerProfile
+            onOpenComputerProfile()
         default:
-            return {}
+            break
+        }
+    }
+}
+
+private struct ProfileItem: Identifiable {
+    var id: String { title }
+    let title: String
+    let icon: String
+    let subtitle: String
+}
+
+private struct ProfileSection: View {
+    let title: String
+    let items: [ProfileItem]
+    let action: (String) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(AppTheme.secondaryText)
+                .padding(.leading, 10)
+
+            VStack(spacing: 0) {
+                ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                    Button {
+                        action(item.title)
+                    } label: {
+                        HStack(spacing: 16) {
+                            Image(systemName: item.icon)
+                                .font(.system(size: 21, weight: .medium))
+                                .foregroundStyle(AppTheme.primaryText)
+                                .frame(width: 32)
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(item.title)
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundStyle(AppTheme.primaryText)
+                                Text(item.subtitle)
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            }
+
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundStyle(AppTheme.secondaryText)
+                        }
+                        .padding(.vertical, 15)
+                    }
+                    .buttonStyle(.plain)
+
+                    if index != items.count - 1 {
+                        Divider().padding(.leading, 48)
+                    }
+                }
+            }
+            .padding(.horizontal, 18)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
+            .modifier(AppTheme.cardShadow)
         }
     }
 }

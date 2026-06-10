@@ -3,6 +3,7 @@ import SwiftUI
 struct LoginView: View {
     let onLogin: () -> Void
     @State private var phoneNumber = ""
+    @State private var verificationCode = ""
     @State private var hasAgreed = true
 
     var body: some View {
@@ -10,18 +11,20 @@ struct LoginView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     LoginHero()
-                        .padding(.top, max(38, proxy.safeAreaInsets.top + 30))
+                        .frame(width: proxy.size.width - (AppTheme.screenPadding + 10) * 2, height: 250)
+                        .padding(.top, 8)
 
                     LoginForm(
                         phoneNumber: $phoneNumber,
+                        verificationCode: $verificationCode,
                         onLogin: onLogin
                     )
-                    .padding(.top, 58)
+                    .padding(.top, 30)
 
                     OtherLoginDivider()
-                        .padding(.top, 38)
+                        .padding(.top, 34)
 
-                    Spacer(minLength: 70)
+                    Spacer(minLength: 20)
 
                     SecurityAssurance()
                         .frame(maxWidth: .infinity)
@@ -34,6 +37,7 @@ struct LoginView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(minHeight: proxy.size.height)
+                .frame(width: proxy.size.width - (AppTheme.screenPadding + 10) * 2)
                 .padding(.horizontal, AppTheme.screenPadding + 10)
             }
         }
@@ -43,50 +47,51 @@ struct LoginView: View {
 
 private struct LoginHero: View {
     var body: some View {
-        HStack(alignment: .center, spacing: 4) {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("欢迎使用\nAI 装机助手")
-                    .font(.system(size: 27, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .lineSpacing(6)
-                    .fixedSize(horizontal: false, vertical: true)
+        ZStack(alignment: .leading) {
+            Image("LoginCardBackground")
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity)
+                .frame(height: 250)
 
-                Text("智能推荐最佳配置方案\n装机更简单，选择更放心")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(AppTheme.secondaryText)
+            VStack(alignment: .leading, spacing: 13) {
+                Text("欢迎使用\nAI 装机助手")
+                    .font(.system(size: 29, weight: .heavy))
+                    .foregroundStyle(AppTheme.primaryText)
                     .lineSpacing(7)
                     .fixedSize(horizontal: false, vertical: true)
+
+                Rectangle()
+                    .fill(AppTheme.secondaryText.opacity(0.65))
+                    .frame(width: 24, height: 1)
+                    .padding(.top, 3)
+                    .padding(.bottom, 2)
+
+                Text("智能推荐最佳配置方案\n装机更简单，选择更放心")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineSpacing(6)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-
-            Spacer(minLength: 0)
-
-            ZStack {
-                Circle()
-                    .fill(Color(red: 0.92, green: 0.96, blue: 1.0).opacity(0.72))
-                    .frame(width: 116, height: 116)
-                    .blur(radius: 2)
-                    .offset(y: 10)
-
-                Image("RobotMascot")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 138, height: 138)
-                    .shadow(color: Color(red: 0.45, green: 0.53, blue: 0.66).opacity(0.18), radius: 16, x: 0, y: 14)
-            }
-            .frame(width: 136, height: 144)
-            .offset(x: 12, y: 8)
+            .padding(.leading, 28)
+            .padding(.top, 20)
         }
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .shadow(color: Color.black.opacity(0.025), radius: 18, x: 0, y: 10)
+        .clipped()
     }
 }
 
 private struct LoginForm: View {
     @Binding var phoneNumber: String
+    @Binding var verificationCode: String
     let onLogin: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("手机号登录")
-                .font(.system(size: 15, weight: .bold))
+                .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(AppTheme.primaryText)
 
             HStack(spacing: 12) {
@@ -102,10 +107,31 @@ private struct LoginForm: View {
                     .foregroundStyle(AppTheme.primaryText)
             }
             .padding(.horizontal, 20)
-            .frame(height: 58)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 14))
+            .frame(height: 56)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
             .overlay(
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(AppTheme.border, lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.022), radius: 10, x: 0, y: 7)
+
+            HStack(spacing: 12) {
+                Image(systemName: "number")
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundStyle(AppTheme.mutedText)
+                    .frame(width: 18)
+
+                TextField("请输入验证码", text: $verificationCode)
+                    .keyboardType(.numberPad)
+                    .textContentType(.oneTimeCode)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(AppTheme.primaryText)
+            }
+            .padding(.horizontal, 20)
+            .frame(height: 56)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
                     .stroke(AppTheme.border, lineWidth: 1)
             )
             .shadow(color: Color.black.opacity(0.022), radius: 10, x: 0, y: 7)
@@ -115,22 +141,11 @@ private struct LoginForm: View {
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.018, green: 0.055, blue: 0.135),
-                                Color(red: 0.028, green: 0.145, blue: 0.310)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        ),
-                        in: RoundedRectangle(cornerRadius: 14)
-                    )
-                    .shadow(color: AppTheme.primaryButton.opacity(0.16), radius: 14, x: 0, y: 8)
+                    .frame(height: 50)
+                    .background(Color.black, in: RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: Color.black.opacity(0.14), radius: 14, x: 0, y: 8)
             }
             .buttonStyle(.plain)
-            .padding(.top, 10)
         }
     }
 }

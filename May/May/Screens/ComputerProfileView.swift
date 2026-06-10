@@ -1,8 +1,10 @@
 import SwiftUI
 
 struct ComputerProfileView: View {
-    let hardwareProfile: HardwareProfile
+    @Binding var hardwareProfile: HardwareProfile
     let onBack: () -> Void
+
+    @State private var selectedCategory: HardwareOptionCategory?
 
     var body: some View {
         VStack(spacing: 16) {
@@ -27,17 +29,19 @@ struct ComputerProfileView: View {
 
             SoftCard(radius: 18) {
                 VStack(spacing: 0) {
-                    ComputerProfileRow(title: "CPU", value: hardwareProfile.cpu, icon: "cpu")
-                    Divider().padding(.leading, 42)
-                    ComputerProfileRow(title: "显卡", value: hardwareProfile.gpu, icon: "display")
-                    Divider().padding(.leading, 42)
-                    ComputerProfileRow(title: "主板", value: hardwareProfile.motherboard, icon: "menucard")
-                    Divider().padding(.leading, 42)
-                    ComputerProfileRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack")
-                    Divider().padding(.leading, 42)
-                    ComputerProfileRow(title: "硬盘", value: hardwareProfile.storage, icon: "externaldrive")
-                    Divider().padding(.leading, 42)
-                    ComputerProfileRow(title: "电源", value: hardwareProfile.powerSupply, icon: "bolt")
+                    ForEach(Array(HardwareProfileOptions.categories.enumerated()), id: \.element.id) { index, category in
+                        ComputerProfileRow(
+                            title: category.title,
+                            value: hardwareProfile.value(for: category.title),
+                            icon: category.icon
+                        ) {
+                            selectedCategory = category
+                        }
+
+                        if index != HardwareProfileOptions.categories.count - 1 {
+                            Divider().padding(.leading, 42)
+                        }
+                    }
                 }
                 .padding(.horizontal, 16)
             }
@@ -46,6 +50,34 @@ struct ComputerProfileView: View {
         }
         .padding(.horizontal, AppTheme.screenPadding)
         .padding(.bottom, 22)
+        .sheet(item: $selectedCategory) { category in
+            HardwarePickerSheet(
+                title: category.title,
+                icon: category.icon,
+                filters: filters(for: category),
+                contextMessage: contextMessage(for: category),
+                selectedValue: binding(for: category.title)
+            )
+            .presentationDetents([.large])
+        }
+    }
+
+    private func binding(for title: String) -> Binding<String> {
+        Binding(
+            get: { hardwareProfile.value(for: title) },
+            set: { hardwareProfile.setValue($0, for: title) }
+        )
+    }
+
+    private func filters(for category: HardwareOptionCategory) -> [HardwareCatalogFilter] {
+        category.title == "主板"
+            ? HardwareCatalog.motherboardFilters(compatibleWithCPU: hardwareProfile.cpu)
+            : HardwareCatalog.filters(for: category.title)
+    }
+
+    private func contextMessage(for category: HardwareOptionCategory) -> String? {
+        guard category.title == "主板", let socket = HardwareCatalog.cpuSocket(for: hardwareProfile.cpu) else { return nil }
+        return "已根据 \(hardwareProfile.cpu) 筛选 \(socket) 兼容主板"
     }
 }
 
@@ -53,30 +85,39 @@ private struct ComputerProfileRow: View {
     let title: String
     let value: String
     let icon: String
+    let action: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 30, height: 30)
-                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .frame(width: 30, height: 30)
+                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
 
-            Text(title)
-                .font(.appSubheadline)
-                .foregroundStyle(AppTheme.primaryText)
+                Text(title)
+                    .font(.appSubheadline)
+                    .foregroundStyle(AppTheme.primaryText)
 
-            Spacer()
+                Spacer()
 
-            Text(value)
-                .font(.appBody)
-                .foregroundStyle(AppTheme.secondaryText)
-                .lineLimit(1)
+                Text(value)
+                    .font(.appBody)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineLimit(1)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(AppTheme.secondaryText)
+            }
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
         .padding(.vertical, 13)
     }
 }
 
 #Preview {
-    ComputerProfileView(hardwareProfile: .skipped, onBack: {})
+    ComputerProfileView(hardwareProfile: .constant(.skipped), onBack: {})
 }

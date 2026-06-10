@@ -8,10 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let hardwareProfileStore = HardwareProfileStore()
+
     @State private var selectedScreen: AppScreen = .login
     @State private var selectedTab: AppTab = .home
-    @State private var onboardingProfile: OnboardingProfile = .skipped
+    @State private var onboardingProfile: OnboardingProfile
     @State private var buildResultReturnTarget: BuildResultReturnTarget = .fromAIBuild
+
+    init() {
+        let savedHardwareProfile = HardwareProfileStore().load()
+        _onboardingProfile = State(
+            initialValue: OnboardingProfile(
+                preference: .balanced,
+                hardwareProfile: savedHardwareProfile
+            )
+        )
+    }
 
     var body: some View {
         ZStack {
@@ -25,7 +37,7 @@ struct ContentView: View {
                         selectedScreen = .onboarding
                     }
                 case .onboarding:
-                    OnboardingChoiceView { profile in
+                    OnboardingChoiceView(initialHardwareProfile: onboardingProfile.hardwareProfile) { profile in
                         onboardingProfile = profile
                         selectedScreen = .home
                         selectedTab = .home
@@ -89,14 +101,17 @@ struct ContentView: View {
                     )
                 case .computerProfile:
                     ComputerProfileView(
-                        hardwareProfile: onboardingProfile.hardwareProfile,
+                        hardwareProfile: $onboardingProfile.hardwareProfile,
                         onBack: {
                             selectedTab = .profile
                             selectedScreen = .profile
                         }
                     )
                 case .upgrade:
-                    UpgradePlanView(onBack: { selectedScreen = .home })
+                    UpgradePlanView(
+                        savedHardwareProfile: onboardingProfile.hardwareProfile,
+                        onBack: { selectedScreen = .home }
+                    )
                 case .configReview:
                     ConfigReviewView(onBack: { selectedScreen = .home })
                 case .compatibility:
@@ -104,7 +119,10 @@ struct ContentView: View {
                 case .guide:
                     GuideView(onBack: { selectedScreen = .home })
                 case .diy:
-                    DIYBuildView(onBack: { selectedScreen = .home })
+                    DIYBuildView(
+                        savedHardwareProfile: onboardingProfile.hardwareProfile,
+                        onBack: { selectedScreen = .home }
+                    )
                 case .buildResult:
                     BuildResultView(
                         plan: AppMockData.samplePlan,
@@ -120,6 +138,9 @@ struct ContentView: View {
             .transition(.opacity)
         }
         .animation(.easeInOut(duration: 0.18), value: selectedScreen)
+        .onChange(of: onboardingProfile.hardwareProfile) { _, profile in
+            hardwareProfileStore.save(profile)
+        }
     }
 
     private func openAI() {

@@ -3,15 +3,15 @@ import SwiftUI
 private let upgradeStepCount = 5
 
 struct UpgradePlanView: View {
+    let savedHardwareProfile: HardwareProfile
     let onBack: () -> Void
 
     @State private var step = 1
     @State private var budget: Double = 3000
     @State private var selectedNeed = "提升游戏性能"
     @State private var selectedGames: Set<String> = ["CS2", "PUBG", "无畏契约"]
-    @State private var selectedPart: UpgradeCurrentPart?
-    @State private var editableParts = UpgradeCurrentPart.samples
-    @State private var selectedPartValue = ""
+    @State private var selectedHardwareCategory: HardwareOptionCategory?
+    @State private var configuration = UpgradePlanConfiguration.sample
 
     private let designWidth: CGFloat = 328
     private let needs = UpgradeNeed.samples
@@ -37,7 +37,11 @@ struct UpgradePlanView: View {
             Group {
                 switch step {
                 case 1:
-                    CurrentConfigStep(parts: editableParts, selectedPart: $selectedPart)
+                    CurrentConfigStep(
+                        configuration: $configuration,
+                        selectedCategory: $selectedHardwareCategory,
+                        savedHardwareProfile: savedHardwareProfile
+                    )
                 case 2:
                     UpgradeBudgetStep(budget: $budget)
                 case 3:
@@ -65,24 +69,68 @@ struct UpgradePlanView: View {
             .padding(.bottom, 22)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sheet(item: $selectedPart) { part in
+        .sheet(item: $selectedHardwareCategory) { category in
             HardwarePickerSheet(
-                title: part.title,
-                icon: part.icon,
-                filters: HardwareCatalog.filters(for: part.title),
-                fallbackOptions: part.options,
-                selectedValue: $selectedPartValue
+                title: category.title,
+                icon: category.icon,
+                filters: filters(for: category),
+                contextMessage: contextMessage(for: category),
+                selectedValue: binding(for: category.title)
             )
             .presentationDetents([.large])
         }
-        .onChange(of: selectedPart) { _, part in
-            selectedPartValue = part?.value ?? ""
-        }
-        .onChange(of: selectedPartValue) { _, value in
-            guard let part = selectedPart, !value.isEmpty else { return }
-            guard let index = editableParts.firstIndex(where: { $0.id == part.id }) else { return }
-            editableParts[index].value = value
-            selectedPart = nil
+    }
+
+    private func binding(for title: String) -> Binding<String> {
+        Binding(
+            get: { configuration.value(for: title) },
+            set: { configuration.setValue($0, for: title) }
+        )
+    }
+
+    private func filters(for category: HardwareOptionCategory) -> [HardwareCatalogFilter] {
+        category.title == "主板"
+            ? HardwareCatalog.motherboardFilters(compatibleWithCPU: configuration.hardwareProfile.cpu)
+            : HardwareCatalog.filters(for: category.title)
+    }
+
+    private func contextMessage(for category: HardwareOptionCategory) -> String? {
+        let cpu = configuration.hardwareProfile.cpu
+        guard category.title == "主板", let socket = HardwareCatalog.cpuSocket(for: cpu) else { return nil }
+        return "已根据 \(cpu) 筛选 \(socket) 兼容主板"
+    }
+}
+
+private struct CurrentConfigStep: View {
+    @Binding var configuration: UpgradePlanConfiguration
+    @Binding var selectedCategory: HardwareOptionCategory?
+    let savedHardwareProfile: HardwareProfile
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            UpgradeConfigIntroCard(
+                icon: "desktopcomputer",
+                title: "选择当前电脑配置",
+                subtitle: "先选你知道的 CPU、显卡、内存和电源，不确定的地方可以选“不知道”。"
+            )
+
+            ApplySavedProfileButton(hasSavedProfile: !savedHardwareProfile.wasSkipped) {
+                configuration.apply(savedHardwareProfile)
+            }
+
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 12) {
+                    ForEach(UpgradePlanConfiguration.categories) { category in
+                        UpgradeHardwareRow(
+                            category: category,
+                            selectedValue: configuration.value(for: category.title)
+                        ) {
+                            selectedCategory = category
+                        }
+                    }
+                }
+                .padding(.bottom, 10)
+            }
         }
     }
 }
@@ -143,30 +191,32 @@ private struct UpgradeProgressDots: View {
     }
 }
 
-private struct CurrentConfigStep: View {
-    let parts: [UpgradeCurrentPart]
-    @Binding var selectedPart: UpgradeCurrentPart?
+private struct UpgradeConfigIntroCard: View {
+    let icon: String
+    let title: String
+    let subtitle: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            UpgradeStepTitle(
-                title: "选择当前电脑配置",
-                subtitle: "准确填写配置信息，帮助 AI 更精准推荐"
-            )
+        SoftCard(radius: 18) {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .frame(width: 52, height: 52)
+                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 16))
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 10) {
-                    ForEach(parts) { part in
-                        Button {
-                            selectedPart = part
-                        } label: {
-                            UpgradePartRow(part: part)
-                        }
-                        .buttonStyle(.plain)
-                    }
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(title)
+                        .font(.appHeadline)
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text(subtitle)
+                        .font(.appCaption)
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(.bottom, 12)
             }
+            .padding(16)
         }
     }
 }
@@ -386,36 +436,41 @@ private struct UpgradeStepTitle: View {
     }
 }
 
-private struct UpgradePartRow: View {
-    let part: UpgradeCurrentPart
+private struct UpgradeHardwareRow: View {
+    let category: HardwareOptionCategory
+    let selectedValue: String
+    let action: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: part.icon)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 32, height: 32)
-                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
+        Button(action: action) {
+            SoftCard(radius: 16) {
+                HStack(spacing: 12) {
+                    Image(systemName: category.icon)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .frame(width: 34, height: 34)
+                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(part.title)
-                    .font(.appSubheadline)
-                    .foregroundStyle(AppTheme.primaryText)
-                Text(part.value)
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .lineLimit(1)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(category.title)
+                            .font(.appSubheadline)
+                            .foregroundStyle(AppTheme.primaryText)
+                        Text(selectedValue)
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                            .lineLimit(1)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
+                .padding(14)
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(AppTheme.secondaryText)
         }
-        .padding(14)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
+        .buttonStyle(.plain)
     }
 }
 
@@ -869,23 +924,6 @@ private struct UpgradeTotalCard: View {
     }
 }
 
-private struct UpgradeCurrentPart: Equatable, Identifiable {
-    let id: String
-    let title: String
-    var value: String
-    let icon: String
-    let options: [String]
-
-    static let samples = [
-        UpgradeCurrentPart(id: "cpu", title: "处理器 (CPU)", value: "i5-10400F", icon: "cpu", options: HardwareCatalog.cpuOptions),
-        UpgradeCurrentPart(id: "gpu", title: "显卡 (GPU)", value: "GTX 1660 Super", icon: "display", options: HardwareCatalog.gpuOptions),
-        UpgradeCurrentPart(id: "motherboard", title: "主板", value: "B460M Mortar", icon: "menucard", options: HardwareCatalog.motherboardOptions),
-        UpgradeCurrentPart(id: "memory", title: "内存 (RAM)", value: "16GB DDR4", icon: "memorychip", options: HardwareCatalog.memoryOptions),
-        UpgradeCurrentPart(id: "power", title: "电源 (PSU)", value: "550W", icon: "bolt", options: HardwareCatalog.powerSupplyOptions),
-        UpgradeCurrentPart(id: "cooler", title: "散热器", value: "原装散热器", icon: "fan", options: ["不知道", "原装散热器", "塔式风冷", "240 水冷"])
-    ]
-}
-
 private struct UpgradeNeed: Identifiable {
     let id = UUID()
     let title: String
@@ -950,5 +988,5 @@ private func toggle(_ value: String, in set: inout Set<String>) {
 }
 
 #Preview {
-    UpgradePlanView(onBack: {})
+    UpgradePlanView(savedHardwareProfile: .skipped, onBack: {})
 }

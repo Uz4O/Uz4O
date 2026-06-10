@@ -55,6 +55,40 @@ struct PrimaryButton: View {
     }
 }
 
+struct ApplySavedProfileButton: View {
+    let hasSavedProfile: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: hasSavedProfile ? "person.crop.circle.badge.checkmark" : "person.crop.circle.badge.questionmark")
+                    .font(.system(size: 15, weight: .semibold))
+
+                Text(hasSavedProfile ? "套用我的电脑配置" : "还没有电脑档案")
+                    .font(.appSubheadline)
+
+                Spacer()
+
+                if hasSavedProfile {
+                    Image(systemName: "arrow.down.to.line.compact")
+                        .font(.system(size: 12, weight: .bold))
+                }
+            }
+            .foregroundStyle(hasSavedProfile ? AppTheme.primaryText : AppTheme.secondaryText)
+            .padding(.horizontal, 14)
+            .frame(height: 44)
+            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(hasSavedProfile ? AppTheme.primaryText.opacity(0.18) : AppTheme.border, lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .disabled(!hasSavedProfile)
+    }
+}
+
 struct SoftCard<Content: View>: View {
     let radius: CGFloat
     @ViewBuilder var content: Content
@@ -152,16 +186,16 @@ enum AppTab: String, CaseIterable {
     case builds = "配置"
     case profile = "我的"
 
-    var icon: String {
+    func icon(isSelected: Bool) -> String {
         switch self {
         case .home:
-            return "house.fill"
+            return isSelected ? "house.fill" : "house"
         case .community:
-            return "bubble.left.and.bubble.right.fill"
+            return isSelected ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right"
         case .builds:
-            return "doc.text"
+            return isSelected ? "doc.text.fill" : "doc.text"
         case .profile:
-            return "person"
+            return isSelected ? "person.fill" : "person"
         }
     }
 }
@@ -178,13 +212,12 @@ struct BottomTabBar: View {
                     onSelect?(tab)
                 } label: {
                     VStack(spacing: 4) {
-                        Image(systemName: tab.icon)
+                        Image(systemName: tab.icon(isSelected: selectedTab == tab))
                             .font(.system(size: 17, weight: .semibold))
                             .frame(width: 24, height: 20)
                         Text(tab.rawValue)
                             .font(.system(size: 10, weight: .medium))
                     }
-                    .padding(.vertical, 0)
                     .foregroundStyle(selectedTab == tab ? AppTheme.primaryText : AppTheme.secondaryText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
@@ -196,6 +229,20 @@ struct BottomTabBar: View {
         .frame(height: 64)
         .background(.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 32))
         .modifier(AppTheme.cardShadow)
+    }
+}
+
+struct MascotAvatar: View {
+    var size: CGFloat = 42
+
+    var body: some View {
+        Image("RobotMascot")
+            .resizable()
+            .scaledToFill()
+            .frame(width: size, height: size)
+            .background(Color.white)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(AppTheme.border, lineWidth: 0.8))
     }
 }
 

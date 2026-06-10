@@ -6,59 +6,56 @@ struct CommunityView: View {
 
     @State private var selectedPost: CommunityPost?
     @State private var isComposerPresented = false
-
     private let posts = CommunityPost.featuredFeed
 
     var body: some View {
         VStack(spacing: 12) {
-            HStack {
-                Text("硬件讨论社区")
-                    .font(.appTitle)
-                    .foregroundStyle(AppTheme.primaryText)
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("硬件讨论社区")
+                        .font(.system(size: 29, weight: .heavy))
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text("分享装机经验，交流硬件知识")
+                        .font(.system(size: 13))
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
 
                 Spacer()
 
                 Image(systemName: "magnifyingglass")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 24, weight: .medium))
                     .foregroundStyle(AppTheme.primaryText)
             }
-            .padding(.top, 8)
+            .padding(.top, 12)
 
             ZStack(alignment: .bottomTrailing) {
                 ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 0) {
-                        ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
+                    LazyVStack(spacing: 12) {
+                        ForEach(posts) { post in
                             Button {
                                 selectedPost = post
                             } label: {
-                                CommunityForumRow(post: post, style: .home)
-                                    .padding(.vertical, 14)
+                                CommunityPostSurface(post: post)
                             }
                             .buttonStyle(.plain)
-
-                            if index != posts.count - 1 {
-                                Divider()
-                                    .padding(.leading, 42)
-                                    .padding(.vertical, 2)
-                            }
                         }
                     }
-                    .padding(.bottom, 88)
+                    .padding(.bottom, 74)
                 }
 
                 Button {
                     isComposerPresented = true
                 } label: {
                     Image(systemName: "plus")
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 28, weight: .light))
                         .foregroundStyle(.white)
-                        .frame(width: 58, height: 58)
-                        .background(AppTheme.primaryButton, in: Circle())
+                        .frame(width: 60, height: 60)
+                        .background(Color.black, in: Circle())
                         .shadow(color: Color.black.opacity(0.18), radius: 18, x: 0, y: 10)
                 }
                 .buttonStyle(.plain)
-                .padding(.trailing, 2)
-                .padding(.bottom, 12)
+                .padding(.trailing, 4)
+                .padding(.bottom, 14)
             }
 
             BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
@@ -74,138 +71,82 @@ struct CommunityView: View {
     }
 }
 
+private struct CommunityPostSurface: View {
+    let post: CommunityPost
+
+    var body: some View {
+        CommunityForumRow(post: post, style: .community)
+            .padding(16)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 22))
+            .modifier(AppTheme.cardShadow)
+    }
+}
+
 struct CommunityPostCard: View {
     let post: CommunityPost
     var isCompact: Bool
 
     var body: some View {
-        CommunityForumRow(post: post, style: .home)
-            .padding(.vertical, 14)
+        CommunityForumRow(post: post, style: isCompact ? .home : .community)
     }
 }
 
 struct CommunityForumRow: View {
-    enum Style {
+    enum Style: Equatable {
         case home
         case community
 
-        var avatarSize: CGFloat {
-            switch self {
-            case .home:
-                return 30
-            case .community:
-                return 40
-            }
-        }
-
-        var authorFont: Font {
-            switch self {
-            case .home:
-                return .system(size: 13, weight: .bold)
-            case .community:
-                return .system(size: 17, weight: .bold)
-            }
-        }
-
-        var timeFont: Font {
-            switch self {
-            case .home:
-                return .system(size: 11)
-            case .community:
-                return .system(size: 14)
-            }
-        }
-
-        var titleFont: Font {
-            switch self {
-            case .home:
-                return .system(size: 15, weight: .bold)
-            case .community:
-                return .system(size: 20, weight: .bold)
-            }
-        }
-
-        var summaryFont: Font {
-            switch self {
-            case .home:
-                return .system(size: 12)
-            case .community:
-                return .system(size: 16)
-            }
-        }
-
-        var verticalSpacing: CGFloat {
-            switch self {
-            case .home:
-                return 8
-            case .community:
-                return 14
-            }
-        }
-
-        var imageHeight: CGFloat {
-            switch self {
-            case .home:
-                return 60
-            case .community:
-                return 82
-            }
-        }
+        var avatarSize: CGFloat { self == .home ? 30 : 38 }
+        var authorFont: Font { .system(size: self == .home ? 13 : 14, weight: .bold) }
+        var timeFont: Font { .system(size: self == .home ? 11 : 12) }
+        var titleFont: Font { .system(size: self == .home ? 15 : 18, weight: .bold) }
+        var summaryFont: Font { .system(size: self == .home ? 12 : 13) }
+        var spacing: CGFloat { self == .home ? 8 : 12 }
     }
 
     let post: CommunityPost
     let style: Style
 
     var body: some View {
-        VStack(alignment: .leading, spacing: style.verticalSpacing) {
-            HStack(alignment: .top, spacing: 12) {
+        VStack(alignment: .leading, spacing: style.spacing) {
+            HStack(spacing: 10) {
                 CommunityAvatar(author: post.author, size: style.avatarSize)
-                    .padding(.top, 1)
 
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(post.author.name)
-                            .font(style.authorFont)
-                            .foregroundStyle(AppTheme.primaryText)
-                            .lineLimit(1)
-
-                        Text(post.author.subtitle)
-                            .font(style.timeFont)
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineLimit(1)
-
-                        Spacer()
-
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: style == .home ? 13 : 16, weight: .bold))
-                            .foregroundStyle(AppTheme.secondaryText)
-                    }
-
-                    if post.isPinned {
-                        Text("置顶")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(AppTheme.success)
-                            .padding(.horizontal, 6)
-                            .frame(height: 18)
-                            .background(AppTheme.success.opacity(0.14), in: Capsule())
-                    }
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(post.author.name)
+                        .font(style.authorFont)
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text(post.author.subtitle)
+                        .font(style.timeFont)
+                        .foregroundStyle(AppTheme.secondaryText)
                 }
+                Spacer()
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(AppTheme.secondaryText)
             }
 
-            Text((post.isPinned ? "✨ " : "") + post.title)
+            if post.isPinned {
+                Text("置顶")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(Color.green)
+                    .padding(.horizontal, 8)
+                    .frame(height: 20)
+                    .background(Color.green.opacity(0.12), in: Capsule())
+            }
+
+            Text((post.isPinned ? "✦ " : "") + post.title)
                 .font(style.titleFont)
                 .foregroundStyle(AppTheme.primaryText)
                 .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
 
             Text(post.summary)
                 .font(style.summaryFont)
-                .foregroundStyle(style == .home ? AppTheme.secondaryText : AppTheme.primaryText)
-                .lineLimit(style == .home ? 2 : 3)
-                .fixedSize(horizontal: false, vertical: true)
+                .foregroundStyle(AppTheme.secondaryText)
+                .lineLimit(style == .home ? 1 : 2)
 
-            if post.id == "value-build-may" {
-                CommunityImageStrip(height: style.imageHeight)
+            if post.id == "value-build-may" && style == .community {
+                CommunityImageStrip(height: 72)
             }
 
             CommunityStatsBar(stats: post.stats, style: style == .home ? .compact : .regular)
@@ -218,18 +159,7 @@ struct CommunityAvatar: View {
     var size: CGFloat = 26
 
     var body: some View {
-        Text(author.avatarInitial)
-            .font(.system(size: size * 0.38, weight: .bold))
-            .foregroundStyle(.white)
-            .frame(width: size, height: size)
-            .background(
-                LinearGradient(
-                    colors: [AppTheme.primaryText, Color(red: 0.33, green: 0.39, blue: 0.49)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                in: Circle()
-            )
+        MascotAvatar(size: size)
     }
 }
 
@@ -237,112 +167,23 @@ struct CommunityImageStrip: View {
     var height: CGFloat = 58
 
     var body: some View {
-        HStack(spacing: 7) {
-            ForEach(0..<4) { index in
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(
-                            LinearGradient(
-                                colors: imageColors[index],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-
-                    if index == 0 {
-                        MiniCaseThumbnail()
-                    } else {
-                        VStack(spacing: 7) {
-                            HStack(spacing: 5) {
-                                Circle().fill(Color.white.opacity(0.86)).frame(width: 12, height: 12)
-                                Circle().fill(Color.white.opacity(0.62)).frame(width: 12, height: 12)
-                            }
-                            RoundedRectangle(cornerRadius: 3)
-                                .fill(Color.white.opacity(0.65))
-                                .frame(width: 42, height: 8)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: height)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
-        }
-    }
-
-    private var imageColors: [[Color]] {
-        [
-            [Color(red: 0.86, green: 0.90, blue: 0.95), Color(red: 0.49, green: 0.56, blue: 0.66)],
-            [Color(red: 0.08, green: 0.10, blue: 0.14), Color(red: 0.31, green: 0.34, blue: 0.42)],
-            [Color(red: 0.12, green: 0.10, blue: 0.22), Color(red: 0.32, green: 0.21, blue: 0.64)],
-            [Color(red: 0.05, green: 0.08, blue: 0.16), Color(red: 0.08, green: 0.31, blue: 0.78)]
-        ]
-    }
-}
-
-private struct MiniCaseThumbnail: View {
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.white.opacity(0.30))
-                .frame(width: 48, height: 48)
-
-            RoundedRectangle(cornerRadius: 5)
-                .fill(LinearGradient(
-                    colors: [Color(red: 0.93, green: 0.96, blue: 1.0), Color(red: 0.65, green: 0.72, blue: 0.82)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
-                .frame(width: 36, height: 42)
-
-            RoundedRectangle(cornerRadius: 3)
-                .fill(Color.white.opacity(0.50))
-                .frame(width: 15, height: 30)
-                .offset(x: -7)
-
-            VStack(spacing: 4) {
-                ForEach(0..<3) { _ in
-                    Circle()
-                        .fill(Color.white.opacity(0.90))
-                        .frame(width: 10, height: 10)
-                }
-            }
-            .offset(x: 10)
-        }
+        Image("CommunityHardwareStrip")
+            .resizable()
+            .scaledToFill()
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
 struct CommunityStatsBar: View {
-    enum Style {
+    enum Style: Equatable {
         case compact
         case regular
 
-        var fontSize: CGFloat {
-            switch self {
-            case .compact:
-                return 11
-            case .regular:
-                return 14
-            }
-        }
-
-        var iconSize: CGFloat {
-            switch self {
-            case .compact:
-                return 13
-            case .regular:
-                return 17
-            }
-        }
-
-        var spacing: CGFloat {
-            switch self {
-            case .compact:
-                return 24
-            case .regular:
-                return 34
-            }
-        }
+        var fontSize: CGFloat { self == .compact ? 11 : 13 }
+        var iconSize: CGFloat { self == .compact ? 13 : 16 }
+        var spacing: CGFloat { self == .compact ? 24 : 30 }
     }
 
     let stats: CommunityStats

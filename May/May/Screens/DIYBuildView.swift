@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DIYBuildView: View {
+    let savedHardwareProfile: HardwareProfile
     let onBack: () -> Void
 
     @State private var flow = PerformanceTestFlow()
@@ -26,7 +27,8 @@ struct DIYBuildView: View {
                 case .hardware:
                     HardwareSelectionStep(
                         hardwareProfile: $flow.hardwareProfile,
-                        selectedCategory: $selectedHardwareCategory
+                        selectedCategory: $selectedHardwareCategory,
+                        savedHardwareProfile: savedHardwareProfile
                     )
                 case .conditions:
                     TestConditionStep(
@@ -57,7 +59,8 @@ struct DIYBuildView: View {
             HardwarePickerSheet(
                 title: category.title,
                 icon: category.icon,
-                filters: HardwareCatalog.filters(for: category.title),
+                filters: filters(for: category),
+                contextMessage: contextMessage(for: category),
                 selectedValue: binding(for: category.title)
             )
             .presentationDetents([.large])
@@ -80,20 +83,22 @@ struct DIYBuildView: View {
     }
 
     private func binding(for title: String) -> Binding<String> {
-        switch title {
-        case "CPU":
-            return $flow.hardwareProfile.cpu
-        case "显卡":
-            return $flow.hardwareProfile.gpu
-        case "主板":
-            return $flow.hardwareProfile.motherboard
-        case "内存":
-            return $flow.hardwareProfile.memory
-        case "硬盘":
-            return $flow.hardwareProfile.storage
-        default:
-            return $flow.hardwareProfile.powerSupply
-        }
+        Binding(
+            get: { flow.hardwareProfile.value(for: title) },
+            set: { flow.hardwareProfile.setValue($0, for: title) }
+        )
+    }
+
+    private func filters(for category: HardwareOptionCategory) -> [HardwareCatalogFilter] {
+        category.title == "主板"
+            ? HardwareCatalog.motherboardFilters(compatibleWithCPU: flow.hardwareProfile.cpu)
+            : HardwareCatalog.filters(for: category.title)
+    }
+
+    private func contextMessage(for category: HardwareOptionCategory) -> String? {
+        let cpu = flow.hardwareProfile.cpu
+        guard category.title == "主板", let socket = HardwareCatalog.cpuSocket(for: cpu) else { return nil }
+        return "已根据 \(cpu) 筛选 \(socket) 兼容主板"
     }
 }
 
@@ -132,6 +137,7 @@ private struct PerformanceStepIndicator: View {
 private struct HardwareSelectionStep: View {
     @Binding var hardwareProfile: HardwareProfile
     @Binding var selectedCategory: HardwareOptionCategory?
+    let savedHardwareProfile: HardwareProfile
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -140,6 +146,10 @@ private struct HardwareSelectionStep: View {
                 title: "选择自己的电脑配置",
                 subtitle: "先选你知道的 CPU、显卡、内存和电源，不确定的地方可以选“不知道”。"
             )
+
+            ApplySavedProfileButton(hasSavedProfile: !savedHardwareProfile.wasSkipped) {
+                hardwareProfile = savedHardwareProfile
+            }
 
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 12) {
@@ -493,5 +503,5 @@ private struct PerformanceMetricRow: View {
 }
 
 #Preview {
-    DIYBuildView(onBack: {})
+    DIYBuildView(savedHardwareProfile: .skipped, onBack: {})
 }

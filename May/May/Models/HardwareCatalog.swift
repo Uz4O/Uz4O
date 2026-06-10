@@ -788,6 +788,38 @@ enum HardwareCatalog {
         }
     }
 
+    static func motherboardFilters(compatibleWithCPU cpu: String) -> [HardwareCatalogFilter] {
+        guard let socket = cpuSocket(for: cpu) else {
+            return filters(for: "主板")
+        }
+
+        let compatibleMotherboards = motherboards.filter { motherboardSocket(for: $0.name) == socket }
+        return groupedFilters(
+            items: compatibleMotherboards,
+            filterKey: { motherboardPlatform(from: $0.detail) },
+            groupKey: { motherboardChipset(from: $0.detail) }
+        )
+    }
+
+    static func areCompatible(cpu: String, motherboard: String) -> Bool {
+        guard cpu != "不知道", motherboard != "不知道" else { return true }
+        guard let cpuSocket = cpuSocket(for: cpu), let motherboardSocket = motherboardSocket(for: motherboard) else {
+            return true
+        }
+
+        return cpuSocket == motherboardSocket
+    }
+
+    static func cpuSocket(for cpu: String) -> String? {
+        guard let item = cpus.first(where: { $0.name == cpu }) else { return nil }
+        return socket(from: item.detail)
+    }
+
+    static func motherboardSocket(for motherboard: String) -> String? {
+        guard let item = motherboards.first(where: { $0.name == motherboard }) else { return nil }
+        return socket(from: item.detail)
+    }
+
     private static func unknownFirst(_ options: [String]) -> [String] {
         ["不知道"] + options
     }
@@ -873,6 +905,12 @@ enum HardwareCatalog {
 
     private static func motherboardChipset(from detail: String) -> String {
         detail.components(separatedBy: " · ").last ?? "其他芯片组"
+    }
+
+    private static func socket(from detail: String) -> String? {
+        detail.components(separatedBy: " · ").first {
+            $0.hasPrefix("LGA") || $0 == "AM4" || $0 == "AM5"
+        }
     }
 
     private static func ramType(from detail: String) -> String {

@@ -117,7 +117,7 @@ enum HardwareProfileOptions {
     ]
 }
 
-struct HardwareProfile: Equatable {
+struct HardwareProfile: Codable, Equatable {
     var cpu: String
     var gpu: String
     var motherboard: String
@@ -156,6 +156,45 @@ struct HardwareProfile: Equatable {
 
     var summary: String {
         "CPU \(cpu) · 显卡 \(gpu) · 主板 \(motherboard) · 内存 \(memory) · 硬盘 \(storage) · 电源 \(powerSupply)"
+    }
+
+    func value(for title: String) -> String {
+        switch title {
+        case "CPU":
+            return cpu
+        case "显卡":
+            return gpu
+        case "主板":
+            return motherboard
+        case "内存":
+            return memory
+        case "硬盘":
+            return storage
+        default:
+            return powerSupply
+        }
+    }
+
+    mutating func setValue(_ value: String, for title: String) {
+        switch title {
+        case "CPU":
+            cpu = value
+            if !HardwareCatalog.areCompatible(cpu: value, motherboard: motherboard) {
+                motherboard = "不知道"
+            }
+        case "显卡":
+            gpu = value
+        case "主板":
+            motherboard = value
+        case "内存":
+            memory = value
+        case "硬盘":
+            storage = value
+        default:
+            powerSupply = value
+        }
+
+        wasSkipped = false
     }
 }
 

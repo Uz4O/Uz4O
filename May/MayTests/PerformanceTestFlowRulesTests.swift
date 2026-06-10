@@ -14,6 +14,17 @@ struct PerformanceTestFlowRulesTests {
         assertEqual(flow.selectedResolution.title, "2K", "Default resolution should match the current result copy.")
         assertEqual(flow.selectedGames.map(\.name), ["赛博朋克 2077"], "Default game should keep one selected test target.")
 
+        let savedProfile = HardwareProfile(
+            cpu: "i7-14700",
+            gpu: "RTX 5080",
+            motherboard: "B860 DS3H",
+            memory: "芝奇/海盗船 DDR5-6000 CL30",
+            storage: "Western Digital WD Black SN850X",
+            powerSupply: "Corsair RM750e"
+        )
+        flow.apply(savedProfile)
+        assertEqual(flow.hardwareProfile, savedProfile, "Performance test should apply the complete saved computer profile.")
+
         flow.goNext()
         assertEqual(flow.currentStep, .conditions, "Next should move from hardware to test conditions.")
 

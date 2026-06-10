@@ -3,6 +3,7 @@ import SwiftUI
 struct HardwarePickerSheet: View {
     let title: String
     let icon: String
+    private let contextMessage: String?
     private let filters: [HardwareCatalogFilter]
     @Binding var selectedValue: String
 
@@ -15,11 +16,13 @@ struct HardwarePickerSheet: View {
         title: String,
         icon: String,
         filters: [HardwareCatalogFilter],
+        contextMessage: String? = nil,
         fallbackOptions: [String] = [],
         selectedValue: Binding<String>
     ) {
         self.title = title
         self.icon = icon
+        self.contextMessage = contextMessage
         self.filters = filters.isEmpty
             ? [
                 HardwareCatalogFilter(
@@ -88,6 +91,20 @@ struct HardwarePickerSheet: View {
                 }
 
                 Spacer()
+            }
+
+            if let contextMessage {
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark.shield")
+                        .font(.system(size: 13, weight: .semibold))
+                    Text(contextMessage)
+                        .font(.appCaption)
+                }
+                .foregroundStyle(AppTheme.secondaryText)
+                .padding(.horizontal, 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: 36)
+                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 11))
             }
 
             if filters.count > 1 {
