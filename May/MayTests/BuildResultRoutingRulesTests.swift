@@ -15,6 +15,12 @@ struct BuildResultRoutingRulesTests {
             "Build detail opened after AI generation should keep returning to home."
         )
 
+        assertEqual(
+            BuildResultReturnTarget.fromConfigAIBuild.destination,
+            .builds,
+            "AI generation opened from the current computer config section should return to the config tab."
+        )
+
         print("BuildResultRoutingRulesTests passed")
     }
 

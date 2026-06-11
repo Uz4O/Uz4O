@@ -4,46 +4,36 @@ struct MyBuildsView: View {
     let hardwareProfile: HardwareProfile
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
+    let onComposePost: () -> Void
     let onOpenPlan: () -> Void
     let onCreate: () -> Void
     let onOpenComputerProfile: () -> Void
+    let onOpenUpgrade: () -> Void
+    let onOpenPerformanceTest: () -> Void
 
-    @State private var selectedSection = ConfigHubSection.defaultSelection
+    @Binding var selectedSection: ConfigHubSection
+    private let designWidth: CGFloat = 344
 
     var body: some View {
-        VStack(spacing: 16) {
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("配置")
-                        .font(.system(size: 29, weight: .heavy))
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text("管理 AI 生成的配置和现在自己的配置")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(AppTheme.secondaryText)
-                }
-
-                Spacer()
-
-                Button(action: onCreate) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 40, height: 40)
-                        .background(AppTheme.surface.opacity(0.92), in: RoundedRectangle(cornerRadius: 14))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(AppTheme.border.opacity(0.9), lineWidth: 1)
-                        )
-                        .shadow(color: Color.black.opacity(0.06), radius: 14, x: 0, y: 8)
-                }
-                .buttonStyle(.plain)
-            }
-            .padding(.top, 12)
-
-            ConfigHubSegmentedPicker(selectedSection: $selectedSection)
-
+        ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 14) {
+                VStack(spacing: 16) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("配置")
+                                .font(.system(size: 29, weight: .heavy))
+                                .foregroundStyle(AppTheme.primaryText)
+                            Text("管理 AI 生成的配置和现在自己的配置")
+                                .font(.system(size: 12, weight: .regular))
+                                .foregroundStyle(AppTheme.secondaryText)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(.top, 12)
+
+                    ConfigHubSegmentedPicker(selectedSection: $selectedSection)
+
                     switch selectedSection {
                     case .aiBuilds:
                         AIBuildsSection(
@@ -55,22 +45,25 @@ struct MyBuildsView: View {
                         CurrentComputerSection(
                             hardwareProfile: hardwareProfile,
                             onEdit: onOpenComputerProfile,
-                            onCreate: onCreate
+                            onCreate: onCreate,
+                            onOpenUpgrade: onOpenUpgrade,
+                            onOpenPerformanceTest: onOpenPerformanceTest
                         )
                     }
                 }
-                .padding(.bottom, 4)
+                .padding(.bottom, 148)
+                .frame(width: designWidth)
+                .frame(maxWidth: .infinity)
                 .transaction { transaction in
                     transaction.animation = nil
                 }
             }
 
-            Spacer(minLength: 0)
-
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
+            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                .frame(width: designWidth)
         }
-        .padding(.horizontal, AppTheme.screenPadding)
-        .padding(.bottom, 12)
+        .frame(maxWidth: .infinity)
+        .background(AppTheme.background.ignoresSafeArea())
     }
 }
 
@@ -129,6 +122,7 @@ private struct AIBuildsSection: View {
                 ConfigPlanList(plans: plans, onOpenPlan: onOpenPlan)
             }
         }
+        .padding(.top, 22)
     }
 }
 
@@ -137,39 +131,22 @@ private struct ConfigPlanList: View {
     let onOpenPlan: () -> Void
 
     var body: some View {
-        ConfigPanel {
-            VStack(spacing: 0) {
-                ConfigSectionHeader(
-                    title: "AI 配置单",
-                    subtitle: ConfigHubSection.aiBuilds.subtitle,
-                    trailing: "\(plans.count) 个"
-                )
-                .padding(.bottom, 6)
+        VStack(spacing: 0) {
+            ConfigSectionHeader(
+                title: "AI 配置单",
+                subtitle: nil,
+                trailing: "\(plans.count) 个"
+            )
+            .padding(.bottom, 22)
 
-                ForEach(Array(plans.enumerated()), id: \.element.id) { index, plan in
-                    SavedPlanRow(plan: plan, onOpen: onOpenPlan)
+            ForEach(Array(plans.enumerated()), id: \.element.id) { index, plan in
+                SavedPlanRow(plan: plan, onOpen: onOpenPlan)
 
-                    if index != plans.count - 1 {
-                        ConfigDivider(leftPadding: 48)
-                    }
+                if index != plans.count - 1 {
+                    ConfigDivider(leftPadding: 48)
                 }
             }
         }
-    }
-}
-
-private struct ConfigPanel<Content: View>: View {
-    @ViewBuilder var content: Content
-
-    var body: some View {
-        content
-            .padding(14)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(AppTheme.border.opacity(0.8), lineWidth: 1)
-            )
-            .shadow(color: Color.black.opacity(0.04), radius: 18, x: 0, y: 10)
     }
 }
 
@@ -210,22 +187,20 @@ private struct EmptyBuildState: View {
     let onCreate: () -> Void
 
     var body: some View {
-        SoftCard(radius: 22) {
-            VStack(spacing: 14) {
-                Image(systemName: "doc.text.magnifyingglass")
-                    .font(.system(size: 34, weight: .semibold))
-                    .foregroundStyle(AppTheme.secondaryText)
-                Text("当前没有 AI 配置")
-                    .font(.appHeadline)
-                    .foregroundStyle(AppTheme.primaryText)
-                Text("生成完配置后，可以在这里回来查看、对比和继续优化。")
-                    .font(.appBody)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .multilineTextAlignment(.center)
-                PrimaryButton(title: "生成第一张配置", icon: "sparkles", action: onCreate)
-            }
-            .padding(24)
+        VStack(spacing: 16) {
+            Image(systemName: "doc.text.magnifyingglass")
+                .font(.system(size: 34, weight: .semibold))
+                .foregroundStyle(AppTheme.secondaryText)
+            Text("当前没有 AI 配置")
+                .font(.appHeadline)
+                .foregroundStyle(AppTheme.primaryText)
+            Text("生成完配置后，可以在这里回来查看、对比和继续优化。")
+                .font(.appBody)
+                .foregroundStyle(AppTheme.secondaryText)
+                .multilineTextAlignment(.center)
+            PrimaryButton(title: "生成第一张配置", icon: "sparkles", action: onCreate)
         }
+        .padding(.top, 24)
     }
 }
 
@@ -275,7 +250,7 @@ private struct SavedPlanRow: View {
                     .foregroundStyle(AppTheme.secondaryText)
             }
             .contentShape(Rectangle())
-            .padding(.vertical, 12)
+            .padding(.vertical, 15)
         }
         .buttonStyle(.plain)
     }
@@ -285,41 +260,45 @@ private struct CurrentComputerSection: View {
     let hardwareProfile: HardwareProfile
     let onEdit: () -> Void
     let onCreate: () -> Void
+    let onOpenUpgrade: () -> Void
+    let onOpenPerformanceTest: () -> Void
 
     var body: some View {
-        VStack(spacing: 12) {
-            ConfigPanel {
-                VStack(spacing: 0) {
-                    ConfigSectionHeader(title: "当前电脑", subtitle: nil, trailing: hardwareProfile.wasSkipped ? "待补充" : "已记录")
-                        .padding(.bottom, 6)
+        VStack(spacing: 28) {
+            VStack(spacing: 0) {
+                ConfigSectionHeader(title: "当前电脑", subtitle: nil, trailing: hardwareProfile.completionLabel)
+                    .padding(.bottom, 20)
 
-                    ComputerConfigRow(title: "CPU", value: hardwareProfile.cpu, icon: "cpu", action: onEdit)
-                    ConfigDivider(leftPadding: 48)
-                    ComputerConfigRow(title: "显卡", value: hardwareProfile.gpu, icon: "display", action: onEdit)
-                    ConfigDivider(leftPadding: 48)
-                    ComputerConfigRow(title: "主板", value: hardwareProfile.motherboard, icon: "menucard", action: onEdit)
-                    ConfigDivider(leftPadding: 48)
-                    ComputerConfigRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack", action: onEdit)
-                    ConfigDivider(leftPadding: 48)
-                    ComputerConfigRow(title: "电源", value: hardwareProfile.powerSupply, icon: "bolt", action: onEdit)
-                }
+                ComputerConfigRow(title: "CPU", value: hardwareProfile.cpu, icon: "cpu", action: onEdit)
+                ConfigDivider(leftPadding: 48)
+                ComputerConfigRow(title: "显卡", value: hardwareProfile.gpu, icon: "display", action: onEdit)
+                ConfigDivider(leftPadding: 48)
+                ComputerConfigRow(title: "主板", value: hardwareProfile.motherboard, icon: "menucard", action: onEdit)
+                ConfigDivider(leftPadding: 48)
+                ComputerConfigRow(title: "内存", value: hardwareProfile.memory, icon: "rectangle.stack", action: onEdit)
+                ConfigDivider(leftPadding: 48)
+                ComputerConfigRow(title: "硬盘", value: hardwareProfile.storage, icon: "externaldrive", action: onEdit)
+                ConfigDivider(leftPadding: 48)
+                ComputerConfigRow(title: "电源", value: hardwareProfile.powerSupply, icon: "bolt", action: onEdit)
             }
 
-            ConfigPanel {
-                VStack(spacing: 0) {
-                    ConfigSectionHeader(title: "可以用它做什么", subtitle: nil, trailing: nil)
-                        .padding(.bottom, 6)
-
-                    ConfigUseCaseRow(icon: "chart.bar.xaxis", title: "看升级短板", subtitle: "判断当前电脑最该先换什么")
-                    ConfigDivider(leftPadding: 48)
-                    ConfigUseCaseRow(icon: "gamecontroller", title: "测游戏表现", subtitle: "结合分辨率和游戏估算体验")
-                    ConfigDivider(leftPadding: 48)
-                    ConfigUseCaseRow(icon: "arrow.left.arrow.right", title: "对比 AI 配置", subtitle: "看新配置相比当前电脑提升在哪")
-                }
+            if !hardwareProfile.isComplete {
+                PrimaryButton(title: "继续补充电脑配置", icon: "plus", action: onEdit)
             }
 
-            PrimaryButton(title: "生成一张可对比的 AI 配置", icon: "sparkles", action: onCreate)
+            VStack(spacing: 0) {
+                ConfigSectionHeader(title: "可以用它做什么", subtitle: nil, trailing: nil)
+                    .padding(.bottom, 20)
+
+                ConfigUseCaseRow(icon: "chart.bar.xaxis", title: "看升级短板", subtitle: "判断当前电脑最该先换什么", action: onOpenUpgrade)
+                ConfigDivider(leftPadding: 48)
+                ConfigUseCaseRow(icon: "gamecontroller", title: "测游戏表现", subtitle: "结合分辨率和游戏估算体验", action: onOpenPerformanceTest)
+                ConfigDivider(leftPadding: 48)
+                ConfigUseCaseRow(icon: "arrow.left.arrow.right", title: "对比 AI 配置", subtitle: "看新配置相比当前电脑提升在哪", action: onCreate)
+            }
+
         }
+        .padding(.top, 22)
     }
 }
 
@@ -355,7 +334,7 @@ private struct ComputerConfigRow: View {
                     .foregroundStyle(AppTheme.secondaryText)
             }
             .contentShape(Rectangle())
-            .padding(.vertical, 9)
+            .padding(.vertical, 13)
         }
         .buttonStyle(.plain)
     }
@@ -365,33 +344,38 @@ private struct ConfigUseCaseRow: View {
     let icon: String
     let title: String
     let subtitle: String
+    let action: () -> Void
 
     var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 30, height: 30)
-                .background(AppTheme.softSurface.opacity(0.9), in: RoundedRectangle(cornerRadius: 8))
-
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.system(size: 15, weight: .bold))
+        Button(action: action) {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                Text(subtitle)
-                    .font(.system(size: 12, weight: .regular))
+                    .frame(width: 30, height: 30)
+                    .background(AppTheme.softSurface.opacity(0.9), in: RoundedRectangle(cornerRadius: 8))
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(title)
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text(subtitle)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.78)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.secondaryText)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.78)
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(AppTheme.secondaryText)
+            .contentShape(Rectangle())
+            .padding(.vertical, 13)
         }
-        .padding(.vertical, 9)
+        .buttonStyle(.plain)
     }
 }
 
@@ -418,8 +402,12 @@ private struct ConfigDivider: View {
         ),
         selectedTab: .constant(.builds),
         onSelectTab: { _ in },
+        onComposePost: {},
         onOpenPlan: {},
         onCreate: {},
-        onOpenComputerProfile: {}
+        onOpenComputerProfile: {},
+        onOpenUpgrade: {},
+        onOpenPerformanceTest: {},
+        selectedSection: .constant(.currentComputer)
     )
 }

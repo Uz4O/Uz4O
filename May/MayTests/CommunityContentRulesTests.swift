@@ -28,9 +28,23 @@ struct CommunityContentRulesTests {
         )
 
         assertEqual(
-            CommunityPost.featuredFeed.first?.title,
-            "2024 年 5 月高性价比装机配置推荐",
-            "Featured community post should match the design topic."
+            CommunityPost.featuredFeed.first?.image?.displayHeight(forWidth: 328),
+            180,
+            "Community images should cap display height even when the original aspect ratio is tall."
+        )
+
+        let tallUpload = CommunityPostImage(assetName: "TallUpload", aspectRatio: 0.25, accessibilityLabel: "竖图")
+        assertEqual(
+            tallUpload.displayHeight(forWidth: 328),
+            180,
+            "Very tall uploaded images should use the maximum placeholder height."
+        )
+
+        let wideUpload = CommunityPostImage(assetName: "WideUpload", aspectRatio: 2, accessibilityLabel: "横图")
+        assertEqual(
+            wideUpload.displayHeight(forWidth: 328),
+            164,
+            "Wide uploaded images should derive placeholder height from their image ratio."
         )
 
         assertEqual(

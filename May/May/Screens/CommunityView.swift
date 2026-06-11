@@ -3,82 +3,83 @@ import SwiftUI
 struct CommunityView: View {
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
+    let onComposePost: () -> Void
 
     @State private var selectedPost: CommunityPost?
-    @State private var isComposerPresented = false
     private let posts = CommunityPost.featuredFeed
+    private let designWidth: CGFloat = 328
 
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("硬件讨论社区")
-                        .font(.system(size: 29, weight: .heavy))
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text("分享装机经验，交流硬件知识")
-                        .font(.system(size: 13))
-                        .foregroundStyle(AppTheme.secondaryText)
-                }
+        ZStack(alignment: .bottom) {
+            ScrollView(showsIndicators: false) {
+                LazyVStack(spacing: 0) {
+                    CommunityHeader()
+                        .padding(.top, 8)
+                        .padding(.bottom, 18)
 
-                Spacer()
-
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundStyle(AppTheme.primaryText)
-            }
-            .padding(.top, 12)
-
-            ZStack(alignment: .bottomTrailing) {
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 12) {
-                        ForEach(posts) { post in
-                            Button {
-                                selectedPost = post
-                            } label: {
-                                CommunityPostSurface(post: post)
-                            }
-                            .buttonStyle(.plain)
+                    ForEach(posts) { post in
+                        Button {
+                            selectedPost = post
+                        } label: {
+                            CommunityPostSurface(post: post, contentWidth: designWidth)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding(.bottom, 74)
-                }
 
-                Button {
-                    isComposerPresented = true
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 28, weight: .light))
-                        .foregroundStyle(.white)
-                        .frame(width: 60, height: 60)
-                        .background(Color.black, in: Circle())
-                        .shadow(color: Color.black.opacity(0.18), radius: 18, x: 0, y: 10)
+                    Color.clear.frame(height: 2)
                 }
-                .buttonStyle(.plain)
-                .padding(.trailing, 4)
-                .padding(.bottom, 14)
+                .frame(width: designWidth)
+                .padding(.bottom, 118)
+                .frame(maxWidth: .infinity)
             }
 
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
+            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                .frame(width: designWidth)
         }
-        .padding(.horizontal, AppTheme.screenPadding)
-        .padding(.bottom, 14)
+        .frame(maxWidth: .infinity)
+        .background(AppTheme.background.ignoresSafeArea())
         .sheet(item: $selectedPost) { post in
             CommunityDetailView(post: post)
         }
-        .sheet(isPresented: $isComposerPresented) {
-            CommunityComposerView()
+    }
+}
+
+private struct CommunityHeader: View {
+    var body: some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("硬件讨论社区")
+                    .font(.system(size: 29, weight: .heavy))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Text("交流装机经验 · 分享配置 · 解决问题")
+                    .font(.system(size: 13))
+                    .foregroundStyle(AppTheme.secondaryText)
+            }
+
+            Spacer()
+
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 24, weight: .medium))
+                .foregroundStyle(AppTheme.primaryText)
+                .frame(width: 34, height: 34)
+                .accessibilityLabel("搜索")
         }
     }
 }
 
 private struct CommunityPostSurface: View {
     let post: CommunityPost
+    let contentWidth: CGFloat
 
     var body: some View {
-        CommunityForumRow(post: post, style: .community)
-            .padding(16)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 22))
-            .modifier(AppTheme.cardShadow)
+        CommunityForumRow(post: post, style: .community, imageWidth: contentWidth)
+            .padding(.vertical, 18)
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(AppTheme.border.opacity(0.8))
+                    .frame(height: 1)
+            }
     }
 }
 
@@ -96,23 +97,23 @@ struct CommunityForumRow: View {
         case home
         case community
 
-        var avatarSize: CGFloat { self == .home ? 30 : 38 }
-        var authorFont: Font { .system(size: self == .home ? 13 : 14, weight: .bold) }
-        var timeFont: Font { .system(size: self == .home ? 11 : 12) }
-        var titleFont: Font { .system(size: self == .home ? 15 : 18, weight: .bold) }
-        var summaryFont: Font { .system(size: self == .home ? 12 : 13) }
-        var spacing: CGFloat { self == .home ? 8 : 12 }
+        var avatarSize: CGFloat { self == .home ? 30 : 32 }
+        var authorFont: Font { .system(size: self == .home ? 13 : 14, weight: .regular) }
+        var timeFont: Font { .system(size: self == .home ? 11 : 11) }
+        var contentFont: Font { .system(size: self == .home ? 13 : 14, weight: .regular) }
+        var spacing: CGFloat { self == .home ? 8 : 9 }
     }
 
     let post: CommunityPost
     let style: Style
+    var imageWidth: CGFloat? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: style.spacing) {
-            HStack(spacing: 10) {
+            HStack(alignment: .top, spacing: 10) {
                 CommunityAvatar(author: post.author, size: style.avatarSize)
 
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(post.author.name)
                         .font(style.authorFont)
                         .foregroundStyle(AppTheme.primaryText)
@@ -120,36 +121,32 @@ struct CommunityForumRow: View {
                         .font(style.timeFont)
                         .foregroundStyle(AppTheme.secondaryText)
                 }
+
                 Spacer()
-                Image(systemName: "ellipsis")
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(AppTheme.secondaryText)
-            }
 
-            if post.isPinned {
-                Text("置顶")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color.green)
-                    .padding(.horizontal, 8)
-                    .frame(height: 20)
-                    .background(Color.green.opacity(0.12), in: Capsule())
+                if style == .community {
+                    Image(systemName: "ellipsis")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .frame(width: 28, height: 28)
+                        .accessibilityLabel("更多")
+                }
             }
-
-            Text((post.isPinned ? "✦ " : "") + post.title)
-                .font(style.titleFont)
-                .foregroundStyle(AppTheme.primaryText)
-                .lineLimit(2)
 
             Text(post.summary)
-                .font(style.summaryFont)
-                .foregroundStyle(AppTheme.secondaryText)
+                .font(style.contentFont)
+                .foregroundStyle(AppTheme.primaryText)
+                .lineSpacing(4)
                 .lineLimit(style == .home ? 1 : 2)
+                .fixedSize(horizontal: false, vertical: true)
 
-            if post.id == "value-build-may" && style == .community {
-                CommunityImageStrip(height: 72)
+            if let image = post.image, let imageWidth, style == .community {
+                CommunityPostImageView(image: image, width: imageWidth)
+                    .padding(.top, 6)
             }
 
             CommunityStatsBar(stats: post.stats, style: style == .home ? .compact : .regular)
+                .padding(.top, style == .home ? 0 : 4)
         }
     }
 }
@@ -163,16 +160,24 @@ struct CommunityAvatar: View {
     }
 }
 
-struct CommunityImageStrip: View {
-    var height: CGFloat = 58
+struct CommunityPostImageView: View {
+    let image: CommunityPostImage
+    let width: CGFloat
 
     var body: some View {
-        Image("CommunityHardwareStrip")
-            .resizable()
-            .scaledToFill()
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+        ZStack {
+            AppTheme.softSurface
+
+            Image(image.assetName)
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
+                .accessibilityLabel(image.accessibilityLabel)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: CGFloat(image.displayHeight(forWidth: Double(width))))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -181,8 +186,8 @@ struct CommunityStatsBar: View {
         case compact
         case regular
 
-        var fontSize: CGFloat { self == .compact ? 11 : 13 }
-        var iconSize: CGFloat { self == .compact ? 13 : 16 }
+        var fontSize: CGFloat { self == .compact ? 12 : 13 }
+        var iconSize: CGFloat { self == .compact ? 13 : 15 }
         var spacing: CGFloat { self == .compact ? 24 : 30 }
     }
 
@@ -193,7 +198,7 @@ struct CommunityStatsBar: View {
         HStack(spacing: style.spacing) {
             stat(icon: "heart", value: stats.likes)
             stat(icon: "bubble.left", value: stats.comments)
-            stat(icon: "hand.thumbsup", value: stats.saves)
+            stat(icon: "bookmark", value: stats.saves)
             Spacer(minLength: 0)
         }
         .foregroundStyle(AppTheme.secondaryText)
@@ -210,5 +215,5 @@ struct CommunityStatsBar: View {
 }
 
 #Preview {
-    CommunityView(selectedTab: .constant(.community), onSelectTab: { _ in })
+    CommunityView(selectedTab: .constant(.community), onSelectTab: { _ in }, onComposePost: {})
 }

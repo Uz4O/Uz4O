@@ -213,7 +213,8 @@ private struct HardwarePickerRow: View {
                     Text(item.detail)
                         .font(.appCaption)
                         .foregroundStyle(AppTheme.secondaryText)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 

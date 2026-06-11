@@ -340,8 +340,9 @@ private struct BudgetSection: View {
                     .foregroundStyle(AppTheme.primaryText)
                 Spacer()
                 Text(valueText)
-                    .font(.system(size: 13, weight: .bold))
+                    .font(.system(size: 22, weight: .heavy))
                     .foregroundStyle(AppTheme.primaryText)
+                    .monospacedDigit()
             }
 
             HStack {

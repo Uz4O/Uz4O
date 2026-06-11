@@ -6,11 +6,10 @@ struct DIYBuildView: View {
 
     @State private var flow = PerformanceTestFlow()
     @State private var selectedHardwareCategory: HardwareOptionCategory?
-
-    private let designWidth: CGFloat = 328
+    @State private var feedbackMessage: String?
 
     var body: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             ScreenHeader(title: "游戏性能测试", trailingIcon: nil) {
                 if flow.currentStep == .hardware {
                     onBack()
@@ -20,7 +19,15 @@ struct DIYBuildView: View {
             }
             .padding(.top, 8)
 
-            PerformanceStepIndicator(currentStep: flow.currentStep)
+            FlowStepIndicator(
+                currentStep: flow.currentStep.rawValue + 1,
+                totalSteps: PerformanceTestStep.allCases.count,
+                currentTitle: flow.currentStep.title
+            )
+
+            if let feedbackMessage {
+                FlowFeedbackBanner(message: feedbackMessage)
+            }
 
             Group {
                 switch flow.currentStep {
@@ -28,7 +35,8 @@ struct DIYBuildView: View {
                     HardwareSelectionStep(
                         hardwareProfile: $flow.hardwareProfile,
                         selectedCategory: $selectedHardwareCategory,
-                        savedHardwareProfile: savedHardwareProfile
+                        savedHardwareProfile: savedHardwareProfile,
+                        onFeedback: showFeedback
                     )
                 case .conditions:
                     TestConditionStep(
@@ -39,7 +47,8 @@ struct DIYBuildView: View {
                     PerformanceResultStep(flow: flow)
                 }
             }
-            .frame(width: designWidth)
+            .frame(maxWidth: 520)
+            .frame(maxWidth: .infinity)
 
             Spacer(minLength: 0)
 
@@ -50,7 +59,7 @@ struct DIYBuildView: View {
                     flow.goNext()
                 }
             }
-            .frame(width: designWidth)
+            .frame(maxWidth: 520)
             .padding(.bottom, 22)
         }
         .frame(maxWidth: .infinity)
@@ -85,8 +94,28 @@ struct DIYBuildView: View {
     private func binding(for title: String) -> Binding<String> {
         Binding(
             get: { flow.hardwareProfile.value(for: title) },
-            set: { flow.hardwareProfile.setValue($0, for: title) }
+            set: {
+                let change = flow.hardwareProfile.updateValue($0, for: title)
+                if let message = change.feedbackMessage {
+                    showFeedback(message)
+                }
+            }
         )
+    }
+
+    private func showFeedback(_ message: String) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            feedbackMessage = message
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            if feedbackMessage == message {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    feedbackMessage = nil
+                }
+            }
+        }
     }
 
     private func filters(for category: HardwareOptionCategory) -> [HardwareCatalogFilter] {
@@ -102,68 +131,46 @@ struct DIYBuildView: View {
     }
 }
 
-private struct PerformanceStepIndicator: View {
-    let currentStep: PerformanceTestStep
-
-    var body: some View {
-        HStack(spacing: 8) {
-            ForEach(PerformanceTestStep.allCases, id: \.self) { step in
-                HStack(spacing: 6) {
-                    Text("\(step.rawValue + 1)")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(step.rawValue <= currentStep.rawValue ? .white : AppTheme.secondaryText)
-                        .frame(width: 22, height: 22)
-                        .background(step.rawValue <= currentStep.rawValue ? AppTheme.primaryText : AppTheme.softSurface, in: Circle())
-
-                    Text(step.title)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(step == currentStep ? AppTheme.primaryText : AppTheme.secondaryText)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.85)
-                }
-
-                if step != PerformanceTestStep.allCases.last {
-                    Rectangle()
-                        .fill(AppTheme.border)
-                        .frame(width: 10, height: 1)
-                }
-            }
-        }
-        .frame(width: 328)
-        .padding(.vertical, 6)
-    }
-}
-
 private struct HardwareSelectionStep: View {
     @Binding var hardwareProfile: HardwareProfile
     @Binding var selectedCategory: HardwareOptionCategory?
     let savedHardwareProfile: HardwareProfile
+    let onFeedback: (String) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            StepIntroCard(
+        VStack(alignment: .leading, spacing: 18) {
+            HardwareConfigIntro(
                 icon: "desktopcomputer",
                 title: "选择自己的电脑配置",
                 subtitle: "先选你知道的 CPU、显卡、内存和电源，不确定的地方可以选“不知道”。"
             )
 
-            ApplySavedProfileButton(hasSavedProfile: !savedHardwareProfile.wasSkipped) {
-                hardwareProfile = savedHardwareProfile
-            }
+            HardwareProfileImportRow(action: applySavedProfile)
 
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 12) {
-                    ForEach(HardwareProfileOptions.categories, id: \.title) { category in
-                        PerformanceHardwareRow(
-                            category: category,
-                            selectedValue: selectedValue(for: category.title)
-                        ) {
-                            selectedCategory = category
-                        }
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("电脑配置")
+                        .font(.appBody.weight(.semibold))
+                        .foregroundStyle(AppTheme.secondaryText)
+
+                    HardwareConfigurationList(
+                        categories: HardwareProfileOptions.categories,
+                        selectedValue: selectedValue(for:)
+                    ) { category in
+                        selectedCategory = category
                     }
                 }
                 .padding(.bottom, 10)
             }
+        }
+    }
+
+    private func applySavedProfile() {
+        if savedHardwareProfile.wasSkipped {
+            onFeedback("还没有可导入的电脑档案")
+        } else {
+            hardwareProfile = savedHardwareProfile
+            onFeedback("已套用 \(savedHardwareProfile.appliedItemCount) 项配置")
         }
     }
 
@@ -192,7 +199,7 @@ private struct TestConditionStep: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 14) {
-                StepIntroCard(
+                FlowIntroCard(
                     icon: "display",
                     title: "选择屏幕分辨率和测试游戏",
                     subtitle: "分辨率越高越吃显卡，游戏可以多选，结果会优先参考第一个游戏。"
@@ -314,74 +321,6 @@ private struct PerformanceResultStep: View {
     }
 }
 
-private struct StepIntroCard: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-
-    var body: some View {
-        SoftCard(radius: 18) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 52, height: 52)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 16))
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(title)
-                        .font(.appHeadline)
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text(subtitle)
-                        .font(.appCaption)
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .lineSpacing(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            .padding(16)
-        }
-    }
-}
-
-private struct PerformanceHardwareRow: View {
-    let category: HardwareOptionCategory
-    let selectedValue: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            SoftCard(radius: 16) {
-                HStack(spacing: 12) {
-                    Image(systemName: category.icon)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 34, height: 34)
-                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(category.title)
-                            .font(.appSubheadline)
-                            .foregroundStyle(AppTheme.primaryText)
-                        Text(selectedValue)
-                            .font(.appCaption)
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineLimit(1)
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(AppTheme.secondaryText)
-                }
-                .padding(14)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 private struct ResolutionSegmentedControl: View {
     @Binding var selectedResolution: PerformanceResolution
     @Namespace private var selectionNamespace
@@ -405,8 +344,7 @@ private struct ResolutionSegmentedControl: View {
                         Text(resolution.title)
                             .font(.system(size: 15, weight: selectedResolution == resolution ? .bold : .semibold))
                             .foregroundStyle(selectedResolution == resolution ? AppTheme.primaryText : AppTheme.secondaryText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                            .lineLimit(2)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 48)

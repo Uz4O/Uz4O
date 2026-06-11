@@ -35,6 +35,27 @@ struct HardwareProfileStoreRulesTests {
             "Changing CPU should clear a motherboard with an incompatible socket."
         )
 
+        var feedbackProfile = HardwareProfile(
+            cpu: "i7-14700",
+            gpu: "RTX 4070",
+            motherboard: "B760M AORUS ELITE GEN5",
+            memory: "不知道",
+            storage: "不知道",
+            powerSupply: "750W"
+        )
+        assertEqual(
+            feedbackProfile.appliedItemCount,
+            4,
+            "Applying a saved profile should report how many known components were applied."
+        )
+
+        let change = feedbackProfile.updateValue("R7 7800X3D", for: "CPU")
+        assertEqual(
+            change,
+            .motherboardCleared,
+            "Changing CPU should report when it clears an incompatible motherboard."
+        )
+
         defaults.removePersistentDomain(forName: suiteName)
         print("HardwareProfileStoreRulesTests passed")
     }

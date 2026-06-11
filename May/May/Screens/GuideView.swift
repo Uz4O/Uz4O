@@ -12,18 +12,22 @@ struct GuideView: View {
             ScreenHeader(title: "装机指南", trailingIcon: nil, onBack: onBack)
                 .padding(.top, 8)
 
-            stepHeader
+            if flow.isShowingComponentIntro {
+                ComponentIntroPage(flow: $flow)
+            } else {
+                stepHeader
 
-            ProgressTrack(flow: $flow)
+                ProgressTrack(flow: $flow)
 
-            Spacer(minLength: 2)
+                Spacer(minLength: 2)
 
-            AssemblyStage(step: flow.currentStep, canvasWidth: canvasWidth)
-                .frame(maxWidth: .infinity)
+                AssemblyStage(step: flow.currentStep, canvasWidth: canvasWidth)
+                    .frame(maxWidth: .infinity)
 
-            Spacer(minLength: 2)
+                Spacer(minLength: 2)
 
-            bottomControls
+                bottomControls
+            }
         }
         .padding(.horizontal, AppTheme.screenPadding)
         .padding(.bottom, 18)
@@ -93,6 +97,413 @@ struct GuideView: View {
             }
             .buttonStyle(.plain)
             .disabled(!flow.canGoNext)
+        }
+    }
+}
+
+private struct ComponentIntroPage: View {
+    @Binding var flow: GuideFlow
+    @State private var isShowingAllComponents = false
+    @State private var selectedComponentID = GuideFlow.componentIntroItems[0].id
+    @State private var componentScrollProgress: CGFloat = 0
+
+    private let contentWidth: CGFloat = 306
+    private let indicatorWidth: CGFloat = 220
+    private let pickerCardWidth: CGFloat = 70
+    private let pickerCardSpacing: CGFloat = 9
+
+    private var selectedComponent: GuideComponentIntroItem {
+        GuideFlow.componentIntroItems.first { $0.id == selectedComponentID } ?? GuideFlow.componentIntroItems[0]
+    }
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .center, spacing: 14) {
+                introHero
+
+                componentPicker
+
+                ComponentIntroFeatureCard(item: selectedComponent)
+
+                tipCard
+
+                bottomActions
+                    .padding(.top, 2)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, 8)
+            .padding(.bottom, 6)
+        }
+    }
+
+    private var componentPicker: some View {
+        VStack(spacing: 10) {
+            GeometryReader { proxy in
+                Group {
+                    if #available(iOS 18.0, *) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            pickerRow(containerWidth: proxy.size.width)
+                        }
+                        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                            let contentWidth = geometry.contentSize.width
+                            let containerWidth = geometry.containerSize.width
+                            let scrollableWidth = max(contentWidth - containerWidth, 1)
+                            return min(max(geometry.contentOffset.x / scrollableWidth, 0), 1)
+                        } action: { _, progress in
+                            componentScrollProgress = progress
+                        }
+                    } else {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            pickerRow(containerWidth: proxy.size.width)
+                                .background(
+                                    GeometryReader { contentProxy in
+                                        Color.clear.preference(
+                                            key: ComponentPickerOffsetPreferenceKey.self,
+                                            value: contentProxy.frame(in: .named("componentPickerScroll")).minX
+                                        )
+                                    }
+                                )
+                        }
+                        .coordinateSpace(name: "componentPickerScroll")
+                        .onPreferenceChange(ComponentPickerOffsetPreferenceKey.self) { minX in
+                            let itemCount = CGFloat(GuideFlow.componentIntroItems.count)
+                            let contentBodyWidth = itemCount * pickerCardWidth + max(itemCount - 1, 0) * pickerCardSpacing
+                            let scrollableWidth = max(contentBodyWidth + AppTheme.screenPadding * 2 - proxy.size.width, 1)
+                            let scrollOffset = max(-minX, 0)
+                            componentScrollProgress = min(max(scrollOffset / scrollableWidth, 0), 1)
+                        }
+                    }
+                }
+            }
+            .frame(height: 104)
+
+            ComponentScrollIndicator(progress: componentScrollProgress)
+                .frame(width: indicatorWidth)
+        }
+    }
+
+    private func pickerRow(containerWidth: CGFloat) -> some View {
+        HStack(spacing: pickerCardSpacing) {
+            ForEach(GuideFlow.componentIntroItems) { item in
+                ComponentIntroPickerCard(
+                    item: item,
+                    isSelected: item.id == selectedComponentID
+                ) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        selectedComponentID = item.id
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, AppTheme.screenPadding)
+        .padding(.vertical, 2)
+        .frame(minWidth: containerWidth, alignment: .leading)
+    }
+
+    private var introHero: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            HStack(spacing: 8) {
+                Label("准备阶段", systemImage: "book.closed.fill")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Circle()
+                    .fill(AppTheme.secondaryText.opacity(0.45))
+                    .frame(width: 4, height: 4)
+
+                Text("装机前先认识配件")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+            }
+            .padding(.horizontal, 11)
+            .padding(.vertical, 7)
+            .background(.white.opacity(0.78), in: Capsule())
+            .overlay {
+                Capsule()
+                    .stroke(AppTheme.border, lineWidth: 1)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("先认识这些配件")
+                    .font(.system(size: 27, weight: .black))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Text("了解常见配件的外观和作用，为接下来的装机步骤打好基础。")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(width: contentWidth, alignment: .leading)
+    }
+
+    private var tipCard: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "lightbulb.fill")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(Color(red: 0.34, green: 0.54, blue: 0.94), in: Circle())
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("小贴士")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Text("建议先熟悉外观与名称，后续每一步都会高亮对应配件，让装机更简单。")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(12)
+        .frame(width: contentWidth, alignment: .leading)
+        .background(Color(red: 0.94, green: 0.97, blue: 1.0), in: RoundedRectangle(cornerRadius: 16))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(red: 0.78, green: 0.87, blue: 0.98), lineWidth: 1)
+        }
+    }
+
+    private var bottomActions: some View {
+        HStack(spacing: 12) {
+            Button {
+                isShowingAllComponents = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "square.grid.2x2")
+                    Text("查看全部配件")
+                }
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(AppTheme.primaryText)
+                .frame(maxWidth: .infinity)
+                .frame(height: 42)
+                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppTheme.controlRadius)
+                        .stroke(AppTheme.border, lineWidth: 1)
+                }
+            }
+            .buttonStyle(.plain)
+            .sheet(isPresented: $isShowingAllComponents) {
+                ComponentIntroDetailSheet()
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.22)) {
+                    flow.startAssembly()
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Text("开始正式装机")
+                    Image(systemName: "chevron.right")
+                }
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 42)
+                .background(AppTheme.primaryButton, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+            }
+            .buttonStyle(.plain)
+        }
+        .frame(width: contentWidth)
+    }
+}
+
+private struct ComponentPickerOffsetProbe: View {
+    var body: some View {
+        GeometryReader { proxy in
+            Color.clear.preference(
+                key: ComponentPickerOffsetPreferenceKey.self,
+                value: proxy.frame(in: .named("componentPickerScroll")).minX
+            )
+        }
+    }
+}
+
+private struct ComponentPickerOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+private struct ComponentScrollIndicator: View {
+    let progress: CGFloat
+
+    var body: some View {
+        GeometryReader { proxy in
+            let trackWidth = proxy.size.width
+            let thumbWidth: CGFloat = 28
+            let travelWidth = max(trackWidth - thumbWidth, 0)
+
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(AppTheme.border)
+                    .frame(width: trackWidth, height: 4)
+
+                Capsule()
+                    .fill(AppTheme.primaryText)
+                    .frame(width: thumbWidth, height: 4)
+                    .offset(x: travelWidth * progress)
+                    .animation(.easeInOut(duration: 0.12), value: progress)
+            }
+        }
+        .frame(height: 4)
+    }
+}
+
+private struct ComponentIntroDetailSheet: View {
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    ForEach(GuideFlow.componentIntroItems) { item in
+                        HStack(spacing: 12) {
+                            Image(item.imageName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 44, height: 44)
+                                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(item.title)
+                                    .font(.system(size: 15, weight: .bold))
+                                    .foregroundStyle(AppTheme.primaryText)
+
+                                Text(item.subtitle)
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                } footer: {
+                    Text("正式装机时会按步骤高亮当前要安装或连接的配件。")
+                }
+            }
+            .navigationTitle("全部配件")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+private struct ComponentIntroPickerCard: View {
+    let item: GuideComponentIntroItem
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 7) {
+                ZStack(alignment: .topTrailing) {
+                    Image(item.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 54, height: 50)
+                        .padding(.top, 4)
+
+                    if isSelected {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(width: 19, height: 19)
+                            .background(AppTheme.primaryText, in: Circle())
+                            .padding(3)
+                    }
+                }
+
+                Text(item.title)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+            }
+            .frame(width: 70, height: 94)
+            .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 14))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(isSelected ? AppTheme.primaryText : .white, lineWidth: isSelected ? 2 : 1)
+            }
+            .shadow(color: isSelected ? Color.black.opacity(0.10) : Color.black.opacity(0.04), radius: isSelected ? 12 : 8, x: 0, y: 6)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(item.title)，\(item.subtitle)")
+    }
+}
+
+private struct ComponentIntroFeatureCard: View {
+    let item: GuideComponentIntroItem
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 16) {
+            Image(item.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 122, height: 140)
+
+            VStack(alignment: .leading, spacing: 9) {
+                Text(item.title)
+                    .font(.system(size: 24, weight: .black))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .lineLimit(1)
+
+                VStack(spacing: 0) {
+                    ForEach(Array(item.detailPoints.enumerated()), id: \.element.id) { index, point in
+                        ComponentDetailRow(point: point)
+
+                        if index < item.detailPoints.count - 1 {
+                            Divider()
+                                .padding(.leading, 36)
+                                .padding(.vertical, 6)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(14)
+        .frame(width: 306)
+        .frame(height: 214)
+        .background(.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 18))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(.white, lineWidth: 1)
+        }
+        .shadow(color: Color.black.opacity(0.05), radius: 14, x: 0, y: 8)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(item.title)，\(item.subtitle)")
+    }
+}
+
+private struct ComponentDetailRow: View {
+    let point: GuideComponentDetailPoint
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: point.symbol)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(AppTheme.primaryText)
+                .frame(width: 28, height: 28)
+                .background(Color(red: 0.88, green: 0.93, blue: 1.0), in: RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(point.title)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Text(point.text)
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineSpacing(1)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.86)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 }

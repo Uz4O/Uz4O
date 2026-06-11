@@ -13,11 +13,11 @@ struct ComputerProfileView: View {
 
             SoftCard(radius: 20) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(hardwareProfile.wasSkipped ? "还没有记录电脑配置" : "当前电脑配置")
+                    Text(hardwareProfile.completionLabel)
                         .font(.appHeadline)
                         .foregroundStyle(AppTheme.primaryText)
 
-                    Text(hardwareProfile.wasSkipped ? "你在进入 App 前跳过了电脑配置，后续可以在这里补充。" : hardwareProfile.summary)
+                    Text(profileSummary)
                         .font(.appBody)
                         .foregroundStyle(AppTheme.secondaryText)
                         .lineSpacing(4)
@@ -60,6 +60,12 @@ struct ComputerProfileView: View {
             )
             .presentationDetents([.large])
         }
+    }
+
+    private var profileSummary: String {
+        hardwareProfile.knownComponentsSummary.isEmpty
+            ? "选择你知道的硬件即可，不确定的项目可以稍后补充。"
+            : hardwareProfile.knownComponentsSummary
     }
 
     private func binding(for title: String) -> Binding<String> {

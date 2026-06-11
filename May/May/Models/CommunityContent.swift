@@ -28,10 +28,25 @@ struct CommunityStats: Equatable {
     let saves: Int
 }
 
+struct CommunityPostImage: Equatable {
+    static let maximumDisplayHeight = 180.0
+
+    let assetName: String
+    let aspectRatio: Double
+    let accessibilityLabel: String
+
+    func displayHeight(forWidth width: Double, maximumHeight: Double = maximumDisplayHeight) -> Double {
+        guard width > 0, aspectRatio > 0, maximumHeight > 0 else {
+            return 0
+        }
+
+        return min(width / aspectRatio, maximumHeight)
+    }
+}
+
 struct CommunityPost: Equatable, Identifiable {
     let id: String
     let author: CommunityAuthor
-    let title: String
     let summary: String
     let body: String
     let createdAt: String
@@ -39,12 +54,12 @@ struct CommunityPost: Equatable, Identifiable {
     let parts: [String]
     let stats: CommunityStats
     let isPinned: Bool
+    let image: CommunityPostImage?
 
     static let featuredFeed = [
         CommunityPost(
             id: "value-build-may",
             author: CommunityAuthor(name: "装机达人小明", subtitle: "30 分钟前", avatarInitial: "明"),
-            title: "2024 年 5 月高性价比装机配置推荐",
             summary: "分享一套 5000 元左右的高性价比配置，适合游戏和生产力需求。",
             body: "这套配置把预算优先放在显卡和稳定电源上，CPU 选择够用不浪费的 i5 档位，适合 2K 游戏、日常剪辑和长期升级。",
             createdAt: "30 分钟前",
@@ -58,12 +73,16 @@ struct CommunityPost: Equatable, Identifiable {
                 "散热：NZXT Kraken 360"
             ],
             stats: CommunityStats(likes: 128, comments: 256, saves: 1024),
-            isPinned: true
+            isPinned: true,
+            image: CommunityPostImage(
+                assetName: "PCTower",
+                aspectRatio: 1,
+                accessibilityLabel: "白色台式主机"
+            )
         ),
         CommunityPost(
             id: "i5-vs-7800x3d",
             author: CommunityAuthor(name: "硬核玩家阿杰", subtitle: "1 小时前", avatarInitial: "杰"),
-            title: "i5-14600K vs R7 7800X3D 怎么选？",
             summary: "最近在纠结这两颗 CPU，主要用途是游戏，求大佬给点建议。",
             body: "预算够但不想乱花钱，显示器是 2K 165Hz。希望游戏帧率稳，也希望平时开浏览器和语音时别卡。",
             createdAt: "1 小时前",
@@ -75,12 +94,12 @@ struct CommunityPost: Equatable, Identifiable {
                 "显示器：2K 165Hz"
             ],
             stats: CommunityStats(likes: 86, comments: 194, saves: 512),
-            isPinned: false
+            isPinned: false,
+            image: nil
         ),
         CommunityPost(
             id: "water-vs-air-cooling",
             author: CommunityAuthor(name: "散热研究所", subtitle: "2 小时前", avatarInitial: "散"),
-            title: "360 水冷 vs 风冷，散热效果差距有多大？",
             summary: "实测对比了多款 360 水冷和风冷散热器，数据说话。",
             body: "如果不追求极限超频，高规格风冷已经能覆盖很多日常场景。360 水冷更适合高功耗 CPU、海景房外观和低温展示需求。",
             createdAt: "2 小时前",
@@ -92,7 +111,8 @@ struct CommunityPost: Equatable, Identifiable {
                 "结论：日常差距小，满载差距明显"
             ],
             stats: CommunityStats(likes: 64, comments: 128, saves: 256),
-            isPinned: false
+            isPinned: false,
+            image: nil
         )
     ]
 }

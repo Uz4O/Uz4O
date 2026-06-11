@@ -4,6 +4,7 @@ struct HomeView: View {
     let profile: OnboardingProfile
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
+    let onComposePost: () -> Void
     let onOpenAI: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenGuide: () -> Void
@@ -13,87 +14,54 @@ struct HomeView: View {
     let onOpenBuilds: () -> Void
     let onOpenCompatibility: () -> Void
     private let designWidth: CGFloat = 328
-    @State private var visibleCommunityPostIDs: Set<String> = []
-    @State private var isComposerPresented = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            VStack(spacing: 10) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 18) {
-                        HStack {
-                            Text("AI 装机助手")
-                                .font(.system(size: 25, weight: .heavy))
-                                .foregroundStyle(AppTheme.primaryText)
-                            Spacer()
-                            Image(systemName: "bell")
-                                .font(.system(size: 21, weight: .medium))
-                                .foregroundStyle(AppTheme.primaryText)
-                        }
-                        .frame(width: designWidth)
-                        .padding(.top, 8)
+        ZStack(alignment: .bottom) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 18) {
+                    HStack {
+                        Text("AI 装机助手")
+                            .font(.system(size: 25, weight: .heavy))
+                            .foregroundStyle(AppTheme.primaryText)
+                        Spacer()
+                        Image(systemName: "bell")
+                            .font(.system(size: 21, weight: .medium))
+                            .foregroundStyle(AppTheme.primaryText)
+                    }
+                    .frame(width: designWidth)
+                    .padding(.top, 8)
 
-                        Button(action: onOpenAI) {
-                            HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
-                        }
-                        .buttonStyle(.plain)
-                        .frame(width: designWidth)
+                    Button(action: onOpenAI) {
+                        HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
+                    }
+                    .buttonStyle(.plain)
+                    .frame(width: designWidth)
 
-                        VStack(spacing: 16) {
-                            ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
-                                HStack(spacing: 14) {
-                                    ForEach(row, id: \.kind) { feature in
-                                        HomeFeatureCard(feature: feature, action: action(for: feature.kind))
-                                    }
+                    VStack(spacing: 16) {
+                        ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
+                            HStack(spacing: 14) {
+                                ForEach(row, id: \.kind) { feature in
+                                    HomeFeatureCard(feature: feature, action: action(for: feature.kind))
                                 }
                             }
                         }
+                    }
+                    .frame(width: designWidth)
+
+                    HomeCommunitySection(onOpenCommunity: onOpenCommunity)
                         .frame(width: designWidth)
 
-                        HomeCommunitySection(
-                            onOpenCommunity: onOpenCommunity,
-                            onPostVisibilityChanged: updateCommunityPostVisibility
-                        )
-                            .frame(width: designWidth)
-
-                        Color.clear.frame(height: 2)
-                    }
-                    .frame(maxWidth: .infinity)
+                    Color.clear.frame(height: 2)
                 }
-
-                Spacer(minLength: 0)
-
-                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
-                    .frame(width: designWidth)
+                .padding(.bottom, 104)
+                .frame(maxWidth: .infinity)
             }
 
-            if showsCommunityFloatingButton {
-                HomeCommunityFloatingButton {
-                    isComposerPresented = true
-                }
-                    .padding(.trailing, AppTheme.screenPadding + 2)
-                    .padding(.bottom, 88)
-                    .transition(.opacity.combined(with: .scale(scale: 0.92)))
-            }
+            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                .frame(width: designWidth)
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, -12)
-        .animation(.easeInOut(duration: 0.16), value: showsCommunityFloatingButton)
-        .sheet(isPresented: $isComposerPresented) {
-            CommunityComposerView()
-        }
-    }
-
-    private var showsCommunityFloatingButton: Bool {
-        visibleCommunityPostIDs.contains { $0 != CommunityPost.featuredFeed.first?.id }
-    }
-
-    private func updateCommunityPostVisibility(id: String, isVisible: Bool) {
-        if isVisible {
-            visibleCommunityPostIDs.insert(id)
-        } else {
-            visibleCommunityPostIDs.remove(id)
-        }
+        .background(AppTheme.background.ignoresSafeArea())
     }
 
     private var featureRows: [[HomeFeatureDisplay]] {
@@ -124,7 +92,6 @@ struct HomeView: View {
 
 private struct HomeCommunitySection: View {
     let onOpenCommunity: () -> Void
-    let onPostVisibilityChanged: (String, Bool) -> Void
 
     private let posts = CommunityPost.featuredFeed
 
@@ -159,30 +126,8 @@ private struct HomeCommunitySection: View {
                         .padding(.vertical, 4)
                 }
                 .buttonStyle(.plain)
-                .onAppear {
-                    onPostVisibilityChanged(post.id, true)
-                }
-                .onDisappear {
-                    onPostVisibilityChanged(post.id, false)
-                }
             }
         }
-    }
-}
-
-private struct HomeCommunityFloatingButton: View {
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: "plus")
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 52, height: 52)
-                .background(AppTheme.primaryButton, in: Circle())
-                .shadow(color: Color.black.opacity(0.18), radius: 16, x: 0, y: 8)
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -303,6 +248,7 @@ private struct HomeFeatureCard: View {
         profile: OnboardingProfile(preference: .balanced),
         selectedTab: .constant(.home),
         onSelectTab: { _ in },
+        onComposePost: {},
         onOpenAI: {},
         onOpenUpgrade: {},
         onOpenGuide: {},

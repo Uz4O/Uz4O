@@ -28,3 +28,8 @@ Carthage/Build/
 .env
 .env.*
 *.log
+
+# Local hardware price crawler state and generated reports
+tools/hardware-price-crawler/.venv/
+tools/hardware-price-crawler/data/
+tools/hardware-price-crawler/**/__pycache__/

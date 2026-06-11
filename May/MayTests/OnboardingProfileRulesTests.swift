@@ -70,6 +70,30 @@ struct OnboardingProfileRulesTests {
         )
 
         assertEqual(
+            completedHardwareProfile.hardwareProfile.completedComponentCount,
+            5,
+            "Unknown components should not count toward profile completion."
+        )
+
+        assertEqual(
+            completedHardwareProfile.hardwareProfile.completionLabel,
+            "已填写 5/6",
+            "Hardware profile should expose a clear completion label."
+        )
+
+        assertEqual(
+            completedHardwareProfile.hardwareProfile.knownComponentsSummary,
+            "显卡 RTX 5090 D · 主板 B860 DS3H · 内存 芝奇/海盗船 DDR5-6000 CL30 · DDR5 · 32GB (16GBx2) · 6000MHz · CL30 · 硬盘 Western Digital WD Black SN850X · 1TB · PCIe 4.0 · 电源 Corsair RM750e · 750W · 80+ Gold",
+            "Profile summaries should omit unknown components."
+        )
+
+        assertEqual(
+            HardwareProfile.skipped.completionLabel,
+            "已填写 0/6",
+            "Skipped profiles should clearly show that no components are recorded."
+        )
+
+        assertEqual(
             completedHardwareProfile.homeFeatureOrder.map(\.title),
             ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
             "Hardware selections should not change home functions."
@@ -88,15 +112,15 @@ struct OnboardingProfileRulesTests {
         )
 
         assertEqual(
-            ComputerOwnershipChoice.hasComputer.shouldCollectHardwareAfterPreference,
+            ComputerOwnershipChoice.hasComputer.shouldCollectHardwareBeforePreference,
             true,
-            "Users with an existing computer should choose their preference before hardware collection."
+            "Users with an existing computer should record hardware before choosing their preference."
         )
 
         assertEqual(
-            ComputerOwnershipChoice.noComputer.shouldCollectHardwareAfterPreference,
+            ComputerOwnershipChoice.noComputer.shouldCollectHardwareBeforePreference,
             false,
-            "Users without an existing computer should choose their preference and then enter the app."
+            "Users without an existing computer should skip hardware collection and choose their preference before entering the app."
         )
 
         assertEqual(

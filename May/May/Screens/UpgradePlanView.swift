@@ -12,27 +12,33 @@ struct UpgradePlanView: View {
     @State private var selectedGames: Set<String> = ["CS2", "PUBG", "无畏契约"]
     @State private var selectedHardwareCategory: HardwareOptionCategory?
     @State private var configuration = UpgradePlanConfiguration.sample
+    @State private var feedbackMessage: String?
 
-    private let designWidth: CGFloat = 328
     private let needs = UpgradeNeed.samples
     private let games = UpgradeGame.samples
 
     var body: some View {
-        VStack(spacing: 0) {
-            UpgradeHeader(
-                step: step,
-                onBack: {
-                    if step == 1 {
-                        onBack()
-                    } else {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            step -= 1
-                        }
+        VStack(spacing: 18) {
+            ScreenHeader(title: "升级建议", trailingIcon: nil) {
+                if step == 1 {
+                    onBack()
+                } else {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        step -= 1
                     }
                 }
-            )
-            .frame(width: designWidth)
+            }
             .padding(.top, 8)
+
+            FlowStepIndicator(
+                currentStep: step,
+                totalSteps: upgradeStepCount,
+                currentTitle: stepTitle
+            )
+
+            if let feedbackMessage {
+                FlowFeedbackBanner(message: feedbackMessage)
+            }
 
             Group {
                 switch step {
@@ -40,7 +46,8 @@ struct UpgradePlanView: View {
                     CurrentConfigStep(
                         configuration: $configuration,
                         selectedCategory: $selectedHardwareCategory,
-                        savedHardwareProfile: savedHardwareProfile
+                        savedHardwareProfile: savedHardwareProfile,
+                        onFeedback: showFeedback
                     )
                 case 2:
                     UpgradeBudgetStep(budget: $budget)
@@ -52,7 +59,7 @@ struct UpgradePlanView: View {
                     UpgradeResultStep()
                 }
             }
-            .frame(width: designWidth)
+            .frame(maxWidth: 520)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             UpgradeFooter(
@@ -65,9 +72,10 @@ struct UpgradePlanView: View {
                 onRegenerate: {},
                 onSave: {}
             )
-            .frame(width: designWidth)
+            .frame(maxWidth: 520)
             .padding(.bottom, 22)
         }
+        .padding(.horizontal, AppTheme.screenPadding)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .sheet(item: $selectedHardwareCategory) { category in
             HardwarePickerSheet(
@@ -81,10 +89,40 @@ struct UpgradePlanView: View {
         }
     }
 
+    private var stepTitle: String {
+        switch step {
+        case 1: return "电脑配置"
+        case 2: return "升级预算"
+        case 3: return "常玩游戏"
+        case 4: return "升级需求"
+        default: return "升级结果"
+        }
+    }
+
+    private func showFeedback(_ message: String) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            feedbackMessage = message
+        }
+
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            if feedbackMessage == message {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    feedbackMessage = nil
+                }
+            }
+        }
+    }
+
     private func binding(for title: String) -> Binding<String> {
         Binding(
             get: { configuration.value(for: title) },
-            set: { configuration.setValue($0, for: title) }
+            set: {
+                let change = configuration.hardwareProfile.updateValue($0, for: title)
+                if let message = change.feedbackMessage {
+                    showFeedback(message)
+                }
+            }
         )
     }
 
@@ -105,121 +143,46 @@ private struct CurrentConfigStep: View {
     @Binding var configuration: UpgradePlanConfiguration
     @Binding var selectedCategory: HardwareOptionCategory?
     let savedHardwareProfile: HardwareProfile
+    let onFeedback: (String) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            UpgradeConfigIntroCard(
+        VStack(alignment: .leading, spacing: 18) {
+            HardwareConfigIntro(
                 icon: "desktopcomputer",
                 title: "选择当前电脑配置",
                 subtitle: "先选你知道的 CPU、显卡、内存和电源，不确定的地方可以选“不知道”。"
             )
 
-            ApplySavedProfileButton(hasSavedProfile: !savedHardwareProfile.wasSkipped) {
-                configuration.apply(savedHardwareProfile)
-            }
+            HardwareProfileImportRow(action: applySavedProfile)
 
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 12) {
-                    ForEach(UpgradePlanConfiguration.categories) { category in
-                        UpgradeHardwareRow(
-                            category: category,
-                            selectedValue: configuration.value(for: category.title)
-                        ) {
-                            selectedCategory = category
-                        }
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("电脑配置")
+                        .font(.appBody.weight(.semibold))
+                        .foregroundStyle(AppTheme.secondaryText)
+
+                    HardwareConfigurationList(
+                        categories: UpgradePlanConfiguration.categories,
+                        selectedValue: configuration.value(for:)
+                    ) { category in
+                        selectedCategory = category
                     }
                 }
                 .padding(.bottom, 10)
             }
         }
     }
-}
 
-private struct UpgradeHeader: View {
-    let step: Int
-    let onBack: () -> Void
-
-    var body: some View {
-        VStack(spacing: 22) {
-            ZStack {
-                Text("升级建议")
-                    .font(.appHeadline)
-                    .foregroundStyle(AppTheme.primaryText)
-
-                HStack {
-                    Button(action: onBack) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .frame(width: 28, height: 28)
-                    }
-                    .buttonStyle(.plain)
-
-                    Spacer()
-                }
-            }
-
-            HStack(spacing: 16) {
-                Text("\(step)/\(upgradeStepCount)")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 40, alignment: .leading)
-
-                UpgradeProgressDots(step: step)
-            }
+    private func applySavedProfile() {
+        if savedHardwareProfile.wasSkipped {
+            onFeedback("还没有可导入的电脑档案")
+        } else {
+            configuration.apply(savedHardwareProfile)
+            onFeedback("已套用 \(savedHardwareProfile.appliedItemCount) 项配置")
         }
     }
 }
 
-private struct UpgradeProgressDots: View {
-    let step: Int
-
-    var body: some View {
-        HStack(spacing: 0) {
-            ForEach(1...upgradeStepCount, id: \.self) { index in
-                Circle()
-                    .fill(index <= step ? AppTheme.primaryText : AppTheme.border)
-                    .frame(width: 8, height: 8)
-
-                if index < upgradeStepCount {
-                    Rectangle()
-                        .fill(index < step ? AppTheme.primaryText : AppTheme.border)
-                        .frame(height: 1)
-                }
-            }
-        }
-    }
-}
-
-private struct UpgradeConfigIntroCard: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-
-    var body: some View {
-        SoftCard(radius: 18) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 52, height: 52)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 16))
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(title)
-                        .font(.appHeadline)
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text(subtitle)
-                        .font(.appCaption)
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .lineSpacing(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            .padding(16)
-        }
-    }
-}
 
 private struct UpgradeBudgetStep: View {
     @Binding var budget: Double
@@ -340,7 +303,7 @@ private struct UpgradeResultStep: View {
                         .foregroundStyle(AppTheme.primaryText)
 
                     Text("智能推荐")
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.appCaption.weight(.bold))
                         .foregroundStyle(AppTheme.primaryText)
                         .padding(.horizontal, 7)
                         .frame(height: 22)
@@ -436,44 +399,6 @@ private struct UpgradeStepTitle: View {
     }
 }
 
-private struct UpgradeHardwareRow: View {
-    let category: HardwareOptionCategory
-    let selectedValue: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            SoftCard(radius: 16) {
-                HStack(spacing: 12) {
-                    Image(systemName: category.icon)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 34, height: 34)
-                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(category.title)
-                            .font(.appSubheadline)
-                            .foregroundStyle(AppTheme.primaryText)
-                        Text(selectedValue)
-                            .font(.appCaption)
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineLimit(1)
-                    }
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(AppTheme.secondaryText)
-                }
-                .padding(14)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 private struct UpgradeBudgetSlider: View {
     @Binding var budget: Double
 
@@ -510,7 +435,7 @@ private struct UpgradeBudgetSlider: View {
                     Spacer()
                     Text("¥ 12000")
                 }
-                .font(.system(size: 11, weight: .semibold))
+                .font(.appCaption.weight(.semibold))
                 .foregroundStyle(AppTheme.secondaryText)
 
                 HStack(spacing: 12) {
@@ -566,7 +491,7 @@ private struct UpgradeBudgetHintRow: View {
                     .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
                 Text(subtitle)
-                    .font(.system(size: 10, weight: .regular))
+                    .font(.appCaption)
                     .foregroundStyle(AppTheme.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -574,7 +499,7 @@ private struct UpgradeBudgetHintRow: View {
             Spacer()
 
             Text(range)
-                .font(.system(size: 11, weight: .bold))
+                .font(.appCaption.weight(.bold))
                 .foregroundStyle(AppTheme.primaryText)
                 .padding(.horizontal, 11)
                 .frame(height: 28)
@@ -624,10 +549,9 @@ private struct UpgradeNeedCard: View {
                         .fixedSize(horizontal: false, vertical: true)
 
                     Text(need.tagline)
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.appCaption.weight(.semibold))
                         .foregroundStyle(isSelected ? AppTheme.primaryText : AppTheme.secondaryText)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .lineLimit(2)
 
                     Text(need.subtitle)
                         .font(.appCaption)
@@ -672,12 +596,12 @@ private struct UpgradeNeedSegmentedPicker: View {
                         Text(need.title)
                             .font(.system(size: 13, weight: selectedNeed == need.title ? .bold : .semibold))
                             .foregroundStyle(selectedNeed == need.title ? AppTheme.primaryText : AppTheme.secondaryText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.68)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
                             .padding(.horizontal, 5)
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 48)
+                    .frame(minHeight: 48)
                 }
                 .buttonStyle(.plain)
             }
@@ -849,13 +773,12 @@ private struct UpgradeOverviewMetric: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(title)
-                .font(.system(size: 9, weight: .medium))
+                .font(.appCaption)
                 .foregroundStyle(.white.opacity(0.62))
             Text(value)
                 .font(.system(size: 15, weight: .bold))
                 .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .lineLimit(2)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 9)
@@ -885,14 +808,14 @@ private struct UpgradeRecommendationCard: View {
                 Text(recommend)
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.72)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()
 
             Text(note)
-                .font(.system(size: 11, weight: .bold))
+                .font(.appCaption.weight(.bold))
                 .foregroundStyle(AppTheme.secondaryText)
         }
         .padding(12)
@@ -909,7 +832,7 @@ private struct UpgradeTotalCard: View {
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
                 Text("先处理影响体验最大的短板")
-                    .font(.system(size: 9))
+                    .font(.appCaption)
                     .foregroundStyle(AppTheme.mutedText)
             }
 

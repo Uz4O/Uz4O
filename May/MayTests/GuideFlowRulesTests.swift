@@ -3,9 +3,21 @@ import Foundation
 @main
 struct GuideFlowRulesTests {
     static func main() {
+        assertEqual(GuideFlow.componentIntroItems.count, 8, "Guide should introduce the main hardware parts before assembly.")
+        assertEqual(GuideFlow.componentIntroItems.first?.title, "CPU", "Guide should begin the intro with CPU.")
+        assertEqual(GuideFlow.componentIntroItems.first?.imageName, "GuidePartCPU", "Guide intro items should point to real image assets.")
+
+        for item in GuideFlow.componentIntroItems {
+            assertEqual(item.detailPoints.count, 3, "\(item.title) should explain appearance, role, and install position.")
+        }
+
         assertEqual(GuideFlow.steps.count, 11, "Guide should expose 11 jumpable steps.")
 
         var flow = GuideFlow()
+        assertEqual(flow.isShowingComponentIntro, true, "Guide should begin with the component intro page.")
+
+        flow.startAssembly()
+        assertEqual(flow.isShowingComponentIntro, false, "Starting assembly should leave the component intro page.")
         assertEqual(flow.currentStep.number, 1, "Guide should begin at the first step.")
 
         flow.goNext()
@@ -23,6 +35,10 @@ struct GuideFlowRulesTests {
 
         flow.jump(to: 99)
         assertEqual(flow.currentStep.number, 9, "Invalid jumps should not change the current step.")
+
+        flow.showComponentIntro()
+        assertEqual(flow.isShowingComponentIntro, true, "Guide should allow returning to the component intro page.")
+        assertEqual(flow.currentStep.number, 1, "Returning to the intro should reset assembly to the first step.")
 
         print("GuideFlowRulesTests passed")
     }

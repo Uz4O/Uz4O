@@ -1,0 +1,4 @@
+target_id,category,query,sku,title,price,shop,url,captured_at
+rtx-5070,gpu,RTX 5070 显卡,1001,品牌A RTX 5070 12GB 显卡,4799,京东自营,https://item.jd.com/1001.html,2026-06-10T20:00:00+08:00
+rtx-5070,gpu,RTX 5070 显卡,1002,品牌B RTX 5070 12GB 显卡,4899,京东自营,https://item.jd.com/1002.html,2026-06-10T20:00:00+08:00
+rtx-5070,gpu,RTX 5070 显卡,1003,RTX 5070 电竞游戏整机台式电脑,9999,第三方店铺,https://item.jd.com/1003.html,2026-06-10T20:00:00+08:00

@@ -39,5 +39,5 @@ extension Font {
     static let appHeadline = Font.system(size: 16, weight: .bold, design: .default)
     static let appSubheadline = Font.system(size: 13, weight: .semibold, design: .default)
     static let appBody = Font.system(size: 13, weight: .regular, design: .default)
-    static let appCaption = Font.system(size: 10, weight: .regular, design: .default)
+    static let appCaption = Font.system(size: 12, weight: .regular, design: .default)
 }

@@ -4,23 +4,23 @@ struct ProfileView: View {
     let hardwareProfile: HardwareProfile
     @Binding var selectedTab: AppTab
     let onSelectTab: (AppTab) -> Void
+    let onComposePost: () -> Void
     let onOpenBuilds: () -> Void
     let onOpenComputerProfile: () -> Void
 
     private let accountItems = [
-        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案"),
-        ProfileItem(title: "我的电脑档案", icon: "desktopcomputer", subtitle: "查看或补充当前电脑配置")
+        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案", isAvailable: true)
     ]
 
     private let helpItems = [
-        ProfileItem(title: "用户协议", icon: "doc.plaintext", subtitle: "使用规则与条款"),
-        ProfileItem(title: "隐私政策", icon: "lock.shield", subtitle: "数据如何被保护"),
-        ProfileItem(title: "意见反馈", icon: "paperplane", subtitle: "告诉我们哪里不好用"),
-        ProfileItem(title: "关于我们", icon: "info.circle", subtitle: "版本与项目介绍")
+        ProfileItem(title: "用户协议", icon: "doc.plaintext", subtitle: "使用规则与条款", isAvailable: false),
+        ProfileItem(title: "隐私政策", icon: "lock.shield", subtitle: "数据如何被保护", isAvailable: false),
+        ProfileItem(title: "意见反馈", icon: "paperplane", subtitle: "告诉我们哪里不好用", isAvailable: false),
+        ProfileItem(title: "关于我们", icon: "info.circle", subtitle: "版本与项目介绍", isAvailable: false)
     ]
 
     var body: some View {
-        VStack(spacing: 14) {
+        ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 20) {
                     Button(action: onOpenComputerProfile) {
@@ -30,10 +30,11 @@ struct ProfileView: View {
                                 Text("AI 装机助手")
                                     .font(.system(size: 22, weight: .bold))
                                     .foregroundStyle(AppTheme.primaryText)
-                                Text(hardwareProfile.wasSkipped ? "可在这里补充电脑档案" : hardwareProfile.summary)
+                                Text(profileSummary)
                                     .font(.system(size: 13))
                                     .foregroundStyle(AppTheme.secondaryText)
-                                    .lineLimit(2)
+                                    .lineLimit(3)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -46,25 +47,30 @@ struct ProfileView: View {
                     }
                     .buttonStyle(.plain)
 
-                    ProfileSection(title: "我的方案与档案", items: accountItems, action: action)
+                    ProfileSection(title: "我的方案", items: accountItems, action: action)
                     ProfileSection(title: "设置与帮助", items: helpItems, action: action)
                 }
                 .padding(.top, 12)
-                .padding(.bottom, 4)
+                .padding(.bottom, 112)
             }
 
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab)
+            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
         }
         .padding(.horizontal, AppTheme.screenPadding)
-        .padding(.bottom, 14)
+        .background(AppTheme.background.ignoresSafeArea())
+    }
+
+    private var profileSummary: String {
+        let knownSummary = hardwareProfile.knownComponentsSummary
+        return knownSummary.isEmpty
+            ? "\(hardwareProfile.completionLabel) · 点击开始补充"
+            : "\(hardwareProfile.completionLabel) · \(knownSummary)"
     }
 
     private func action(for title: String) {
         switch title {
         case "我的配置单":
             onOpenBuilds()
-        case "我的电脑档案":
-            onOpenComputerProfile()
         default:
             break
         }
@@ -76,6 +82,7 @@ private struct ProfileItem: Identifiable {
     let title: String
     let icon: String
     let subtitle: String
+    let isAvailable: Bool
 }
 
 private struct ProfileSection: View {
@@ -111,13 +118,20 @@ private struct ProfileSection: View {
                             }
 
                             Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 13, weight: .bold))
-                                .foregroundStyle(AppTheme.secondaryText)
+                            if item.isAvailable {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            } else {
+                                Text("暂未开放")
+                                    .font(.appCaption.weight(.semibold))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            }
                         }
                         .padding(.vertical, 15)
                     }
                     .buttonStyle(.plain)
+                    .disabled(!item.isAvailable)
 
                     if index != items.count - 1 {
                         Divider().padding(.leading, 48)
@@ -136,6 +150,7 @@ private struct ProfileSection: View {
         hardwareProfile: .skipped,
         selectedTab: .constant(.profile),
         onSelectTab: { _ in },
+        onComposePost: {},
         onOpenBuilds: {},
         onOpenComputerProfile: {}
     )

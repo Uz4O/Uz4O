@@ -14,6 +14,9 @@ struct ContentView: View {
     @State private var selectedTab: AppTab = .home
     @State private var onboardingProfile: OnboardingProfile
     @State private var buildResultReturnTarget: BuildResultReturnTarget = .fromAIBuild
+    @State private var selectedConfigSection = ConfigHubSection.defaultSelection
+    @State private var toolReturnScreen: AppScreen = .home
+    @State private var isComposerPresented = false
 
     init() {
         let savedHardwareProfile = HardwareProfileStore().load()
@@ -47,10 +50,11 @@ struct ContentView: View {
                         profile: onboardingProfile,
                         selectedTab: $selectedTab,
                         onSelectTab: handleTabSelection,
+                        onComposePost: { isComposerPresented = true },
                         onOpenAI: { openAI() },
-                        onOpenUpgrade: { selectedScreen = .upgrade },
+                        onOpenUpgrade: { openTool(.upgrade, returningTo: .home) },
                         onOpenGuide: { selectedScreen = .guide },
-                        onOpenDIY: { selectedScreen = .diy },
+                        onOpenDIY: { openTool(.diy, returningTo: .home) },
                         onOpenConfigReview: { selectedScreen = .configReview },
                         onOpenCommunity: {
                             selectedTab = .community
@@ -66,31 +70,53 @@ struct ContentView: View {
                     )
                 case .aiBuild:
                     AIBuildView(
-                        onBack: { selectedScreen = .home },
+                        onBack: {
+                            selectedScreen = buildResultReturnTarget.destination
+                            if selectedScreen == .builds {
+                                selectedTab = .builds
+                            }
+                        },
                         onShowResult: {
-                            buildResultReturnTarget = .fromAIBuild
                             selectedScreen = .buildResult
                         }
                     )
                 case .community:
-                    CommunityView(selectedTab: $selectedTab, onSelectTab: handleTabSelection)
+                    CommunityView(
+                        selectedTab: $selectedTab,
+                        onSelectTab: handleTabSelection,
+                        onComposePost: { isComposerPresented = true }
+                    )
                 case .builds:
                     MyBuildsView(
                         hardwareProfile: onboardingProfile.hardwareProfile,
                         selectedTab: $selectedTab,
                         onSelectTab: handleTabSelection,
+                        onComposePost: { isComposerPresented = true },
                         onOpenPlan: {
                             buildResultReturnTarget = .fromConfigTab
                             selectedScreen = .buildResult
                         },
-                        onCreate: { openAI() },
-                        onOpenComputerProfile: { selectedScreen = .computerProfile }
+                        onCreate: {
+                            selectedConfigSection = .currentComputer
+                            openAI(returningTo: .fromConfigAIBuild)
+                        },
+                        onOpenComputerProfile: { selectedScreen = .computerProfile },
+                        onOpenUpgrade: {
+                            selectedConfigSection = .currentComputer
+                            openTool(.upgrade, returningTo: .builds)
+                        },
+                        onOpenPerformanceTest: {
+                            selectedConfigSection = .currentComputer
+                            openTool(.diy, returningTo: .builds)
+                        },
+                        selectedSection: $selectedConfigSection
                     )
                 case .profile:
                     ProfileView(
                         hardwareProfile: onboardingProfile.hardwareProfile,
                         selectedTab: $selectedTab,
                         onSelectTab: handleTabSelection,
+                        onComposePost: { isComposerPresented = true },
                         onOpenBuilds: {
                             selectedTab = .builds
                             selectedScreen = .builds
@@ -110,7 +136,7 @@ struct ContentView: View {
                 case .upgrade:
                     UpgradePlanView(
                         savedHardwareProfile: onboardingProfile.hardwareProfile,
-                        onBack: { selectedScreen = .home }
+                        onBack: { selectedScreen = toolReturnScreen }
                     )
                 case .configReview:
                     ConfigReviewView(onBack: { selectedScreen = .home })
@@ -121,7 +147,7 @@ struct ContentView: View {
                 case .diy:
                     DIYBuildView(
                         savedHardwareProfile: onboardingProfile.hardwareProfile,
-                        onBack: { selectedScreen = .home }
+                        onBack: { selectedScreen = toolReturnScreen }
                     )
                 case .buildResult:
                     BuildResultView(
@@ -141,10 +167,19 @@ struct ContentView: View {
         .onChange(of: onboardingProfile.hardwareProfile) { _, profile in
             hardwareProfileStore.save(profile)
         }
+        .sheet(isPresented: $isComposerPresented) {
+            CommunityComposerView()
+        }
     }
 
-    private func openAI() {
+    private func openAI(returningTo returnTarget: BuildResultReturnTarget = .fromAIBuild) {
+        buildResultReturnTarget = returnTarget
         selectedScreen = .aiBuild
+    }
+
+    private func openTool(_ screen: AppScreen, returningTo returnScreen: AppScreen) {
+        toolReturnScreen = returnScreen
+        selectedScreen = screen
     }
 
     private func handleTabSelection(_ tab: AppTab) {

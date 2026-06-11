@@ -20,12 +20,13 @@ enum AppScreen: Hashable {
 enum BuildResultReturnTarget: Equatable {
     case fromAIBuild
     case fromConfigTab
+    case fromConfigAIBuild
 
     var destination: AppScreen {
         switch self {
         case .fromAIBuild:
             return .home
-        case .fromConfigTab:
+        case .fromConfigTab, .fromConfigAIBuild:
             return .builds
         }
     }
@@ -86,7 +87,7 @@ enum ComputerOwnershipChoice {
     case hasComputer
     case noComputer
 
-    var shouldCollectHardwareAfterPreference: Bool {
+    var shouldCollectHardwareBeforePreference: Bool {
         self == .hasComputer
     }
 }
@@ -118,6 +119,20 @@ enum HardwareProfileOptions {
 }
 
 struct HardwareProfile: Codable, Equatable {
+    enum Change: Equatable {
+        case updated
+        case motherboardCleared
+
+        var feedbackMessage: String? {
+            switch self {
+            case .updated:
+                return nil
+            case .motherboardCleared:
+                return "因接口不兼容，已清除原主板"
+            }
+        }
+    }
+
     var cpu: String
     var gpu: String
     var motherboard: String
@@ -158,6 +173,29 @@ struct HardwareProfile: Codable, Equatable {
         "CPU \(cpu) · 显卡 \(gpu) · 主板 \(motherboard) · 内存 \(memory) · 硬盘 \(storage) · 电源 \(powerSupply)"
     }
 
+    var completedComponentCount: Int {
+        componentValues.filter { $0 != "不知道" }.count
+    }
+
+    var appliedItemCount: Int {
+        completedComponentCount
+    }
+
+    var completionLabel: String {
+        "已填写 \(completedComponentCount)/\(HardwareProfileOptions.categories.count)"
+    }
+
+    var isComplete: Bool {
+        completedComponentCount == HardwareProfileOptions.categories.count
+    }
+
+    var knownComponentsSummary: String {
+        componentSummaries
+            .filter { $0.value != "不知道" }
+            .map { "\($0.title) \($0.value)" }
+            .joined(separator: " · ")
+    }
+
     func value(for title: String) -> String {
         switch title {
         case "CPU":
@@ -176,11 +214,19 @@ struct HardwareProfile: Codable, Equatable {
     }
 
     mutating func setValue(_ value: String, for title: String) {
+        _ = updateValue(value, for: title)
+    }
+
+    @discardableResult
+    mutating func updateValue(_ value: String, for title: String) -> Change {
+        var change = Change.updated
+
         switch title {
         case "CPU":
             cpu = value
             if !HardwareCatalog.areCompatible(cpu: value, motherboard: motherboard) {
                 motherboard = "不知道"
+                change = .motherboardCleared
             }
         case "显卡":
             gpu = value
@@ -195,6 +241,22 @@ struct HardwareProfile: Codable, Equatable {
         }
 
         wasSkipped = false
+        return change
+    }
+
+    private var componentValues: [String] {
+        [cpu, gpu, motherboard, memory, storage, powerSupply]
+    }
+
+    private var componentSummaries: [(title: String, value: String)] {
+        [
+            ("CPU", cpu),
+            ("显卡", gpu),
+            ("主板", motherboard),
+            ("内存", memory),
+            ("硬盘", storage),
+            ("电源", powerSupply)
+        ]
     }
 }
 

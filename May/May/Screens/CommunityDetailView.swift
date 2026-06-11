@@ -33,28 +33,19 @@ struct CommunityDetailView: View {
                         SoftCard(radius: 16) {
                             VStack(alignment: .leading, spacing: 14) {
                                 HStack(alignment: .top, spacing: 9) {
-                                    CommunityAvatar(author: post.author, size: 30)
+                                    CommunityAvatar(author: post.author, size: 32)
                                         .padding(.top, 1)
 
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                                             Text(post.author.name)
-                                                .font(.system(size: 13, weight: .bold))
+                                                .font(.system(size: 13, weight: .regular))
                                                 .foregroundStyle(AppTheme.primaryText)
                                                 .lineLimit(1)
 
                                             Text(post.createdAt)
                                                 .font(.system(size: 11))
                                                 .foregroundStyle(AppTheme.secondaryText)
-                                        }
-
-                                        if post.isPinned {
-                                            Text("置顶")
-                                                .font(.system(size: 8, weight: .bold))
-                                                .foregroundStyle(AppTheme.success)
-                                                .padding(.horizontal, 5)
-                                                .frame(height: 16)
-                                                .background(AppTheme.success.opacity(0.14), in: Capsule())
                                         }
                                     }
 
@@ -71,26 +62,21 @@ struct CommunityDetailView: View {
                                     .buttonStyle(.plain)
                                 }
 
-                                Text(post.title)
-                                    .font(.system(size: 18, weight: .bold))
-                                    .foregroundStyle(AppTheme.primaryText)
-                                    .fixedSize(horizontal: false, vertical: true)
-
                                 Text(post.body)
-                                    .font(.system(size: 14))
+                                    .font(.system(size: 14, weight: .regular))
                                     .foregroundStyle(AppTheme.primaryText)
                                     .fixedSize(horizontal: false, vertical: true)
 
                                 VStack(alignment: .leading, spacing: 7) {
                                     ForEach(post.parts, id: \.self) { part in
                                         Text(part)
-                                            .font(.system(size: 12))
+                                            .font(.system(size: 14, weight: .regular))
                                             .foregroundStyle(AppTheme.primaryText)
                                     }
                                 }
 
-                                if post.id == "value-build-may" {
-                                    CommunityImageStrip(height: 64)
+                                if let image = post.image {
+                                    CommunityPostImageView(image: image, width: 296)
                                 }
 
                                 HStack(spacing: 8) {
