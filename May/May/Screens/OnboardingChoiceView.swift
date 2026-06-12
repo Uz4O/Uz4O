@@ -8,96 +8,101 @@ struct OnboardingChoiceView: View {
     @State private var computerOwnership: ComputerOwnershipChoice = .noComputer
     @State private var step: OnboardingStep = .computerOwnership
 
-    private let designWidth: CGFloat = 328
-
     init(initialHardwareProfile: HardwareProfile = .skipped, onFinish: @escaping (OnboardingProfile) -> Void) {
         self.onFinish = onFinish
         _hardwareProfile = State(initialValue: initialHardwareProfile)
     }
 
     var body: some View {
-        ZStack {
-            OnboardingBackground()
+        GeometryReader { proxy in
+            let contentWidth = AppTheme.responsiveContentWidth(for: proxy.size.width)
 
-            VStack(spacing: 0) {
-                HStack(spacing: 8) {
-                    ProgressPill(isActive: step == .computerOwnership)
-                    ProgressPill(isActive: step == .hardwareProfile)
-                    ProgressPill(isActive: step == .preference)
-                    Spacer()
-                    Button {
-                        onFinish(.skipped)
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text("先跳过，进入 App")
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 11, weight: .bold))
+            ZStack {
+                OnboardingBackground()
+
+                VStack(spacing: 0) {
+                    HStack(spacing: 8) {
+                        ProgressPill(isActive: step == .computerOwnership)
+                        ProgressPill(isActive: step == .hardwareProfile)
+                        ProgressPill(isActive: step == .preference)
+                        Spacer()
+                        Button {
+                            onFinish(.skipped)
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("先跳过，进入 App")
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 11, weight: .bold))
+                            }
                         }
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(AppTheme.secondaryText)
                     }
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundStyle(AppTheme.secondaryText)
+                    .frame(width: contentWidth)
+                    .padding(.top, 20)
+
+                    TabView(selection: $step) {
+                        ComputerOwnershipStep(
+                            contentWidth: contentWidth,
+                            onHasComputer: {
+                                computerOwnership = .hasComputer
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = .hardwareProfile
+                                }
+                            },
+                            onNoComputer: {
+                                computerOwnership = .noComputer
+                                hardwareProfile = .skipped
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = .preference
+                                }
+                            }
+                        )
+                        .tag(OnboardingStep.computerOwnership)
+
+                        HardwareProfileStep(
+                            contentWidth: contentWidth,
+                            hardwareProfile: $hardwareProfile,
+                            onBack: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = .computerOwnership
+                                }
+                            },
+                            onSkip: {
+                                hardwareProfile = .skipped
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = .preference
+                                }
+                            },
+                            onFinish: {
+                                hardwareProfile = savedHardwareProfile()
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = .preference
+                                }
+                            }
+                        )
+                        .tag(OnboardingStep.hardwareProfile)
+
+                        PreferenceStep(
+                            contentWidth: contentWidth,
+                            selectedPreference: $selectedPreference,
+                            primaryButtonTitle: "进入 App",
+                            onBack: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    step = computerOwnership.shouldCollectHardwareBeforePreference ? .hardwareProfile : .computerOwnership
+                                }
+                            },
+                            onFinish: {
+                                onFinish(OnboardingProfile(preference: selectedPreference, hardwareProfile: hardwareProfile))
+                            }
+                        )
+                        .tag(OnboardingStep.preference)
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
                 }
-                .frame(width: designWidth)
-                .padding(.top, 20)
-
-                TabView(selection: $step) {
-                    ComputerOwnershipStep(
-                        onHasComputer: {
-                            computerOwnership = .hasComputer
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = .hardwareProfile
-                            }
-                        },
-                        onNoComputer: {
-                            computerOwnership = .noComputer
-                            hardwareProfile = .skipped
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = .preference
-                            }
-                        }
-                    )
-                    .tag(OnboardingStep.computerOwnership)
-
-                    HardwareProfileStep(
-                        hardwareProfile: $hardwareProfile,
-                        onBack: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = .computerOwnership
-                            }
-                        },
-                        onSkip: {
-                            hardwareProfile = .skipped
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = .preference
-                            }
-                        },
-                        onFinish: {
-                            hardwareProfile = savedHardwareProfile()
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = .preference
-                            }
-                        }
-                    )
-                    .tag(OnboardingStep.hardwareProfile)
-
-                    PreferenceStep(
-                        selectedPreference: $selectedPreference,
-                        primaryButtonTitle: "进入 App",
-                        onBack: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                step = computerOwnership.shouldCollectHardwareBeforePreference ? .hardwareProfile : .computerOwnership
-                            }
-                        },
-                        onFinish: {
-                            onFinish(OnboardingProfile(preference: selectedPreference, hardwareProfile: hardwareProfile))
-                        }
-                    )
-                    .tag(OnboardingStep.preference)
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func savedHardwareProfile() -> HardwareProfile {
@@ -130,10 +135,9 @@ private struct ProgressPill: View {
 }
 
 private struct ComputerOwnershipStep: View {
+    let contentWidth: CGFloat
     let onHasComputer: () -> Void
     let onNoComputer: () -> Void
-
-    private let designWidth: CGFloat = 328
 
     var body: some View {
         VStack(spacing: 0) {
@@ -155,7 +159,7 @@ private struct ComputerOwnershipStep: View {
             }
 
             OnboardingComputerIllustration()
-                .frame(width: designWidth, height: 172)
+                .frame(width: contentWidth, height: 172)
                 .padding(.top, 42)
 
             VStack(spacing: 12) {
@@ -186,18 +190,17 @@ private struct ComputerOwnershipStep: View {
             .foregroundStyle(AppTheme.mutedText)
             .padding(.bottom, 88)
         }
-        .frame(width: designWidth)
+        .frame(width: contentWidth)
         .frame(maxWidth: .infinity)
     }
 }
 
 private struct PreferenceStep: View {
+    let contentWidth: CGFloat
     @Binding var selectedPreference: BuildPreference
     let primaryButtonTitle: String
     let onBack: () -> Void
     let onFinish: () -> Void
-
-    private let designWidth: CGFloat = 328
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
@@ -247,20 +250,19 @@ private struct PreferenceStep: View {
             PrimaryButton(title: primaryButtonTitle, icon: "arrow.right", action: onFinish)
                 .padding(.bottom, 28)
         }
-        .frame(width: designWidth)
+        .frame(width: contentWidth)
         .frame(maxWidth: .infinity)
     }
 }
 
 private struct HardwareProfileStep: View {
+    let contentWidth: CGFloat
     @Binding var hardwareProfile: HardwareProfile
     let onBack: () -> Void
     let onSkip: () -> Void
     let onFinish: () -> Void
 
     @State private var selectedCategory: HardwareOptionCategory?
-
-    private let designWidth: CGFloat = 328
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -314,7 +316,7 @@ private struct HardwareProfileStep: View {
             PrimaryButton(title: "保存并继续", icon: "arrow.right", action: onFinish)
                 .padding(.bottom, 28)
         }
-        .frame(width: designWidth)
+        .frame(width: contentWidth)
         .frame(maxWidth: .infinity)
         .sheet(item: $selectedCategory) { category in
             HardwarePickerSheet(

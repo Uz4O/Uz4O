@@ -20,44 +20,51 @@ struct ProfileView: View {
     ]
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 20) {
-                    Button(action: onOpenComputerProfile) {
-                        HStack(spacing: 18) {
-                            MascotAvatar(size: 82)
-                            VStack(alignment: .leading, spacing: 7) {
-                                Text("AI 装机助手")
-                                    .font(.system(size: 22, weight: .bold))
-                                    .foregroundStyle(AppTheme.primaryText)
-                                Text(profileSummary)
-                                    .font(.system(size: 13))
+        GeometryReader { proxy in
+            let contentWidth = AppTheme.responsiveContentWidth(for: proxy.size.width)
+
+            ZStack(alignment: .bottom) {
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Button(action: onOpenComputerProfile) {
+                            HStack(spacing: 18) {
+                                MascotAvatar(size: 82)
+                                VStack(alignment: .leading, spacing: 7) {
+                                    Text("AI 装机助手")
+                                        .font(.system(size: 22, weight: .bold))
+                                        .foregroundStyle(AppTheme.primaryText)
+                                    Text(profileSummary)
+                                        .font(.system(size: 13))
+                                        .foregroundStyle(AppTheme.secondaryText)
+                                        .lineLimit(3)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 16, weight: .bold))
                                     .foregroundStyle(AppTheme.secondaryText)
-                                    .lineLimit(3)
-                                    .fixedSize(horizontal: false, vertical: true)
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundStyle(AppTheme.secondaryText)
+                            .padding(20)
+                            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
+                            .modifier(AppTheme.cardShadow)
                         }
-                        .padding(20)
-                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
-                        .modifier(AppTheme.cardShadow)
+                        .buttonStyle(.plain)
+
+                        ProfileSection(title: "我的方案", items: accountItems, action: action)
+                        ProfileSection(title: "设置与帮助", items: helpItems, action: action)
                     }
-                    .buttonStyle(.plain)
-
-                    ProfileSection(title: "我的方案", items: accountItems, action: action)
-                    ProfileSection(title: "设置与帮助", items: helpItems, action: action)
+                    .frame(width: contentWidth)
+                    .padding(.top, 12)
+                    .padding(.bottom, 112)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.top, 12)
-                .padding(.bottom, 112)
-            }
 
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                    .frame(width: contentWidth)
+            }
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.background.ignoresSafeArea())
         }
-        .padding(.horizontal, AppTheme.screenPadding)
-        .background(AppTheme.background.ignoresSafeArea())
     }
 
     private var profileSummary: String {

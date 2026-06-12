@@ -27,7 +27,14 @@ Carthage/Build/
 # Local environment and logs
 .env
 .env.*
+!**/.env.example
 *.log
+
+# Python backend local state
+backend/.venv/
+backend/.pytest_cache/
+backend/**/*.egg-info/
+backend/**/__pycache__/
 
 # Local hardware price crawler state and generated reports
 tools/hardware-price-crawler/.venv/

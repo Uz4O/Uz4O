@@ -7,37 +7,40 @@ struct CommunityView: View {
 
     @State private var selectedPost: CommunityPost?
     private let posts = CommunityPost.featuredFeed
-    private let designWidth: CGFloat = 328
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: 0) {
-                    CommunityHeader()
-                        .padding(.top, 8)
-                        .padding(.bottom, 18)
+        GeometryReader { proxy in
+            let contentWidth = AppTheme.responsiveContentWidth(for: proxy.size.width)
 
-                    ForEach(posts) { post in
-                        Button {
-                            selectedPost = post
-                        } label: {
-                            CommunityPostSurface(post: post, contentWidth: designWidth)
+            ZStack(alignment: .bottom) {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 0) {
+                        CommunityHeader()
+                            .padding(.top, 8)
+                            .padding(.bottom, 18)
+
+                        ForEach(posts) { post in
+                            Button {
+                                selectedPost = post
+                            } label: {
+                                CommunityPostSurface(post: post, contentWidth: contentWidth)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
+
+                        Color.clear.frame(height: 2)
                     }
-
-                    Color.clear.frame(height: 2)
+                    .frame(width: contentWidth)
+                    .padding(.bottom, 118)
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(width: designWidth)
-                .padding(.bottom, 118)
-                .frame(maxWidth: .infinity)
-            }
 
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                .frame(width: designWidth)
+                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                    .frame(width: contentWidth)
+            }
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.background.ignoresSafeArea())
         }
-        .frame(maxWidth: .infinity)
-        .background(AppTheme.background.ignoresSafeArea())
         .sheet(item: $selectedPost) { post in
             CommunityDetailView(post: post)
         }

@@ -12,58 +12,61 @@ struct MyBuildsView: View {
     let onOpenPerformanceTest: () -> Void
 
     @Binding var selectedSection: ConfigHubSection
-    private let designWidth: CGFloat = 344
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("配置")
-                                .font(.system(size: 29, weight: .heavy))
-                                .foregroundStyle(AppTheme.primaryText)
-                            Text("管理 AI 生成的配置和现在自己的配置")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundStyle(AppTheme.secondaryText)
+        GeometryReader { proxy in
+            let contentWidth = AppTheme.responsiveContentWidth(for: proxy.size.width, compactWidth: 344, expandedWidth: 368)
+
+            ZStack(alignment: .bottom) {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("配置")
+                                    .font(.system(size: 29, weight: .heavy))
+                                    .foregroundStyle(AppTheme.primaryText)
+                                Text("管理 AI 生成的配置和现在自己的配置")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            }
+
+                            Spacer()
                         }
+                        .padding(.top, 12)
 
-                        Spacer()
+                        ConfigHubSegmentedPicker(selectedSection: $selectedSection)
+
+                        switch selectedSection {
+                        case .aiBuilds:
+                            AIBuildsSection(
+                                plans: AppMockData.savedPlans,
+                                onOpenPlan: onOpenPlan,
+                                onCreate: onCreate
+                            )
+                        case .currentComputer:
+                            CurrentComputerSection(
+                                hardwareProfile: hardwareProfile,
+                                onEdit: onOpenComputerProfile,
+                                onCreate: onCreate,
+                                onOpenUpgrade: onOpenUpgrade,
+                                onOpenPerformanceTest: onOpenPerformanceTest
+                            )
+                        }
                     }
-                    .padding(.top, 12)
-
-                    ConfigHubSegmentedPicker(selectedSection: $selectedSection)
-
-                    switch selectedSection {
-                    case .aiBuilds:
-                        AIBuildsSection(
-                            plans: AppMockData.savedPlans,
-                            onOpenPlan: onOpenPlan,
-                            onCreate: onCreate
-                        )
-                    case .currentComputer:
-                        CurrentComputerSection(
-                            hardwareProfile: hardwareProfile,
-                            onEdit: onOpenComputerProfile,
-                            onCreate: onCreate,
-                            onOpenUpgrade: onOpenUpgrade,
-                            onOpenPerformanceTest: onOpenPerformanceTest
-                        )
+                    .padding(.bottom, 148)
+                    .frame(width: contentWidth)
+                    .frame(maxWidth: .infinity)
+                    .transaction { transaction in
+                        transaction.animation = nil
                     }
                 }
-                .padding(.bottom, 148)
-                .frame(width: designWidth)
-                .frame(maxWidth: .infinity)
-                .transaction { transaction in
-                    transaction.animation = nil
-                }
+
+                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                    .frame(width: contentWidth)
             }
-
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                .frame(width: designWidth)
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.background.ignoresSafeArea())
         }
-        .frame(maxWidth: .infinity)
-        .background(AppTheme.background.ignoresSafeArea())
     }
 }
 

@@ -13,55 +13,62 @@ struct HomeView: View {
     let onOpenCommunity: () -> Void
     let onOpenBuilds: () -> Void
     let onOpenCompatibility: () -> Void
-    private let designWidth: CGFloat = 328
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
-                    HStack {
-                        Text("AI 装机助手")
-                            .font(.system(size: 25, weight: .heavy))
-                            .foregroundStyle(AppTheme.primaryText)
-                        Spacer()
-                        Image(systemName: "bell")
-                            .font(.system(size: 21, weight: .medium))
-                            .foregroundStyle(AppTheme.primaryText)
-                    }
-                    .frame(width: designWidth)
-                    .padding(.top, 8)
+        GeometryReader { proxy in
+            let contentWidth = AppTheme.responsiveContentWidth(for: proxy.size.width)
 
-                    Button(action: onOpenAI) {
-                        HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
-                    }
-                    .buttonStyle(.plain)
-                    .frame(width: designWidth)
+            ZStack(alignment: .bottom) {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        HStack {
+                            Text("AI 装机助手")
+                                .font(.system(size: 25, weight: .heavy))
+                                .foregroundStyle(AppTheme.primaryText)
+                            Spacer()
+                            Image(systemName: "bell")
+                                .font(.system(size: 21, weight: .medium))
+                                .foregroundStyle(AppTheme.primaryText)
+                        }
+                        .frame(width: contentWidth)
+                        .padding(.top, 8)
 
-                    VStack(spacing: 16) {
-                        ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
-                            HStack(spacing: 14) {
-                                ForEach(row, id: \.kind) { feature in
-                                    HomeFeatureCard(feature: feature, action: action(for: feature.kind))
+                        Button(action: onOpenAI) {
+                            HeroBuildCard(subtitle: profile.homeHeroSubtitle, buttonTitle: profile.homeHeroButtonTitle)
+                        }
+                        .buttonStyle(.plain)
+                        .frame(width: contentWidth)
+
+                        VStack(spacing: 16) {
+                            ForEach(Array(featureRows.enumerated()), id: \.offset) { _, row in
+                                HStack(spacing: 14) {
+                                    ForEach(row, id: \.kind) { feature in
+                                        HomeFeatureCard(
+                                            feature: feature,
+                                            width: featureCardWidth(for: contentWidth),
+                                            action: action(for: feature.kind)
+                                        )
+                                    }
                                 }
                             }
                         }
+                        .frame(width: contentWidth)
+
+                        HomeCommunitySection(onOpenCommunity: onOpenCommunity)
+                            .frame(width: contentWidth)
+
+                        Color.clear.frame(height: 2)
                     }
-                    .frame(width: designWidth)
-
-                    HomeCommunitySection(onOpenCommunity: onOpenCommunity)
-                        .frame(width: designWidth)
-
-                    Color.clear.frame(height: 2)
+                    .padding(.bottom, 104)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.bottom, 104)
-                .frame(maxWidth: .infinity)
-            }
 
-            BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                .frame(width: designWidth)
+                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
+                    .frame(width: contentWidth)
+            }
+            .frame(maxWidth: .infinity)
+            .background(AppTheme.background.ignoresSafeArea())
         }
-        .frame(maxWidth: .infinity)
-        .background(AppTheme.background.ignoresSafeArea())
     }
 
     private var featureRows: [[HomeFeatureDisplay]] {
@@ -87,6 +94,10 @@ struct HomeView: View {
         case .diy:
             return onOpenDIY
         }
+    }
+
+    private func featureCardWidth(for contentWidth: CGFloat) -> CGFloat {
+        (contentWidth - 14) / 2
     }
 }
 
@@ -198,6 +209,7 @@ private struct HeroBuildCard: View {
 
 private struct HomeFeatureCard: View {
     let feature: HomeFeatureDisplay
+    let width: CGFloat
     let action: () -> Void
 
     var body: some View {
@@ -236,7 +248,7 @@ private struct HomeFeatureCard: View {
                     }
                 }
                 .padding(18)
-                .frame(width: 156, height: 164, alignment: .topLeading)
+                .frame(width: width, height: 164, alignment: .topLeading)
             }
         }
         .buttonStyle(.plain)

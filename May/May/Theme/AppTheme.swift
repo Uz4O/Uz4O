@@ -17,6 +17,15 @@ enum AppTheme {
     static let controlRadius: CGFloat = 12
     static let screenPadding: CGFloat = 20
 
+    static func responsiveContentWidth(
+        for screenWidth: CGFloat,
+        compactWidth: CGFloat = 328,
+        expandedWidth: CGFloat = 360,
+        sideMargin: CGFloat = 56
+    ) -> CGFloat {
+        min(max(screenWidth - sideMargin, compactWidth), expandedWidth)
+    }
+
     static var cardShadow: some ViewModifier {
         ShadowModifier(color: Color.black.opacity(0.07), radius: 24, x: 0, y: 14)
     }

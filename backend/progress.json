@@ -1,0 +1,110 @@
+{
+  "project": "AI 装机助手后端",
+  "updated_at": "2026-06-13",
+  "current_phase": "Phase 0 · 地基",
+  "phases": [
+    {
+      "name": "Phase 0 · 地基",
+      "description": "建立可靠的数据、规则和账户基础。",
+      "items": [
+        {
+          "title": "FastAPI 后端脚手架",
+          "description": "可运行的 API、健康检查、测试与部署基础。",
+          "status": "completed",
+          "completed_at": "2026-06-12"
+        },
+        {
+          "title": "PostgreSQL 数据库地基",
+          "description": "独立数据库、低权限账户、本机访问隔离和应用连接配置。",
+          "status": "completed",
+          "completed_at": "2026-06-13"
+        },
+        {
+          "title": "硬件库种子导入",
+          "description": "把现有硬件目录转换为后端可查询的结构化数据。",
+          "status": "completed",
+          "completed_at": "2026-06-13"
+        },
+        {
+          "title": "价格摄取",
+          "description": "导入人工确认后的参考价格。",
+          "status": "not_started"
+        },
+        {
+          "title": "规则与兼容性引擎",
+          "description": "检查插槽、内存、电源和配置失衡。",
+          "status": "not_started"
+        },
+        {
+          "title": "账户、登录与配置同步",
+          "description": "保存用户偏好和当前电脑配置。",
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 · 决策类 AI",
+      "description": "实现产品最核心的装机与排雷能力。",
+      "items": [
+        {
+          "title": "AI 一键装机",
+          "description": "按预算和用途从维护中的硬件库生成方案。",
+          "status": "not_started"
+        },
+        {
+          "title": "配置排雷",
+          "description": "分析商家配置单并生成风险说明和回复话术。",
+          "status": "not_started"
+        },
+        {
+          "title": "配置中心 CRUD",
+          "description": "保存、查看和删除装机方案。",
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 · 进阶 AI",
+      "description": "补充升级、性能和兼容性能力。",
+      "items": [
+        {
+          "title": "升级建议",
+          "description": "根据当前电脑和预算给出升级顺序。",
+          "status": "not_started"
+        },
+        {
+          "title": "游戏性能测试",
+          "description": "基于基准数据估算帧率和瓶颈。",
+          "status": "not_started"
+        },
+        {
+          "title": "兼容性检查接口收口",
+          "description": "提供统一、稳定的兼容性检查接口。",
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "name": "Phase 3 · 社区",
+      "description": "支持配置分享和围绕装机决策的交流。",
+      "items": [
+        {
+          "title": "社区服务",
+          "description": "Feed、发帖、评论、点赞收藏、图片和审核。",
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "name": "Phase 4 · 打磨",
+      "description": "完善内容服务、可靠性和成本控制。",
+      "items": [
+        {
+          "title": "内容与运行优化",
+          "description": "装机指南、流式响应、降级、限流和成本优化。",
+          "status": "not_started"
+        }
+      ]
+    }
+  ]
+}
