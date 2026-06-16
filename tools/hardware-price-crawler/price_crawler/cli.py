@@ -5,7 +5,7 @@ from pathlib import Path
 
 from .catalog import extract_hardware_targets
 from .pricing import HardwareTarget, assess_product, build_reference_price
-from .scraper import scrape_jd_targets
+from .scraper import scrape_targets
 from .storage import (
     read_hardware_targets,
     read_previous_prices,
@@ -23,6 +23,8 @@ DEFAULT_CATALOG = REPO_ROOT / "May/May/Models/HardwareCatalog.swift"
 DEFAULT_HARDWARE = TOOL_ROOT / "data/hardware.csv"
 DEFAULT_APPROVED = TOOL_ROOT / "data/approved-reference-prices.csv"
 DEFAULT_PROFILE = TOOL_ROOT / "data/browser-profile"
+DEFAULT_PLATFORM = "taobao"
+DEFAULT_DELAY_SECONDS = 8
 
 
 def main() -> None:
@@ -40,13 +42,14 @@ def _build_parser() -> argparse.ArgumentParser:
     catalog_parser.add_argument("--output", type=Path, default=DEFAULT_HARDWARE)
     catalog_parser.set_defaults(handler=_catalog)
 
-    crawl_parser = subparsers.add_parser("crawl", help="打开可见浏览器并采集京东搜索结果")
+    crawl_parser = subparsers.add_parser("crawl", help="打开可见浏览器并采集电商搜索结果")
     crawl_parser.add_argument("--hardware", type=Path, default=DEFAULT_HARDWARE)
     crawl_parser.add_argument("--output", type=Path)
     crawl_parser.add_argument("--profile", type=Path, default=DEFAULT_PROFILE)
+    crawl_parser.add_argument("--platform", choices=["taobao", "jd"], default=DEFAULT_PLATFORM)
     crawl_parser.add_argument("--category", choices=["cpu", "gpu", "motherboard"])
     crawl_parser.add_argument("--limit", type=int, default=0, help="本次最多采集的型号数，0 表示全部")
-    crawl_parser.add_argument("--delay", type=float, default=5)
+    crawl_parser.add_argument("--delay", type=float, default=DEFAULT_DELAY_SECONDS)
     crawl_parser.add_argument("--channel", default="msedge", help="Playwright 浏览器频道，默认 msedge")
     crawl_parser.add_argument("--skip-login-pause", action="store_true")
     crawl_parser.set_defaults(handler=_crawl)
@@ -83,13 +86,14 @@ def _crawl(args) -> None:
     def save_progress(products):
         write_raw_products(output, products)
 
-    scrape_jd_targets(
+    scrape_targets(
         targets=targets,
         profile_path=args.profile,
         delay_seconds=args.delay,
         channel=args.channel,
         pause_for_login=not args.skip_login_pause,
         after_target=save_progress,
+        platform=args.platform,
     )
     print("原始商品已写入 {}".format(output))
 

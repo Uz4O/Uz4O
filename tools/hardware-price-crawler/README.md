@@ -1,6 +1,6 @@
 # Hardware Price Crawler
 
-本工具用于每周人工监督采集京东 CPU、显卡和主板搜索结果，并生成供 AI 装机使用的参考价格复核文件。
+本工具用于每周人工监督采集淘宝或京东 CPU、显卡和主板搜索结果，并生成供 AI 装机使用的参考价格复核文件。
 
 它完全独立于 SwiftUI 前端，不会修改 `May/`，也不会自动把价格发布到 App。
 
@@ -9,14 +9,16 @@
 ```text
 现有 HardwareCatalog.swift
 → 导出硬件清单
-→ 可见 Edge 浏览器逐个搜索京东
+→ 可见 Edge 浏览器逐个搜索电商平台
 → 保存原始商品 CSV
 → 自动排除明显错误商品
 → 计算价格中位数
 → 人工检查异常清单
 ```
 
-工具不会绕过登录或验证码。遇到京东验证时，在打开的浏览器中手动处理，再回到终端继续。
+工具不会绕过登录、滑块或验证码。遇到淘宝/京东验证时，在打开的浏览器中手动处理，再回到终端继续。
+
+默认平台是淘宝，京东仍保留为备用平台。工具使用单浏览器、单线程、顺序采集和较长默认延迟，尽量降低账号触发风控的概率；它不会使用代理池、指纹伪装或验证码破解。
 
 ## 安装
 
@@ -48,10 +50,16 @@ python3 run.py catalog
 ### 2. 小批量试采集
 
 ```bash
-python3 run.py crawl --category gpu --limit 3 --delay 5
+python3 run.py crawl --platform taobao --category gpu --limit 3 --delay 8
 ```
 
-浏览器打开后，手动登录京东并按终端提示继续。工具每完成一个型号就会更新 `raw-products.csv`。
+浏览器打开后，手动登录淘宝并按终端提示继续。工具每完成一个型号就会更新 `raw-products.csv`。
+
+京东账号恢复后也可以备用：
+
+```bash
+python3 run.py crawl --platform jd --category gpu --limit 3 --delay 8
+```
 
 ### 3. 生成参考价和复核清单
 
@@ -76,9 +84,9 @@ data/approved-reference-prices.csv
 
 ## 每周建议流程
 
-1. 先用 `--limit 3` 验证京东页面结构仍然可读取。
+1. 先用 `--limit 3` 验证淘宝页面结构仍然可读取。
 2. 分类别运行，避免一次执行时间过长。
-3. 保留至少 5 秒搜索间隔。
+3. 保留至少 8 秒搜索间隔，账号敏感时可以提高到 15-30 秒。
 4. 查看 `review-required.csv`，重点检查无结果、样本不足和价格变化超过 20% 的型号。
 5. 只在人工确认后更新 `approved-reference-prices.csv`。
 
@@ -89,4 +97,3 @@ python3 -m unittest discover -s tests -v
 ```
 
 测试不访问京东，也不需要 Playwright。
-
