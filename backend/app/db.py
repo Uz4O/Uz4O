@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Generator
 
 from sqlalchemy import create_engine
@@ -17,7 +18,14 @@ def create_database_engine(settings: Settings):
 
 
 def create_session_factory(settings: Settings):
-    return sessionmaker(bind=create_database_engine(settings), expire_on_commit=False)
+    if not settings.sqlalchemy_database_url:
+        raise RuntimeError("APP_POSTGRES_URL is required for database operations")
+    return _create_session_factory(settings.sqlalchemy_database_url)
+
+
+@lru_cache(maxsize=8)
+def _create_session_factory(database_url: str):
+    return sessionmaker(bind=create_engine(database_url), expire_on_commit=False)
 
 
 def get_session() -> Generator[Session, None, None]:

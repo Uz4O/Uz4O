@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 
 Status = Literal["completed", "in_progress", "not_started"]
+Owner = Literal["backend", "user"]
 DEFAULT_PROGRESS_PATH = Path(__file__).resolve().parents[1] / "progress.json"
 
 
@@ -13,6 +14,7 @@ class ProgressItem(BaseModel):
     title: str
     description: str
     status: Status
+    owner: Owner = "backend"
     completed_at: Optional[str] = None
 
 
@@ -25,6 +27,7 @@ class ProgressPhase(BaseModel):
 class ProgressDashboard(BaseModel):
     project: str
     updated_at: str
+    estimated_completion: str
     current_phase: str
     phases: List[ProgressPhase]
 
@@ -39,6 +42,15 @@ class ProgressDashboard(BaseModel):
             for phase in self.phases
             for item in phase.items
         )
+
+    @property
+    def user_action_items(self) -> List[ProgressItem]:
+        return [
+            item
+            for phase in self.phases
+            for item in phase.items
+            if item.owner == "user" and item.status != "completed"
+        ]
 
     @property
     def completion_percentage(self) -> int:

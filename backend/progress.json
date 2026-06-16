@@ -1,7 +1,8 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-06-13",
-  "current_phase": "Phase 0 · 地基",
+  "updated_at": "2026-06-16",
+  "estimated_completion": "仅后端可开发剩余项：约 0-0.5 天（待最终联调）",
+  "current_phase": "Phase 4 · 打磨",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -28,17 +29,92 @@
         {
           "title": "价格摄取",
           "description": "导入人工确认后的参考价格。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-15"
         },
         {
           "title": "规则与兼容性引擎",
           "description": "检查插槽、内存、电源和配置失衡。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-15"
+        },
+        {
+          "title": "硬件规格字段补全",
+          "description": "从现有硬件目录推导 CPU/GPU 性能指标与功耗、主板内存代际和板型，让规则、升级和性能估算能工作。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "硬件尺寸字段人工补充",
+          "description": "需要人工补充显卡长度、机箱限长和散热器高度等尺寸数据；现有目录没有可靠来源，不能自动编造。",
+          "status": "not_started",
+          "owner": "user"
         },
         {
           "title": "账户、登录与配置同步",
           "description": "保存用户偏好和当前电脑配置。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-15"
+        },
+        {
+          "title": "短信验证码基础限流",
+          "description": "为短信发送和登录验证增加独立固定窗口限流，并修复重复发送调试验证码时可能撞唯一约束的问题。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "短信验证码旧码失效收口",
+          "description": "同一手机号重新发送验证码时，主动废弃旧的未消费验证码，避免多条有效验证码记录造成登录边界混乱。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "调试短信验证码稳定性修复",
+          "description": "调试模式验证码改为基于 SHA-256 的稳定 6 位码，避免 Python 进程重启后同一手机号验证码变化导致本地联调不稳定。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "短信登录格式校验收口",
+          "description": "短信发送和登录接口限制手机号只能是数字或前导 +，验证码只能是数字，避免异常账号标识和非数字验证码进入登录流程。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产短信未配置安全拒绝",
+          "description": "关闭短信 debug 后，如果真实短信服务商未接入，短信发送接口直接返回未配置，不再默默生成调试验证码；健康检查会继续用 sms_provider_not_configured 阻断生产上线。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "短信重复验证码线上 500 修复",
+          "description": "同一手机号登录消费验证码后再次请求相同调试验证码时，后端会复用并刷新原记录，不再因 phone+code_hash 唯一约束冲突返回 500。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产短信服务与登录密钥配置",
+          "description": "需要配置真实短信服务商、关闭短信 debug，并设置生产级 APP_AUTH_TOKEN_SECRET；当前后端已支持验证码登录和安全体检，但不能用调试验证码上线。",
+          "status": "not_started",
+          "owner": "user"
+        },
+        {
+          "title": "Sign in with Apple 登录配置",
+          "description": "App Store 上架需要支持 Apple 登录；需要提供 Apple 开发者配置、客户端 identity token 校验参数，并在后端补充 Apple 登录校验流程。",
+          "status": "not_started",
+          "owner": "user"
+        },
+        {
+          "title": "Sign in with Apple 登录入口占位",
+          "description": "提供 /v1/auth/apple/login 入口和健康检查配置状态；Apple 开发者参数未配置时明确返回未配置，不接受假 token 创建账户。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "Sign in with Apple identity token 校验流程",
+          "description": "Apple 登录入口接入 identity token 签名、issuer、audience 和过期时间校验；校验通过后按 apple_sub 创建或复用账号并签发后端 token，未配置 Apple client id 时仍拒绝登录。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
         }
       ]
     },
@@ -48,18 +124,81 @@
       "items": [
         {
           "title": "AI 一键装机",
-          "description": "按预算和用途从维护中的硬件库生成方案。",
-          "status": "not_started"
+          "description": "按预算、用途和前端偏好从审核模板、维护硬件库、人工价格库与受控 DeepSeek 候选中生成方案；未满足数据条件时安全降级，不编造硬件。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "AI 一键装机规则兜底",
+          "description": "未命中人工模板、且 DeepSeek 未配置时，从维护中的推荐硬件库和人工价格库选择真实型号，并经过兼容性复校后返回可用方案。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产推荐池与价格/模板数据发布",
+          "description": "服务器当前已有硬件库，但推荐池为 0、人工价格很少、配置模板为 0；需要人工确认推荐型号、导入足够 approved-reference-prices.csv，并发布各价位审核配置模板后，AI 一键装机才能在公网返回真实方案。",
+          "status": "not_started",
+          "owner": "user"
+        },
+        {
+          "title": "推荐硬件池导入工具",
+          "description": "新增 import-recommendations CLI，可从人工确认的型号清单发布推荐池，并支持 --replace 清理旧推荐，避免 AI/规则兜底选到未审核型号。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产数据就绪检查工具",
+          "description": "新增 check-data-readiness CLI，检查硬件库、人工价格、激活模板、各品类推荐池数量，以及每个推荐品类是否至少有带人工价格的型号。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产数据就绪 API",
+          "description": "提供 /v1/catalog/readiness，返回硬件总数、人工价格数、激活模板数、推荐池数量、带价格推荐池数量和缺失品类，方便上线前直接确认一键装机是否具备真实数据基础。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置模板导入质量校验",
+          "description": "导入人工配置模板前校验引用型号必须存在、处于推荐池且已有人工价格，避免坏模板进入一键装机流程。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置模板结构质量校验",
+          "description": "导入人工配置模板前校验预算区间、估算总价和 CPU/主板/内存/电源等核心角色，避免结构错误模板进入一键装机流程。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置模板兼容性复校",
+          "description": "导入人工配置模板前复用兼容性引擎检查缺核心件、插槽、内存代际和电源等硬性问题，阻止不兼容模板上线。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "DeepSeek API Key 与配置模板",
+          "description": "DeepSeek API Key 已在服务器配置并通过连通性测试；仍需要提供各价位几套已审核配置模板和足够推荐/价格数据，后端才能在公网返回真实方案。",
+          "status": "in_progress",
+          "owner": "user"
+        },
+        {
+          "title": "AI 一键装机前端请求契约兼容",
+          "description": "装机接口已兼容 useCase、gameCategories、officeApps、purchasePreference、chassisColor、CPU/GPU 偏好和指定型号等前端字段，并把这些偏好用于模板匹配和受控 DeepSeek 请求。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
         },
         {
           "title": "配置排雷",
           "description": "分析商家配置单并生成风险说明和回复话术。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
         },
         {
           "title": "配置中心 CRUD",
           "description": "保存、查看和删除装机方案。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
         }
       ]
     },
@@ -70,17 +209,20 @@
         {
           "title": "升级建议",
           "description": "根据当前电脑和预算给出升级顺序。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
         },
         {
           "title": "游戏性能测试",
           "description": "基于基准数据估算帧率和瓶颈。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
         },
         {
           "title": "兼容性检查接口收口",
           "description": "提供统一、稳定的兼容性检查接口。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
         }
       ]
     },
@@ -91,7 +233,50 @@
         {
           "title": "社区服务",
           "description": "Feed、发帖、评论、点赞收藏、图片和审核。",
-          "status": "not_started"
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区图片占位安全拦截",
+          "description": "在 OSS/COS 图片上传签名和审核配置完成前，拒绝客户端直接提交任意 image_asset，避免绕过上传与审核流程。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区图片上传签名入口占位",
+          "description": "提供受登录保护的 /v1/community/upload 入口，校验图片类型和大小；OSS/COS 未配置前明确返回未配置，不生成假签名。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区敏感内容变体拦截",
+          "description": "社区发帖和评论审核前会规范化文本，拦截用空格、标点拆开的加微信、返现、广告等敏感内容变体。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区标签与配件字段长度收口",
+          "description": "限制社区发帖 tags 和 parts 单项长度，避免异常长标签或配件描述写入数据库并影响 Feed 展示。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区图片上传文件类型一致性校验",
+          "description": "社区图片上传签名前校验文件后缀必须匹配 content_type，避免伪装文件或错误扩展名进入后续存储流程。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区图片 OSS 直传签名",
+          "description": "社区图片上传接口支持阿里云 OSS 表单直传签名，返回短期 policy/signature 和 asset_key；未配置存储桶、区域或 AccessKey 时继续安全拒绝，响应不暴露密钥。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区图片上传配置",
+          "description": "需要提供 OSS 存储桶、区域、AccessKey ID/Secret 和可选临时安全 token 后，才能在生产启用社区图片直传；当前签名接口已完成。",
+          "status": "not_started",
+          "owner": "user"
         }
       ]
     },
@@ -100,9 +285,262 @@
       "description": "完善内容服务、可靠性和成本控制。",
       "items": [
         {
-          "title": "内容与运行优化",
-          "description": "装机指南、流式响应、降级、限流和成本优化。",
-          "status": "not_started"
+          "title": "装机指南内容服务",
+          "description": "提供 /v1/guide 静态内容接口，返回配件认识、装机步骤和互动安装元数据。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "AI 接口基础限流",
+          "description": "为配置生成、配置排雷、升级建议和性能估算等高成本接口增加客户端/令牌级固定窗口限流。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区写入基础限流",
+          "description": "为社区发帖、评论、点赞和收藏增加独立固定窗口限流，降低登录用户刷屏和互动刷量风险。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "Redis 分布式限流存储通道",
+          "description": "限流器支持在配置 Redis 后使用共享计数，避免多进程或多机器部署时各实例单独计数；未配置 Redis 时继续使用内存限流。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "Redis 限流故障本机降级",
+          "description": "配置 Redis 限流后，如果 Redis 临时不可用，接口退回本机固定窗口限流，避免高成本接口因限流存储故障直接 500。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "非法 Redis URL 限流降级",
+          "description": "Redis URL 配置为非法协议时，应用启动不再直接失败，限流器退回本机固定窗口；健康检查仍会把 redis_url_invalid 作为生产阻断项暴露。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "数据库 Session Factory 复用",
+          "description": "按数据库 URL 复用 SQLAlchemy session factory 和 engine，避免每次请求重复创建连接池，降低高并发时的连接和初始化开销。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "安全配置体检",
+          "description": "健康检查返回登录密钥和短信 debug 的安全状态，只暴露状态不暴露密钥原文。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产关键配置体检扩展",
+          "description": "健康检查补充 DeepSeek API Key、运维 token 和请求体积限制状态，只展示是否配置，不暴露敏感值。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产上线阻断项体检",
+          "description": "健康检查新增 production.ready 和 blocking_items，用枚举列出缺失的 Postgres、登录密钥、短信 debug、AI Key、Apple、运维 token 和社区图片上传配置，不暴露敏感值。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产数据就绪健康阻断",
+          "description": "健康检查支持开启 APP_PRODUCTION_DATA_READINESS_REQUIRED 后把一键装机推荐池、人工价格和激活模板不就绪列为生产阻断项，避免配置项齐全但真实数据为空时误判可上线。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "关键依赖 URL 格式体检",
+          "description": "健康检查识别 Postgres 和 Redis URL 的明显错误格式，并作为生产上线阻断项返回，避免把无效连接串误判为已配置。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "登录密钥强度体检",
+          "description": "健康检查把过短的 APP_AUTH_TOKEN_SECRET 标记为 weak，并作为生产上线阻断项返回，避免弱登录密钥被误判为已安全配置。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "畸形登录 Token 安全拒绝",
+          "description": "登录 token 校验遇到非 ASCII 等异常格式时稳定返回无效，不因异常编码触发 500。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "超长 Bearer Token 提前拒绝",
+          "description": "认证入口对超过 4096 字符的 Bearer token 直接返回无效，不进入签名校验和账户查询流程，降低异常请求对认证路径的压力。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "CORS 跨域白名单配置",
+          "description": "默认不开放浏览器跨域；需要 Web 前端时通过 APP_CORS_ALLOWED_ORIGINS 显式配置允许域名，避免生产环境误开通配跨域。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "危险 CORS 配置阻断",
+          "description": "APP_CORS_ALLOWED_ORIGINS 填成 * 或非法 origin 时不会启用跨域，并在健康检查中标记为生产上线阻断项。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "生产 API 文档默认关闭",
+          "description": "FastAPI /docs、/redoc 和 /openapi.json 默认关闭；只有显式开启 APP_API_DOCS_ENABLED 才开放，并在健康检查中作为生产阻断项提示。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "基础安全响应头",
+          "description": "为公开页面和 API 响应增加 nosniff、DENY frame 和 no-referrer 等基础安全响应头，降低浏览器侧误用和点击劫持风险。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "敏感接口禁止缓存",
+          "description": "为登录、个人资料、配置中心和运维统计等敏感接口增加 no-store/no-cache，避免用户数据被浏览器或中间代理缓存。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "高成本接口输入缓存",
+          "description": "配置排雷、升级建议和性能估算的相同输入短时间内复用已计算结果，并通过 X-Cache 标识命中状态，减少重复计算和后续 AI 成本。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置排雷流式响应",
+          "description": "提供 /v1/review/analyze/stream SSE 接口，返回接收、分析、缓存状态和最终排雷结果事件，方便前端展示渐进式 loading。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "性能与升级流式响应",
+          "description": "提供 /v1/perf/estimate/stream 与 /v1/upgrade/plan/stream SSE 接口，复用缓存状态并返回渐进式结果事件。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区作者展示修复",
+          "description": "修复 Feed、详情和评论返回默认作者的问题，按真实账户昵称或手机号尾号生成稳定展示名。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区作者查询优化",
+          "description": "Feed 和详情页批量加载作者账户，避免帖子数量增加时出现作者查询 N+1 性能问题。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置中心保存体积限制",
+          "description": "限制保存方案 plan JSON 体积，避免异常请求把超大内容写入数据库。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "Profile 同步输入边界收口",
+          "description": "限制 Onboarding 功能排序数量和当前电脑配置文本长度，避免异常同步请求写入过大的用户配置数据。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "全局请求体积限制",
+          "description": "为所有 HTTP 请求增加默认 1MB body 上限，超出时直接返回 413，避免异常大包进入业务逻辑。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "高成本接口用量统计",
+          "description": "为配置生成、配置排雷、升级建议和性能估算等高成本接口记录请求量、限流次数和缓存命中情况；查询接口需要单独配置 APP_OPS_TOKEN。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "高成本接口估算成本统计",
+          "description": "为配置排雷、升级建议和性能估算记录可配置的单次估算成本；缓存命中和限流请求不重复计费，真实 AI 账单接入前先用于观察成本趋势。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "真实 AI 成本与失败统计通道",
+          "description": "高成本接口用量统计支持记录真实 AI 账单金额和外部 AI 失败次数；后续接入 DeepSeek Provider 时可直接写入，不暴露请求内容、API Key 或响应原文。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "AI/规则接口输入边界收口",
+          "description": "限制装机生成、升级建议、性能估算和兼容性检查的预算、列表数量和硬件 ID 长度，避免异常请求进入高成本或规则计算逻辑。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置生成偏好输入收口",
+          "description": "装机生成请求会拒绝空白用途、空白偏好、重复偏好和超长偏好词，并统一去除首尾空格，避免异常输入污染模板匹配和高成本生成路径。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "AI Provider 安全降级说明",
+          "description": "装机生成未命中模板和规则兜底时，会区分 DeepSeek Key 未配置与已配置但缺少审核模板/候选数据两种状态；即使配置了 Key，也不会让 AI 自由编造硬件型号。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "DeepSeek 受控 Provider 失败降级",
+          "description": "配置 DeepSeek API Key 且存在受控候选池时，装机接口会尝试让模型只能从候选 component_id 中选择；外部 AI 超时、异常、返回候选池外型号或不兼容结果时，自动退回规则兜底并记录失败次数。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "AI Provider URL 安全阻断",
+          "description": "健康检查和 DeepSeek 调用前都会校验 AI Provider Base URL，只允许外部 HTTPS 地址，阻断 localhost、内网 IP、链路本地地址和非 HTTPS 配置，避免服务端请求被错误指向内部资源。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "硬件目录列表分页边界",
+          "description": "为公网硬件目录和价格列表增加 limit/offset，并限制单次最多返回 500 条，避免数据增长后被单次请求拖慢。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "社区 Feed 与评论分页边界",
+          "description": "为社区 Feed 和帖子详情评论增加 limit/offset，并限制单次最多返回 100 条，避免社区内容增长后被单次请求拖慢。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "配置中心列表分页边界",
+          "description": "为当前用户保存的装机方案列表增加 limit/offset，并限制单次最多返回 100 条，避免长期使用后列表接口一次拉取过多数据。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "流式响应、降级与成本优化",
+          "description": "已完成流式响应、输入缓存、用量统计、估算/真实成本统计、Redis 分布式限流通道，以及 DeepSeek 受控 Provider 失败降级。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "Bug 检查",
+          "description": "已执行自动化测试、公开 API 状态、PM2 运行状态和 new-site 最近日志检查；发现并修复短信重复调试验证码触发的线上 500。后续 App 真实操作流程仍需在前端联调阶段持续复测。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "安全检查",
+          "description": "已检查敏感配置不在健康检查中泄漏、运维接口 token 保护、账号数据隔离、敏感接口 no-store、API 文档默认关闭、安全响应头和新旧项目端口/PM2 隔离；SSH 主机防护仍作为单独待办。",
+          "status": "completed",
+          "completed_at": "2026-06-16"
+        },
+        {
+          "title": "服务器 SSH 暴力破解防护",
+          "description": "服务器登录提示显示存在大量 SSH 失败登录尝试；需要配置 fail2ban/安全组白名单/禁用密码登录等主机层防护，避免暴力破解风险。",
+          "status": "not_started",
+          "owner": "user"
         }
       ]
     }

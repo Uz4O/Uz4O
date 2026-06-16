@@ -3,7 +3,10 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.catalog.models import HardwareComponent
+from app.auth.models import Account, AuthSmsCode
+from app.builds.models import BuildTemplate
+from app.catalog.models import ComponentPrice, HardwareComponent
+from app.profile.models import HardwareProfile, OnboardingProfile
 from app.core.config import Settings
 from app.db import Base
 

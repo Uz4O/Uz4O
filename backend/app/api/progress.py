@@ -29,6 +29,7 @@ def create_progress_router() -> APIRouter:
 
 def render_progress_dashboard(progress: ProgressDashboard) -> str:
     phases = "".join(_render_phase(phase) for phase in progress.phases)
+    user_actions = _render_user_actions(progress)
     percentage = progress.completion_percentage
 
     return f"""<!doctype html>
@@ -67,11 +68,11 @@ def render_progress_dashboard(progress: ProgressDashboard) -> str:
     .subtitle {{ margin: 0; color: var(--muted); font-size: 16px; }}
     .summary {{
       display: grid;
-      grid-template-columns: 1.4fr repeat(3, 1fr);
+      grid-template-columns: 1.4fr repeat(4, 1fr);
       gap: 14px;
       margin: 30px 0 36px;
     }}
-    .summary-card, .phase {{
+    .summary-card, .phase, .user-actions {{
       background: color-mix(in srgb, var(--card) 94%, transparent);
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -82,6 +83,9 @@ def render_progress_dashboard(progress: ProgressDashboard) -> str:
     .label {{ color: var(--muted); font-size: 13px; font-weight: 650; }}
     .meter {{ height: 9px; margin-top: 18px; overflow: hidden; border-radius: 99px; background: #e8edf5; }}
     .meter span {{ display: block; width: {percentage}%; height: 100%; border-radius: inherit; background: var(--primary); }}
+    .user-actions {{ margin: -12px 0 36px; padding: 24px; border-color: #f1d39a; background: #fffaf0; }}
+    .user-actions h2 {{ margin: 0 0 6px; font-size: 20px; }}
+    .user-actions > p {{ margin: 0 0 16px; color: var(--muted); line-height: 1.6; }}
     .phases {{ display: grid; gap: 18px; }}
     .phase {{ padding: 24px; }}
     .phase-header {{ display: flex; justify-content: space-between; gap: 20px; margin-bottom: 18px; }}
@@ -127,12 +131,27 @@ def render_progress_dashboard(progress: ProgressDashboard) -> str:
       <div class="summary-card"><span class="label">当前阶段</span><strong>{escape(progress.current_phase)}</strong></div>
       <div class="summary-card"><span class="label">已完成</span><strong>{progress.completed_items} / {progress.total_items}</strong></div>
       <div class="summary-card"><span class="label">最近更新</span><strong>{escape(progress.updated_at)}</strong></div>
+      <div class="summary-card"><span class="label">预计完成时间</span><strong>{escape(progress.estimated_completion)}</strong></div>
     </section>
+    {user_actions}
     <section class="phases" aria-label="开发阶段">{phases}</section>
     <footer>状态来源：项目内 progress.json · 页面只展示，不接受外部修改</footer>
   </main>
 </body>
 </html>"""
+
+
+def _render_user_actions(progress: ProgressDashboard) -> str:
+    if not progress.user_action_items:
+        return ""
+
+    items = "".join(_render_item(item) for item in progress.user_action_items)
+    return f"""
+    <section class="user-actions" aria-label="需要你完成">
+      <h2>需要你完成</h2>
+      <p>下面这些不是后端代码缺口，不计入预计完成时间；它们需要你提供资料、密钥、人工确认数据或服务器安全策略。</p>
+      <div class="items">{items}</div>
+    </section>"""
 
 
 def _render_phase(phase) -> str:
