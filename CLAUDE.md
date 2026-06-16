@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-This is a SwiftUI iOS app at `/Users/may/Documents/AI装机`.
+This is a SwiftUI iOS app plus FastAPI backend at `/Users/may/Documents/AI装机`.
 
-The product is an AI PC-building assistant for Chinese users, especially beginners who do not understand PC hardware. The app currently focuses on frontend/product experience. Backend work has not been started yet.
+The product is an AI PC-building assistant for Chinese users, especially beginners who do not understand PC hardware. The iOS frontend lives under `May/`, and the backend has been implemented under `backend/` with FastAPI + PostgreSQL. The deployed backend PM2 app is `new-site` on port `8790`; use `docs/后端开发完成总结-2026-06-16.md` as the authoritative backend progress summary.
 
 Core product direction:
 
@@ -23,8 +23,25 @@ The product should feel like a practical PC decision assistant, not a generic ha
 - Scheme: `May`
 - Main entry: `May/May/MayApp.swift`
 - Root routing: `May/May/ContentView.swift`
+- Backend: Python + FastAPI
+- Backend database: PostgreSQL
+- Backend root: `backend/`
+- Backend PM2 app: `new-site`
+- Backend port: `8790`
 
-There is no backend yet. Most data is local mock/model data.
+Backend core directories:
+
+- `backend/app/api`
+- `backend/app/auth`
+- `backend/app/builds`
+- `backend/app/catalog`
+- `backend/app/compat`
+- `backend/app/community`
+- `backend/app/review`
+- `backend/app/upgrade`
+- `backend/app/perf`
+- `backend/app/guide`
+- `backend/app/core`
 
 ## Important Product Principles
 
@@ -91,6 +108,12 @@ There is no backend yet. Most data is local mock/model data.
 - `design-qa.md`
   - Notes from visual QA against reference screenshots.
 
+- `docs/后端开发完成总结-2026-06-16.md`
+  - Authoritative summary of implemented backend capabilities, deployment state, verification, and remaining user-provided production configuration/data.
+
+- `backend/`
+  - FastAPI backend implementing auth/profile sync, hardware catalog, price ingest, compatibility rules, build generation, review, upgrade, performance, community, guide content, security checks, limits, and production health gates.
+
 ## Build and Verification
 
 Use Xcode or XcodeBuildMCP.
@@ -132,7 +155,7 @@ This repository often has active uncommitted UI changes. Do not revert user or o
 4. Preserve existing SwiftUI visual patterns unless the user asks for a redesign.
 5. Keep frontend changes scoped and verify with an iOS Simulator build.
 6. If changing UI, use simulator screenshots or UI snapshots for visual sanity checks.
-7. If asked about backend, answer at the architecture/product level unless the user explicitly asks to implement backend code.
+7. If asked about backend, inspect `backend/` and `docs/后端开发完成总结-2026-06-16.md`; do not assume backend work is unstarted.
 
 ## Suggested Skills
 
@@ -142,4 +165,3 @@ If available, use:
 - Systematic debugging for build failures or broken navigation.
 - Verification-before-completion before claiming a change is done.
 - Product/brainstorming workflow for feature decisions.
-
