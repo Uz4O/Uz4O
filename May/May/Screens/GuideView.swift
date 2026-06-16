@@ -137,83 +137,46 @@ private struct ComponentIntroPage: View {
     @State private var isShowingAllComponents = false
     @State private var isShowingAssemblyInstructions = false
     @State private var selectedComponentID = GuideFlow.componentIntroItems[0].id
-    @State private var componentScrollProgress: CGFloat = 0
 
-    private let indicatorWidth: CGFloat = 220
-    private let pickerCardWidth: CGFloat = 70
-    private let pickerCardSpacing: CGFloat = 9
+    private let pickerSpacing: CGFloat = 16
 
     private var selectedComponent: GuideComponentIntroItem {
         GuideFlow.componentIntroItems.first { $0.id == selectedComponentID } ?? GuideFlow.componentIntroItems[0]
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .center, spacing: 14) {
-                introHero
-
-                componentPicker
-
-                ComponentIntroFeatureCard(item: selectedComponent, contentWidth: contentWidth)
-
-                bottomActions
-                    .padding(.top, 2)
+        VStack(spacing: 14) {
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .center, spacing: 14) {
+                    introHero
+                    componentPicker
+                    ComponentIntroFeatureCard(item: selectedComponent, contentWidth: contentWidth)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 8)
+                .padding(.bottom, 6)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.top, 8)
-            .padding(.bottom, 6)
+
+            bottomActions
         }
     }
 
     private var componentPicker: some View {
-        VStack(spacing: 10) {
-            GeometryReader { proxy in
-                Group {
-                    if #available(iOS 18.0, *) {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            pickerRow(containerWidth: proxy.size.width)
-                        }
-                        .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                            let contentWidth = geometry.contentSize.width
-                            let containerWidth = geometry.containerSize.width
-                            let scrollableWidth = max(contentWidth - containerWidth, 1)
-                            return min(max(geometry.contentOffset.x / scrollableWidth, 0), 1)
-                        } action: { _, progress in
-                            componentScrollProgress = progress
-                        }
-                    } else {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            pickerRow(containerWidth: proxy.size.width)
-                                .background(
-                                    GeometryReader { contentProxy in
-                                        Color.clear.preference(
-                                            key: ComponentPickerOffsetPreferenceKey.self,
-                                            value: contentProxy.frame(in: .named("componentPickerScroll")).minX
-                                        )
-                                    }
-                                )
-                        }
-                        .coordinateSpace(name: "componentPickerScroll")
-                        .onPreferenceChange(ComponentPickerOffsetPreferenceKey.self) { minX in
-                            let itemCount = CGFloat(GuideFlow.componentIntroItems.count)
-                            let contentBodyWidth = itemCount * pickerCardWidth + max(itemCount - 1, 0) * pickerCardSpacing
-                            let scrollableWidth = max(contentBodyWidth - proxy.size.width, 1)
-                            let scrollOffset = max(-minX, 0)
-                            componentScrollProgress = min(max(scrollOffset / scrollableWidth, 0), 1)
-                        }
-                    }
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                pickerRow
+            }
+            .onChange(of: selectedComponentID) { _, componentID in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    proxy.scrollTo(componentID, anchor: .center)
                 }
             }
-            .frame(height: 104)
-            .frame(width: contentWidth)
-
-            ComponentScrollIndicator(progress: componentScrollProgress)
-                .frame(width: indicatorWidth)
         }
+        .frame(width: contentWidth, height: 82)
     }
 
-    private func pickerRow(containerWidth: CGFloat) -> some View {
-        HStack(spacing: pickerCardSpacing) {
+    private var pickerRow: some View {
+        HStack(spacing: pickerSpacing) {
             ForEach(GuideFlow.componentIntroItems) { item in
                 ComponentIntroPickerCard(
                     item: item,
@@ -223,48 +186,24 @@ private struct ComponentIntroPage: View {
                         selectedComponentID = item.id
                     }
                 }
+                .id(item.id)
             }
         }
-        .padding(.horizontal, 0)
-        .padding(.vertical, 2)
-        .frame(minWidth: containerWidth, alignment: .leading)
+        .padding(.horizontal, 2)
     }
 
     private var introHero: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            HStack(spacing: 8) {
-                Label("准备阶段", systemImage: "book.closed.fill")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
+        VStack(alignment: .leading, spacing: 7) {
+            Text("先认识这些配件")
+                .font(.system(size: 26, weight: .black))
+                .foregroundStyle(AppTheme.primaryText)
+                .fixedSize(horizontal: false, vertical: true)
 
-                Circle()
-                    .fill(AppTheme.secondaryText.opacity(0.45))
-                    .frame(width: 4, height: 4)
-
-                Text("装机前先认识配件")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(AppTheme.secondaryText)
-            }
-            .padding(.horizontal, 11)
-            .padding(.vertical, 7)
-            .background(.white.opacity(0.78), in: Capsule())
-            .overlay {
-                Capsule()
-                    .stroke(AppTheme.border, lineWidth: 1)
-            }
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("先认识这些配件")
-                    .font(.system(size: 27, weight: .black))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Text("了解常见配件的外观和作用，为接下来的装机步骤打好基础。")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .lineSpacing(4)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text("了解常见配件的外观和作用，为接下来的装机步骤打好基础。")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(AppTheme.secondaryText)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .frame(width: contentWidth, alignment: .leading)
     }
@@ -393,50 +332,6 @@ private struct AssemblyInstructionSheet: View {
     }
 }
 
-private struct ComponentPickerOffsetProbe: View {
-    var body: some View {
-        GeometryReader { proxy in
-            Color.clear.preference(
-                key: ComponentPickerOffsetPreferenceKey.self,
-                value: proxy.frame(in: .named("componentPickerScroll")).minX
-            )
-        }
-    }
-}
-
-private struct ComponentPickerOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
-private struct ComponentScrollIndicator: View {
-    let progress: CGFloat
-
-    var body: some View {
-        GeometryReader { proxy in
-            let trackWidth = proxy.size.width
-            let thumbWidth: CGFloat = 28
-            let travelWidth = max(trackWidth - thumbWidth, 0)
-
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(AppTheme.border)
-                    .frame(width: trackWidth, height: 4)
-
-                Capsule()
-                    .fill(AppTheme.primaryText)
-                    .frame(width: thumbWidth, height: 4)
-                    .offset(x: travelWidth * progress)
-                    .animation(.easeInOut(duration: 0.12), value: progress)
-            }
-        }
-        .frame(height: 4)
-    }
-}
-
 private struct ComponentIntroDetailSheet: View {
     var body: some View {
         NavigationStack {
@@ -479,35 +374,21 @@ private struct ComponentIntroPickerCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 7) {
-                ZStack(alignment: .topTrailing) {
-                    Image(item.imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 54, height: 50)
-                        .padding(.top, 4)
-
-                    if isSelected {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 19, height: 19)
-                            .background(AppTheme.primaryText, in: Circle())
-                            .padding(3)
-                    }
-                }
+            VStack(spacing: 6) {
+                Image(item.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 46)
 
                 Text(item.title)
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
+                    .font(.system(size: 12, weight: isSelected ? .bold : .semibold))
+                    .foregroundStyle(isSelected ? AppTheme.primaryText : AppTheme.secondaryText)
+
+                Capsule()
+                    .fill(isSelected ? AppTheme.primaryText : .clear)
+                    .frame(width: 22, height: 3)
             }
-            .frame(width: 70, height: 94)
-            .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 14))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? AppTheme.primaryText : .white, lineWidth: isSelected ? 2 : 1)
-            }
-            .shadow(color: isSelected ? Color.black.opacity(0.10) : Color.black.opacity(0.04), radius: isSelected ? 12 : 8, x: 0, y: 6)
+            .frame(width: 58, height: 80)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
@@ -519,97 +400,301 @@ private struct ComponentIntroFeatureCard: View {
     let item: GuideComponentIntroItem
     let contentWidth: CGFloat
 
-    private var imageColumnWidth: CGFloat {
-        min(max(contentWidth * 0.38, 116), 130)
-    }
-
-    private var detailColumnWidth: CGFloat {
-        max(contentWidth - imageColumnWidth - 49, 142)
+    private var componentDescription: String {
+        "\(item.subtitle)。\(item.detailPoints[0].text)"
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            ZStack(alignment: .center) {
-                Image(item.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageColumnWidth - 12, height: 128)
-                    .shadow(color: Color.black.opacity(0.07), radius: 8, x: 0, y: 7)
-            }
-            .frame(width: imageColumnWidth, height: 142, alignment: .center)
+        VStack(alignment: .leading, spacing: 12) {
+            Text(item.title)
+                .font(.system(size: 20, weight: .black))
+                .foregroundStyle(AppTheme.primaryText)
 
-            Rectangle()
-                .fill(AppTheme.border)
-                .frame(width: 1, height: 132)
+            Text(componentDescription)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(AppTheme.secondaryText)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 220, alignment: .leading)
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text(item.title)
-                    .font(.system(size: 24, weight: .black))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .lineLimit(1)
-                    .frame(width: detailColumnWidth, alignment: .leading)
-
-                VStack(spacing: 0) {
-                    ForEach(Array(item.detailPoints.enumerated()), id: \.element.id) { index, point in
-                        ComponentDetailRow(point: point, contentWidth: detailColumnWidth)
-
-                        if index < item.detailPoints.count - 1 {
-                            Divider()
-                                .padding(.leading, 42)
-                                .padding(.vertical, 7)
-                        }
-                    }
-                }
-                .frame(width: detailColumnWidth, alignment: .leading)
-            }
+            ComponentIntroModelStage(item: item, contentWidth: contentWidth)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 15)
-        .frame(width: contentWidth)
-        .frame(height: 190)
-        .background(.white.opacity(0.96), in: RoundedRectangle(cornerRadius: 22))
-        .overlay {
-            RoundedRectangle(cornerRadius: 22)
-                .stroke(AppTheme.border, lineWidth: 1)
-        }
-        .shadow(color: Color.black.opacity(0.045), radius: 18, x: 0, y: 10)
+        .frame(width: contentWidth, alignment: .leading)
+        .animation(.easeInOut(duration: 0.22), value: item.id)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(item.title)，\(item.subtitle)")
     }
 }
 
-private struct ComponentDetailRow: View {
-    let point: GuideComponentDetailPoint
+private struct ComponentIntroModelStage: View {
+    let item: GuideComponentIntroItem
     let contentWidth: CGFloat
 
     var body: some View {
-        HStack(alignment: .top, spacing: 9) {
-            Image(systemName: point.symbol)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 32, height: 32)
-                .background(.white, in: RoundedRectangle(cornerRadius: 9))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 9)
-                        .stroke(AppTheme.border, lineWidth: 1)
-                }
+        ZStack {
+            Ellipse()
+                .stroke(AppTheme.border.opacity(0.55), lineWidth: 1)
+                .frame(width: contentWidth - 6, height: 148)
 
-            VStack(alignment: .leading, spacing: 3) {
-                Text(point.title)
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
+            Ellipse()
+                .stroke(AppTheme.border.opacity(0.36), lineWidth: 1)
+                .frame(width: contentWidth - 60, height: 104)
 
-                Text(point.text)
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .lineSpacing(1.5)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.84)
-                    .fixedSize(horizontal: false, vertical: true)
+            if let modelName = item.modelName,
+               Bundle.main.url(forResource: modelName, withExtension: "usdc") != nil {
+                ComponentModelSceneView(modelName: modelName)
+                    .frame(width: contentWidth + 28, height: 420)
+                    .id(modelName)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+            } else {
+                Image(item.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: contentWidth - 52, height: 384)
+                    .shadow(color: Color.black.opacity(0.13), radius: 16, x: 0, y: 14)
+                    .id(item.id)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
             }
-            .frame(width: max(contentWidth - 41, 96), alignment: .leading)
         }
-        .frame(width: contentWidth, alignment: .leading)
+        .frame(width: contentWidth, height: 432)
+        .accessibilityLabel("\(item.title) 配件展示")
+    }
+}
+
+private struct ComponentModelSceneView: UIViewRepresentable {
+    let modelName: String
+
+    func makeUIView(context: Context) -> SCNView {
+        let view = SCNView(frame: .zero)
+        view.backgroundColor = .clear
+        let scene = ComponentModelSceneFactory.makeScene(modelName: modelName)
+        view.scene = scene
+        view.pointOfView = scene.rootNode.childNode(withName: "component-camera", recursively: true)
+        view.allowsCameraControl = true
+        view.autoenablesDefaultLighting = false
+        view.preferredFramesPerSecond = 30
+        view.antialiasingMode = .multisampling4X
+        view.defaultCameraController.inertiaEnabled = true
+        view.defaultCameraController.minimumVerticalAngle = -70
+        view.defaultCameraController.maximumVerticalAngle = 70
+        return view
+    }
+
+    func updateUIView(_ view: SCNView, context: Context) {
+        guard view.scene?.rootNode.childNode(withName: modelName, recursively: true) == nil else {
+            return
+        }
+        let scene = ComponentModelSceneFactory.makeScene(modelName: modelName)
+        view.scene = scene
+        view.pointOfView = scene.rootNode.childNode(withName: "component-camera", recursively: true)
+    }
+}
+
+private enum ComponentModelSceneFactory {
+    static func makeScene(modelName: String) -> SCNScene {
+        let scene = SCNScene()
+        scene.background.contents = UIColor.clear
+
+        let modelRoot = SCNNode()
+        modelRoot.name = modelName
+
+        if let url = Bundle.main.url(forResource: modelName, withExtension: "usdc"),
+           let sourceScene = try? SCNScene(url: url, options: nil) {
+            sourceScene.rootNode.childNodes.forEach {
+                modelRoot.addChildNode($0.clone())
+            }
+            applyModelOverrides(to: modelRoot, modelName: modelName)
+            normalize(modelRoot, modelName: modelName)
+        }
+
+        scene.rootNode.addChildNode(modelRoot)
+        installCamera(in: scene, modelName: modelName)
+        installLighting(in: scene, modelName: modelName)
+        return scene
+    }
+
+    private static func applyModelOverrides(to node: SCNNode, modelName: String) {
+        guard modelName == "desktop-cpu-mobile" else { return }
+
+        let ihsMaterial = SCNMaterial()
+        ihsMaterial.name = "CPU_IHS_Bright_Brushed_Metal"
+        ihsMaterial.lightingModel = .physicallyBased
+        ihsMaterial.diffuse.contents = UIColor(red: 0.56, green: 0.58, blue: 0.57, alpha: 1)
+        ihsMaterial.metalness.contents = 0.92
+        ihsMaterial.roughness.contents = 0.32
+        ihsMaterial.specular.contents = UIColor.white
+        ihsMaterial.transparency = 1
+        ihsMaterial.transparencyMode = .aOne
+        ihsMaterial.blendMode = .replace
+        ihsMaterial.isDoubleSided = true
+        ihsMaterial.writesToDepthBuffer = true
+        ihsMaterial.readsFromDepthBuffer = true
+        ihsMaterial.fresnelExponent = 0.9
+
+        node.enumerateChildNodes { child, _ in
+            if child.name?.contains("Brushed_Highlight") == true {
+                child.isHidden = true
+                return
+            }
+            guard child.name?.contains("IHS") == true else { return }
+            child.geometry?.materials = [ihsMaterial]
+        }
+    }
+
+    private static func normalize(_ node: SCNNode, modelName: String) {
+        let (minimum, maximum) = node.boundingBox
+        let width = maximum.x - minimum.x
+        let height = maximum.y - minimum.y
+        let depth = maximum.z - minimum.z
+        let longestSide = max(width, height, depth)
+        guard longestSide > 0 else { return }
+
+        let targetLongestSide: Float
+        if modelName == "modern-atx-motherboard-mobile" {
+            targetLongestSide = 3.75
+        } else if modelName == "tower-cpu-air-cooler-mobile" {
+            targetLongestSide = 3.45
+        } else {
+            targetLongestSide = 4.05
+        }
+        let scale = targetLongestSide / longestSide
+        node.scale = SCNVector3(scale, scale, scale)
+        node.position = SCNVector3(
+            -(minimum.x + maximum.x) * 0.5 * scale,
+            -(minimum.y + maximum.y) * 0.5 * scale,
+            -(minimum.z + maximum.z) * 0.5 * scale
+        )
+        if modelName == "desktop-dimm-ram-mobile" {
+            node.position.x += 0.26
+        } else if modelName == "tower-cpu-air-cooler-mobile" {
+            node.position.x += 0.38
+            node.position.y -= 0.18
+        }
+        if modelName == "modern-atx-motherboard-mobile" {
+            node.eulerAngles = SCNVector3(-0.34, -0.46, 0.07)
+        } else if modelName == "desktop-dimm-ram-mobile" {
+            node.eulerAngles = SCNVector3(-0.28, -0.34, 0.1)
+        } else if modelName == "m2-2280-nvme-ssd-mobile" {
+            node.eulerAngles = SCNVector3(-0.22, -0.38, 0.08)
+        } else if modelName == "atx-psu-mobile" {
+            node.eulerAngles = SCNVector3(-0.28, -0.58, 0.06)
+        } else if modelName == "tower-cpu-air-cooler-mobile" {
+            node.eulerAngles = SCNVector3(-0.16, -0.34, 0.02)
+        } else {
+            node.eulerAngles = SCNVector3(-0.14, -0.42, 0)
+        }
+    }
+
+    private static func installCamera(in scene: SCNScene, modelName: String) {
+        let cameraNode = SCNNode()
+        cameraNode.name = "component-camera"
+        let camera = SCNCamera()
+        camera.fieldOfView = 34
+        camera.zNear = 0.1
+        camera.zFar = 100
+        cameraNode.camera = camera
+        let cameraDistance: Float
+        switch modelName {
+        case "desktop-cpu-mobile":
+            cameraDistance = 11.4
+        case "modern-atx-motherboard-mobile":
+            cameraDistance = 9.0
+        case "desktop-dimm-ram-mobile":
+            cameraDistance = 8.2
+        case "m2-2280-nvme-ssd-mobile":
+            cameraDistance = 8.4
+        case "atx-psu-mobile":
+            cameraDistance = 10.0
+        case "tower-cpu-air-cooler-mobile":
+            cameraDistance = 10.2
+        default:
+            cameraDistance = 7.7
+        }
+        cameraNode.position = SCNVector3(0, 0, cameraDistance)
+        scene.rootNode.addChildNode(cameraNode)
+    }
+
+    private static func installLighting(in scene: SCNScene, modelName: String) {
+        let isCPU = modelName == "desktop-cpu-mobile"
+        let isBoard = modelName == "modern-atx-motherboard-mobile"
+        let isSSD = modelName == "m2-2280-nvme-ssd-mobile"
+        scene.lightingEnvironment.contents = UIColor(white: isCPU || isBoard || isSSD ? 1.0 : 0.9, alpha: 1)
+        scene.lightingEnvironment.intensity = isCPU ? 1.08 : (isBoard ? 0.9 : (isSSD ? 1.0 : 0.8))
+
+        addLight(
+            to: scene,
+            type: .directional,
+            intensity: isCPU ? 1_280 : (isBoard ? 880 : (isSSD ? 1_220 : 1_100)),
+            color: UIColor.white,
+            eulerAngles: isBoard ? SCNVector3(-0.95, 0.75, 0.15) : (isSSD ? SCNVector3(-0.62, 0.42, 0.08) : SCNVector3(-0.7, 0.55, 0))
+        )
+        addLight(
+            to: scene,
+            type: .directional,
+            intensity: isBoard ? 360 : (isSSD ? 640 : 520),
+            color: UIColor(red: 0.75, green: 0.84, blue: 1, alpha: 1),
+            eulerAngles: SCNVector3(0.35, -1.9, 0)
+        )
+        addLight(
+            to: scene,
+            type: .ambient,
+            intensity: isBoard ? 320 : (isSSD ? 420 : 260),
+            color: UIColor(white: 0.72, alpha: 1),
+            eulerAngles: SCNVector3(0, 0, 0)
+        )
+        if isSSD {
+            addLight(
+                to: scene,
+                type: .directional,
+                intensity: 360,
+                color: UIColor(white: 0.95, alpha: 1),
+                eulerAngles: SCNVector3(0.05, 0.05, 0)
+            )
+            addLight(
+                to: scene,
+                type: .directional,
+                intensity: 220,
+                color: UIColor(red: 0.82, green: 0.88, blue: 1, alpha: 1),
+                eulerAngles: SCNVector3(-0.1, 2.35, 0)
+            )
+            return
+        }
+        if isBoard {
+            addLight(
+                to: scene,
+                type: .directional,
+                intensity: 260,
+                color: UIColor(white: 0.94, alpha: 1),
+                eulerAngles: SCNVector3(0, 0, 0)
+            )
+            return
+        }
+        guard isCPU else { return }
+
+        addLight(
+            to: scene,
+            type: .omni,
+            intensity: 520,
+            color: UIColor(white: 1, alpha: 1),
+            eulerAngles: SCNVector3(-0.35, -0.35, 0)
+        )
+    }
+
+    private static func addLight(
+        to scene: SCNScene,
+        type: SCNLight.LightType,
+        intensity: CGFloat,
+        color: UIColor,
+        eulerAngles: SCNVector3
+    ) {
+        let node = SCNNode()
+        let light = SCNLight()
+        light.type = type
+        light.intensity = intensity
+        light.color = color
+        node.light = light
+        node.eulerAngles = eulerAngles
+        scene.rootNode.addChildNode(node)
     }
 }
 
@@ -987,7 +1072,7 @@ private struct CPUInstallPseudo3DStage: View {
             let localProgress = currentProgress(at: timeline.date)
             let visiblePhaseIndex = min(phaseIndex, GuideFlow.cpuInstallPhases.count - 1)
             let phase = GuideFlow.cpuInstallPhases[visiblePhaseIndex]
-            let scenePhaseIndex = isResettingLoop ? GuideFlow.cpuInstallPhases.count : phaseIndex
+            let scenePhaseIndex = isResettingLoop ? GuideFlow.cpuInstallResetScenePhaseIndex : phaseIndex
 
             VStack(spacing: 30) {
                 TutorialSceneChrome(
@@ -1015,7 +1100,13 @@ private struct CPUInstallPseudo3DStage: View {
             .onChange(of: localProgress) { _, progress in
                 if phaseStartDate != nil, progress >= 1 {
                     phaseStartDate = nil
-                    completedProgress = 1
+                    if isResettingLoop {
+                        isResettingLoop = false
+                        phaseIndex = 0
+                        completedProgress = 0
+                    } else {
+                        completedProgress = 1
+                    }
                 }
             }
         }
@@ -1345,34 +1436,65 @@ private enum TutorialSceneLighting {
 
 private enum SSDInstallSceneFactory {
     private static let cameraName = "ssd-camera"
+    private static let cameraTargetName = "ssd-camera-target"
     private static let ssdName = "ssd-module"
-    private static let heatsinkName = "ssd-heatsink"
-    private static let screwName = "ssd-screw"
-    private static let filmName = "ssd-film"
+    private static let installedCPUName = "ssd-installed-cpu"
+    private static let firstMemoryName = "ssd-installed-memory-a2"
+    private static let secondMemoryName = "ssd-installed-memory-b2"
+    private static let heatsinkGroupName = "ssd-m2-heatsink-group"
     private static let alignCueName = "ssd-align-cue"
     private static let pressCueName = "ssd-press-cue"
+    private static let boardModelName = "modern-atx-motherboard-mobile"
+    private static let cpuModelName = "desktop-cpu-mobile"
+    private static let memoryModelName = "desktop-dimm-ram-mobile"
+    private static let ssdModelName = "m2-2280-nvme-ssd-mobile"
+    private static let memoryBaseEuler = SCNVector3(-Float.pi / 2, Float.pi / 2, 0)
+    private static let ssdFlatEuler = SCNVector3(-Float.pi / 2, 0, 0)
+    private static let ssdAngledEuler = SCNVector3(-Float.pi / 2, 0, -0.46)
+    private static let m2HeatsinkNodeNames = ["MB_M2_Lower_Heatsink", "MB_M2_Lower_Cut"]
+    private static let heatsinkBasePositionKey = "ssdHeatsinkBasePosition"
 
     static func makeScene() -> SCNScene {
         let scene = SCNScene()
         scene.background.contents = UIColor.clear
 
+        let cameraTarget = SCNNode()
+        cameraTarget.name = cameraTargetName
+        cameraTarget.position = SCNVector3(0.35, 0.18, -0.18)
+        scene.rootNode.addChildNode(cameraTarget)
+
         let cameraNode = SCNNode()
         let camera = SCNCamera()
-        camera.fieldOfView = 34
+        camera.fieldOfView = 30
         camera.zNear = 0.1
         camera.zFar = 100
         cameraNode.name = cameraName
         cameraNode.camera = camera
-        cameraNode.position = SCNVector3(0.12, 3.35, 3.75)
-        cameraNode.eulerAngles = SCNVector3(-0.66, 0.02, 0)
+        cameraNode.position = SCNVector3(0.42, 2.68, 2.82)
+        let lookAt = SCNLookAtConstraint(target: cameraTarget)
+        lookAt.isGimbalLockEnabled = true
+        cameraNode.constraints = [lookAt]
         scene.rootNode.addChildNode(cameraNode)
 
         TutorialSceneLighting.install(in: scene, keyIntensity: 980, keyAngles: SCNVector3(-0.72, 0.32, -0.24))
 
-        scene.rootNode.addChildNode(makeBoard())
+        scene.rootNode.addChildNode(makeModelNode(name: boardModelName))
+        installCPUSocketAnchor(in: scene)
+        installDIMMSlotAnchor(named: GuideFlow.memoryInstallAnchorNames[0], slotNumber: 2, in: scene)
+        installDIMMSlotAnchor(named: GuideFlow.memoryInstallAnchorNames[1], slotNumber: 4, in: scene)
+        installM2SlotAnchor(in: scene)
+        configureM2HeatsinkGroup(in: scene)
+
+        let installedCPU = makeInstalledCPU()
+        scene.rootNode.addChildNode(installedCPU)
+        installedCPU.position = cpuInstalledPosition(in: scene, cpuNode: installedCPU)
+
+        let firstMemory = makeInstalledMemory(name: firstMemoryName, anchorName: GuideFlow.memoryInstallAnchorNames[0], slotNumber: 2, in: scene)
+        let secondMemory = makeInstalledMemory(name: secondMemoryName, anchorName: GuideFlow.memoryInstallAnchorNames[1], slotNumber: 4, in: scene)
+        scene.rootNode.addChildNode(firstMemory)
+        scene.rootNode.addChildNode(secondMemory)
+
         scene.rootNode.addChildNode(makeSSD())
-        scene.rootNode.addChildNode(makeHeatsink())
-        scene.rootNode.addChildNode(makeScrew())
         scene.rootNode.addChildNode(makeAlignCue())
         scene.rootNode.addChildNode(makePressCue())
 
@@ -1386,139 +1508,22 @@ private enum SSDInstallSceneFactory {
         updateCamera(in: scene, phaseIndex: phaseIndex, progress: progress)
 
         let ssd = scene.rootNode.childNode(withName: ssdName, recursively: true)
-        ssd?.position = ssdPosition(phaseIndex: phaseIndex, progress: progress)
         ssd?.eulerAngles = ssdAngles(phaseIndex: phaseIndex, progress: progress)
+        ssd?.position = ssdPosition(phaseIndex: phaseIndex, progress: progress, in: scene, ssdNode: ssd)
         ssd?.opacity = ssdOpacity(phaseIndex: phaseIndex, progress: progress)
 
-        let heatsink = scene.rootNode.childNode(withName: heatsinkName, recursively: true)
-        heatsink?.position = heatsinkPosition(phaseIndex: phaseIndex, progress: progress)
-        heatsink?.opacity = heatsinkOpacity(phaseIndex: phaseIndex, progress: progress)
-
-        let screw = scene.rootNode.childNode(withName: screwName, recursively: true)
-        screw?.position = screwPosition(phaseIndex: phaseIndex, progress: progress)
-        screw?.opacity = screwOpacity(phaseIndex: phaseIndex, progress: progress)
-
-        let film = scene.rootNode.childNode(withName: filmName, recursively: true)
-        film?.position = filmPosition(phaseIndex: phaseIndex, progress: progress)
-        film?.opacity = filmOpacity(phaseIndex: phaseIndex, progress: progress)
+        updateM2Heatsink(in: scene, phaseIndex: phaseIndex, progress: progress)
 
         scene.rootNode.childNode(withName: alignCueName, recursively: true)?.opacity = phaseIndex == 1 ? Double(0.45 + 0.45 * sin(progress * .pi)) : 0
         scene.rootNode.childNode(withName: pressCueName, recursively: true)?.opacity = phaseIndex == 3 ? Double(0.35 + 0.45 * sin(progress * .pi)) : 0
     }
 
-    private static func makeBoard() -> SCNNode {
-        let board = SCNNode()
-
-        let base = boxNode(width: 3.8, height: 0.08, length: 4.6, radius: 0.06, material: material(UIColor(red: 0.06, green: 0.075, blue: 0.085, alpha: 1), roughness: 0.72, metalness: 0.15))
-        board.addChildNode(base)
-
-        let m2SlotMaterial = material(UIColor(red: 0.56, green: 0.58, blue: 0.56, alpha: 1), roughness: 0.54, metalness: 0.26)
-        let m2Slot = boxNode(width: 0.32, height: 0.08, length: 0.66, radius: 0.025, material: m2SlotMaterial)
-        m2Slot.position = SCNVector3(1.03, 0.135, -0.22)
-        board.addChildNode(m2Slot)
-
-        let socketLowerLip = boxNode(width: 0.08, height: 0.10, length: 0.66, radius: 0.014, material: m2SlotMaterial)
-        socketLowerLip.position = SCNVector3(0.88, 0.205, -0.22)
-        board.addChildNode(socketLowerLip)
-
-        let socketUpperLip = boxNode(width: 0.24, height: 0.07, length: 0.66, radius: 0.014, material: m2SlotMaterial)
-        socketUpperLip.position = SCNVector3(0.95, 0.285, -0.22)
-        board.addChildNode(socketUpperLip)
-
-        let socketOpening = boxNode(width: 0.028, height: 0.07, length: 0.50, radius: 0.008, material: material(UIColor(red: 0.03, green: 0.035, blue: 0.04, alpha: 1), roughness: 0.7, metalness: 0.12))
-        socketOpening.position = SCNVector3(0.84, 0.245, -0.22)
-        board.addChildNode(socketOpening)
-
-        let keyBlock = boxNode(width: 0.04, height: 0.085, length: 0.09, radius: 0.006, material: material(UIColor(red: 0.36, green: 0.38, blue: 0.36, alpha: 1), roughness: 0.56, metalness: 0.20))
-        keyBlock.position = SCNVector3(0.82, 0.25, -0.05)
-        board.addChildNode(keyBlock)
-
-        let contactMaterial = material(UIColor(red: 0.72, green: 0.70, blue: 0.62, alpha: 1), roughness: 0.42, metalness: 0.52)
-        for side in [-1, 1] {
-            for index in 0..<6 {
-                let contact = boxNode(width: 0.018, height: 0.020, length: 0.034, radius: 0.002, material: contactMaterial)
-                contact.position = SCNVector3(0.875 + Float(side) * 0.024, 0.245, -0.405 + Float(index) * 0.073)
-                board.addChildNode(contact)
-            }
-        }
-
-        let standoff = cylinderNode(radius: 0.09, height: 0.16, material: material(UIColor(red: 0.68, green: 0.66, blue: 0.58, alpha: 1), roughness: 0.42, metalness: 0.58))
-        standoff.position = SCNVector3(-0.74, 0.16, -0.22)
-        board.addChildNode(standoff)
-
-        let lane = boxNode(width: 2.18, height: 0.018, length: 0.50, radius: 0.025, material: material(UIColor(red: 0.12, green: 0.14, blue: 0.15, alpha: 1), roughness: 0.62, metalness: 0.12))
-        lane.position = SCNVector3(0.03, 0.095, -0.22)
-        board.addChildNode(lane)
-
-        for index in 0..<5 {
-            let capacitor = cylinderNode(radius: 0.065, height: 0.18, material: material(UIColor(red: 0.18, green: 0.19, blue: 0.20, alpha: 1), roughness: 0.55, metalness: 0.45))
-            capacitor.position = SCNVector3(-1.55 + Float(index) * 0.25, 0.18, -1.05)
-            board.addChildNode(capacitor)
-        }
-
-        return board
-    }
-
     private static func makeSSD() -> SCNNode {
-        let ssd = SCNNode()
+        let ssd = makeModelNode(name: ssdModelName)
         ssd.name = ssdName
-
-        let pcb = boxNode(width: 1.92, height: 0.055, length: 0.44, radius: 0.025, material: material(UIColor(red: 0.06, green: 0.34, blue: 0.25, alpha: 1), roughness: 0.62, metalness: 0.08))
-        ssd.addChildNode(pcb)
-
-        for index in 0..<3 {
-            let chip = boxNode(width: 0.34, height: 0.07, length: 0.28, radius: 0.025, material: material(UIColor(red: 0.08, green: 0.09, blue: 0.10, alpha: 1), roughness: 0.50, metalness: 0.24))
-            chip.position = SCNVector3(0.18 - Float(index) * 0.42, 0.055, 0.0)
-            ssd.addChildNode(chip)
-        }
-
-        let contactMaterial = material(UIColor(red: 0.92, green: 0.62, blue: 0.30, alpha: 1), roughness: 0.34, metalness: 0.44)
-        for index in 0..<6 {
-            let contact = boxNode(width: 0.075, height: 0.018, length: 0.05, radius: 0.004, material: contactMaterial)
-            contact.position = SCNVector3(0.78, 0.032, -0.15 + Float(index) * 0.06)
-            ssd.addChildNode(contact)
-        }
-
-        let notch = boxNode(width: 0.10, height: 0.024, length: 0.14, radius: 0.006, material: material(UIColor(red: 0.04, green: 0.10, blue: 0.08, alpha: 1), roughness: 0.7, metalness: 0.04))
-        notch.position = SCNVector3(0.59, 0.038, -0.13)
-        ssd.addChildNode(notch)
-
-        let screwHole = cylinderNode(radius: 0.055, height: 0.018, material: material(UIColor(red: 0.03, green: 0.05, blue: 0.05, alpha: 1), roughness: 0.55, metalness: 0.20))
-        screwHole.position = SCNVector3(-0.86, 0.055, 0)
-        ssd.addChildNode(screwHole)
-
-        ssd.position = ssdPosition(phaseIndex: 0, progress: 0)
+        ssd.position = ssdInitialPosition()
         ssd.eulerAngles = ssdAngles(phaseIndex: 0, progress: 0)
         return ssd
-    }
-
-    private static func makeHeatsink() -> SCNNode {
-        let heatsink = SCNNode()
-        heatsink.name = heatsinkName
-
-        let body = boxNode(width: 2.28, height: 0.13, length: 0.62, radius: 0.05, material: material(UIColor(red: 0.16, green: 0.17, blue: 0.18, alpha: 1), roughness: 0.36, metalness: 0.48))
-        heatsink.addChildNode(body)
-
-        for index in 0..<5 {
-            let groove = boxNode(width: 0.08, height: 0.025, length: 0.68, radius: 0.01, material: material(UIColor(red: 0.29, green: 0.30, blue: 0.31, alpha: 1), roughness: 0.46, metalness: 0.32))
-            groove.position = SCNVector3(-0.72 + Float(index) * 0.36, 0.075, 0)
-            heatsink.addChildNode(groove)
-        }
-
-        let film = boxNode(width: 2.05, height: 0.018, length: 0.42, radius: 0.015, material: material(UIColor(red: 0.52, green: 0.78, blue: 1.0, alpha: 0.78), roughness: 0.2, metalness: 0.0))
-        film.name = filmName
-        film.position = SCNVector3(0, -0.09, 0)
-        heatsink.addChildNode(film)
-
-        heatsink.position = heatsinkPosition(phaseIndex: 0, progress: 0)
-        return heatsink
-    }
-
-    private static func makeScrew() -> SCNNode {
-        let screw = cylinderNode(radius: 0.055, height: 0.055, material: material(UIColor(red: 0.70, green: 0.70, blue: 0.66, alpha: 1), roughness: 0.38, metalness: 0.72))
-        screw.name = screwName
-        screw.position = screwPosition(phaseIndex: 0, progress: 0)
-        return screw
     }
 
     private static func makeAlignCue() -> SCNNode {
@@ -1528,15 +1533,15 @@ private enum SSDInstallSceneFactory {
         let cueMaterial = material(UIColor(red: 1.0, green: 0.55, blue: 0.12, alpha: 1), roughness: 0.34, metalness: 0.08)
 
         let slotCue = boxNode(width: 0.16, height: 0.025, length: 0.42, radius: 0.012, material: cueMaterial)
-        slotCue.position = SCNVector3(0.84, 0.34, -0.22)
+        slotCue.position = SCNVector3(0.70, 0.34, -0.18)
         group.addChildNode(slotCue)
 
         let ssdCue = boxNode(width: 0.16, height: 0.025, length: 0.26, radius: 0.012, material: cueMaterial)
-        ssdCue.position = SCNVector3(0.30, 0.74, -0.34)
+        ssdCue.position = SCNVector3(0.18, 0.78, -0.26)
         group.addChildNode(ssdCue)
 
         let connector = cylinderNode(radius: 0.012, height: 0.50, material: cueMaterial)
-        connector.position = SCNVector3(0.57, 0.54, -0.28)
+        connector.position = SCNVector3(0.44, 0.56, -0.22)
         group.addChildNode(connector)
 
         return group
@@ -1549,85 +1554,100 @@ private enum SSDInstallSceneFactory {
         let cueMaterial = material(UIColor(red: 0.20, green: 0.58, blue: 1.0, alpha: 1), roughness: 0.36, metalness: 0)
 
         let highlight = boxNode(width: 0.30, height: 0.025, length: 0.34, radius: 0.018, material: cueMaterial)
-        highlight.position = SCNVector3(-0.74, 0.52, -0.22)
+        highlight.position = SCNVector3(-0.42, 0.52, -0.18)
         group.addChildNode(highlight)
 
         let arrow = coneNode(topRadius: 0, bottomRadius: 0.08, height: 0.18, material: cueMaterial)
         arrow.eulerAngles = SCNVector3(Float.pi, 0, 0)
-        arrow.position = SCNVector3(-0.74, 0.80, -0.22)
+        arrow.position = SCNVector3(-0.42, 0.80, -0.18)
         group.addChildNode(arrow)
 
         return group
     }
 
     private static func updateCamera(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
-        guard let cameraNode = scene.rootNode.childNode(withName: cameraName, recursively: true) else { return }
+        guard let cameraNode = scene.rootNode.childNode(withName: cameraName, recursively: true),
+              let camera = cameraNode.camera,
+              let target = scene.rootNode.childNode(withName: cameraTargetName, recursively: true) else {
+            return
+        }
 
-        let closePosition = SCNVector3(0.02, 3.05, 3.35)
-        let closeAngles = SCNVector3(-0.66, 0.02, 0)
-        let slotPosition = SCNVector3(0.26, 2.70, 2.85)
-        let slotAngles = SCNVector3(-0.62, -0.04, 0)
-        let insertPosition = SCNVector3(0.34, 2.86, 3.10)
-        let insertAngles = SCNVector3(-0.64, -0.02, 0)
-        let widePosition = SCNVector3(0.18, 3.45, 3.90)
-        let wideAngles = SCNVector3(-0.68, 0.02, 0)
+        let overviewPosition = SCNVector3(0.05, 4.50, 4.95)
+        let overviewTarget = SCNVector3(0.0, 0.04, -0.12)
+        let slotPosition = SCNVector3(0.52, 2.48, 2.36)
+        let slotTarget = SCNVector3(0.68, 0.22, -0.18)
+        let insertPosition = SCNVector3(0.42, 2.70, 2.75)
+        let insertTarget = SCNVector3(0.34, 0.20, -0.18)
+        let finishPosition = SCNVector3(0.24, 3.35, 3.55)
+        let finishTarget = SCNVector3(0.06, 0.16, -0.18)
 
         let position: SCNVector3
-        let angles: SCNVector3
+        let targetPosition: SCNVector3
         switch phaseIndex {
+        case 0:
+            let cameraProgress = easeHold(progress, startHold: 0.06, endHold: 0.12)
+            position = mix(overviewPosition, slotPosition, cameraProgress)
+            targetPosition = mix(overviewTarget, slotTarget, cameraProgress)
         case 1:
             let cameraProgress = easeHold(progress, startHold: 0.10, endHold: 0.10)
-            position = mix(closePosition, slotPosition, cameraProgress)
-            angles = mix(closeAngles, slotAngles, cameraProgress)
-        case 2:
-            let cameraProgress = easeHold(progress, startHold: 0.08, endHold: 0.16)
             position = mix(slotPosition, insertPosition, cameraProgress)
-            angles = mix(slotAngles, insertAngles, cameraProgress)
+            targetPosition = mix(slotTarget, insertTarget, cameraProgress)
+        case 2:
+            position = insertPosition
+            targetPosition = insertTarget
         case 3:
             let cameraProgress = easeHold(progress, startHold: 0.14, endHold: 0.08)
-            position = mix(insertPosition, widePosition, cameraProgress)
-            angles = mix(insertAngles, wideAngles, cameraProgress)
+            position = mix(insertPosition, finishPosition, cameraProgress)
+            targetPosition = mix(insertTarget, finishTarget, cameraProgress)
         case 4:
             let cameraProgress = easeHold(progress, startHold: 0.12, endHold: 0.16)
-            position = mix(widePosition, SCNVector3(0.12, 3.34, 3.76), cameraProgress)
-            angles = mix(wideAngles, SCNVector3(-0.67, 0.02, 0), cameraProgress)
+            position = mix(finishPosition, overviewPosition, cameraProgress * 0.35)
+            targetPosition = mix(finishTarget, overviewTarget, cameraProgress * 0.20)
         default:
-            position = closePosition
-            angles = closeAngles
+            position = slotPosition
+            targetPosition = slotTarget
         }
 
         cameraNode.position = position
-        cameraNode.eulerAngles = angles
+        target.position = targetPosition
+        camera.fieldOfView = 28 + Double(max(0, position.y - 2.4)) * 3.2
     }
 
-    private static func ssdPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
+    private static func ssdPosition(phaseIndex: Int, progress: CGFloat, in scene: SCNScene, ssdNode: SCNNode?) -> SCNVector3 {
+        let installed = ssdInstalledPosition(in: scene, ssdNode: ssdNode)
+        let angledReady = SCNVector3(installed.x - 0.64, installed.y + 0.42, installed.z - 0.05)
+        let angledInserted = SCNVector3(installed.x - 0.18, installed.y + 0.26, installed.z)
         switch phaseIndex {
         case 0:
-            return SCNVector3(0.20, 1.28, -1.28)
+            return angledReady
         case 1:
             let eased = easeHold(progress, startHold: 0.08, endHold: 0.14)
-            return mix(SCNVector3(0.20, 1.28, -1.28), SCNVector3(-0.24, 0.90, -0.34), eased)
+            return mix(SCNVector3(installed.x - 0.90, installed.y + 0.62, installed.z - 0.20), angledReady, eased)
         case 2:
             let eased = easeHold(progress, startHold: 0.14, endHold: 0.18)
-            return mix(SCNVector3(-0.24, 0.90, -0.34), SCNVector3(0.06, 0.55, -0.22), eased)
+            return mix(angledReady, angledInserted, eased)
         case 3:
             let eased = easeHold(progress, startHold: 0.10, endHold: 0.12)
-            return mix(SCNVector3(0.06, 0.55, -0.22), SCNVector3(0.12, 0.18, -0.22), eased)
+            return mix(angledInserted, installed, eased)
         default:
-            return SCNVector3(0.12, 0.18, -0.22)
+            return installed
         }
     }
 
+    private static func ssdInitialPosition() -> SCNVector3 {
+        let installed = ssdInstalledFallback()
+        return SCNVector3(installed.x - 0.64, installed.y + 0.42, installed.z - 0.05)
+    }
+
     private static func ssdAngles(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
-        let angled = SCNVector3(0, 0, -0.42)
         switch phaseIndex {
         case 0, 1, 2:
-            return angled
+            return ssdAngledEuler
         case 3:
             let eased = easeHold(progress, startHold: 0.10, endHold: 0.12)
-            return mix(angled, SCNVector3Zero, eased)
+            return mix(ssdAngledEuler, ssdFlatEuler, eased)
         default:
-            return SCNVector3Zero
+            return ssdFlatEuler
         }
     }
 
@@ -1641,56 +1661,31 @@ private enum SSDInstallSceneFactory {
         return 1
     }
 
-    private static func heatsinkPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
-        let installed = SCNVector3(0.08, 0.60, -0.22)
-        let removed = SCNVector3(-0.62, 1.10, -1.06)
+    private static func updateM2Heatsink(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
+        guard let group = scene.rootNode.childNode(withName: heatsinkGroupName, recursively: true),
+              let basePosition = (group.value(forKey: heatsinkBasePositionKey) as? NSValue)?.scnVector3Value else {
+            return
+        }
+        group.position = heatsinkPosition(basePosition: basePosition, phaseIndex: phaseIndex, progress: progress)
+        group.opacity = heatsinkOpacity(phaseIndex: phaseIndex)
+    }
+
+    private static func heatsinkPosition(basePosition: SCNVector3, phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
+        let removed = SCNVector3(basePosition.x - 0.52, basePosition.y + 0.72, basePosition.z - 0.58)
         switch phaseIndex {
         case 0:
-            return mix(installed, removed, easeHold(progress, startHold: 0.08, endHold: 0.12))
+            return mix(basePosition, removed, easeHold(progress, startHold: 0.08, endHold: 0.12))
         case 4:
             let delayed = easeHold(progress, startHold: 0.28, endHold: 0.10)
-            return mix(removed, installed, delayed)
+            return mix(removed, basePosition, delayed)
         default:
             return removed
         }
     }
 
-    private static func heatsinkOpacity(phaseIndex: Int, progress: CGFloat) -> Double {
+    private static func heatsinkOpacity(phaseIndex: Int) -> Double {
         if phaseIndex == 0 || phaseIndex == 4 { return 1 }
         return 0.72
-    }
-
-    private static func screwPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
-        let fixed = SCNVector3(-0.74, 0.35, -0.22)
-        let raised = SCNVector3(-0.74, 0.94, -0.22)
-        switch phaseIndex {
-        case 0:
-            return mix(fixed, raised, easeHold(progress, startHold: 0.04, endHold: 0.18))
-        case 3:
-            return mix(raised, fixed, easeHold(progress, startHold: 0.18, endHold: 0.10))
-        default:
-            return phaseIndex < 3 ? raised : fixed
-        }
-    }
-
-    private static func screwOpacity(phaseIndex: Int, progress: CGFloat) -> Double {
-        if phaseIndex == 4 { return 0.35 }
-        return 1
-    }
-
-    private static func filmPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
-        if phaseIndex == 4 {
-            let peel = smoothStep(min(max(progress / 0.38, 0), 1))
-            return SCNVector3(0.34 + Float(peel) * 0.42, -0.09 + Float(peel) * 0.24, 0.16 + Float(peel) * 0.22)
-        }
-        return SCNVector3(0, -0.09, 0)
-    }
-
-    private static func filmOpacity(phaseIndex: Int, progress: CGFloat) -> Double {
-        if phaseIndex == 4 {
-            return max(0, 1 - Double(progress) * 1.8)
-        }
-        return phaseIndex == 0 ? 1 : 0.85
     }
 
     private static func mix(_ start: SCNVector3, _ end: SCNVector3, _ progress: CGFloat) -> SCNVector3 {
@@ -1706,6 +1701,213 @@ private enum SSDInstallSceneFactory {
         let available = max(1 - startHold - endHold, 0.001)
         let normalized = min(max((value - startHold) / available, 0), 1)
         return normalized * normalized * normalized * (normalized * (normalized * 6 - 15) + 10)
+    }
+
+    private static func makeModelNode(name: String) -> SCNNode {
+        let node = SCNNode()
+        node.name = name
+
+        guard let url = Bundle.main.url(forResource: name, withExtension: "usdc"),
+              let scene = try? SCNScene(url: url, options: nil) else {
+            return node
+        }
+
+        scene.rootNode.childNodes.forEach {
+            node.addChildNode($0.clone())
+        }
+        normalize(node, modelName: name)
+        applyModelOverrides(to: node, modelName: name)
+        return node
+    }
+
+    private static func normalize(_ node: SCNNode, modelName: String) {
+        let (minimum, maximum) = node.boundingBox
+        let width = maximum.x - minimum.x
+        let height = maximum.y - minimum.y
+        let depth = maximum.z - minimum.z
+        let longestSide = max(width, height, depth)
+        guard longestSide > 0 else { return }
+
+        let targetLongestSide: Float
+        if modelName == boardModelName {
+            targetLongestSide = 4.65
+        } else if modelName == cpuModelName {
+            targetLongestSide = 0.74
+        } else if modelName == memoryModelName {
+            targetLongestSide = 1.50
+        } else {
+            targetLongestSide = 2.02
+        }
+
+        let scale = targetLongestSide / longestSide
+        node.scale = SCNVector3(scale, scale, scale)
+        node.position = SCNVector3(
+            -(minimum.x + maximum.x) * 0.5 * scale,
+            -(minimum.y + maximum.y) * 0.5 * scale,
+            -(minimum.z + maximum.z) * 0.5 * scale
+        )
+
+        if modelName == boardModelName {
+            node.eulerAngles = SCNVector3(-Float.pi / 2, 0, 0)
+            node.position = SCNVector3(0, 0.02, 0)
+        } else if modelName == memoryModelName {
+            node.eulerAngles = memoryBaseEuler
+        } else if modelName == ssdModelName {
+            node.eulerAngles = ssdFlatEuler
+        } else {
+            node.eulerAngles = SCNVector3Zero
+        }
+    }
+
+    private static func applyModelOverrides(to node: SCNNode, modelName: String) {
+        guard modelName == cpuModelName else { return }
+
+        let ihsMaterial = SCNMaterial()
+        ihsMaterial.name = "CPU_IHS_Bright_Brushed_Metal"
+        ihsMaterial.lightingModel = .physicallyBased
+        ihsMaterial.diffuse.contents = UIColor(red: 0.56, green: 0.58, blue: 0.57, alpha: 1)
+        ihsMaterial.metalness.contents = 0.92
+        ihsMaterial.roughness.contents = 0.32
+        ihsMaterial.specular.contents = UIColor.white
+        ihsMaterial.isDoubleSided = true
+
+        node.enumerateChildNodes { child, _ in
+            if child.name?.contains("Brushed_Highlight") == true {
+                child.isHidden = true
+                return
+            }
+            guard child.name?.contains("IHS") == true else { return }
+            child.geometry?.materials = [ihsMaterial]
+        }
+    }
+
+    private static func installM2SlotAnchor(in scene: SCNScene) {
+        guard scene.rootNode.childNode(withName: GuideFlow.ssdInstallAnchorName, recursively: true) == nil else {
+            return
+        }
+
+        let slotNode = scene.rootNode.childNode(withName: "MB_M2_Slot_Mouth_Clearance", recursively: true)
+            ?? scene.rootNode.childNode(withName: "MB_M2_Slot_Channel_Shadow", recursively: true)
+            ?? scene.rootNode.childNode(withName: "MB_M2_Slot", recursively: true)
+        guard let slotNode,
+              let slotBounds = sceneBounds(of: slotNode, in: scene.rootNode) else {
+            installAnchor(named: GuideFlow.ssdInstallAnchorName, at: SCNVector3(0.62, 0.23, -0.18), in: scene.rootNode)
+            return
+        }
+
+        installAnchor(
+            named: GuideFlow.ssdInstallAnchorName,
+            at: SCNVector3(slotBounds.center.x, slotBounds.center.y, slotBounds.center.z),
+            in: scene.rootNode
+        )
+    }
+
+    private static func configureM2HeatsinkGroup(in scene: SCNScene) {
+        guard let firstNode = scene.rootNode.childNode(withName: m2HeatsinkNodeNames[0], recursively: true),
+              let firstParent = firstNode.parent else {
+            return
+        }
+
+        let pivot = scene.rootNode.convertPosition(firstNode.position, from: firstParent)
+        groupBoardNodes(named: heatsinkGroupName, childNames: m2HeatsinkNodeNames, pivotPosition: pivot, in: scene.rootNode)
+    }
+
+    private static func groupBoardNodes(named groupName: String, childNames: [String], pivotPosition: SCNVector3, in root: SCNNode) {
+        let group = SCNNode()
+        group.name = groupName
+        group.position = pivotPosition
+        root.addChildNode(group)
+
+        for childName in childNames {
+            guard let node = root.childNode(withName: childName, recursively: true),
+                  let parent = node.parent else {
+                continue
+            }
+
+            let rootTransform = root.convertTransform(node.transform, from: parent)
+            node.removeFromParentNode()
+            node.transform = group.convertTransform(rootTransform, from: root)
+            group.addChildNode(node)
+        }
+
+        group.setValue(NSValue(scnVector3: group.position), forKey: heatsinkBasePositionKey)
+    }
+
+    private static func makeInstalledCPU() -> SCNNode {
+        let cpu = makeModelNode(name: cpuModelName)
+        cpu.name = installedCPUName
+        return cpu
+    }
+
+    private static func cpuInstalledPosition(in scene: SCNScene, cpuNode: SCNNode) -> SCNVector3 {
+        guard let anchor = scene.rootNode.childNode(withName: GuideFlow.cpuInstallAnchorName, recursively: true),
+              let alignedPosition = alignedInstallPosition(
+                  anchor: anchor,
+                  componentNode: cpuNode,
+                  in: scene.rootNode,
+                  matchingName: { $0.contains("PCB") }
+              ) else {
+            return SCNVector3(-0.19, 0.27, -1.00)
+        }
+
+        return alignedPosition
+    }
+
+    private static func makeInstalledMemory(name: String, anchorName: String, slotNumber: Int, in scene: SCNScene) -> SCNNode {
+        let module = makeModelNode(name: memoryModelName)
+        module.name = name
+        module.eulerAngles = memoryBaseEuler
+        module.position = memoryInstalledPosition(module: module, anchorName: anchorName, slotNumber: slotNumber, in: scene)
+        return module
+    }
+
+    private static func memoryInstalledPosition(module: SCNNode, anchorName: String, slotNumber: Int, in scene: SCNScene) -> SCNVector3 {
+        guard let anchor = scene.rootNode.childNode(withName: anchorName, recursively: true),
+              let contactBounds = installBoundsOffset(
+                  for: module,
+                  in: scene.rootNode,
+                  matchingName: { $0.contains("Gold_Finger") }
+              ),
+              let slotBounds = dimmSlotBounds(slotNumber: slotNumber, in: scene) else {
+            return slotNumber == 2 ? SCNVector3(0.768, 0.28, -0.892) : SCNVector3(1.114, 0.28, -0.892)
+        }
+
+        let slotDepth = max(slotBounds.maximum.y - slotBounds.minimum.y, 0.001)
+        let coveredContactTopY = slotBounds.maximum.y - slotDepth * 0.18
+        return SCNVector3(
+            anchor.position.x - contactBounds.center.x,
+            coveredContactTopY - contactBounds.maximum.y,
+            anchor.position.z - contactBounds.center.z
+        )
+    }
+
+    private static func ssdInstalledFallback() -> SCNVector3 {
+        SCNVector3(0.26, 0.225, -0.18)
+    }
+
+    private static func ssdInstalledPosition(in scene: SCNScene, ssdNode: SCNNode?) -> SCNVector3 {
+        guard let ssdNode,
+              let anchor = scene.rootNode.childNode(withName: GuideFlow.ssdInstallAnchorName, recursively: true) else {
+            return ssdInstalledFallback()
+        }
+
+        let originalEuler = ssdNode.eulerAngles
+        ssdNode.eulerAngles = ssdFlatEuler
+        defer { ssdNode.eulerAngles = originalEuler }
+
+        guard let contactBounds = installBoundsOffset(
+            for: ssdNode,
+            in: scene.rootNode,
+            matchingName: { $0.contains("Gold_Finger") }
+        ) else {
+            return ssdInstalledFallback()
+        }
+
+        return SCNVector3(
+            anchor.position.x - contactBounds.center.x,
+            anchor.position.y - contactBounds.center.y,
+            anchor.position.z - contactBounds.center.z
+        )
     }
 
     private static func boxNode(width: CGFloat, height: CGFloat, length: CGFloat, radius: CGFloat, material: SCNMaterial) -> SCNNode {
@@ -1735,15 +1937,209 @@ private enum SSDInstallSceneFactory {
     }
 }
 
+private struct SceneNodeBounds {
+    var minimum: SCNVector3
+    var maximum: SCNVector3
+
+    var center: SCNVector3 {
+        SCNVector3(
+            (minimum.x + maximum.x) * 0.5,
+            (minimum.y + maximum.y) * 0.5,
+            (minimum.z + maximum.z) * 0.5
+        )
+    }
+
+    mutating func include(_ point: SCNVector3) {
+        minimum = SCNVector3(
+            min(minimum.x, point.x),
+            min(minimum.y, point.y),
+            min(minimum.z, point.z)
+        )
+        maximum = SCNVector3(
+            max(maximum.x, point.x),
+            max(maximum.y, point.y),
+            max(maximum.z, point.z)
+        )
+    }
+
+    mutating func include(_ bounds: SceneNodeBounds) {
+        include(bounds.minimum)
+        include(bounds.maximum)
+    }
+}
+
+private func sceneBounds(of node: SCNNode, in coordinateRoot: SCNNode) -> SceneNodeBounds? {
+    let localBounds = node.boundingBox
+    let minimum = localBounds.min
+    let maximum = localBounds.max
+    guard minimum.x.isFinite, minimum.y.isFinite, minimum.z.isFinite,
+          maximum.x.isFinite, maximum.y.isFinite, maximum.z.isFinite,
+          minimum.x <= maximum.x, minimum.y <= maximum.y, minimum.z <= maximum.z else {
+        return nil
+    }
+
+    let corners = [
+        SCNVector3(minimum.x, minimum.y, minimum.z),
+        SCNVector3(minimum.x, minimum.y, maximum.z),
+        SCNVector3(minimum.x, maximum.y, minimum.z),
+        SCNVector3(minimum.x, maximum.y, maximum.z),
+        SCNVector3(maximum.x, minimum.y, minimum.z),
+        SCNVector3(maximum.x, minimum.y, maximum.z),
+        SCNVector3(maximum.x, maximum.y, minimum.z),
+        SCNVector3(maximum.x, maximum.y, maximum.z)
+    ]
+
+    var bounds = SceneNodeBounds(
+        minimum: SCNVector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude),
+        maximum: SCNVector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude)
+    )
+    for corner in corners {
+        bounds.include(coordinateRoot.convertPosition(corner, from: node))
+    }
+    return bounds
+}
+
+private func combinedSceneBounds(
+    under rootNode: SCNNode,
+    in coordinateRoot: SCNNode,
+    matchingName nameMatcher: (String) -> Bool
+) -> SceneNodeBounds? {
+    var combinedBounds: SceneNodeBounds?
+
+    rootNode.enumerateChildNodes { child, _ in
+        guard let name = child.name, nameMatcher(name),
+              let childBounds = sceneBounds(of: child, in: coordinateRoot) else {
+            return
+        }
+
+        if var existingBounds = combinedBounds {
+            existingBounds.include(childBounds)
+            combinedBounds = existingBounds
+        } else {
+            combinedBounds = childBounds
+        }
+    }
+
+    return combinedBounds
+}
+
+private func installBaselineOffset(
+    for componentNode: SCNNode,
+    in coordinateRoot: SCNNode,
+    matchingName nameMatcher: ((String) -> Bool)? = nil
+) -> SCNVector3? {
+    guard let bounds = installBoundsOffset(for: componentNode, in: coordinateRoot, matchingName: nameMatcher) else {
+        return nil
+    }
+
+    return SCNVector3(bounds.center.x, bounds.minimum.y, bounds.center.z)
+}
+
+private func installBoundsOffset(
+    for componentNode: SCNNode,
+    in coordinateRoot: SCNNode,
+    matchingName nameMatcher: ((String) -> Bool)? = nil
+) -> SceneNodeBounds? {
+    let originalPosition = componentNode.position
+    componentNode.position = SCNVector3Zero
+    defer { componentNode.position = originalPosition }
+
+    let bounds: SceneNodeBounds?
+    if let nameMatcher {
+        bounds = combinedSceneBounds(under: componentNode, in: coordinateRoot, matchingName: nameMatcher)
+            ?? sceneBounds(of: componentNode, in: coordinateRoot)
+    } else {
+        bounds = sceneBounds(of: componentNode, in: coordinateRoot)
+    }
+
+    return bounds
+}
+
+private func alignedInstallPosition(
+    anchor: SCNNode,
+    componentNode: SCNNode,
+    in coordinateRoot: SCNNode,
+    matchingName nameMatcher: ((String) -> Bool)? = nil
+) -> SCNVector3? {
+    guard let baselineOffset = installBaselineOffset(for: componentNode, in: coordinateRoot, matchingName: nameMatcher) else {
+        return nil
+    }
+
+    return SCNVector3(
+        anchor.position.x - baselineOffset.x,
+        anchor.position.y - baselineOffset.y,
+        anchor.position.z - baselineOffset.z
+    )
+}
+
+private func installAnchor(named name: String, at position: SCNVector3, in root: SCNNode) {
+    let anchor = SCNNode()
+    anchor.name = name
+    anchor.position = position
+    anchor.isHidden = true
+    root.addChildNode(anchor)
+}
+
+private func installCPUSocketAnchor(in scene: SCNScene) {
+    guard scene.rootNode.childNode(withName: GuideFlow.cpuInstallAnchorName, recursively: true) == nil,
+          let socketSupport = scene.rootNode.childNode(withName: "MB_CPU_LGA_Field", recursively: true),
+          let socketBounds = sceneBounds(of: socketSupport, in: scene.rootNode) else {
+        return
+    }
+
+    installAnchor(
+        named: GuideFlow.cpuInstallAnchorName,
+        at: SCNVector3(socketBounds.center.x, socketBounds.maximum.y, socketBounds.center.z),
+        in: scene.rootNode
+    )
+}
+
+private func installDIMMSlotAnchor(named name: String, slotNumber: Int, in scene: SCNScene) {
+    guard scene.rootNode.childNode(withName: name, recursively: true) == nil else { return }
+
+    let slotNode = scene.rootNode.childNode(withName: "MB_RAM_Slot_Groove_\(slotNumber)", recursively: true)
+        ?? scene.rootNode.childNode(withName: "MB_RAM_Slot_Inner_Well_\(slotNumber)", recursively: true)
+        ?? scene.rootNode.childNode(withName: "MB_RAM_Slot_\(slotNumber)", recursively: true)
+    guard let slotNode,
+          let slotBounds = sceneBounds(of: slotNode, in: scene.rootNode) else {
+        return
+    }
+
+    installAnchor(
+        named: name,
+        at: SCNVector3(slotBounds.center.x, slotBounds.minimum.y, slotBounds.center.z),
+        in: scene.rootNode
+    )
+}
+
+private func dimmSlotBounds(slotNumber: Int, in scene: SCNScene) -> SceneNodeBounds? {
+    let slotNode = scene.rootNode.childNode(withName: "MB_RAM_Slot_Groove_\(slotNumber)", recursively: true)
+        ?? scene.rootNode.childNode(withName: "MB_RAM_Slot_Inner_Well_\(slotNumber)", recursively: true)
+        ?? scene.rootNode.childNode(withName: "MB_RAM_Slot_\(slotNumber)", recursively: true)
+    guard let slotNode else { return nil }
+    return sceneBounds(of: slotNode, in: scene.rootNode)
+}
+
 private enum MemoryInstallSceneFactory {
     private static let cameraName = "memory-camera"
+    private static let installedCPUName = "memory-installed-cpu"
     private static let firstStickName = "first-memory-stick"
     private static let secondStickName = "second-memory-stick"
     private static let targetGlowName = "memory-target-glow"
     private static let ramNotchCueName = "memory-ram-notch-cue"
     private static let slotNotchCueName = "memory-slot-notch-cue"
     private static let pressCueName = "memory-press-cue"
-    private static let latchPrefix = "memory-latch-"
+    private static let boardModelName = "modern-atx-motherboard-mobile"
+    private static let cpuModelName = "desktop-cpu-mobile"
+    private static let memoryModelName = "desktop-dimm-ram-mobile"
+    private static let selectedSlotNumbers = [2, 4]
+    private static let latchPartSuffixes = ["Latch", "Latch_Lever", "Latch_Hook", "Latch_Notch"]
+    private static let memoryLatchBaseEulerKey = "memoryInstallBaseEuler"
+    private static let firstSlotX: Float = 0.768
+    private static let secondSlotX: Float = 1.114
+    private static let slotCenterZ: Float = -0.892
+    private static let slotKeyZ: Float = -0.692
+    private static let memoryBaseEuler = SCNVector3(-Float.pi / 2, Float.pi / 2, 0)
 
     static func makeScene() -> SCNScene {
         let scene = SCNScene()
@@ -1762,12 +2158,22 @@ private enum MemoryInstallSceneFactory {
 
         TutorialSceneLighting.install(in: scene, keyIntensity: 1_000, keyAngles: SCNVector3(-0.72, 0.30, -0.25))
 
-        scene.rootNode.addChildNode(makeBoard())
-        scene.rootNode.addChildNode(makeMemoryStick(name: firstStickName))
-        scene.rootNode.addChildNode(makeMemoryStick(name: secondStickName))
+        scene.rootNode.addChildNode(makeModelNode(name: boardModelName))
+        installCPUSocketAnchor(in: scene)
+        installDIMMSlotAnchor(named: GuideFlow.memoryInstallAnchorNames[0], slotNumber: selectedSlotNumbers[0], in: scene)
+        installDIMMSlotAnchor(named: GuideFlow.memoryInstallAnchorNames[1], slotNumber: selectedSlotNumbers[1], in: scene)
+
+        let installedCPU = makeInstalledCPU()
+        scene.rootNode.addChildNode(installedCPU)
+        installedCPU.position = cpuInstalledPosition(in: scene, cpuNode: installedCPU)
+
+        scene.rootNode.addChildNode(makeMemoryModule(name: firstStickName))
+        scene.rootNode.addChildNode(makeMemoryModule(name: secondStickName))
+        scene.rootNode.addChildNode(makeTargetSlotCues())
         scene.rootNode.addChildNode(makeRamNotchCues())
         scene.rootNode.addChildNode(makeSlotNotchCues())
         scene.rootNode.addChildNode(makePressCues())
+        configureMemoryLatchGroups(in: scene)
 
         return scene
     }
@@ -1776,25 +2182,18 @@ private enum MemoryInstallSceneFactory {
         guard let scene else { return }
         let progress = CGFloat(localProgress)
         updateCamera(in: scene, phaseIndex: phaseIndex, progress: progress)
-        scene.rootNode.childNode(withName: firstStickName, recursively: true)?.position = firstStickPosition(phaseIndex: phaseIndex, progress: progress)
-        scene.rootNode.childNode(withName: secondStickName, recursively: true)?.position = secondStickPosition(phaseIndex: phaseIndex, progress: progress)
+        scene.rootNode.childNode(withName: firstStickName, recursively: true)?.position = firstStickPosition(phaseIndex: phaseIndex, progress: progress, in: scene)
+        scene.rootNode.childNode(withName: secondStickName, recursively: true)?.position = secondStickPosition(phaseIndex: phaseIndex, progress: progress, in: scene)
         scene.rootNode.childNode(withName: ramNotchCueName, recursively: true)?.opacity = phaseIndex == 1 ? Double(0.50 + 0.36 * sin(progress * .pi)) : 0
         scene.rootNode.childNode(withName: slotNotchCueName, recursively: true)?.opacity = phaseIndex == 2 ? Double(0.48 + 0.40 * sin(progress * .pi)) : 0
         updateRamNotchCue(in: scene, phaseIndex: phaseIndex, progress: progress)
         updatePressCue(in: scene, phaseIndex: phaseIndex, progress: progress)
+        updateMemoryLatches(in: scene, phaseIndex: phaseIndex, progress: progress)
 
         scene.rootNode.childNode(withName: firstStickName, recursively: true)?.eulerAngles = firstStickAngles(phaseIndex: phaseIndex, progress: progress)
         scene.rootNode.childNode(withName: secondStickName, recursively: true)?.eulerAngles = secondStickAngles(phaseIndex: phaseIndex, progress: progress)
 
-        scene.rootNode.childNode(withName: targetGlowName, recursively: true)?.opacity = phaseIndex == 0 ? 0.55 + 0.25 * Double(sin(progress * .pi)) : 0.22
-
-        for slot in [1, 3] {
-            let openAmount = latchOpenAmount(slot: slot, phaseIndex: phaseIndex, progress: progress)
-            for end in 0..<2 {
-                let node = scene.rootNode.childNode(withName: "\(latchPrefix)\(slot)-\(end)", recursively: true)
-                node?.eulerAngles = SCNVector3(openAmount * (end == 0 ? -0.78 : 0.78), 0, 0)
-            }
-        }
+        scene.rootNode.childNode(withName: targetGlowName, recursively: true)?.opacity = phaseIndex == 0 ? 0.55 + 0.25 * Double(sin(progress * .pi)) : 0
     }
 
     private static func updateCamera(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
@@ -1873,8 +2272,8 @@ private enum MemoryInstallSceneFactory {
 
     private static func updateRamNotchCue(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
         let positions = [
-            firstStickPosition(phaseIndex: phaseIndex, progress: progress),
-            secondStickPosition(phaseIndex: phaseIndex, progress: progress)
+            firstStickPosition(phaseIndex: phaseIndex, progress: progress, in: scene),
+            secondStickPosition(phaseIndex: phaseIndex, progress: progress, in: scene)
         ]
 
         for index in 0..<2 {
@@ -1883,162 +2282,94 @@ private enum MemoryInstallSceneFactory {
         }
     }
 
-    private static func makeBoard() -> SCNNode {
-        let board = SCNNode()
+    private static func makeModelNode(name: String) -> SCNNode {
+        let node = SCNNode()
+        node.name = name
 
-        let base = boxNode(
-            width: 3.8,
-            height: 0.08,
-            length: 4.6,
-            radius: 0.06,
-            material: material(UIColor(red: 0.06, green: 0.075, blue: 0.085, alpha: 1), roughness: 0.72, metalness: 0.15)
-        )
-        base.position = SCNVector3(0, 0, 0)
-        board.addChildNode(base)
-
-        let cpuSocket = boxNode(width: 1.06, height: 0.11, length: 1.06, radius: 0.05, material: material(UIColor(red: 0.34, green: 0.36, blue: 0.36, alpha: 1), roughness: 0.70, metalness: 0.10))
-        cpuSocket.position = SCNVector3(-0.54, 0.14, -0.58)
-        board.addChildNode(cpuSocket)
-
-        let cpuPlate = boxNode(width: 0.74, height: 0.09, length: 0.74, radius: 0.045, material: material(UIColor(red: 0.72, green: 0.74, blue: 0.70, alpha: 1), roughness: 0.44, metalness: 0.35))
-        cpuPlate.position = SCNVector3(-0.54, 0.24, -0.58)
-        board.addChildNode(cpuPlate)
-
-        let slotMaterial = material(UIColor(red: 0.10, green: 0.11, blue: 0.12, alpha: 1), roughness: 0.65, metalness: 0.18)
-        let targetMaterial = material(UIColor(red: 0.18, green: 0.19, blue: 0.20, alpha: 1), roughness: 0.56, metalness: 0.18)
-        for index in 0..<4 {
-            let x = 0.56 + Float(index) * 0.24
-            board.addChildNode(makeMemorySlot(x: x, isTarget: index == 1 || index == 3, slotMaterial: slotMaterial, targetMaterial: targetMaterial))
-
-            for end in 0..<2 {
-                board.addChildNode(makeMemoryLatch(name: "\(latchPrefix)\(index)-\(end)", x: x, end: end))
-            }
+        guard let url = Bundle.main.url(forResource: name, withExtension: "usdc"),
+              let scene = try? SCNScene(url: url, options: nil) else {
+            return node
         }
 
+        scene.rootNode.childNodes.forEach {
+            node.addChildNode($0.clone())
+        }
+        normalize(node, modelName: name)
+        return node
+    }
+
+    private static func makeMemoryModule(name: String) -> SCNNode {
+        let module = makeModelNode(name: memoryModelName)
+        module.name = name
+        module.position = name == firstStickName ? initialFirstStickPosition(progress: 0) : initialSecondStickPosition(progress: 0)
+        module.eulerAngles = name == firstStickName ? firstStickAngles(phaseIndex: 0, progress: 0) : secondStickAngles(phaseIndex: 0, progress: 0)
+        return module
+    }
+
+    private static func makeInstalledCPU() -> SCNNode {
+        let cpu = makeModelNode(name: cpuModelName)
+        cpu.name = installedCPUName
+        return cpu
+    }
+
+    private static func cpuInstalledPosition(in scene: SCNScene, cpuNode: SCNNode) -> SCNVector3 {
+        guard let anchor = scene.rootNode.childNode(withName: GuideFlow.cpuInstallAnchorName, recursively: true),
+              let alignedPosition = alignedInstallPosition(
+                  anchor: anchor,
+                  componentNode: cpuNode,
+                  in: scene.rootNode,
+                  matchingName: { $0.contains("PCB") }
+              ) else {
+            return SCNVector3(-0.19, 0.27, -1.00)
+        }
+
+        return alignedPosition
+    }
+
+    private static func makeTargetSlotCues() -> SCNNode {
         let targetGlow = SCNNode()
         targetGlow.name = targetGlowName
         let glowMaterial = material(UIColor(red: 0.40, green: 0.72, blue: 1.0, alpha: 1), roughness: 0.4, metalness: 0)
-        for x in [Float(0.80), Float(1.28)] {
-            let glow = boxNode(width: 0.075, height: 0.012, length: 2.50, radius: 0.008, material: glowMaterial)
-            glow.position = SCNVector3(x, 0.222, -0.20)
+        for x in [firstSlotX, secondSlotX] {
+            let glow = boxNode(width: 0.075, height: 0.012, length: 1.54, radius: 0.008, material: glowMaterial)
+            glow.position = SCNVector3(x, 0.205, slotCenterZ)
             targetGlow.addChildNode(glow)
         }
-        board.addChildNode(targetGlow)
-
-        let m2Slot = boxNode(width: 1.26, height: 0.08, length: 0.16, radius: 0.025, material: material(UIColor(red: 0.50, green: 0.52, blue: 0.52, alpha: 1), roughness: 0.54, metalness: 0.26))
-        m2Slot.position = SCNVector3(-0.30, 0.16, 0.42)
-        board.addChildNode(m2Slot)
-
-        let pcieSlot = boxNode(width: 1.58, height: 0.10, length: 0.16, radius: 0.025, material: material(UIColor(red: 0.52, green: 0.54, blue: 0.54, alpha: 1), roughness: 0.54, metalness: 0.28))
-        pcieSlot.position = SCNVector3(-0.46, 0.16, 1.08)
-        board.addChildNode(pcieSlot)
-
-        return board
+        return targetGlow
     }
 
-    private static func makeMemorySlot(x: Float, isTarget: Bool, slotMaterial: SCNMaterial, targetMaterial: SCNMaterial) -> SCNNode {
-        let slot = SCNNode()
-        let shellMaterial = isTarget ? targetMaterial : slotMaterial
-        let innerMaterial = material(UIColor(red: 0.025, green: 0.028, blue: 0.030, alpha: 1), roughness: 0.72, metalness: 0.08)
-        let contactMaterial = material(UIColor(red: 0.68, green: 0.70, blue: 0.68, alpha: 1), roughness: 0.42, metalness: 0.52)
-        let keyMaterial = material(UIColor(red: 0.40, green: 0.42, blue: 0.41, alpha: 1), roughness: 0.56, metalness: 0.24)
+    private static func normalize(_ node: SCNNode, modelName: String) {
+        let (minimum, maximum) = node.boundingBox
+        let width = maximum.x - minimum.x
+        let height = maximum.y - minimum.y
+        let depth = maximum.z - minimum.z
+        let longestSide = max(width, height, depth)
+        guard longestSide > 0 else { return }
 
-        let shell = boxNode(width: 0.17, height: 0.13, length: 2.82, radius: 0.024, material: shellMaterial)
-        shell.position = SCNVector3(x, 0.14, -0.20)
-        slot.addChildNode(shell)
-
-        let opening = boxNode(width: 0.105, height: 0.035, length: 2.62, radius: 0.01, material: innerMaterial)
-        opening.position = SCNVector3(x, 0.215, -0.20)
-        slot.addChildNode(opening)
-
-        for side in [-1, 1] {
-            for index in 0..<26 {
-                let tooth = boxNode(width: 0.018, height: 0.028, length: 0.030, radius: 0.002, material: contactMaterial)
-                tooth.position = SCNVector3(
-                    x + Float(side) * 0.047,
-                    0.238,
-                    -1.43 + Float(index) * 0.098
-                )
-                slot.addChildNode(tooth)
-            }
+        let targetLongestSide: Float
+        if modelName == boardModelName {
+            targetLongestSide = 4.65
+        } else if modelName == cpuModelName {
+            targetLongestSide = 0.74
+        } else {
+            targetLongestSide = 1.50
         }
+        let scale = targetLongestSide / Float(longestSide)
+        node.scale = SCNVector3(scale, scale, scale)
+        node.position = SCNVector3(
+            -Float(minimum.x + maximum.x) * 0.5 * scale,
+            -Float(minimum.y + maximum.y) * 0.5 * scale,
+            -Float(minimum.z + maximum.z) * 0.5 * scale
+        )
 
-        let keyBlock = boxNode(width: 0.12, height: 0.055, length: 0.115, radius: 0.008, material: keyMaterial)
-        keyBlock.position = SCNVector3(x, 0.252, -0.18)
-        slot.addChildNode(keyBlock)
-
-        return slot
-    }
-
-    private static func makeMemoryLatch(name: String, x: Float, end: Int) -> SCNNode {
-        let direction: Float = end == 0 ? -1 : 1
-        let pivot = SCNNode()
-        pivot.name = name
-        pivot.position = SCNVector3(x, 0.24, end == 0 ? -1.62 : 1.22)
-
-        let latchMaterial = material(UIColor(red: 0.31, green: 0.34, blue: 0.35, alpha: 1), roughness: 0.54, metalness: 0.22)
-        let hingeMaterial = material(UIColor(red: 0.45, green: 0.48, blue: 0.49, alpha: 1), roughness: 0.48, metalness: 0.36)
-
-        let foot = boxNode(width: 0.18, height: 0.08, length: 0.16, radius: 0.022, material: latchMaterial)
-        foot.position = SCNVector3(0, -0.02, 0)
-        pivot.addChildNode(foot)
-
-        let hinge = cylinderNode(radius: 0.032, height: 0.18, material: hingeMaterial)
-        hinge.eulerAngles = SCNVector3(0, 0, Float.pi / 2)
-        hinge.position = SCNVector3(0, 0.03, direction * 0.02)
-        pivot.addChildNode(hinge)
-
-        let arm = boxNode(width: 0.16, height: 0.34, length: 0.10, radius: 0.018, material: latchMaterial)
-        arm.position = SCNVector3(0, 0.19, direction * 0.04)
-        pivot.addChildNode(arm)
-
-        let hook = boxNode(width: 0.18, height: 0.055, length: 0.18, radius: 0.018, material: latchMaterial)
-        hook.position = SCNVector3(0, 0.36, direction * 0.08)
-        pivot.addChildNode(hook)
-
-        let innerLip = boxNode(width: 0.13, height: 0.045, length: 0.08, radius: 0.012, material: hingeMaterial)
-        innerLip.position = SCNVector3(0, 0.30, -direction * 0.04)
-        pivot.addChildNode(innerLip)
-
-        return pivot
-    }
-
-    private static func makeMemoryStick(name: String) -> SCNNode {
-        let stick = SCNNode()
-        stick.name = name
-
-        let pcb = boxNode(width: 0.12, height: 0.58, length: 3.44, radius: 0.03, material: material(UIColor(red: 0.12, green: 0.42, blue: 0.24, alpha: 1), roughness: 0.58, metalness: 0.08))
-        stick.addChildNode(pcb)
-
-        let heatSpreader = boxNode(width: 0.16, height: 0.38, length: 3.10, radius: 0.035, material: material(UIColor(red: 0.18, green: 0.20, blue: 0.22, alpha: 1), roughness: 0.36, metalness: 0.46))
-        heatSpreader.position = SCNVector3(0, 0.06, 0.02)
-        stick.addChildNode(heatSpreader)
-
-        let label = boxNode(width: 0.17, height: 0.13, length: 1.04, radius: 0.01, material: material(UIColor(red: 0.78, green: 0.80, blue: 0.78, alpha: 1), roughness: 0.44, metalness: 0.22))
-        label.position = SCNVector3(0.02, 0.08, -0.34)
-        stick.addChildNode(label)
-
-        let contactMaterial = material(UIColor(red: 0.90, green: 0.64, blue: 0.32, alpha: 1), roughness: 0.34, metalness: 0.42)
-        for index in 0..<24 {
-            let contact = boxNode(width: 0.035, height: 0.08, length: 0.09, radius: 0.004, material: contactMaterial)
-            contact.position = SCNVector3(0.02, -0.34, -1.52 + Float(index) * 0.132)
-            stick.addChildNode(contact)
+        if modelName == boardModelName {
+            node.eulerAngles = SCNVector3(-Float.pi / 2, 0, 0)
+            node.position = SCNVector3(0, 0.02, 0)
+        } else if modelName == cpuModelName {
+            node.eulerAngles = SCNVector3Zero
+        } else {
+            node.eulerAngles = memoryBaseEuler
         }
-
-        let notch = boxNode(width: 0.055, height: 0.12, length: 0.20, radius: 0.004, material: material(UIColor(red: 0.04, green: 0.13, blue: 0.08, alpha: 1), roughness: 0.72, metalness: 0.02))
-        notch.position = SCNVector3(0.04, -0.34, -0.18)
-        stick.addChildNode(notch)
-
-        for z in [Float(-1.62), Float(1.62)] {
-            let endCap = boxNode(width: 0.17, height: 0.42, length: 0.14, radius: 0.018, material: material(UIColor(red: 0.10, green: 0.11, blue: 0.12, alpha: 1), roughness: 0.42, metalness: 0.38))
-            endCap.position = SCNVector3(0, 0.06, z)
-            stick.addChildNode(endCap)
-        }
-
-        stick.scale = SCNVector3(0.82, 0.82, 0.82)
-        stick.eulerAngles = SCNVector3(-0.10, 0, 0)
-        stick.position = name == firstStickName ? firstStickPosition(phaseIndex: 0, progress: 0) : secondStickPosition(phaseIndex: 0, progress: 0)
-        return stick
     }
 
     private static func makePressCues() -> SCNNode {
@@ -2046,8 +2377,8 @@ private enum MemoryInstallSceneFactory {
         group.name = pressCueName
         group.opacity = 0
 
-        for x in [Float(0.80), Float(1.28)] {
-            for z in [Float(-1.05), Float(0.65)] {
+        for x in [firstSlotX, secondSlotX] {
+            for z in [slotCenterZ - 0.44, slotCenterZ + 0.44] {
                 let highlight = boxNode(width: 0.22, height: 0.02, length: 0.34, radius: 0.018, material: material(UIColor(red: 0.20, green: 0.58, blue: 1.0, alpha: 1), roughness: 0.36, metalness: 0.0))
                 highlight.position = SCNVector3(x, 0.75, z)
                 group.addChildNode(highlight)
@@ -2059,6 +2390,108 @@ private enum MemoryInstallSceneFactory {
         }
 
         return group
+    }
+
+    private static func configureMemoryLatchGroups(in scene: SCNScene) {
+        for slotNumber in selectedSlotNumbers {
+            for endName in ["Top", "Bottom"] {
+                let hingeName = "MB_RAM_\(endName)_Latch_Hinge_\(slotNumber)"
+                guard let hinge = scene.rootNode.childNode(withName: hingeName, recursively: true),
+                      let hingeParent = hinge.parent else {
+                    continue
+                }
+
+                groupBoardNodes(
+                    named: memoryLatchGroupName(endName: endName, slotNumber: slotNumber),
+                    childNames: latchPartNames(endName: endName, slotNumber: slotNumber),
+                    pivotPosition: scene.rootNode.convertPosition(hinge.position, from: hingeParent),
+                    in: scene.rootNode
+                )
+            }
+        }
+    }
+
+    private static func updateMemoryLatches(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
+        let openAmount = memoryLatchOpenAmount(phaseIndex: phaseIndex, progress: progress)
+
+        for slotNumber in selectedSlotNumbers {
+            updateMemoryLatchGroup(
+                named: memoryLatchGroupName(endName: "Top", slotNumber: slotNumber),
+                in: scene,
+                progress: openAmount,
+                xRotation: -0.66
+            )
+            updateMemoryLatchGroup(
+                named: memoryLatchGroupName(endName: "Bottom", slotNumber: slotNumber),
+                in: scene,
+                progress: openAmount,
+                xRotation: 0.66
+            )
+        }
+    }
+
+    private static func memoryLatchOpenAmount(phaseIndex: Int, progress: CGFloat) -> Float {
+        switch phaseIndex {
+        case 0:
+            return Float(smoothStep(progress))
+        case 1, 2, 3:
+            return 1
+        case 4:
+            return Float(1 - smoothStep(min(max((progress - 0.54) / 0.34, 0), 1)))
+        default:
+            return 0
+        }
+    }
+
+    private static func updateMemoryLatchGroup(
+        named groupName: String,
+        in scene: SCNScene,
+        progress: Float,
+        xRotation: Float
+    ) {
+        guard let group = scene.rootNode.childNode(withName: groupName, recursively: true),
+              let baseEuler = baseMemoryLatchEulerAngles(for: group) else {
+            return
+        }
+
+        group.eulerAngles = SCNVector3(
+            baseEuler.x + xRotation * progress,
+            baseEuler.y,
+            baseEuler.z
+        )
+    }
+
+    private static func groupBoardNodes(named groupName: String, childNames: [String], pivotPosition: SCNVector3, in root: SCNNode) {
+        let group = SCNNode()
+        group.name = groupName
+        group.position = pivotPosition
+        root.addChildNode(group)
+
+        for childName in childNames {
+            guard let node = root.childNode(withName: childName, recursively: true),
+                  let parent = node.parent else {
+                continue
+            }
+
+            let rootTransform = root.convertTransform(node.transform, from: parent)
+            node.removeFromParentNode()
+            node.transform = group.convertTransform(rootTransform, from: root)
+            group.addChildNode(node)
+        }
+
+        group.setValue(NSValue(scnVector3: group.eulerAngles), forKey: memoryLatchBaseEulerKey)
+    }
+
+    private static func baseMemoryLatchEulerAngles(for node: SCNNode) -> SCNVector3? {
+        (node.value(forKey: memoryLatchBaseEulerKey) as? NSValue)?.scnVector3Value
+    }
+
+    private static func memoryLatchGroupName(endName: String, slotNumber: Int) -> String {
+        "memory-\(endName.lowercased())-latch-group-\(slotNumber)"
+    }
+
+    private static func latchPartNames(endName: String, slotNumber: Int) -> [String] {
+        latchPartSuffixes.map { "MB_RAM_\(endName)_\($0)_\(slotNumber)" }
     }
 
     private static func makeRamNotchCues() -> SCNNode {
@@ -2082,109 +2515,152 @@ private enum MemoryInstallSceneFactory {
         group.opacity = 0
         let cueMaterial = material(UIColor(red: 1.0, green: 0.55, blue: 0.12, alpha: 1), roughness: 0.34, metalness: 0.08)
 
-        for x in [Float(0.80), Float(1.28)] {
+        for x in [firstSlotX, secondSlotX] {
             let slotCue = boxNode(width: 0.20, height: 0.03, length: 0.18, radius: 0.01, material: cueMaterial)
-            slotCue.position = SCNVector3(x, 0.31, -0.18)
+            slotCue.position = SCNVector3(x, 0.31, slotKeyZ)
             group.addChildNode(slotCue)
 
             let connector = cylinderNode(radius: 0.012, height: 0.44, material: cueMaterial)
-            connector.position = SCNVector3(x, 0.55, -0.18)
+            connector.position = SCNVector3(x, 0.55, slotKeyZ)
             group.addChildNode(connector)
         }
 
         return group
     }
 
-    private static func firstStickPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
+    private static func firstStickPosition(phaseIndex: Int, progress: CGFloat, in scene: SCNScene) -> SCNVector3 {
+        let installedPosition = memoryInstalledPosition(
+            stickName: firstStickName,
+            anchorName: GuideFlow.memoryInstallAnchorNames[0],
+            slotNumber: selectedSlotNumbers[0],
+            fallback: SCNVector3(firstSlotX, 0.28, slotCenterZ),
+            in: scene
+        )
+
         switch phaseIndex {
         case 0:
-            return SCNVector3(0.80, 1.34, -1.08)
+            return initialFirstStickPosition(progress: 0)
         case 1:
             let eased = progress * progress * (3 - 2 * progress)
-            return SCNVector3(0.80, 1.34 - Float(eased) * 0.16, -1.08 + Float(eased) * 0.18)
+            return initialFirstStickPosition(progress: eased)
         case 2:
             let eased = progress * progress * (3 - 2 * progress)
-            return SCNVector3(0.80, 1.18 - Float(eased) * 0.26, -0.90 + Float(eased) * 0.70)
+            return SCNVector3(firstSlotX, 1.18 - Float(eased) * 0.26, slotCenterZ - 0.40 + Float(eased) * 0.40)
         case 3:
             let rawProgress = min(max((progress - 0.10) / 0.68, 0), 1)
             let firstProgress = rawProgress * rawProgress * (3 - 2 * rawProgress)
-            return SCNVector3(0.80, 0.92 - Float(firstProgress) * 0.52, -0.20)
+            return mix(SCNVector3(firstSlotX, 0.92, slotCenterZ), installedPosition, firstProgress)
         case 4:
             let pressProgress = smoothStep(min(max(progress / 0.72, 0), 1))
-            return SCNVector3(0.80, 0.40 - Float(pressProgress) * 0.02, -0.20)
+            return SCNVector3(installedPosition.x, installedPosition.y - 0.018 * Float(sin(pressProgress * .pi)), installedPosition.z)
         case 5:
             let resetProgress = smoothStep(progress)
-            return mix(SCNVector3(0.80, 0.38, -0.20), SCNVector3(0.80, 1.34, -1.08), resetProgress)
+            return mix(installedPosition, SCNVector3(firstSlotX, 1.34, slotCenterZ - 0.58), resetProgress)
         default:
-            return SCNVector3(0.80, 0.40, -0.20)
+            return installedPosition
         }
     }
 
-    private static func secondStickPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
+    private static func secondStickPosition(phaseIndex: Int, progress: CGFloat, in scene: SCNScene) -> SCNVector3 {
+        let installedPosition = memoryInstalledPosition(
+            stickName: secondStickName,
+            anchorName: GuideFlow.memoryInstallAnchorNames[1],
+            slotNumber: selectedSlotNumbers[1],
+            fallback: SCNVector3(secondSlotX, 0.28, slotCenterZ),
+            in: scene
+        )
+
         switch phaseIndex {
         case 0:
-            return SCNVector3(1.28, 1.46, -1.10)
+            return initialSecondStickPosition(progress: 0)
         case 1:
             let eased = progress * progress * (3 - 2 * progress)
-            return SCNVector3(1.28, 1.46 - Float(eased) * 0.20, -1.10 + Float(eased) * 0.20)
+            return initialSecondStickPosition(progress: eased)
         case 2:
             let eased = progress * progress * (3 - 2 * progress)
-            return SCNVector3(1.28, 1.26 - Float(eased) * 0.34, -0.90 + Float(eased) * 0.70)
+            return SCNVector3(secondSlotX, 1.26 - Float(eased) * 0.34, slotCenterZ - 0.40 + Float(eased) * 0.40)
         case 3:
             let rawProgress = min(max((progress - 0.34) / 0.66, 0), 1)
             let secondProgress = rawProgress * rawProgress * (3 - 2 * rawProgress)
-            return SCNVector3(1.28, 0.92 - Float(secondProgress) * 0.52, -0.20)
+            return mix(SCNVector3(secondSlotX, 0.92, slotCenterZ), installedPosition, secondProgress)
         case 4:
             let pressProgress = smoothStep(min(max(progress / 0.72, 0), 1))
-            return SCNVector3(1.28, 0.40 - Float(pressProgress) * 0.02, -0.20)
+            return SCNVector3(installedPosition.x, installedPosition.y - 0.018 * Float(sin(pressProgress * .pi)), installedPosition.z)
         case 5:
             let resetProgress = smoothStep(progress)
-            return mix(SCNVector3(1.28, 0.38, -0.20), SCNVector3(1.28, 1.46, -1.10), resetProgress)
+            return mix(installedPosition, SCNVector3(secondSlotX, 1.46, slotCenterZ - 0.60), resetProgress)
         default:
-            return SCNVector3(1.28, 0.40, -0.20)
+            return installedPosition
         }
+    }
+
+    private static func initialFirstStickPosition(progress: CGFloat) -> SCNVector3 {
+        let eased = Float(progress)
+        return SCNVector3(firstSlotX, 1.34 - eased * 0.16, slotCenterZ - 0.58 + eased * 0.18)
+    }
+
+    private static func initialSecondStickPosition(progress: CGFloat) -> SCNVector3 {
+        let eased = Float(progress)
+        return SCNVector3(secondSlotX, 1.46 - eased * 0.20, slotCenterZ - 0.60 + eased * 0.20)
+    }
+
+    private static func memoryInstalledPosition(
+        stickName: String,
+        anchorName: String,
+        slotNumber: Int,
+        fallback: SCNVector3,
+        in scene: SCNScene
+    ) -> SCNVector3 {
+        guard let stick = scene.rootNode.childNode(withName: stickName, recursively: true),
+              let anchor = scene.rootNode.childNode(withName: anchorName, recursively: true),
+              let contactBounds = installBoundsOffset(
+                  for: stick,
+                  in: scene.rootNode,
+                  matchingName: { $0.contains("Gold_Finger") }
+              ),
+              let slotBounds = dimmSlotBounds(slotNumber: slotNumber, in: scene) else {
+            return fallback
+        }
+
+        let slotDepth = max(slotBounds.maximum.y - slotBounds.minimum.y, 0.001)
+        let coveredContactTopY = slotBounds.maximum.y - slotDepth * 0.18
+        return SCNVector3(
+            anchor.position.x - contactBounds.center.x,
+            coveredContactTopY - contactBounds.maximum.y,
+            anchor.position.z - contactBounds.center.z
+        )
     }
 
     private static func firstStickAngles(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
         if phaseIndex == 3 {
             let rawProgress = min(max((progress - 0.10) / 0.68, 0), 1)
-            return SCNVector3(-0.10 + Float(smoothStep(rawProgress)) * 0.10, 0, 0)
+            return memoryEuler(tilt: -0.10 + Float(smoothStep(rawProgress)) * 0.10)
         }
         if phaseIndex == 4 {
-            return SCNVector3Zero
+            return memoryEuler(tilt: 0)
         }
         if phaseIndex == 5 {
-            return SCNVector3(-Float(smoothStep(progress)) * 0.10, 0, 0)
+            return memoryEuler(tilt: -Float(smoothStep(progress)) * 0.10)
         }
-        return SCNVector3(-0.10, 0, 0)
+        return memoryEuler(tilt: -0.10)
     }
 
     private static func secondStickAngles(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
         if phaseIndex == 3 {
             let rawProgress = min(max((progress - 0.34) / 0.66, 0), 1)
-            return SCNVector3(-0.10 + Float(smoothStep(rawProgress)) * 0.10, 0, 0)
+            return memoryEuler(tilt: -0.10 + Float(smoothStep(rawProgress)) * 0.10)
         }
         if phaseIndex == 4 {
-            return SCNVector3Zero
+            return memoryEuler(tilt: 0)
         }
         if phaseIndex == 5 {
-            return SCNVector3(-Float(smoothStep(progress)) * 0.10, 0, 0)
+            return memoryEuler(tilt: -Float(smoothStep(progress)) * 0.10)
         }
-        return SCNVector3(-0.10, 0, 0)
+        return memoryEuler(tilt: -0.10)
     }
 
-    private static func latchOpenAmount(slot: Int, phaseIndex: Int, progress: CGFloat) -> Float {
-        if phaseIndex == 0 {
-            return Float(progress)
-        }
-        if phaseIndex == 4 {
-            let latchProgress = min(max((progress - 0.45) / 0.55, 0), 1)
-            return Float(1 - latchProgress)
-        }
-        if phaseIndex == 5 {
-            return Float(smoothStep(progress))
-        }
-        return 1
+    private static func memoryEuler(tilt: Float) -> SCNVector3 {
+        SCNVector3(memoryBaseEuler.x + tilt, memoryBaseEuler.y, memoryBaseEuler.z)
     }
 
     private static func mix(_ start: SCNVector3, _ end: SCNVector3, _ progress: CGFloat) -> SCNVector3 {
@@ -2244,31 +2720,50 @@ private enum MemoryInstallSceneFactory {
 }
 
 private enum CPUInstallSceneFactory {
+    private static let cameraName = "cpu-install-camera"
+    private static let cameraTargetName = "cpu-install-camera-target"
     private static let cpuNodeName = "cpu-node"
-    private static let leverPivotName = "lever-pivot"
-    private static let socketMarkerName = "socket-marker"
     private static let cpuMarkerName = "cpu-marker"
-    private static let socketGlowName = "socket-glow"
+    private static let leverGroupName = "cpu-install-lever-group"
+    private static let frameGroupName = "cpu-install-frame-group"
+    private static let boardModelName = "modern-atx-motherboard-mobile"
+    private static let cpuModelName = "desktop-cpu-mobile"
+    private static let socketCenter = SCNVector3(-0.19, 0.16, -1.00)
+    private static let leverNodeNames = ["MB_CPU_Load_Lever", "MB_CPU_Lever_Handle"]
+    private static let frameNodeNames = ["MB_CPU_Metal_Frame_Top", "MB_CPU_Metal_Frame_Bottom", "MB_CPU_Metal_Frame_Left", "MB_CPU_Metal_Frame_Right"]
+    private static let leverOpenAngle: Float = -70 * .pi / 180
+    private static let frameOpenAngle: Float = -70 * .pi / 180
+    private static let boardOverviewTarget = SCNVector3(0, 0.04, -0.05)
+    private static let boardOverviewCameraPosition = SCNVector3(0, 4.35, 3.95)
+    private static let socketCloseCameraPosition = SCNVector3(-0.24, 2.35, 1.25)
 
     static func makeScene() -> SCNScene {
         let scene = SCNScene()
         scene.background.contents = UIColor.clear
 
+        let cameraTarget = SCNNode()
+        cameraTarget.name = cameraTargetName
+        cameraTarget.position = socketCenter
+        scene.rootNode.addChildNode(cameraTarget)
+
         let cameraNode = SCNNode()
         let camera = SCNCamera()
-        camera.fieldOfView = 38
+        camera.fieldOfView = 28
         camera.zNear = 0.1
         camera.zFar = 100
+        cameraNode.name = cameraName
         cameraNode.camera = camera
-        cameraNode.position = SCNVector3(0.10, 4.15, 5.15)
-        cameraNode.eulerAngles = SCNVector3(-0.72, 0.012, 0.01)
+        cameraNode.position = boardOverviewCameraPosition
+        let lookAt = SCNLookAtConstraint(target: cameraTarget)
+        lookAt.isGimbalLockEnabled = true
+        cameraNode.constraints = [lookAt]
         scene.rootNode.addChildNode(cameraNode)
 
-        TutorialSceneLighting.install(in: scene, keyIntensity: 1_040, keyAngles: SCNVector3(-0.75, 0.35, -0.34))
+        TutorialSceneLighting.install(in: scene, keyIntensity: 1_120, keyAngles: SCNVector3(-0.80, 0.36, -0.30))
 
         scene.rootNode.addChildNode(makeBoard())
-        scene.rootNode.addChildNode(makeSocket())
-        scene.rootNode.addChildNode(makeLever())
+        installCPUSocketAnchor(in: scene)
+        configureBoardLatchGroups(in: scene)
         scene.rootNode.addChildNode(makeCPU())
 
         return scene
@@ -2278,325 +2773,217 @@ private enum CPUInstallSceneFactory {
         guard let scene else { return }
         let progress = CGFloat(localProgress)
         let cpuNode = scene.rootNode.childNode(withName: cpuNodeName, recursively: true)
-        let leverPivot = scene.rootNode.childNode(withName: leverPivotName, recursively: true)
-        let socketMarker = scene.rootNode.childNode(withName: socketMarkerName, recursively: true)
         let cpuMarker = scene.rootNode.childNode(withName: cpuMarkerName, recursively: true)
-        let socketGlow = scene.rootNode.childNode(withName: socketGlowName, recursively: true)
 
-        let cpuPosition = cpuPosition(phaseIndex: phaseIndex, progress: progress)
+        updateCamera(in: scene, phaseIndex: phaseIndex, progress: progress)
+        updateBoardLatch(in: scene, phaseIndex: phaseIndex, progress: progress)
+
+        let installedPosition = cpuInstalledPosition(in: scene, cpuNode: cpuNode)
+        let cpuPosition = cpuPosition(phaseIndex: phaseIndex, progress: progress, installedPosition: installedPosition)
         cpuNode?.position = cpuPosition
         cpuNode?.eulerAngles = SCNVector3(0, cpuYaw(phaseIndex: phaseIndex, progress: progress), 0)
-        cpuNode?.opacity = phaseIndex == 0 ? 0.46 + 0.42 * Double(progress) : (phaseIndex == 4 ? 1 - 0.54 * Double(progress) : 1)
+        cpuNode?.opacity = cpuOpacity(phaseIndex: phaseIndex, progress: progress)
 
-        leverPivot?.eulerAngles = SCNVector3(leverOpenAmount(phaseIndex: phaseIndex, progress: progress) * Float.pi * 0.58, 0, 0)
-
-        let isAligning = phaseIndex == 1 || phaseIndex == 4
+        let isAligning = phaseIndex == 0 || phaseIndex == 3
         let glowOpacity: CGFloat = isAligning ? 0.75 + 0.25 * sin(progress * .pi) : 0.22
-        socketMarker?.opacity = Double(glowOpacity)
         cpuMarker?.opacity = Double(glowOpacity)
-        socketGlow?.opacity = phaseIndex == 2 ? Double(0.2 + 0.42 * progress) : (phaseIndex == 3 ? 0.52 : (phaseIndex == 4 ? Double(0.52 - 0.36 * progress) : 0.16))
     }
 
     private static func makeBoard() -> SCNNode {
-        let board = SCNNode()
-
-        let base = boxNode(
-            width: 3.8,
-            height: 0.08,
-            length: 4.6,
-            radius: 0.06,
-            material: material(UIColor(red: 0.06, green: 0.075, blue: 0.085, alpha: 1), roughness: 0.72, metalness: 0.15)
-        )
-        base.position = SCNVector3(0, 0, 0)
-        base.opacity = 0.98
-        base.castsShadow = true
-        board.addChildNode(base)
-
-        for index in 0..<4 {
-            let slot = boxNode(
-                width: 0.16,
-                height: 0.16,
-                length: 2.0,
-                radius: 0.03,
-                material: material(UIColor(red: 0.16, green: 0.17, blue: 0.18, alpha: 1), roughness: 0.68, metalness: 0.2)
-            )
-            slot.position = SCNVector3(1.05 + Float(index) * 0.24, 0.14, -0.28)
-            board.addChildNode(slot)
-        }
-
-        let pcieSlot = boxNode(
-            width: 2.05,
-            height: 0.12,
-            length: 0.16,
-            radius: 0.025,
-            material: material(UIColor(red: 0.09, green: 0.10, blue: 0.11, alpha: 1), roughness: 0.62, metalness: 0.24)
-        )
-        pcieSlot.position = SCNVector3(-0.06, 0.14, 1.64)
-        board.addChildNode(pcieSlot)
-
-        for index in 0..<7 {
-            let capacitor = cylinderNode(
-                radius: 0.08,
-                height: 0.22,
-                material: material(UIColor(red: 0.20, green: 0.21, blue: 0.22, alpha: 1), roughness: 0.58, metalness: 0.55)
-            )
-            capacitor.position = SCNVector3(-1.55, 0.18, -1.35 + Float(index) * 0.32)
-            board.addChildNode(capacitor)
-        }
-
-        for index in 0..<3 {
-            let heatSink = boxNode(
-                width: 0.45,
-                height: 0.28,
-                length: 0.55,
-                radius: 0.05,
-                material: material(UIColor(red: 0.10, green: 0.11, blue: 0.12, alpha: 1), roughness: 0.5, metalness: 0.45)
-            )
-            heatSink.position = SCNVector3(-0.95 + Float(index) * 0.48, 0.22, -1.86)
-            board.addChildNode(heatSink)
-        }
-
-        let screwMaterial = material(UIColor(red: 0.55, green: 0.57, blue: 0.56, alpha: 1), roughness: 0.46, metalness: 0.68)
-        for position in [
-            SCNVector3(-1.62, 0.085, -1.92),
-            SCNVector3(1.62, 0.085, -1.92),
-            SCNVector3(-1.62, 0.085, 1.92),
-            SCNVector3(1.62, 0.085, 1.92)
-        ] {
-            let screw = cylinderNode(radius: 0.12, height: 0.026, material: screwMaterial)
-            screw.position = position
-            board.addChildNode(screw)
-        }
-
-        return board
-    }
-
-    private static func makeSocket() -> SCNNode {
-        let socket = SCNNode()
-
-        let socketBase = boxNode(
-            width: 1.46,
-            height: 0.11,
-            length: 1.46,
-            radius: 0.06,
-            material: material(UIColor(red: 0.34, green: 0.36, blue: 0.36, alpha: 1), roughness: 0.7, metalness: 0.1)
-        )
-        socketBase.position = SCNVector3(0, 0.15, 0.14)
-        socket.addChildNode(socketBase)
-
-        let well = boxNode(
-            width: 1.05,
-            height: 0.035,
-            length: 1.05,
-            radius: 0.035,
-            material: material(UIColor(red: 0.42, green: 0.43, blue: 0.42, alpha: 1), roughness: 0.82, metalness: 0.02)
-        )
-        well.position = SCNVector3(0, 0.235, 0.14)
-        socket.addChildNode(well)
-
-        let railMaterial = material(UIColor(red: 0.72, green: 0.72, blue: 0.68, alpha: 1), roughness: 0.38, metalness: 0.62)
-        for x in [-0.74, 0.74] {
-            let rail = boxNode(width: 0.075, height: 0.07, length: 1.36, radius: 0.018, material: railMaterial)
-            rail.position = SCNVector3(Float(x), 0.31, 0.14)
-            socket.addChildNode(rail)
-        }
-        for z in [-0.60, 0.88] {
-            let rail = boxNode(width: 1.46, height: 0.055, length: 0.07, radius: 0.018, material: railMaterial)
-            rail.position = SCNVector3(0, 0.305, Float(z))
-            socket.addChildNode(rail)
-        }
-
-        let glow = boxNode(
-            width: 1.47,
-            height: 0.018,
-            length: 1.47,
-            radius: 0.05,
-            material: material(UIColor(red: 0.96, green: 0.40, blue: 0.13, alpha: 1), roughness: 0.5, metalness: 0)
-        )
-        glow.name = socketGlowName
-        glow.position = SCNVector3(0, 0.126, 0.14)
-        socket.addChildNode(glow)
-
-        let pinMaterial = material(UIColor(red: 0.91, green: 0.66, blue: 0.35, alpha: 1), roughness: 0.42, metalness: 0.45)
-        for row in 0..<8 {
-            for column in 0..<8 {
-                let pin = boxNode(width: 0.032, height: 0.016, length: 0.032, radius: 0.004, material: pinMaterial)
-                pin.position = SCNVector3(-0.34 + Float(column) * 0.095, 0.265, -0.20 + Float(row) * 0.095)
-                socket.addChildNode(pin)
-            }
-        }
-
-        let marker = markerNode(size: 0.14)
-        marker.name = socketMarkerName
-        marker.position = SCNVector3(-0.61, 0.295, -0.48)
-        socket.addChildNode(marker)
-
-        return socket
-    }
-
-    private static func makeLever() -> SCNNode {
-        let pivot = SCNNode()
-        pivot.name = leverPivotName
-        pivot.position = SCNVector3(0.86, 0.32, 0.92)
-
-        let hinge = cylinderNode(
-            radius: 0.065,
-            height: 0.34,
-            material: material(UIColor(red: 0.74, green: 0.72, blue: 0.68, alpha: 1), roughness: 0.36, metalness: 0.68)
-        )
-        hinge.eulerAngles = SCNVector3(0, 0, Float.pi / 2)
-        pivot.addChildNode(hinge)
-
-        let lever = cylinderNode(
-            radius: 0.032,
-            height: 1.56,
-            material: material(UIColor(red: 0.92, green: 0.54, blue: 0.22, alpha: 1), roughness: 0.28, metalness: 0.76)
-        )
-        lever.eulerAngles = SCNVector3(Float.pi / 2, 0, 0)
-        lever.position = SCNVector3(0, 0, -0.78)
-        pivot.addChildNode(lever)
-
-        let handle = sphereNode(
-            radius: 0.085,
-            material: material(UIColor(red: 1.0, green: 0.54, blue: 0.20, alpha: 1), roughness: 0.34, metalness: 0.45)
-        )
-        handle.position = SCNVector3(0, 0, -1.58)
-        pivot.addChildNode(handle)
-
-        return pivot
+        makeModelNode(name: boardModelName)
     }
 
     private static func makeCPU() -> SCNNode {
-        let cpu = SCNNode()
+        let cpu = makeModelNode(name: cpuModelName)
         cpu.name = cpuNodeName
 
-        let substrate = boxNode(
-            width: 1.16,
-            height: 0.055,
-            length: 1.16,
-            radius: 0.045,
-            material: material(UIColor(red: 0.16, green: 0.36, blue: 0.31, alpha: 1), roughness: 0.66, metalness: 0.08)
-        )
-        substrate.position = SCNVector3(0, -0.03, 0)
-        cpu.addChildNode(substrate)
-
-        let heatSpreader = boxNode(
-            width: 0.86,
-            height: 0.09,
-            length: 0.86,
-            radius: 0.05,
-            material: material(UIColor(red: 0.77, green: 0.79, blue: 0.75, alpha: 1), roughness: 0.36, metalness: 0.46)
-        )
-        heatSpreader.position = SCNVector3(0, 0.035, 0)
-        cpu.addChildNode(heatSpreader)
-
-        let centerPlate = boxNode(
-            width: 0.58,
-            height: 0.014,
-            length: 0.28,
-            radius: 0.012,
-            material: material(UIColor(red: 0.58, green: 0.61, blue: 0.58, alpha: 1), roughness: 0.58, metalness: 0.18)
-        )
-        centerPlate.position = SCNVector3(0, 0.088, 0.04)
-        cpu.addChildNode(centerPlate)
-
-        let marker = markerNode(size: 0.13)
+        let marker = markerNode(size: 0.07)
         marker.name = cpuMarkerName
-        marker.position = SCNVector3(-0.49, 0.012, -0.49)
+        marker.position = SCNVector3(-0.30, 0.04, -0.30)
         cpu.addChildNode(marker)
 
-        let pinMaterial = material(UIColor(red: 0.92, green: 0.62, blue: 0.31, alpha: 1), roughness: 0.30, metalness: 0.54)
-        for row in 0..<7 {
-            for column in 0..<7 {
-                let pin = cylinderNode(radius: 0.018, height: 0.055, material: pinMaterial)
-                pin.position = SCNVector3(-0.36 + Float(column) * 0.12, -0.105, -0.36 + Float(row) * 0.12)
-                cpu.addChildNode(pin)
-            }
-        }
-
-        for x in [-0.36, 0.36] {
-            let notch = boxNode(
-                width: 0.16,
-                height: 0.018,
-                length: 0.045,
-                radius: 0.006,
-                material: material(UIColor(red: 0.05, green: 0.12, blue: 0.11, alpha: 1), roughness: 0.72, metalness: 0.02)
-            )
-            notch.position = SCNVector3(Float(x), 0.002, -0.595)
-            cpu.addChildNode(notch)
-        }
-
-        cpu.position = SCNVector3(-0.94, 1.20, -0.48)
         return cpu
     }
 
-    private static func cpuPosition(phaseIndex: Int, progress: CGFloat) -> SCNVector3 {
+    private static func cpuInstalledPosition(in scene: SCNScene, cpuNode: SCNNode?) -> SCNVector3 {
+        guard let cpuNode,
+              let anchor = scene.rootNode.childNode(withName: GuideFlow.cpuInstallAnchorName, recursively: true),
+              let alignedPosition = alignedInstallPosition(
+                  anchor: anchor,
+                  componentNode: cpuNode,
+                  in: scene.rootNode
+              ) else {
+            return SCNVector3(-0.19, 0.27, -1.00)
+        }
+
+        return alignedPosition
+    }
+
+    private static func cpuPosition(phaseIndex: Int, progress: CGFloat, installedPosition: SCNVector3) -> SCNVector3 {
+        let cpuHoverPosition = SCNVector3(installedPosition.x, installedPosition.y + 0.49, installedPosition.z)
         switch phaseIndex {
         case 0:
-            return SCNVector3(-0.94 + Float(progress) * 0.10, 1.20 + Float(sin(progress * .pi)) * 0.08, -0.56 + Float(progress) * 0.10)
+            return SCNVector3(-0.64, 1.12 + Float(sin(progress * .pi)) * 0.03, -0.54)
         case 1:
-            return SCNVector3(-0.84 + Float(progress) * 0.84, 1.17 + Float(sin(progress * .pi)) * 0.05, -0.46 + Float(progress) * 0.60)
+            return SCNVector3(-0.64, 1.12, -0.54)
         case 2:
-            let easedDrop = progress * progress * (3 - 2 * progress)
-            return SCNVector3(0, 1.12 - Float(easedDrop) * 0.79, 0.14)
+            return SCNVector3(-0.64, 1.08, -0.54)
+        case 3:
+            let eased = smoothStep(progress)
+            return mix(SCNVector3(-0.64, 1.08, -0.54), cpuHoverPosition, eased)
         case 4:
-            let resetProgress = progress * progress * (3 - 2 * progress)
-            return SCNVector3(
-                -Float(resetProgress) * 0.94,
-                0.33 + Float(resetProgress) * 0.87,
-                0.14 - Float(resetProgress) * 0.70
-            )
+            let easedDrop = smoothStep(min(max(progress / 0.62, 0), 1))
+            return mix(cpuHoverPosition, installedPosition, easedDrop)
+        case 5:
+            return installedPosition
         default:
-            return SCNVector3(0, 0.33, 0.14)
+            return installedPosition
         }
     }
 
     private static func cpuYaw(phaseIndex: Int, progress: CGFloat) -> Float {
         switch phaseIndex {
         case 0:
-            return -0.18
-        case 1:
-            return -0.18 + Float(progress) * 0.18
-        case 4:
-            let resetProgress = progress * progress * (3 - 2 * progress)
-            return -Float(resetProgress) * 0.18
+            return -0.08
+        case 3:
+            return -0.08 + Float(progress) * 0.08
+        case 5:
+            return 0
         default:
             return 0
         }
     }
 
-    private static func leverOpenAmount(phaseIndex: Int, progress: CGFloat) -> Float {
+    private static func cpuOpacity(phaseIndex: Int, progress: CGFloat) -> Double {
+        if phaseIndex == 0 {
+            return 0.48 + 0.18 * Double(sin(progress * .pi))
+        }
+        if phaseIndex == 5 {
+            return 1
+        }
+        return 1
+    }
+
+    private static func updateCamera(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
+        guard let cameraNode = scene.rootNode.childNode(withName: cameraName, recursively: true),
+              let camera = cameraNode.camera,
+              let target = scene.rootNode.childNode(withName: cameraTargetName, recursively: true) else {
+            return
+        }
+
+        let closePosition = socketCloseCameraPosition
+        let insertPosition = SCNVector3(-0.26, 2.05, 0.88)
+        let finishPosition = SCNVector3(-0.22, 2.42, 1.58)
+
         switch phaseIndex {
         case 0:
-            return Float(progress)
-        case 1, 2:
-            return 1
+            cameraNode.position = boardOverviewCameraPosition
+            camera.fieldOfView = 44
+            target.position = boardOverviewTarget
+        case 1:
+            let eased = smoothStep(progress)
+            cameraNode.position = mix(boardOverviewCameraPosition, closePosition, eased)
+            camera.fieldOfView = 44 - 16 * Double(eased)
+            target.position = mix(boardOverviewTarget, socketCenter, eased)
+        case 3:
+            let eased = smoothStep(progress)
+            cameraNode.position = mix(closePosition, insertPosition, eased)
+            camera.fieldOfView = 28 - 3 * Double(eased)
+            target.position = mix(socketCenter, SCNVector3(socketCenter.x, socketCenter.y + 0.06, socketCenter.z), eased)
         case 4:
-            let reopenProgress = progress * progress * (3 - 2 * progress)
-            return Float(reopenProgress)
+            let eased = smoothStep(progress)
+            cameraNode.position = mix(insertPosition, finishPosition, eased)
+            camera.fieldOfView = 25 + 3 * Double(eased)
+            target.position = mix(SCNVector3(socketCenter.x, socketCenter.y + 0.06, socketCenter.z), socketCenter, eased)
+        case GuideFlow.cpuInstallResetScenePhaseIndex:
+            let eased = smoothStep(min(max((progress - 0.18) / 0.82, 0), 1))
+            cameraNode.position = mix(finishPosition, boardOverviewCameraPosition, eased)
+            camera.fieldOfView = 28 + 16 * Double(eased)
+            target.position = mix(socketCenter, boardOverviewTarget, eased)
         default:
-            return Float(1 - progress)
+            cameraNode.position = closePosition
+            camera.fieldOfView = 28
+            target.position = socketCenter
         }
     }
 
-    private static func boxNode(width: CGFloat, height: CGFloat, length: CGFloat, radius: CGFloat, material: SCNMaterial) -> SCNNode {
-        let box = SCNBox(width: width, height: height, length: length, chamferRadius: radius)
-        box.materials = [material]
-        return SCNNode(geometry: box)
+    private static func updateBoardLatch(in scene: SCNScene, phaseIndex: Int, progress: CGFloat) {
+        let leverProgress = latchOpenAmount(phaseIndex: phaseIndex, progress: progress)
+        let frameProgress = frameOpenAmount(phaseIndex: phaseIndex, progress: progress)
+
+        updateLatchGroup(
+            named: leverGroupName,
+            in: scene,
+            progress: leverProgress,
+            xRotation: leverOpenAngle
+        )
+        updateLatchGroup(
+            named: frameGroupName,
+            in: scene,
+            progress: frameProgress,
+            xRotation: frameOpenAngle
+        )
     }
 
-    private static func cylinderNode(radius: CGFloat, height: CGFloat, material: SCNMaterial) -> SCNNode {
-        let cylinder = SCNCylinder(radius: radius, height: height)
-        cylinder.radialSegmentCount = 18
-        cylinder.materials = [material]
-        return SCNNode(geometry: cylinder)
+    private static func updateLatchGroup(
+        named groupName: String,
+        in scene: SCNScene,
+        progress: Float,
+        xRotation: Float
+    ) {
+        guard let group = scene.rootNode.childNode(withName: groupName, recursively: true),
+              let baseEuler = baseEulerAngles(for: group) else {
+            return
+        }
+
+        group.eulerAngles = SCNVector3(
+            baseEuler.x + xRotation * progress,
+            baseEuler.y,
+            baseEuler.z
+        )
     }
 
-    private static func sphereNode(radius: CGFloat, material: SCNMaterial) -> SCNNode {
-        let sphere = SCNSphere(radius: radius)
-        sphere.segmentCount = 18
-        sphere.materials = [material]
-        return SCNNode(geometry: sphere)
+    private static func latchOpenAmount(phaseIndex: Int, progress: CGFloat) -> Float {
+        switch phaseIndex {
+        case 1:
+            return Float(smoothStep(progress))
+        case 2, 3:
+            return 1
+        case 4:
+            return Float(1 - smoothStep(min(max((progress - 0.70) / 0.30, 0), 1)))
+        case 5:
+            return 0
+        default:
+            return 0
+        }
+    }
+
+    private static func frameOpenAmount(phaseIndex: Int, progress: CGFloat) -> Float {
+        switch phaseIndex {
+        case 2:
+            return Float(smoothStep(progress))
+        case 3:
+            return 1
+        case 4:
+            return Float(1 - smoothStep(min(max((progress - 0.58) / 0.28, 0), 1)))
+        case 5:
+            return 0
+        default:
+            return 0
+        }
+    }
+
+    private static func mix(_ start: SCNVector3, _ end: SCNVector3, _ progress: CGFloat) -> SCNVector3 {
+        let t = Float(progress)
+        return SCNVector3(
+            start.x + (end.x - start.x) * t,
+            start.y + (end.y - start.y) * t,
+            start.z + (end.z - start.z) * t
+        )
+    }
+
+    private static func smoothStep(_ value: CGFloat) -> CGFloat {
+        value * value * (3 - 2 * value)
     }
 
     private static func markerNode(size: CGFloat) -> SCNNode {
@@ -2606,6 +2993,115 @@ private enum CPUInstallSceneFactory {
         let node = SCNNode(geometry: cone)
         node.eulerAngles = SCNVector3(Float.pi / 2, 0, Float.pi / 3)
         return node
+    }
+
+    private static func makeModelNode(name: String) -> SCNNode {
+        let node = SCNNode()
+        node.name = name
+
+        guard let url = Bundle.main.url(forResource: name, withExtension: "usdc"),
+              let scene = try? SCNScene(url: url, options: nil) else {
+            return node
+        }
+
+        scene.rootNode.childNodes.forEach {
+            node.addChildNode($0.clone())
+        }
+        normalize(node, modelName: name)
+        applyModelOverrides(to: node, modelName: name)
+        return node
+    }
+
+    private static func configureBoardLatchGroups(in scene: SCNScene) {
+        groupBoardNodes(
+            named: leverGroupName,
+            childNames: leverNodeNames,
+            pivotPosition: SCNVector3(0.346, 0.231, -1.444),
+            in: scene.rootNode
+        )
+        groupBoardNodes(
+            named: frameGroupName,
+            childNames: frameNodeNames,
+            pivotPosition: SCNVector3(-0.189, 0.185, -1.395),
+            in: scene.rootNode
+        )
+    }
+
+    private static func groupBoardNodes(named groupName: String, childNames: [String], pivotPosition: SCNVector3, in root: SCNNode) {
+        let group = SCNNode()
+        group.name = groupName
+        group.position = pivotPosition
+        root.addChildNode(group)
+
+        for childName in childNames {
+            guard let node = root.childNode(withName: childName, recursively: true),
+                  let parent = node.parent else {
+                continue
+            }
+
+            let rootTransform = root.convertTransform(node.transform, from: parent)
+            node.removeFromParentNode()
+            node.transform = group.convertTransform(rootTransform, from: root)
+            group.addChildNode(node)
+        }
+
+        group.setValue(NSValue(scnVector3: group.position), forKey: "cpuInstallBasePosition")
+        group.setValue(NSValue(scnVector3: group.eulerAngles), forKey: "cpuInstallBaseEuler")
+    }
+
+    private static func basePosition(for node: SCNNode) -> SCNVector3? {
+        (node.value(forKey: "cpuInstallBasePosition") as? NSValue)?.scnVector3Value
+    }
+
+    private static func baseEulerAngles(for node: SCNNode) -> SCNVector3? {
+        (node.value(forKey: "cpuInstallBaseEuler") as? NSValue)?.scnVector3Value
+    }
+
+    private static func normalize(_ node: SCNNode, modelName: String) {
+        let (minimum, maximum) = node.boundingBox
+        let width = maximum.x - minimum.x
+        let height = maximum.y - minimum.y
+        let depth = maximum.z - minimum.z
+        let longestSide = max(width, height, depth)
+        guard longestSide > 0 else { return }
+
+        let targetLongestSide: Float = modelName == boardModelName ? 4.65 : 0.74
+        let scale = targetLongestSide / longestSide
+        node.scale = SCNVector3(scale, scale, scale)
+        node.position = SCNVector3(
+            -(minimum.x + maximum.x) * 0.5 * scale,
+            -(minimum.y + maximum.y) * 0.5 * scale,
+            -(minimum.z + maximum.z) * 0.5 * scale
+        )
+
+        if modelName == boardModelName {
+            node.eulerAngles = SCNVector3(-Float.pi / 2, 0, 0)
+            node.position = SCNVector3(0, 0.02, 0)
+        } else {
+            node.eulerAngles = SCNVector3Zero
+        }
+    }
+
+    private static func applyModelOverrides(to node: SCNNode, modelName: String) {
+        guard modelName == cpuModelName else { return }
+
+        let ihsMaterial = SCNMaterial()
+        ihsMaterial.name = "CPU_IHS_Bright_Brushed_Metal"
+        ihsMaterial.lightingModel = .physicallyBased
+        ihsMaterial.diffuse.contents = UIColor(red: 0.56, green: 0.58, blue: 0.57, alpha: 1)
+        ihsMaterial.metalness.contents = 0.92
+        ihsMaterial.roughness.contents = 0.32
+        ihsMaterial.specular.contents = UIColor.white
+        ihsMaterial.isDoubleSided = true
+
+        node.enumerateChildNodes { child, _ in
+            if child.name?.contains("Brushed_Highlight") == true {
+                child.isHidden = true
+                return
+            }
+            guard child.name?.contains("IHS") == true else { return }
+            child.geometry?.materials = [ihsMaterial]
+        }
     }
 
     private static func material(_ color: UIColor, roughness: CGFloat = 0.6, metalness: CGFloat = 0.0, emission: UIColor? = nil) -> SCNMaterial {
