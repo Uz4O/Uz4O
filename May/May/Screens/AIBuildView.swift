@@ -740,7 +740,6 @@ private struct PreferenceSegmentGroup: View {
     let options: [String]
     @Binding var selected: String
     var showsSelectionDot = false
-    @Namespace private var selectionNamespace
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -748,44 +747,11 @@ private struct PreferenceSegmentGroup: View {
                 .font(.appSubheadline)
                 .foregroundStyle(AppTheme.primaryText)
 
-            ZStack(alignment: .leading) {
-                HStack(spacing: 4) {
-                    ForEach(options, id: \.self) { option in
-                        if selected == option {
-                            Capsule()
-                                .fill(AppTheme.surface)
-                                .matchedGeometryEffect(id: "selection", in: selectionNamespace)
-                                .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 42)
-                        } else {
-                            Color.clear
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 42)
-                        }
-                    }
-                }
-
-                HStack(spacing: 4) {
-                    ForEach(options, id: \.self) { option in
-                        let isSelected = selected == option
-                        SlidingSegmentOptionButton(
-                            title: option,
-                            isSelected: isSelected,
-                            showsSelectionDot: showsSelectionDot
-                        ) {
-                            withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
-                                selected = option
-                            }
-                        }
-                    }
-                }
-            }
-            .padding(5)
-            .background(AppTheme.softSurface, in: Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(AppTheme.border, lineWidth: 1)
+            LiquidGlassSegmentedPicker(
+                options: options,
+                selection: $selected,
+                showsSelectionDot: showsSelectionDot,
+                title: { $0 }
             )
         }
     }
@@ -816,38 +782,6 @@ private struct SpecificPartField: View {
     }
 }
 
-private struct SlidingSegmentOptionButton: View {
-    let title: String
-    let isSelected: Bool
-    var showsSelectionDot = false
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 8) {
-                if showsSelectionDot {
-                    Circle()
-                        .fill(isSelected ? AppTheme.primaryText : Color.clear)
-                        .frame(width: 15, height: 15)
-                        .overlay(
-                            Circle()
-                                .stroke(isSelected ? Color.clear : AppTheme.secondaryText, lineWidth: 2)
-                        )
-                }
-
-                Text(title)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.78)
-            }
-            .font(.system(size: 13, weight: .bold))
-            .foregroundStyle(isSelected ? AppTheme.primaryText : AppTheme.secondaryText)
-            .frame(maxWidth: .infinity)
-            .frame(height: 42)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-}
 
 #Preview {
     AIBuildView(onBack: {}, onShowResult: {})

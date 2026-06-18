@@ -53,6 +53,15 @@ class ProgressDashboard(BaseModel):
         ]
 
     @property
+    def open_items(self) -> List[ProgressItem]:
+        return [
+            item
+            for phase in self.phases
+            for item in phase.items
+            if item.status != "completed"
+        ]
+
+    @property
     def completion_percentage(self) -> int:
         if self.total_items == 0:
             return 0

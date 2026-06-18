@@ -1,8 +1,8 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-06-16",
-  "estimated_completion": "仅后端可开发剩余项：约 0-0.5 天（待最终联调）",
-  "current_phase": "Phase 4 · 打磨",
+  "updated_at": "2026-06-17",
+  "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
+  "current_phase": "持续精进",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -539,6 +539,50 @@
         {
           "title": "服务器 SSH 暴力破解防护",
           "description": "服务器登录提示显示存在大量 SSH 失败登录尝试；需要配置 fail2ban/安全组白名单/禁用密码登录等主机层防护，避免暴力破解风险。",
+          "status": "not_started",
+          "owner": "user"
+        }
+      ]
+    },
+    {
+      "name": "持续精进",
+      "description": "上线前继续补强数据库、联调、观测和生产运维能力。",
+      "items": [
+        {
+          "title": "数据库唯一性与索引加固",
+          "description": "补充账号手机号/Apple ID 唯一约束、社区点赞收藏唯一约束、用户保存配置和社区 Feed 常用查询索引，并通过 migration 和测试验证，降低重复数据和慢查询风险。",
+          "status": "not_started"
+        },
+        {
+          "title": "当前电脑配置唯一性约束",
+          "description": "在数据库层限制同一账号只能有一个当前电脑配置，避免后端 bug 或并发请求导致多个 is_current_computer 同时存在。",
+          "status": "not_started"
+        },
+        {
+          "title": "前端真实接口联调与契约冻结",
+          "description": "用 SwiftUI 真实请求串通登录、装机、排雷、保存配置、社区和指南接口；确认字段命名、错误态和空数据态稳定后，把接口契约固定下来。",
+          "status": "not_started"
+        },
+        {
+          "title": "生产监控与告警接入",
+          "description": "为健康检查、PM2 状态、接口错误率、限流次数、AI 失败次数和磁盘/内存使用配置监控告警，避免服务异常只能靠人工发现。",
+          "status": "not_started"
+        },
+        {
+          "title": "数据库备份与恢复演练",
+          "description": "需要确认使用本机 PostgreSQL 备份还是云数据库自动备份，并完成一次恢复演练；这决定正式上线后误删或损坏数据能不能找回。",
+          "status": "not_started",
+          "owner": "user"
+        },
+        {
+          "title": "社区内容审核服务选择",
+          "description": "需要确认使用阿里云/腾讯云/人工审核等方案；当前后端已有基础敏感词拦截，但生产社区图片和文本审核仍需要明确供应商和策略。",
+          "status": "not_started",
+          "owner": "user"
+        },
+        {
+          "title": "生产域名、HTTPS 与 CORS 白名单确认",
+          "description": "需要确认正式域名和前端访问来源，再配置 HTTPS、CORS 白名单和 App 端 API base URL；当前暂未修改 Nginx 80/443。",
           "status": "not_started",
           "owner": "user"
         }

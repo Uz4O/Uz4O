@@ -460,57 +460,55 @@ struct PartRow: View {
     }
 }
 
-enum AppTab: String, CaseIterable {
-    case home = "首页"
-    case community = "社区"
-    case builds = "配置"
-    case profile = "我的"
-
-    func icon(isSelected: Bool) -> String {
-        switch self {
-        case .home:
-            return isSelected ? "house.fill" : "house"
-        case .community:
-            return isSelected ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right"
-        case .builds:
-            return isSelected ? "doc.text.fill" : "doc.text"
-        case .profile:
-            return isSelected ? "person.fill" : "person"
-        }
-    }
-}
-
 struct BottomTabBar: View {
     @Binding var selectedTab: AppTab
     var onSelect: ((AppTab) -> Void)?
     var onComposePost: (() -> Void)?
+    @State private var liquidStretch: CGFloat = 0
+    @State private var liquidDirection: CGFloat = 1
+    @State private var selectedIndex: Int = 0
 
     var body: some View {
-        HStack {
-            ForEach([AppTab.home, .community], id: \.self) { tab in
-                tabButton(tab)
-            }
+        ZStack(alignment: .leading) {
+            GeometryReader { geometry in
+                let tabCount = CGFloat(AppTab.bottomNavigationTabs.count)
+                let slotWidth = geometry.size.width / tabCount
+                let pillWidth = max(slotWidth - 8, 0)
+                let pillHeight: CGFloat = 54
+                let pillOffset = slotWidth * (CGFloat(selectedIndex) + 0.5) - pillWidth / 2
+                let pillVerticalOffset = (geometry.size.height - pillHeight) / 2
 
-            PostComposerButton(size: 48, iconSize: 22) {
-                onComposePost?()
+                BottomTabLiquidSelection(
+                    stretch: liquidStretch,
+                    direction: liquidDirection
+                )
+                .frame(width: pillWidth, height: pillHeight)
+                .offset(x: pillOffset, y: pillVerticalOffset)
+                .animation(.spring(response: 0.5, dampingFraction: 0.62), value: selectedIndex)
             }
-            .frame(maxWidth: .infinity)
-            .offset(y: -10)
+            .allowsHitTesting(false)
 
-            ForEach([AppTab.builds, .profile], id: \.self) { tab in
-                tabButton(tab)
+            HStack(spacing: 0) {
+                ForEach(AppTab.bottomNavigationTabs, id: \.self) { tab in
+                    tabButton(tab)
+                }
             }
         }
         .padding(.horizontal, 8)
         .frame(height: 64)
         .background(.white, in: RoundedRectangle(cornerRadius: 32))
         .modifier(AppTheme.cardShadow)
+        .onAppear {
+            syncSelectedIndex(with: selectedTab)
+        }
+        .onChange(of: selectedTab) { _, newTab in
+            syncSelectedIndex(with: newTab)
+        }
     }
 
     private func tabButton(_ tab: AppTab) -> some View {
         Button {
-            selectedTab = tab
-            onSelect?(tab)
+            select(tab)
         } label: {
             VStack(spacing: 4) {
                 Image(systemName: tab.icon(isSelected: selectedTab == tab))
@@ -521,9 +519,239 @@ struct BottomTabBar: View {
             }
             .foregroundStyle(selectedTab == tab ? AppTheme.primaryText : AppTheme.secondaryText)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
+            .frame(height: 54)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+
+    private func select(_ tab: AppTab) {
+        guard tab != selectedTab else { return }
+        let oldIndex = selectedIndex
+        let newIndex = AppTab.bottomNavigationTabs.firstIndex(of: tab) ?? oldIndex
+
+        liquidDirection = newIndex >= oldIndex ? 1 : -1
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.62)) {
+            selectedIndex = newIndex
+            selectedTab = tab
+            onSelect?(tab)
+        }
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+            liquidStretch = 1
+        }
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.5).delay(0.16)) {
+            liquidStretch = 0
+        }
+    }
+
+    private func syncSelectedIndex(with tab: AppTab) {
+        guard let index = AppTab.bottomNavigationTabs.firstIndex(of: tab) else { return }
+        selectedIndex = index
+    }
+}
+
+private struct BottomTabLiquidSelection: View {
+    let stretch: CGFloat
+    let direction: CGFloat
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(Color.white.opacity(0.22))
+                .scaleEffect(
+                    x: tailHorizontalScale,
+                    y: tailVerticalScale,
+                    anchor: stretchAnchor
+                )
+                .offset(x: -direction * progress * 34)
+                .opacity(Double(progress) * 0.6)
+                .blur(radius: progress * 3.2)
+
+            LiquidGlassSelection(
+                stretch: 0,
+                direction: direction,
+                cornerRadius: 28
+            )
+            .scaleEffect(
+                x: horizontalScale,
+                y: verticalScale,
+                anchor: stretchAnchor
+            )
+
+            Capsule()
+                .stroke(Color.white.opacity(0.78), lineWidth: 1)
+                .blur(radius: 0.6)
+                .scaleEffect(x: horizontalScale, y: verticalScale, anchor: stretchAnchor)
+                .opacity(stretch * 0.36)
+        }
+    }
+
+    private var progress: CGFloat {
+        min(max(stretch, 0), 1)
+    }
+
+    private var horizontalScale: CGFloat {
+        1 + progress * 0.68
+    }
+
+    private var verticalScale: CGFloat {
+        1 - progress * 0.24
+    }
+
+    private var tailHorizontalScale: CGFloat {
+        1 + progress * 1.15
+    }
+
+    private var tailVerticalScale: CGFloat {
+        1 - progress * 0.16
+    }
+
+    private var stretchAnchor: UnitPoint {
+        direction > 0 ? .leading : .trailing
+    }
+}
+
+struct LiquidGlassSegmentedPicker<Option: Hashable>: View {
+    let options: [Option]
+    @Binding var selection: Option
+    var height: CGFloat = 42
+    var spacing: CGFloat = 4
+    var padding: CGFloat = 5
+    var showsSelectionDot = false
+    var title: (Option) -> String
+
+    @Namespace private var selectionNamespace
+    @State private var liquidStretch: CGFloat = 0
+    @State private var liquidDirection: CGFloat = 1
+
+    var body: some View {
+        HStack(spacing: spacing) {
+            ForEach(options, id: \.self) { option in
+                optionButton(option)
+            }
+        }
+        .padding(padding)
+        .background(.ultraThinMaterial, in: Capsule())
+        .background(AppTheme.softSurface.opacity(0.82), in: Capsule())
+        .overlay(
+            Capsule()
+                .stroke(AppTheme.border.opacity(0.82), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.035), radius: 14, x: 0, y: 8)
+    }
+
+    private func optionButton(_ option: Option) -> some View {
+        let isSelected = selection == option
+
+        return Button {
+            select(option)
+        } label: {
+            ZStack {
+                if isSelected {
+                    LiquidGlassSelection(
+                        stretch: liquidStretch,
+                        direction: liquidDirection,
+                        cornerRadius: height / 2
+                    )
+                    .matchedGeometryEffect(id: "liquidSegmentSelection", in: selectionNamespace)
+                }
+
+                HStack(spacing: 8) {
+                    if showsSelectionDot {
+                        Circle()
+                            .fill(isSelected ? AppTheme.primaryText : Color.clear)
+                            .frame(width: 15, height: 15)
+                            .overlay(
+                                Circle()
+                                    .stroke(isSelected ? Color.clear : AppTheme.secondaryText, lineWidth: 2)
+                            )
+                    }
+
+                    Text(title(option))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.72)
+                }
+                .font(.system(size: 13, weight: isSelected ? .bold : .semibold))
+                .foregroundStyle(isSelected ? AppTheme.primaryText : AppTheme.secondaryText)
+                .padding(.horizontal, 6)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func select(_ option: Option) {
+        guard option != selection else { return }
+        let oldIndex = options.firstIndex(of: selection) ?? 0
+        let newIndex = options.firstIndex(of: option) ?? oldIndex
+
+        liquidDirection = newIndex >= oldIndex ? 1 : -1
+        withAnimation(.spring(response: 0.28, dampingFraction: 0.58)) {
+            liquidStretch = 1
+            selection = option
+        }
+        withAnimation(.spring(response: 0.48, dampingFraction: 0.72).delay(0.08)) {
+            liquidStretch = 0
+        }
+    }
+}
+
+private struct LiquidGlassSelection: View {
+    let stretch: CGFloat
+    let direction: CGFloat
+    let cornerRadius: CGFloat
+
+    var body: some View {
+        LightLiquidGlassSelection(stretch: stretch, direction: direction)
+    }
+}
+
+private struct LightLiquidGlassSelection: View {
+    let stretch: CGFloat
+    let direction: CGFloat
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(Color.white.opacity(0.86))
+
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.92),
+                            Color.white.opacity(0.56),
+                            AppTheme.softSurface.opacity(0.32)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            Capsule()
+                .stroke(Color.white.opacity(0.92), lineWidth: 1)
+
+            ripple
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: rippleAlignment)
+        }
+        .scaleEffect(x: 1 + stretch * 0.13, y: 1 - stretch * 0.035)
+        .shadow(color: Color.black.opacity(0.08), radius: 14, x: 0, y: 8)
+        .shadow(color: Color.white.opacity(0.72), radius: 10, x: 0, y: -3)
+    }
+
+    private var rippleAlignment: Alignment {
+        direction > 0 ? .trailing : .leading
+    }
+
+    private var ripple: some View {
+        Circle()
+            .fill(Color.white.opacity(0.62))
+            .frame(width: 22 + stretch * 12, height: 22 + stretch * 5)
+            .blur(radius: 0.6)
+            .offset(x: direction * (8 + stretch * 7))
+            .opacity(0.28 + stretch * 0.34)
     }
 }
 

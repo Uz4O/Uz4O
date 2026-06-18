@@ -72,43 +72,15 @@ struct MyBuildsView: View {
 
 private struct ConfigHubSegmentedPicker: View {
     @Binding var selectedSection: ConfigHubSection
-    @Namespace private var animation
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(ConfigHubSection.allCases) { section in
-                Button {
-                    selectedSection = section
-                } label: {
-                    ZStack {
-                        if selectedSection == section {
-                            RoundedRectangle(cornerRadius: 13)
-                                .fill(AppTheme.surface)
-                                .matchedGeometryEffect(id: "configHubSectionSelection", in: animation)
-                                .shadow(color: Color.black.opacity(0.06), radius: 12, x: 0, y: 6)
-                        }
-
-                        Text(section.title)
-                            .font(.system(size: 15, weight: selectedSection == section ? .bold : .semibold))
-                            .foregroundStyle(selectedSection == section ? AppTheme.primaryText : AppTheme.secondaryText)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.68)
-                            .padding(.horizontal, 5)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 38)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(3)
-        .background(AppTheme.softSurface.opacity(0.74), in: RoundedRectangle(cornerRadius: 16))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(AppTheme.border.opacity(0.75), lineWidth: 1)
+        LiquidGlassSegmentedPicker(
+            options: ConfigHubSection.allCases,
+            selection: $selectedSection,
+            height: 38,
+            padding: 3,
+            title: { $0.title }
         )
-        .shadow(color: Color.black.opacity(0.025), radius: 10, x: 0, y: 6)
-        .animation(.spring(response: 0.34, dampingFraction: 0.86), value: selectedSection)
     }
 }
 

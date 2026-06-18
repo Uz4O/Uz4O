@@ -323,39 +323,15 @@ private struct PerformanceResultStep: View {
 
 private struct ResolutionSegmentedControl: View {
     @Binding var selectedResolution: PerformanceResolution
-    @Namespace private var selectionNamespace
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(PerformanceResolution.allCases) { resolution in
-                Button {
-                    withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
-                        selectedResolution = resolution
-                    }
-                } label: {
-                    ZStack {
-                        if selectedResolution == resolution {
-                            Capsule()
-                                .fill(AppTheme.surface)
-                                .matchedGeometryEffect(id: "performanceResolutionSelection", in: selectionNamespace)
-                                .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 10)
-                        }
-
-                        Text(resolution.title)
-                            .font(.system(size: 15, weight: selectedResolution == resolution ? .bold : .semibold))
-                            .foregroundStyle(selectedResolution == resolution ? AppTheme.primaryText : AppTheme.secondaryText)
-                            .lineLimit(2)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(4)
-        .background(AppTheme.softSurface, in: Capsule())
-        .overlay(Capsule().stroke(AppTheme.border.opacity(0.75), lineWidth: 1))
-        .shadow(color: Color.black.opacity(0.04), radius: 14, x: 0, y: 8)
+        LiquidGlassSegmentedPicker(
+            options: PerformanceResolution.allCases,
+            selection: $selectedResolution,
+            height: 48,
+            padding: 4,
+            title: { $0.title }
+        )
     }
 }
 

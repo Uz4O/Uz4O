@@ -120,7 +120,7 @@ def render_progress_dashboard(progress: ProgressDashboard) -> str:
     <header>
       <div class="eyebrow">BACKEND ROADMAP</div>
       <h1>{escape(progress.project)}</h1>
-      <p class="subtitle">公开展示真实开发状态，每完成一项后端能力同步更新。</p>
+      <p class="subtitle">只展示未完成和待精进事项；已完成任务从页面隐藏，历史仍保留在 progress.json。</p>
     </header>
     <section class="summary" aria-label="项目摘要">
       <div class="summary-card">
@@ -155,13 +155,16 @@ def _render_user_actions(progress: ProgressDashboard) -> str:
 
 
 def _render_phase(phase) -> str:
-    items = "".join(_render_item(item) for item in phase.items)
-    completed = sum(item.status == "completed" for item in phase.items)
+    open_items = [item for item in phase.items if item.status != "completed"]
+    if not open_items:
+        return ""
+
+    items = "".join(_render_item(item) for item in open_items)
     return f"""
     <article class="phase">
       <div class="phase-header">
         <div><h2>{escape(phase.name)}</h2><p>{escape(phase.description)}</p></div>
-        <span class="label">{completed} / {len(phase.items)} 完成</span>
+        <span class="label">{len(open_items)} 项待处理</span>
       </div>
       <div class="items">{items}</div>
     </article>"""

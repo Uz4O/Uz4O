@@ -575,44 +575,15 @@ private struct UpgradeNeedCard: View {
 private struct UpgradeNeedSegmentedPicker: View {
     let needs: [UpgradeNeed]
     @Binding var selectedNeed: String
-    @Namespace private var selectionNamespace
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(needs) { need in
-                Button {
-                    withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
-                        selectedNeed = need.title
-                    }
-                } label: {
-                    ZStack {
-                        if selectedNeed == need.title {
-                            Capsule()
-                                .fill(AppTheme.surface)
-                                .matchedGeometryEffect(id: "upgradeNeedSelection", in: selectionNamespace)
-                                .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 10)
-                        }
-
-                        Text(need.title)
-                            .font(.system(size: 13, weight: selectedNeed == need.title ? .bold : .semibold))
-                            .foregroundStyle(selectedNeed == need.title ? AppTheme.primaryText : AppTheme.secondaryText)
-                            .lineLimit(2)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 5)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(minHeight: 48)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(4)
-        .background(AppTheme.softSurface, in: Capsule())
-        .overlay(
-            Capsule()
-                .stroke(AppTheme.border.opacity(0.75), lineWidth: 1)
+        LiquidGlassSegmentedPicker(
+            options: needs.map(\.title),
+            selection: $selectedNeed,
+            height: 48,
+            padding: 4,
+            title: { $0 }
         )
-        .shadow(color: Color.black.opacity(0.04), radius: 14, x: 0, y: 8)
     }
 }
 
