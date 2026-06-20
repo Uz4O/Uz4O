@@ -4,7 +4,9 @@ struct LoginView: View {
     let onLogin: () -> Void
     @State private var phoneNumber = ""
     @State private var verificationCode = ""
-    @State private var hasAgreed = true
+    @State private var consent = LoginConsentState()
+    @State private var presentedLegalDocument: LegalDocument?
+    @State private var showsConsentReminder = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -17,7 +19,7 @@ struct LoginView: View {
                     LoginForm(
                         phoneNumber: $phoneNumber,
                         verificationCode: $verificationCode,
-                        onLogin: onLogin
+                        onLogin: authenticate
                     )
                     .padding(.top, 30)
 
@@ -30,7 +32,10 @@ struct LoginView: View {
                         .frame(maxWidth: .infinity)
                         .offset(x: -22)
 
-                    AgreementRow(isOn: $hasAgreed)
+                    AgreementRow(
+                        isOn: $consent.hasAcceptedTerms,
+                        onOpenDocument: { presentedLegalDocument = $0 }
+                    )
                         .frame(maxWidth: .infinity)
                         .padding(.top, 20)
                         .padding(.bottom, max(18, proxy.safeAreaInsets.bottom + 6))
@@ -42,6 +47,24 @@ struct LoginView: View {
             }
         }
         .background(LoginBackground().ignoresSafeArea())
+        .sheet(item: $presentedLegalDocument) { document in
+            NavigationStack {
+                LegalDocumentView(document: document)
+            }
+        }
+        .alert("请先阅读并同意", isPresented: $showsConsentReminder) {
+            Button("知道了", role: .cancel) {}
+        } message: {
+            Text("请先阅读并同意用户协议和隐私政策。")
+        }
+    }
+
+    private func authenticate() {
+        guard consent.canAuthenticate else {
+            showsConsentReminder = true
+            return
+        }
+        onLogin()
     }
 }
 
@@ -195,24 +218,40 @@ private struct SecurityAssurance: View {
 
 private struct AgreementRow: View {
     @Binding var isOn: Bool
+    let onOpenDocument: (LegalDocument) -> Void
 
     var body: some View {
-        Button {
-            isOn.toggle()
-        } label: {
-            HStack(spacing: 10) {
+        HStack(spacing: 7) {
+            Button {
+                isOn.toggle()
+            } label: {
                 Image(systemName: isOn ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.primaryButton)
-
-                Text("我已阅读并同意《用户协议》和《隐私政策》")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.82)
+                    .accessibilityLabel(isOn ? "取消同意" : "同意协议")
             }
+            .buttonStyle(.plain)
+
+            Text("我已阅读并同意")
+                .foregroundStyle(AppTheme.primaryText)
+
+            Button("《用户协议》") {
+                onOpenDocument(.userAgreement)
+            }
+            .foregroundStyle(AppTheme.primaryButton)
+
+            Text("和")
+                .foregroundStyle(AppTheme.primaryText)
+
+            Button("《隐私政策》") {
+                onOpenDocument(.privacyPolicy)
+            }
+            .foregroundStyle(AppTheme.primaryButton)
         }
+        .font(.system(size: 11, weight: .medium))
         .buttonStyle(.plain)
+        .lineLimit(1)
+        .minimumScaleFactor(0.78)
     }
 }
 
