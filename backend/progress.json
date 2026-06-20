@@ -1,6 +1,6 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-06-17",
+  "updated_at": "2026-06-21",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
   "current_phase": "持续精进",
   "phases": [
@@ -235,6 +235,12 @@
           "description": "Feed、发帖、评论、点赞收藏、图片和审核。",
           "status": "completed",
           "completed_at": "2026-06-16"
+        },
+        {
+          "title": "用户隐私与社区安全闭环",
+          "description": "提供账号注销、本人内容删除、举报幂等、用户屏蔽、审核权限和所有权响应字段，并以迁移和 API 测试覆盖关联数据清理与越权边界。",
+          "status": "completed",
+          "completed_at": "2026-06-21"
         },
         {
           "title": "社区图片占位安全拦截",

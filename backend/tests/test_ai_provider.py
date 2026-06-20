@@ -107,3 +107,9 @@ def test_deepseek_provider_sends_frontend_preference_tokens(monkeypatch) -> None
 
     user_payload = json.loads(captured_payload["messages"][1]["content"])
     assert user_payload["preferences"] == ["静音", "FPS", "全新优先", "曜石黑"]
+    assert {
+        "phone",
+        "account_id",
+        "apple_sub",
+        "nickname",
+    }.isdisjoint(user_payload)

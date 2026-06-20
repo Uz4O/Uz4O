@@ -10,6 +10,12 @@ struct BuildResultView: View {
                 ScreenHeader(title: "配置方案详情", onBack: onBack)
                     .padding(.top, 8)
 
+                Text(AIContentDisclosure.text)
+                    .font(.appCaption)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 4)
+
                 SoftCard(radius: 22) {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack(alignment: .top) {
