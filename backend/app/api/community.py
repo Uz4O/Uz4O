@@ -6,11 +6,16 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated, Dict, List, Literal, Optional
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from app.auth.dependencies import get_app_settings, get_current_account
+from app.auth.dependencies import (
+    get_app_settings,
+    get_current_account,
+    get_optional_current_account,
+    require_moderator,
+)
 from app.auth.models import Account
 from app.auth.repository import list_accounts_by_ids
 from app.community.models import CommunityComment, CommunityPost
@@ -23,6 +28,17 @@ from app.community.repository import (
     list_comments,
     list_feed_posts,
     set_reaction,
+)
+from app.community.safety_models import CommunityBlock, CommunityReport
+from app.community.safety_repository import (
+    block_account,
+    blocked_account_ids,
+    create_report,
+    list_open_reports,
+    resolve_report,
+    soft_delete_comment,
+    soft_delete_post,
+    unblock_account,
 )
 from app.db import get_session
 
@@ -39,6 +55,7 @@ CommunityPart = Annotated[str, Field(min_length=1, max_length=160)]
 
 
 class CommunityAuthorResponse(BaseModel):
+    id: str
     name: str
     subtitle: str
     avatar_initial: str
@@ -60,6 +77,7 @@ class CommunityPostRequest(BaseModel):
 
 class CommunityPostResponse(BaseModel):
     id: str
+    author_id: str
     author: CommunityAuthorResponse
     summary: str
     body: str
@@ -70,6 +88,7 @@ class CommunityPostResponse(BaseModel):
     is_pinned: bool
     image_asset: Optional[str]
     status: str
+    is_owned_by_current_account: bool
 
 
 class CommunityFeedResponse(BaseModel):
@@ -82,10 +101,12 @@ class CommunityCommentRequest(BaseModel):
 
 class CommunityCommentResponse(BaseModel):
     id: str
+    author_id: str
     author: CommunityAuthorResponse
     body: str
     status: str
     created_at: datetime
+    is_owned_by_current_account: bool
 
 
 class CommunityPostDetailResponse(BaseModel):
@@ -116,6 +137,36 @@ class CommunityUploadResponse(BaseModel):
     form_fields: Dict[str, str]
 
 
+class CommunityReportRequest(BaseModel):
+    target_type: Literal["post", "comment"]
+    target_id: str = Field(min_length=1, max_length=64)
+    reason: Literal["illegal", "harassment", "privacy", "spam", "infringement", "other"]
+    details: str = Field(default="", max_length=1000)
+
+
+class CommunityReportResponse(BaseModel):
+    id: str
+    reporter_id: str
+    target_type: str
+    target_id: str
+    reason: str
+    details: str
+    status: str
+    resolution_note: Optional[str]
+    created_at: datetime
+    updated_at: datetime
+
+
+class CommunityBlockResponse(BaseModel):
+    id: str
+    blocked_id: str
+
+
+class ModerationDecisionRequest(BaseModel):
+    status: Literal["resolved", "rejected"]
+    resolution_note: str = Field(min_length=1, max_length=1000)
+
+
 router = APIRouter(prefix="/v1/community", tags=["community"])
 
 
@@ -124,12 +175,23 @@ def community_feed(
     topic: Optional[str] = None,
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
+    account: Optional[Account] = Depends(get_optional_current_account),
     session: Session = Depends(get_session),
 ) -> CommunityFeedResponse:
-    posts = list_feed_posts(session, topic, limit=limit, offset=offset)
+    excluded_author_ids = blocked_account_ids(session, account.id) if account else set()
+    posts = list_feed_posts(
+        session,
+        topic,
+        limit=limit,
+        offset=offset,
+        excluded_author_ids=excluded_author_ids,
+    )
     authors = _accounts_by_id(session, [post.author_id for post in posts])
     return CommunityFeedResponse(
-        posts=[_post_response(post, authors.get(post.author_id)) for post in posts]
+        posts=[
+            _post_response(post, authors.get(post.author_id), account)
+            for post in posts
+        ]
     )
 
 
@@ -138,6 +200,7 @@ def community_post_detail(
     post_id: str,
     comments_limit: int = Query(default=50, ge=1, le=100),
     comments_offset: int = Query(default=0, ge=0),
+    account: Optional[Account] = Depends(get_optional_current_account),
     session: Session = Depends(get_session),
 ) -> CommunityPostDetailResponse:
     post = _published_or_404(session, post_id)
@@ -147,9 +210,9 @@ def community_post_detail(
         [post.author_id] + [comment.author_id for comment in comments],
     )
     return CommunityPostDetailResponse(
-        post=_post_response(post, authors.get(post.author_id)),
+        post=_post_response(post, authors.get(post.author_id), account),
         comments=[
-            _comment_response(comment, authors.get(comment.author_id))
+            _comment_response(comment, authors.get(comment.author_id), account)
             for comment in comments
         ],
     )
@@ -176,7 +239,7 @@ def write_community_post(
         image_asset=request.image_asset,
         status=status,
     )
-    return _post_response(post, account)
+    return _post_response(post, account, account)
 
 
 @router.post("/posts/{post_id}/comments", response_model=CommunityCommentResponse)
@@ -191,7 +254,7 @@ def write_community_comment(
     post = _published_or_404(session, post_id)
     status = _moderation_status(request.body)
     comment = create_comment(session, post=post, author_id=account.id, body=request.body, status=status)
-    return _comment_response(comment, account)
+    return _comment_response(comment, account, account)
 
 
 @router.post("/posts/{post_id}/reactions", response_model=CommunityReactionResponse)
@@ -226,6 +289,114 @@ def create_community_upload(
     return _oss_upload_signature(request, account, settings)
 
 
+@router.delete("/posts/{post_id}", status_code=204)
+def delete_community_post(
+    post_id: str,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> Response:
+    if soft_delete_post(session, post_id, account.id) is None:
+        raise HTTPException(status_code=404, detail="Community post not found")
+    return Response(status_code=204)
+
+
+@router.delete("/comments/{comment_id}", status_code=204)
+def delete_community_comment(
+    comment_id: str,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> Response:
+    if soft_delete_comment(session, comment_id, account.id) is None:
+        raise HTTPException(status_code=404, detail="Community comment not found")
+    return Response(status_code=204)
+
+
+@router.post("/reports", response_model=CommunityReportResponse)
+def report_community_content(
+    http_request: Request,
+    request: CommunityReportRequest,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> CommunityReportResponse:
+    community_write_rate_limit(http_request, account)
+    try:
+        report = create_report(
+            session,
+            reporter_id=account.id,
+            target_type=request.target_type,
+            target_id=request.target_id,
+            reason=request.reason,
+            details=request.details,
+        )
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail="Community content not found") from exc
+    return _report_response(report)
+
+
+@router.post("/blocks/{account_id}", response_model=CommunityBlockResponse)
+def block_community_account(
+    http_request: Request,
+    account_id: str,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> CommunityBlockResponse:
+    community_write_rate_limit(http_request, account)
+    try:
+        block = block_account(session, account.id, account_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail="Cannot block current account") from exc
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail="Account not found") from exc
+    return _block_response(block)
+
+
+@router.delete("/blocks/{account_id}", status_code=204)
+def unblock_community_account(
+    account_id: str,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> Response:
+    unblock_account(session, account.id, account_id)
+    return Response(status_code=204)
+
+
+@router.get(
+    "/moderation/reports",
+    response_model=List[CommunityReportResponse],
+)
+def moderation_reports(
+    limit: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    _: Account = Depends(require_moderator),
+    session: Session = Depends(get_session),
+) -> List[CommunityReportResponse]:
+    return [
+        _report_response(report)
+        for report in list_open_reports(session, limit=limit, offset=offset)
+    ]
+
+
+@router.patch(
+    "/moderation/reports/{report_id}",
+    response_model=CommunityReportResponse,
+)
+def decide_moderation_report(
+    report_id: str,
+    request: ModerationDecisionRequest,
+    _: Account = Depends(require_moderator),
+    session: Session = Depends(get_session),
+) -> CommunityReportResponse:
+    report = resolve_report(
+        session,
+        report_id=report_id,
+        status=request.status,
+        resolution_note=request.resolution_note,
+    )
+    if report is None:
+        raise HTTPException(status_code=404, detail="Community report not found")
+    return _report_response(report)
+
+
 def _published_or_404(session: Session, post_id: str) -> CommunityPost:
     post = get_post(session, post_id)
     if post is None or post.status != "published":
@@ -233,10 +404,15 @@ def _published_or_404(session: Session, post_id: str) -> CommunityPost:
     return post
 
 
-def _post_response(post: CommunityPost, account: Optional[Account] = None) -> CommunityPostResponse:
+def _post_response(
+    post: CommunityPost,
+    author: Optional[Account] = None,
+    viewer: Optional[Account] = None,
+) -> CommunityPostResponse:
     return CommunityPostResponse(
         id=post.id,
-        author=_author_response(account),
+        author_id=post.author_id,
+        author=_author_response(author, post.author_id),
         summary=post.summary,
         body=post.body,
         created_at=post.created_at,
@@ -246,22 +422,53 @@ def _post_response(post: CommunityPost, account: Optional[Account] = None) -> Co
         is_pinned=post.is_pinned,
         image_asset=post.image_asset,
         status=post.status,
+        is_owned_by_current_account=viewer is not None and viewer.id == post.author_id,
     )
 
 
-def _comment_response(comment: CommunityComment, account: Optional[Account] = None) -> CommunityCommentResponse:
+def _comment_response(
+    comment: CommunityComment,
+    author: Optional[Account] = None,
+    viewer: Optional[Account] = None,
+) -> CommunityCommentResponse:
     return CommunityCommentResponse(
         id=comment.id,
-        author=_author_response(account),
+        author_id=comment.author_id,
+        author=_author_response(author, comment.author_id),
         body=comment.body,
         status=comment.status,
         created_at=comment.created_at,
+        is_owned_by_current_account=viewer is not None and viewer.id == comment.author_id,
     )
 
 
-def _author_response(account: Optional[Account]) -> CommunityAuthorResponse:
+def _author_response(account: Optional[Account], account_id: str) -> CommunityAuthorResponse:
     name = _display_name(account)
-    return CommunityAuthorResponse(name=name, subtitle="", avatar_initial=name[:1] or "用")
+    return CommunityAuthorResponse(
+        id=account_id,
+        name=name,
+        subtitle="",
+        avatar_initial=name[:1] or "用",
+    )
+
+
+def _report_response(report: CommunityReport) -> CommunityReportResponse:
+    return CommunityReportResponse(
+        id=report.id,
+        reporter_id=report.reporter_id,
+        target_type=report.target_type,
+        target_id=report.target_id,
+        reason=report.reason,
+        details=report.details,
+        status=report.status,
+        resolution_note=report.resolution_note,
+        created_at=report.created_at,
+        updated_at=report.updated_at,
+    )
+
+
+def _block_response(block: CommunityBlock) -> CommunityBlockResponse:
+    return CommunityBlockResponse(id=block.id, blocked_id=block.blocked_id)
 
 
 def _display_name(account: Optional[Account]) -> str:
