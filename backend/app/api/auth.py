@@ -1,15 +1,20 @@
 import hashlib
 from datetime import datetime, timedelta, timezone
-from typing import Optional
+from typing import Literal, Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.auth.dependencies import get_app_settings, get_current_account
 from app.auth.apple import verify_apple_identity_token
 from app.auth.models import Account
-from app.auth.repository import create_sms_code, get_or_create_account_by_apple_sub, login_with_sms_code
+from app.auth.repository import (
+    create_sms_code,
+    delete_account,
+    get_or_create_account_by_apple_sub,
+    login_with_sms_code,
+)
 from app.auth.security import sign_access_token
 from app.core.config import Settings
 from app.core.rate_limit import auth_login_rate_limit, auth_sms_rate_limit
@@ -39,6 +44,10 @@ class AccountResponse(BaseModel):
     id: str
     phone: Optional[str]
     nickname: Optional[str]
+
+
+class AccountDeletionRequest(BaseModel):
+    confirmation: Literal["DELETE"]
 
 
 class LoginResponse(BaseModel):
@@ -125,6 +134,16 @@ def apple_login(
 @router.get("/me", response_model=AccountResponse)
 def me(account: Account = Depends(get_current_account)) -> AccountResponse:
     return _account_response(account)
+
+
+@router.delete("/me", status_code=204)
+def delete_me(
+    request: AccountDeletionRequest,
+    account: Account = Depends(get_current_account),
+    session: Session = Depends(get_session),
+) -> Response:
+    delete_account(session, account)
+    return Response(status_code=204)
 
 
 def _account_response(account: Account) -> AccountResponse:

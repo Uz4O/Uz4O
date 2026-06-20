@@ -1,11 +1,14 @@
 from datetime import datetime, timedelta, timezone
 from typing import Iterable, List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import delete, or_, select
 from sqlalchemy.orm import Session
 
 from app.auth.models import Account, AuthSmsCode
 from app.auth.security import hash_sms_code, verify_sms_code
+from app.builds.models import SavedBuild
+from app.community.models import CommunityComment, CommunityPost, CommunityReaction
+from app.profile.models import HardwareProfile, OnboardingProfile
 
 
 def create_sms_code(
@@ -89,6 +92,31 @@ def list_accounts_by_ids(session: Session, account_ids: Iterable[str]) -> List[A
         return []
     statement = select(Account).where(Account.id.in_(ids))
     return list(session.scalars(statement))
+
+
+def delete_account(session: Session, account: Account) -> None:
+    post_ids = list(
+        session.scalars(
+            select(CommunityPost.id).where(CommunityPost.author_id == account.id)
+        )
+    )
+
+    reaction_filter = CommunityReaction.account_id == account.id
+    comment_filter = CommunityComment.author_id == account.id
+    if post_ids:
+        reaction_filter = or_(reaction_filter, CommunityReaction.post_id.in_(post_ids))
+        comment_filter = or_(comment_filter, CommunityComment.post_id.in_(post_ids))
+
+    session.execute(delete(CommunityReaction).where(reaction_filter))
+    session.execute(delete(CommunityComment).where(comment_filter))
+    session.execute(delete(CommunityPost).where(CommunityPost.author_id == account.id))
+    session.execute(delete(SavedBuild).where(SavedBuild.account_id == account.id))
+    session.execute(delete(HardwareProfile).where(HardwareProfile.account_id == account.id))
+    session.execute(delete(OnboardingProfile).where(OnboardingProfile.account_id == account.id))
+    if account.phone:
+        session.execute(delete(AuthSmsCode).where(AuthSmsCode.phone == account.phone))
+    session.delete(account)
+    session.commit()
 
 
 def _latest_valid_sms_code(session: Session, phone: str) -> Optional[AuthSmsCode]:
