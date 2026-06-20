@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta, timezone
 from typing import Iterable, List, Optional
 
-from sqlalchemy import delete, or_, select
+from sqlalchemy import and_, delete, or_, select
 from sqlalchemy.orm import Session
 
 from app.auth.models import Account, AuthSmsCode
 from app.auth.security import hash_sms_code, verify_sms_code
 from app.builds.models import SavedBuild
 from app.community.models import CommunityComment, CommunityPost, CommunityReaction
+from app.community.safety_models import CommunityBlock, CommunityReport
 from app.profile.models import HardwareProfile, OnboardingProfile
 
 
@@ -98,6 +99,43 @@ def delete_account(session: Session, account: Account) -> None:
     post_ids = list(
         session.scalars(
             select(CommunityPost.id).where(CommunityPost.author_id == account.id)
+        )
+    )
+    comment_ids = list(
+        session.scalars(
+            select(CommunityComment.id).where(
+                or_(
+                    CommunityComment.author_id == account.id,
+                    CommunityComment.post_id.in_(post_ids) if post_ids else False,
+                )
+            )
+        )
+    )
+
+    report_filter = CommunityReport.reporter_id == account.id
+    if post_ids:
+        report_filter = or_(
+            report_filter,
+            and_(
+                CommunityReport.target_type == "post",
+                CommunityReport.target_id.in_(post_ids),
+            ),
+        )
+    if comment_ids:
+        report_filter = or_(
+            report_filter,
+            and_(
+                CommunityReport.target_type == "comment",
+                CommunityReport.target_id.in_(comment_ids),
+            ),
+        )
+    session.execute(delete(CommunityReport).where(report_filter))
+    session.execute(
+        delete(CommunityBlock).where(
+            or_(
+                CommunityBlock.blocker_id == account.id,
+                CommunityBlock.blocked_id == account.id,
+            )
         )
     )
 

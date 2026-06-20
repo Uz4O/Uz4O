@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Set
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -11,12 +11,15 @@ def list_feed_posts(
     topic: Optional[str] = None,
     limit: Optional[int] = None,
     offset: int = 0,
+    excluded_author_ids: Optional[Set[str]] = None,
 ) -> List[CommunityPost]:
     statement = (
         select(CommunityPost)
         .where(CommunityPost.status == "published")
         .order_by(CommunityPost.is_pinned.desc(), CommunityPost.created_at.desc())
     )
+    if excluded_author_ids:
+        statement = statement.where(CommunityPost.author_id.not_in(excluded_author_ids))
     posts = list(session.scalars(statement))
     if topic and topic not in {"推荐", "最新", "关注"}:
         posts = [post for post in posts if topic in (post.tags or [])]
