@@ -1,22 +1,5 @@
 import Foundation
 
-struct GuideStepContent: Identifiable, Hashable {
-    let id: String
-    let number: Int
-    let title: String
-    let summary: String
-    let action: String
-    let caution: String
-    let symbol: String
-}
-
-struct CPUInstallPhase: Identifiable, Hashable {
-    let id: String
-    let title: String
-    let subtitle: String
-    let symbol: String
-}
-
 struct GuideComponentIntroItem: Identifiable, Hashable {
     let id: String
     let title: String
@@ -52,64 +35,103 @@ struct GuideComponentDetailPoint: Identifiable, Hashable {
     let symbol: String
 }
 
+struct GuideSection: Identifiable, Hashable {
+    let id: String
+    let title: String
+    let subtitle: String
+    let symbol: String
+    let badge: String
+    let items: [GuideSectionItem]
+}
+
+struct GuideSectionItem: Identifiable, Hashable {
+    let id: String
+    let title: String
+    let text: String
+    let symbol: String
+}
+
+struct GuideHomeEntry: Identifiable, Hashable {
+    let id: String
+    let title: String
+    let subtitle: String
+    let symbol: String
+    let badge: String
+}
+
 struct GuideFlow {
-    static let cpuInstallModelNames = ["modern-atx-motherboard-mobile", "desktop-cpu-mobile"]
-    static let cpuInstallAnimatedBoardNodeNames = [
-        "MB_CPU_Load_Lever",
-        "MB_CPU_Lever_Handle",
-        "MB_CPU_Metal_Frame_Top",
-        "MB_CPU_Metal_Frame_Bottom",
-        "MB_CPU_Metal_Frame_Left",
-        "MB_CPU_Metal_Frame_Right"
-    ]
-    static let cpuInstallAnchorName = "cpuSocketInstallAnchor"
-
-    static let cpuInstallPhases = [
-        CPUInstallPhase(id: "position-board", title: "摆正主板", subtitle: "先确认 AM5 插槽位置", symbol: "rectangle.3.group"),
-        CPUInstallPhase(id: "lift-lever", title: "抬起拉杆", subtitle: "向外拨开再向上抬起", symbol: "arrow.up.right"),
-        CPUInstallPhase(id: "open-frame", title: "打开压框", subtitle: "翻开金属压框，露出触点", symbol: "rectangle.portrait.rotate"),
-        CPUInstallPhase(id: "align", title: "对准三角", subtitle: "CPU 角标对准插槽角标", symbol: "triangle.fill"),
-        CPUInstallPhase(id: "seat-lock", title: "轻放并锁紧", subtitle: "自然落入后压回拉杆", symbol: "checkmark")
-    ]
-    static let cpuInstallResetScenePhaseIndex = cpuInstallPhases.count
-
-    static let memoryInstallPhases = [
-        CPUInstallPhase(id: "open", title: "打开卡扣", subtitle: "优先打开 2/4 槽位卡扣", symbol: "arrow.up.left.and.arrow.up.right"),
-        CPUInstallPhase(id: "inspect-notch", title: "查看防呆口", subtitle: "先看清内存金手指缺口", symbol: "magnifyingglass"),
-        CPUInstallPhase(id: "align-slot", title: "对齐插槽", subtitle: "缺口对准主板插槽凸点", symbol: "rectangle.and.text.magnifyingglass"),
-        CPUInstallPhase(id: "install", title: "安装两条内存", subtitle: "两条都对准后垂直压入", symbol: "rectangle.stack.badge.plus"),
-        CPUInstallPhase(id: "press-lock", title: "下压回弹", subtitle: "两端下压，卡扣自动回弹", symbol: "checkmark")
-    ]
-    static let memoryInstallModelNames = ["modern-atx-motherboard-mobile", "desktop-cpu-mobile", "desktop-dimm-ram-mobile"]
-    static let memoryInstallAnchorNames = ["dimmSlotA2InstallAnchor", "dimmSlotB2InstallAnchor"]
-    static let memoryInstallAnimatedBoardNodeNames = [
-        "MB_RAM_Top_Latch_2",
-        "MB_RAM_Top_Latch_Lever_2",
-        "MB_RAM_Top_Latch_Hook_2",
-        "MB_RAM_Top_Latch_Notch_2",
-        "MB_RAM_Bottom_Latch_2",
-        "MB_RAM_Bottom_Latch_Lever_2",
-        "MB_RAM_Bottom_Latch_Hook_2",
-        "MB_RAM_Bottom_Latch_Notch_2",
-        "MB_RAM_Top_Latch_4",
-        "MB_RAM_Top_Latch_Lever_4",
-        "MB_RAM_Top_Latch_Hook_4",
-        "MB_RAM_Top_Latch_Notch_4",
-        "MB_RAM_Bottom_Latch_4",
-        "MB_RAM_Bottom_Latch_Lever_4",
-        "MB_RAM_Bottom_Latch_Hook_4",
-        "MB_RAM_Bottom_Latch_Notch_4"
+    static let guideHomeEntries = [
+        GuideHomeEntry(
+            id: "troubleshooting",
+            title: "点不亮排查助手",
+            subtitle: "供电、内存、显卡、灯号逐项排查",
+            symbol: "wrench.and.screwdriver",
+            badge: "救急"
+        ),
+        GuideHomeEntry(
+            id: "components",
+            title: "电脑八大件展示",
+            subtitle: "用 3D 模型认识核心配件",
+            symbol: "cube.transparent",
+            badge: "认识"
+        ),
+        GuideHomeEntry(
+            id: "preparation",
+            title: "装机前需准备和了解的事",
+            subtitle: "工具、兼容性、顺序先理清",
+            symbol: "list.bullet.clipboard",
+            badge: "准备"
+        ),
+        GuideHomeEntry(
+            id: "faq",
+            title: "常见问题答疑解惑",
+            subtitle: "静电、硅脂、风扇、BIOS",
+            symbol: "questionmark.bubble",
+            badge: "答疑"
+        )
     ]
 
-    static let ssdInstallPhases = [
-        CPUInstallPhase(id: "remove-heatsink", title: "拆下散热片", subtitle: "先卸下 M.2 散热片和固定螺丝", symbol: "screwdriver"),
-        CPUInstallPhase(id: "align-notch", title: "对齐缺口", subtitle: "金手指缺口对准 M.2 插槽", symbol: "rectangle.and.text.magnifyingglass"),
-        CPUInstallPhase(id: "insert-angle", title: "斜插 SSD", subtitle: "约 30 度角轻轻插入插槽", symbol: "arrow.down.forward"),
-        CPUInstallPhase(id: "press-fix", title: "压平固定", subtitle: "压平尾端后拧紧固定螺丝", symbol: "arrow.down.to.line.compact"),
-        CPUInstallPhase(id: "reinstall-heatsink", title: "装回散热片", subtitle: "撕掉导热垫保护膜再装回", symbol: "checkmark")
+    static let guideSections = [
+        GuideSection(
+            id: "troubleshooting",
+            title: "点不亮排查助手",
+            subtitle: "从供电、线材、内存、显卡到主板灯号，一步一步排除。",
+            symbol: "wrench.and.screwdriver",
+            badge: "救急",
+            items: [
+                GuideSectionItem(id: "power", title: "先看供电", text: "确认插排有电、电源开关拨到 I、24Pin 主板供电和 CPU 8Pin 都插到底。", symbol: "bolt"),
+                GuideSectionItem(id: "memory", title: "只留一根内存", text: "优先插主板说明书推荐的插槽，拔插时听到两侧卡扣回弹。很多点不亮都卡在这里。", symbol: "rectangle.stack"),
+                GuideSectionItem(id: "display", title: "显示器线插哪", text: "有独立显卡时，视频线要插显卡接口，不要插主板接口。这个坑非常会装无辜。", symbol: "display"),
+                GuideSectionItem(id: "minimal", title: "最小化启动", text: "只保留 CPU、散热器、一根内存、显卡和电源，先让机器成功进 BIOS。", symbol: "checklist")
+            ]
+        ),
+        GuideSection(
+            id: "faq",
+            title: "常见问题答疑解惑",
+            subtitle: "把新手最容易纠结的问题放在一起，先用人话讲清楚。",
+            symbol: "questionmark.bubble",
+            badge: "答疑",
+            items: [
+                GuideSectionItem(id: "static", title: "装机会不会被静电打坏？", text: "正常家庭环境概率不高。装机前摸一下机箱金属边框，避免在毛毯上反复摩擦就够用了。", symbol: "hand.raised"),
+                GuideSectionItem(id: "paste", title: "硅脂涂多少？", text: "CPU 中间一粒黄豆大小即可。压上散热器后它会自己摊开，不需要涂成壁画。", symbol: "drop"),
+                GuideSectionItem(id: "fans", title: "风扇方向怎么看？", text: "多数风扇有支架的一面是出风面。机箱通常前进后出、下进上出。", symbol: "fan"),
+                GuideSectionItem(id: "bios", title: "第一次开机要做什么？", text: "能进 BIOS 后先确认 CPU、内存、硬盘都被识别，再考虑开 XMP/EXPO 和装系统。", symbol: "gearshape")
+            ]
+        ),
+        GuideSection(
+            id: "preparation",
+            title: "装机前需准备和了解的事",
+            subtitle: "开工前把工具、空间、说明书和风险点准备好，后面会顺很多。",
+            symbol: "list.bullet.clipboard",
+            badge: "准备",
+            items: [
+                GuideSectionItem(id: "tools", title: "准备工具", text: "一把十字螺丝刀、扎带、U 盘系统盘、干净桌面，以及一个放小螺丝的小盒子。", symbol: "screwdriver"),
+                GuideSectionItem(id: "manual", title: "先看主板说明书", text: "内存推荐插槽、前面板针脚、M.2 螺丝位置都在里面。说明书是新手的隐藏队友。", symbol: "book"),
+                GuideSectionItem(id: "compatibility", title: "确认兼容性", text: "检查主板尺寸、CPU 插槽、内存代数、散热器限高、显卡长度和电源功率。", symbol: "checkmark.seal"),
+                GuideSectionItem(id: "order", title: "推荐顺序", text: "桌面上先装 CPU、内存、SSD 和散热器底座，再把主板放进机箱，最后接线。", symbol: "arrow.down.doc")
+            ]
+        )
     ]
-    static let ssdInstallModelNames = ["modern-atx-motherboard-mobile", "desktop-cpu-mobile", "desktop-dimm-ram-mobile", "m2-2280-nvme-ssd-mobile"]
-    static let ssdInstallAnchorName = "m2SlotInstallAnchor"
 
     static let componentIntroItems = [
         GuideComponentIntroItem(
@@ -208,60 +230,4 @@ struct GuideFlow {
             ]
         )
     ]
-
-    static let steps = [
-        GuideStepContent(id: "cpu", number: 1, title: "安装 CPU", summary: "将 CPU 放入主板插槽", action: "抬起拉杆并打开压框，对准三角标记后轻放 CPU", caution: "不要触碰插槽触点，不要用力按压", symbol: "cpu"),
-        GuideStepContent(id: "memory", number: 2, title: "安装内存", summary: "对准缺口后压入插槽", action: "优先安装 2/4 槽位，双手均匀下压到卡扣回弹", caution: "没有对准缺口时不要强压", symbol: "rectangle.stack"),
-        GuideStepContent(id: "ssd", number: 3, title: "安装 SSD", summary: "固定 M.2 固态硬盘", action: "斜插 SSD，压平后用螺丝固定", caution: "散热片胶膜要撕掉", symbol: "externaldrive"),
-        GuideStepContent(id: "cooler", number: 4, title: "安装散热器", summary: "涂硅脂并压紧散热器", action: "涂黄豆大小硅脂，对角拧紧散热器", caution: "风扇线要接 CPU_FAN", symbol: "fan"),
-        GuideStepContent(id: "board", number: 5, title: "主板入箱", summary: "把主板固定到机箱", action: "确认铜柱位置，对齐背部接口后固定螺丝", caution: "多余铜柱可能造成短路", symbol: "rectangle.3.group"),
-        GuideStepContent(id: "psu", number: 6, title: "安装电源", summary: "固定电源并预留线材", action: "确认风扇朝向，固定电源，预留主供电线", caution: "模组线不要混用其他品牌", symbol: "bolt"),
-        GuideStepContent(id: "cables", number: 7, title: "接电源线", summary: "连接主板和机箱线", action: "接 24pin、CPU 8pin、前面板和风扇线", caution: "CPU 供电和显卡供电不要插错", symbol: "cable.connector"),
-        GuideStepContent(id: "gpu", number: 8, title: "安装显卡", summary: "把显卡插入 PCIe 插槽", action: "打开卡扣，插入显卡，固定挡板螺丝", caution: "显示器线要接到显卡接口", symbol: "display"),
-        GuideStepContent(id: "boot", number: 9, title: "首次开机", summary: "检查是否能点亮", action: "接显示器键盘，打开电源，按机箱开机键", caution: "首次开机可能会训练内存较久", symbol: "power"),
-        GuideStepContent(id: "finish", number: 10, title: "收尾检查", summary: "检查温度和线材", action: "确认硬件识别、温度正常，再整理线材", caution: "不要带电整理机箱内部线材", symbol: "checkmark.seal")
-    ]
-
-    private(set) var isShowingComponentIntro = true
-    private(set) var currentIndex = 0
-
-    var currentStep: GuideStepContent {
-        Self.steps[currentIndex]
-    }
-
-    var canGoPrevious: Bool {
-        currentIndex > 0
-    }
-
-    var canGoNext: Bool {
-        currentIndex < Self.steps.count - 1
-    }
-
-    var progressFraction: Double {
-        guard Self.steps.count > 1 else { return 1 }
-        return Double(currentIndex) / Double(Self.steps.count - 1)
-    }
-
-    mutating func startAssembly() {
-        isShowingComponentIntro = false
-        currentIndex = 0
-    }
-
-    mutating func showComponentIntro() {
-        isShowingComponentIntro = true
-        currentIndex = 0
-    }
-
-    mutating func goPrevious() {
-        currentIndex = max(currentIndex - 1, 0)
-    }
-
-    mutating func goNext() {
-        currentIndex = min(currentIndex + 1, Self.steps.count - 1)
-    }
-
-    mutating func jump(to index: Int) {
-        guard Self.steps.indices.contains(index) else { return }
-        currentIndex = index
-    }
 }

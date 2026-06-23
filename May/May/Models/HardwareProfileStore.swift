@@ -23,4 +23,8 @@ struct HardwareProfileStore {
         guard let data = try? JSONEncoder().encode(profile) else { return }
         defaults.set(data, forKey: key)
     }
+
+    func clear() {
+        defaults.removeObject(forKey: key)
+    }
 }

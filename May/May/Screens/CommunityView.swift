@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct CommunityView: View {
-    @Binding var selectedTab: AppTab
-    let onSelectTab: (AppTab) -> Void
-    let onComposePost: () -> Void
-
+    @ObservedObject var session: AppSession
     @State private var selectedPost: CommunityPost?
-    private let posts = CommunityPost.featuredFeed
+    @State private var posts: [CommunityPost] = []
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var showsComposer = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -15,9 +15,30 @@ struct CommunityView: View {
             ZStack(alignment: .bottom) {
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 0) {
-                        CommunityHeader()
+                        CommunityHeader(onCompose: { showsComposer = true })
                             .padding(.top, 8)
                             .padding(.bottom, 18)
+
+                        if isLoading && posts.isEmpty {
+                            ProgressView("正在加载社区...")
+                                .padding(.top, 60)
+                        } else if let errorMessage, posts.isEmpty {
+                            ContentUnavailableView(
+                                "社区加载失败",
+                                systemImage: "wifi.exclamationmark",
+                                description: Text(errorMessage)
+                            )
+                            Button("重试") { loadFeed() }
+                                .buttonStyle(.borderedProminent)
+                                .tint(AppTheme.primaryButton)
+                        } else if posts.isEmpty {
+                            ContentUnavailableView(
+                                "暂时没有帖子",
+                                systemImage: "bubble.left.and.bubble.right",
+                                description: Text("发布第一条装机讨论吧")
+                            )
+                            .padding(.top, 40)
+                        }
 
                         ForEach(posts) { post in
                             Button {
@@ -34,20 +55,52 @@ struct CommunityView: View {
                     .padding(.bottom, 118)
                     .frame(maxWidth: .infinity)
                 }
-
-                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                    .frame(width: contentWidth)
             }
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
         }
         .sheet(item: $selectedPost) { post in
-            CommunityDetailView(post: post)
+            CommunityDetailView(
+                session: session,
+                post: post,
+                onContentChanged: loadFeed
+            )
+        }
+        .sheet(isPresented: $showsComposer) {
+            CommunityComposerView(
+                session: session,
+                onPublished: {
+                    showsComposer = false
+                    loadFeed()
+                }
+            )
+        }
+        .task { await loadFeedAsync() }
+    }
+
+    private func loadFeed() {
+        Task { await loadFeedAsync() }
+    }
+
+    private func loadFeedAsync() async {
+        guard let token = session.accessToken else {
+            errorMessage = "登录状态已失效，请重新登录"
+            return
+        }
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            posts = try await session.api.communityFeed(token: token)
+            errorMessage = nil
+        } catch {
+            errorMessage = (error as? LocalizedError)?.errorDescription ?? "网络请求失败"
         }
     }
 }
 
 private struct CommunityHeader: View {
+    let onCompose: () -> Void
+
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 6) {
@@ -62,11 +115,14 @@ private struct CommunityHeader: View {
 
             Spacer()
 
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 34, height: 34)
-                .accessibilityLabel("搜索")
+            Button(action: onCompose) {
+                Image(systemName: "square.and.pencil")
+                    .font(.system(size: 23, weight: .medium))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .frame(width: 38, height: 38)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("发布帖子")
         }
     }
 }
@@ -218,5 +274,5 @@ struct CommunityStatsBar: View {
 }
 
 #Preview {
-    CommunityView(selectedTab: .constant(.community), onSelectTab: { _ in }, onComposePost: {})
+    CommunityView(session: AppSession())
 }

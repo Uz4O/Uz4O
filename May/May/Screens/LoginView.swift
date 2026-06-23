@@ -7,6 +7,8 @@ struct LoginView: View {
     @State private var consent = LoginConsentState()
     @State private var presentedLegalDocument: LegalDocument?
     @State private var showsConsentReminder = false
+    @State private var hasSentCode = false
+    @State private var requestError: String?
 
     var body: some View {
         GeometryReader { proxy in
@@ -19,7 +21,9 @@ struct LoginView: View {
                     LoginForm(
                         phoneNumber: $phoneNumber,
                         verificationCode: $verificationCode,
-                        onLogin: authenticate
+                        hasSentCode: hasSentCode,
+                        isSubmitting: false,
+                        onSubmit: authenticate
                     )
                     .padding(.top, 30)
 
@@ -57,6 +61,11 @@ struct LoginView: View {
         } message: {
             Text("请先阅读并同意用户协议和隐私政策。")
         }
+        .alert("登录失败", isPresented: errorIsPresented) {
+            Button("知道了", role: .cancel) { requestError = nil }
+        } message: {
+            Text(requestError ?? "请稍后重试")
+        }
     }
 
     private func authenticate() {
@@ -64,7 +73,28 @@ struct LoginView: View {
             showsConsentReminder = true
             return
         }
-        onLogin()
+        guard DevelopmentLoginMode.isValidPhone(phoneNumber) else {
+            requestError = "请输入有效手机号"
+            return
+        }
+
+        if hasSentCode {
+            guard DevelopmentLoginMode.canCompleteLogin(phone: phoneNumber, code: verificationCode, consent: consent) else {
+                requestError = "开发测试阶段请使用验证码 \(DevelopmentLoginMode.testVerificationCode)"
+                return
+            }
+            onLogin()
+        } else {
+            verificationCode = DevelopmentLoginMode.testVerificationCode
+            hasSentCode = true
+        }
+    }
+
+    private var errorIsPresented: Binding<Bool> {
+        Binding(
+            get: { requestError != nil },
+            set: { if !$0 { requestError = nil } }
+        )
     }
 }
 
@@ -109,7 +139,9 @@ private struct LoginHero: View {
 private struct LoginForm: View {
     @Binding var phoneNumber: String
     @Binding var verificationCode: String
-    let onLogin: () -> Void
+    let hasSentCode: Bool
+    let isSubmitting: Bool
+    let onSubmit: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -159,8 +191,8 @@ private struct LoginForm: View {
             )
             .shadow(color: Color.black.opacity(0.022), radius: 10, x: 0, y: 7)
 
-            Button(action: onLogin) {
-                Text("获取验证码")
+            Button(action: onSubmit) {
+                Text(isSubmitting ? "请稍候..." : (hasSentCode ? "登录" : "获取验证码"))
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -169,6 +201,8 @@ private struct LoginForm: View {
                     .shadow(color: Color.black.opacity(0.14), radius: 14, x: 0, y: 8)
             }
             .buttonStyle(.plain)
+            .disabled(isSubmitting)
+            .opacity(isSubmitting ? 0.65 : 1)
         }
     }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum LegalDocument: String, CaseIterable, Identifiable {
+enum LegalDocument: String, CaseIterable, Hashable, Identifiable {
     case userAgreement = "UserAgreement"
     case privacyPolicy = "PrivacyPolicy"
     case thirdPartySharing = "ThirdPartySharingList"
@@ -49,4 +49,21 @@ enum AIContentDisclosure {
 enum LegalContact {
     static let operatorName = "孙裕凤"
     static let email = "youz66811@gmail.com"
+}
+
+enum DevelopmentLoginMode {
+    static let testVerificationCode = "123456"
+    static let restoresBackendSession = false
+
+    static func canRequestCode(phone: String, consent: LoginConsentState) -> Bool {
+        consent.canAuthenticate && isValidPhone(phone)
+    }
+
+    static func canCompleteLogin(phone: String, code: String, consent: LoginConsentState) -> Bool {
+        canRequestCode(phone: phone, consent: consent) && code == testVerificationCode
+    }
+
+    static func isValidPhone(_ phone: String) -> Bool {
+        phone.range(of: #"^\+?[0-9]{5,32}$"#, options: .regularExpression) != nil
+    }
 }

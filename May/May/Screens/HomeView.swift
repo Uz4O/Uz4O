@@ -2,9 +2,6 @@ import SwiftUI
 
 struct HomeView: View {
     let profile: OnboardingProfile
-    @Binding var selectedTab: AppTab
-    let onSelectTab: (AppTab) -> Void
-    let onComposePost: () -> Void
     let onOpenAI: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenGuide: () -> Void
@@ -62,9 +59,6 @@ struct HomeView: View {
                     .padding(.bottom, 104)
                     .frame(maxWidth: .infinity)
                 }
-
-                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                    .frame(width: contentWidth)
             }
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
@@ -257,10 +251,7 @@ private struct HomeFeatureCard: View {
 
 #Preview {
     HomeView(
-        profile: OnboardingProfile(preference: .balanced),
-        selectedTab: .constant(.home),
-        onSelectTab: { _ in },
-        onComposePost: {},
+        profile: OnboardingProfile(),
         onOpenAI: {},
         onOpenUpgrade: {},
         onOpenGuide: {},

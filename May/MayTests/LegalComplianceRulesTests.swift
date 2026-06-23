@@ -21,12 +21,28 @@ struct LegalComplianceRulesTests {
         precondition(AIContentDisclosure.text.contains("AI 辅助生成"))
         assertEqual(LegalContact.operatorName, "孙裕凤", "Operator metadata must stay consistent.")
         assertEqual(LegalContact.email, "youz66811@gmail.com", "Contact metadata must stay consistent.")
+
+        let communityGuidelines = try! String(
+            contentsOfFile: "May/May/Legal/CommunityGuidelines.md",
+            encoding: .utf8
+        )
+        assertContains(communityGuidelines, "未满14周岁", "Community rules must repeat the child age boundary.")
+        assertContains(communityGuidelines, "网络暴力", "Community rules must cover online violence and harassment.")
+        assertContains(communityGuidelines, "价格、性能、兼容性", "Community rules must cover hardware advice risk.")
+        assertContains(communityGuidelines, "优先处理涉未成年人", "Community rules must prioritize minor-related reports.")
+        assertContains(communityGuidelines, "15个工作日", "Community appeal response timing should stay visible.")
         print("LegalComplianceRulesTests passed")
     }
 
     private static func assertEqual<T: Equatable>(_ actual: T, _ expected: T, _ message: String) {
         guard actual == expected else {
             fatalError("\(message)\nExpected: \(expected)\nActual: \(actual)")
+        }
+    }
+
+    private static func assertContains(_ text: String, _ expectedFragment: String, _ message: String) {
+        guard text.contains(expectedFragment) else {
+            fatalError("\(message)\nMissing: \(expectedFragment)")
         }
     }
 }

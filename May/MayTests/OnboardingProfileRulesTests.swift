@@ -9,43 +9,26 @@ struct OnboardingProfileRulesTests {
             "Skipped users should see the default home priority."
         )
 
-        let balancedProfile = OnboardingProfile(preference: .balanced)
+        let onboardingProfile = OnboardingProfile()
         assertEqual(
-            balancedProfile.homeFeatureOrder.map(\.title),
+            onboardingProfile.homeFeatureOrder.map(\.title),
             ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Onboarding should not segment users into different home priorities."
-        )
-
-        let performanceProfile = OnboardingProfile(preference: .performance)
-        assertEqual(
-            performanceProfile.homeFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Preference should not segment users into different home priorities."
-        )
-
-        let aestheticProfile = OnboardingProfile(preference: .aesthetic)
-        assertEqual(
-            aestheticProfile.homeFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Aesthetic preference should not change home functions."
+            "Onboarding should keep the default home priority."
         )
 
         assertEqual(
-            performanceProfile.homeHeroButtonTitle,
+            onboardingProfile.homeHeroButtonTitle,
             "开始装机",
-            "Hero button copy should not change based on preference."
+            "Hero button copy should stay stable."
         )
 
         assertEqual(
-            performanceProfile.homeHeroSubtitle,
+            onboardingProfile.homeHeroSubtitle,
             "智能推荐最佳配置方案",
             "Hero subtitle should keep the original copy."
         )
 
-        let skippedHardwareProfile = OnboardingProfile(
-            preference: .balanced,
-            hardwareProfile: .skipped
-        )
+        let skippedHardwareProfile = OnboardingProfile(hardwareProfile: .skipped)
         assertEqual(
             skippedHardwareProfile.hardwareProfile.wasSkipped,
             true,
@@ -53,7 +36,6 @@ struct OnboardingProfileRulesTests {
         )
 
         let completedHardwareProfile = OnboardingProfile(
-            preference: .balanced,
             hardwareProfile: HardwareProfile(
                 cpu: HardwareProfileOptions.cpu[0],
                 gpu: HardwareProfileOptions.gpu[1],
@@ -112,27 +94,15 @@ struct OnboardingProfileRulesTests {
         )
 
         assertEqual(
-            ComputerOwnershipChoice.hasComputer.shouldCollectHardwareBeforePreference,
-            true,
-            "Users with an existing computer should record hardware before choosing their preference."
+            BuildPreference.aiBuildOptions.map(\.title),
+            ["性能优先", "颜值优先", "均衡搭配"],
+            "AI build preferences should use the requested order and labels."
         )
 
         assertEqual(
-            ComputerOwnershipChoice.noComputer.shouldCollectHardwareBeforePreference,
-            false,
-            "Users without an existing computer should skip hardware collection and choose their preference before entering the app."
-        )
-
-        assertEqual(
-            balancedProfile.preferenceLabel,
-            "均衡推荐",
-            "Balanced preference should keep the default label."
-        )
-
-        assertEqual(
-            performanceProfile.preferenceLabel,
-            "性能优先",
-            "Performance preference should use the chosen label."
+            BuildPreference.defaultAISelection,
+            .balanced,
+            "AI build preference should default to balanced."
         )
 
         print("OnboardingProfileRulesTests passed")

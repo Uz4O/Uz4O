@@ -37,38 +37,19 @@ enum BuildPreference: String, CaseIterable, Identifiable {
     case performance
     case aesthetic
 
+    static let aiBuildOptions: [BuildPreference] = [.performance, .aesthetic, .balanced]
+    static let defaultAISelection: BuildPreference = .balanced
+
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .balanced:
-            return "均衡推荐"
+            return "均衡搭配"
         case .performance:
             return "性能优先"
         case .aesthetic:
             return "颜值优先"
-        }
-    }
-
-    var subtitle: String {
-        switch self {
-        case .balanced:
-            return "性能和外观都照顾一点，适合大多数人"
-        case .performance:
-            return "同预算优先把钱花在 CPU、显卡、内存和电源上"
-        case .aesthetic:
-            return "更重视外观，但会帮你避开好看却不值的搭配"
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .balanced:
-            return "scale.3d"
-        case .performance:
-            return "bolt.fill"
-        case .aesthetic:
-            return "paintpalette.fill"
         }
     }
 }
@@ -81,15 +62,6 @@ enum HomeFeatureKind: String {
     case upgrade
     case compatibility
     case diy
-}
-
-enum ComputerOwnershipChoice {
-    case hasComputer
-    case noComputer
-
-    var shouldCollectHardwareBeforePreference: Bool {
-        self == .hasComputer
-    }
 }
 
 struct HardwareOptionCategory: Equatable, Identifiable {
@@ -268,19 +240,13 @@ struct HomeFeatureDisplay: Equatable {
 }
 
 struct OnboardingProfile: Equatable {
-    var preference: BuildPreference
     var hardwareProfile: HardwareProfile
 
-    init(preference: BuildPreference, hardwareProfile: HardwareProfile = .skipped) {
-        self.preference = preference
+    init(hardwareProfile: HardwareProfile = .skipped) {
         self.hardwareProfile = hardwareProfile
     }
 
-    static let skipped = OnboardingProfile(preference: .balanced, hardwareProfile: .skipped)
-
-    var preferenceLabel: String {
-        preference.title
-    }
+    static let skipped = OnboardingProfile()
 
     var homeHeroSubtitle: String {
         "智能推荐最佳配置方案"

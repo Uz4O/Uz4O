@@ -10,7 +10,7 @@ struct CommunityContentRulesTests {
         )
 
         assertEqual(
-            AppTab.community.icon,
+            AppTab.community.icon(isSelected: true),
             "bubble.left.and.bubble.right.fill",
             "Community tab should use the chat icon from the design."
         )
@@ -72,6 +72,50 @@ struct CommunityContentRulesTests {
             draft.selectedTopicTitles,
             ["求助问答"],
             "Composer should allow removing an already selected topic."
+        )
+
+        assertEqual(
+            CommunityPost.featuredFeed[0].availableActions,
+            [.report, .block],
+            "Posts owned by another account should expose report and block."
+        )
+
+        let ownedPost = CommunityPost(
+            id: "owned",
+            author: CommunityAuthor(id: "me", name: "我", subtitle: "刚刚", avatarInitial: "我"),
+            summary: "我的装机配置",
+            body: "用于验证所有者操作的正文",
+            createdAt: "刚刚",
+            tags: [],
+            parts: [],
+            stats: CommunityStats(likes: 0, comments: 0, saves: 0),
+            isPinned: false,
+            image: nil,
+            isOwnedByCurrentAccount: true
+        )
+        assertEqual(
+            ownedPost.availableActions,
+            [.delete],
+            "An owned post should expose delete instead of report or block."
+        )
+
+        assertEqual(
+            CommunityReportReason.allCases.map(\.rawValue),
+            ["illegal", "harassment", "privacy", "spam", "infringement", "other"],
+            "Report reasons must match backend literals."
+        )
+
+        draft = CommunityComposerDraft()
+        assertEqual(
+            draft.canPublish(content: "一条有效的装机内容"),
+            false,
+            "Publishing must stay disabled before accepting community guidelines."
+        )
+        draft.hasAcceptedGuidelines = true
+        assertEqual(
+            draft.canPublish(content: "一条有效的装机内容"),
+            true,
+            "Accepted guidelines and valid content should enable publishing."
         )
 
         print("CommunityContentRulesTests passed")

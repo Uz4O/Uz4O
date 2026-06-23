@@ -3,9 +3,7 @@ import SwiftUI
 struct OnboardingChoiceView: View {
     let onFinish: (OnboardingProfile) -> Void
 
-    @State private var selectedPreference: BuildPreference = .balanced
     @State private var hardwareProfile: HardwareProfile
-    @State private var computerOwnership: ComputerOwnershipChoice = .noComputer
     @State private var step: OnboardingStep = .computerOwnership
 
     init(initialHardwareProfile: HardwareProfile = .skipped, onFinish: @escaping (OnboardingProfile) -> Void) {
@@ -24,7 +22,6 @@ struct OnboardingChoiceView: View {
                     HStack(spacing: 8) {
                         ProgressPill(isActive: step == .computerOwnership)
                         ProgressPill(isActive: step == .hardwareProfile)
-                        ProgressPill(isActive: step == .preference)
                         Spacer()
                         Button {
                             onFinish(.skipped)
@@ -45,17 +42,13 @@ struct OnboardingChoiceView: View {
                         ComputerOwnershipStep(
                             contentWidth: contentWidth,
                             onHasComputer: {
-                                computerOwnership = .hasComputer
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     step = .hardwareProfile
                                 }
                             },
                             onNoComputer: {
-                                computerOwnership = .noComputer
                                 hardwareProfile = .skipped
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    step = .preference
-                                }
+                                onFinish(.skipped)
                             }
                         )
                         .tag(OnboardingStep.computerOwnership)
@@ -70,33 +63,14 @@ struct OnboardingChoiceView: View {
                             },
                             onSkip: {
                                 hardwareProfile = .skipped
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    step = .preference
-                                }
+                                onFinish(.skipped)
                             },
                             onFinish: {
                                 hardwareProfile = savedHardwareProfile()
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    step = .preference
-                                }
+                                onFinish(OnboardingProfile(hardwareProfile: hardwareProfile))
                             }
                         )
                         .tag(OnboardingStep.hardwareProfile)
-
-                        PreferenceStep(
-                            contentWidth: contentWidth,
-                            selectedPreference: $selectedPreference,
-                            primaryButtonTitle: "进入 App",
-                            onBack: {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    step = computerOwnership.shouldCollectHardwareBeforePreference ? .hardwareProfile : .computerOwnership
-                                }
-                            },
-                            onFinish: {
-                                onFinish(OnboardingProfile(preference: selectedPreference, hardwareProfile: hardwareProfile))
-                            }
-                        )
-                        .tag(OnboardingStep.preference)
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
                 }
@@ -120,7 +94,6 @@ struct OnboardingChoiceView: View {
 private enum OnboardingStep {
     case computerOwnership
     case hardwareProfile
-    case preference
 }
 
 private struct ProgressPill: View {
@@ -172,7 +145,7 @@ private struct ComputerOwnershipStep: View {
 
                 OnboardingRouteCard(
                     title: "没有电脑，先跳过",
-                    subtitle: "先进入偏好选择，\n不需要填写或选择硬件配置。",
+                    subtitle: "直接进入 App，之后仍可在「我的」页面补充电脑配置。",
                     icon: "forward.end",
                     action: onNoComputer
                 )
@@ -189,66 +162,6 @@ private struct ComputerOwnershipStep: View {
             }
             .foregroundStyle(AppTheme.mutedText)
             .padding(.bottom, 88)
-        }
-        .frame(width: contentWidth)
-        .frame(maxWidth: .infinity)
-    }
-}
-
-private struct PreferenceStep: View {
-    let contentWidth: CGFloat
-    @Binding var selectedPreference: BuildPreference
-    let primaryButtonTitle: String
-    let onBack: () -> Void
-    let onFinish: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            HStack {
-                Button(action: onBack) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                        Text("返回")
-                    }
-                    .font(.appSubheadline)
-                    .foregroundStyle(AppTheme.secondaryText)
-                }
-                .buttonStyle(.plain)
-
-                Spacer()
-            }
-            .padding(.top, 24)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("你希望电脑更偏哪种风格？")
-                    .font(.appLargeTitle)
-                    .foregroundStyle(AppTheme.primaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Text("这个偏好会影响后续配置建议，你也可以之后再修改。")
-                    .font(.appBody)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .lineSpacing(4)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            VStack(spacing: 10) {
-                ForEach(BuildPreference.allCases) { preference in
-                    OnboardingOptionCard(
-                        title: preference.title,
-                        subtitle: preference.subtitle,
-                        icon: preference.icon,
-                        isSelected: selectedPreference == preference
-                    ) {
-                        selectedPreference = preference
-                    }
-                }
-            }
-
-            Spacer()
-
-            PrimaryButton(title: primaryButtonTitle, icon: "arrow.right", action: onFinish)
-                .padding(.bottom, 28)
         }
         .frame(width: contentWidth)
         .frame(maxWidth: .infinity)
@@ -313,7 +226,7 @@ private struct HardwareProfileStep: View {
                 .padding(.bottom, 10)
             }
 
-            PrimaryButton(title: "保存并继续", icon: "arrow.right", action: onFinish)
+            PrimaryButton(title: "保存并进入 App", icon: "arrow.right", action: onFinish)
                 .padding(.bottom, 28)
         }
         .frame(width: contentWidth)
@@ -484,51 +397,6 @@ private struct OnboardingComputerIllustration: View {
         Image("OnboardingComputerIllustration")
             .resizable()
             .scaledToFit()
-    }
-}
-
-private struct OnboardingOptionCard: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 14) {
-                Image(systemName: icon)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
-                    .frame(width: 42, height: 42)
-                    .background(isSelected ? AppTheme.primaryText : AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
-
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(title)
-                        .font(.appHeadline)
-                        .foregroundStyle(AppTheme.primaryText)
-                    Text(subtitle)
-                        .font(.appBody)
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                Spacer()
-
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(isSelected ? AppTheme.success : AppTheme.border)
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, minHeight: 92, alignment: .leading)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 1.5 : 1)
-            )
-            .modifier(AppTheme.cardShadow)
-        }
-        .buttonStyle(.plain)
     }
 }
 

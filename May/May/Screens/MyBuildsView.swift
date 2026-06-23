@@ -2,9 +2,6 @@ import SwiftUI
 
 struct MyBuildsView: View {
     let hardwareProfile: HardwareProfile
-    @Binding var selectedTab: AppTab
-    let onSelectTab: (AppTab) -> Void
-    let onComposePost: () -> Void
     let onOpenPlan: () -> Void
     let onCreate: () -> Void
     let onOpenComputerProfile: () -> Void
@@ -60,9 +57,6 @@ struct MyBuildsView: View {
                         transaction.animation = nil
                     }
                 }
-
-                BottomTabBar(selectedTab: $selectedTab, onSelect: onSelectTab, onComposePost: onComposePost)
-                    .frame(width: contentWidth)
             }
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
@@ -375,9 +369,6 @@ private struct ConfigDivider: View {
             storage: "Samsung 990 PRO · 1TB · PCIe 4.0",
             powerSupply: "Corsair RM750e · 750W · 80+ Gold"
         ),
-        selectedTab: .constant(.builds),
-        onSelectTab: { _ in },
-        onComposePost: {},
         onOpenPlan: {},
         onCreate: {},
         onOpenComputerProfile: {},

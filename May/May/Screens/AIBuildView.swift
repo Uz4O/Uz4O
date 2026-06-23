@@ -9,6 +9,7 @@ struct AIBuildView: View {
     @State private var presentedGameCategory: GameCategory?
     @State private var selectedOfficeApps: Set<String> = []
     @State private var purchasePreference = "全新优先"
+    @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
     @State private var cpuPreference = "任意"
     @State private var gpuPreference = "任意"
@@ -44,6 +45,12 @@ struct AIBuildView: View {
                 .padding(.horizontal, AppTheme.screenPadding)
             }
 
+            Text(AIContentDisclosure.text)
+                .font(.appCaption)
+                .foregroundStyle(AppTheme.secondaryText)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, AppTheme.screenPadding)
+
             WizardBottomBar(
                 canGoBack: currentStep.previous != nil,
                 primaryTitle: currentStep.next == nil ? "生成配置方案" : "下一步",
@@ -76,6 +83,17 @@ struct AIBuildView: View {
 
         case .purchase:
             PreferenceSegmentGroup(title: "购买偏好", options: purchaseOptions, selected: $purchasePreference)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("装机偏好")
+                    .font(.appSubheadline)
+                    .foregroundStyle(AppTheme.primaryText)
+
+                LiquidGlassSegmentedPicker(
+                    options: BuildPreference.aiBuildOptions,
+                    selection: $selectedBuildPreference,
+                    title: \.title
+                )
+            }
             PreferenceSegmentGroup(
                 title: "主机颜色偏好",
                 options: ["曜石黑", "纯净白"],

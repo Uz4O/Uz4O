@@ -17,6 +17,7 @@ struct CommunityTopic: Equatable, Identifiable {
 }
 
 struct CommunityAuthor: Equatable {
+    let id: String
     let name: String
     let subtitle: String
     let avatarInitial: String
@@ -55,11 +56,16 @@ struct CommunityPost: Equatable, Identifiable {
     let stats: CommunityStats
     let isPinned: Bool
     let image: CommunityPostImage?
+    let isOwnedByCurrentAccount: Bool
+
+    var availableActions: [CommunityAction] {
+        isOwnedByCurrentAccount ? [.delete] : [.report, .block]
+    }
 
     static let featuredFeed = [
         CommunityPost(
             id: "value-build-may",
-            author: CommunityAuthor(name: "装机达人小明", subtitle: "30 分钟前", avatarInitial: "明"),
+            author: CommunityAuthor(id: "featured-author-1", name: "装机达人小明", subtitle: "30 分钟前", avatarInitial: "明"),
             summary: "分享一套 5000 元左右的高性价比配置，适合游戏和生产力需求。",
             body: "这套配置把预算优先放在显卡和稳定电源上，CPU 选择够用不浪费的 i5 档位，适合 2K 游戏、日常剪辑和长期升级。",
             createdAt: "30 分钟前",
@@ -78,11 +84,12 @@ struct CommunityPost: Equatable, Identifiable {
                 assetName: "PCTower",
                 aspectRatio: 1,
                 accessibilityLabel: "白色台式主机"
-            )
+            ),
+            isOwnedByCurrentAccount: false
         ),
         CommunityPost(
             id: "i5-vs-7800x3d",
-            author: CommunityAuthor(name: "硬核玩家阿杰", subtitle: "1 小时前", avatarInitial: "杰"),
+            author: CommunityAuthor(id: "featured-author-2", name: "硬核玩家阿杰", subtitle: "1 小时前", avatarInitial: "杰"),
             summary: "最近在纠结这两颗 CPU，主要用途是游戏，求大佬给点建议。",
             body: "预算够但不想乱花钱，显示器是 2K 165Hz。希望游戏帧率稳，也希望平时开浏览器和语音时别卡。",
             createdAt: "1 小时前",
@@ -95,11 +102,12 @@ struct CommunityPost: Equatable, Identifiable {
             ],
             stats: CommunityStats(likes: 86, comments: 194, saves: 512),
             isPinned: false,
-            image: nil
+            image: nil,
+            isOwnedByCurrentAccount: false
         ),
         CommunityPost(
             id: "water-vs-air-cooling",
-            author: CommunityAuthor(name: "散热研究所", subtitle: "2 小时前", avatarInitial: "散"),
+            author: CommunityAuthor(id: "featured-author-3", name: "散热研究所", subtitle: "2 小时前", avatarInitial: "散"),
             summary: "实测对比了多款 360 水冷和风冷散热器，数据说话。",
             body: "如果不追求极限超频，高规格风冷已经能覆盖很多日常场景。360 水冷更适合高功耗 CPU、海景房外观和低温展示需求。",
             createdAt: "2 小时前",
@@ -112,7 +120,8 @@ struct CommunityPost: Equatable, Identifiable {
             ],
             stats: CommunityStats(likes: 64, comments: 128, saves: 256),
             isPinned: false,
-            image: nil
+            image: nil,
+            isOwnedByCurrentAccount: false
         )
     ]
 }
@@ -121,6 +130,7 @@ struct CommunityComposerDraft: Equatable {
     static let characterLimit = 1000
 
     var text = ""
+    var hasAcceptedGuidelines = false
     private(set) var selectedTopicTitles: [String] = ["装机配置"]
 
     mutating func toggleTopic(_ title: String) {
@@ -129,5 +139,51 @@ struct CommunityComposerDraft: Equatable {
         } else {
             selectedTopicTitles.append(title)
         }
+    }
+
+    func canPublish(content: String) -> Bool {
+        let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
+        return hasAcceptedGuidelines
+            && trimmed.count >= 4
+            && trimmed.count <= Self.characterLimit
+            && !selectedTopicTitles.isEmpty
+    }
+}
+
+enum CommunityAction: Equatable {
+    case delete
+    case report
+    case block
+}
+
+enum CommunityReportReason: String, CaseIterable, Equatable {
+    case illegal
+    case harassment
+    case privacy
+    case spam
+    case infringement
+    case other
+
+    var title: String {
+        switch self {
+        case .illegal: "违法有害"
+        case .harassment: "骚扰攻击"
+        case .privacy: "泄露隐私"
+        case .spam: "垃圾广告"
+        case .infringement: "侵权内容"
+        case .other: "其他问题"
+        }
+    }
+}
+
+struct CommunityComment: Equatable, Identifiable {
+    let id: String
+    let author: CommunityAuthor
+    let body: String
+    let createdAt: String
+    let isOwnedByCurrentAccount: Bool
+
+    var availableActions: [CommunityAction] {
+        isOwnedByCurrentAccount ? [.delete] : [.report, .block]
     }
 }
