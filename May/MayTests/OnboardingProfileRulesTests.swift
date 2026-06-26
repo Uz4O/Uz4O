@@ -4,16 +4,16 @@ import Foundation
 struct OnboardingProfileRulesTests {
     static func main() {
         assertEqual(
-            OnboardingProfile.skipped.homeFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Skipped users should see the default home priority."
+            OnboardingProfile.skipped.toolFeatureOrder.map(\.title),
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            "Skipped users should see the default tools priority."
         )
 
         let onboardingProfile = OnboardingProfile()
         assertEqual(
-            onboardingProfile.homeFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Onboarding should keep the default home priority."
+            onboardingProfile.toolFeatureOrder.map(\.title),
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            "Onboarding should keep the default tools priority."
         )
 
         assertEqual(
@@ -76,9 +76,9 @@ struct OnboardingProfileRulesTests {
         )
 
         assertEqual(
-            completedHardwareProfile.homeFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南"],
-            "Hardware selections should not change home functions."
+            completedHardwareProfile.toolFeatureOrder.map(\.title),
+            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            "Hardware selections should not change tool functions."
         )
 
         assertEqual(

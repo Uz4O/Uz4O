@@ -91,6 +91,14 @@ struct GuideFlow {
         )
     ]
 
+    static var featuredGuideHomeEntry: GuideHomeEntry {
+        guideHomeEntries[0]
+    }
+
+    static var secondaryGuideHomeEntries: [GuideHomeEntry] {
+        Array(guideHomeEntries.dropFirst())
+    }
+
     static let guideSections = [
         GuideSection(
             id: "troubleshooting",

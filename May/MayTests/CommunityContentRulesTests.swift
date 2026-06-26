@@ -22,6 +22,22 @@ struct CommunityContentRulesTests {
         )
 
         assertEqual(
+            Array(CommunityPost.featuredFeed.prefix(3)).map(\.summary),
+            [
+                "分享一套 5000 元左右的高性价比配置，适合游戏和生产力需求。",
+                "最近在纠结这两颗 CPU，主要用途是游戏，求大佬给点建议。",
+                "实测对比了多款 360 水冷和风冷散热器，数据说话。"
+            ],
+            "Home community preview should reuse the first three curated community summaries."
+        )
+
+        assertEqual(
+            Array(CommunityPost.featuredFeed.prefix(3)).map { $0.stats.comments },
+            [256, 194, 128],
+            "Home community preview metadata should expose reply counts from curated posts."
+        )
+
+        assertEqual(
             CommunityPost.featuredFeed.first?.isPinned,
             true,
             "The first community post should be pinned on the home community preview."

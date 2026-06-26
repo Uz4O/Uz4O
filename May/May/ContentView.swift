@@ -153,15 +153,13 @@ private struct MainTabView: View {
         TabView(selection: $selectedTab) {
             NavigationStack(path: $homePath) {
                 HomeView(
-                    profile: onboardingProfile,
                     onOpenAI: { onPresentFullScreen(.aiBuild(.fromAIBuild)) },
-                    onOpenUpgrade: { homePath.append(.upgrade) },
-                    onOpenGuide: { homePath.append(.guide) },
                     onOpenDIY: { onPresentFullScreen(.diy(.home)) },
                     onOpenConfigReview: { homePath.append(.configReview) },
+                    onOpenUpgrade: { homePath.append(.upgrade) },
+                    onOpenGuide: { homePath.append(.guide) },
                     onOpenCommunity: { selectedTab = .community },
-                    onOpenBuilds: { selectedTab = .builds },
-                    onOpenCompatibility: { homePath.append(.compatibility) }
+                    onOpenBuildRecords: { selectedTab = .builds }
                 )
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: MainRoute.self) { route in

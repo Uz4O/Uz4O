@@ -3,6 +3,7 @@ import SceneKit
 
 private enum GuidePage: Equatable {
     case overview
+    case componentShowcase
     case components
     case section(GuideSection)
 }
@@ -21,6 +22,8 @@ struct GuideView: View {
         switch page {
         case .overview:
             return "装机指南"
+        case .componentShowcase:
+            return "电脑八大件展示"
         case .components:
             return "全部配件"
         case .section(let section):
@@ -45,11 +48,11 @@ struct GuideView: View {
     private var currentPage: some View {
         switch page {
         case .overview:
+            GuideHomePage(contentWidth: contentWidth, onOpen: openHomeEntry)
+                .transition(.opacity)
+        case .componentShowcase:
             ComponentIntroPage(
                 contentWidth: contentWidth,
-                onOpenGuideSection: { section in
-                    page = .section(section)
-                },
                 onOpenComponentCatalogue: {
                     page = .components
                 }
@@ -72,6 +75,18 @@ struct GuideView: View {
         }
     }
 
+    private func openHomeEntry(_ entry: GuideHomeEntry) {
+        if entry.id == "components" {
+            page = .componentShowcase
+            return
+        }
+
+        guard let section = GuideFlow.guideSections.first(where: { $0.id == entry.id }) else {
+            return
+        }
+        page = .section(section)
+    }
+
     private var widthReader: some View {
         GeometryReader { proxy in
             Color.clear
@@ -86,9 +101,194 @@ struct GuideView: View {
 
 }
 
+private struct GuideHomePage: View {
+    let contentWidth: CGFloat
+    let onOpen: (GuideHomeEntry) -> Void
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 18) {
+                GuideHomeIntro()
+
+                FeaturedGuideHomeCard(entry: GuideFlow.featuredGuideHomeEntry) {
+                    onOpen(GuideFlow.featuredGuideHomeEntry)
+                }
+
+                GuideHomeListCard(entries: GuideFlow.secondaryGuideHomeEntries, onOpen: onOpen)
+
+                GuideHomeTip()
+            }
+            .frame(width: contentWidth, alignment: .leading)
+            .padding(.top, 8)
+            .padding(.bottom, 10)
+            .frame(maxWidth: .infinity)
+        }
+    }
+}
+
+private struct GuideHomeIntro: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Text("你想先了解哪一部分？")
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundStyle(AppTheme.primaryText)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text("从排查、认识到准备，帮你一步到位完成装机。")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(AppTheme.secondaryText)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+private struct FeaturedGuideHomeCard: View {
+    let entry: GuideHomeEntry
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("推荐优先")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .padding(.horizontal, 9)
+                        .frame(height: 24)
+                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
+
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(entry.title)
+                            .font(.system(size: 19, weight: .semibold))
+                            .foregroundStyle(AppTheme.primaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        Text(entry.subtitle)
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(AppTheme.secondaryText)
+                            .lineSpacing(3)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    HStack(spacing: 7) {
+                        Text("进入")
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .padding(.top, 2)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 15)
+            .frame(height: 146)
+            .background {
+                Image("GuideTroubleshootingCardBackground")
+                    .resizable()
+                    .scaledToFill()
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(entry.title)，\(entry.subtitle)")
+    }
+}
+
+private struct GuideHomeListCard: View {
+    let entries: [GuideHomeEntry]
+    let onOpen: (GuideHomeEntry) -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                GuideHomeListRow(entry: entry) {
+                    onOpen(entry)
+                }
+
+                if index < entries.count - 1 {
+                    Divider()
+                        .padding(.leading, 70)
+                }
+            }
+        }
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(AppTheme.border, lineWidth: 1)
+        }
+    }
+}
+
+private struct GuideHomeListRow: View {
+    let entry: GuideHomeEntry
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 13) {
+                Image(systemName: entry.symbol)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundStyle(.black)
+                    .frame(width: 46, height: 46)
+                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 14))
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(entry.title)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.86)
+
+                    Text(entry.subtitle)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.86)
+                }
+
+                Spacer(minLength: 8)
+
+                HStack(spacing: 7) {
+                    Text("进入")
+                    Image(systemName: "chevron.right")
+                }
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(AppTheme.primaryText)
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 82)
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(entry.title)，\(entry.subtitle)")
+    }
+}
+
+private struct GuideHomeTip: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "lightbulb")
+                .font(.system(size: 16, weight: .regular))
+                .foregroundStyle(AppTheme.primaryText)
+                .frame(width: 28, height: 28)
+
+            Text("建议先从「准备」和「八大件认识」开始，事半功倍。")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(AppTheme.secondaryText)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 16)
+        .frame(minHeight: 56)
+        .background(AppTheme.softSurface.opacity(0.72), in: RoundedRectangle(cornerRadius: 16))
+    }
+}
+
 private struct ComponentIntroPage: View {
     let contentWidth: CGFloat
-    let onOpenGuideSection: (GuideSection) -> Void
     let onOpenComponentCatalogue: () -> Void
 
     @State private var selectedComponentID = GuideFlow.componentIntroItems[0].id
@@ -104,7 +304,6 @@ private struct ComponentIntroPage: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .center, spacing: 14) {
                     introHero
-                    GuideSectionHub(contentWidth: contentWidth, onOpen: onOpenGuideSection)
                     componentPicker
                     ComponentIntroFeatureCard(item: selectedComponent, contentWidth: contentWidth)
                 }
@@ -186,147 +385,6 @@ private struct ComponentIntroPage: View {
             .buttonStyle(.plain)
         }
         .frame(width: contentWidth)
-    }
-}
-
-private struct GuideSectionHub: View {
-    let contentWidth: CGFloat
-    let onOpen: (GuideSection) -> Void
-
-    private var featuredSection: GuideSection {
-        GuideFlow.guideSections[0]
-    }
-
-    private var supportingSections: [GuideSection] {
-        Array(GuideFlow.guideSections.dropFirst())
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text("新手指南中心")
-                    .font(.system(size: 16, weight: .black))
-                    .foregroundStyle(AppTheme.primaryText)
-
-                Spacer()
-
-                Text("先救急，再学习")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(AppTheme.secondaryText)
-            }
-
-            FeaturedGuideAction(section: featuredSection) {
-                onOpen(featuredSection)
-            }
-
-            HStack(spacing: 10) {
-                ForEach(supportingSections) { section in
-                    CompactGuideAction(section: section) {
-                        onOpen(section)
-                    }
-                }
-            }
-        }
-        .frame(width: contentWidth, alignment: .leading)
-    }
-}
-
-private struct FeaturedGuideAction: View {
-    let section: GuideSection
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 14) {
-                Image(systemName: section.symbol)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(width: 54, height: 54)
-                    .background(AppTheme.primaryText, in: RoundedRectangle(cornerRadius: 16))
-
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack(spacing: 6) {
-                        Text(section.badge)
-                            .font(.system(size: 10, weight: .black))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .padding(.horizontal, 7)
-                            .frame(height: 20)
-                            .background(AppTheme.softSurface, in: Capsule())
-
-                        Text(section.title)
-                            .font(.system(size: 15, weight: .black))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .lineLimit(1)
-                    }
-
-                    Text(section.subtitle)
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                Spacer(minLength: 8)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(AppTheme.secondaryText)
-            }
-            .padding(14)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-            .overlay {
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(AppTheme.border, lineWidth: 1)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(section.title)，\(section.subtitle)")
-    }
-}
-
-private struct CompactGuideAction: View {
-    let section: GuideSection
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 9) {
-                HStack {
-                    Image(systemName: section.symbol)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 34, height: 34)
-                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 11))
-
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(AppTheme.mutedText)
-                }
-
-                Text(section.title)
-                    .font(.system(size: 13, weight: .black))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Text(section.badge)
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(AppTheme.secondaryText)
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity, minHeight: 122, alignment: .leading)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(AppTheme.border, lineWidth: 1)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(section.title)，\(section.subtitle)")
     }
 }
 

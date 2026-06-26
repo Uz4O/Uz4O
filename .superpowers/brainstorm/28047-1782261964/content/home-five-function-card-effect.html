@@ -1,0 +1,219 @@
+<style>
+  .preview-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+  }
+
+  .phone-preview {
+    width: 390px;
+    min-height: 760px;
+    border-radius: 42px;
+    padding: 34px 24px 24px;
+    background:
+      radial-gradient(circle at 18% 10%, rgba(255,255,255,.95), transparent 28%),
+      linear-gradient(145deg, #f8f8fa 0%, #eef2f6 100%);
+    box-shadow: 0 32px 90px rgba(15, 23, 42, .16);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+    color: #06070a;
+  }
+
+  .home-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+
+  .hello {
+    font-size: 36px;
+    line-height: 1;
+    font-weight: 360;
+    letter-spacing: 0;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 68% 20%, #2f8df4 0 7px, transparent 8px),
+      linear-gradient(145deg, #ffffff, #edf0f4);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, .16);
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    font-weight: 390;
+  }
+
+  .primary-card {
+    height: 150px;
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 16% 48%, rgba(200,225,255,.72), transparent 28%),
+      linear-gradient(145deg, rgba(255,255,255,.96), rgba(244,246,250,.92));
+    box-shadow:
+      18px 22px 38px rgba(15, 23, 42, .12),
+      -12px -14px 26px rgba(255, 255, 255, .88),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    align-items: center;
+    padding: 0 22px;
+  }
+
+  .primary-card img {
+    width: 128px;
+    height: 108px;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 22px rgba(55, 89, 145, .18));
+  }
+
+  .primary-title {
+    font-size: 25px;
+    line-height: 1.05;
+    font-weight: 720;
+    letter-spacing: 0;
+  }
+
+  .primary-sub {
+    margin-top: 9px;
+    font-size: 15px;
+    line-height: 1.25;
+    color: #23262b;
+    font-weight: 390;
+  }
+
+  .function-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 30px;
+  }
+
+  .soft-function {
+    height: 116px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(243,245,249,.9));
+    box-shadow:
+      16px 18px 30px rgba(15, 23, 42, .12),
+      -10px -12px 24px rgba(255, 255, 255, .9),
+      inset 0 1px 0 rgba(255,255,255,.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+  }
+
+  .soft-function .icon {
+    width: 36px;
+    height: 36px;
+    stroke: #05070a;
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .soft-function span {
+    font-size: 17px;
+    font-weight: 430;
+    letter-spacing: 0;
+  }
+
+  .section-heading {
+    margin: 30px 0 16px;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .build-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .build-card {
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255,255,255,.9);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, .11);
+  }
+
+  .build-card img {
+    width: 100%;
+    height: 132px;
+    object-fit: contain;
+    background: #edf1f5;
+  }
+
+  .build-text {
+    padding: 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .note {
+    max-width: 640px;
+    margin: 20px auto 0;
+    color: #64748b;
+    line-height: 1.7;
+  }
+</style>
+
+<h2>把 5 个功能卡做成参考图这种效果</h2>
+<p class="subtitle">这版保留你的功能结构，但把呈现从“小程序宫格”改成轻拟物 App 控制台。</p>
+
+<div class="preview-wrap">
+  <div class="phone-preview">
+    <div class="home-top">
+      <div class="hello">Hi User</div>
+      <div class="avatar">U</div>
+    </div>
+
+    <div class="primary-card">
+      <img src="guide-part-cpu.png" alt="CPU">
+      <div>
+        <div class="primary-title">AI 一键装机</div>
+        <div class="primary-sub">按预算和用途生成电脑配置</div>
+      </div>
+    </div>
+
+    <div class="function-grid">
+      <div class="soft-function">
+        <svg class="icon" viewBox="0 0 48 48"><path d="M8 28a16 16 0 1 1 32 0"/><path d="M12 31h24"/><path d="M24 28l8-10"/><circle cx="24" cy="28" r="2"/></svg>
+        <span>性能测试</span>
+      </div>
+      <div class="soft-function">
+        <svg class="icon" viewBox="0 0 48 48"><path d="M20 6h8l2 6 6 3 6-2 4 7-5 4v7l5 4-4 7-6-2-6 3-2 6h-8l-2-6-6-3-6 2-4-7 5-4v-7l-5-4 4-7 6 2 6-3z"/><circle cx="24" cy="24" r="7"/></svg>
+        <span>配置排雷</span>
+      </div>
+      <div class="soft-function">
+        <svg class="icon" viewBox="0 0 48 48"><path d="M24 39V9"/><path d="M13 20L24 9l11 11"/><path d="M10 33v6h28v-6"/></svg>
+        <span>升级建议</span>
+      </div>
+      <div class="soft-function">
+        <svg class="icon" viewBox="0 0 48 48"><path d="M14 7h16l8 8v26H14z"/><path d="M30 7v9h8"/><path d="M19 25h14"/><path d="M19 32h10"/><circle cx="34" cy="35" r="5"/><path d="M34 33v4"/></svg>
+        <span>装机指南</span>
+      </div>
+    </div>
+
+    <div class="section-heading">热门配置</div>
+    <div class="build-row">
+      <div class="build-card">
+        <img src="pc-tower.png" alt="PC build">
+        <div class="build-text">RTX 4090 | i9-13900K</div>
+      </div>
+      <div class="build-card">
+        <img src="pc-tower.png" alt="PC build">
+        <div class="build-text">白色海景房主机</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="note">如果要落地到 SwiftUI，我会把 `HeroBuildCard` 和 `HomeFeatureCard` 统一改成这种柔光浮雕卡：低对比白灰背景、外阴影 + 内高光、细线黑色图标、字号轻一点。这样保留当前导航逻辑，不需要大改业务。</p>

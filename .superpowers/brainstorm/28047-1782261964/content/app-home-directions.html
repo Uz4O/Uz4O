@@ -1,0 +1,512 @@
+<style>
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+  }
+
+  .design-option {
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    background: #fff;
+    padding: 14px;
+    cursor: pointer;
+    box-shadow: 0 18px 50px rgba(15, 23, 42, .08);
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  .design-option:hover {
+    transform: translateY(-3px);
+    border-color: #111827;
+    box-shadow: 0 22px 64px rgba(15, 23, 42, .14);
+  }
+
+  .phone {
+    height: 650px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e3e7ee;
+    border-radius: 34px;
+    background: #f7fafb;
+    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+  }
+
+  .status {
+    height: 42px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 22px 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+    font-weight: 680;
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #111827, #475569);
+  }
+
+  .bell {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(15,23,42,.06);
+  }
+
+  .body {
+    padding: 22px;
+  }
+
+  .eyebrow {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: .04em;
+  }
+
+  .title {
+    margin-top: 7px;
+    font-size: 25px;
+    line-height: 1.12;
+    font-weight: 720;
+    letter-spacing: 0;
+  }
+
+  .sub {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .device-card {
+    margin-top: 20px;
+    min-height: 205px;
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(203,213,225,.8);
+    background:
+      radial-gradient(circle at 76% 38%, rgba(182,205,245,.46), transparent 34%),
+      linear-gradient(145deg, #ffffff, #eef4f8);
+    box-shadow: 0 22px 55px rgba(71, 85, 105, .16);
+  }
+
+  .device-card img {
+    position: absolute;
+    right: -18px;
+    bottom: -15px;
+    width: 170px;
+    max-height: 190px;
+    object-fit: contain;
+  }
+
+  .device-copy {
+    position: relative;
+    z-index: 2;
+    width: 58%;
+    padding: 19px;
+  }
+
+  .score {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.76);
+    border: 1px solid rgba(226,232,240,.9);
+    color: #475569;
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .device-name {
+    margin-top: 16px;
+    font-size: 20px;
+    line-height: 1.12;
+    font-weight: 720;
+  }
+
+  .primary-action {
+    margin-top: 18px;
+    height: 40px;
+    border-radius: 15px;
+    background: #111827;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 12px;
+    font-weight: 680;
+  }
+
+  .quick-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .quick {
+    min-height: 82px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.9);
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+  }
+
+  .quick-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    margin-bottom: 11px;
+  }
+
+  .quick-line {
+    height: 8px;
+    width: 72%;
+    border-radius: 999px;
+    background: #111827;
+  }
+
+  .section-title {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .muted-link {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .insight-list {
+    margin-top: 12px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .insight {
+    min-height: 60px;
+    border-radius: 18px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 13px;
+  }
+
+  .dot-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 13px;
+    background: #f1f5f9;
+  }
+
+  .line-a {
+    height: 9px;
+    width: 120px;
+    border-radius: 999px;
+    background: #111827;
+  }
+
+  .line-b {
+    margin-top: 8px;
+    height: 7px;
+    width: 150px;
+    border-radius: 999px;
+    background: #cbd5e1;
+  }
+
+  .coach {
+    background:
+      radial-gradient(circle at 60% -4%, rgba(213,224,243,.9), transparent 31%),
+      linear-gradient(180deg, #f9fbfd, #ffffff 52%, #f3f6f9);
+  }
+
+  .chat-card {
+    margin-top: 20px;
+    border-radius: 30px;
+    background: #111827;
+    color: white;
+    min-height: 230px;
+    padding: 20px;
+    box-shadow: 0 22px 58px rgba(15,23,42,.24);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chat-card img {
+    position: absolute;
+    right: -22px;
+    bottom: -28px;
+    width: 180px;
+    opacity: .78;
+  }
+
+  .ask {
+    position: relative;
+    z-index: 2;
+    width: 64%;
+  }
+
+  .ask h4 {
+    margin: 12px 0 0;
+    font-size: 22px;
+    line-height: 1.14;
+  }
+
+  .ask p {
+    margin: 8px 0 0;
+    color: rgba(255,255,255,.68);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .input {
+    margin-top: 18px;
+    height: 42px;
+    border-radius: 15px;
+    background: white;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .stacked-actions {
+    margin-top: 14px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .action-row {
+    min-height: 58px;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+    gap: 11px;
+  }
+
+  .editorial {
+    background: #f7f8f8;
+  }
+
+  .feature-story {
+    margin-top: 20px;
+    height: 254px;
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    background: #101820;
+    box-shadow: 0 22px 58px rgba(15,23,42,.23);
+  }
+
+  .feature-story img {
+    position: absolute;
+    right: -36px;
+    bottom: -18px;
+    width: 230px;
+    opacity: .95;
+  }
+
+  .story-copy {
+    position: relative;
+    z-index: 2;
+    padding: 22px;
+    color: white;
+    width: 62%;
+  }
+
+  .story-copy .sub {
+    color: rgba(255,255,255,.66);
+  }
+
+  .story-tabs {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .story-tab {
+    width: 40px;
+    height: 5px;
+    border-radius: 99px;
+    background: rgba(255,255,255,.32);
+  }
+
+  .story-tab:first-child {
+    background: white;
+  }
+
+  .article-card {
+    min-height: 72px;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 14px;
+  }
+
+  .caption {
+    padding: 14px 4px 2px;
+  }
+
+  .caption h3 {
+    margin: 0;
+    font-size: 17px;
+  }
+
+  .caption p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 980px) {
+    .home-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<h2>你说得对：问题在 App 主页</h2>
+<p class="subtitle">当前首页像小程序，是因为它把所有能力平铺成入口。真正 App 化的主页应该有“状态、主任务、下一步”，而不是单纯功能宫格。</p>
+
+<div class="home-grid">
+  <div class="design-option" data-choice="device-cockpit" onclick="toggleSelect(this)">
+    <div class="phone">
+      <div class="status"><span>10:18</span><span>⌁ ◔</span></div>
+      <div class="topbar">
+        <div class="brand"><div class="avatar"></div><span>AI 装机</span></div>
+        <div class="bell"></div>
+      </div>
+      <div class="body">
+        <div class="eyebrow">MY PC COCKPIT</div>
+        <div class="title">你的电脑状态<br>今天看这里</div>
+        <div class="sub">首页先回答“我现在的配置怎么样”，再给下一步建议。</div>
+        <div class="device-card">
+          <img src="pc-tower.png" alt="PC tower">
+          <div class="device-copy">
+            <div class="score">档案 3/6 · 待完善</div>
+            <div class="device-name">先补全主板和电源</div>
+            <div class="primary-action">继续完善</div>
+          </div>
+        </div>
+        <div class="quick-row">
+          <div class="quick"><div class="quick-icon"></div><div class="quick-line"></div></div>
+          <div class="quick"><div class="quick-icon"></div><div class="quick-line"></div></div>
+          <div class="quick"><div class="quick-icon"></div><div class="quick-line"></div></div>
+        </div>
+        <div class="section-title"><span>今日建议</span><span class="muted-link">查看全部</span></div>
+        <div class="insight-list">
+          <div class="insight"><div class="dot-icon"></div><div><div class="line-a"></div><div class="line-b"></div></div></div>
+          <div class="insight"><div class="dot-icon"></div><div><div class="line-a"></div><div class="line-b"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h3>A. 电脑驾驶舱</h3>
+      <p>我最推荐。首页围绕“我的电脑/我的装机计划”展开，有状态、有下一步，功能入口被收进快捷操作。</p>
+    </div>
+  </div>
+
+  <div class="design-option" data-choice="ai-coach" onclick="toggleSelect(this)">
+    <div class="phone coach">
+      <div class="status"><span>10:18</span><span>⌁ ◔</span></div>
+      <div class="topbar">
+        <div class="brand"><div class="avatar"></div><span>AI 装机助手</span></div>
+        <div class="bell"></div>
+      </div>
+      <div class="body">
+        <div class="eyebrow">ASK FIRST</div>
+        <div class="title">不知道怎么选？<br>直接问我</div>
+        <div class="sub">把主页做成 AI 对话入口，其他能力作为问题场景。</div>
+        <div class="chat-card">
+          <img src="home-hero-character.png" alt="AI assistant">
+          <div class="ask">
+            <div class="eyebrow" style="color:rgba(255,255,255,.55)">AI READY</div>
+            <h4>你想装一台什么电脑？</h4>
+            <p>游戏、生产力、升级、点不亮，都可以从一句话开始。</p>
+            <div class="input"><span>输入预算或问题</span><span>↗</span></div>
+          </div>
+        </div>
+        <div class="section-title"><span>常见场景</span><span class="muted-link">更多</span></div>
+        <div class="stacked-actions">
+          <div class="action-row"><div class="dot-icon"></div><div><div class="line-a"></div><div class="line-b"></div></div></div>
+          <div class="action-row"><div class="dot-icon"></div><div><div class="line-a"></div><div class="line-b"></div></div></div>
+          <div class="action-row"><div class="dot-icon"></div><div><div class="line-a"></div><div class="line-b"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h3>B. AI 教练首页</h3>
+      <p>最突出 AI。适合你想让“一键装机/问答/排查”成为核心，但“我的配置状态”会弱一些。</p>
+    </div>
+  </div>
+
+  <div class="design-option" data-choice="hardware-magazine" onclick="toggleSelect(this)">
+    <div class="phone editorial">
+      <div class="status"><span>10:18</span><span>⌁ ◔</span></div>
+      <div class="topbar">
+        <div class="brand"><div class="avatar"></div><span>装机研究所</span></div>
+        <div class="bell"></div>
+      </div>
+      <div class="body">
+        <div class="eyebrow">FEATURED GUIDE</div>
+        <div class="title">像看杂志一样<br>认识电脑硬件</div>
+        <div class="feature-story">
+          <img src="pc-tower.png" alt="PC tower">
+          <div class="story-copy">
+            <div class="eyebrow" style="color:rgba(255,255,255,.55)">NEW USER PATH</div>
+            <div class="title" style="font-size:23px">新手第一台电脑怎么配</div>
+            <div class="sub">把内容和社区做得更有阅读感。</div>
+            <div class="story-tabs"><div class="story-tab"></div><div class="story-tab"></div><div class="story-tab"></div></div>
+          </div>
+        </div>
+        <div class="section-title"><span>继续阅读</span><span class="muted-link">全部</span></div>
+        <div class="insight-list">
+          <div class="article-card"><div class="line-a"></div><div class="line-b"></div></div>
+          <div class="article-card"><div class="line-a"></div><div class="line-b"></div></div>
+          <div class="article-card"><div class="line-a"></div><div class="line-b"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h3>C. 硬件杂志首页</h3>
+      <p>最好看、内容感强，但容易偏社区/资讯，不一定能承接你的 AI 装机核心。</p>
+    </div>
+  </div>
+</div>

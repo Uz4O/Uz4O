@@ -22,8 +22,9 @@ struct GuideFlowRulesTests {
         assertEqual(GuideFlow.guideSections.map(\.id), ["troubleshooting", "faq", "preparation"], "Guide should expose the three requested full-page entries.")
         assertEqual(GuideFlow.guideSections.map(\.title), ["点不亮排查助手", "常见问题答疑解惑", "装机前需准备和了解的事"], "Guide entries should use the requested titles.")
         assertEqual(GuideFlow.guideSections.allSatisfy { !$0.items.isEmpty }, true, "Each guide entry should include readable starter content.")
-        assertEqual(GuideFlow.guideHomeEntries.map(\.id), ["troubleshooting", "components", "preparation", "faq"], "Guide home should arrange four equal entries in the chosen 2x2 order.")
-        assertEqual(GuideFlow.guideHomeEntries.map(\.title), ["点不亮排查助手", "电脑八大件展示", "装机前需准备和了解的事", "常见问题答疑解惑"], "Guide home should include the component showcase as a first-class entry.")
+        assertEqual(GuideFlow.featuredGuideHomeEntry.id, "troubleshooting", "Guide home should feature the no-boot troubleshooting assistant first.")
+        assertEqual(GuideFlow.secondaryGuideHomeEntries.map(\.id), ["components", "preparation", "faq"], "Guide home should put the remaining three entries under the featured card.")
+        assertEqual(GuideFlow.secondaryGuideHomeEntries.map(\.title), ["电脑八大件展示", "装机前需准备和了解的事", "常见问题答疑解惑"], "Guide home should keep the three lower functions in the reference order.")
 
         print("GuideFlowRulesTests passed")
     }

@@ -6,7 +6,7 @@ struct BottomNavigationRulesTests {
         assertEqual(
             AppTab.bottomNavigationTabs,
             [.home, .community, .builds, .profile],
-            "Bottom navigation should expose the four main destinations without a center compose item."
+            "Bottom navigation should omit tools because tool entry points live on the home screen."
         )
 
         assertEqual(

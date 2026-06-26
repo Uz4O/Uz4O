@@ -256,12 +256,13 @@ struct OnboardingProfile: Equatable {
         "开始装机"
     }
 
-    var homeFeatureOrder: [HomeFeatureDisplay] {
+    var toolFeatureOrder: [HomeFeatureDisplay] {
         [
             .diy,
             .configReview,
             .upgrade,
-            .guide
+            .guide,
+            .compatibility
         ]
     }
 }
@@ -300,5 +301,12 @@ private extension HomeFeatureDisplay {
         title: "升级建议",
         subtitle: "按预算给出升级顺序",
         icon: "arrow.up.forward.circle"
+    )
+
+    static let compatibility = HomeFeatureDisplay(
+        kind: .compatibility,
+        title: "兼容性检查",
+        subtitle: "检查硬件接口和搭配风险",
+        icon: "checkmark.shield"
     )
 }
