@@ -107,19 +107,15 @@ private struct GuideHomePage: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 24) {
                 GuideHomeIntro()
 
-                FeaturedGuideHomeCard(entry: GuideFlow.featuredGuideHomeEntry) {
-                    onOpen(GuideFlow.featuredGuideHomeEntry)
-                }
-
-                GuideHomeListCard(entries: GuideFlow.secondaryGuideHomeEntries, onOpen: onOpen)
+                GuideHomeModuleGrid(entries: GuideFlow.guideHomeEntries, onOpen: onOpen)
 
                 GuideHomeTip()
             }
             .frame(width: contentWidth, alignment: .leading)
-            .padding(.top, 8)
+            .padding(.top, 12)
             .padding(.bottom, 10)
             .frame(maxWidth: .infinity)
         }
@@ -128,142 +124,131 @@ private struct GuideHomePage: View {
 
 private struct GuideHomeIntro: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            Text("你想先了解哪一部分？")
-                .font(.system(size: 21, weight: .semibold))
+        VStack(alignment: .leading, spacing: 12) {
+            Text("遇到问题，先来这里查")
+                .font(.system(size: 29, weight: .black))
                 .foregroundStyle(AppTheme.primaryText)
+                .lineLimit(2)
+                .minimumScaleFactor(0.82)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("从排查、认识到准备，帮你一步到位完成装机。")
-                .font(.system(size: 11, weight: .medium))
+            Text("排查故障、认识配件、准备装机、解答疑问。")
+                .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(AppTheme.secondaryText)
-                .lineSpacing(3)
+                .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
 
-private struct FeaturedGuideHomeCard: View {
-    let entry: GuideHomeEntry
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("推荐优先")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .padding(.horizontal, 9)
-                        .frame(height: 24)
-                        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 8))
-
-                    VStack(alignment: .leading, spacing: 7) {
-                        Text(entry.title)
-                            .font(.system(size: 19, weight: .semibold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        Text(entry.subtitle)
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineSpacing(3)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    HStack(spacing: 7) {
-                        Text("进入")
-                        Image(systemName: "chevron.right")
-                    }
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .padding(.top, 2)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 15)
-            .frame(height: 146)
-            .background {
-                Image("GuideTroubleshootingCardBackground")
-                    .resizable()
-                    .scaledToFill()
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(entry.title)，\(entry.subtitle)")
-    }
-}
-
-private struct GuideHomeListCard: View {
+private struct GuideHomeModuleGrid: View {
     let entries: [GuideHomeEntry]
     let onOpen: (GuideHomeEntry) -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                GuideHomeListRow(entry: entry) {
+        LazyVGrid(
+            columns: [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ],
+            spacing: 16
+        ) {
+            ForEach(entries) { entry in
+                GuideHomeModuleCard(entry: entry, isRecommended: entry.id == GuideFlow.featuredGuideHomeEntry.id) {
                     onOpen(entry)
                 }
-
-                if index < entries.count - 1 {
-                    Divider()
-                        .padding(.leading, 70)
-                }
             }
-        }
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-        .overlay {
-            RoundedRectangle(cornerRadius: 18)
-                .stroke(AppTheme.border, lineWidth: 1)
         }
     }
 }
 
-private struct GuideHomeListRow: View {
+private struct GuideHomeModuleCard: View {
     let entry: GuideHomeEntry
+    let isRecommended: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 13) {
-                Image(systemName: entry.symbol)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.black)
-                    .frame(width: 46, height: 46)
-                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 14))
+            VStack(alignment: .leading, spacing: 14) {
+                GuideHomeAssetSlot(entryID: entry.id, isRecommended: isRecommended)
 
-                VStack(alignment: .leading, spacing: 5) {
+                Spacer(minLength: 0)
+
+                VStack(alignment: .leading, spacing: 8) {
                     Text(entry.title)
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(.system(size: 17, weight: .black))
                         .foregroundStyle(AppTheme.primaryText)
                         .lineLimit(2)
-                        .minimumScaleFactor(0.86)
+                        .minimumScaleFactor(0.78)
 
                     Text(entry.subtitle)
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(AppTheme.secondaryText)
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .minimumScaleFactor(0.86)
+                        .lineSpacing(3)
                 }
 
-                Spacer(minLength: 8)
-
-                HStack(spacing: 7) {
+                HStack(spacing: 8) {
                     Text("进入")
                     Image(systemName: "chevron.right")
                 }
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(AppTheme.primaryText)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(AppTheme.secondaryText)
+                .padding(.top, 4)
             }
-            .padding(.horizontal, 14)
-            .frame(height: 82)
+            .padding(14)
+            .frame(height: 250, alignment: .topLeading)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 20))
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(AppTheme.border.opacity(0.8), lineWidth: 1)
+            }
+            .shadow(color: Color.black.opacity(0.035), radius: 14, x: 0, y: 8)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(entry.title)，\(entry.subtitle)")
+    }
+}
+
+private struct GuideHomeAssetSlot: View {
+    let entryID: String
+    let isRecommended: Bool
+
+    private var imageName: String {
+        switch entryID {
+        case "troubleshooting":
+            return "GuideHomeTroubleshooting"
+        case "components":
+            return "GuideHomeComponents"
+        case "preparation":
+            return "GuideHomePreparation"
+        default:
+            return "GuideHomeFAQ"
+        }
+    }
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .frame(height: 106)
+
+            if isRecommended {
+                Text("推荐使用")
+                    .font(.system(size: 11, weight: .black))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .frame(height: 26)
+                    .background(Color.black, in: Capsule())
+                    .padding(2)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 108)
     }
 }
 
@@ -275,7 +260,7 @@ private struct GuideHomeTip: View {
                 .foregroundStyle(AppTheme.primaryText)
                 .frame(width: 28, height: 28)
 
-            Text("建议先从「准备」和「八大件认识」开始，事半功倍。")
+            Text("遇到问题先查排查助手；想了解配件或准备事项时，按需进入对应板块。")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(AppTheme.secondaryText)
                 .lineLimit(2)

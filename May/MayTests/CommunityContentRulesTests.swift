@@ -5,36 +5,14 @@ struct CommunityContentRulesTests {
     static func main() {
         assertEqual(
             AppTab.allCases.map(\.rawValue),
-            ["首页", "社区", "配置", "我的"],
-            "Bottom navigation should remove Tools and keep Community as a primary tab."
-        )
-
-        assertEqual(
-            AppTab.community.icon(isSelected: true),
-            "bubble.left.and.bubble.right.fill",
-            "Community tab should use the chat icon from the design."
+            ["首页", "DIY", "配置", "我的"],
+            "Bottom navigation should expose DIY while keeping community dormant before launch."
         )
 
         assertEqual(
             CommunityPost.featuredFeed.count,
             3,
             "Community feed should start with three curated hardware discussion posts."
-        )
-
-        assertEqual(
-            Array(CommunityPost.featuredFeed.prefix(3)).map(\.summary),
-            [
-                "分享一套 5000 元左右的高性价比配置，适合游戏和生产力需求。",
-                "最近在纠结这两颗 CPU，主要用途是游戏，求大佬给点建议。",
-                "实测对比了多款 360 水冷和风冷散热器，数据说话。"
-            ],
-            "Home community preview should reuse the first three curated community summaries."
-        )
-
-        assertEqual(
-            Array(CommunityPost.featuredFeed.prefix(3)).map { $0.stats.comments },
-            [256, 194, 128],
-            "Home community preview metadata should expose reply counts from curated posts."
         )
 
         assertEqual(

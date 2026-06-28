@@ -5,8 +5,8 @@ struct BottomNavigationRulesTests {
     static func main() {
         assertEqual(
             AppTab.bottomNavigationTabs,
-            [.home, .community, .builds, .profile],
-            "Bottom navigation should omit tools because tool entry points live on the home screen."
+            [.home, .diy, .builds, .profile],
+            "Bottom navigation should expose the DIY workspace before builds."
         )
 
         assertEqual(

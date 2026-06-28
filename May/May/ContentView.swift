@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     private let hardwareProfileStore = HardwareProfileStore()
 
+    @AppStorage("hasCompletedLaunchIntro") private var hasCompletedLaunchIntro = false
     @StateObject private var session: AppSession
     @State private var appPhase: AppPhase = .login
     @State private var selectedTab: AppTab = .home
@@ -32,26 +33,27 @@ struct ContentView: View {
             AppTheme.background
                 .ignoresSafeArea()
 
-            switch appPhase {
-            case .login:
-                LoginView {
-                    appPhase = .onboarding
+            if !hasCompletedLaunchIntro, appPhase == .login {
+                LaunchIntroView {
+                    hasCompletedLaunchIntro = true
                 }
-            case .onboarding:
-                OnboardingChoiceView(initialHardwareProfile: onboardingProfile.hardwareProfile) { profile in
-                    onboardingProfile = profile
-                    selectedTab = .home
-                    appPhase = .main
+            } else {
+                switch appPhase {
+                case .login:
+                    LoginView {
+                        selectedTab = .home
+                        appPhase = .main
+                    }
+                case .main:
+                    MainTabView(
+                        session: session,
+                        onboardingProfile: $onboardingProfile,
+                        selectedTab: $selectedTab,
+                        selectedConfigSection: $selectedConfigSection,
+                        onPresentFullScreen: { presentedFullScreen = $0 },
+                        onAccountDeleted: resetAfterAccountDeletion
+                    )
                 }
-            case .main:
-                MainTabView(
-                    session: session,
-                    onboardingProfile: $onboardingProfile,
-                    selectedTab: $selectedTab,
-                    selectedConfigSection: $selectedConfigSection,
-                    onPresentFullScreen: { presentedFullScreen = $0 },
-                    onAccountDeleted: resetAfterAccountDeletion
-                )
             }
         }
         .onChange(of: onboardingProfile.hardwareProfile) { _, profile in
@@ -107,7 +109,6 @@ struct ContentView: View {
 
 private enum AppPhase: Equatable {
     case login
-    case onboarding
     case main
 }
 
@@ -145,9 +146,9 @@ private struct MainTabView: View {
     let onAccountDeleted: () -> Void
 
     @State private var homePath: [MainRoute] = []
-    @State private var communityPath: [MainRoute] = []
     @State private var buildsPath: [MainRoute] = []
     @State private var profilePath: [MainRoute] = []
+    @State private var showsDIYConfigurator = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -158,7 +159,6 @@ private struct MainTabView: View {
                     onOpenConfigReview: { homePath.append(.configReview) },
                     onOpenUpgrade: { homePath.append(.upgrade) },
                     onOpenGuide: { homePath.append(.guide) },
-                    onOpenCommunity: { selectedTab = .community },
                     onOpenBuildRecords: { selectedTab = .builds }
                 )
                 .toolbar(.hidden, for: .navigationBar)
@@ -171,17 +171,21 @@ private struct MainTabView: View {
             }
             .tag(AppTab.home)
 
-            NavigationStack(path: $communityPath) {
-                CommunityView(session: session)
-                    .toolbar(.hidden, for: .navigationBar)
-                    .navigationDestination(for: MainRoute.self) { route in
-                        destination(for: route, path: $communityPath)
-                    }
+            NavigationStack {
+                DIYHomeView {
+                    showsDIYConfigurator = true
+                }
+                .toolbar(.hidden, for: .navigationBar)
+                .navigationDestination(isPresented: $showsDIYConfigurator) {
+                    DIYConfiguratorView(onBack: { showsDIYConfigurator = false })
+                        .toolbar(.hidden, for: .navigationBar)
+                        .toolbar(.hidden, for: .tabBar)
+                }
             }
             .tabItem {
-                Label(AppTab.community.rawValue, systemImage: "bubble.left.and.bubble.right")
+                Label(AppTab.diy.rawValue, systemImage: "wrench.and.screwdriver")
             }
-            .tag(AppTab.community)
+            .tag(AppTab.diy)
 
             NavigationStack(path: $buildsPath) {
                 MyBuildsView(

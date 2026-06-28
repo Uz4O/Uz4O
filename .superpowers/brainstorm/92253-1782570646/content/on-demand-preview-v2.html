@@ -1,0 +1,57 @@
+<style>
+  .pair { display:grid; grid-template-columns:repeat(2,minmax(280px,1fr)); gap:28px; }
+  .state { border:1px solid #ddd; border-radius:20px; padding:18px; background:#fff; }
+  .phone { width:276px; height:540px; margin:12px auto 0; padding:18px 16px; border:2px solid #151515; border-radius:34px; box-sizing:border-box; overflow:hidden; background:#fff; }
+  .brand { display:flex; justify-content:space-between; font-size:15px; font-weight:850; margin-bottom:26px; }
+  .eyebrow { color:#999; font-size:10px; }
+  .title { font-size:27px; font-weight:900; margin:4px 0 8px; }
+  .desc { font-size:9px; color:#888; margin-bottom:16px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .part { height:88px; border:1px solid #e4e4e4; border-radius:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:8px; gap:7px; }
+  .part:before { content:""; width:22px; height:22px; border:2px solid #333; border-radius:6px; }
+  .summary { margin-top:12px; border:1px solid #ddd; border-radius:16px; padding:11px; display:flex; justify-content:space-between; font-size:8px; }
+  .actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .action { height:34px; border:1px solid #111; border-radius:17px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; }
+  .action.primary { background:#111; color:#fff; }
+  .preview { height:150px; margin:-2px 0 14px; border-radius:20px; background:radial-gradient(circle at 50% 42%,#fff 0,#f1f1f1 55%,#e5e5e5 100%); display:flex; align-items:center; justify-content:center; position:relative; }
+  .tower { width:68px; height:112px; border-radius:5px; background:#222; position:relative; box-shadow:-28px 30px 0 -16px #777; }
+  .tower:before,.tower:after { content:""; position:absolute; right:8px; width:25px; height:25px; border:3px solid #eee; border-radius:50%; }
+  .tower:before{top:12px}.tower:after{top:51px}
+  .preview-label { position:absolute; left:12px; bottom:9px; font-size:8px; color:#777; }
+  .after .grid .part { height:64px; }
+  .after .summary { margin-top:9px; }
+  .after .actions { margin-top:8px; }
+  .state > p { color:#666; min-height:42px; }
+  .arrow { display:flex; align-items:center; justify-content:center; font-size:28px; color:#999; }
+  @media(max-width:760px){.pair{grid-template-columns:1fr}}
+</style>
+
+<h2>修正版：点击前不占位置，点击后才展开图片</h2>
+<p class="subtitle">我先把“上方”理解为：主机图插入标题说明与八张硬件卡片之间，并自动滚动到图片顶部。</p>
+
+<div class="pair">
+  <div class="state">
+    <h3>点击前：完全保持原设计</h3>
+    <p>没有预览占位、没有空状态卡，用户专注选配。</p>
+    <div class="phone">
+      <div class="brand"><span>UzBox</span><span>◯</span></div>
+      <div class="eyebrow">DIY 选配</div><div class="title">开始 DIY</div><div class="desc">自由搭配硬件，实时检查兼容性与预算</div>
+      <div class="grid"><div class="part">CPU</div><div class="part">显卡</div><div class="part">主板</div><div class="part">内存</div><div class="part">硬盘</div><div class="part">电源</div><div class="part">散热</div><div class="part">机箱</div></div>
+      <div class="summary"><span>总价 ¥7997</span><span>完全兼容 ✓</span></div>
+      <div class="actions"><div class="action">✦ AI 优化</div><div class="action primary">查看主机概况 ›</div></div>
+    </div>
+  </div>
+
+  <div class="state after">
+    <h3>点击后：上方展开主机图</h3>
+    <p>从后端按机箱与风扇组合加载完整图片；硬件区向下移动。</p>
+    <div class="phone">
+      <div class="brand"><span>UzBox</span><span>◯</span></div>
+      <div class="eyebrow">DIY 选配</div><div class="title">开始 DIY</div><div class="desc">自由搭配硬件，实时检查兼容性与预算</div>
+      <div class="preview"><div class="tower"></div><div class="preview-label">你的主机外观 · 点击查看大图</div></div>
+      <div class="grid"><div class="part">CPU</div><div class="part">显卡</div><div class="part">主板</div><div class="part">内存</div><div class="part">硬盘</div><div class="part">电源</div><div class="part">散热</div><div class="part">机箱</div></div>
+      <div class="summary"><span>总价 ¥7997</span><span>完全兼容 ✓</span></div>
+      <div class="actions"><div class="action">✦ AI 优化</div><div class="action primary">收起主机概况</div></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<style>
+  .cards { grid-template-columns: repeat(3, minmax(240px, 1fr)); }
+  .phone { width: 220px; height: 430px; margin: 0 auto; padding: 14px; border: 2px solid #171717; border-radius: 30px; background: #fff; box-sizing: border-box; overflow: hidden; }
+  .topline { display:flex; justify-content:space-between; font-weight:800; font-size:13px; margin-bottom:18px; }
+  .eyebrow { color:#999; font-size:10px; margin-bottom:5px; }
+  .title { font-size:22px; font-weight:850; margin-bottom:10px; }
+  .image-stage { height:180px; border-radius:20px; background:radial-gradient(circle at 50% 42%, #fff 0, #f3f3f3 54%, #e7e7e7 100%); display:flex; align-items:center; justify-content:center; margin-bottom:12px; position:relative; }
+  .tower { width:64px; height:114px; border:4px solid #171717; border-radius:5px; position:relative; background:#313131; box-shadow:-30px 30px 0 -15px #777; }
+  .tower:before, .tower:after { content:""; position:absolute; right:8px; width:25px; height:25px; border:3px solid #eee; border-radius:50%; }
+  .tower:before { top:12px; } .tower:after { top:48px; }
+  .specs { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+  .spec { height:34px; border:1px solid #e5e5e5; border-radius:10px; padding:7px; box-sizing:border-box; font-size:9px; color:#555; }
+  .button { height:34px; border-radius:17px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; margin-top:10px; }
+  .builder-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:8px; }
+  .part { height:68px; border:1px solid #e7e7e7; border-radius:16px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:8px; }
+  .summary { border:1px solid #ddd; border-radius:14px; padding:9px; font-size:9px; margin-top:8px; }
+  .inline-image { height:118px; border-radius:16px; background:#eee; display:flex; align-items:center; justify-content:center; margin-top:8px; }
+  .mini-preview { height:90px; border:1px solid #ddd; border-radius:16px; display:flex; align-items:center; gap:10px; padding:10px; box-sizing:border-box; margin-bottom:10px; }
+  .mini-tower { width:38px; height:65px; border-radius:4px; background:#222; }
+  .note { font-size:9px; color:#888; line-height:1.4; }
+  .recommended { display:inline-block; padding:3px 8px; border-radius:999px; background:#111; color:#fff; font-size:10px; margin-bottom:8px; }
+  @media (max-width: 950px) { .cards { grid-template-columns:1fr; } }
+</style>
+
+<h2>主机图片放在哪里最合适？</h2>
+<p class="subtitle">点击一个方案。重点看：选配页是否拥挤、生成过程是否自然、图片是否有“完成作品”的仪式感。</p>
+
+<div class="cards">
+  <div class="card" data-choice="dedicated" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="phone">
+        <div class="topline"><span>UzBox</span><span>◯</span></div>
+        <div class="eyebrow">DIY 选配结果</div>
+        <div class="title">你的主机概况</div>
+        <div class="image-stage"><div class="tower"></div></div>
+        <div class="specs"><div class="spec">机箱 · 海景房</div><div class="spec">风扇 · 7 枚</div><div class="spec">功耗 · 428W</div><div class="spec">预算内 ✓</div></div>
+        <div class="button">保存 / 分享主机图</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="recommended">推荐</span>
+      <h3>A. 独立“主机概况”结果页</h3>
+      <p>点击现有按钮进入新页面，生成图作为大幅 Hero。选配页保持专注，图片也有足够空间展示。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="inline" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="phone">
+        <div class="topline"><span>UzBox</span><span>◯</span></div>
+        <div class="eyebrow">DIY 选配</div>
+        <div class="title">开始 DIY</div>
+        <div class="builder-grid">
+          <div class="part">CPU</div><div class="part">显卡</div><div class="part">主板</div><div class="part">内存</div>
+          <div class="part">硬盘</div><div class="part">电源</div><div class="part">散热</div><div class="part">机箱</div>
+        </div>
+        <div class="summary">实时检测 · 完全兼容</div>
+        <div class="inline-image"><div class="tower" style="transform:scale(.65)"></div></div>
+        <div class="button">重新生成</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 直接放在选配页底部</h3>
+      <p>上下文最直接，但页面会非常长；每次更换机箱或风扇后，旧图与当前配置容易混淆。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="mini" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="phone">
+        <div class="topline"><span>UzBox</span><span>◯</span></div>
+        <div class="eyebrow">DIY 选配</div>
+        <div class="title">开始 DIY</div>
+        <div class="mini-preview">
+          <div class="mini-tower"></div>
+          <div><b style="font-size:10px">主机预览</b><div class="note">机箱或风扇变化后<br>自动更新缩略图</div></div>
+        </div>
+        <div class="builder-grid">
+          <div class="part">CPU</div><div class="part">显卡</div><div class="part">主板</div><div class="part">内存</div>
+          <div class="part">硬盘</div><div class="part">电源</div><div class="part">散热</div><div class="part">机箱</div>
+        </div>
+        <div class="summary">总价 ¥7997 · 功耗 428W</div>
+        <div class="button">查看大图</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 选配页顶部放缩略预览</h3>
+      <p>调整时反馈强，但占用首屏空间；若每次变化都生成图片，等待和成本会被放大。</p>
+    </div>
+  </div>
+</div>

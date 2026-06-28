@@ -7,11 +7,10 @@ struct HomeView: View {
     let onOpenConfigReview: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenGuide: () -> Void
-    let onOpenCommunity: () -> Void
     let onOpenBuildRecords: () -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
-    @State private var heroTransitionDirection = 1
+    @State private var selectedBuildStyleID = HomeBuildStyle.featured[0].id
 
     private var features: [HomeDashboardFeature] {
         [
@@ -20,7 +19,7 @@ struct HomeView: View {
                 title: "AI 一键装机",
                 subtitle: "智能推荐适合你的装机方案",
                 buttonTitle: "开始装机",
-                heroImage: "HomeGPUHeroCard",
+                heroImage: "HomeStyleBlackKnight",
                 icon: "wrench.and.screwdriver",
                 bullets: ["智能推荐配置", "自动检测兼容性", "优化预算方案"],
                 action: onOpenAI
@@ -82,7 +81,6 @@ struct HomeView: View {
                         feature: selectedFeature,
                         activeIndex: selectedFeatureIndex,
                         totalCount: features.count,
-                        transitionDirection: heroTransitionDirection,
                         onSwipeFeature: selectFeature
                     )
                     .padding(.top, 18)
@@ -91,21 +89,24 @@ struct HomeView: View {
                         features: features,
                         selectedID: selectedFeatureID,
                         onSelect: { feature in
-                            let currentIndex = selectedFeatureIndex
-                            let targetIndex = features.firstIndex { $0.id == feature.id } ?? currentIndex
-                            heroTransitionDirection = targetIndex >= currentIndex ? 1 : -1
-                            withAnimation(.spring(response: 0.32, dampingFraction: 0.86)) {
+                            withAnimation(.easeOut(duration: 0.26)) {
                                 selectedFeatureID = feature.id
                             }
                         }
                     )
                     .padding(.top, 44)
 
-                    HomeCommunityPreviewSection(
-                        posts: Array(CommunityPost.featuredFeed.prefix(3)),
-                        onOpenCommunity: onOpenCommunity
+                    HomeBuildStyleSection(
+                        styles: HomeBuildStyle.featured,
+                        selectedID: selectedBuildStyleID,
+                        onSelect: { style in
+                            withAnimation(.easeOut(duration: 0.22)) {
+                                selectedBuildStyleID = style.id
+                            }
+                        },
+                        onOpenAll: onOpenBuildRecords
                     )
-                    .padding(.top, 32)
+                    .padding(.top, 34)
                 }
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.bottom, 112)
@@ -126,16 +127,15 @@ struct HomeView: View {
     private func selectFeature(offset: Int) {
         guard !features.isEmpty else { return }
         let nextIndex = (selectedFeatureIndex + offset + features.count) % features.count
-        heroTransitionDirection = offset >= 0 ? 1 : -1
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        withAnimation(.spring(response: 0.32, dampingFraction: 0.86)) {
+        withAnimation(.easeOut(duration: 0.26)) {
             selectedFeatureID = features[nextIndex].id
         }
     }
 
     private var homeHeader: some View {
         HStack(alignment: .center) {
-            Text("AI 装机助手")
+            Text("UzBox")
                 .font(.system(size: 28, weight: .heavy))
                 .foregroundStyle(.black)
 
@@ -175,7 +175,6 @@ private struct HomeHeroCard: View {
     let feature: HomeDashboardFeature
     let activeIndex: Int
     let totalCount: Int
-    let transitionDirection: Int
     let onSwipeFeature: (Int) -> Void
 
     var body: some View {
@@ -190,7 +189,7 @@ private struct HomeHeroCard: View {
                         .transition(heroTransition)
                 }
                 .frame(height: cardHeight)
-                .animation(.spring(response: 0.36, dampingFraction: 0.88), value: feature.id)
+                .animation(.easeOut(duration: 0.26), value: feature.id)
                 .clipped()
             }
             .frame(height: 316)
@@ -203,14 +202,13 @@ private struct HomeHeroCard: View {
     }
 
     private var heroTransition: AnyTransition {
-        .asymmetric(
-            insertion: .move(edge: transitionDirection >= 0 ? .trailing : .leading).combined(with: .opacity),
-            removal: .move(edge: transitionDirection >= 0 ? .leading : .trailing).combined(with: .opacity)
-        )
+        .homeDepthFocus
     }
 
     private func heroImageSize(cardWidth: CGFloat) -> (width: CGFloat, height: CGFloat) {
         switch feature.id {
+        case "aiBuild":
+            return (cardWidth * 0.50, 266)
         case "performance":
             return (cardWidth * 0.58, 300)
         case "configReview":
@@ -325,51 +323,63 @@ private struct HomeHeroCard: View {
     }
 }
 
+private struct HomeDepthFocusTransitionModifier: ViewModifier {
+    let opacity: Double
+    let scale: CGFloat
+    let blurRadius: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(opacity)
+            .scaleEffect(scale)
+            .blur(radius: blurRadius)
+    }
+}
+
+private extension AnyTransition {
+    static var homeDepthFocus: AnyTransition {
+        .modifier(
+            active: HomeDepthFocusTransitionModifier(opacity: 0, scale: 0.985, blurRadius: 5),
+            identity: HomeDepthFocusTransitionModifier(opacity: 1, scale: 1, blurRadius: 0)
+        )
+    }
+}
+
 private struct HomeFeatureSelector: View {
     let features: [HomeDashboardFeature]
     let selectedID: String
     let onSelect: (HomeDashboardFeature) -> Void
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
-                .fill(Color.white.opacity(0.88))
-                .shadow(color: Color.black.opacity(0.045), radius: 24, x: 0, y: 14)
+        HStack(alignment: .top, spacing: 0) {
+            ForEach(features) { feature in
+                Button {
+                    onSelect(feature)
+                } label: {
+                    VStack(spacing: 8) {
+                        Image(systemName: feature.icon)
+                            .font(.system(size: 22, weight: .regular))
+                            .foregroundStyle(selectedID == feature.id ? .white : .black)
+                            .frame(width: 50, height: 50)
+                            .background(
+                                selectedID == feature.id ? Color.black : Color.white.opacity(0.62),
+                                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            )
+                            .shadow(color: Color.black.opacity(selectedID == feature.id ? 0.14 : 0.035), radius: 12, x: 0, y: 8)
 
-            HStack(spacing: 0) {
-                ForEach(features) { feature in
-                    Button {
-                        onSelect(feature)
-                    } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: feature.icon)
-                                .font(.system(size: 22, weight: .regular))
-                                .foregroundStyle(selectedID == feature.id ? .white : .black)
-                                .frame(width: 44, height: 44)
-                                .background(selectedID == feature.id ? Color.black : Color.white, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                                .shadow(color: Color.black.opacity(selectedID == feature.id ? 0.14 : 0.04), radius: 12, x: 0, y: 8)
-
-                            Text(selectorTitle(for: feature))
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundStyle(.black)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.72)
-                        }
-                        .frame(maxWidth: .infinity)
+                        Text(selectorTitle(for: feature))
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(.black)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
                     }
-                    .buttonStyle(.plain)
-
-                    if feature.id != features.last?.id {
-                        Rectangle()
-                            .fill(Color.black.opacity(0.06))
-                            .frame(width: 1, height: 58)
-                    }
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 15)
         }
-        .frame(height: 94)
+        .frame(height: 78)
     }
 
     private func selectorTitle(for feature: HomeDashboardFeature) -> String {
@@ -388,37 +398,124 @@ private struct HomeFeatureSelector: View {
     }
 }
 
-private struct HomeCommunityPreviewSection: View {
-    let posts: [CommunityPost]
-    let onOpenCommunity: () -> Void
+private struct HomeBuildStyle: Identifiable {
+    let id: String
+    let title: String
+    let summary: String
+    let image: String
+    let tags: [String]
+
+    static let featured: [HomeBuildStyle] = [
+        .init(
+            id: "blackKnight",
+            title: "黑武士",
+            summary: "低调冷酷，灯效克制，适合高性能玩家",
+            image: "HomeStyleBlackKnight",
+            tags: ["高品质", "电竞", "暗黑机箱"]
+        ),
+        .init(
+            id: "panorama",
+            title: "海景房",
+            summary: "通透展示，适合 RGB 与颜值党",
+            image: "HomeStylePanorama",
+            tags: ["通透设计", "RGB"]
+        ),
+        .init(
+            id: "whiteMinimal",
+            title: "白色极简",
+            summary: "干净克制，适合桌搭与工作环境",
+            image: "HomeStyleWhiteMinimal",
+            tags: ["简约", "百搭"]
+        ),
+        .init(
+            id: "rgbGaming",
+            title: "RGB 电竞",
+            summary: "灯光更强，适合沉浸游戏氛围",
+            image: "HomeStylePanorama",
+            tags: ["灯效", "性能"]
+        ),
+        .init(
+            id: "quietOffice",
+            title: "静音办公",
+            summary: "低噪散热，适合长时间工作",
+            image: "HomeStyleWhiteMinimal",
+            tags: ["静音", "办公"]
+        ),
+    ]
+}
+
+private struct HomeBuildStyleSection: View {
+    let styles: [HomeBuildStyle]
+    let selectedID: String
+    let onSelect: (HomeBuildStyle) -> Void
+    let onOpenAll: () -> Void
+
+    private var orderedStyles: [HomeBuildStyle] {
+        guard let selected = styles.first(where: { $0.id == selectedID }) else {
+            return styles
+        }
+        return [selected] + styles.filter { $0.id != selectedID }
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 13) {
-            HStack(alignment: .center) {
-                Text("社区精选")
-                    .font(.system(size: 20, weight: .heavy))
-                    .foregroundStyle(.black)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("精选装机风格")
+                        .font(.system(size: 18, weight: .heavy))
+                        .foregroundStyle(.black)
+
+                    Text("找到你喜欢的主机外观与氛围")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(.black.opacity(0.52))
+                }
 
                 Spacer()
 
-                Button(action: onOpenCommunity) {
-                    HStack(spacing: 4) {
-                        Text("更多")
+                Button(action: onOpenAll) {
+                    HStack(spacing: 5) {
+                        Text("查看全部")
                         Image(systemName: "chevron.right")
                     }
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.black.opacity(0.58))
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.black.opacity(0.62))
                 }
                 .buttonStyle(.plain)
             }
 
-            VStack(spacing: 0) {
-                ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
-                    HomeCommunityPreviewRow(post: post, action: onOpenCommunity)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 15) {
+                    ForEach(styles) { style in
+                        Button {
+                            onSelect(style)
+                        } label: {
+                            Text(style.title)
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(selectedID == style.id ? .white : .black.opacity(0.72))
+                                .frame(height: 28)
+                                .padding(.horizontal, 15)
+                                .background(
+                                    selectedID == style.id ? Color.black : Color.black.opacity(0.045),
+                                    in: Capsule()
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 1)
+            }
+            .scrollClipDisabled()
 
-                    if index < posts.count - 1 {
-                        Divider()
-                            .padding(.leading, 2)
+            VStack(spacing: 0) {
+                ForEach(Array(orderedStyles.enumerated()), id: \.element.id) { index, style in
+                    HomeBuildStyleRow(style: style) {
+                        onSelect(style)
+                    }
+
+                    if index < orderedStyles.count - 1 {
+                        Rectangle()
+                            .fill(Color.black.opacity(0.07))
+                            .frame(height: 1)
                     }
                 }
             }
@@ -426,43 +523,53 @@ private struct HomeCommunityPreviewSection: View {
     }
 }
 
-private struct HomeCommunityPreviewRow: View {
-    let post: CommunityPost
+private struct HomeBuildStyleRow: View {
+    let style: HomeBuildStyle
     let action: () -> Void
-
-    private var metadataText: String {
-        let tagText = Array(post.tags.prefix(2)).joined(separator: " · ")
-        return "\(tagText) · \(post.stats.comments) 回复"
-    }
 
     var body: some View {
         Button(action: action) {
-            HStack(alignment: .center, spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(post.summary)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
+            HStack(alignment: .center, spacing: 10) {
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack(spacing: 7) {
+                        Text(style.title)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(.black)
 
-                    Text(metadataText)
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(AppTheme.secondaryText)
+                        Image(systemName: "bookmark")
+                            .font(.system(size: 15, weight: .regular))
+                            .foregroundStyle(.black.opacity(0.38))
+                    }
+
+                    Text(style.summary)
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(.black.opacity(0.66))
                         .lineLimit(1)
+                        .minimumScaleFactor(0.76)
+
+                    HStack(spacing: 8) {
+                        ForEach(style.tags, id: \.self) { tag in
+                            Text(tag)
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundStyle(.black.opacity(0.62))
+                                .frame(height: 22)
+                                .padding(.horizontal, 10)
+                                .background(Color.black.opacity(0.04), in: Capsule())
+                        }
+                    }
                 }
 
-                Spacer(minLength: 8)
+                Spacer(minLength: 6)
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.black.opacity(0.24))
+                Image(style.image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 148, height: 106)
             }
-            .padding(.vertical, 13)
+            .padding(.vertical, 10)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(post.summary)，\(metadataText)")
     }
 }
 
@@ -475,7 +582,6 @@ private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
         onOpenConfigReview: {},
         onOpenUpgrade: {},
         onOpenGuide: {},
-        onOpenCommunity: {},
         onOpenBuildRecords: {}
     )
 }

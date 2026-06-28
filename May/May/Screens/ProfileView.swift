@@ -19,7 +19,6 @@ struct ProfileView: View {
         ProfileItem(title: "用户协议", icon: "doc.plaintext", isAvailable: true),
         ProfileItem(title: "隐私政策", icon: "lock.shield", isAvailable: true),
         ProfileItem(title: "第三方信息共享清单", icon: "square.stack.3d.up", isAvailable: true),
-        ProfileItem(title: "社区规范", icon: "person.2", isAvailable: true),
         ProfileItem(title: "联系与投诉", icon: "paperplane", subtitle: LegalContact.email, isAvailable: true)
     ]
 
@@ -111,8 +110,6 @@ struct ProfileView: View {
             presentedLegalDocument = .privacyPolicy
         case "第三方信息共享清单":
             presentedLegalDocument = .thirdPartySharing
-        case "社区规范":
-            presentedLegalDocument = .communityGuidelines
         case "联系与投诉":
             onOpenContactComplaint()
         case "注销账号":

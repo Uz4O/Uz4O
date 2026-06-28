@@ -196,7 +196,7 @@ struct CommunityForumRow: View {
                 .font(style.contentFont)
                 .foregroundStyle(AppTheme.primaryText)
                 .lineSpacing(4)
-                .lineLimit(style == .home ? 1 : 2)
+                .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             if let image = post.image, let imageWidth, style == .community {
