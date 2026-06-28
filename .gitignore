@@ -43,3 +43,6 @@ tools/hardware-price-crawler/**/__pycache__/
 
 # Generated 3D model and render artifacts (not source code)
 outputs/
+
+# Local agent worktrees
+.worktrees/
