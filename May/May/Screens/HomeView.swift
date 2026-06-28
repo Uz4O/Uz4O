@@ -105,6 +105,7 @@ struct HomeView: View {
                             }
                         },
                         onOpen: { style in
+                            selectedBuildStyleID = style.id
                             onOpenAestheticStyle(style.id)
                         }
                     )

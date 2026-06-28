@@ -294,13 +294,20 @@ private struct QuoteStep: View {
                     QuoteRow(title: "外观与散热", value: flow.quote.styleModule.label)
                     QuoteRow(title: "其中颜值溢价", value: flow.quote.aestheticPremium.label)
                     QuoteRow(title: "整机预计", value: flow.quote.total.label)
+
+                    if flow.selectedResolution == .unknown {
+                        Text("屏幕不知道时，报价暂按 2K 估算。")
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
                 .padding(18)
             }
 
             Text("演示估价，仅用于验证流程，不作为购买报价。")
                 .font(.appCaption)
-                .foregroundStyle(AppTheme.secondaryText)
+                .foregroundStyle(AppTheme.warning)
 
             HStack(spacing: 10) {
                 SecondaryActionButton(title: "少为外观花一点") {
