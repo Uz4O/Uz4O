@@ -101,6 +101,32 @@ enum AppMockData {
         ]
     )
 
+    static func aestheticSamplePlan(for flow: AestheticBuildFlow) -> BuildPlan {
+        let stylePart = PCPart(
+            category: "外观与散热",
+            model: "\(flow.style.title) · \(flow.restoration.tier.title)",
+            price: flow.quote.styleModule.midpointLabel,
+            icon: "fan",
+            accent: AppTheme.primaryText,
+            reason: flow.restoration.keeps,
+            alternative: flow.restoration.tradeoff,
+            source: "演示估价"
+        )
+
+        return BuildPlan(
+            name: "\(flow.style.title)颜值游戏配置",
+            budget: flow.quote.total.label,
+            totalPrice: flow.quote.total.midpointLabel,
+            useCase: "\(flow.resolvedResolution.title) · \(flow.selectedExperience.title) · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
+            createdAt: "演示方案",
+            parts: Array(parts.prefix(6)) + [stylePart],
+            risks: [
+                BuildRisk(level: .warning, title: "演示价格", detail: "当前价格只用于验证颜值装机流程，不作为购买报价。"),
+                BuildRisk(level: .warning, title: "兼容性待接入", detail: "生产版必须用真实机箱、散热器和风扇数据重新检查空间与散热。")
+            ]
+        )
+    }
+
     static let savedPlans = [
         samplePlan,
         BuildPlan(name: "5000 办公剪辑配置", budget: "5000 档", totalPrice: "¥ 5188", useCase: "办公 / 轻剪辑", createdAt: "昨天 21:08", parts: parts, risks: samplePlan.risks),

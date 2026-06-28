@@ -77,6 +77,8 @@ struct ContentView: View {
                 returnTarget: returnTarget,
                 onClose: { closeFullScreen(returningTo: returnTarget) }
             )
+        case .aestheticBuild(let styleID):
+            AestheticBuildFlowView(styleID: styleID, onClose: { presentedFullScreen = nil })
         case .diy(let returnTab):
             DIYBuildView(
                 savedHardwareProfile: onboardingProfile.hardwareProfile,
@@ -124,12 +126,15 @@ private enum MainRoute: Hashable {
 
 private enum FullScreenRoute: Identifiable, Equatable {
     case aiBuild(BuildResultReturnTarget)
+    case aestheticBuild(styleID: String)
     case diy(AppTab)
 
     var id: String {
         switch self {
         case .aiBuild(let returnTarget):
             return "aiBuild-\(returnTarget)"
+        case .aestheticBuild(let styleID):
+            return "aesthetic-build-\(styleID)"
         case .diy(let returnTab):
             return "diy-\(returnTab)"
         }
@@ -159,7 +164,9 @@ private struct MainTabView: View {
                     onOpenConfigReview: { homePath.append(.configReview) },
                     onOpenUpgrade: { homePath.append(.upgrade) },
                     onOpenGuide: { homePath.append(.guide) },
-                    onOpenBuildRecords: { selectedTab = .builds }
+                    onOpenAestheticStyle: { styleID in
+                        onPresentFullScreen(.aestheticBuild(styleID: styleID))
+                    }
                 )
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: MainRoute.self) { route in
@@ -310,6 +317,27 @@ private struct AIBuildFlowView: View {
                     onBack: onClose,
                     onShowResult: { showsResult = true }
                 )
+            }
+        }
+    }
+}
+
+private struct AestheticBuildFlowView: View {
+    let onClose: () -> Void
+    @State private var flow: AestheticBuildFlow
+    @State private var showsResult = false
+
+    init(styleID: String, onClose: @escaping () -> Void) {
+        self.onClose = onClose
+        _flow = State(initialValue: AestheticBuildFlow(styleID: styleID))
+    }
+
+    var body: some View {
+        if showsResult {
+            BuildResultView(plan: AppMockData.aestheticSamplePlan(for: flow), onBack: onClose)
+        } else {
+            AestheticBuildView(flow: $flow, onClose: onClose) {
+                showsResult = true
             }
         }
     }

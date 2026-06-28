@@ -7,10 +7,10 @@ struct HomeView: View {
     let onOpenConfigReview: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenGuide: () -> Void
-    let onOpenBuildRecords: () -> Void
+    let onOpenAestheticStyle: (String) -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
-    @State private var selectedBuildStyleID = HomeBuildStyle.featured[0].id
+    @State private var selectedBuildStyleID = AestheticBuildStyle.featured[0].id
 
     private var features: [HomeDashboardFeature] {
         [
@@ -97,14 +97,16 @@ struct HomeView: View {
                     .padding(.top, 44)
 
                     HomeBuildStyleSection(
-                        styles: HomeBuildStyle.featured,
+                        styles: AestheticBuildStyle.featured,
                         selectedID: selectedBuildStyleID,
                         onSelect: { style in
                             withAnimation(.easeOut(duration: 0.22)) {
                                 selectedBuildStyleID = style.id
                             }
                         },
-                        onOpenAll: onOpenBuildRecords
+                        onOpen: { style in
+                            onOpenAestheticStyle(style.id)
+                        }
                     )
                     .padding(.top, 34)
                 }
@@ -398,59 +400,13 @@ private struct HomeFeatureSelector: View {
     }
 }
 
-private struct HomeBuildStyle: Identifiable {
-    let id: String
-    let title: String
-    let summary: String
-    let image: String
-    let tags: [String]
-
-    static let featured: [HomeBuildStyle] = [
-        .init(
-            id: "blackKnight",
-            title: "黑武士",
-            summary: "低调冷酷，灯效克制，适合高性能玩家",
-            image: "HomeStyleBlackKnight",
-            tags: ["高品质", "电竞", "暗黑机箱"]
-        ),
-        .init(
-            id: "panorama",
-            title: "海景房",
-            summary: "通透展示，适合 RGB 与颜值党",
-            image: "HomeStylePanorama",
-            tags: ["通透设计", "RGB"]
-        ),
-        .init(
-            id: "whiteMinimal",
-            title: "白色极简",
-            summary: "干净克制，适合桌搭与工作环境",
-            image: "HomeStyleWhiteMinimal",
-            tags: ["简约", "百搭"]
-        ),
-        .init(
-            id: "rgbGaming",
-            title: "RGB 电竞",
-            summary: "灯光更强，适合沉浸游戏氛围",
-            image: "HomeStylePanorama",
-            tags: ["灯效", "性能"]
-        ),
-        .init(
-            id: "quietOffice",
-            title: "静音办公",
-            summary: "低噪散热，适合长时间工作",
-            image: "HomeStyleWhiteMinimal",
-            tags: ["静音", "办公"]
-        ),
-    ]
-}
-
 private struct HomeBuildStyleSection: View {
-    let styles: [HomeBuildStyle]
+    let styles: [AestheticBuildStyle]
     let selectedID: String
-    let onSelect: (HomeBuildStyle) -> Void
-    let onOpenAll: () -> Void
+    let onSelect: (AestheticBuildStyle) -> Void
+    let onOpen: (AestheticBuildStyle) -> Void
 
-    private var orderedStyles: [HomeBuildStyle] {
+    private var orderedStyles: [AestheticBuildStyle] {
         guard let selected = styles.first(where: { $0.id == selectedID }) else {
             return styles
         }
@@ -469,18 +425,6 @@ private struct HomeBuildStyleSection: View {
                         .font(.system(size: 12, weight: .regular))
                         .foregroundStyle(.black.opacity(0.52))
                 }
-
-                Spacer()
-
-                Button(action: onOpenAll) {
-                    HStack(spacing: 5) {
-                        Text("查看全部")
-                        Image(systemName: "chevron.right")
-                    }
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.black.opacity(0.62))
-                }
-                .buttonStyle(.plain)
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -509,7 +453,7 @@ private struct HomeBuildStyleSection: View {
             VStack(spacing: 0) {
                 ForEach(Array(orderedStyles.enumerated()), id: \.element.id) { index, style in
                     HomeBuildStyleRow(style: style) {
-                        onSelect(style)
+                        onOpen(style)
                     }
 
                     if index < orderedStyles.count - 1 {
@@ -524,7 +468,7 @@ private struct HomeBuildStyleSection: View {
 }
 
 private struct HomeBuildStyleRow: View {
-    let style: HomeBuildStyle
+    let style: AestheticBuildStyle
     let action: () -> Void
 
     var body: some View {
@@ -536,9 +480,9 @@ private struct HomeBuildStyleRow: View {
                             .font(.system(size: 18, weight: .bold))
                             .foregroundStyle(.black)
 
-                        Image(systemName: "bookmark")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundStyle(.black.opacity(0.38))
+                        Text(style.startingCostLabel)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(.black.opacity(0.52))
                     }
 
                     Text(style.summary)
@@ -546,6 +490,10 @@ private struct HomeBuildStyleRow: View {
                         .foregroundStyle(.black.opacity(0.66))
                         .lineLimit(1)
                         .minimumScaleFactor(0.76)
+
+                    Text("按这个风格装机  →")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(.black)
 
                     HStack(spacing: 8) {
                         ForEach(style.tags, id: \.self) { tag in
@@ -582,6 +530,6 @@ private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
         onOpenConfigReview: {},
         onOpenUpgrade: {},
         onOpenGuide: {},
-        onOpenBuildRecords: {}
+        onOpenAestheticStyle: { _ in }
     )
 }
