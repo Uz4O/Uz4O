@@ -4,21 +4,25 @@ struct AestheticPriceRange: Equatable {
     let low: Int
     let high: Int
 
-    init(_ low: Int, _ high: Int) {
+    init(low: Int, high: Int) {
         self.low = low
         self.high = high
     }
 
+    init(_ low: Int, _ high: Int) {
+        self.init(low: low, high: high)
+    }
+
     static func + (lhs: AestheticPriceRange, rhs: AestheticPriceRange) -> AestheticPriceRange {
-        AestheticPriceRange(lhs.low + rhs.low, lhs.high + rhs.high)
+        AestheticPriceRange(low: lhs.low + rhs.low, high: lhs.high + rhs.high)
     }
 
     var label: String {
-        "¥\(low)–\(high)"
+        "¥\(low.formatted())–\(high.formatted())"
     }
 
     var midpointLabel: String {
-        "约 ¥\((low + high) / 2)"
+        "约 ¥\(((low + high) / 2).formatted())"
     }
 }
 
@@ -159,7 +163,7 @@ struct AestheticBuildQuote: Equatable {
 
 struct AestheticBuildFlow: Equatable {
     var step: AestheticBuildStep = .restoration
-    var styleID: String
+    let styleID: String
     var selectedTier: AestheticRestorationTier = .core
     var selectedGames: [PerformanceGame] = [.cyberpunk]
     var selectedExperience: AestheticExperience = .smooth
@@ -252,45 +256,45 @@ struct AestheticBuildFlow: Equatable {
     private var basePerformanceCost: AestheticPriceRange {
         switch (resolvedResolution, selectedExperience) {
         case (.fullHD, .smooth):
-            return AestheticPriceRange(3800, 4500)
+            return AestheticPriceRange(low: 3800, high: 4500)
         case (.fullHD, .highRefresh):
-            return AestheticPriceRange(5000, 6000)
+            return AestheticPriceRange(low: 5000, high: 6000)
         case (.fullHD, .competitive):
-            return AestheticPriceRange(6200, 7500)
+            return AestheticPriceRange(low: 6200, high: 7500)
         case (.twoK, .smooth):
-            return AestheticPriceRange(4800, 5700)
+            return AestheticPriceRange(low: 4800, high: 5700)
         case (.twoK, .highRefresh):
-            return AestheticPriceRange(6500, 7800)
+            return AestheticPriceRange(low: 6500, high: 7800)
         case (.twoK, .competitive):
-            return AestheticPriceRange(7800, 9400)
+            return AestheticPriceRange(low: 7800, high: 9400)
         case (.fourK, .smooth):
-            return AestheticPriceRange(7200, 8600)
+            return AestheticPriceRange(low: 7200, high: 8600)
         case (.fourK, .highRefresh):
-            return AestheticPriceRange(10500, 12800)
+            return AestheticPriceRange(low: 10500, high: 12800)
         case (.fourK, .competitive):
-            return AestheticPriceRange(13800, 17500)
+            return AestheticPriceRange(low: 13800, high: 17500)
         }
     }
 
     private var gameAdjustment: AestheticPriceRange {
         selectedGames
             .map { adjustment(for: $0) }
-            .max { $0.high < $1.high } ?? AestheticPriceRange(0, 0)
+            .max { $0.high < $1.high } ?? AestheticPriceRange(low: 0, high: 0)
     }
 
     private func adjustment(for game: PerformanceGame) -> AestheticPriceRange {
         switch game.id {
         case "cyberpunk", "elden-ring", "cod":
-            return AestheticPriceRange(800, 1200)
+            return AestheticPriceRange(low: 800, high: 1200)
         case "pubg", "genshin", "apex":
-            return AestheticPriceRange(300, 600)
+            return AestheticPriceRange(low: 300, high: 600)
         default:
-            return AestheticPriceRange(0, 200)
+            return AestheticPriceRange(low: 0, high: 200)
         }
     }
 }
 
-enum AestheticDemoCatalog {
+private enum AestheticDemoCatalog {
     static let styles: [AestheticBuildStyle] = [
         style(
             id: "blackKnight",
@@ -301,8 +305,8 @@ enum AestheticDemoCatalog {
             signature: "黑色机箱与整体暗色观感",
             highDetail: "统一黑色散热器与主要风扇位",
             completeDetail: "统一散热、风扇和克制灯效",
-            costs: [AestheticPriceRange(850, 1100), AestheticPriceRange(1450, 1900), AestheticPriceRange(2300, 3100)],
-            premiums: [AestheticPriceRange(300, 450), AestheticPriceRange(850, 1250), AestheticPriceRange(1650, 2350)]
+            costs: [AestheticPriceRange(low: 850, high: 1100), AestheticPriceRange(low: 1450, high: 1900), AestheticPriceRange(low: 2300, high: 3100)],
+            premiums: [AestheticPriceRange(low: 300, high: 450), AestheticPriceRange(low: 850, high: 1250), AestheticPriceRange(low: 1650, high: 2350)]
         ),
         style(
             id: "panorama",
@@ -313,8 +317,8 @@ enum AestheticDemoCatalog {
             signature: "海景房机箱与基础灯效",
             highDetail: "造型匹配的散热器与主要风扇位",
             completeDetail: "完整风扇布局、统一灯效与展示感",
-            costs: [AestheticPriceRange(900, 1200), AestheticPriceRange(1600, 2200), AestheticPriceRange(2600, 3600)],
-            premiums: [AestheticPriceRange(350, 500), AestheticPriceRange(950, 1450), AestheticPriceRange(1900, 2800)]
+            costs: [AestheticPriceRange(low: 900, high: 1200), AestheticPriceRange(low: 1600, high: 2200), AestheticPriceRange(low: 2600, high: 3600)],
+            premiums: [AestheticPriceRange(low: 350, high: 500), AestheticPriceRange(low: 950, high: 1450), AestheticPriceRange(low: 1900, high: 2800)]
         ),
         style(
             id: "whiteMinimal",
@@ -325,8 +329,8 @@ enum AestheticDemoCatalog {
             signature: "白色机箱与干净桌搭观感",
             highDetail: "白色散热器与主要可见部件",
             completeDetail: "主要可见部件、风扇和线材统一",
-            costs: [AestheticPriceRange(800, 1050), AestheticPriceRange(1400, 1850), AestheticPriceRange(2200, 3000)],
-            premiums: [AestheticPriceRange(280, 420), AestheticPriceRange(800, 1200), AestheticPriceRange(1550, 2300)]
+            costs: [AestheticPriceRange(low: 800, high: 1050), AestheticPriceRange(low: 1400, high: 1850), AestheticPriceRange(low: 2200, high: 3000)],
+            premiums: [AestheticPriceRange(low: 280, high: 420), AestheticPriceRange(low: 800, high: 1200), AestheticPriceRange(low: 1550, high: 2300)]
         )
     ]
 
