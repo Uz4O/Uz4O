@@ -4,7 +4,14 @@ enum LegalDocument: String, CaseIterable, Hashable, Identifiable {
     case userAgreement = "UserAgreement"
     case privacyPolicy = "PrivacyPolicy"
     case thirdPartySharing = "ThirdPartySharingList"
+    // ponytail: kept for dormant community screens; not exposed in launch legal docs.
     case communityGuidelines = "CommunityGuidelines"
+
+    static let allCases: [LegalDocument] = [
+        .userAgreement,
+        .privacyPolicy,
+        .thirdPartySharing
+    ]
 
     var id: String { rawValue }
 

@@ -1,19 +1,23 @@
 import json
 from typing import Generator, Tuple
 
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.core.rate_limit import high_cost_rate_limit
 from app.core.response_cache import response_cache_key
 from app.db import get_session
+from app.review.ocr import OCRTextNotFoundError, OCRUnavailableError, extract_text_from_image_bytes
 from app.review.service import (
     ConfigReviewRequest,
     ConfigReviewResponse,
     analyze_configuration_text,
 )
 
+
+MAX_REVIEW_IMAGE_BYTES = 8 * 1024 * 1024
+SUPPORTED_REVIEW_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 router = APIRouter(
     prefix="/v1/review",
@@ -30,6 +34,32 @@ def analyze_review(
     session: Session = Depends(get_session),
 ) -> ConfigReviewResponse:
     result, cache_status = _cached_or_analyze(http_request, session, payload)
+    response.headers["X-Cache"] = cache_status
+    return result
+
+
+@router.post("/analyze/image", response_model=ConfigReviewResponse)
+async def analyze_review_image(
+    http_request: Request,
+    response: Response,
+    image: UploadFile = File(...),
+    session: Session = Depends(get_session),
+) -> ConfigReviewResponse:
+    if image.content_type not in SUPPORTED_REVIEW_IMAGE_TYPES:
+        raise HTTPException(status_code=415, detail="仅支持 JPG、PNG 或 WebP 配置单图片")
+
+    image_bytes = await image.read(MAX_REVIEW_IMAGE_BYTES + 1)
+    if len(image_bytes) > MAX_REVIEW_IMAGE_BYTES:
+        raise HTTPException(status_code=413, detail="图片不能超过 8MB")
+
+    try:
+        text = extract_text_from_image_bytes(image_bytes)
+    except OCRUnavailableError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except OCRTextNotFoundError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    result, cache_status = _cached_or_analyze(http_request, session, ConfigReviewRequest(text=text))
     response.headers["X-Cache"] = cache_status
     return result
 

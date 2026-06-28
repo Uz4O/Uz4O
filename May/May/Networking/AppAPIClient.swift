@@ -184,6 +184,30 @@ struct AppAPIClient {
         )
     }
 
+    func analyzeConfigReviewText(_ text: String) async throws -> ConfigReviewResponseDTO {
+        try await request(
+            path: "/v1/review/analyze",
+            method: "POST",
+            body: ["text": text]
+        )
+    }
+
+    func analyzeConfigReviewImage(imageData: Data) async throws -> ConfigReviewResponseDTO {
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = makeRequest(path: "/v1/review/analyze/image", method: "POST", token: nil)
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.appendUTF8("--\(boundary)\r\n")
+        body.appendUTF8("Content-Disposition: form-data; name=\"image\"; filename=\"config.jpg\"\r\n")
+        body.appendUTF8("Content-Type: image/jpeg\r\n\r\n")
+        body.append(imageData)
+        body.appendUTF8("\r\n--\(boundary)--\r\n")
+        request.httpBody = body
+
+        return try await perform(request: request)
+    }
+
     private func request<Response: Decodable>(
         path: String,
         method: String,
@@ -266,6 +290,12 @@ struct AppAPIClient {
             return payload.detail
         }
         return "请求失败（\(status)）"
+    }
+}
+
+private extension Data {
+    mutating func appendUTF8(_ string: String) {
+        append(contentsOf: string.utf8)
     }
 }
 
@@ -370,6 +400,26 @@ private struct CommunityCommentDTO: Decodable {
 
 private struct CommunityReportDTO: Decodable { let id: String }
 private struct CommunityBlockDTO: Decodable { let id: String }
+
+struct ConfigReviewResponseDTO: Decodable {
+    let riskLevel: String
+    let summary: String
+    let sourceText: String
+    let sellerPrice: Int?
+    let referenceTotal: Int?
+    let findings: [ConfigReviewFindingDTO]
+    let questionsForSeller: [String]
+    let replyText: String
+}
+
+struct ConfigReviewFindingDTO: Decodable, Identifiable {
+    var id: String { code }
+
+    let level: String
+    let code: String
+    let title: String
+    let detail: String
+}
 
 enum AppConfiguration {
     static var apiBaseURL: URL {

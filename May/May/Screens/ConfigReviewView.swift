@@ -1,80 +1,290 @@
 import SwiftUI
+import PhotosUI
 
 private enum ConfigReviewState {
-    case empty
+    case landing
+    case input
     case loading
-    case result
+    case result(ConfigReviewResponseDTO)
+    case error(String)
 }
 
 struct ConfigReviewView: View {
     let onBack: () -> Void
 
     @State private var inputText = "i7-14700F + RTX4060 + H610 主板 + 500W 电源，商家报价 6999"
-    @State private var state: ConfigReviewState = .empty
+    @State private var selectedImageItem: PhotosPickerItem?
+    @State private var state: ConfigReviewState = .landing
 
     var body: some View {
-        VStack(spacing: 14) {
-            ScreenHeader(title: "配置单诊断", trailingIcon: nil, onBack: onBack)
-                .padding(.top, 8)
+        VStack(alignment: .leading, spacing: 18) {
+            Button(action: onBack) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .frame(width: 32, height: 32)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("返回")
+            .padding(.top, 8)
 
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 14) {
-                    SoftCard(radius: 22) {
-                        VStack(alignment: .leading, spacing: 14) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("粘贴配置单或报价")
-                                    .font(.appHeadline)
-                                    .foregroundStyle(AppTheme.primaryText)
-                                Text("适合把商家整机、朋友推荐配置发来，让系统用小白能看懂的话判断能不能买。")
-                                    .font(.appCaption)
-                                    .foregroundStyle(AppTheme.secondaryText)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
+                VStack(alignment: .leading, spacing: 24) {
+                    ConfigReviewHeroView()
 
-                            TextEditor(text: $inputText)
-                                .font(.appBody)
-                                .frame(minHeight: 116)
-                                .padding(10)
-                                .scrollContentBackground(.hidden)
-                                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
-
-                            PrimaryButton(title: "开始诊断", icon: "magnifyingglass") {
-                                state = .loading
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                                    state = .result
-                                }
-                            }
+                    ConfigReviewActionCard(
+                        icon: "doc",
+                        title: "上传配置单",
+                        subtitle: "支持截图、照片、聊天记录"
+                    ) {
+                        PhotosPicker(selection: $selectedImageItem, matching: .images) {
+                            Text("选择图片")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 112, height: 44)
+                                .background(Color.black, in: Capsule())
                         }
-                        .padding(18)
                     }
+
+                    ConfigReviewActionCard(
+                        icon: "list.clipboard",
+                        title: "粘贴配置单",
+                        subtitle: "直接粘贴整段配置文本"
+                    ) {
+                        Button("去粘贴") {
+                            state = .input
+                        }
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Color.black)
+                        .frame(width: 112, height: 44)
+                        .background(Color.white, in: Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.black, lineWidth: 2)
+                        )
+                        .buttonStyle(.plain)
+                    }
+
+                    ConfigReviewExampleLink()
+
+                    VStack(alignment: .leading, spacing: 14) {
+                        Text("AI 将为你检查")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(AppTheme.secondaryText)
+
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 132), spacing: 12)], alignment: .leading, spacing: 12) {
+                            ConfigReviewCheckPill(icon: "puzzlepiece", title: "兼容性")
+                            ConfigReviewCheckPill(icon: "yensign", title: "预算")
+                            ConfigReviewCheckPill(icon: "speedometer", title: "性能瓶颈")
+                            ConfigReviewCheckPill(icon: "tag", title: "是否买贵")
+                        }
+                    }
+                    .padding(.top, 4)
 
                     switch state {
-                    case .empty:
-                        ConfigReviewEmptyView()
+                    case .landing:
+                        EmptyView()
+                    case .input:
+                        ConfigReviewInputPanel(inputText: $inputText, onSubmit: startTextReview)
                     case .loading:
                         ConfigReviewLoadingView()
-                    case .result:
-                        ConfigReviewResultView()
+                    case .result(let result):
+                        ConfigReviewResultView(result: result)
+                    case .error(let message):
+                        ConfigReviewErrorView(message: message)
                     }
                 }
-                .padding(.bottom, 22)
+                .padding(.bottom, 28)
             }
         }
         .padding(.horizontal, AppTheme.screenPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Color.white)
+        .onChange(of: selectedImageItem) { _, item in
+            guard let item else { return }
+            startImageReview(item)
+        }
+    }
+
+    private func startTextReview() {
+        state = .loading
+        Task {
+            do {
+                let result = try await AppAPIClient().analyzeConfigReviewText(inputText)
+                state = .result(result)
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+
+    private func startImageReview(_ item: PhotosPickerItem) {
+        state = .loading
+        Task {
+            do {
+                guard let data = try await item.loadTransferable(type: Data.self) else {
+                    state = .error("没有读取到图片内容")
+                    return
+                }
+                let result = try await AppAPIClient().analyzeConfigReviewImage(imageData: data)
+                state = .result(result)
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
     }
 }
 
-private struct ConfigReviewEmptyView: View {
+private struct ConfigReviewHeroView: View {
     var body: some View {
-        SoftCard(radius: 18) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("会输出三样东西")
+        VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("当前功能")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+
+                Text("配置排雷")
+                    .font(.system(size: 42, weight: .black))
+                    .foregroundStyle(Color.black)
+
+                Text("上传配置单或粘贴配置，AI 帮你找出哪里有坑")
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundStyle(Color.black.opacity(0.74))
+            }
+
+            HStack(spacing: 12) {
+                ConfigReviewHeroPoint(title: "识别搭配风险")
+                ConfigReviewHeroPoint(title: "检查兼容问题")
+                ConfigReviewHeroPoint(title: "给出修改建议")
+            }
+            .padding(.top, 10)
+        }
+    }
+}
+
+private struct ConfigReviewHeroPoint: View {
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "checkmark.circle")
+                .font(.system(size: 15, weight: .semibold))
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+        }
+        .foregroundStyle(AppTheme.secondaryText)
+    }
+}
+
+private struct ConfigReviewActionCard<Control: View>: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+    @ViewBuilder let control: () -> Control
+
+    var body: some View {
+        HStack(spacing: 30) {
+            ConfigReviewCardIcon(name: icon)
+                .frame(width: 96)
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text(title)
+                    .font(.system(size: 26, weight: .black))
+                    .foregroundStyle(Color.black)
+
+                Text(subtitle)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+
+                control()
+                    .padding(.top, 2)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 36)
+        .frame(maxWidth: .infinity, minHeight: 172)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 28))
+        .shadow(color: Color.black.opacity(0.06), radius: 26, x: 0, y: 16)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+private struct ConfigReviewCardIcon: View {
+    let name: String
+
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Image(systemName: name)
+                .font(.system(size: 58, weight: .light))
+                .foregroundStyle(Color.black)
+
+            if name == "doc" {
+                Image(systemName: "arrow.up")
+                    .font(.system(size: 23, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 44, height: 44)
+                    .background(Color.black, in: Circle())
+                    .offset(x: 12, y: 10)
+            }
+        }
+    }
+}
+
+private struct ConfigReviewExampleLink: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Spacer()
+            Image(systemName: "doc.text")
+                .font(.system(size: 16, weight: .semibold))
+            Text("查看示例")
+                .font(.system(size: 16, weight: .semibold))
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .bold))
+            Spacer()
+        }
+        .foregroundStyle(AppTheme.secondaryText)
+        .padding(.vertical, 4)
+    }
+}
+
+private struct ConfigReviewCheckPill: View {
+    let icon: String
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 9) {
+            Image(systemName: icon)
+                .font(.system(size: 15, weight: .semibold))
+            Text(title)
+                .font(.system(size: 14, weight: .bold))
+        }
+        .foregroundStyle(Color.black)
+        .padding(.horizontal, 14)
+        .frame(height: 42)
+        .background(AppTheme.softSurface, in: Capsule())
+    }
+}
+
+private struct ConfigReviewInputPanel: View {
+    @Binding var inputText: String
+    let onSubmit: () -> Void
+
+    var body: some View {
+        SoftCard(radius: 22) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("粘贴配置单或报价")
                     .font(.appHeadline)
                     .foregroundStyle(AppTheme.primaryText)
-                Text("小白结论、主要问题、以及一段可以直接复制给商家的回复。")
+
+                TextEditor(text: $inputText)
                     .font(.appBody)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(minHeight: 116)
+                    .padding(10)
+                    .scrollContentBackground(.hidden)
+                    .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+
+                PrimaryButton(title: "开始诊断", icon: "magnifyingglass", action: onSubmit)
             }
             .padding(18)
         }
@@ -102,15 +312,31 @@ private struct ConfigReviewLoadingView: View {
     }
 }
 
+private struct ConfigReviewErrorView: View {
+    let message: String
+
+    var body: some View {
+        SoftCard(radius: 18) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("识别失败")
+                    .font(.appHeadline)
+                    .foregroundStyle(AppTheme.primaryText)
+                Text(message)
+                    .font(.appBody)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(18)
+        }
+    }
+}
+
 private struct ConfigReviewResultView: View {
-    private let sourceText = "i7-14700F + RTX4060 + H610 + 500W，报价 6999"
-    private let conclusion = "不建议直接买。主要问题是 CPU 太高、显卡偏弱，主板和电源也偏保守，6999 这个报价不太划算。"
-    private let replyText = "这套配置有高 U 低显问题，预算更适合降低 CPU、提高显卡，电源建议换一线 650W，主板也建议至少换到供电更稳的 B760。"
-    private let risks = [
-        BuildRisk(level: .error, title: "高 U 低显", detail: "i7-14700F 搭配 RTX4060，对游戏用户来说预算分配不均衡。"),
-        BuildRisk(level: .warning, title: "主板偏保守", detail: "H610 搭配 i7 级 CPU 不利于长期满载稳定。"),
-        BuildRisk(level: .warning, title: "电源余量一般", detail: "500W 可以点亮，但更建议换一线 650W。")
-    ]
+    let result: ConfigReviewResponseDTO
+
+    private var riskLevel: RiskLevel {
+        RiskLevel(reviewLevel: result.riskLevel)
+    }
 
     var body: some View {
         VStack(spacing: 14) {
@@ -123,22 +349,22 @@ private struct ConfigReviewResultView: View {
 
                         Spacer()
 
-                        Text("不建议直接买")
+                        Text(riskLevel.title)
                             .font(.system(size: 10, weight: .bold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 9)
                             .padding(.vertical, 6)
-                            .background(AppTheme.error, in: Capsule())
+                            .background(riskLevel.color, in: Capsule())
                     }
 
-                    Text(sourceText)
+                    Text(result.sourceText)
                         .font(.appCaption)
                         .foregroundStyle(AppTheme.secondaryText)
                         .padding(10)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
 
-                    Text(conclusion)
+                    Text(result.summary)
                         .font(.appBody)
                         .foregroundStyle(AppTheme.primaryText)
                         .fixedSize(horizontal: false, vertical: true)
@@ -152,20 +378,21 @@ private struct ConfigReviewResultView: View {
                         .font(.appHeadline)
                         .foregroundStyle(AppTheme.primaryText)
 
-                    ForEach(risks) { risk in
+                    ForEach(result.findings) { finding in
+                        let level = RiskLevel(reviewLevel: finding.level)
                         HStack(alignment: .top, spacing: 10) {
-                            Text(risk.level.title)
+                            Text(level.title)
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 5)
-                                .background(risk.level.color, in: Capsule())
+                                .background(level.color, in: Capsule())
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(risk.title)
+                                Text(finding.title)
                                     .font(.appSubheadline)
                                     .foregroundStyle(AppTheme.primaryText)
-                                Text(risk.detail)
+                                Text(finding.detail)
                                     .font(.appCaption)
                                     .foregroundStyle(AppTheme.secondaryText)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -190,7 +417,7 @@ private struct ConfigReviewResultView: View {
                             .foregroundStyle(AppTheme.primaryText)
                     }
 
-                    Text(replyText)
+                    Text(result.replyText)
                         .font(.appBody)
                         .foregroundStyle(AppTheme.primaryText)
                         .fixedSize(horizontal: false, vertical: true)
@@ -212,6 +439,19 @@ private struct ConfigReviewResultView: View {
                 }
                 .padding(18)
             }
+        }
+    }
+}
+
+private extension RiskLevel {
+    init(reviewLevel: String) {
+        switch reviewLevel {
+        case "pass":
+            self = .pass
+        case "error":
+            self = .error
+        default:
+            self = .warning
         }
     }
 }

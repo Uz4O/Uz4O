@@ -5,8 +5,8 @@ struct LegalComplianceRulesTests {
     static func main() {
         assertEqual(
             LegalDocument.allCases.map(\.title),
-            ["用户协议", "隐私政策", "第三方信息共享清单", "社区规范"],
-            "Every effective legal document should have an in-app destination."
+            ["用户协议", "隐私政策", "第三方信息共享清单"],
+            "Launch legal documents should match the no-community build."
         )
         assertEqual(
             LoginConsentState().canAuthenticate,
@@ -22,15 +22,15 @@ struct LegalComplianceRulesTests {
         assertEqual(LegalContact.operatorName, "孙裕凤", "Operator metadata must stay consistent.")
         assertEqual(LegalContact.email, "youz66811@gmail.com", "Contact metadata must stay consistent.")
 
-        let communityGuidelines = try! String(
-            contentsOfFile: "May/May/Legal/CommunityGuidelines.md",
-            encoding: .utf8
-        )
-        assertContains(communityGuidelines, "未满14周岁", "Community rules must repeat the child age boundary.")
-        assertContains(communityGuidelines, "网络暴力", "Community rules must cover online violence and harassment.")
-        assertContains(communityGuidelines, "价格、性能、兼容性", "Community rules must cover hardware advice risk.")
-        assertContains(communityGuidelines, "优先处理涉未成年人", "Community rules must prioritize minor-related reports.")
-        assertContains(communityGuidelines, "15个工作日", "Community appeal response timing should stay visible.")
+        let userAgreement = try! String(contentsOfFile: "May/May/Legal/UserAgreement.md", encoding: .utf8)
+        let privacyPolicy = try! String(contentsOfFile: "May/May/Legal/PrivacyPolicy.md", encoding: .utf8)
+        let thirdPartyList = try! String(contentsOfFile: "May/May/Legal/ThirdPartySharingList.md", encoding: .utf8)
+        for legalText in [userAgreement, privacyPolicy, thirdPartyList] {
+            assertNotContains(legalText, "社区", "Launch legal text must not describe removed community features.")
+            assertNotContains(legalText, "帖子", "Launch legal text must not describe removed community posts.")
+            assertNotContains(legalText, "评论", "Launch legal text must not describe removed community comments.")
+            assertNotContains(legalText, "屏蔽", "Launch legal text must not describe removed community blocks.")
+        }
         print("LegalComplianceRulesTests passed")
     }
 
@@ -43,6 +43,12 @@ struct LegalComplianceRulesTests {
     private static func assertContains(_ text: String, _ expectedFragment: String, _ message: String) {
         guard text.contains(expectedFragment) else {
             fatalError("\(message)\nMissing: \(expectedFragment)")
+        }
+    }
+
+    private static func assertNotContains(_ text: String, _ unexpectedFragment: String, _ message: String) {
+        guard !text.contains(unexpectedFragment) else {
+            fatalError("\(message)\nUnexpected: \(unexpectedFragment)")
         }
     }
 }

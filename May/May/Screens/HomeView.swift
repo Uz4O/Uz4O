@@ -514,6 +514,7 @@ private struct HomeBuildStyleRow: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 148, height: 106)
+                    .offset(x: 12)
             }
             .padding(.vertical, 10)
             .contentShape(Rectangle())

@@ -152,6 +152,27 @@ def test_review_analyze_rejects_too_short_input() -> None:
     assert response.status_code == 422
 
 
+def test_review_analyze_image_uses_ocr_text(monkeypatch) -> None:
+    client = make_client()
+
+    def fake_ocr(image_bytes: bytes) -> str:
+        assert image_bytes == b"fake image"
+        return "i7-14700F + RTX4060 + H610 主板 + 500W 电源，商家报价 6999"
+
+    monkeypatch.setattr("app.api.review.extract_text_from_image_bytes", fake_ocr, raising=False)
+
+    response = client.post(
+        "/v1/review/analyze/image",
+        files={"image": ("config.png", b"fake image", "image/png")},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["risk_level"] == "error"
+    assert body["source_text"].startswith("i7-14700F")
+    assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
+
+
 def test_review_analyze_stream_returns_progress_and_result_events() -> None:
     client = make_client()
 

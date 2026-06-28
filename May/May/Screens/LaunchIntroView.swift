@@ -36,7 +36,7 @@ struct LaunchIntroView: View {
             return
         }
 
-        withAnimation(.snappy(duration: 0.35)) {
+        withAnimation(.smooth(duration: 0.42)) {
             selectedPageID = min((selectedPageID ?? LaunchIntroPage.build.id) + 1, LaunchIntroPage.save.id)
         }
     }
@@ -54,6 +54,7 @@ private struct LaunchIntroPageView: View {
         GeometryReader { proxy in
             let heroHeight = proxy.size.height * 0.58
             let heroWidth = min(proxy.size.width * 1.08, 430)
+            let buttonWidth = max(0, min(proxy.size.width - 48, 390))
             let content = page.content
 
             VStack(spacing: 0) {
@@ -62,13 +63,13 @@ private struct LaunchIntroPageView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: heroWidth, height: heroHeight)
-                        .modifier(LayerMotion(parallax: 24, scaleDrop: 0.04, breatheY: bBack ? -2 : 2))
+                        .modifier(LayerMotion(parallax: 24, scaleDrop: 0.04, rotation: -4, breatheY: bBack ? -2 : 2))
 
                     Image(content.front)
                         .resizable()
                         .scaledToFit()
                         .frame(width: heroWidth, height: heroHeight)
-                        .modifier(LayerMotion(parallax: 56, scaleDrop: 0.07, breatheY: bFront ? -4 : 4))
+                        .modifier(LayerMotion(parallax: 66, scaleDrop: 0.08, rotation: 9, breatheY: bFront ? -4 : 4))
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: heroHeight)
@@ -103,7 +104,8 @@ private struct LaunchIntroPageView: View {
                     content
                         .blur(radius: abs(phase.value) * 8)
                         .opacity(1 - abs(phase.value))
-                        .offset(y: phase.value * 10)
+                        .scaleEffect(1 - abs(phase.value) * 0.035, anchor: .leading)
+                        .offset(x: phase.value * -18, y: abs(phase.value) * 18)
                 }
 
                 Spacer(minLength: 24)
@@ -112,12 +114,12 @@ private struct LaunchIntroPageView: View {
                     Text(content.cta)
                         .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 56)
+                        .frame(width: buttonWidth, height: 56)
                         .background(Color.black, in: Capsule())
                 }
                 .buttonStyle(.plain)
-                .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .offset(x: -10)
                 .padding(.bottom, 16)
 
                 LaunchIntroDots(selectedPageID: selectedPageID)
@@ -131,16 +133,23 @@ private struct LaunchIntroPageView: View {
 private struct LayerMotion: ViewModifier {
     let parallax: CGFloat
     let scaleDrop: CGFloat
+    let rotation: CGFloat
     let breatheY: CGFloat
 
     func body(content: Content) -> some View {
         content
             .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                 content
-                    .offset(x: phase.value * parallax)
+                    .offset(x: phase.value * parallax, y: abs(phase.value) * 16)
                     .scaleEffect(1 - abs(phase.value) * scaleDrop)
-                    .blur(radius: abs(phase.value) * 6)
-                    .opacity(1 - abs(phase.value) * 0.3)
+                    .rotation3DEffect(
+                        .degrees(phase.value * rotation),
+                        axis: (x: 0, y: 1, z: 0),
+                        anchor: phase.value > 0 ? .leading : .trailing,
+                        perspective: 0.68
+                    )
+                    .blur(radius: abs(phase.value) * 4)
+                    .opacity(1 - abs(phase.value) * 0.28)
             }
             .offset(y: breatheY)
     }
