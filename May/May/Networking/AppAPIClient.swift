@@ -423,13 +423,10 @@ struct ConfigReviewFindingDTO: Decodable, Identifiable {
 
 enum AppConfiguration {
     static var apiBaseURL: URL {
-        if let value = Bundle.main.object(forInfoDictionaryKey: "API_BASE_URL") as? String,
-           let url = URL(string: value),
-           let scheme = url.scheme,
-           ["http", "https"].contains(scheme) {
-            return url
-        }
-
+#if DEBUG
         return URL(string: "http://127.0.0.1:8790")!
+#else
+        return URL(string: "https://api.uzbox.top")!
+#endif
     }
 }

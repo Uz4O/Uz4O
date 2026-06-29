@@ -150,12 +150,13 @@ This repository often has active uncommitted UI changes. Do not revert user or o
 ## Suggested Workflow for Claude
 
 1. Read this file first.
-2. Run `git status --short --branch`.
-3. Inspect the exact screen/model files related to the user's request.
-4. Preserve existing SwiftUI visual patterns unless the user asks for a redesign.
-5. Keep frontend changes scoped and verify with an iOS Simulator build.
-6. If changing UI, use simulator screenshots or UI snapshots for visual sanity checks.
-7. If asked about backend, inspect `backend/` and `docs/后端开发完成总结-2026-06-16.md`; do not assume backend work is unstarted.
+2. For backend, API, server, deployment, domain, ICP, or launch-readiness work, read `docs/agents/backend-server-context.md`.
+3. Run `git status --short --branch`.
+4. Inspect the exact screen/model files related to the user's request.
+5. Preserve existing SwiftUI visual patterns unless the user asks for a redesign.
+6. Keep frontend changes scoped and verify with an iOS Simulator build.
+7. If changing UI, use simulator screenshots or UI snapshots for visual sanity checks.
+8. If asked about backend, inspect `backend/` and `docs/后端开发完成总结-2026-06-16.md`; do not assume backend work is unstarted.
 
 ## Suggested Skills
 

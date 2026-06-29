@@ -97,7 +97,7 @@ def test_health_reports_unconfigured_optional_dependencies() -> None:
             "api_docs": "disabled",
             "sms_debug": "enabled",
             "sms_provider": "debug",
-            "max_request_body_bytes": 1000000,
+            "max_request_body_bytes": 10000000,
         },
         "production": {
             "ready": False,

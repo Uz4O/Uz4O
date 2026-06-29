@@ -17,19 +17,19 @@ struct ConfigReviewView: View {
     @State private var state: ConfigReviewState = .landing
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: 14) {
             Button(action: onBack) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 28, height: 28)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("返回")
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 18) {
                     ConfigReviewHeroView()
 
                     ConfigReviewActionCard(
@@ -39,9 +39,9 @@ struct ConfigReviewView: View {
                     ) {
                         PhotosPicker(selection: $selectedImageItem, matching: .images) {
                             Text("选择图片")
-                                .font(.system(size: 15, weight: .bold))
+                                .font(.system(size: 14, weight: .bold))
                                 .foregroundStyle(.white)
-                                .frame(width: 112, height: 44)
+                                .frame(width: 100, height: 38)
                                 .background(Color.black, in: Capsule())
                         }
                     }
@@ -54,9 +54,9 @@ struct ConfigReviewView: View {
                         Button("去粘贴") {
                             state = .input
                         }
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundStyle(Color.black)
-                        .frame(width: 112, height: 44)
+                        .frame(width: 100, height: 38)
                         .background(Color.white, in: Capsule())
                         .overlay(
                             Capsule()
@@ -67,12 +67,12 @@ struct ConfigReviewView: View {
 
                     ConfigReviewExampleLink()
 
-                    VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("AI 将为你检查")
-                            .font(.system(size: 14, weight: .regular))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundStyle(AppTheme.secondaryText)
 
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 132), spacing: 12)], alignment: .leading, spacing: 12) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 116), spacing: 10)], alignment: .leading, spacing: 10) {
                             ConfigReviewCheckPill(icon: "puzzlepiece", title: "兼容性")
                             ConfigReviewCheckPill(icon: "yensign", title: "预算")
                             ConfigReviewCheckPill(icon: "speedometer", title: "性能瓶颈")
@@ -94,10 +94,10 @@ struct ConfigReviewView: View {
                         ConfigReviewErrorView(message: message)
                     }
                 }
-                .padding(.bottom, 28)
+                .padding(.bottom, 24)
             }
         }
-        .padding(.horizontal, AppTheme.screenPadding)
+        .padding(.horizontal, 30)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.white)
         .onChange(of: selectedImageItem) { _, item in
@@ -137,27 +137,27 @@ struct ConfigReviewView: View {
 
 private struct ConfigReviewHeroView: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 15) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text("当前功能")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(AppTheme.secondaryText)
 
                 Text("配置排雷")
-                    .font(.system(size: 42, weight: .black))
+                    .font(.system(size: 36, weight: .black))
                     .foregroundStyle(Color.black)
 
                 Text("上传配置单或粘贴配置，AI 帮你找出哪里有坑")
-                    .font(.system(size: 19, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.black.opacity(0.74))
             }
 
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 ConfigReviewHeroPoint(title: "识别搭配风险")
                 ConfigReviewHeroPoint(title: "检查兼容问题")
                 ConfigReviewHeroPoint(title: "给出修改建议")
             }
-            .padding(.top, 10)
+            .padding(.top, 6)
         }
     }
 }
@@ -166,11 +166,11 @@ private struct ConfigReviewHeroPoint: View {
     let title: String
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             Image(systemName: "checkmark.circle")
-                .font(.system(size: 15, weight: .semibold))
-            Text(title)
                 .font(.system(size: 13, weight: .semibold))
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
         }
         .foregroundStyle(AppTheme.secondaryText)
     }
@@ -183,17 +183,17 @@ private struct ConfigReviewActionCard<Control: View>: View {
     @ViewBuilder let control: () -> Control
 
     var body: some View {
-        HStack(spacing: 30) {
+        HStack(spacing: 22) {
             ConfigReviewCardIcon(name: icon)
-                .frame(width: 96)
+                .frame(width: 76)
 
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 9) {
                 Text(title)
-                    .font(.system(size: 26, weight: .black))
+                    .font(.system(size: 23, weight: .black))
                     .foregroundStyle(Color.black)
 
                 Text(subtitle)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(AppTheme.secondaryText)
 
                 control()
@@ -202,10 +202,10 @@ private struct ConfigReviewActionCard<Control: View>: View {
 
             Spacer(minLength: 0)
         }
-        .padding(.horizontal, 36)
-        .frame(maxWidth: .infinity, minHeight: 172)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 28))
-        .shadow(color: Color.black.opacity(0.06), radius: 26, x: 0, y: 16)
+        .padding(.horizontal, 28)
+        .frame(maxWidth: .infinity, minHeight: 146)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 24))
+        .shadow(color: Color.black.opacity(0.055), radius: 22, x: 0, y: 13)
         .accessibilityElement(children: .combine)
     }
 }
@@ -216,16 +216,16 @@ private struct ConfigReviewCardIcon: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             Image(systemName: name)
-                .font(.system(size: 58, weight: .light))
+                .font(.system(size: 48, weight: .light))
                 .foregroundStyle(Color.black)
 
             if name == "doc" {
                 Image(systemName: "arrow.up")
-                    .font(.system(size: 23, weight: .bold))
+                    .font(.system(size: 19, weight: .bold))
                     .foregroundStyle(.white)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 36, height: 36)
                     .background(Color.black, in: Circle())
-                    .offset(x: 12, y: 10)
+                    .offset(x: 9, y: 8)
             }
         }
     }
@@ -236,11 +236,11 @@ private struct ConfigReviewExampleLink: View {
         HStack(spacing: 10) {
             Spacer()
             Image(systemName: "doc.text")
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
             Text("查看示例")
-                .font(.system(size: 16, weight: .semibold))
+                .font(.system(size: 14, weight: .medium))
             Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .bold))
+                .font(.system(size: 12, weight: .bold))
             Spacer()
         }
         .foregroundStyle(AppTheme.secondaryText)
@@ -253,15 +253,15 @@ private struct ConfigReviewCheckPill: View {
     let title: String
 
     var body: some View {
-        HStack(spacing: 9) {
+        HStack(spacing: 8) {
             Image(systemName: icon)
-                .font(.system(size: 15, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
             Text(title)
-                .font(.system(size: 14, weight: .bold))
+                .font(.system(size: 13, weight: .semibold))
         }
         .foregroundStyle(Color.black)
-        .padding(.horizontal, 14)
-        .frame(height: 42)
+        .padding(.horizontal, 12)
+        .frame(height: 36)
         .background(AppTheme.softSurface, in: Capsule())
     }
 }

@@ -25,6 +25,42 @@ struct GuideFlowRulesTests {
         assertEqual(GuideFlow.featuredGuideHomeEntry.id, "troubleshooting", "Guide home should feature the no-boot troubleshooting assistant first.")
         assertEqual(GuideFlow.secondaryGuideHomeEntries.map(\.id), ["components", "preparation", "faq"], "Guide home should put the remaining three entries under the featured card.")
         assertEqual(GuideFlow.secondaryGuideHomeEntries.map(\.title), ["电脑八大件展示", "装机前需准备和了解的事", "常见问题答疑解惑"], "Guide home should keep the three lower functions in the reference order.")
+        assertEqual(GuideFlow.noBootChecklistScenarios.count, 2, "No-boot assistant should split the two common failure states.")
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios.map(\.title),
+            ["显示器不亮，主机亮着", "显示器和主机都不亮"],
+            "No-boot scenarios should match the approved checklist entry choices."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios.allSatisfy { $0.subtitle.contains("AI") == false },
+            true,
+            "No-boot checklist copy should not imply AI involvement."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios.map { $0.steps.count },
+            [7, 7],
+            "Each no-boot scenario should start with seven ordered checklist steps."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios[0].steps.first?.title,
+            "显示器是否通电",
+            "Display-on-host-on path should start with monitor power."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios[0].steps.last?.title,
+            "查看主板故障灯或蜂鸣提示",
+            "Display-on-host-on path should end with board diagnostic indicators."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios[1].steps.first?.title,
+            "插排和墙插是否有电",
+            "All-dark path should start with wall power."
+        )
+        assertEqual(
+            GuideFlow.noBootChecklistScenarios[1].steps.last?.title,
+            "最小化启动，排除短路",
+            "All-dark path should end with a minimal boot check."
+        )
 
         print("GuideFlowRulesTests passed")
     }

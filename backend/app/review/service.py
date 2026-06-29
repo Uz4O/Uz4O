@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -32,6 +32,7 @@ class DetectedReviewComponent(BaseModel):
     name: str
     brand: str
     confidence: Literal["exact", "partial"]
+    specs: Dict[str, Any] = Field(default_factory=dict)
 
 
 class ReviewFinding(BaseModel):
@@ -61,10 +62,10 @@ def analyze_configuration_text(session: Session, text: str) -> ConfigReviewRespo
     detected = _detect_components(normalized_text, components)
     seller_price = _parse_seller_price(text)
     reference_total = _reference_total(detected, prices)
-    findings = _build_findings(detected, prices, seller_price, reference_total)
+    findings = _build_findings(detected, prices, seller_price, reference_total, normalized_text)
     questions = _questions_for_seller(detected, findings)
     risk_level = _overall_level(findings)
-    summary = _summary_for_level(risk_level)
+    summary = _summary_for_level(risk_level, findings)
     reply_text = _reply_text(summary, findings, questions)
     return ConfigReviewResponse(
         risk_level=risk_level,
@@ -115,6 +116,7 @@ def _best_match_for_role(
                 name=component.name,
                 brand=component.brand,
                 confidence=confidence,
+                specs=component.specs,
             )
     return best
 
@@ -140,9 +142,13 @@ def _build_findings(
     prices: Dict[str, ComponentPrice],
     seller_price: Optional[int],
     reference_total: Optional[int],
+    normalized_text: str,
 ) -> List[ReviewFinding]:
     findings: List[ReviewFinding] = []
     findings.extend(_missing_core_findings(detected))
+    findings.extend(_insufficient_information_findings(detected))
+    findings.extend(_marketing_findings(detected, normalized_text))
+    findings.extend(_outdated_clearance_findings(detected, normalized_text))
     findings.extend(_balance_findings(detected))
     findings.extend(_motherboard_findings(detected))
     findings.extend(_psu_findings(detected))
@@ -157,6 +163,86 @@ def _build_findings(
             )
         )
     return findings
+
+
+def _insufficient_information_findings(
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+) -> List[ReviewFinding]:
+    missing_roles = [role for role in ["cpu", "gpu", "psu"] if detected.get(role) is None]
+    if len(missing_roles) < 2:
+        return []
+    labels = "、".join(ROLE_LABELS[role] for role in missing_roles)
+    return [
+        ReviewFinding(
+            level="error",
+            code="insufficient_core_information",
+            title="核心型号信息不足",
+            detail=f"{labels} 都没有明确型号，无法判断性能、功耗和价格，不建议在商家补全前购买。",
+        )
+    ]
+
+
+def _marketing_findings(
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+    normalized_text: str,
+) -> List[ReviewFinding]:
+    marketing_terms = [
+        "i7级",
+        "i9级",
+        "电竞级",
+        "高端独显",
+        "高性能显卡",
+        "游戏显卡",
+        "军工主板",
+        "高性能游戏主机",
+    ]
+    matched_terms = [term for term in marketing_terms if _normalize(term) in normalized_text]
+    if not matched_terms:
+        return []
+    missing_labels = [
+        ROLE_LABELS[role]
+        for role in ["cpu", "gpu", "motherboard"]
+        if detected.get(role) is None
+    ]
+    if not missing_labels:
+        return []
+    return [
+        ReviewFinding(
+            level="error",
+            code="marketing_terms_without_models",
+            title="营销话术替代具体型号",
+            detail=f"配置单使用了{'、'.join(matched_terms)}这类听起来高级但不等于型号的话术，且{'、'.join(missing_labels)}没有写清楚。",
+        )
+    ]
+
+
+def _outdated_clearance_findings(
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+    normalized_text: str,
+) -> List[ReviewFinding]:
+    risky_components = [
+        component
+        for component in detected.values()
+        if component is not None and _is_outdated_clearance_component(component)
+    ]
+    if not risky_components:
+        return []
+    level: ReviewRiskLevel = "error" if _looks_sold_as_performance_build(normalized_text) else "warning"
+    names = "、".join(component.name for component in risky_components)
+    detail = (
+        f"{names} 属于明显老旧或清库存硬件，却被包装成高性能/游戏主机，风险很高。"
+        if level == "error"
+        else f"{names} 属于明显老旧或清库存硬件，购买前要确认用途和价格是否真的合理。"
+    )
+    return [
+        ReviewFinding(
+            level=level,
+            code="outdated_clearance_hardware",
+            title="老旧清库存硬件风险",
+            detail=detail,
+            component_ids=[component.component_id for component in risky_components],
+        )
+    ]
 
 
 def _missing_core_findings(
@@ -195,6 +281,16 @@ def _balance_findings(
                 component_ids=[cpu.component_id, gpu.component_id],
             )
         ]
+    if cpu_tier <= 3 and gpu_tier >= 4080:
+        return [
+            ReviewFinding(
+                level="warning",
+                code="gpu_cpu_imbalance",
+                title="显卡很强，CPU 偏弱",
+                detail=f"{gpu.name} 的档次明显高于 {cpu.name}，高帧率游戏可能被 CPU 拖住。",
+                component_ids=[cpu.component_id, gpu.component_id],
+            )
+        ]
     return []
 
 
@@ -225,6 +321,33 @@ def _psu_findings(
     psu = detected.get("psu")
     if psu is None:
         return []
+    psu_watt = _int_spec(psu, "watt")
+    total_tdp = sum(
+        _int_spec(component, "tdp")
+        for role, component in detected.items()
+        if role != "psu" and component is not None
+    )
+    if psu_watt and total_tdp:
+        if psu_watt < total_tdp:
+            return [
+                ReviewFinding(
+                    level="error",
+                    code="psu_wattage_insufficient",
+                    title="电源瓦数可能不够",
+                    detail=f"已识别配件估算功耗约 {total_tdp}W，{psu_watt}W 电源可能带不动这套配置。",
+                    component_ids=[psu.component_id],
+                )
+            ]
+        if psu_watt < total_tdp * 1.3:
+            return [
+                ReviewFinding(
+                    level="warning",
+                    code="psu_wattage_tight",
+                    title="电源余量偏紧",
+                    detail=f"已识别配件估算功耗约 {total_tdp}W，{psu_watt}W 电源余量偏紧。",
+                    component_ids=[psu.component_id],
+                )
+            ]
     if psu.brand in {"未知", "Unknown", ""}:
         return [
             ReviewFinding(
@@ -268,13 +391,22 @@ def _price_findings(
                 detail="配置单里没有识别到明确总价，暂时不能判断是否虚高。",
             )
         )
-    elif reference_total is not None and seller_price > reference_total * 1.18:
+    elif reference_total is not None and seller_price > reference_total * 1.2:
         findings.append(
             ReviewFinding(
                 level="error",
                 code="seller_price_high",
                 title="报价明显偏高",
                 detail=f"已识别配件参考价合计约 {reference_total} 元，商家报价 {seller_price} 元，差距偏大。",
+            )
+        )
+    elif reference_total is not None and seller_price > reference_total * 1.1:
+        findings.append(
+            ReviewFinding(
+                level="warning",
+                code="seller_price_above_market",
+                title="报价偏贵",
+                detail=f"已识别配件参考价合计约 {reference_total} 元，商家报价 {seller_price} 元，已经高出正常装机服务溢价。",
             )
         )
     return findings
@@ -303,7 +435,9 @@ def _overall_level(findings: List[ReviewFinding]) -> ReviewRiskLevel:
     return "pass"
 
 
-def _summary_for_level(level: ReviewRiskLevel) -> str:
+def _summary_for_level(level: ReviewRiskLevel, findings: List[ReviewFinding]) -> str:
+    if any(finding.code == "insufficient_core_information" for finding in findings):
+        return "信息不足，不建议直接买。先让商家补全核心配件的具体品牌和型号。"
     if level == "error":
         return "不建议直接买。这张配置单存在比较明显的风险点，需要让商家改清楚后再考虑。"
     if level == "warning":
@@ -361,6 +495,22 @@ def _cpu_tier(name: str) -> int:
 def _gpu_tier(name: str) -> int:
     match = re.search(r"(\d{4})", name)
     return int(match.group(1)) if match else 0
+
+
+def _int_spec(component: DetectedReviewComponent, key: str) -> int:
+    value = component.specs.get(key)
+    return value if isinstance(value, int) else 0
+
+
+def _is_outdated_clearance_component(component: DetectedReviewComponent) -> bool:
+    normalized_name = _normalize(component.name + component.component_id)
+    outdated_markers = ["e5", "xeon", "gt730", "gt710", "gtx750ti", "ddr3"]
+    return any(marker in normalized_name for marker in outdated_markers)
+
+
+def _looks_sold_as_performance_build(normalized_text: str) -> bool:
+    performance_terms = ["高性能", "游戏主机", "电竞", "游戏显卡", "高端独显"]
+    return any(_normalize(term) in normalized_text for term in performance_terms)
 
 
 def _normalize(value: str) -> str:

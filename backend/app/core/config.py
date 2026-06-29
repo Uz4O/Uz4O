@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     response_cache_enabled: bool = True
     response_cache_ttl_seconds: int = 300
     response_cache_max_entries: int = 512
-    max_request_body_bytes: int = 1_000_000
+    max_request_body_bytes: int = 10_000_000
     ops_token: Optional[str] = None
     community_image_upload_enabled: bool = False
     community_image_max_bytes: int = 5_000_000

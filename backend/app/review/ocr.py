@@ -46,9 +46,12 @@ def _paddleocr_engine() -> Any:
         raise OCRUnavailableError("PaddleOCR 尚未安装，请安装 paddleocr 后再使用图片排雷") from exc
 
     try:
-        return PaddleOCR(lang="ch", use_angle_cls=True)
-    except TypeError:
-        return PaddleOCR(lang="ch")
+        try:
+            return PaddleOCR(lang="ch", use_angle_cls=True)
+        except TypeError:
+            return PaddleOCR(lang="ch")
+    except Exception as exc:  # pragma: no cover - exact OCR runtime depends on host
+        raise OCRUnavailableError("PaddleOCR 初始化失败，请确认 paddlepaddle 已安装后再使用图片排雷") from exc
 
 
 def _texts_from_ocr_result(value: Any) -> List[str]:
@@ -80,4 +83,3 @@ def _walk_texts(value: Any) -> Iterable[str]:
             return
         for child in value:
             yield from _walk_texts(child)
-
