@@ -130,13 +130,13 @@ curl --noproxy '*' --resolve api.uzbox.top:443:8.152.202.123 -I https://api.uzbo
 
 ## Current Production Health
 
-Last checked health showed the backend process is reachable but not production-ready:
+Last checked health showed the backend process is reachable and PostgreSQL is configured, but the app is not production-ready:
 
 ```json
 {
   "status": "ok",
   "dependencies": {
-    "postgres": "not_configured",
+    "postgres": "configured",
     "redis": "not_configured"
   },
   "security": {
@@ -152,7 +152,6 @@ Last checked health showed the backend process is reachable but not production-r
   "production": {
     "ready": false,
     "blocking_items": [
-      "postgres_not_configured",
       "auth_token_secret_default",
       "sms_debug_enabled",
       "ai_provider_api_key_not_configured",
@@ -164,18 +163,21 @@ Last checked health showed the backend process is reachable but not production-r
 }
 ```
 
+The database schema is at Alembic revision `20260621_0007`. Catalog endpoints now return 200, but the production catalog/readiness data is empty until hardware components, prices, recommendations, and build templates are imported.
+
 Because first release will not expose community, `community_image_upload_not_configured` may be handled by hiding community/image features rather than configuring OSS immediately. Do not silently remove the health gate without an explicit release decision.
 
-## Deployment Warning
+## Deployment
 
-`backend/scripts/deploy.sh` is currently stale. It still points at the old server `36.213.128.58`, key `~/.ssh/mark_six_deploy`, remote directory `/opt/new-site`, and PM2 app `new-site`.
-
-Do not use that script for the current production server until it is updated and verified. Current production is:
+`backend/scripts/deploy.sh` is configured for the current production server:
 
 - Server: `8.152.202.123`.
+- SSH key: `~/.ssh/ai_builder_aliyun`.
 - Directory: `/opt/ai-builder-api`.
 - Service: `ai-builder-api.service`.
-- Manager: systemd, not PM2.
+- Manager: systemd.
+
+The old server `36.213.128.58` still exists for previous projects, but it is not the current `api.uzbox.top` target.
 
 ## ICP and Domain Notes
 

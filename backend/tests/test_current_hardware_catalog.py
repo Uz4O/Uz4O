@@ -3,12 +3,12 @@ from pathlib import Path
 from app.catalog.seed import extract_catalog_components
 
 
-def test_current_swift_catalog_extracts_715_components() -> None:
+def test_current_swift_catalog_extracts_723_components() -> None:
     catalog_path = Path("../May/May/Models/HardwareCatalog.swift")
 
     components = extract_catalog_components(catalog_path)
 
-    assert len(components) == 715
+    assert len(components) == 723
     assert {component.category for component in components} == {
         "cpu",
         "gpu",
@@ -17,7 +17,7 @@ def test_current_swift_catalog_extracts_715_components() -> None:
         "storage",
         "psu",
     }
-    assert len({component.id for component in components}) == 715
+    assert len({component.id for component in components}) == 723
 
     cpus = [component for component in components if component.category == "cpu"]
     gpus = [component for component in components if component.category == "gpu"]

@@ -13,7 +13,7 @@ struct AccountDeletionView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("注销后将删除或匿名化账号资料、硬件档案和保存方案。社区内容及安全记录将按隐私政策和法律要求处理。")
+                    Text("注销后将删除或匿名化账号资料、硬件档案和保存方案。相关记录将按隐私政策和法律要求处理。")
                         .font(.appBody)
                         .foregroundStyle(AppTheme.primaryText)
                         .lineSpacing(5)

@@ -8,20 +8,47 @@ struct AIBuildView: View {
     @State private var selectedGameCategories: Set<String> = ["FPS"]
     @State private var presentedGameCategory: GameCategory?
     @State private var selectedOfficeApps: Set<String> = []
-    @State private var purchasePreference = "全新优先"
+    @State private var usesNoGpuBuild = false
+    @State private var needsWirelessNetwork = false
     @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
-    @State private var cpuPreference = "任意"
-    @State private var gpuPreference = "任意"
-    @State private var specifiedCPU = ""
-    @State private var specifiedGPU = ""
+    @State private var upgradePreference = "AI 自动平衡"
+    @State private var selectedAestheticStyleID = AestheticBuildStyle.featured[0].id
 
     let onBack: () -> Void
     let onShowResult: () -> Void
 
-    private let purchaseOptions = ["全新优先", "部分配件二手", "全二手"]
     private let gameCategories = GameCategory.defaultCategories
     private let officeAppOptions = ["Office", "WPS", "Photoshop", "Premiere", "AutoCAD", "Blender"]
+
+    private var visibleSteps: [AIBuildStep] {
+        AIBuildFlowRules.visibleSteps(
+            budget: Int(budget),
+            ownedParts: []
+        )
+    }
+
+    private var nextStep: AIBuildStep? {
+        guard let index = visibleSteps.firstIndex(of: currentStep) else {
+            return visibleSteps.first
+        }
+        let nextIndex = index + 1
+        return nextIndex < visibleSteps.count ? visibleSteps[nextIndex] : nil
+    }
+
+    private var previousStep: AIBuildStep? {
+        guard let index = visibleSteps.firstIndex(of: currentStep), index > 0 else {
+            return nil
+        }
+        return visibleSteps[index - 1]
+    }
+
+    private var usesLowBudgetMode: Bool {
+        AIBuildFlowRules.usesLowBudgetMode(
+            budget: Int(budget),
+            ownedParts: []
+        )
+    }
 
     var body: some View {
         VStack(spacing: 14) {
@@ -30,7 +57,7 @@ struct AIBuildView: View {
                     ScreenHeader(title: "AI 写配置", trailingIcon: nil, onBack: onBack)
                         .padding(.top, 8)
 
-                    StepProgressHeader(currentStep: currentStep)
+                    StepProgressHeader(currentStep: currentStep, steps: visibleSteps)
 
                     SoftCard(radius: 22) {
                         VStack(alignment: .leading, spacing: 18) {
@@ -52,9 +79,9 @@ struct AIBuildView: View {
                 .padding(.horizontal, AppTheme.screenPadding)
 
             WizardBottomBar(
-                canGoBack: currentStep.previous != nil,
-                primaryTitle: currentStep.next == nil ? "生成配置方案" : "下一步",
-                primaryIcon: currentStep.next == nil ? "sparkles" : "arrow.right",
+                canGoBack: previousStep != nil,
+                primaryTitle: nextStep == nil ? "生成配置方案" : "下一步",
+                primaryIcon: nextStep == nil ? "sparkles" : "arrow.right",
                 onBack: goToPreviousStep,
                 onPrimary: handlePrimaryAction
             )
@@ -70,6 +97,17 @@ struct AIBuildView: View {
         case .budget:
             BudgetSection(budget: $budget)
             PreferenceSegmentGroup(title: "主要用途", options: AppMockData.useCases, selected: $selectedUseCase)
+            Toggle(isOn: $usesNoGpuBuild) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("无显卡方案")
+                        .font(.appSubheadline)
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text("是否自备显卡")
+                        .font(.appCaption)
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
+            }
+            .tint(AppTheme.primaryText)
 
         case .scenario:
             ScenarioSelectionSection(
@@ -82,7 +120,17 @@ struct AIBuildView: View {
             )
 
         case .purchase:
-            PreferenceSegmentGroup(title: "购买偏好", options: purchaseOptions, selected: $purchasePreference)
+            Toggle(isOn: $needsWirelessNetwork) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("无线网络")
+                        .font(.appSubheadline)
+                        .foregroundStyle(AppTheme.primaryText)
+                    Text("房间没有墙上网口时建议打开")
+                        .font(.appCaption)
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
+            }
+            .tint(AppTheme.primaryText)
             VStack(alignment: .leading, spacing: 8) {
                 Text("装机偏好")
                     .font(.appSubheadline)
@@ -102,19 +150,14 @@ struct AIBuildView: View {
             )
 
         case .hardware:
-            PreferenceSegmentGroup(
-                title: "CPU 偏好",
-                options: ["任意", "Intel", "AMD"],
-                selected: $cpuPreference
-            )
-            SpecificPartField(title: "指定 CPU 型号", placeholder: "例如 Ryzen 5 7500F", text: $specifiedCPU)
-            PreferenceSegmentGroup(
-                title: "显卡偏好",
-                options: ["任意", "NVIDIA", "AMD"],
-                selected: $gpuPreference
-            )
-            SpecificPartField(title: "指定显卡型号", placeholder: "例如 RTX 4070 Super", text: $specifiedGPU)
-            HardwareHint()
+            if selectedBuildPreference == .aesthetic {
+                AestheticStylePreferenceSection(
+                    styles: AestheticBuildStyle.featured,
+                    selectedID: $selectedAestheticStyleID
+                )
+            } else {
+                UpgradePreferenceSection(selected: $upgradePreference)
+            }
         }
     }
 
@@ -122,9 +165,10 @@ struct AIBuildView: View {
         guard !isChangingStep else { return }
         isChangingStep = true
 
-        if let next = currentStep.next {
+        if let next = nextStep {
             currentStep = next
         } else {
+            applyLowBudgetDefaultsIfNeeded()
             onShowResult()
         }
 
@@ -135,7 +179,7 @@ struct AIBuildView: View {
         guard !isChangingStep else { return }
         isChangingStep = true
 
-        if let previous = currentStep.previous {
+        if let previous = previousStep {
             currentStep = previous
         }
 
@@ -147,76 +191,40 @@ struct AIBuildView: View {
             isChangingStep = false
         }
     }
-}
 
-private enum AIBuildStep: Int, CaseIterable {
-    case budget
-    case scenario
-    case purchase
-    case hardware
-
-    var title: String {
-        switch self {
-        case .budget:
-            return "预算和用途"
-        case .scenario:
-            return "场景选择"
-        case .purchase:
-            return "购买和外观"
-        case .hardware:
-            return "硬件偏好"
-        }
-    }
-
-    var subtitle: String {
-        switch self {
-        case .budget:
-            return "先确定大方向，AI 会按预算控制配置。"
-        case .scenario:
-            return "选择常用场景。"
-        case .purchase:
-            return "选择你能接受的购买方式和主机外观。"
-        case .hardware:
-            return "不懂就保持任意，AI 会优先避开明显短板。"
-        }
-    }
-
-    var indexText: String {
-        "\(rawValue + 1)/\(Self.allCases.count)"
-    }
-
-    var next: AIBuildStep? {
-        Self(rawValue: rawValue + 1)
-    }
-
-    var previous: AIBuildStep? {
-        Self(rawValue: rawValue - 1)
+    private func applyLowBudgetDefaultsIfNeeded() {
+        guard usesLowBudgetMode else { return }
+        let defaults = AIBuildFlowRules.lowBudgetDefaults(useCase: selectedUseCase)
+        selectedBuildPreference = defaults.buildPreference
+        chassisColorPreference = defaults.colorPreference
     }
 }
 
 private struct StepProgressHeader: View {
     let currentStep: AIBuildStep
+    let steps: [AIBuildStep]
 
     var body: some View {
         VStack(spacing: 12) {
             HStack {
-                ForEach(AIBuildStep.allCases, id: \.self) { step in
+                ForEach(steps, id: \.self) { step in
                     StepIndicator(
                         title: step.title,
                         isActive: step == currentStep,
-                        isComplete: step.rawValue < currentStep.rawValue
+                        displayNumber: stepNumber(for: step),
+                        isComplete: isComplete(step)
                     )
 
-                    if step != AIBuildStep.allCases.last {
+                    if step != steps.last {
                         Rectangle()
-                            .fill(step.rawValue < currentStep.rawValue ? AppTheme.primaryText : AppTheme.border)
+                            .fill(isComplete(step) ? AppTheme.primaryText : AppTheme.border)
                             .frame(height: 2)
                     }
                 }
             }
 
             HStack {
-                Text("第 \(currentStep.indexText) 步")
+                Text("第 \(currentStepIndex + 1)/\(steps.count) 步")
                     .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
                     .padding(.horizontal, 10)
@@ -228,11 +236,25 @@ private struct StepProgressHeader: View {
             }
         }
     }
+
+    private var currentStepIndex: Int {
+        steps.firstIndex(of: currentStep) ?? 0
+    }
+
+    private func stepNumber(for step: AIBuildStep) -> Int {
+        (steps.firstIndex(of: step) ?? 0) + 1
+    }
+
+    private func isComplete(_ step: AIBuildStep) -> Bool {
+        guard let index = steps.firstIndex(of: step) else { return false }
+        return index < currentStepIndex
+    }
 }
 
 private struct StepIndicator: View {
     let title: String
     let isActive: Bool
+    let displayNumber: Int
     let isComplete: Bool
 
     var body: some View {
@@ -266,9 +288,6 @@ private struct StepIndicator: View {
         .frame(width: 66)
     }
 
-    private var displayNumber: Int {
-        AIBuildStep.allCases.firstIndex { $0.title == title }.map { $0 + 1 } ?? 1
-    }
 }
 
 private struct StepTitle: View {
@@ -287,26 +306,104 @@ private struct StepTitle: View {
     }
 }
 
-private struct HardwareHint: View {
-    var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(width: 28, height: 28)
-                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 8))
+private struct UpgradePreferenceSection: View {
+    @Binding var selected: String
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text("不知道选什么就保持任意")
-                    .font(.appSubheadline)
+    private let options = ["当前体验优先", "保留升级空间", "AI 自动平衡"]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            PreferenceSegmentGroup(title: "后期升级计划", options: options, selected: $selected)
+
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "arrow.up.forward.circle")
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
-                Text("AI 会根据预算和用途自动平衡 CPU、显卡和升级空间。")
+                    .frame(width: 28, height: 28)
+                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 8))
+
+                Text("性能优先会更偏向当前帧数；保留升级空间会给主板、电源和机箱留一点余量。")
                     .font(.appCaption)
                     .foregroundStyle(AppTheme.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(12)
+            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+        }
+    }
+}
+
+private struct AestheticStylePreferenceSection: View {
+    let styles: [AestheticBuildStyle]
+    @Binding var selectedID: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("选择装机风格")
+                .font(.appSubheadline)
+                .foregroundStyle(AppTheme.primaryText)
+
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                ForEach(styles) { style in
+                    AestheticStyleChoiceCard(
+                        style: style,
+                        isSelected: style.id == selectedID
+                    ) {
+                        selectedID = style.id
+                    }
+                }
             }
         }
-        .padding(12)
-        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+private struct AestheticStyleChoiceCard: View {
+    let style: AestheticBuildStyle
+    let isSelected: Bool
+    let onSelect: () -> Void
+
+    var body: some View {
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: 9) {
+                ZStack(alignment: .topTrailing) {
+                    Image(style.image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 92)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+
+                    if isSelected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(.white)
+                            .padding(8)
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(style.title)
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .lineLimit(1)
+
+                    Text(style.summary)
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(isSelected ? AppTheme.surface : AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 1.4 : 1)
+            )
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -774,32 +871,6 @@ private struct PreferenceSegmentGroup: View {
         }
     }
 }
-
-private struct SpecificPartField: View {
-    let title: String
-    let placeholder: String
-    @Binding var text: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.appSubheadline)
-                .foregroundStyle(AppTheme.primaryText)
-
-            TextField(placeholder, text: $text)
-                .font(.appBody)
-                .foregroundStyle(AppTheme.primaryText)
-                .padding(.horizontal, 14)
-                .frame(height: 46)
-                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(AppTheme.border, lineWidth: 1)
-                )
-        }
-    }
-}
-
 
 #Preview {
     AIBuildView(onBack: {}, onShowResult: {})

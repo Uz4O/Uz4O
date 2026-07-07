@@ -70,7 +70,7 @@ struct PostComposerButton: View {
                 .shadow(color: Color.black.opacity(0.16), radius: 14, x: 0, y: 8)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("发布帖子")
+        .accessibilityLabel("发布")
     }
 }
 

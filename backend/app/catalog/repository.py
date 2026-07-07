@@ -4,8 +4,8 @@ from typing import Iterable, List, Optional
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from app.catalog.models import ComponentPrice, HardwareComponent
-from app.catalog.prices import ApprovedPriceRow
+from app.catalog.models import ComponentPrice, GPUWhitelistPrice, HardwareComponent, MotherboardWhitelistPrice
+from app.catalog.prices import ApprovedPriceRow, GPUWhitelistPriceRow, MotherboardWhitelistPriceRow
 from app.catalog.seed import CatalogComponent
 
 
@@ -83,6 +83,56 @@ def seed_component_prices(
         }
         if row is None:
             session.add(ComponentPrice(component_id=price.component_id, **values))
+        else:
+            for key, value in values.items():
+                setattr(row, key, value)
+        count += 1
+    session.commit()
+    return count
+
+
+def seed_gpu_whitelist_prices(
+    session: Session,
+    prices: Iterable[GPUWhitelistPriceRow],
+) -> int:
+    count = 0
+    for price in prices:
+        row = session.get(GPUWhitelistPrice, price.component_id)
+        values = {
+            "name": price.name,
+            "used_price": price.used_price,
+            "new_price": price.new_price,
+            "source": price.source,
+            "approved_at": price.approved_at,
+        }
+        if row is None:
+            session.add(GPUWhitelistPrice(component_id=price.component_id, **values))
+        else:
+            for key, value in values.items():
+                setattr(row, key, value)
+        count += 1
+    session.commit()
+    return count
+
+
+def seed_motherboard_whitelist_prices(
+    session: Session,
+    prices: Iterable[MotherboardWhitelistPriceRow],
+) -> int:
+    count = 0
+    for price in prices:
+        row = session.get(MotherboardWhitelistPrice, price.component_id)
+        values = {
+            "name": price.name,
+            "platform": price.platform,
+            "used_price": price.used_price,
+            "new_price": price.new_price,
+            "status": price.status,
+            "source": price.source,
+            "approved_at": price.approved_at,
+        }
+        if row is None:
+            session.add(MotherboardWhitelistPrice(component_id=price.component_id, **values))
         else:
             for key, value in values.items():
                 setattr(row, key, value)

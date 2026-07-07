@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REMOTE_HOST="root@36.213.128.58"
-SSH_KEY="${HOME}/.ssh/mark_six_deploy"
-REMOTE_DIR="/opt/new-site"
-APP_NAME="new-site"
+REMOTE_HOST="root@8.152.202.123"
+SSH_KEY="${HOME}/.ssh/ai_builder_aliyun"
+REMOTE_DIR="/opt/ai-builder-api"
+SERVICE_NAME="ai-builder-api"
 PORT="8790"
 
 ssh -i "${SSH_KEY}" "${REMOTE_HOST}" "
   set -e
   if ss -lnt | grep -q ':${PORT} '; then
-    if ! pm2 describe '${APP_NAME}' >/dev/null 2>&1; then
+    if ! systemctl is-active --quiet '${SERVICE_NAME}'; then
       echo 'Port ${PORT} is occupied by another process.' >&2
       exit 1
     fi
@@ -26,6 +26,7 @@ rsync -az \
   --exclude ".pytest_cache/" \
   --exclude "**/__pycache__/" \
   --exclude "*.egg-info/" \
+  --exclude "build/" \
   --exclude "tests/" \
   -e "ssh -i ${SSH_KEY}" \
   ./ "${REMOTE_HOST}:${REMOTE_DIR}/"
@@ -44,6 +45,6 @@ ssh -i "${SSH_KEY}" "${REMOTE_HOST}" "
   python3 -m venv .venv
   .venv/bin/python -m pip install --upgrade pip
   .venv/bin/python -m pip install .
-  pm2 startOrRestart ecosystem.config.cjs --only '${APP_NAME}'
-  pm2 save
+  systemctl daemon-reload
+  systemctl restart '${SERVICE_NAME}'
 "

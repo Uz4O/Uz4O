@@ -3,10 +3,16 @@ from pathlib import Path
 
 from app.builds.repository import upsert_build_templates
 from app.builds.templates import read_build_template_inputs
-from app.catalog.prices import read_approved_price_rows
+from app.catalog.prices import (
+    read_approved_price_rows,
+    read_gpu_whitelist_price_rows,
+    read_motherboard_whitelist_price_rows,
+)
 from app.catalog.readiness import REQUIRED_RECOMMENDED_CATEGORIES, build_data_readiness
 from app.catalog.repository import seed_component_prices
+from app.catalog.repository import seed_gpu_whitelist_prices
 from app.catalog.repository import seed_hardware_components
+from app.catalog.repository import seed_motherboard_whitelist_prices
 from app.catalog.repository import update_recommended_components
 from app.catalog.seed import extract_catalog_components
 from app.core.config import Settings
@@ -23,6 +29,14 @@ def main() -> None:
     prices_parser = subparsers.add_parser("ingest-prices")
     prices_parser.add_argument("csv_path", type=Path)
     prices_parser.add_argument("--approved-at", required=True)
+
+    gpu_prices_parser = subparsers.add_parser("ingest-gpu-whitelist-prices")
+    gpu_prices_parser.add_argument("csv_path", type=Path)
+    gpu_prices_parser.add_argument("--approved-at", required=True)
+
+    motherboard_prices_parser = subparsers.add_parser("ingest-motherboard-whitelist-prices")
+    motherboard_prices_parser.add_argument("csv_path", type=Path)
+    motherboard_prices_parser.add_argument("--approved-at", required=True)
 
     build_templates_parser = subparsers.add_parser("import-build-templates")
     build_templates_parser.add_argument("json_path", type=Path)
@@ -46,6 +60,18 @@ def main() -> None:
         with session_factory() as session:
             count = seed_component_prices(session, prices)
         print(f"Imported {count} component prices.")
+    if args.command == "ingest-gpu-whitelist-prices":
+        prices = read_gpu_whitelist_price_rows(args.csv_path, approved_at=args.approved_at)
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            count = seed_gpu_whitelist_prices(session, prices)
+        print(f"Imported {count} GPU whitelist prices.")
+    if args.command == "ingest-motherboard-whitelist-prices":
+        prices = read_motherboard_whitelist_price_rows(args.csv_path, approved_at=args.approved_at)
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            count = seed_motherboard_whitelist_prices(session, prices)
+        print(f"Imported {count} motherboard whitelist prices.")
     if args.command == "import-build-templates":
         templates = read_build_template_inputs(args.json_path)
         session_factory = create_session_factory(Settings())
