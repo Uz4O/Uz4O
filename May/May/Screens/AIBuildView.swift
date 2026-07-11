@@ -5,21 +5,74 @@ struct AIBuildView: View {
     @State private var isChangingStep = false
     @State private var budget: Double = 6850
     @State private var selectedUseCase = "游戏"
-    @State private var selectedGameCategories: Set<String> = ["FPS"]
-    @State private var presentedGameCategory: GameCategory?
+    @State private var selectedGames: Set<String> = []
     @State private var selectedOfficeApps: Set<String> = []
     @State private var usesNoGpuBuild = false
     @State private var needsWirelessNetwork = false
     @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
-    @State private var upgradePreference = "AI 自动平衡"
+    @State private var upgradePreference = "当前体验优先"
+    @State private var selectedMemorySize = "16GB"
+    @State private var selectedStorageSize = "1TB"
     @State private var selectedAestheticStyleID = AestheticBuildStyle.featured[0].id
 
     let onBack: () -> Void
     let onShowResult: () -> Void
 
-    private let gameCategories = GameCategory.defaultCategories
+    private let gameOptions = [
+        "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "云顶之弈", "LOL",
+        "逃离塔科夫", "COD", "赛博朋克2077", "荒野大镖客2", "GTA5",
+        "黑神话悟空", "穿越火线", "APEX英雄", "地平线6", "艾尔登法环",
+        "城市天际线", "我的世界"
+    ]
+    private let gameIcons = [
+        "瓦罗兰特": "scope",
+        "CS2": "target",
+        "PUBG": "figure.run",
+        "三角洲行动": "map",
+        "云顶之弈": "checkerboard.shield",
+        "LOL": "shield",
+        "逃离塔科夫": "backpack",
+        "COD": "crosshair",
+        "赛博朋克2077": "sparkles",
+        "荒野大镖客2": "mountain.2",
+        "GTA5": "car",
+        "黑神话悟空": "flame",
+        "穿越火线": "plus.viewfinder",
+        "APEX英雄": "bolt",
+        "地平线6": "steeringwheel",
+        "艾尔登法环": "circle.hexagongrid",
+        "城市天际线": "building.2",
+        "我的世界": "cube"
+    ]
     private let officeAppOptions = ["Office", "WPS", "Photoshop", "Premiere", "AutoCAD", "Blender"]
+    private let memorySizeOptions = ["16GB", "32GB", "64GB"]
+    private let storageSizeOptions = ["512GB", "1TB", "2TB", "4TB"]
+
+    private var availableMemorySizeOptions: [String] {
+        let budgetValue = Int(budget)
+        if budgetValue < 5000 {
+            return ["16GB"]
+        }
+        if budgetValue < 15000 {
+            return ["16GB", "32GB"]
+        }
+        return memorySizeOptions
+    }
+
+    private var availableStorageSizeOptions: [String] {
+        let budgetValue = Int(budget)
+        if budgetValue < 4000 {
+            return ["512GB"]
+        }
+        if budgetValue < 8000 {
+            return ["512GB", "1TB"]
+        }
+        if budgetValue < 15000 {
+            return ["512GB", "1TB", "2TB"]
+        }
+        return storageSizeOptions
+    }
 
     private var visibleSteps: [AIBuildStep] {
         AIBuildFlowRules.visibleSteps(
@@ -51,7 +104,7 @@ struct AIBuildView: View {
     }
 
     var body: some View {
-        VStack(spacing: 14) {
+        ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
                     ScreenHeader(title: "AI 写配置", trailingIcon: nil, onBack: onBack)
@@ -70,13 +123,8 @@ struct AIBuildView: View {
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
                 }
                 .padding(.horizontal, AppTheme.screenPadding)
+                .padding(.bottom, 92)
             }
-
-            Text(AIContentDisclosure.text)
-                .font(.appCaption)
-                .foregroundStyle(AppTheme.secondaryText)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, AppTheme.screenPadding)
 
             WizardBottomBar(
                 canGoBack: previousStep != nil,
@@ -89,6 +137,10 @@ struct AIBuildView: View {
             .padding(.bottom, 18)
         }
         .animation(.easeInOut(duration: 0.18), value: currentStep)
+        .onAppear(perform: clampCapacitySelections)
+        .onChange(of: budget) { _, _ in
+            clampCapacitySelections()
+        }
     }
 
     @ViewBuilder
@@ -112,10 +164,10 @@ struct AIBuildView: View {
         case .scenario:
             ScenarioSelectionSection(
                 useCase: selectedUseCase,
-                gameCategories: gameCategories,
+                gameOptions: gameOptions,
+                gameIcons: gameIcons,
                 officeAppOptions: officeAppOptions,
-                selectedGameCategories: $selectedGameCategories,
-                presentedGameCategory: $presentedGameCategory,
+                selectedGames: $selectedGames,
                 selectedOfficeApps: $selectedOfficeApps
             )
 
@@ -158,6 +210,12 @@ struct AIBuildView: View {
             } else {
                 UpgradePreferenceSection(selected: $upgradePreference)
             }
+            if availableMemorySizeOptions.count > 1 {
+                PreferenceSegmentGroup(title: "内存大小", options: availableMemorySizeOptions, selected: $selectedMemorySize)
+            }
+            if availableStorageSizeOptions.count > 1 {
+                PreferenceSegmentGroup(title: "存储大小", options: availableStorageSizeOptions, selected: $selectedStorageSize)
+            }
         }
     }
 
@@ -197,6 +255,18 @@ struct AIBuildView: View {
         let defaults = AIBuildFlowRules.lowBudgetDefaults(useCase: selectedUseCase)
         selectedBuildPreference = defaults.buildPreference
         chassisColorPreference = defaults.colorPreference
+    }
+
+    private func clampCapacitySelections() {
+        if !availableMemorySizeOptions.contains(selectedMemorySize),
+           let fallback = availableMemorySizeOptions.last {
+            selectedMemorySize = fallback
+        }
+
+        if !availableStorageSizeOptions.contains(selectedStorageSize),
+           let fallback = availableStorageSizeOptions.last {
+            selectedStorageSize = fallback
+        }
     }
 }
 
@@ -309,27 +379,10 @@ private struct StepTitle: View {
 private struct UpgradePreferenceSection: View {
     @Binding var selected: String
 
-    private let options = ["当前体验优先", "保留升级空间", "AI 自动平衡"]
+    private let options = ["当前体验优先", "保留升级空间"]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            PreferenceSegmentGroup(title: "后期升级计划", options: options, selected: $selected)
-
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "arrow.up.forward.circle")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 28, height: 28)
-                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 8))
-
-                Text("性能优先会更偏向当前帧数；保留升级空间会给主板、电源和机箱留一点余量。")
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(12)
-            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
-        }
+        PreferenceSegmentGroup(title: "后期升级计划", options: options, selected: $selected)
     }
 }
 
@@ -429,9 +482,7 @@ private struct WizardBottomBar: View {
 
             PrimaryButton(title: primaryTitle, icon: primaryIcon, action: onPrimary)
         }
-        .padding(10)
-        .background(.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 18))
-        .modifier(AppTheme.cardShadow)
+        .padding(.vertical, 4)
     }
 }
 
@@ -507,73 +558,12 @@ private struct BudgetStepButton: View {
     }
 }
 
-private struct GameCategory: Identifiable {
-    let id: String
-    let title: String
-    let subtitle: String
-    let symbol: String
-    let examples: [GameExample]
-
-    static let defaultCategories = [
-        GameCategory(
-            id: "FPS",
-            title: "FPS",
-            subtitle: "高帧率",
-            symbol: "scope",
-            examples: [
-                GameExample(title: "无畏契约", symbol: "scope"),
-                GameExample(title: "CS2", symbol: "target"),
-                GameExample(title: "Apex 英雄", symbol: "bolt")
-            ]
-        ),
-        GameCategory(
-            id: "3A",
-            title: "3A",
-            subtitle: "高画质",
-            symbol: "gamecontroller",
-            examples: [
-                GameExample(title: "黑神话：悟空", symbol: "flame"),
-                GameExample(title: "赛博朋克 2077", symbol: "sparkles"),
-                GameExample(title: "荒野大镖客 2", symbol: "mountain.2")
-            ]
-        ),
-        GameCategory(
-            id: "腾讯全家桶",
-            title: "腾讯全家桶",
-            subtitle: "多人网游",
-            symbol: "person.3",
-            examples: [
-                GameExample(title: "英雄联盟", symbol: "shield"),
-                GameExample(title: "地下城与勇士", symbol: "hammer"),
-                GameExample(title: "穿越火线", symbol: "crosshair")
-            ]
-        ),
-        GameCategory(
-            id: "大战场",
-            title: "大战场",
-            subtitle: "大地图",
-            symbol: "map",
-            examples: [
-                GameExample(title: "战地 2042", symbol: "airplane"),
-                GameExample(title: "三角洲行动", symbol: "location"),
-                GameExample(title: "绝地求生", symbol: "figure.run")
-            ]
-        )
-    ]
-}
-
-private struct GameExample: Identifiable {
-    let id = UUID()
-    let title: String
-    let symbol: String
-}
-
 private struct ScenarioSelectionSection: View {
     let useCase: String
-    let gameCategories: [GameCategory]
+    let gameOptions: [String]
+    let gameIcons: [String: String]
     let officeAppOptions: [String]
-    @Binding var selectedGameCategories: Set<String>
-    @Binding var presentedGameCategory: GameCategory?
+    @Binding var selectedGames: Set<String>
     @Binding var selectedOfficeApps: Set<String>
 
     private var showsGames: Bool {
@@ -587,10 +577,15 @@ private struct ScenarioSelectionSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             if showsGames {
-                GameCategorySection(
-                    categories: gameCategories,
-                    selectedCategories: $selectedGameCategories,
-                    presentedCategory: $presentedGameCategory
+                MultiChoiceChipSection(
+                    title: "你玩什么游戏？",
+                    subtitle: "可多选，AI 会按这些游戏调整 CPU 和显卡侧重点",
+                    options: gameOptions,
+                    selected: $selectedGames,
+                    icons: gameIcons,
+                    minimumChipWidth: 92,
+                    usesSquareTiles: true,
+                    footer: "游戏名称仅用于描述你的配置需求，本应用与相关游戏厂商无关联。"
                 )
             }
 
@@ -603,182 +598,6 @@ private struct ScenarioSelectionSection: View {
                 )
             }
         }
-        .sheet(item: $presentedGameCategory) { category in
-            GameExamplesSheet(category: category)
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
-        }
-    }
-}
-
-private struct GameCategorySection: View {
-    let categories: [GameCategory]
-    @Binding var selectedCategories: Set<String>
-    @Binding var presentedCategory: GameCategory?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("游戏类型")
-                    .font(.appSubheadline)
-                    .foregroundStyle(AppTheme.primaryText)
-            }
-
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                ForEach(categories) { category in
-                    let isSelected = selectedCategories.contains(category.id)
-                    GameCategoryCard(
-                        category: category,
-                        isSelected: isSelected,
-                        onSelect: {
-                            withAnimation(.spring(response: 0.34, dampingFraction: 0.86)) {
-                                if isSelected {
-                                    selectedCategories.remove(category.id)
-                                } else {
-                                    selectedCategories.insert(category.id)
-                                }
-                            }
-                        },
-                        onToggleInfo: {
-                            presentedCategory = category
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
-private struct GameCategoryCard: View {
-    let category: GameCategory
-    let isSelected: Bool
-    let onSelect: () -> Void
-    let onToggleInfo: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .top, spacing: 8) {
-                Image(systemName: category.symbol)
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(width: 32, height: 32)
-                    .background(AppTheme.primaryText, in: RoundedRectangle(cornerRadius: 9))
-
-                Spacer(minLength: 6)
-
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                }
-
-                Button(action: onToggleInfo) {
-                    Image(systemName: "exclamationmark.circle")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .frame(width: 22, height: 22)
-                        .background(AppTheme.surface, in: Circle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("\(category.title) 示例游戏")
-            }
-
-            Button(action: onSelect) {
-                VStack(alignment: .leading, spacing: 8) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(category.title)
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Text(category.subtitle)
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(12)
-        .frame(minHeight: 124, alignment: .top)
-        .background(isSelected ? AppTheme.surface : AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 14))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 1.4 : 1)
-        )
-        .shadow(color: isSelected ? Color.black.opacity(0.08) : Color.clear, radius: 12, x: 0, y: 7)
-    }
-}
-
-private struct GameExamplesSheet: View {
-    let category: GameCategory
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack {
-                Text("\(category.title) 示例游戏")
-                    .font(.appTitle)
-                    .foregroundStyle(AppTheme.primaryText)
-
-                Spacer()
-
-                Image(systemName: category.symbol)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(width: 38, height: 38)
-                    .background(AppTheme.primaryText, in: RoundedRectangle(cornerRadius: 10))
-            }
-
-            Text("代表游戏")
-                .font(.appBody)
-                .foregroundStyle(AppTheme.secondaryText)
-                .fixedSize(horizontal: false, vertical: true)
-
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                ForEach(category.examples) { example in
-                    GameExampleTile(example: example)
-                }
-            }
-
-            Spacer()
-        }
-        .padding(22)
-        .background(AppTheme.background.ignoresSafeArea())
-    }
-}
-
-private struct GameExampleTile: View {
-    let example: GameExample
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            ZStack {
-                LinearGradient(
-                    colors: [AppTheme.primaryText, AppTheme.secondaryText],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-
-                Image(systemName: example.symbol)
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-            .frame(height: 74)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-
-            Text(example.title)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(AppTheme.primaryText)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
-        }
-        .padding(9)
-        .frame(maxWidth: .infinity)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
     }
 }
 
@@ -787,6 +606,10 @@ private struct MultiChoiceChipSection: View {
     let subtitle: String
     let options: [String]
     @Binding var selected: Set<String>
+    var icons: [String: String] = [:]
+    var minimumChipWidth: CGFloat = 92
+    var usesSquareTiles = false
+    var footer: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -800,10 +623,15 @@ private struct MultiChoiceChipSection: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 92), spacing: 8)], alignment: .leading, spacing: 8) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumChipWidth), spacing: 8)], alignment: .leading, spacing: 8) {
                 ForEach(options, id: \.self) { option in
                     let isSelected = selected.contains(option)
-                    MultiChoiceChip(title: option, isSelected: isSelected) {
+                    MultiChoiceChip(
+                        title: option,
+                        systemImage: icons[option],
+                        isSelected: isSelected,
+                        usesSquareTile: usesSquareTiles
+                    ) {
                         withAnimation(.spring(response: 0.28, dampingFraction: 0.88)) {
                             if isSelected {
                                 selected.remove(option)
@@ -814,37 +642,84 @@ private struct MultiChoiceChipSection: View {
                     }
                 }
             }
+
+            if let footer {
+                Text(footer)
+                    .font(.system(size: 10, weight: .regular))
+                    .foregroundStyle(AppTheme.mutedText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 }
 
 private struct MultiChoiceChip: View {
     let title: String
+    let systemImage: String?
     let isSelected: Bool
+    let usesSquareTile: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 6) {
-                if isSelected {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 10, weight: .bold))
-                }
+            if usesSquareTile {
+                ZStack(alignment: .topTrailing) {
+                    VStack(spacing: 8) {
+                        if let systemImage {
+                            Image(systemName: systemImage)
+                                .font(.system(size: 18, weight: .bold))
+                        }
 
-                Text(title)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.78)
+                        Text(title)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
+                            .minimumScaleFactor(0.72)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(10)
+
+                    if isSelected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 16, weight: .bold))
+                            .padding(8)
+                    }
+                }
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
+                .aspectRatio(1, contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .background(isSelected ? AppTheme.primaryText : AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(isSelected ? Color.clear : AppTheme.border, lineWidth: 1)
+                )
+            } else {
+                HStack(spacing: 6) {
+                    if let systemImage {
+                        Image(systemName: systemImage)
+                            .font(.system(size: 10, weight: .bold))
+                    }
+
+                    if isSelected {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .bold))
+                    }
+
+                    Text(title)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.78)
+                }
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .padding(.horizontal, 8)
+                .background(isSelected ? AppTheme.primaryText : AppTheme.softSurface, in: Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(isSelected ? Color.clear : AppTheme.border, lineWidth: 1)
+                )
             }
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
-            .frame(maxWidth: .infinity)
-            .frame(height: 38)
-            .padding(.horizontal, 8)
-            .background(isSelected ? AppTheme.primaryText : AppTheme.softSurface, in: Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(isSelected ? Color.clear : AppTheme.border, lineWidth: 1)
-            )
         }
         .buttonStyle(.plain)
     }

@@ -156,3 +156,55 @@ def test_ingest_motherboard_whitelist_prices_command_imports_status(
     assert captured["rows"][0].new_price is None
     assert captured["rows"][0].status == "discontinued"
     assert capsys.readouterr().out == "Imported 1 motherboard whitelist prices.\n"
+
+
+def test_ingest_cpu_whitelist_prices_command_imports_used_and_new_tray_prices(
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
+) -> None:
+    captured = {}
+    csv_path = tmp_path / "cpu-whitelist-prices.csv"
+    csv_path.write_text(
+        "\n".join(
+            [
+                "target_id,name,used_price,new_tray_price",
+                "r7-9800x3d,R7 9800X3D,2400,2700",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    class FakeSession:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+    def fake_create_session_factory(settings):
+        return lambda: FakeSession()
+
+    def fake_seed_cpu_whitelist_prices(session, rows):
+        captured["rows"] = list(rows)
+        return len(captured["rows"])
+
+    monkeypatch.setattr("app.cli.create_session_factory", fake_create_session_factory)
+    monkeypatch.setattr("app.cli.seed_cpu_whitelist_prices", fake_seed_cpu_whitelist_prices)
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "ai-pc-builder-api",
+            "ingest-cpu-whitelist-prices",
+            str(csv_path),
+            "--approved-at",
+            "2026-07-07",
+        ],
+    )
+
+    main()
+
+    assert captured["rows"][0].component_id == "r7-9800x3d"
+    assert captured["rows"][0].used_price == 2400
+    assert captured["rows"][0].new_tray_price == 2700
+    assert capsys.readouterr().out == "Imported 1 CPU whitelist prices.\n"

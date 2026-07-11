@@ -92,3 +92,24 @@ class MotherboardWhitelistPrice(Base):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+
+
+class CPUWhitelistPrice(Base):
+    __tablename__ = "cpu_whitelist_price"
+
+    component_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("hardware_component.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    used_price: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    new_tray_price: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    source: Mapped[str] = mapped_column(String, nullable=False)
+    approved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )

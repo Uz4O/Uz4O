@@ -4,8 +4,8 @@ from typing import Iterable, List, Optional
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from app.catalog.models import ComponentPrice, GPUWhitelistPrice, HardwareComponent, MotherboardWhitelistPrice
-from app.catalog.prices import ApprovedPriceRow, GPUWhitelistPriceRow, MotherboardWhitelistPriceRow
+from app.catalog.models import ComponentPrice, CPUWhitelistPrice, GPUWhitelistPrice, HardwareComponent, MotherboardWhitelistPrice
+from app.catalog.prices import ApprovedPriceRow, CPUWhitelistPriceRow, GPUWhitelistPriceRow, MotherboardWhitelistPriceRow
 from app.catalog.seed import CatalogComponent
 
 
@@ -133,6 +133,30 @@ def seed_motherboard_whitelist_prices(
         }
         if row is None:
             session.add(MotherboardWhitelistPrice(component_id=price.component_id, **values))
+        else:
+            for key, value in values.items():
+                setattr(row, key, value)
+        count += 1
+    session.commit()
+    return count
+
+
+def seed_cpu_whitelist_prices(
+    session: Session,
+    prices: Iterable[CPUWhitelistPriceRow],
+) -> int:
+    count = 0
+    for price in prices:
+        row = session.get(CPUWhitelistPrice, price.component_id)
+        values = {
+            "name": price.name,
+            "used_price": price.used_price,
+            "new_tray_price": price.new_tray_price,
+            "source": price.source,
+            "approved_at": price.approved_at,
+        }
+        if row is None:
+            session.add(CPUWhitelistPrice(component_id=price.component_id, **values))
         else:
             for key, value in values.items():
                 setattr(row, key, value)

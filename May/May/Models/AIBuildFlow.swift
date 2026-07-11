@@ -24,7 +24,7 @@ enum AIBuildStep: Int, CaseIterable {
         case .budget:
             return "先确定大方向，AI 会按预算控制配置。"
         case .scenario:
-            return "选择常用场景。"
+            return "告诉 AI 你主要玩哪些游戏。"
         case .purchase:
             return "选择你能接受的购买方式和主机外观。"
         case .hardware:

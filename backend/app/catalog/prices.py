@@ -42,6 +42,16 @@ class MotherboardWhitelistPriceRow:
     approved_at: datetime
 
 
+@dataclass(frozen=True)
+class CPUWhitelistPriceRow:
+    component_id: str
+    name: str
+    used_price: Optional[int]
+    new_tray_price: Optional[int]
+    source: str
+    approved_at: datetime
+
+
 def read_approved_price_rows(path: Path, approved_at: str) -> List[ApprovedPriceRow]:
     approved_at_dt = datetime.fromisoformat(approved_at).replace(tzinfo=ZoneInfo("Asia/Shanghai"))
     with Path(path).open(encoding="utf-8", newline="") as handle:
@@ -96,6 +106,24 @@ def read_motherboard_whitelist_price_rows(path: Path, approved_at: str) -> List[
                     used_price=_optional_int(row.get("used_price")),
                     new_price=_optional_int(row.get("new_price")),
                     status=row["status"],
+                    source=Path(path).name,
+                    approved_at=approved_at_dt,
+                )
+            )
+    return rows
+
+
+def read_cpu_whitelist_price_rows(path: Path, approved_at: str) -> List[CPUWhitelistPriceRow]:
+    approved_at_dt = datetime.fromisoformat(approved_at).replace(tzinfo=ZoneInfo("Asia/Shanghai"))
+    with Path(path).open(encoding="utf-8", newline="") as handle:
+        rows = []
+        for row in csv.DictReader(handle):
+            rows.append(
+                CPUWhitelistPriceRow(
+                    component_id=row["target_id"],
+                    name=row["name"],
+                    used_price=_optional_int(row.get("used_price")),
+                    new_tray_price=_optional_int(row.get("new_tray_price")),
                     source=Path(path).name,
                     approved_at=approved_at_dt,
                 )
