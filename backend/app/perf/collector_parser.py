@@ -6,6 +6,7 @@ from typing import Dict, List, Literal, Optional, Tuple
 
 Resolution = Literal["1080p", "2k", "4k"]
 BottleneckType = Literal["cpu", "gpu", "balanced"]
+_NUMERIC_TOKEN = r"[+-]?(?:[0-9][0-9,.]*|\.[0-9][0-9,.]*)"
 
 
 @dataclass(frozen=True)
@@ -104,7 +105,7 @@ def _resolution(text: str) -> Optional[Resolution]:
 
 
 def _integer(text: str, label: str) -> int:
-    numbers = re.findall(r"[+-]?[0-9][0-9,]*", text)
+    numbers = re.findall(_NUMERIC_TOKEN, text)
     if len(numbers) != 1 or re.fullmatch(r"[0-9]+", numbers[0]) is None:
         raise ParseError(f"invalid {label} FPS value: {text!r}")
     return int(numbers[0])
@@ -121,7 +122,7 @@ def _bottleneck(text: str) -> Tuple[BottleneckType, Optional[int]]:
     else:
         raise ParseError(f"unsupported bottleneck value: {text!r}")
 
-    percentages = re.findall(r"([+-]?[0-9][0-9,.]*)\s*%", value)
+    percentages = re.findall(rf"({_NUMERIC_TOKEN})\s*%", value)
     if len(percentages) > 1 or (
         percentages and re.fullmatch(r"[0-9]+", percentages[0]) is None
     ):

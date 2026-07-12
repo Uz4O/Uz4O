@@ -27,7 +27,7 @@ def table(*rows: str, header: Optional[str] = None) -> str:
 
 def valid_rows() -> Tuple[str, str, str]:
     return (
-        row("1920 x 1080", 77, 66, 89, "CPU bottleneck 11%"),
+        row("1920 x 1080", 77, 66, 89, "CPU bottleneck (11%)"),
         row("2560 x 1440", 58, 49, 66, "No bottleneck 0%"),
         row("3840 x 2160", 38, 32, 44, "No bottleneck 0%"),
     )
@@ -81,7 +81,7 @@ def test_invalid_fps_order_or_range_raises(average: int, minimum: int, maximum: 
         parse_medium_results(table(*rows))
 
 
-@pytest.mark.parametrize("average", ["-5", "1,2,3", "1,000"])
+@pytest.mark.parametrize("average", ["-5", "1,2,3", "1,000", ".5", "12.5"])
 def test_signed_or_comma_separated_fps_raises(average: str) -> None:
     rows = list(valid_rows())
     rows[0] = row("1920 x 1080", average, 1, 1200, "CPU bottleneck 11%")
@@ -90,7 +90,7 @@ def test_signed_or_comma_separated_fps_raises(average: str) -> None:
         parse_medium_results(table(*rows))
 
 
-@pytest.mark.parametrize("percent", ["-11%", "1,000%"])
+@pytest.mark.parametrize("percent", ["-11%", "1,000%", ".5%", "11.5%"])
 def test_signed_or_comma_separated_bottleneck_percent_raises(percent: str) -> None:
     rows = list(valid_rows())
     rows[0] = row("1920 x 1080", 77, 66, 89, f"CPU bottleneck {percent}")
