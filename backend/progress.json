@@ -2,7 +2,7 @@
   "project": "AI 装机助手后端",
   "updated_at": "2026-07-13",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
-  "current_phase": "持续精进",
+  "current_phase": "游戏性能数据内部验证与映射补全",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -226,9 +226,8 @@
         },
         {
           "title": "游戏性能测试",
-          "description": "基于基准数据估算帧率和瓶颈。",
-          "status": "completed",
-          "completed_at": "2026-06-16"
+          "description": "采集器、校验导出、幂等导入、精确查询模型与 API，以及 iOS 加载、结果、部分缺失、无数据和错误状态均已实现并通过验证。当前映射覆盖为 CPU 101 个（exact 1、review 100、missing 0）、GPU 77 个（exact 1、review 76、missing 0）、游戏 15 个（exact 1、review 14、missing 0），仅可生成 1 个精确结果页任务；其余映射仍待人工审核，完整 116,655 个页面尚未采集。PC-Builds 当前返回访问挑战，采集器会停止并保留断点；第三方数据在取得书面授权前仅限内部验证，不导入或发布到生产环境。",
+          "status": "in_progress"
         },
         {
           "title": "兼容性检查接口收口",
