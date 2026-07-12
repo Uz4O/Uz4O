@@ -127,6 +127,7 @@ struct PerformanceTestResult: Equatable {
     let averageFPS: String
     let lowFPS: String
     let maximumFPS: String
+    let smoothness: String
     let bottleneck: String
     let sourceFetchedAt: String
     let missingGameNames: [String]
@@ -214,6 +215,7 @@ struct PerformanceTestFlow: Equatable {
             averageFPS: "\(averageFPS) FPS",
             lowFPS: "\(lowFPS) FPS",
             maximumFPS: "\(maximumFPS) FPS",
+            smoothness: Self.smoothness(for: averageFPS),
             bottleneck: Self.bottleneckText(payload.bottleneck, percent: payload.bottleneckPercent),
             sourceFetchedAt: sourceFetchedAt,
             missingGameNames: payload.missingGames.map { PerformanceGame.name(for: $0) },
@@ -248,5 +250,14 @@ struct PerformanceTestFlow: Equatable {
         default: name = "暂无明显瓶颈"
         }
         return percent.map { "\(name) \($0)%" } ?? name
+    }
+
+    private static func smoothness(for averageFPS: Int) -> String {
+        switch averageFPS {
+        case 120...: "非常流畅"
+        case 60...: "流畅"
+        case 30...: "基本流畅"
+        default: "不够流畅"
+        }
     }
 }

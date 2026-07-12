@@ -385,6 +385,7 @@ private struct PerformanceResultStep: View {
                     VStack(spacing: 16) {
                         PerformanceMetricRow(title: "屏幕分辨率", value: result.resolution, detail: "按你选择的显示器目标估算")
                         PerformanceMetricRow(title: "测试游戏", value: "\(flow.selectedGames.count) 款", detail: flow.selectedGames.map(\.name).joined(separator: "、"))
+                        PerformanceMetricRow(title: "流畅度评价", value: result.smoothness, detail: "根据平均帧率判断")
                         PerformanceMetricRow(title: "性能瓶颈", value: result.bottleneck, detail: "来自当前组合的估算结果")
                         PerformanceMetricRow(title: "数据更新时间", value: result.sourceFetchedAt, detail: "结果所用数据的最早采集时间")
                     }

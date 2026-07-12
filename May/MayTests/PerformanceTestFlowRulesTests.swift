@@ -78,6 +78,7 @@ struct PerformanceTestFlowRulesTests {
         assertEqual(flow.result?.averageFPS, "77 FPS", "Results must use backend data.")
         assertEqual(flow.result?.lowFPS, "66 FPS", "Low FPS must use backend data.")
         assertEqual(flow.result?.maximumFPS, "89 FPS", "Maximum FPS must use backend data.")
+        assertEqual(flow.result?.smoothness, "流畅", "Smoothness should be derived from the backend average FPS.")
         assertEqual(flow.result?.bottleneck, "CPU 11%", "Bottleneck and percentage must use backend data.")
         assertEqual(flow.result?.sourceFetchedAt, "2026-07-12T00:00:00Z", "Freshness must use backend data.")
 
