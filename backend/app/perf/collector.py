@@ -16,6 +16,13 @@ from app.perf.collector_store import CollectorStore, StoredTask
 
 USER_AGENT = "AI PC Builder FPS Collector/1.0 (low-rate public result fetcher)"
 ALLOWED_HOSTS = {"pc-builds.com", "www.pc-builds.com"}
+WIRE_BODY_HEADERS = {
+    "content-encoding",
+    "content-length",
+    "content-md5",
+    "digest",
+    "transfer-encoding",
+}
 
 
 @dataclass(frozen=True)
@@ -170,29 +177,11 @@ class Collector:
         self.client.headers.pop("Cookie", None)
         self.client.headers.pop("Authorization", None)
         try:
-            with self.client.stream(
-                "GET",
-                task.source_url,
-                headers={"User-Agent": USER_AGENT},
-                timeout=self.policy.timeout_seconds,
-                auth=None,
-                follow_redirects=False,
-            ) as streamed_response:
-                chunks = []
-                size = 0
-                for chunk in streamed_response.iter_bytes(chunk_size=65_536):
-                    size += len(chunk)
-                    if size > self.policy.max_response_bytes:
-                        self.store.record_failed(task.id, "response_too_large")
-                        return "failed"
-                    chunks.append(chunk)
-                response = httpx.Response(
-                    streamed_response.status_code,
-                    headers=streamed_response.headers,
-                    content=b"".join(chunks),
-                )
-        except httpx.TransportError as error:
-            return self._record_network_failure(task, f"transport error: {error}")
+            response = self._limited_response(task)
+        except httpx.HTTPError as error:
+            return self._record_network_failure(task, f"HTTP error: {error}")
+        if response is None:
+            return "failed"
 
         if is_challenge(response):
             self._block(task, "challenge page detected")
@@ -240,6 +229,34 @@ class Collector:
             self.now() + timedelta(seconds=2**task.attempts),
         )
         return "retryable"
+
+    def _limited_response(self, task: StoredTask) -> Optional[httpx.Response]:
+        with self.client.stream(
+            "GET",
+            task.source_url,
+            headers={"User-Agent": USER_AGENT},
+            timeout=self.policy.timeout_seconds,
+            auth=None,
+            follow_redirects=False,
+        ) as streamed_response:
+            chunks = []
+            size = 0
+            for chunk in streamed_response.iter_bytes(chunk_size=65_536):
+                size += len(chunk)
+                if size > self.policy.max_response_bytes:
+                    self.store.record_failed(task.id, "response_too_large")
+                    return None
+                chunks.append(chunk)
+            headers = [
+                (name, value)
+                for name, value in streamed_response.headers.multi_items()
+                if name.casefold() not in WIRE_BODY_HEADERS
+            ]
+            return httpx.Response(
+                streamed_response.status_code,
+                headers=headers,
+                content=b"".join(chunks),
+            )
 
     def _block(self, task: StoredTask, reason: str) -> None:
         self.store.block_and_pause(task.id, reason)

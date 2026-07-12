@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import gzip
 from pathlib import Path
 import sqlite3
 
@@ -272,6 +273,82 @@ def test_200_challenge_blocks_and_pauses(tmp_path: Path) -> None:
         collector(store, lambda _: httpx.Response(200, text="Just a moment")).run()
 
     assert store.task_counts() == {"blocked": 1}
+
+
+def test_gzip_challenge_is_decoded_once_then_blocks_and_pauses(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "challenge")
+    body = gzip.compress(b"Just a moment")
+
+    with pytest.raises(CollectionBlocked, match="challenge"):
+        collector(
+            store,
+            lambda _: httpx.Response(
+                200,
+                content=body,
+                headers={
+                    "Content-Encoding": "gzip",
+                    "Content-Length": str(len(body)),
+                    "Content-Type": "text/html; charset=utf-8",
+                },
+            ),
+        ).run()
+
+    assert store.task_counts() == {"blocked": 1}
+    assert store.pause_reason() == "challenge page detected"
+
+
+def test_gzip_results_are_decoded_once_and_parsed(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "results")
+    body = gzip.compress(HTML.encode())
+
+    summary = collector(
+        store,
+        lambda _: httpx.Response(
+            200,
+            content=body,
+            headers={
+                "Content-Encoding": "gzip",
+                "Content-Length": str(len(body)),
+                "Transfer-Encoding": "chunked",
+                "Content-Type": "text/html; charset=utf-8",
+            },
+        ),
+    ).run()
+
+    assert summary.succeeded == 1
+    assert store.task_counts() == {"succeeded": 1}
+
+
+@pytest.mark.parametrize(
+    ("max_attempts", "expected_status"), [(3, "retryable"), (1, "failed")]
+)
+def test_malformed_gzip_becomes_network_failure_and_releases_lock(
+    tmp_path: Path, max_attempts: int, expected_status: str
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "broken")
+    runner = collector(
+        store,
+        lambda _: httpx.Response(
+            200,
+            content=b"not a gzip stream",
+            headers={"Content-Encoding": "gzip"},
+        ),
+        policy=CollectorPolicy(
+            delay_seconds=0,
+            jitter_seconds=0,
+            max_attempts=max_attempts,
+        ),
+    )
+
+    summary = runner.run()
+
+    assert getattr(summary, expected_status) == 1
+    assert store.task_counts() == {expected_status: 1}
+    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
 
 
 def test_three_consecutive_parse_failures_pause_collection(tmp_path: Path) -> None:
