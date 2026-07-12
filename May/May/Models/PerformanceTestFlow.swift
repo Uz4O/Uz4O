@@ -113,6 +113,12 @@ struct PerformanceEstimateInput: Equatable {
     let gameIDs: [String]
 }
 
+struct PerformanceRequestContext: Equatable {
+    let token: Int
+    let input: PerformanceEstimateInput
+    let resolutionTitle: String
+}
+
 enum PerformanceLoadState: Equatable {
     case idle
     case loading
@@ -148,6 +154,8 @@ struct PerformanceTestFlow: Equatable {
     var selectedGames: [PerformanceGame] = [.cyberpunk]
     private(set) var loadState: PerformanceLoadState = .idle
     private(set) var result: PerformanceTestResult?
+    private var requestGeneration = 0
+    private var activeRequestToken: Int?
 
     var requestInput: PerformanceEstimateInput? {
         guard
@@ -161,6 +169,10 @@ struct PerformanceTestFlow: Equatable {
             resolution: selectedResolution.apiValue,
             gameIDs: selectedGames.map(\.id)
         )
+    }
+
+    var selectedGamesDisplay: String {
+        selectedGames == [.allGames] ? "全部 \(PerformanceGame.samples.count) 款" : "\(selectedGames.count) 款"
     }
 
     mutating func goNext() {
@@ -190,14 +202,29 @@ struct PerformanceTestFlow: Equatable {
         }
     }
 
-    mutating func beginRequest() {
-        guard loadState != .loading else { return }
+    mutating func beginRequest() -> PerformanceRequestContext? {
+        guard loadState != .loading else { return nil }
         currentStep = .result
-        loadState = .loading
         result = nil
+        guard let input = requestInput else {
+            activeRequestToken = nil
+            loadState = .empty
+            return nil
+        }
+
+        requestGeneration += 1
+        activeRequestToken = requestGeneration
+        loadState = .loading
+        return PerformanceRequestContext(
+            token: requestGeneration,
+            input: input,
+            resolutionTitle: selectedResolution.title
+        )
     }
 
-    mutating func apply(_ payload: PerformanceEstimatePayload) {
+    mutating func apply(_ payload: PerformanceEstimatePayload, for request: PerformanceRequestContext) {
+        guard activeRequestToken == request.token else { return }
+        activeRequestToken = nil
         guard
             payload.status != .needsMoreData,
             let averageFPS = payload.averageFPS,
@@ -211,7 +238,7 @@ struct PerformanceTestFlow: Equatable {
         }
 
         result = PerformanceTestResult(
-            resolution: selectedResolution.title,
+            resolution: request.resolutionTitle,
             averageFPS: "\(averageFPS) FPS",
             lowFPS: "\(lowFPS) FPS",
             maximumFPS: "\(maximumFPS) FPS",
@@ -224,18 +251,23 @@ struct PerformanceTestFlow: Equatable {
         loadState = payload.status == .partial ? .partial : .loaded
     }
 
-    mutating func showNoData() {
-        currentStep = .result
-        loadState = .empty
-        result = nil
-    }
-
-    mutating func failRequest(_ message: String) {
+    mutating func failRequest(_ message: String, for request: PerformanceRequestContext) {
+        guard activeRequestToken == request.token else { return }
+        activeRequestToken = nil
         loadState = .failed(message)
         result = nil
     }
 
+    mutating func cancelRequest() {
+        activeRequestToken = nil
+        if loadState == .loading {
+            loadState = .idle
+            result = nil
+        }
+    }
+
     mutating func reset() {
+        cancelRequest()
         currentStep = .hardware
         loadState = .idle
         result = nil
@@ -252,7 +284,7 @@ struct PerformanceTestFlow: Equatable {
         return percent.map { "\(name) \($0)%" } ?? name
     }
 
-    private static func smoothness(for averageFPS: Int) -> String {
+    static func smoothness(for averageFPS: Int) -> String {
         switch averageFPS {
         case 120...: "非常流畅"
         case 60...: "流畅"

@@ -110,6 +110,13 @@ def post_estimate(client: TestClient, games: list[str], resolution: str = "2k"):
     )
 
 
+def test_perf_estimate_accepts_the_15_game_scope_and_rejects_16() -> None:
+    client = make_client()
+
+    assert post_estimate(client, APPROVED_GAME_IDS).status_code == 200
+    assert post_estimate(client, APPROVED_GAME_IDS + ["extra-game"]).status_code == 422
+
+
 def test_perf_estimate_ready_uses_exact_medium_quality_row() -> None:
     client = make_client(
         [

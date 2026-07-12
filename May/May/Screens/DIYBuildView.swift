@@ -7,10 +7,12 @@ struct DIYBuildView: View {
     @State private var flow = PerformanceTestFlow()
     @State private var selectedHardwareCategory: HardwareOptionCategory?
     @State private var feedbackMessage: String?
+    @State private var requestTask: Task<Void, Never>?
 
     var body: some View {
         VStack(spacing: 18) {
             ScreenHeader(title: "游戏性能测试", trailingIcon: nil) {
+                cancelRequest()
                 if flow.currentStep == .hardware {
                     onBack()
                 } else {
@@ -41,7 +43,8 @@ struct DIYBuildView: View {
                 case .conditions:
                     TestConditionStep(
                         selectedResolution: $flow.selectedResolution,
-                        selectedGames: $flow.selectedGames
+                        selectedGames: flow.selectedGames,
+                        onToggle: { flow.toggleGame($0) }
                     )
                 case .result:
                     PerformanceResultStep(flow: flow)
@@ -57,11 +60,12 @@ struct DIYBuildView: View {
                 case .hardware:
                     flow.goNext()
                 case .conditions:
-                    Task { await startTest() }
+                    startTest()
                 case .result:
                     if case .failed = flow.loadState {
-                        Task { await startTest() }
+                        startTest()
                     } else {
+                        cancelRequest()
                         flow.reset()
                     }
                 }
@@ -82,6 +86,7 @@ struct DIYBuildView: View {
             )
             .presentationDetents([.large])
         }
+        .onDisappear(perform: cancelRequest)
     }
 
     private var primaryButtonTitle: String {
@@ -101,27 +106,32 @@ struct DIYBuildView: View {
         flow.currentStep == .result && flow.loadState != .loading ? "arrow.clockwise" : "arrow.right"
     }
 
-    @MainActor
-    private func startTest() async {
+    private func startTest() {
         guard flow.loadState != .loading else { return }
-        let input = flow.requestInput
-        flow.beginRequest()
-        guard let input else {
-            flow.showNoData()
-            return
+        requestTask?.cancel()
+        guard let request = flow.beginRequest() else { return }
+        requestTask = Task {
+            do {
+                let response = try await AppAPIClient().estimatePerformance(
+                    cpuID: request.input.cpuID,
+                    gpuID: request.input.gpuID,
+                    resolution: request.input.resolution,
+                    gameIDs: request.input.gameIDs
+                )
+                try Task.checkCancellation()
+                flow.apply(response.model, for: request)
+            } catch is CancellationError {
+                return
+            } catch {
+                flow.failRequest(error.localizedDescription, for: request)
+            }
         }
+    }
 
-        do {
-            let response = try await AppAPIClient().estimatePerformance(
-                cpuID: input.cpuID,
-                gpuID: input.gpuID,
-                resolution: input.resolution,
-                gameIDs: input.gameIDs
-            )
-            flow.apply(response.model)
-        } catch {
-            flow.failRequest(error.localizedDescription)
-        }
+    private func cancelRequest() {
+        requestTask?.cancel()
+        requestTask = nil
+        flow.cancelRequest()
     }
 
     private func binding(for title: String) -> Binding<String> {
@@ -227,7 +237,8 @@ private struct HardwareSelectionStep: View {
 
 private struct TestConditionStep: View {
     @Binding var selectedResolution: PerformanceResolution
-    @Binding var selectedGames: [PerformanceGame]
+    let selectedGames: [PerformanceGame]
+    let onToggle: (PerformanceGame) -> Void
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -273,7 +284,7 @@ private struct TestConditionStep: View {
                         game: .allGames,
                         isSelected: selectedGames.contains(.allGames)
                     ) {
-                        toggle(.allGames)
+                        onToggle(.allGames)
                     }
 
                     ForEach(PerformanceGame.samples) { game in
@@ -281,7 +292,7 @@ private struct TestConditionStep: View {
                             game: game,
                             isSelected: selectedGames.contains(game)
                         ) {
-                            toggle(game)
+                            onToggle(game)
                         }
                     }
 
@@ -291,18 +302,6 @@ private struct TestConditionStep: View {
         }
     }
 
-    private func toggle(_ game: PerformanceGame) {
-        if game == .allGames {
-            selectedGames = selectedGames == [.allGames] ? [.cyberpunk] : [.allGames]
-        } else if selectedGames.contains(game) {
-            if selectedGames.count > 1 {
-                selectedGames.removeAll { $0 == game }
-            }
-        } else {
-            selectedGames.removeAll { $0 == .allGames }
-            selectedGames.append(game)
-        }
-    }
 }
 
 private struct PerformanceResultStep: View {
@@ -384,7 +383,7 @@ private struct PerformanceResultStep: View {
                 SoftCard(radius: 16) {
                     VStack(spacing: 16) {
                         PerformanceMetricRow(title: "屏幕分辨率", value: result.resolution, detail: "按你选择的显示器目标估算")
-                        PerformanceMetricRow(title: "测试游戏", value: "\(flow.selectedGames.count) 款", detail: flow.selectedGames.map(\.name).joined(separator: "、"))
+                        PerformanceMetricRow(title: "测试游戏", value: flow.selectedGamesDisplay, detail: flow.selectedGames.map(\.name).joined(separator: "、"))
                         PerformanceMetricRow(title: "流畅度评价", value: result.smoothness, detail: "根据平均帧率判断")
                         PerformanceMetricRow(title: "性能瓶颈", value: result.bottleneck, detail: "来自当前组合的估算结果")
                         PerformanceMetricRow(title: "数据更新时间", value: result.sourceFetchedAt, detail: "结果所用数据的最早采集时间")
@@ -516,6 +515,9 @@ private struct PerformanceGameCard: View {
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(isSelected ? AppTheme.success.opacity(0.55) : AppTheme.border, lineWidth: 1))
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(game.name)
+        .accessibilityValue(isSelected ? "已选择" : "未选择")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

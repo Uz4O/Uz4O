@@ -27,7 +27,7 @@ class PerfHardwareInput(BaseModel):
 class PerfEstimateRequest(BaseModel):
     hardware: PerfHardwareInput
     resolution: Resolution
-    games: List[str] = Field(min_length=1, max_length=12)
+    games: List[str] = Field(min_length=1, max_length=15)
 
 
 class GamePerfEstimate(BaseModel):
