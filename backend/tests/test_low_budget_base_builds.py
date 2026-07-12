@@ -2,6 +2,7 @@ import csv
 import json
 from pathlib import Path
 
+import app.builds.low_budget_catalog as low_budget_catalog
 from app.builds.low_budget_catalog import (
     BUDGET_TIERS,
     CPU_PERFORMANCE,
@@ -18,6 +19,7 @@ from app.builds.low_budget_catalog import (
     render_low_budget_markdown,
     write_low_budget_artifacts,
 )
+from app.builds.service import BuildTemplatePart
 
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
@@ -50,10 +52,15 @@ KNOWN_IMPOSSIBLE_COMBINATIONS = {
     for direction in DIRECTIONS
     for purchase_mode in ("new", "mixed")
 }
+PENDING_REVIEW_CONDITION_PAIRS = {("base-psu-850w-gold", "used")}
 
 
 def generated_templates():
     return generate_low_budget_templates()
+
+
+def generated_report():
+    return low_budget_catalog.generate_low_budget_report()
 
 
 def test_generates_every_low_budget_direction_with_only_feasible_modes() -> None:
@@ -181,10 +188,162 @@ def test_fps_and_aaa_allocations_follow_their_performance_priorities() -> None:
     assert compared >= len(BUDGET_TIERS)
 
 
-def test_known_impossible_modes_are_absent_and_audited_as_over_budget(
+def test_direction_scores_strictly_rank_cpu_and_gpu_priority() -> None:
+    cpu_first = _ranking_candidate(cpu_performance=90, gpu_performance=50)
+    gpu_first = _ranking_candidate(cpu_performance=60, gpu_performance=85)
+
+    assert low_budget_catalog._score_candidate(
+        cpu_first, "fps"
+    ) > low_budget_catalog._score_candidate(gpu_first, "fps")
+    assert low_budget_catalog._score_candidate(
+        gpu_first, "aaa"
+    ) > low_budget_catalog._score_candidate(cpu_first, "aaa")
+
+
+def test_selection_reports_over_budget_separately_from_no_candidate() -> None:
+    cpus, motherboards, gpus, support_parts = low_budget_catalog._load_catalog()
+
+    over_budget = low_budget_catalog._select_candidate(
+        0,
+        "fps",
+        "used",
+        cpus,
+        motherboards,
+        gpus,
+        support_parts,
+    )
+    no_candidate = low_budget_catalog._select_candidate(
+        3_000,
+        "fps",
+        "used",
+        [],
+        [],
+        [],
+        support_parts,
+    )
+
+    assert over_budget.candidate is None
+    assert over_budget.skip_reason == "over_budget"
+    assert no_candidate.candidate is None
+    assert no_candidate.skip_reason == "no_feasible_candidate"
+
+
+def test_reference_export_preserves_unavailable_condition_prices(tmp_path) -> None:
+    templates = generated_templates()
+    paths = write_low_budget_artifacts(tmp_path, templates)
+    rows = _price_rows(paths.reference_prices_csv)
+    observed_pairs = {
+        (part.component_id, part.condition)
+        for template in templates
+        for part in template.details.parts
+    }
+
+    for component_id, row in rows.items():
+        used_price = row["normal_price_min"]
+        new_price = row["normal_price_max"]
+        if (component_id, "used") not in observed_pairs:
+            assert used_price == ""
+        if (component_id, "new") not in observed_pairs:
+            assert new_price == ""
+        assert row["reference_price"] in {
+            value for value in (used_price, new_price) if value
+        }
+
+
+def test_pending_review_condition_is_excluded_from_templates_and_prices(
     tmp_path,
 ) -> None:
     templates = generated_templates()
+    template_pairs = {
+        (part.component_id, part.condition)
+        for template in templates
+        for part in template.details.parts
+    }
+    assert PENDING_REVIEW_CONDITION_PAIRS.isdisjoint(template_pairs)
+
+    paths = write_low_budget_artifacts(tmp_path, templates)
+    assert PENDING_REVIEW_CONDITION_PAIRS.isdisjoint(
+        _exported_condition_pairs(paths.reference_prices_csv)
+    )
+
+
+def test_reference_export_uses_the_generated_snapshot_after_source_mutation(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    templates = generated_templates()
+    mutated_cpu_path = tmp_path / CPU_PRICE_PATH.name
+    original = CPU_PRICE_PATH.read_text(encoding="utf-8")
+    mutated = original.replace(
+        "r5-5600x,R5 5600X,720,820",
+        "r5-5600x,R5 5600X,1,2",
+    )
+    assert mutated != original
+    mutated_cpu_path.write_text(mutated, encoding="utf-8")
+    monkeypatch.setattr(low_budget_catalog, "CPU_PRICE_PATH", mutated_cpu_path)
+
+    paths = write_low_budget_artifacts(tmp_path / "artifacts", templates)
+    row = _price_rows(paths.reference_prices_csv)["r5-5600x"]
+    observed = {
+        part.condition: part.reference_price
+        for template in templates
+        for part in template.details.parts
+        if part.component_id == "r5-5600x"
+    }
+
+    assert row["normal_price_min"] == str(observed["used"])
+    assert row["normal_price_max"] == str(observed["new"])
+
+
+def test_empty_and_partial_artifacts_report_actual_completion(tmp_path) -> None:
+    full_templates = generated_templates()
+    cases = (
+        ("empty", [], [], 0, 0),
+        ("partial", [full_templates[0]], [], 1, 1),
+    )
+    for name, templates, completed_tiers, completed_pairs, visible_tiers in cases:
+        paths = write_low_budget_artifacts(tmp_path / name, templates)
+        audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
+        markdown = paths.review_markdown.read_text(encoding="utf-8")
+
+        assert audit["completed_tiers"] == completed_tiers
+        assert audit["completed_tier_direction_count"] == completed_pairs
+        assert audit["completed_template_count"] == len(templates)
+        assert {item["reason"] for item in audit["skipped_combinations"]} == {
+            "no_feasible_candidate"
+        }
+        assert audit["missing_data"] == audit["skipped_combinations"]
+        assert audit["failed_templates"] == []
+        assert f"{len(completed_tiers)}/9个价位" in markdown
+        assert (
+            sum(line.startswith("## ") for line in markdown.splitlines())
+            == visible_tiers
+        )
+
+
+def test_failed_template_audit_is_derived_from_skip_evidence(tmp_path) -> None:
+    failed = low_budget_catalog.SkippedCombination(
+        target_budget=3_000,
+        direction="fps",
+        purchase_mode="new",
+        reason="generation_error",
+    )
+    paths = write_low_budget_artifacts(
+        tmp_path,
+        [],
+        skipped_combinations=[failed],
+    )
+    audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
+
+    assert audit["failed_templates"] == [failed.as_dict()]
+    assert failed.as_dict() not in audit["missing_data"]
+
+
+def test_known_impossible_modes_are_absent_and_audited_as_over_budget(
+    tmp_path,
+) -> None:
+    report = generated_report()
+    templates = list(report.templates)
     generated_keys = {
         (
             template.details.target_budget,
@@ -195,43 +354,46 @@ def test_known_impossible_modes_are_absent_and_audited_as_over_budget(
     }
     assert KNOWN_IMPOSSIBLE_COMBINATIONS.isdisjoint(generated_keys)
 
-    paths = write_low_budget_artifacts(tmp_path, templates)
+    paths = write_low_budget_artifacts(
+        tmp_path,
+        templates,
+        skipped_combinations=report.skipped_combinations,
+    )
     audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
-    expected_skips = [
-        {
-            "target_budget": budget,
-            "direction": direction,
-            "purchase_mode": purchase_mode,
-            "reason": "over_budget",
-        }
-        for budget in BUDGET_TIERS
-        for direction in DIRECTIONS
-        for purchase_mode in PURCHASE_MODES
-        if (budget, direction, purchase_mode) not in generated_keys
-    ]
+    skip_reasons = {
+        (
+            item["target_budget"],
+            item["direction"],
+            item["purchase_mode"],
+        ): item["reason"]
+        for item in audit["skipped_combinations"]
+    }
 
     assert audit["completed_template_count"] == len(templates)
     assert audit["completed_tiers"] == BUDGET_TIERS
     assert audit["completed_tier_direction_count"] == 27
-    assert audit["skipped_combinations"] == expected_skips
+    assert len(audit["skipped_combinations"]) == len(
+        KNOWN_IMPOSSIBLE_COMBINATIONS
+    )
+    assert {
+        key for key, reason in skip_reasons.items() if reason == "over_budget"
+    } == KNOWN_IMPOSSIBLE_COMBINATIONS
     assert audit["missing_data"] == []
     assert audit["failed_templates"] == []
-    assert KNOWN_IMPOSSIBLE_COMBINATIONS.issubset(
-        {
-            (
-                item["target_budget"],
-                item["direction"],
-                item["purchase_mode"],
-            )
-            for item in audit["skipped_combinations"]
-        }
-    )
 
 
 def test_writes_deterministic_review_and_import_artifacts(tmp_path) -> None:
-    templates = generated_templates()
-    markdown = render_low_budget_markdown(templates)
-    paths = write_low_budget_artifacts(tmp_path, templates)
+    report = generated_report()
+    templates = list(report.templates)
+    markdown = render_low_budget_markdown(
+        templates,
+        report.skipped_combinations,
+    )
+    paths = write_low_budget_artifacts(
+        tmp_path,
+        templates,
+        skipped_combinations=report.skipped_combinations,
+    )
 
     lines = markdown.splitlines()
     assert sum(line.startswith("## ") for line in lines) == len(BUDGET_TIERS)
@@ -281,3 +443,37 @@ def _source_prices():
                 item["new_source"],
             )
     return prices
+
+
+def _ranking_candidate(cpu_performance: int, gpu_performance: int):
+    gpu = BuildTemplatePart(
+        role="gpu",
+        component_id="rx-ranking-test",
+        name="ranking test GPU",
+        condition="used",
+        reference_price=1,
+        price_source="test",
+        price_date="2026-07-12",
+        specs={},
+    )
+    return low_budget_catalog.Candidate(
+        parts=(gpu,),
+        total=1,
+        cpu_performance=cpu_performance,
+        gpu_performance=gpu_performance,
+    )
+
+
+def _price_rows(path: Path):
+    with path.open(encoding="utf-8", newline="") as handle:
+        return {row["target_id"]: row for row in csv.DictReader(handle)}
+
+
+def _exported_condition_pairs(path: Path):
+    pairs = set()
+    for component_id, row in _price_rows(path).items():
+        if row["normal_price_min"]:
+            pairs.add((component_id, "used"))
+        if row["normal_price_max"]:
+            pairs.add((component_id, "new"))
+    return pairs

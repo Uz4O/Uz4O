@@ -6,7 +6,6 @@ base-cooler-dual-tower-6-heatpipe
 base-ddr4-16gb-3200
 base-ddr5-16gb-6000-c30
 base-psu-650w-gold
-base-psu-850w-gold
 base-ssd-512gb-tlc
 r5-5600x
 r5-7500f
@@ -15,7 +14,6 @@ r7-7800x3d
 r7-9800x3d
 rtx-3060-ti
 rtx-3070-ti
-rtx-3080
 rtx-5060-ti
 rx-6750-gre
 rx-7650-gre
@@ -23,4 +21,3 @@ rx-7700-xt
 rx-7800-xt
 rx-9060-xt-8gb
 rx-9070-gre
-rx-9070-xt

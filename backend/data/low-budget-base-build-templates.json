@@ -970,14 +970,14 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 3850,
+    "estimated_total": 3800,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1014,16 +1014,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -1057,16 +1057,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -1098,7 +1097,7 @@
       ],
       "advantages": [
         "R5 5600X优先保证高帧率和1% Low",
-        "RTX 3080来自当前预算内可行的显卡档位"
+        "RX 7700 XT来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -1130,14 +1129,14 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 3850,
+    "estimated_total": 3800,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1174,16 +1173,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -1217,16 +1216,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -1257,7 +1255,7 @@
         }
       ],
       "advantages": [
-        "预算优先投入RTX 3080，更适合高画质3A游戏",
+        "预算优先投入RX 7700 XT，更适合高画质3A游戏",
         "R5 5600X来自当前预算内可行的平台"
       ],
       "disadvantages": [
@@ -1290,14 +1288,14 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 3850,
+    "estimated_total": 3800,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1334,16 +1332,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -1377,16 +1375,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -1417,7 +1414,7 @@
         }
       ],
       "advantages": [
-        "R5 5600X与RTX 3080之间没有刻意单边堆料",
+        "R5 5600X与RX 7700 XT之间没有刻意单边堆料",
         "同时兼顾高帧率网游与3A游戏"
       ],
       "disadvantages": [
@@ -1606,14 +1603,14 @@
     "components": {
       "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3070-ti",
+      "gpu": "rtx-3060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4700,
+    "estimated_total": 4500,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
@@ -1650,16 +1647,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3070-ti",
-          "name": "RTX 3070 Ti",
+          "component_id": "rtx-3060-ti",
+          "name": "RTX 3060 Ti",
           "condition": "used",
-          "reference_price": 1500,
+          "reference_price": 1350,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 55,
-            "tdp": 290
+            "perf_index": 50,
+            "tdp": 200
           }
         },
         {
@@ -1693,16 +1690,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -1734,7 +1730,7 @@
       ],
       "advantages": [
         "R5 7500F优先保证高帧率和1% Low",
-        "RTX 3070 Ti来自当前预算内可行的显卡档位"
+        "RTX 3060 Ti来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -2549,12 +2545,12 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3070-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "cpu": "r5-5600x",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rx-9070-gre",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
@@ -2567,59 +2563,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 720,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 52,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-b650m-tuf",
-          "name": "华硕 B650M PLUS 重炮手",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "used",
-          "reference_price": 650,
+          "reference_price": 230,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3070-ti",
-          "name": "RTX 3070 Ti",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 1500,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 55,
-            "tdp": 290
+            "vendor": "AMD",
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -2638,16 +2634,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -2678,7 +2673,7 @@
         }
       ],
       "advantages": [
-        "R5 7500F与RTX 3070 Ti之间没有刻意单边堆料",
+        "R5 5600X与RX 9070 GRE之间没有刻意单边堆料",
         "同时兼顾高帧率网游与3A游戏"
       ],
       "disadvantages": [
@@ -3024,14 +3019,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3070-ti",
+      "gpu": "rtx-3060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5100,
+    "estimated_total": 4900,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -3068,16 +3063,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3070-ti",
-          "name": "RTX 3070 Ti",
+          "component_id": "rtx-3060-ti",
+          "name": "RTX 3060 Ti",
           "condition": "used",
-          "reference_price": 1500,
+          "reference_price": 1350,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 55,
-            "tdp": 290
+            "perf_index": 50,
+            "tdp": 200
           }
         },
         {
@@ -3111,16 +3106,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -3152,7 +3146,7 @@
       ],
       "advantages": [
         "R5 9600X优先保证高帧率和1% Low",
-        "RTX 3070 Ti来自当前预算内可行的显卡档位"
+        "RTX 3060 Ti来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -3969,14 +3963,14 @@
     "components": {
       "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5000,
+    "estimated_total": 4950,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -4013,16 +4007,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -4056,16 +4050,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -4096,7 +4089,7 @@
         }
       ],
       "advantages": [
-        "R5 7500F与RTX 3080之间没有刻意单边堆料",
+        "R5 7500F与RX 7700 XT之间没有刻意单边堆料",
         "同时兼顾高帧率网游与3A游戏"
       ],
       "disadvantages": [
@@ -5385,16 +5378,16 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7800-xt",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5400,
+    "estimated_total": 5450,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -5403,16 +5396,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -5431,16 +5424,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7800-xt",
+          "name": "RX 7800 XT",
           "condition": "used",
-          "reference_price": 1800,
+          "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 65,
+            "tdp": 263
           }
         },
         {
@@ -5474,16 +5467,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -5514,7 +5506,7 @@
         }
       ],
       "advantages": [
-        "R5 9600X与RTX 3080之间没有刻意单边堆料",
+        "R5 7500F与RX 7800 XT之间没有刻意单边堆料",
         "同时兼顾高帧率网游与3A游戏"
       ],
       "disadvantages": [
@@ -5860,14 +5852,14 @@
     "components": {
       "cpu": "r7-7800x3d",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6130,
+    "estimated_total": 6080,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -5904,16 +5896,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -5947,16 +5939,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -5988,7 +5979,7 @@
       ],
       "advantages": [
         "R7 7800X3D优先保证高帧率和1% Low",
-        "RTX 3080来自当前预算内可行的显卡档位"
+        "RX 7700 XT来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -6331,16 +6322,16 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-5600x",
-      "motherboard": "asus-a520m-k",
-      "gpu": "rx-9070-xt",
-      "ram": "base-ddr4-16gb-3200",
+      "cpu": "r5-7500f",
+      "motherboard": "asus-b650m-tuf",
+      "gpu": "rx-9070-gre",
+      "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6050,
+    "estimated_total": 5850,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -6349,59 +6340,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-5600x",
-          "name": "R5 5600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 720,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM4",
-            "perf_index": 52,
-            "tdp": 65
+            "socket": "AM5",
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-a520m-k",
-          "name": "华硕 A520M-K",
+          "component_id": "asus-b650m-tuf",
+          "name": "华硕 B650M PLUS 重炮手",
           "condition": "used",
-          "reference_price": 230,
+          "reference_price": 650,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM4",
-            "mem_type": "DDR4",
-            "chipset": "A520"
+            "socket": "AM5",
+            "mem_type": "DDR5",
+            "chipset": "B650"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rx-9070-xt",
-          "name": "RX 9070 XT",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 4000,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 85,
-            "tdp": 304
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
           "condition": "used",
-          "reference_price": 400,
+          "reference_price": 1300,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR4",
+            "type": "DDR5",
             "capacity_gb": 16,
-            "speed_mhz": 3200,
-            "modules": 2
+            "speed_mhz": 6000,
+            "cas_latency": 30
           }
         },
         {
@@ -6420,16 +6411,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -6460,8 +6450,8 @@
         }
       ],
       "advantages": [
-        "预算优先投入RX 9070 XT，更适合高画质3A游戏",
-        "R5 5600X来自当前预算内可行的平台"
+        "预算优先投入RX 9070 GRE，更适合高画质3A游戏",
+        "R5 7500F来自当前预算内可行的平台"
       ],
       "disadvantages": [
         "CPU投入低于FPS方案时，不以极限高刷新率为首要目标"
@@ -6804,16 +6794,16 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rx-7800-xt",
+      "gpu": "rx-9070-gre",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5900,
+    "estimated_total": 5850,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -6822,16 +6812,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -6850,16 +6840,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-7800-xt",
-          "name": "RX 7800 XT",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 2300,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 65,
-            "tdp": 263
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
@@ -6893,16 +6883,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -6933,7 +6922,7 @@
         }
       ],
       "advantages": [
-        "R5 9600X与RX 7800 XT之间没有刻意单边堆料",
+        "R5 7500F与RX 9070 GRE之间没有刻意单边堆料",
         "同时兼顾高帧率网游与3A游戏"
       ],
       "disadvantages": [
@@ -7279,14 +7268,14 @@
     "components": {
       "cpu": "r7-9800x3d",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3070-ti",
+      "gpu": "rtx-3060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6580,
+    "estimated_total": 6380,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -7323,16 +7312,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3070-ti",
-          "name": "RTX 3070 Ti",
+          "component_id": "rtx-3060-ti",
+          "name": "RTX 3060 Ti",
           "condition": "used",
-          "reference_price": 1500,
+          "reference_price": 1350,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 55,
-            "tdp": 290
+            "perf_index": 50,
+            "tdp": 200
           }
         },
         {
@@ -7366,16 +7355,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -7407,7 +7395,7 @@
       ],
       "advantages": [
         "R7 9800X3D优先保证高帧率和1% Low",
-        "RTX 3070 Ti来自当前预算内可行的显卡档位"
+        "RTX 3060 Ti来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -7750,16 +7738,16 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-5600x",
-      "motherboard": "asus-a520m-k",
-      "gpu": "rx-9070-xt",
-      "ram": "base-ddr4-16gb-3200",
+      "cpu": "r5-9600x",
+      "motherboard": "asus-b650m-tuf",
+      "gpu": "rx-9070-gre",
+      "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6050,
+    "estimated_total": 6250,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -7768,59 +7756,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-5600x",
-          "name": "R5 5600X",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "used",
-          "reference_price": 720,
+          "reference_price": 950,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM4",
-            "perf_index": 52,
-            "tdp": 65
+            "socket": "AM5",
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-a520m-k",
-          "name": "华硕 A520M-K",
+          "component_id": "asus-b650m-tuf",
+          "name": "华硕 B650M PLUS 重炮手",
           "condition": "used",
-          "reference_price": 230,
+          "reference_price": 650,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM4",
-            "mem_type": "DDR4",
-            "chipset": "A520"
+            "socket": "AM5",
+            "mem_type": "DDR5",
+            "chipset": "B650"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rx-9070-xt",
-          "name": "RX 9070 XT",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 4000,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 85,
-            "tdp": 304
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
           "condition": "used",
-          "reference_price": 400,
+          "reference_price": 1300,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR4",
+            "type": "DDR5",
             "capacity_gb": 16,
-            "speed_mhz": 3200,
-            "modules": 2
+            "speed_mhz": 6000,
+            "cas_latency": 30
           }
         },
         {
@@ -7839,16 +7827,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -7879,8 +7866,8 @@
         }
       ],
       "advantages": [
-        "预算优先投入RX 9070 XT，更适合高画质3A游戏",
-        "R5 5600X来自当前预算内可行的平台"
+        "预算优先投入RX 9070 GRE，更适合高画质3A游戏",
+        "R5 9600X来自当前预算内可行的平台"
       ],
       "disadvantages": [
         "CPU投入低于FPS方案时，不以极限高刷新率为首要目标"
@@ -8697,14 +8684,14 @@
     "components": {
       "cpu": "r7-9800x3d",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3080",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6880,
+    "estimated_total": 6830,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -8741,16 +8728,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3080",
-          "name": "RTX 3080",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 320
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -8784,16 +8771,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -8825,7 +8811,7 @@
       ],
       "advantages": [
         "R7 9800X3D优先保证高帧率和1% Low",
-        "RTX 3080来自当前预算内可行的显卡档位"
+        "RX 7700 XT来自当前预算内可行的显卡档位"
       ],
       "disadvantages": [
         "显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"
@@ -9169,16 +9155,16 @@
       "used"
     ],
     "components": {
-      "cpu": "r5-7500f",
+      "cpu": "r7-7800x3d",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rx-9070-xt",
+      "gpu": "rx-9070-gre",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "psu": "base-psu-650w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7200,
+    "estimated_total": 6980,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -9187,16 +9173,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r7-7800x3d",
+          "name": "R7 7800X3D",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 1650,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "perf_index": 90,
+            "tdp": 120
           }
         },
         {
@@ -9215,16 +9201,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-9070-xt",
-          "name": "RX 9070 XT",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 4000,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 85,
-            "tdp": 304
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
@@ -9258,30 +9244,29 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-12",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -9298,8 +9283,8 @@
         }
       ],
       "advantages": [
-        "预算优先投入RX 9070 XT，更适合高画质3A游戏",
-        "R5 7500F来自当前预算内可行的平台"
+        "预算优先投入RX 9070 GRE，更适合高画质3A游戏",
+        "R7 7800X3D来自当前预算内可行的平台"
       ],
       "disadvantages": [
         "CPU投入低于FPS方案时，不以极限高刷新率为首要目标"

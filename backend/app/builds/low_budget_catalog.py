@@ -18,6 +18,7 @@ from app.builds.service import (
 Direction = Literal["fps", "aaa", "balanced"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
+SkipReason = Literal["over_budget", "no_feasible_candidate", "generation_error"]
 
 PRICE_DATE = "2026-07-12"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
@@ -89,6 +90,12 @@ CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
 
 DIRECTION_LABELS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 PURCHASE_LABELS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
+PENDING_REVIEW_CONDITIONS: Dict[Tuple[str, Condition], str] = {
+    (
+        "base-psu-850w-gold",
+        "used",
+    ): "当前仅有单一公开样本，正式展示前需要重新核价",
+}
 
 
 @dataclass(frozen=True)
@@ -128,6 +135,32 @@ class Candidate:
 
 
 @dataclass(frozen=True)
+class SelectionOutcome:
+    candidate: Optional[Candidate]
+    skip_reason: Optional[SkipReason]
+
+
+@dataclass(frozen=True)
+class SkippedCombination:
+    target_budget: int
+    direction: Direction
+    purchase_mode: PurchaseMode
+    reason: SkipReason
+
+    @property
+    def key(self) -> Tuple[int, Direction, PurchaseMode]:
+        return (self.target_budget, self.direction, self.purchase_mode)
+
+    def as_dict(self) -> Dict[str, object]:
+        return {
+            "target_budget": self.target_budget,
+            "direction": self.direction,
+            "purchase_mode": self.purchase_mode,
+            "reason": self.reason,
+        }
+
+
+@dataclass(frozen=True)
 class ArtifactPaths:
     templates_json: Path
     review_markdown: Path
@@ -136,14 +169,21 @@ class ArtifactPaths:
     audit_json: Path
 
 
+@dataclass(frozen=True)
+class GenerationReport:
+    templates: Tuple[BuildTemplateInput, ...]
+    skipped_combinations: Tuple[SkippedCombination, ...]
+
+
 @lru_cache(maxsize=1)
-def generate_low_budget_templates() -> List[BuildTemplateInput]:
+def generate_low_budget_report() -> GenerationReport:
     cpus, motherboards, gpus, support_parts = _load_catalog()
     templates = []
+    skipped = []
     for budget in BUDGET_TIERS:
         for direction in DIRECTIONS:
             for purchase_mode in PURCHASE_MODES:
-                candidate = _select_candidate(
+                selection = _select_candidate(
                     budget,
                     direction,
                     purchase_mode,
@@ -152,19 +192,76 @@ def generate_low_budget_templates() -> List[BuildTemplateInput]:
                     gpus,
                     support_parts,
                 )
-                if candidate is not None:
+                if selection.candidate is not None:
                     templates.append(
-                        _build_template(budget, direction, purchase_mode, candidate)
+                        _build_template(
+                            budget,
+                            direction,
+                            purchase_mode,
+                            selection.candidate,
+                        )
                     )
-    return templates
+                else:
+                    skipped.append(
+                        SkippedCombination(
+                            target_budget=budget,
+                            direction=direction,
+                            purchase_mode=purchase_mode,
+                            reason=selection.skip_reason
+                            or "no_feasible_candidate",
+                        )
+                    )
+    return GenerationReport(
+        templates=tuple(templates),
+        skipped_combinations=tuple(skipped),
+    )
+
+
+def generate_low_budget_templates() -> List[BuildTemplateInput]:
+    return list(generate_low_budget_report().templates)
 
 
 def minimum_psu_watt(cpu_id: str, gpu_id: str) -> int:
     return math.ceil((CPU_TDP[cpu_id] + GPU_TDP[gpu_id]) * 1.5 + 100)
 
 
-def render_low_budget_markdown(templates: Sequence[BuildTemplateInput]) -> str:
-    skipped_count = len(_skipped_combinations(templates))
+def _completed_tiers(templates: Sequence[BuildTemplateInput]) -> List[int]:
+    directions_by_tier: Dict[int, set] = {}
+    for template in templates:
+        if template.details is None:
+            continue
+        directions_by_tier.setdefault(template.details.target_budget, set()).add(
+            template.details.direction
+        )
+    return sorted(
+        budget
+        for budget, directions in directions_by_tier.items()
+        if directions == set(DIRECTIONS)
+    )
+
+
+def render_low_budget_markdown(
+    templates: Sequence[BuildTemplateInput],
+    skipped_combinations: Optional[Sequence[SkippedCombination]] = None,
+) -> str:
+    present_tiers = sorted(
+        {
+            template.details.target_budget
+            for template in templates
+            if template.details is not None
+        }
+    )
+    completed_tiers = _completed_tiers(templates)
+    completed_tier_directions = {
+        (template.details.target_budget, template.details.direction)
+        for template in templates
+        if template.details is not None
+    }
+    skipped = _complete_skipped_combinations(templates, skipped_combinations)
+    skip_counts = {
+        reason: sum(item.reason == reason for item in skipped)
+        for reason in ("over_budget", "no_feasible_candidate", "generation_error")
+    }
     lines = [
         "# 3000-7000元装机基底配置",
         "",
@@ -172,11 +269,16 @@ def render_low_budget_markdown(templates: Sequence[BuildTemplateInput]) -> str:
         "",
         "说明：每500元一个档位，分别尝试FPS、3A、均衡方向的全新、二手和混合采购。",
         "只保留八大件参考价合计不超过目标预算加200元的真实可行方案；未生成组合记录在审计文件中。",
-        f"生成状态：9/9个价位覆盖全部三个方向，共{len(templates)}套可行配置，跳过{skipped_count}个超预算组合。",
+        (
+            f"生成状态：{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位有可行配置，"
+            f"覆盖{len(completed_tier_directions)}/{len(BUDGET_TIERS) * len(DIRECTIONS)}个价位方向，"
+            f"共{len(templates)}套；跳过{len(skipped)}个组合（超预算{skip_counts['over_budget']}，"
+            f"无可行候选{skip_counts['no_feasible_candidate']}，生成失败{skip_counts['generation_error']}）。"
+        ),
         "二手方案中的电源、SSD和显卡购买前必须复核健康度、成色和保修。",
         "",
     ]
-    for budget in BUDGET_TIERS:
+    for budget in present_tiers:
         lines.extend([f"## {budget}元档", ""])
         for template in templates:
             details = template.details
@@ -217,12 +319,17 @@ def write_low_budget_artifacts(
     output_dir: Path,
     templates: Optional[Sequence[BuildTemplateInput]] = None,
     review_markdown_path: Optional[Path] = None,
+    skipped_combinations: Optional[Sequence[SkippedCombination]] = None,
 ) -> ArtifactPaths:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    generated = list(
-        generate_low_budget_templates() if templates is None else templates
-    )
+    if templates is None:
+        report = generate_low_budget_report()
+        generated = list(report.templates)
+        skips = list(report.skipped_combinations)
+    else:
+        generated = list(templates)
+        skips = _complete_skipped_combinations(generated, skipped_combinations)
     paths = ArtifactPaths(
         templates_json=output_dir / "low-budget-base-build-templates.json",
         review_markdown=(
@@ -243,12 +350,12 @@ def write_low_budget_artifacts(
         encoding="utf-8",
     )
     paths.review_markdown.write_text(
-        render_low_budget_markdown(generated),
+        render_low_budget_markdown(generated, skips),
         encoding="utf-8",
     )
     _write_reference_prices(paths.reference_prices_csv, generated)
     _write_recommendation_ids(paths.recommendation_ids, generated)
-    _write_audit(paths.audit_json, generated)
+    _write_audit(paths.audit_json, generated, skips)
     return paths
 
 
@@ -260,13 +367,14 @@ def _select_candidate(
     motherboards: Sequence[PricedPart],
     gpus: Sequence[PricedPart],
     support_parts: Dict[str, PricedPart],
-) -> Optional[Candidate]:
+) -> SelectionOutcome:
     best: Optional[Candidate] = None
     best_score: Optional[Tuple[int, ...]] = None
+    saw_complete_candidate = False
     conditions = CONDITIONS_BY_MODE[purchase_mode]
 
     for cpu in cpus:
-        if cpu.price(conditions["cpu"]) is None:
+        if not _condition_is_allowed(cpu, conditions["cpu"]):
             continue
         cooler_id = (
             "base-cooler-dual-tower-6-heatpipe"
@@ -276,7 +384,10 @@ def _select_candidate(
         cooler = support_parts[cooler_id]
 
         for motherboard in motherboards:
-            if motherboard.price(conditions["motherboard"]) is None:
+            if not _condition_is_allowed(
+                motherboard,
+                conditions["motherboard"],
+            ):
                 continue
             if cpu.specs["socket"] != motherboard.specs["socket"]:
                 continue
@@ -291,7 +402,7 @@ def _select_candidate(
                     "rtx-40"
                 ):
                     continue
-                if gpu.price(conditions["gpu"]) is None:
+                if not _condition_is_allowed(gpu, conditions["gpu"]):
                     continue
                 psu = _smallest_psu(
                     minimum_psu_watt(cpu.component_id, gpu.component_id),
@@ -314,13 +425,15 @@ def _select_candidate(
                 for role in PART_ROLE_ORDER:
                     part = fixed_parts[role]
                     condition = conditions[role]
-                    price = part.price(condition)
-                    if price is None:
+                    if not _condition_is_allowed(part, condition):
                         break
+                    price = part.price(condition)
+                    assert price is not None
                     parts.append(_template_part(role, part, condition, price))
                 if len(parts) != len(PART_ROLE_ORDER):
                     continue
 
+                saw_complete_candidate = True
                 total = sum(part.reference_price for part in parts)
                 if total > budget + 200:
                     continue
@@ -342,7 +455,14 @@ def _select_candidate(
                 ):
                     best = candidate
                     best_score = score
-    return best
+    if best is not None:
+        return SelectionOutcome(candidate=best, skip_reason=None)
+    return SelectionOutcome(
+        candidate=None,
+        skip_reason=(
+            "over_budget" if saw_complete_candidate else "no_feasible_candidate"
+        ),
+    )
 
 
 def _score_candidate(
@@ -486,6 +606,13 @@ def _template_part(
     )
 
 
+def _condition_is_allowed(part: PricedPart, condition: Condition) -> bool:
+    return (
+        part.price(condition) is not None
+        and (part.component_id, condition) not in PENDING_REVIEW_CONDITIONS
+    )
+
+
 def _smallest_psu(
     required_watt: int,
     condition: Condition,
@@ -497,7 +624,7 @@ def _smallest_psu(
             for part in support_parts.values()
             if part.category == "psu"
             and isinstance(part.specs.get("watt"), int)
-            and part.price(condition) is not None
+            and _condition_is_allowed(part, condition)
         ),
         key=lambda part: int(part.specs["watt"]),
     )
@@ -629,17 +756,33 @@ def _write_reference_prices(
     path: Path,
     templates: Sequence[BuildTemplateInput],
 ) -> None:
-    referenced_ids = {
-        component_id
+    snapshot: Dict[str, Dict[str, object]] = {}
+    for part in (
+        part
         for template in templates
-        for component_id in template.components.values()
-    }
-    cpus, motherboards, gpus, support_parts = _load_catalog()
-    catalog = {
-        part.component_id: part
-        for part in [*cpus, *motherboards, *gpus, *support_parts.values()]
-        if part.component_id in referenced_ids
-    }
+        if template.details is not None
+        for part in template.details.parts
+    ):
+        if (part.component_id, part.condition) in PENDING_REVIEW_CONDITIONS:
+            continue
+        row = snapshot.setdefault(
+            part.component_id,
+            {
+                "category": part.role,
+                "name": part.name,
+                "brand": _brand_for_template_part(part),
+                "used_price": None,
+                "new_price": None,
+            },
+        )
+        price_key = f"{part.condition}_price"
+        existing_price = row[price_key]
+        if existing_price not in (None, part.reference_price):
+            raise ValueError(
+                f"Conflicting {part.condition} prices for {part.component_id}"
+            )
+        row[price_key] = part.reference_price
+
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(
@@ -656,19 +799,20 @@ def _write_reference_prices(
                 "review_reasons",
             ]
         )
-        for component_id in sorted(catalog):
-            part = catalog[component_id]
-            used_price = part.used_price or part.new_price
-            new_price = part.new_price or part.used_price
-            if used_price is None or new_price is None:
-                continue
+        for component_id in sorted(snapshot):
+            row = snapshot[component_id]
+            used_price = row["used_price"]
+            new_price = row["new_price"]
+            reference_price = new_price if new_price is not None else used_price
+            if reference_price is None:
+                raise ValueError(f"No generated price for {component_id}")
             writer.writerow(
                 [
-                    part.category,
+                    row["category"],
                     component_id,
-                    part.name,
-                    part.brand,
-                    new_price,
+                    row["name"],
+                    row["brand"],
+                    reference_price,
                     used_price,
                     new_price,
                     1,
@@ -692,7 +836,12 @@ def _write_recommendation_ids(
     path.write_text("\n".join(component_ids) + "\n", encoding="utf-8")
 
 
-def _write_audit(path: Path, templates: Sequence[BuildTemplateInput]) -> None:
+def _write_audit(
+    path: Path,
+    templates: Sequence[BuildTemplateInput],
+    skipped_combinations: Sequence[SkippedCombination],
+) -> None:
+    completed_tiers = _completed_tiers(templates)
     completed_tier_directions = {
         (template.details.target_budget, template.details.direction)
         for template in templates
@@ -711,24 +860,34 @@ def _write_audit(path: Path, templates: Sequence[BuildTemplateInput]) -> None:
         and template.estimated_total is not None
         and template.details.target_budget - template.estimated_total >= 500
     ]
+    skipped_payload = [item.as_dict() for item in skipped_combinations]
     payload = {
         "price_date": PRICE_DATE,
-        "attempted_combination_count": (
-            len(BUDGET_TIERS) * len(DIRECTIONS) * len(PURCHASE_MODES)
-        ),
-        "completed_tiers": BUDGET_TIERS,
+        "attempted_combination_count": len(templates) + len(skipped_combinations),
+        "completed_tiers": completed_tiers,
         "completed_tier_direction_count": len(completed_tier_directions),
         "completed_template_count": len(templates),
-        "skipped_combinations": _skipped_combinations(templates),
+        "skipped_combinations": skipped_payload,
         "pending_review": [
             {
-                "component_id": "base-psu-850w-gold",
-                "condition": "used",
-                "reason": "当前仅有单一公开样本，正式展示前需要重新核价",
+                "component_id": component_id,
+                "condition": condition,
+                "reason": reason,
             }
+            for (component_id, condition), reason in sorted(
+                PENDING_REVIEW_CONDITIONS.items()
+            )
         ],
-        "missing_data": [],
-        "failed_templates": [],
+        "missing_data": [
+            item.as_dict()
+            for item in skipped_combinations
+            if item.reason == "no_feasible_candidate"
+        ],
+        "failed_templates": [
+            item.as_dict()
+            for item in skipped_combinations
+            if item.reason == "generation_error"
+        ],
         "underutilized_templates": underutilized,
     }
     path.write_text(
@@ -737,9 +896,10 @@ def _write_audit(path: Path, templates: Sequence[BuildTemplateInput]) -> None:
     )
 
 
-def _skipped_combinations(
+def _complete_skipped_combinations(
     templates: Sequence[BuildTemplateInput],
-) -> List[Dict[str, object]]:
+    skipped_combinations: Optional[Sequence[SkippedCombination]] = None,
+) -> List[SkippedCombination]:
     generated_keys = {
         (
             template.details.target_budget,
@@ -749,13 +909,19 @@ def _skipped_combinations(
         for template in templates
         if template.details is not None
     }
+    provided_by_key = {
+        item.key: item for item in (skipped_combinations or [])
+    }
     return [
-        {
-            "target_budget": budget,
-            "direction": direction,
-            "purchase_mode": purchase_mode,
-            "reason": "over_budget",
-        }
+        provided_by_key.get(
+            (budget, direction, purchase_mode),
+            SkippedCombination(
+                target_budget=budget,
+                direction=direction,
+                purchase_mode=purchase_mode,
+                reason="no_feasible_candidate",
+            ),
+        )
         for budget in BUDGET_TIERS
         for direction in DIRECTIONS
         for purchase_mode in PURCHASE_MODES
@@ -777,6 +943,17 @@ def _motherboard_chipset(component_id: str) -> str:
         if chipset in component_id:
             return chipset.upper()
     return ""
+
+
+def _brand_for_template_part(part: BuildTemplatePart) -> str:
+    vendor = part.specs.get("vendor")
+    if isinstance(vendor, str):
+        return vendor
+    if part.role == "cpu":
+        return "Intel" if part.component_id.startswith("i") else "AMD"
+    if part.role == "motherboard":
+        return part.name.split(" ", 1)[0]
+    return "通用规格"
 
 
 def _role_label(role: str) -> str:
@@ -801,11 +978,13 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, default=DATA_DIR)
     parser.add_argument("--markdown", type=Path, default=REVIEW_MARKDOWN_PATH)
     args = parser.parse_args()
-    templates = generate_low_budget_templates()
+    report = generate_low_budget_report()
+    templates = list(report.templates)
     paths = write_low_budget_artifacts(
         args.output_dir,
         templates,
         review_markdown_path=args.markdown,
+        skipped_combinations=report.skipped_combinations,
     )
     print(f"Generated {len(templates)} templates.")
     print(paths.templates_json)
