@@ -1,0 +1,259 @@
+import sqlite3
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List, Optional, Sequence
+
+from app.perf.collector_parser import ParsedPerformanceRow
+
+
+@dataclass(frozen=True)
+class CollectionTask:
+    cpu_id: str
+    gpu_id: str
+    game_id: str
+    source_url: str
+
+
+@dataclass(frozen=True)
+class StoredTask:
+    id: int
+    cpu_id: str
+    gpu_id: str
+    game_id: str
+    source_url: str
+    attempts: int
+
+
+def _utc_iso(value: Optional[datetime] = None) -> str:
+    value = value or datetime.now(timezone.utc)
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc).isoformat()
+
+
+class CollectorStore:
+    def __init__(self, path: Path):
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self._connection = sqlite3.connect(path)
+        self._connection.row_factory = sqlite3.Row
+        self._connection.execute("PRAGMA foreign_keys = ON")
+        self._connection.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS task (
+                id INTEGER PRIMARY KEY,
+                cpu_id TEXT NOT NULL,
+                gpu_id TEXT NOT NULL,
+                game_id TEXT NOT NULL,
+                source_url TEXT NOT NULL UNIQUE,
+                status TEXT NOT NULL DEFAULT 'pending',
+                attempts INTEGER NOT NULL DEFAULT 0,
+                next_attempt_at TEXT,
+                error TEXT,
+                response_hash TEXT,
+                updated_at TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS result (
+                task_id INTEGER NOT NULL,
+                resolution TEXT NOT NULL CHECK (resolution IN ('1080p', '2k', '4k')),
+                average INTEGER NOT NULL,
+                min INTEGER NOT NULL,
+                max INTEGER NOT NULL,
+                bottleneck_type TEXT CHECK (
+                    bottleneck_type IN ('cpu', 'gpu', 'balanced')
+                    OR bottleneck_type IS NULL
+                ),
+                bottleneck_percent INTEGER CHECK (
+                    bottleneck_percent BETWEEN 0 AND 100
+                    OR bottleneck_percent IS NULL
+                ),
+                PRIMARY KEY (task_id, resolution),
+                FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
+            );
+            CREATE TABLE IF NOT EXISTS collector_state (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
+            """
+        )
+
+    def seed_tasks(self, tasks: Sequence[CollectionTask]) -> int:
+        before = self._connection.total_changes
+        updated_at = _utc_iso()
+        with self._connection:
+            self._connection.executemany(
+                """
+                INSERT OR IGNORE INTO task
+                    (cpu_id, gpu_id, game_id, source_url, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                [
+                    (item.cpu_id, item.gpu_id, item.game_id, item.source_url, updated_at)
+                    for item in tasks
+                ],
+            )
+        return self._connection.total_changes - before
+
+    def claim_next(self, now: Optional[datetime] = None) -> Optional[StoredTask]:
+        current_time = _utc_iso(now)
+        self._connection.execute("BEGIN IMMEDIATE")
+        try:
+            self._connection.execute(
+                """
+                UPDATE task
+                SET status = 'retryable', next_attempt_at = NULL,
+                    error = 'interrupted', updated_at = ?
+                WHERE status = 'fetching'
+                """,
+                (current_time,),
+            )
+            paused = self._connection.execute(
+                "SELECT 1 FROM collector_state WHERE key = 'pause_reason'"
+            ).fetchone()
+            if paused:
+                self._connection.commit()
+                return None
+            row = self._connection.execute(
+                """
+                SELECT id FROM task
+                WHERE status IN ('pending', 'retryable')
+                  AND (next_attempt_at IS NULL OR next_attempt_at <= ?)
+                ORDER BY id
+                LIMIT 1
+                """,
+                (current_time,),
+            ).fetchone()
+            if row is None:
+                self._connection.commit()
+                return None
+            claimed = self._connection.execute(
+                """
+                UPDATE task
+                SET status = 'fetching', attempts = attempts + 1,
+                    next_attempt_at = NULL, error = NULL, updated_at = ?
+                WHERE id = ?
+                RETURNING id, cpu_id, gpu_id, game_id, source_url, attempts
+                """,
+                (current_time, row["id"]),
+            ).fetchone()
+            self._connection.commit()
+        except Exception:
+            self._connection.rollback()
+            raise
+        return StoredTask(**dict(claimed))
+
+    def record_success(
+        self,
+        task_id: int,
+        rows: Sequence[ParsedPerformanceRow],
+        response_hash: str,
+    ) -> None:
+        with self._connection:
+            self._connection.execute("DELETE FROM result WHERE task_id = ?", (task_id,))
+            self._connection.executemany(
+                """
+                INSERT INTO result
+                    (task_id, resolution, average, min, max,
+                     bottleneck_type, bottleneck_percent)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (
+                        task_id,
+                        row.resolution,
+                        row.average_fps,
+                        row.minimum_fps,
+                        row.maximum_fps,
+                        row.bottleneck_type,
+                        row.bottleneck_percent,
+                    )
+                    for row in rows
+                ],
+            )
+            self._connection.execute(
+                """
+                UPDATE task
+                SET status = 'succeeded', response_hash = ?, error = NULL,
+                    next_attempt_at = NULL, updated_at = ?
+                WHERE id = ?
+                """,
+                (response_hash, _utc_iso(), task_id),
+            )
+
+    def record_retryable(
+        self, task_id: int, error: str, next_attempt_at: datetime
+    ) -> None:
+        self._record_failure(task_id, "retryable", error, _utc_iso(next_attempt_at))
+
+    def record_missing(self, task_id: int, error: str) -> None:
+        self._record_failure(task_id, "missing", error, None)
+
+    def record_parse_failed(self, task_id: int, error: str) -> None:
+        self._record_failure(task_id, "parse_failed", error, None)
+
+    def _record_failure(
+        self, task_id: int, status: str, error: str, next_attempt_at: Optional[str]
+    ) -> None:
+        with self._connection:
+            self._connection.execute(
+                """
+                UPDATE task
+                SET status = ?, error = ?, next_attempt_at = ?, updated_at = ?
+                WHERE id = ?
+                """,
+                (status, error, next_attempt_at, _utc_iso(), task_id),
+            )
+
+    def pause_all(self, reason: str) -> None:
+        with self._connection:
+            self._connection.execute(
+                """
+                INSERT INTO collector_state (key, value) VALUES ('pause_reason', ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                """,
+                (reason,),
+            )
+
+    def resume_all(self) -> None:
+        with self._connection:
+            self._connection.execute(
+                "DELETE FROM collector_state WHERE key = 'pause_reason'"
+            )
+
+    def pause_reason(self) -> Optional[str]:
+        row = self._connection.execute(
+            "SELECT value FROM collector_state WHERE key = 'pause_reason'"
+        ).fetchone()
+        return row["value"] if row else None
+
+    def task_counts(self) -> Dict[str, int]:
+        return {
+            row["status"]: row["count"]
+            for row in self._connection.execute(
+                "SELECT status, COUNT(*) AS count FROM task GROUP BY status"
+            )
+        }
+
+    def results_for_task(self, task_id: int) -> List[ParsedPerformanceRow]:
+        rows = self._connection.execute(
+            """
+            SELECT resolution, average, min, max,
+                   bottleneck_type, bottleneck_percent
+            FROM result
+            WHERE task_id = ?
+            ORDER BY CASE resolution WHEN '1080p' THEN 1 WHEN '2k' THEN 2 ELSE 3 END
+            """,
+            (task_id,),
+        )
+        return [
+            ParsedPerformanceRow(
+                row["resolution"],
+                row["average"],
+                row["min"],
+                row["max"],
+                row["bottleneck_type"],
+                row["bottleneck_percent"],
+            )
+            for row in rows
+        ]
