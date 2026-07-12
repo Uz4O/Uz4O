@@ -194,6 +194,35 @@ def test_upsert_build_templates_persists_structured_high_budget_details() -> Non
     assert row.details["parts"][0]["reference_price"] > 0
 
 
+def test_legacy_reimport_preserves_existing_structured_details() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    structured = generate_high_budget_templates()[0]
+    legacy = structured.model_copy(
+        update={"title": "Legacy title update", "details": None},
+        deep=True,
+    )
+
+    with Session(engine) as session:
+        for part in structured.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+
+        upsert_build_templates(session, [structured])
+        upsert_build_templates(session, [legacy])
+        row = session.get(BuildTemplate, structured.id)
+
+    assert row.title == "Legacy title update"
+    assert row.details == structured.details.model_dump(mode="json")
+
+
 def test_detailed_template_rejects_purchase_mode_condition_mismatch() -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     Base.metadata.create_all(engine)

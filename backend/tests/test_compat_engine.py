@@ -174,6 +174,34 @@ def test_psu_headroom_ignores_unselected_catalog_components() -> None:
     assert "预计功耗约 300W" in psu_finding.detail
 
 
+def test_psu_headroom_counts_each_selected_component_id_once() -> None:
+    selected = {
+        "cpu": "selected-cpu",
+        "gpu": "selected-gpu",
+        "storage": "selected-gpu",
+        "motherboard": "b650m",
+        "ram": "ram-ddr5",
+        "psu": "psu-500w",
+    }
+    components = {
+        "selected-cpu": component(
+            "selected-cpu", "cpu", "Selected CPU", {"socket": "AM5", "tdp": 100}
+        ),
+        "selected-gpu": component("selected-gpu", "gpu", "Selected GPU", {"tdp": 200}),
+        "b650m": component("b650m", "motherboard", "B650M", {"socket": "AM5"}),
+        "ram-ddr5": component("ram-ddr5", "ram", "DDR5 16GB", {"type": "DDR5"}),
+        "psu-500w": component("psu-500w", "psu", "500W Gold", {"watt": 500}),
+    }
+
+    result = evaluate_compatibility(BuildSelection(components=selected), components)
+
+    psu_finding = next(
+        finding for finding in result.findings if finding.code == "psu_headroom"
+    )
+    assert psu_finding.level == "pass"
+    assert "预计功耗约 300W" in psu_finding.detail
+
+
 def test_warns_for_high_cpu_low_gpu_imbalance() -> None:
     result = evaluate_compatibility(
         BuildSelection(

@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, func, select
 from sqlalchemy.orm import Session
 
 from app.builds.high_budget_catalog import (
-    generate_high_budget_templates,
+    generate_high_budget_report,
     render_high_budget_markdown,
     write_high_budget_artifacts,
 )
@@ -40,15 +40,17 @@ LOW_RECOMMENDATION_PATH = DATA_DIR / "low-budget-base-recommendation-ids.txt"
 
 
 def test_committed_artifacts_match_the_deterministic_generator(tmp_path) -> None:
-    generated = generate_high_budget_templates()
+    report = generate_high_budget_report()
+    generated = list(report.templates)
     committed = read_build_template_inputs(TEMPLATE_PATH)
-    generated_paths = write_high_budget_artifacts(tmp_path, generated)
+    generated_paths = write_high_budget_artifacts(tmp_path, report=report)
 
     assert [item.model_dump(mode="json") for item in committed] == [
         item.model_dump(mode="json") for item in generated
     ]
     assert MARKDOWN_PATH.read_text(encoding="utf-8") == render_high_budget_markdown(
-        generated
+        generated,
+        report.failures,
     )
     assert generated_paths.templates_json.read_bytes() == TEMPLATE_PATH.read_bytes()
     assert generated_paths.reference_prices_csv.read_bytes() == PRICE_PATH.read_bytes()

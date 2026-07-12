@@ -81,6 +81,10 @@ def seed_component_prices(
             "review_reasons": price.review_reasons,
             "approved_at": price.approved_at,
         }
+        if row is not None:
+            for key in ("price_range_low", "price_range_high"):
+                if values[key] is None:
+                    values[key] = getattr(row, key)
         if row is None:
             session.add(ComponentPrice(component_id=price.component_id, **values))
         else:

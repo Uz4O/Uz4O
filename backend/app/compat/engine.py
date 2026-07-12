@@ -251,7 +251,7 @@ def _psu_headroom_findings(
     psu_watt = _int_spec(psu, "watt")
     total_tdp = sum(
         _int_spec(components_by_id[component_id], "tdp") or 0
-        for component_id in selection.selected_ids()
+        for component_id in set(selection.selected_ids())
         if component_id in components_by_id
         and components_by_id[component_id].category != "psu"
     )

@@ -126,6 +126,8 @@ CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
 
 DIRECTION_LABELS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 PURCHASE_LABELS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
+DIRECTIONS: Tuple[Direction, ...] = ("fps", "aaa", "balanced")
+PURCHASE_MODES: Tuple[PurchaseMode, ...] = ("new", "used", "mixed")
 
 
 @dataclass(frozen=True)
@@ -169,26 +171,74 @@ class ArtifactPaths:
     audit_json: Path
 
 
+@dataclass(frozen=True)
+class GenerationFailure:
+    target_budget: int
+    direction: Direction
+    purchase_mode: PurchaseMode
+    error: str
+
+    @property
+    def key(self) -> Tuple[int, Direction, PurchaseMode]:
+        return (self.target_budget, self.direction, self.purchase_mode)
+
+    def as_dict(self) -> Dict[str, object]:
+        return {
+            "target_budget": self.target_budget,
+            "direction": self.direction,
+            "purchase_mode": self.purchase_mode,
+            "error": self.error,
+        }
+
+
+@dataclass(frozen=True)
+class GenerationReport:
+    templates: Tuple[BuildTemplateInput, ...]
+    source_parts: Tuple[PricedPart, ...]
+    failures: Tuple[GenerationFailure, ...]
+
+
 @lru_cache(maxsize=1)
-def generate_high_budget_templates() -> List[BuildTemplateInput]:
+def generate_high_budget_report() -> GenerationReport:
     cpus, motherboards, gpus, support_parts = _load_catalog()
+    source_parts = tuple([*cpus, *motherboards, *gpus, *support_parts.values()])
     templates = []
+    failures = []
     for budget in BUDGET_TIERS:
-        for direction in ("fps", "aaa", "balanced"):
-            for purchase_mode in ("new", "used", "mixed"):
-                candidate = _select_candidate(
-                    budget=budget,
-                    direction=direction,
-                    purchase_mode=purchase_mode,
-                    cpus=cpus,
-                    motherboards=motherboards,
-                    gpus=gpus,
-                    support_parts=support_parts,
-                )
+        for direction in DIRECTIONS:
+            for purchase_mode in PURCHASE_MODES:
+                try:
+                    candidate = _select_candidate(
+                        budget=budget,
+                        direction=direction,
+                        purchase_mode=purchase_mode,
+                        cpus=cpus,
+                        motherboards=motherboards,
+                        gpus=gpus,
+                        support_parts=support_parts,
+                    )
+                except ValueError as exc:
+                    failures.append(
+                        GenerationFailure(
+                            target_budget=budget,
+                            direction=direction,
+                            purchase_mode=purchase_mode,
+                            error=str(exc),
+                        )
+                    )
+                    continue
                 templates.append(
                     _build_template(budget, direction, purchase_mode, candidate)
                 )
-    return templates
+    return GenerationReport(
+        templates=tuple(templates),
+        source_parts=source_parts,
+        failures=tuple(failures),
+    )
+
+
+def generate_high_budget_templates() -> List[BuildTemplateInput]:
+    return list(generate_high_budget_report().templates)
 
 
 def minimum_psu_watt(cpu_id: str, gpu_id: str) -> int:
@@ -197,7 +247,51 @@ def minimum_psu_watt(cpu_id: str, gpu_id: str) -> int:
     return math.ceil((cpu_tdp + gpu_tdp) * 1.5 + 100)
 
 
-def render_high_budget_markdown(templates: Sequence[BuildTemplateInput]) -> str:
+def _completion_metadata(
+    templates: Sequence[BuildTemplateInput],
+    failures: Sequence[GenerationFailure] = (),
+) -> Tuple[List[int], List[Dict[str, object]]]:
+    generated_keys = {
+        (
+            template.details.target_budget,
+            template.details.direction,
+            template.details.purchase_mode,
+        )
+        for template in templates
+        if template.details is not None
+    }
+    failed_keys = {failure.key for failure in failures}
+    completed_tiers = [
+        budget
+        for budget in BUDGET_TIERS
+        if all(
+            (budget, direction, purchase_mode) in generated_keys
+            for direction in DIRECTIONS
+            for purchase_mode in PURCHASE_MODES
+        )
+    ]
+    missing_data = [
+        {
+            "target_budget": budget,
+            "direction": direction,
+            "purchase_mode": purchase_mode,
+            "reason": "not_provided",
+        }
+        for budget in BUDGET_TIERS
+        for direction in DIRECTIONS
+        for purchase_mode in PURCHASE_MODES
+        if (budget, direction, purchase_mode) not in generated_keys
+        and (budget, direction, purchase_mode) not in failed_keys
+    ]
+    return completed_tiers, missing_data
+
+
+def render_high_budget_markdown(
+    templates: Sequence[BuildTemplateInput],
+    failures: Sequence[GenerationFailure] = (),
+) -> str:
+    completed_tiers, missing_data = _completion_metadata(templates, failures)
+    expected_template_count = len(BUDGET_TIERS) * len(DIRECTIONS) * len(PURCHASE_MODES)
     lines = [
         "# 7500-20000元装机基底配置",
         "",
@@ -205,11 +299,31 @@ def render_high_budget_markdown(templates: Sequence[BuildTemplateInput]) -> str:
         "",
         "说明：每500元一个档位，每档包含FPS、3A、均衡三个方向及全新、二手、混合采购三种方式。",
         "二手方案中的电源、SSD和显卡仍按二手采购规则生成，购买前必须复核健康度、成色和保修。",
-        "生成状态：26/26个价位完成，234/234套配置通过自动校验，失败配置0套。",
-        "待人工复核：二手850W电源目前来自单一样本，属于低置信度参考价；所有价格在正式展示前仍需抽样核价。",
+        (
+            f"生成状态：{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位完成，"
+            f"{len(templates)}/{expected_template_count}套配置生成，"
+            f"缺失配置{len(missing_data)}套，失败配置{len(failures)}套。"
+        ),
         "",
     ]
-    for budget in BUDGET_TIERS:
+    if any(
+        part.component_id == "base-psu-850w-gold" and part.condition == "used"
+        for template in templates
+        if template.details is not None
+        for part in template.details.parts
+    ):
+        lines.insert(
+            -1,
+            "待人工复核：二手850W电源目前来自单一样本，属于低置信度参考价；所有价格在正式展示前仍需抽样核价。",
+        )
+    present_tiers = sorted(
+        {
+            template.details.target_budget
+            for template in templates
+            if template.details is not None
+        }
+    )
+    for budget in present_tiers:
         lines.extend([f"## {budget}元档", ""])
         tier_templates = [
             template
@@ -255,10 +369,23 @@ def write_high_budget_artifacts(
     output_dir: Path,
     templates: Optional[Sequence[BuildTemplateInput]] = None,
     review_markdown_path: Optional[Path] = None,
+    report: Optional[GenerationReport] = None,
 ) -> ArtifactPaths:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    templates = list(templates or generate_high_budget_templates())
+    if report is not None and templates is not None:
+        raise ValueError("Pass either report or templates, not both")
+    if report is None:
+        if templates is None:
+            report = generate_high_budget_report()
+        else:
+            generated = tuple(templates)
+            report = GenerationReport(
+                templates=generated,
+                source_parts=_source_parts_from_templates(generated),
+                failures=(),
+            )
+    templates = list(report.templates)
     paths = ArtifactPaths(
         templates_json=output_dir / "high-budget-base-build-templates.json",
         review_markdown=review_markdown_path or output_dir / "high-budget-base-builds.md",
@@ -277,12 +404,16 @@ def write_high_budget_artifacts(
         encoding="utf-8",
     )
     paths.review_markdown.write_text(
-        render_high_budget_markdown(templates),
+        render_high_budget_markdown(templates, report.failures),
         encoding="utf-8",
     )
-    _write_reference_prices(paths.reference_prices_csv, templates)
+    _write_reference_prices(
+        paths.reference_prices_csv,
+        templates,
+        report.source_parts,
+    )
     _write_recommendation_ids(paths.recommendation_ids, templates)
-    _write_audit(paths.audit_json, templates)
+    _write_audit(paths.audit_json, templates, report.failures)
     return paths
 
 
@@ -651,20 +782,67 @@ def _load_support_parts(path: Path) -> List[PricedPart]:
     ]
 
 
+def _source_parts_from_templates(
+    templates: Sequence[BuildTemplateInput],
+) -> Tuple[PricedPart, ...]:
+    snapshots: Dict[str, Dict[str, object]] = {}
+    for template in templates:
+        if template.details is None:
+            continue
+        for part in template.details.parts:
+            snapshot = snapshots.setdefault(
+                part.component_id,
+                {
+                    "category": part.role,
+                    "name": part.name,
+                    "brand": _brand_for_template_part(part),
+                    "specs": part.specs,
+                    "used_price": None,
+                    "new_price": None,
+                    "used_source": "",
+                    "new_source": "",
+                    "price_date": part.price_date,
+                },
+            )
+            price_key = f"{part.condition}_price"
+            existing_price = snapshot[price_key]
+            if existing_price not in (None, part.reference_price):
+                raise ValueError(
+                    f"Conflicting {part.condition} prices for {part.component_id}"
+                )
+            snapshot[price_key] = part.reference_price
+            snapshot[f"{part.condition}_source"] = part.price_source
+
+    return tuple(
+        PricedPart(component_id=component_id, **snapshots[component_id])
+        for component_id in sorted(snapshots)
+    )
+
+
 def _write_reference_prices(
     path: Path,
     templates: Sequence[BuildTemplateInput],
+    source_parts: Sequence[PricedPart],
 ) -> None:
     referenced_ids = {
         component_id
         for template in templates
         for component_id in template.components.values()
     }
-    cpus, motherboards, gpus, support_parts = _load_catalog()
+    source_by_id = {part.component_id: part for part in source_parts}
+    missing_ids = sorted(referenced_ids - set(source_by_id))
+    if missing_ids:
+        raise ValueError("Source snapshot is missing: " + ", ".join(missing_ids))
+    for template in templates:
+        if template.details is None:
+            continue
+        for part in template.details.parts:
+            source = source_by_id[part.component_id]
+            if source.price(part.condition) != part.reference_price:
+                raise ValueError(f"Snapshot price mismatch for {part.component_id}")
     catalog = {
-        part.component_id: part
-        for part in [*cpus, *motherboards, *gpus, *support_parts.values()]
-        if part.component_id in referenced_ids
+        component_id: source_by_id[component_id]
+        for component_id in referenced_ids
     }
 
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -685,9 +863,10 @@ def _write_reference_prices(
         )
         for component_id in sorted(catalog):
             part = catalog[component_id]
-            used_price = part.used_price or part.new_price
-            new_price = part.new_price or part.used_price
-            if used_price is None or new_price is None:
+            reference_price = (
+                part.new_price if part.new_price is not None else part.used_price
+            )
+            if reference_price is None:
                 continue
             writer.writerow(
                 [
@@ -695,9 +874,9 @@ def _write_reference_prices(
                     component_id,
                     part.name,
                     part.brand,
-                    new_price,
-                    used_price,
-                    new_price,
+                    reference_price,
+                    part.used_price,
+                    part.new_price,
                     1,
                     0,
                     "high_budget_base_catalog",
@@ -719,7 +898,12 @@ def _write_recommendation_ids(
     path.write_text("\n".join(component_ids) + "\n", encoding="utf-8")
 
 
-def _write_audit(path: Path, templates: Sequence[BuildTemplateInput]) -> None:
+def _write_audit(
+    path: Path,
+    templates: Sequence[BuildTemplateInput],
+    failures: Sequence[GenerationFailure] = (),
+) -> None:
+    completed_tiers, missing_data = _completion_metadata(templates, failures)
     underutilized = [
         {
             "template_id": template.id,
@@ -735,17 +919,27 @@ def _write_audit(path: Path, templates: Sequence[BuildTemplateInput]) -> None:
     ]
     payload = {
         "price_date": PRICE_DATE,
-        "completed_tiers": BUDGET_TIERS,
+        "completed_tiers": completed_tiers,
         "completed_template_count": len(templates),
-        "pending_review": [
-            {
-                "component_id": "base-psu-850w-gold",
-                "condition": "used",
-                "reason": "当前仅有单一公开样本，正式展示前需要重新核价",
-            }
-        ],
-        "missing_data": [],
-        "failed_templates": [],
+        "pending_review": (
+            [
+                {
+                    "component_id": "base-psu-850w-gold",
+                    "condition": "used",
+                    "reason": "当前仅有单一公开样本，正式展示前需要重新核价",
+                }
+            ]
+            if any(
+                part.component_id == "base-psu-850w-gold"
+                and part.condition == "used"
+                for template in templates
+                if template.details is not None
+                for part in template.details.parts
+            )
+            else []
+        ),
+        "missing_data": missing_data,
+        "failed_templates": [failure.as_dict() for failure in failures],
         "underutilized_templates": underutilized,
     }
     path.write_text(
@@ -771,6 +965,17 @@ def _motherboard_chipset(component_id: str) -> str:
     return "B650"
 
 
+def _brand_for_template_part(part: BuildTemplatePart) -> str:
+    vendor = part.specs.get("vendor")
+    if isinstance(vendor, str) and vendor:
+        return vendor
+    if part.role == "cpu" and part.component_id.startswith(("r5-", "r7-", "r9-")):
+        return "AMD"
+    if part.component_id.startswith("base-"):
+        return "通用规格"
+    return part.name.split(" ", 1)[0]
+
+
 def _role_label(role: str) -> str:
     return {
         "cpu": "CPU",
@@ -793,11 +998,13 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, default=DATA_DIR)
     parser.add_argument("--markdown", type=Path)
     args = parser.parse_args()
+    report = generate_high_budget_report()
     paths = write_high_budget_artifacts(
         args.output_dir,
         review_markdown_path=args.markdown,
+        report=report,
     )
-    print(f"Generated {len(generate_high_budget_templates())} templates.")
+    print(f"Generated {len(report.templates)} templates.")
     print(paths.templates_json)
     print(paths.review_markdown)
 

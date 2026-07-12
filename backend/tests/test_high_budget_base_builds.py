@@ -2,6 +2,7 @@ import csv
 import json
 from collections import Counter
 
+import app.builds.high_budget_catalog as high_budget_catalog
 from app.builds.models import BuildTemplate
 from app.builds.high_budget_catalog import (
     BUDGET_TIERS,
@@ -204,6 +205,140 @@ def test_writes_review_markdown_and_backend_json(tmp_path) -> None:
     assert audit["pending_review"][0]["component_id"] == "base-psu-850w-gold"
     assert audit["missing_data"] == []
     assert audit["failed_templates"] == []
+
+
+def test_empty_and_partial_artifacts_report_actual_completion(tmp_path) -> None:
+    cases = [[], generated_templates()[:1]]
+
+    for index, templates in enumerate(cases):
+        paths = write_high_budget_artifacts(tmp_path / str(index), templates)
+        payload = json.loads(paths.templates_json.read_text(encoding="utf-8"))
+        audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
+        markdown = paths.review_markdown.read_text(encoding="utf-8")
+        expected_missing = 234 - len(templates)
+
+        assert len(payload) == len(templates)
+        assert audit["completed_tiers"] == []
+        assert audit["completed_template_count"] == len(templates)
+        assert len(audit["missing_data"]) == expected_missing
+        assert {item["reason"] for item in audit["missing_data"]} == {
+            "not_provided"
+        }
+        assert audit["failed_templates"] == []
+        assert f"{len(templates)}/234套配置生成" in markdown
+        assert f"缺失配置{expected_missing}套" in markdown
+        assert "26/26个价位完成" not in markdown
+
+
+def test_artifacts_use_the_generation_report_price_snapshot(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    report = high_budget_catalog.generate_high_budget_report()
+    source_case = next(
+        part
+        for part in report.source_parts
+        if part.component_id == "base-case-mid-tower"
+    )
+    support_parts = json.loads(
+        high_budget_catalog.SUPPORT_PART_PATH.read_text(encoding="utf-8")
+    )
+    mutated_case = next(
+        item for item in support_parts if item["id"] == "base-case-mid-tower"
+    )
+    mutated_case["used_price"] = 1
+    mutated_case["new_price"] = 2
+    mutated_support_path = tmp_path / "mutated-support-components.json"
+    mutated_support_path.write_text(
+        json.dumps(support_parts, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        high_budget_catalog,
+        "SUPPORT_PART_PATH",
+        mutated_support_path,
+    )
+
+    paths = write_high_budget_artifacts(tmp_path / "artifacts", report=report)
+    with paths.reference_prices_csv.open(encoding="utf-8", newline="") as handle:
+        rows = {row["target_id"]: row for row in csv.DictReader(handle)}
+
+    assert rows["base-case-mid-tower"]["normal_price_min"] == str(
+        source_case.used_price
+    )
+    assert rows["base-case-mid-tower"]["normal_price_max"] == str(
+        source_case.new_price
+    )
+
+
+def test_generation_report_records_the_actual_selection_failure(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    original_select_candidate = high_budget_catalog._select_candidate
+
+    def fail_one_combination(*args, **kwargs):
+        if (
+            kwargs["budget"],
+            kwargs["direction"],
+            kwargs["purchase_mode"],
+        ) == (7_500, "fps", "new"):
+            raise ValueError("fixture selection failure")
+        return original_select_candidate(*args, **kwargs)
+
+    monkeypatch.setattr(
+        high_budget_catalog,
+        "_select_candidate",
+        fail_one_combination,
+    )
+    high_budget_catalog.generate_high_budget_report.cache_clear()
+    try:
+        report = high_budget_catalog.generate_high_budget_report()
+        paths = write_high_budget_artifacts(tmp_path, report=report)
+        audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
+        markdown = paths.review_markdown.read_text(encoding="utf-8")
+    finally:
+        high_budget_catalog.generate_high_budget_report.cache_clear()
+
+    assert len(report.templates) == 233
+    assert audit["completed_tiers"] == BUDGET_TIERS[1:]
+    assert audit["completed_template_count"] == 233
+    assert audit["missing_data"] == []
+    assert audit["failed_templates"] == [
+        {
+            "target_budget": 7_500,
+            "direction": "fps",
+            "purchase_mode": "new",
+            "error": "fixture selection failure",
+        }
+    ]
+    assert "233/234套配置生成" in markdown
+    assert "缺失配置0套" in markdown
+    assert "失败配置1套" in markdown
+
+
+def test_reference_export_does_not_invent_a_missing_condition_price(
+    tmp_path,
+) -> None:
+    template = next(
+        template
+        for template in generated_templates()
+        if template.details.purchase_mode == "used"
+    )
+    case = next(
+        part
+        for part in template.details.parts
+        if part.component_id == "base-case-mid-tower"
+    )
+
+    paths = write_high_budget_artifacts(tmp_path / "artifacts", [template])
+    with paths.reference_prices_csv.open(encoding="utf-8", newline="") as handle:
+        rows = {row["target_id"]: row for row in csv.DictReader(handle)}
+
+    assert rows["base-case-mid-tower"]["normal_price_min"] == str(
+        case.reference_price
+    )
+    assert rows["base-case-mid-tower"]["normal_price_max"] == ""
 
 
 def test_template_api_response_includes_structured_details() -> None:

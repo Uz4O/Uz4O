@@ -61,9 +61,12 @@ def upsert_build_templates(
             "components": template.components,
             "estimated_total": template.estimated_total,
             "explanation": template.explanation,
-            "details": template.details.model_dump(mode="json") if template.details else {},
             "status": "active",
         }
+        if template.details is not None:
+            values["details"] = template.details.model_dump(mode="json")
+        elif row is None:
+            values["details"] = {}
         if row is None:
             session.add(BuildTemplate(id=template.id, **values))
         else:
