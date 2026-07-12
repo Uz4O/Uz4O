@@ -151,6 +151,37 @@ def test_invalid_result_set_preserves_previous_results_status_and_hash(
     assert (status, response_hash) == ("succeeded", "old-hash")
 
 
+def test_database_insert_failure_rolls_back_deleted_results_status_and_hash(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "collector.sqlite3"
+    store = CollectorStore(path)
+    store.seed_tasks([task("one")])
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    store.record_success(claimed.id, rows(), "old-hash")
+    with sqlite3.connect(path) as connection:
+        connection.execute(
+            """
+            CREATE TRIGGER force_result_insert_failure
+            BEFORE INSERT ON result
+            BEGIN
+                SELECT RAISE(FAIL, 'forced');
+            END
+            """
+        )
+
+    with pytest.raises(sqlite3.DatabaseError, match="forced"):
+        store.record_success(claimed.id, rows(5), "new-hash")
+
+    assert store.results_for_task(claimed.id) == rows()
+    with sqlite3.connect(path) as connection:
+        status, response_hash = connection.execute(
+            "SELECT status, response_hash FROM task WHERE id = ?", (claimed.id,)
+        ).fetchone()
+    assert (status, response_hash) == ("succeeded", "old-hash")
+
+
 def test_terminal_and_retryable_states_store_expected_error_fields(
     tmp_path: Path,
 ) -> None:
