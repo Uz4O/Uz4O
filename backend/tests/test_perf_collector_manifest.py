@@ -296,3 +296,35 @@ def test_check_command_reports_status_and_page_count(monkeypatch, capsys) -> Non
     assert "review:" in output
     assert "missing:" in output
     assert f"Derived result-page count: {expected_pages}" in output
+
+
+def test_check_command_writes_json_coverage_report(monkeypatch, tmp_path, capsys) -> None:
+    output_path = tmp_path / "coverage.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "ai-pc-builder-api",
+            "check-perf-manifest",
+            str(MANIFEST_PATH),
+            "--json",
+            str(output_path),
+        ],
+    )
+
+    main()
+
+    report = json.loads(output_path.read_text(encoding="utf-8"))
+    assert report == {
+        "sections": {
+            "cpus": {"total": 101, "exact": 1, "review": 100, "missing": 0},
+            "gpus": {"total": 77, "exact": 1, "review": 76, "missing": 0},
+            "games": {"total": 15, "exact": 1, "review": 14, "missing": 0},
+        },
+        "overall": {"total": 193, "exact": 3, "review": 190, "missing": 0},
+        "derived_result_page_count": 1,
+    }
+    output = capsys.readouterr().out
+    assert "exact: 3\n" in output
+    assert "review: 190\n" in output
+    assert "missing: 0\n" in output
+    assert "Derived result-page count: 1\n" in output

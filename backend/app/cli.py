@@ -78,6 +78,7 @@ def main() -> None:
 
     check_perf_manifest_parser = subparsers.add_parser("check-perf-manifest")
     check_perf_manifest_parser.add_argument("manifest_json", type=Path)
+    check_perf_manifest_parser.add_argument("--json", type=Path)
 
     seed_perf_parser = subparsers.add_parser("seed-perf-collection")
     seed_perf_parser.add_argument("manifest_json", type=Path)
@@ -185,6 +186,8 @@ def main() -> None:
         for status in ("exact", "review", "missing"):
             print(f"{status}: {counts[status]}")
         print(f"Derived result-page count: {target_page_count(manifest)}")
+        if args.json:
+            _write_perf_coverage_report(manifest, args.json)
     if args.command == "seed-perf-collection":
         manifest = load_manifest(args.manifest_json)
         cpus = [item for item in manifest.cpus if item.status == "exact"]
@@ -276,6 +279,49 @@ def _read_component_ids(path: Path) -> list[str]:
         if stripped and not stripped.startswith("#"):
             component_ids.append(stripped)
     return component_ids
+
+
+def _write_perf_coverage_report(manifest, path: Path) -> None:
+    statuses = ("exact", "review", "missing")
+    sections = {}
+    for name in ("cpus", "gpus", "games"):
+        items = getattr(manifest, name)
+        counts = Counter(item.status for item in items)
+        sections[name] = {
+            "total": len(items),
+            **{status: counts[status] for status in statuses},
+        }
+    overall = Counter(
+        item.status
+        for name in ("cpus", "gpus", "games")
+        for item in getattr(manifest, name)
+    )
+    payload = {
+        "sections": sections,
+        "overall": {
+            "total": sum(section["total"] for section in sections.values()),
+            **{status: overall[status] for status in statuses},
+        },
+        "derived_result_page_count": target_page_count(manifest),
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+            json.dump(payload, temporary_file, ensure_ascii=False, indent=2)
+            temporary_file.write("\n")
+        temporary_path.replace(path)
+    finally:
+        if temporary_path:
+            temporary_path.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":
