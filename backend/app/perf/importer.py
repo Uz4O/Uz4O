@@ -46,6 +46,8 @@ def read_performance_batch(
     records = payload.get("records")
     if not isinstance(records, list):
         raise ValueError("records must be a list")
+    if not records:
+        raise ValueError("records must not be empty")
     manifest = load_manifest(manifest_path)
     mappings = (
         {item.app_id: item for item in manifest.cpus},

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
@@ -122,6 +122,69 @@ def test_upsert_is_idempotent_and_exact_lookup_is_scoped_by_quality(session) -> 
         )
         == []
     )
+
+
+def test_upsert_prefetches_existing_rows_in_bounded_chunks(session) -> None:
+    estimates = [
+        estimate_input(game_id=f"game-{index}")
+        for index in range(2400)
+    ]
+    select_count = 0
+
+    def count_selects(connection, cursor, statement, parameters, context, executemany):
+        nonlocal select_count
+        if statement.lstrip().upper().startswith("SELECT"):
+            select_count += 1
+
+    engine = session.get_bind()
+    event.listen(engine, "before_cursor_execute", count_selects)
+    try:
+        assert upsert_performance_estimates(session, estimates) == 2400
+    finally:
+        event.remove(engine, "before_cursor_execute", count_selects)
+
+    assert select_count == 16
+
+
+def test_upsert_skips_older_source_rows_and_counts_only_written_rows(session) -> None:
+    newer = datetime(2026, 7, 13, tzinfo=timezone.utc)
+    older = datetime(2026, 7, 12, tzinfo=timezone.utc)
+
+    assert upsert_performance_estimates(
+        session,
+        [estimate_input(average_fps=80, maximum_fps=100, source_fetched_at=newer)],
+    ) == 1
+    assert upsert_performance_estimates(
+        session,
+        [estimate_input(average_fps=70, maximum_fps=100, source_fetched_at=older)],
+    ) == 0
+
+    stored = get_performance_estimates(
+        session,
+        "r5-5600",
+        "rtx-4060",
+        ["cyberpunk-2077"],
+        "1080p",
+        "medium",
+    )[0]
+    assert stored.average_fps == 80
+    assert stored.source_fetched_at.replace(tzinfo=timezone.utc) == newer
+
+
+def test_chunk_failure_does_not_commit_prior_chunks(session) -> None:
+    estimates = [
+        estimate_input(game_id=f"game-{index}")
+        for index in range(150)
+    ]
+    estimates.append(estimate_input(game_id="invalid", quality="high"))
+
+    with pytest.raises(IntegrityError):
+        upsert_performance_estimates(session, estimates)
+    session.rollback()
+
+    assert session.scalar(
+        select(func.count()).select_from(GamePerformanceEstimate)
+    ) == 0
 
 
 @pytest.mark.parametrize(

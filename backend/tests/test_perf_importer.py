@@ -56,6 +56,15 @@ def test_import_rejects_invalid_ranges(tmp_path) -> None:
         read_performance_batch(path)
 
 
+def test_import_rejects_empty_records(tmp_path) -> None:
+    payload = batch_payload()
+    payload["records"] = []
+    path = write_batch(tmp_path / "empty.json", payload)
+
+    with pytest.raises(ValueError, match="records must not be empty"):
+        read_performance_batch(path)
+
+
 def test_import_reads_reviewed_medium_record(tmp_path) -> None:
     path = write_batch(tmp_path / "reviewed.json", batch_payload())
 
