@@ -130,6 +130,8 @@ def parse_medium_results(html: str) -> List[ParsedPerformanceRow]:
 
     for cells in table[header_index + 1 :]:
         if len(cells) <= max(columns.values()):
+            if any(cell.strip() for cell in cells):
+                raise ParseError("results table data row has too few columns")
             continue
         resolution = _resolution(cells[columns["resolution"]])
         if resolution is None:

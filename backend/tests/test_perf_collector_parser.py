@@ -62,6 +62,13 @@ def test_duplicate_target_resolution_raises() -> None:
         parse_medium_results(table(*valid_rows(), valid_rows()[0]))
 
 
+def test_nonempty_short_data_row_raises_even_when_target_rows_are_complete() -> None:
+    short_row = "<tr><td>unexpected summary</td></tr>"
+
+    with pytest.raises(ParseError, match="columns"):
+        parse_medium_results(table(*valid_rows(), short_row))
+
+
 @pytest.mark.parametrize(
     "average,minimum,maximum",
     [(10, 0, 20), (10, 11, 20), (21, 10, 20), (1000, 10, 2001)],
@@ -102,4 +109,43 @@ def test_supports_english_headers_and_bottleneck_text() -> None:
         ("cpu", 12),
         ("gpu", 8),
         ("balanced", None),
+    ]
+
+
+def test_no_bottleneck_text_takes_priority_over_cpu_or_gpu_words() -> None:
+    parsed = parse_medium_results(
+        table(
+            row("1920x1080", 80, 70, 90, "No bottleneck despite CPU 11%"),
+            row("2560x1440", 60, 50, 70, "无瓶颈 GPU 9%"),
+            row("3840x2160", 40, 30, 50, "No bottleneck 0%"),
+        )
+    )
+
+    assert [(item.bottleneck_type, item.bottleneck_percent) for item in parsed] == [
+        ("balanced", 11),
+        ("balanced", 9),
+        ("balanced", 0),
+    ]
+
+
+def test_ignores_emoji_and_star_noise_in_playability_column() -> None:
+    header = (
+        "<tr><th>Resolution</th><th>Average FPS</th><th>Minimum FPS</th>"
+        "<th>Maximum FPS</th><th>Playability</th><th>Bottleneck</th></tr>"
+    )
+    noisy_rows = (
+        "<tr><td>1920x1080</td><td>🎮 80 FPS</td><td>70 FPS</td><td>90 FPS ★</td>"
+        "<td>🌟★★★ Excellent</td><td>CPU 12%</td></tr>",
+        "<tr><td>2560x1440</td><td>60</td><td>50</td><td>70</td>"
+        "<td>😊 ★★</td><td>GPU 8%</td></tr>",
+        "<tr><td>3840x2160</td><td>40</td><td>30</td><td>50</td>"
+        "<td>⚠️ ★</td><td>No bottleneck</td></tr>",
+    )
+
+    parsed = parse_medium_results(table(*noisy_rows, header=header))
+
+    assert [(item.resolution, item.average_fps) for item in parsed] == [
+        ("1080p", 80),
+        ("2k", 60),
+        ("4k", 40),
     ]
