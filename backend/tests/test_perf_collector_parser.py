@@ -62,6 +62,33 @@ def test_duplicate_target_resolution_raises() -> None:
         parse_medium_results(table(*valid_rows(), valid_rows()[0]))
 
 
+@pytest.mark.parametrize(
+    "resolution", ["11920x10800", "11920x1080", "1920x10801"]
+)
+def test_resolution_with_extra_digits_does_not_match(resolution: str) -> None:
+    malformed = row(resolution, 77, 66, 89, "CPU bottleneck 11%")
+
+    with pytest.raises(ParseError, match="missing"):
+        parse_medium_results(table(malformed, *valid_rows()[1:]))
+
+
+def test_combined_resolutions_in_one_cell_raise() -> None:
+    combined = row(
+        "1920x1080/2560x1440", 77, 66, 89, "CPU bottleneck 11%"
+    )
+
+    with pytest.raises(ParseError, match="multiple"):
+        parse_medium_results(table(combined, *valid_rows()[1:]))
+
+
+def test_resolution_allows_star_and_emoji_decoration() -> None:
+    decorated = row("🎮 ★ 1920 × 1080 ★", 77, 66, 89, "CPU 11%")
+
+    parsed = parse_medium_results(table(decorated, *valid_rows()[1:]))
+
+    assert [item.resolution for item in parsed] == ["1080p", "2k", "4k"]
+
+
 def test_nonempty_short_data_row_raises_even_when_target_rows_are_complete() -> None:
     short_row = "<tr><td>unexpected summary</td></tr>"
 

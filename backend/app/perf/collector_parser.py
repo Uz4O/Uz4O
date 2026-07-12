@@ -95,13 +95,27 @@ def _find_results_tables(
 
 def _resolution(text: str) -> Optional[Resolution]:
     value = re.sub(r"\s+", "", text.casefold()).replace("×", "x")
-    if "1920x1080" in value or value in {"1080p", "fhd"}:
-        return "1080p"
-    if "2560x1440" in value or value in {"2k", "1440p", "qhd"}:
-        return "2k"
-    if "3840x2160" in value or value in {"4k", "2160p", "uhd"}:
-        return "4k"
-    return None
+    pixel_tokens = re.findall(
+        r"(?<![0-9a-z])([0-9]+x[0-9]+)(?![0-9a-z])", value
+    )
+    if len(pixel_tokens) > 1:
+        raise ParseError(f"multiple resolutions in one cell: {text!r}")
+    if pixel_tokens:
+        return {
+            "1920x1080": "1080p",
+            "2560x1440": "2k",
+            "3840x2160": "4k",
+        }.get(pixel_tokens[0])
+    return {
+        "1080p": "1080p",
+        "fhd": "1080p",
+        "2k": "2k",
+        "1440p": "2k",
+        "qhd": "2k",
+        "4k": "4k",
+        "2160p": "4k",
+        "uhd": "4k",
+    }.get(value)
 
 
 def _integer(text: str, label: str) -> int:
