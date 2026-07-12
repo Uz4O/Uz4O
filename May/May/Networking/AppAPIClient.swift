@@ -40,6 +40,69 @@ struct SMSResponse: Decodable {
     let debugCode: String?
 }
 
+struct PerformanceHardwareDTO: Encodable {
+    let cpu: String
+    let gpu: String
+}
+
+struct PerformanceEstimateRequestDTO: Encodable {
+    let hardware: PerformanceHardwareDTO
+    let resolution: String
+    let games: [String]
+}
+
+struct GamePerformanceResultDTO: Decodable {
+    let game: String
+    let averageFPS: Int
+    let lowFPS: Int
+    let maximumFPS: Int
+    let bottleneck: String?
+    let bottleneckPercent: Int?
+    let confidence: String
+    let sourceFetchedAt: String
+
+    var model: GamePerformanceResult {
+        GamePerformanceResult(
+            gameID: game,
+            averageFPS: averageFPS,
+            lowFPS: lowFPS,
+            maximumFPS: maximumFPS,
+            bottleneck: bottleneck,
+            bottleneckPercent: bottleneckPercent,
+            sourceFetchedAt: sourceFetchedAt
+        )
+    }
+}
+
+struct PerformanceEstimateResponseDTO: Decodable {
+    let status: String
+    let averageFPS: Int?
+    let lowFPS: Int?
+    let maximumFPS: Int?
+    let bottleneck: String?
+    let bottleneckPercent: Int?
+    let confidence: String
+    let advice: String
+    let missingData: [String]
+    let missingGames: [String]
+    let sourceFetchedAt: String?
+    let gameResults: [GamePerformanceResultDTO]
+
+    var model: PerformanceEstimatePayload {
+        PerformanceEstimatePayload(
+            status: PerformanceEstimateStatus(rawValue: status) ?? .needsMoreData,
+            averageFPS: averageFPS,
+            lowFPS: lowFPS,
+            maximumFPS: maximumFPS,
+            bottleneck: bottleneck,
+            bottleneckPercent: bottleneckPercent,
+            sourceFetchedAt: sourceFetchedAt,
+            missingGames: missingGames,
+            gameResults: gameResults.map(\.model)
+        )
+    }
+}
+
 struct AppAPIClient {
     let baseURL: URL
     private let transport: APITransport
@@ -226,6 +289,23 @@ struct AppAPIClient {
         request.httpBody = body
 
         return try await perform(request: request)
+    }
+
+    func estimatePerformance(
+        cpuID: String,
+        gpuID: String,
+        resolution: String,
+        gameIDs: [String]
+    ) async throws -> PerformanceEstimateResponseDTO {
+        try await request(
+            path: "/v1/perf/estimate",
+            method: "POST",
+            body: PerformanceEstimateRequestDTO(
+                hardware: PerformanceHardwareDTO(cpu: cpuID, gpu: gpuID),
+                resolution: resolution,
+                games: gameIDs
+            )
+        )
     }
 
     private func request<Response: Decodable>(
