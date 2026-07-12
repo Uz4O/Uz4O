@@ -68,8 +68,11 @@ enum RiskLevel {
 }
 
 extension BuildOptionDTO {
-    func part(for role: BuildPartRoleDTO) -> BuildOptionPartDTO? {
-        details.parts.first { $0.role == role }
+    func part(for role: BuildPartRoleDTO) -> BuildOptionPartDTO {
+        guard let part = details.parts.first(where: { $0.role == role }) else {
+            preconditionFailure("Validated build option is missing role: \(role.rawValue)")
+        }
+        return part
     }
 
     var referenceTotalText: String {
@@ -96,7 +99,7 @@ extension BuildOptionDTO {
             totalPrice: referenceTotalText,
             useCase: "\(details.direction.displayName) · \(details.suitableUser)\n\(explanation)",
             createdAt: "参考价日期 \(details.priceDate)",
-            parts: BuildPartRoleDTO.allCases.compactMap { part(for: $0)?.model },
+            parts: BuildPartRoleDTO.allCases.map { part(for: $0).model },
             risks: compatibilityRisks + planRisks,
             advantages: details.advantages,
             disadvantages: details.disadvantages

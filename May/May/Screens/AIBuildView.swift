@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct AIBuildView: View {
+    typealias LoadOptions = (Int, String, [String]) async throws -> BuildOptionsResponseDTO
+
     @State private var currentStep: AIBuildStep = .budget
     @State private var isChangingStep = false
     @State private var isSubmitting = false
     @State private var submissionError: String?
+    @State private var generationTask: Task<Void, Never>?
     @State private var budget: Double = 6850
     @State private var selectedUseCase = "游戏"
     @State private var selectedGames: Set<String> = []
@@ -20,6 +23,23 @@ struct AIBuildView: View {
 
     let onBack: () -> Void
     let onComplete: (BuildOptionsResponseDTO) -> Void
+    let loadOptions: LoadOptions
+
+    init(
+        onBack: @escaping () -> Void,
+        onComplete: @escaping (BuildOptionsResponseDTO) -> Void,
+        loadOptions: @escaping LoadOptions = { budget, useCase, games in
+            try await AppAPIClient().buildOptions(
+                budget: budget,
+                useCase: useCase,
+                gameCategories: games
+            )
+        }
+    ) {
+        self.onBack = onBack
+        self.onComplete = onComplete
+        self.loadOptions = loadOptions
+    }
 
     private let gameOptions = [
         "什么都玩", "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "云顶之弈", "LOL",
@@ -114,7 +134,7 @@ struct AIBuildView: View {
         ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    ScreenHeader(title: "AI 写配置", trailingIcon: nil, onBack: onBack)
+                    ScreenHeader(title: "AI 写配置", trailingIcon: nil, onBack: handleHeaderBack)
                         .padding(.top, 8)
 
                     StepProgressHeader(currentStep: currentStep, steps: visibleSteps)
@@ -151,6 +171,7 @@ struct AIBuildView: View {
         .onChange(of: budget) { _, _ in
             clampCapacitySelections()
         }
+        .onDisappear(perform: cancelGeneration)
         .alert("生成失败", isPresented: showsSubmissionError) {
             Button("重试") {
                 submissionError = nil
@@ -291,20 +312,29 @@ struct AIBuildView: View {
         let requestGames = selectedGames.sorted()
         isSubmitting = true
 
-        Task {
+        generationTask = Task {
             do {
-                let response = try await AppAPIClient().buildOptions(
-                    budget: requestBudget,
-                    useCase: requestUseCase,
-                    gameCategories: requestGames
-                )
+                let response = try await loadOptions(requestBudget, requestUseCase, requestGames)
+                guard !Task.isCancelled else { return }
+                generationTask = nil
                 isSubmitting = false
                 onComplete(response)
             } catch {
+                guard !Task.isCancelled else { return }
+                generationTask = nil
                 isSubmitting = false
                 submissionError = error.localizedDescription
             }
         }
+    }
+
+    private func handleHeaderBack() {
+        cancelGeneration()
+        onBack()
+    }
+
+    private func cancelGeneration() {
+        generationTask?.cancel()
     }
 
     private func applyLowBudgetDefaultsIfNeeded() {

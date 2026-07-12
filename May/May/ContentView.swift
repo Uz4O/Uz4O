@@ -307,23 +307,35 @@ private struct AIBuildFlowView: View {
     @State private var selectedOption: BuildOptionDTO?
 
     var body: some View {
-        Group {
-            if let selectedOption {
-                BuildResultView(
-                    plan: selectedOption.buildPlan,
-                    onBack: { self.selectedOption = nil }
-                )
-            } else if let response {
+        ZStack {
+            AIBuildView(
+                onBack: onClose,
+                onComplete: { response = $0 }
+            )
+            .allowsHitTesting(response == nil)
+            .accessibilityHidden(response != nil)
+
+            if let response {
                 BuildOptionsView(
                     response: response,
                     onBack: { self.response = nil },
                     onSelect: { selectedOption = $0 }
                 )
-            } else {
-                AIBuildView(
-                    onBack: onClose,
-                    onComplete: { response = $0 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(AppTheme.background.ignoresSafeArea())
+                .allowsHitTesting(selectedOption == nil)
+                .accessibilityHidden(selectedOption != nil)
+                .zIndex(1)
+            }
+
+            if let selectedOption {
+                BuildResultView(
+                    plan: selectedOption.buildPlan,
+                    onBack: { self.selectedOption = nil }
                 )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(AppTheme.background.ignoresSafeArea())
+                .zIndex(2)
             }
         }
     }

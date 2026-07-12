@@ -78,7 +78,7 @@ struct AppAPIClient {
         useCase: String,
         gameCategories: [String]
     ) async throws -> BuildOptionsResponseDTO {
-        try await request(
+        let response: BuildOptionsResponseDTO = try await request(
             path: "/v1/build/options",
             method: "POST",
             body: BuildOptionsRequestDTO(
@@ -87,6 +87,10 @@ struct AppAPIClient {
                 gameCategories: gameCategories
             )
         )
+        guard response.hasValidPartRoles else {
+            throw APIError.invalidResponse
+        }
+        return response
     }
 
     func deleteAccount(confirmation: String, token: String) async throws {
@@ -449,7 +453,7 @@ enum BuildOptionSourceDTO: String, Decodable {
     case template
 }
 
-enum BuildPartRoleDTO: String, CaseIterable, Decodable {
+enum BuildPartRoleDTO: String, CaseIterable, Decodable, Hashable {
     case cpu
     case motherboard
     case gpu
@@ -528,6 +532,16 @@ struct BuildCompatibilityFindingDTO: Decodable {
     let title: String
     let detail: String
     let componentIds: [String]
+}
+
+private extension BuildOptionsResponseDTO {
+    var hasValidPartRoles: Bool {
+        let requiredRoles = Set(BuildPartRoleDTO.allCases)
+        return options.allSatisfy { option in
+            let roles = option.details.parts.map(\.role)
+            return roles.count == requiredRoles.count && Set(roles) == requiredRoles
+        }
+    }
 }
 
 struct ConfigReviewResponseDTO: Decodable {

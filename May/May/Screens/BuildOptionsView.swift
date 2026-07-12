@@ -60,11 +60,11 @@ private struct BuildOptionCard: View {
     let onSelect: () -> Void
 
     private var cpuName: String {
-        option.part(for: .cpu)?.name ?? "CPU 型号待确认"
+        option.part(for: .cpu).name
     }
 
     private var gpuName: String {
-        option.part(for: .gpu)?.name ?? "显卡型号待确认"
+        option.part(for: .gpu).name
     }
 
     var body: some View {
