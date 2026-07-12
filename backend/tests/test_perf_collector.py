@@ -72,12 +72,19 @@ def collector(
         {"timeout_seconds": float("inf")},
         {"max_response_bytes": 0},
         {"lock_ttl_seconds": 0},
-        {"lock_ttl_seconds": 22},
     ],
 )
 def test_policy_rejects_invalid_values(kwargs: dict) -> None:
     with pytest.raises(ValueError):
         CollectorPolicy(**kwargs)
+
+
+def test_policy_allows_large_delay_and_small_positive_configured_lock_ttl() -> None:
+    policy = CollectorPolicy(delay_seconds=40, lock_ttl_seconds=1)
+
+    assert policy.delay_seconds == 40
+    assert policy.lock_ttl_seconds == 1
+    assert policy.effective_lock_ttl_seconds > 60.4
 
 
 @pytest.mark.parametrize(

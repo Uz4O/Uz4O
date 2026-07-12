@@ -47,14 +47,18 @@ class CollectorPolicy:
             or self.max_response_bytes <= 0
         ):
             raise ValueError("max response bytes must be a positive integer")
-        minimum_lock_ttl = (
-            self.timeout_seconds + self.delay_seconds + self.jitter_seconds
-        )
         if (
             not math.isfinite(self.lock_ttl_seconds)
-            or self.lock_ttl_seconds <= minimum_lock_ttl
+            or self.lock_ttl_seconds <= 0
         ):
-            raise ValueError("lock TTL must exceed timeout, delay, and jitter")
+            raise ValueError("lock TTL must be positive")
+
+    @property
+    def effective_lock_ttl_seconds(self) -> float:
+        return max(
+            self.lock_ttl_seconds,
+            self.timeout_seconds + self.delay_seconds + self.jitter_seconds + 1.0,
+        )
 
 
 @dataclass(frozen=True)
@@ -117,7 +121,7 @@ class Collector:
             "blocked": 0,
         }
         if not self.store.acquire_run_lock(
-            self.owner, self.now(), self.policy.lock_ttl_seconds
+            self.owner, self.now(), self.policy.effective_lock_ttl_seconds
         ):
             raise CollectorAlreadyRunning("FPS collector is already running")
         try:
@@ -243,6 +247,6 @@ class Collector:
 
     def _renew_lock(self) -> None:
         if not self.store.renew_run_lock(
-            self.owner, self.now(), self.policy.lock_ttl_seconds
+            self.owner, self.now(), self.policy.effective_lock_ttl_seconds
         ):
             raise CollectorAlreadyRunning("FPS collector lock was lost")

@@ -136,6 +136,24 @@ def test_run_command_rejects_negative_max_tasks(monkeypatch, tmp_path: Path, cap
     assert "non-negative" in capsys.readouterr().err
 
 
+def test_run_command_allows_large_delay_when_no_tasks_are_requested(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    invoke(
+        monkeypatch,
+        "run-perf-collection",
+        str(tmp_path / "perf.sqlite"),
+        "--max-tasks",
+        "0",
+        "--delay-seconds",
+        "40",
+    )
+
+    captured = capsys.readouterr()
+    assert "processed=0" in captured.out
+    assert captured.err == ""
+
+
 def test_export_command_flattens_only_valid_succeeded_results(
     monkeypatch, tmp_path: Path, capsys
 ) -> None:
