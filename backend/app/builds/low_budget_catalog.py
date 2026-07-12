@@ -18,7 +18,12 @@ from app.builds.service import (
 Direction = Literal["fps", "aaa", "balanced"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
-SkipReason = Literal["over_budget", "no_feasible_candidate", "generation_error"]
+SkipReason = Literal[
+    "over_budget",
+    "no_feasible_candidate",
+    "missing_evidence",
+    "generation_error",
+]
 
 PRICE_DATE = "2026-07-12"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
@@ -173,11 +178,13 @@ class ArtifactPaths:
 class GenerationReport:
     templates: Tuple[BuildTemplateInput, ...]
     skipped_combinations: Tuple[SkippedCombination, ...]
+    source_parts: Tuple[PricedPart, ...]
 
 
 @lru_cache(maxsize=1)
 def generate_low_budget_report() -> GenerationReport:
     cpus, motherboards, gpus, support_parts = _load_catalog()
+    source_parts = tuple([*cpus, *motherboards, *gpus, *support_parts.values()])
     templates = []
     skipped = []
     for budget in BUDGET_TIERS:
@@ -214,6 +221,7 @@ def generate_low_budget_report() -> GenerationReport:
     return GenerationReport(
         templates=tuple(templates),
         skipped_combinations=tuple(skipped),
+        source_parts=source_parts,
     )
 
 
@@ -260,7 +268,12 @@ def render_low_budget_markdown(
     skipped = _complete_skipped_combinations(templates, skipped_combinations)
     skip_counts = {
         reason: sum(item.reason == reason for item in skipped)
-        for reason in ("over_budget", "no_feasible_candidate", "generation_error")
+        for reason in (
+            "over_budget",
+            "no_feasible_candidate",
+            "missing_evidence",
+            "generation_error",
+        )
     }
     lines = [
         "# 3000-7000元装机基底配置",
@@ -273,7 +286,8 @@ def render_low_budget_markdown(
             f"生成状态：{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位有可行配置，"
             f"覆盖{len(completed_tier_directions)}/{len(BUDGET_TIERS) * len(DIRECTIONS)}个价位方向，"
             f"共{len(templates)}套；跳过{len(skipped)}个组合（超预算{skip_counts['over_budget']}，"
-            f"无可行候选{skip_counts['no_feasible_candidate']}，生成失败{skip_counts['generation_error']}）。"
+            f"无可行候选{skip_counts['no_feasible_candidate']}，缺少证据{skip_counts['missing_evidence']}，"
+            f"生成失败{skip_counts['generation_error']}）。"
         ),
         "二手方案中的电源、SSD和显卡购买前必须复核健康度、成色和保修。",
         "",
@@ -320,6 +334,7 @@ def write_low_budget_artifacts(
     templates: Optional[Sequence[BuildTemplateInput]] = None,
     review_markdown_path: Optional[Path] = None,
     skipped_combinations: Optional[Sequence[SkippedCombination]] = None,
+    source_parts: Optional[Sequence[PricedPart]] = None,
 ) -> ArtifactPaths:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -327,9 +342,11 @@ def write_low_budget_artifacts(
         report = generate_low_budget_report()
         generated = list(report.templates)
         skips = list(report.skipped_combinations)
+        prices_snapshot = report.source_parts
     else:
         generated = list(templates)
         skips = _complete_skipped_combinations(generated, skipped_combinations)
+        prices_snapshot = tuple(source_parts) if source_parts is not None else None
     paths = ArtifactPaths(
         templates_json=output_dir / "low-budget-base-build-templates.json",
         review_markdown=(
@@ -353,7 +370,11 @@ def write_low_budget_artifacts(
         render_low_budget_markdown(generated, skips),
         encoding="utf-8",
     )
-    _write_reference_prices(paths.reference_prices_csv, generated)
+    _write_reference_prices(
+        paths.reference_prices_csv,
+        generated,
+        prices_snapshot,
+    )
     _write_recommendation_ids(paths.recommendation_ids, generated)
     _write_audit(paths.audit_json, generated, skips)
     return paths
@@ -755,33 +776,71 @@ def _load_support_parts(path: Path) -> List[PricedPart]:
 def _write_reference_prices(
     path: Path,
     templates: Sequence[BuildTemplateInput],
+    source_parts: Optional[Sequence[PricedPart]] = None,
 ) -> None:
-    snapshot: Dict[str, Dict[str, object]] = {}
-    for part in (
+    generated_parts = [
         part
         for template in templates
         if template.details is not None
         for part in template.details.parts
-    ):
-        if (part.component_id, part.condition) in PENDING_REVIEW_CONDITIONS:
-            continue
-        row = snapshot.setdefault(
-            part.component_id,
-            {
-                "category": part.role,
-                "name": part.name,
-                "brand": _brand_for_template_part(part),
-                "used_price": None,
-                "new_price": None,
-            },
-        )
-        price_key = f"{part.condition}_price"
-        existing_price = row[price_key]
-        if existing_price not in (None, part.reference_price):
+    ]
+    referenced_ids = {part.component_id for part in generated_parts}
+    snapshot: Dict[str, Dict[str, object]] = {}
+    if source_parts is not None:
+        source_by_id = {part.component_id: part for part in source_parts}
+        missing_ids = sorted(referenced_ids - set(source_by_id))
+        if missing_ids:
             raise ValueError(
-                f"Conflicting {part.condition} prices for {part.component_id}"
+                "Source snapshot is missing: " + ", ".join(missing_ids)
             )
-        row[price_key] = part.reference_price
+        for component_id in sorted(referenced_ids):
+            source = source_by_id[component_id]
+            snapshot[component_id] = {
+                "category": source.category,
+                "name": source.name,
+                "brand": source.brand,
+                "used_price": (
+                    None
+                    if (component_id, "used") in PENDING_REVIEW_CONDITIONS
+                    else source.used_price
+                ),
+                "new_price": (
+                    None
+                    if (component_id, "new") in PENDING_REVIEW_CONDITIONS
+                    else source.new_price
+                ),
+            }
+        for part in generated_parts:
+            if (part.component_id, part.condition) in PENDING_REVIEW_CONDITIONS:
+                raise ValueError(
+                    f"Pending-review price used by {part.component_id}"
+                )
+            expected_price = source_by_id[part.component_id].price(part.condition)
+            if expected_price != part.reference_price:
+                raise ValueError(
+                    f"Snapshot price mismatch for {part.component_id}"
+                )
+    else:
+        for part in generated_parts:
+            if (part.component_id, part.condition) in PENDING_REVIEW_CONDITIONS:
+                continue
+            row = snapshot.setdefault(
+                part.component_id,
+                {
+                    "category": part.role,
+                    "name": part.name,
+                    "brand": _brand_for_template_part(part),
+                    "used_price": None,
+                    "new_price": None,
+                },
+            )
+            price_key = f"{part.condition}_price"
+            existing_price = row[price_key]
+            if existing_price not in (None, part.reference_price):
+                raise ValueError(
+                    f"Conflicting {part.condition} prices for {part.component_id}"
+                )
+            row[price_key] = part.reference_price
 
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
@@ -881,7 +940,7 @@ def _write_audit(
         "missing_data": [
             item.as_dict()
             for item in skipped_combinations
-            if item.reason == "no_feasible_candidate"
+            if item.reason in {"no_feasible_candidate", "missing_evidence"}
         ],
         "failed_templates": [
             item.as_dict()
@@ -919,7 +978,7 @@ def _complete_skipped_combinations(
                 target_budget=budget,
                 direction=direction,
                 purchase_mode=purchase_mode,
-                reason="no_feasible_candidate",
+                reason="missing_evidence",
             ),
         )
         for budget in BUDGET_TIERS
@@ -985,6 +1044,7 @@ def main() -> None:
         templates,
         review_markdown_path=args.markdown,
         skipped_combinations=report.skipped_combinations,
+        source_parts=report.source_parts,
     )
     print(f"Generated {len(templates)} templates.")
     print(paths.templates_json)

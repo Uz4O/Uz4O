@@ -3,7 +3,7 @@ motherboard,asus-a520m-k,华硕 A520M-K,华硕,330,230,330,1,0,low_budget_base_c
 motherboard,asus-b650m-tuf,华硕 B650M PLUS 重炮手,华硕,900,650,900,1,0,low_budget_base_catalog
 case,base-case-mid-tower,普通中塔机箱,通用规格,100,80,100,1,0,low_budget_base_catalog
 cooler,base-cooler-6-heatpipe,6热管风冷,通用规格,100,70,100,1,0,low_budget_base_catalog
-cooler,base-cooler-dual-tower-6-heatpipe,双塔6热管风冷,通用规格,100,100,,1,0,low_budget_base_catalog
+cooler,base-cooler-dual-tower-6-heatpipe,双塔6热管风冷,通用规格,150,100,150,1,0,low_budget_base_catalog
 ram,base-ddr4-16gb-3200,DDR4 16GB 3200,通用规格,500,400,500,1,0,low_budget_base_catalog
 ram,base-ddr5-16gb-6000-c30,DDR5 16GB 6000 C30,通用规格,1800,1300,1800,1,0,low_budget_base_catalog
 psu,base-psu-650w-gold,650W金牌电源,通用规格,469,150,469,1,0,low_budget_base_catalog
@@ -11,14 +11,14 @@ storage,base-ssd-512gb-tlc,512GB TLC SSD,通用规格,500,350,500,1,0,low_budget
 cpu,r5-5600x,R5 5600X,AMD,820,720,820,1,0,low_budget_base_catalog
 cpu,r5-7500f,R5 7500F,AMD,600,550,600,1,0,low_budget_base_catalog
 cpu,r5-9600x,R5 9600X,AMD,1100,950,1100,1,0,low_budget_base_catalog
-cpu,r7-7800x3d,R7 7800X3D,AMD,1650,1650,,1,0,low_budget_base_catalog
-cpu,r7-9800x3d,R7 9800X3D,AMD,2400,2400,,1,0,low_budget_base_catalog
+cpu,r7-7800x3d,R7 7800X3D,AMD,1800,1650,1800,1,0,low_budget_base_catalog
+cpu,r7-9800x3d,R7 9800X3D,AMD,2700,2400,2700,1,0,low_budget_base_catalog
 gpu,rtx-3060-ti,RTX 3060 Ti,NVIDIA,1350,1350,,1,0,low_budget_base_catalog
 gpu,rtx-3070-ti,RTX 3070 Ti,NVIDIA,1500,1500,,1,0,low_budget_base_catalog
-gpu,rtx-5060-ti,RTX 5060 Ti,NVIDIA,3000,,3000,1,0,low_budget_base_catalog
+gpu,rtx-5060-ti,RTX 5060 Ti,NVIDIA,3000,2700,3000,1,0,low_budget_base_catalog
 gpu,rx-6750-gre,RX 6750 GRE,AMD,1200,1200,,1,0,low_budget_base_catalog
-gpu,rx-7650-gre,RX 7650 GRE,AMD,1850,,1850,1,0,low_budget_base_catalog
+gpu,rx-7650-gre,RX 7650 GRE,AMD,1850,1200,1850,1,0,low_budget_base_catalog
 gpu,rx-7700-xt,RX 7700 XT,AMD,2600,1800,2600,1,0,low_budget_base_catalog
-gpu,rx-7800-xt,RX 7800 XT,AMD,2300,2300,,1,0,low_budget_base_catalog
-gpu,rx-9060-xt-8gb,RX 9060 XT 8G,AMD,2300,,2300,1,0,low_budget_base_catalog
+gpu,rx-7800-xt,RX 7800 XT,AMD,3700,2300,3700,1,0,low_budget_base_catalog
+gpu,rx-9060-xt-8gb,RX 9060 XT 8G,AMD,2300,1800,2300,1,0,low_budget_base_catalog
 gpu,rx-9070-gre,RX 9070 GRE,AMD,3500,2700,3500,1,0,low_budget_base_catalog

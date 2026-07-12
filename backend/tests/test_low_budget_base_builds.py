@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 
 import app.builds.low_budget_catalog as low_budget_catalog
+from sqlalchemy import create_engine, func, select
+from sqlalchemy.orm import Session
 from app.builds.low_budget_catalog import (
     BUDGET_TIERS,
     CPU_PERFORMANCE,
@@ -19,7 +21,18 @@ from app.builds.low_budget_catalog import (
     render_low_budget_markdown,
     write_low_budget_artifacts,
 )
+from app.builds.models import BuildTemplate
+from app.builds.repository import upsert_build_templates
 from app.builds.service import BuildTemplatePart
+from app.builds.templates import read_build_template_inputs
+from app.catalog.prices import read_approved_price_rows
+from app.catalog.repository import (
+    seed_component_prices,
+    seed_hardware_components,
+    update_recommended_components,
+)
+from app.catalog.seed import read_catalog_components
+from app.db import Base
 
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +43,9 @@ PRICE_PATH = DATA_DIR / "low-budget-base-reference-prices.csv"
 RECOMMENDATION_PATH = DATA_DIR / "low-budget-base-recommendation-ids.txt"
 AUDIT_PATH = DATA_DIR / "low-budget-base-audit.json"
 MARKDOWN_PATH = PROJECT_ROOT / "docs" / "3000-7000-yuan-base-builds.md"
+HIGH_TEMPLATE_PATH = DATA_DIR / "high-budget-base-build-templates.json"
+HIGH_PRICE_PATH = DATA_DIR / "high-budget-base-reference-prices.csv"
+SWIFT_CATALOG_PATH = PROJECT_ROOT / "May" / "May" / "Models" / "HardwareCatalog.swift"
 
 EXPECTED_CONDITIONS = {
     "new": {role: "new" for role in REQUIRED_PART_ROLES},
@@ -228,32 +244,50 @@ def test_selection_reports_over_budget_separately_from_no_candidate() -> None:
     assert no_candidate.skip_reason == "no_feasible_candidate"
 
 
-def test_reference_export_preserves_unavailable_condition_prices(tmp_path) -> None:
-    templates = generated_templates()
-    paths = write_low_budget_artifacts(tmp_path, templates)
+def test_reference_export_preserves_source_condition_prices(tmp_path) -> None:
+    report = generated_report()
+    templates = list(report.templates)
+    paths = write_low_budget_artifacts(
+        tmp_path,
+        templates,
+        source_parts=report.source_parts,
+    )
     rows = _price_rows(paths.reference_prices_csv)
-    observed_pairs = {
-        (part.component_id, part.condition)
-        for template in templates
+    referenced_ids = {
+        part.component_id
+        for template in report.templates
         for part in template.details.parts
+    }
+    source_by_id = {
+        part.component_id: part
+        for part in report.source_parts
+        if part.component_id in referenced_ids
     }
 
     for component_id, row in rows.items():
-        used_price = row["normal_price_min"]
-        new_price = row["normal_price_max"]
-        if (component_id, "used") not in observed_pairs:
-            assert used_price == ""
-        if (component_id, "new") not in observed_pairs:
-            assert new_price == ""
+        source = source_by_id[component_id]
+        used_price = (
+            None
+            if (component_id, "used") in PENDING_REVIEW_CONDITION_PAIRS
+            else source.used_price
+        )
+        new_price = (
+            None
+            if (component_id, "new") in PENDING_REVIEW_CONDITION_PAIRS
+            else source.new_price
+        )
+        assert row["normal_price_min"] == (str(used_price) if used_price else "")
+        assert row["normal_price_max"] == (str(new_price) if new_price else "")
         assert row["reference_price"] in {
-            value for value in (used_price, new_price) if value
+            str(value) for value in (used_price, new_price) if value
         }
 
 
 def test_pending_review_condition_is_excluded_from_templates_and_prices(
     tmp_path,
 ) -> None:
-    templates = generated_templates()
+    report = generated_report()
+    templates = list(report.templates)
     template_pairs = {
         (part.component_id, part.condition)
         for template in templates
@@ -261,7 +295,11 @@ def test_pending_review_condition_is_excluded_from_templates_and_prices(
     }
     assert PENDING_REVIEW_CONDITION_PAIRS.isdisjoint(template_pairs)
 
-    paths = write_low_budget_artifacts(tmp_path, templates)
+    paths = write_low_budget_artifacts(
+        tmp_path,
+        templates,
+        source_parts=report.source_parts,
+    )
     assert PENDING_REVIEW_CONDITION_PAIRS.isdisjoint(
         _exported_condition_pairs(paths.reference_prices_csv)
     )
@@ -271,7 +309,8 @@ def test_reference_export_uses_the_generated_snapshot_after_source_mutation(
     tmp_path,
     monkeypatch,
 ) -> None:
-    templates = generated_templates()
+    report = generated_report()
+    templates = list(report.templates)
     mutated_cpu_path = tmp_path / CPU_PRICE_PATH.name
     original = CPU_PRICE_PATH.read_text(encoding="utf-8")
     mutated = original.replace(
@@ -282,7 +321,11 @@ def test_reference_export_uses_the_generated_snapshot_after_source_mutation(
     mutated_cpu_path.write_text(mutated, encoding="utf-8")
     monkeypatch.setattr(low_budget_catalog, "CPU_PRICE_PATH", mutated_cpu_path)
 
-    paths = write_low_budget_artifacts(tmp_path / "artifacts", templates)
+    paths = write_low_budget_artifacts(
+        tmp_path / "artifacts",
+        templates,
+        source_parts=report.source_parts,
+    )
     row = _price_rows(paths.reference_prices_csv)["r5-5600x"]
     observed = {
         part.condition: part.reference_price
@@ -310,7 +353,7 @@ def test_empty_and_partial_artifacts_report_actual_completion(tmp_path) -> None:
         assert audit["completed_tier_direction_count"] == completed_pairs
         assert audit["completed_template_count"] == len(templates)
         assert {item["reason"] for item in audit["skipped_combinations"]} == {
-            "no_feasible_candidate"
+            "missing_evidence"
         }
         assert audit["missing_data"] == audit["skipped_combinations"]
         assert audit["failed_templates"] == []
@@ -358,6 +401,7 @@ def test_known_impossible_modes_are_absent_and_audited_as_over_budget(
         tmp_path,
         templates,
         skipped_combinations=report.skipped_combinations,
+        source_parts=report.source_parts,
     )
     audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
     skip_reasons = {
@@ -382,6 +426,48 @@ def test_known_impossible_modes_are_absent_and_audited_as_over_budget(
     assert audit["failed_templates"] == []
 
 
+def test_high_then_low_price_import_keeps_all_297_templates_valid() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    components = [
+        *read_catalog_components(SWIFT_CATALOG_PATH),
+        *read_catalog_components(SUPPORT_PART_PATH),
+    ]
+    high_prices = read_approved_price_rows(
+        HIGH_PRICE_PATH,
+        approved_at="2026-07-12",
+    )
+    low_prices = read_approved_price_rows(
+        PRICE_PATH,
+        approved_at="2026-07-12",
+    )
+    high_templates = read_build_template_inputs(HIGH_TEMPLATE_PATH)
+    low_templates = read_build_template_inputs(TEMPLATE_PATH)
+    recommendation_ids = sorted(
+        {
+            component_id
+            for template in [*high_templates, *low_templates]
+            for component_id in template.components.values()
+        }
+    )
+
+    with Session(engine) as session:
+        seed_hardware_components(session, components)
+        update_recommended_components(session, recommendation_ids)
+        seed_component_prices(session, high_prices)
+        seed_component_prices(session, low_prices)
+        imported = upsert_build_templates(
+            session,
+            [*high_templates, *low_templates],
+        )
+        stored = session.scalar(select(func.count()).select_from(BuildTemplate))
+
+    assert len(high_templates) == 234
+    assert len(low_templates) == 63
+    assert imported == 297
+    assert stored == 297
+
+
 def test_writes_deterministic_review_and_import_artifacts(tmp_path) -> None:
     report = generated_report()
     templates = list(report.templates)
@@ -393,6 +479,7 @@ def test_writes_deterministic_review_and_import_artifacts(tmp_path) -> None:
         tmp_path,
         templates,
         skipped_combinations=report.skipped_combinations,
+        source_parts=report.source_parts,
     )
 
     lines = markdown.splitlines()
