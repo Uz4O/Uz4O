@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 补齐 3000～20000 元基底配置，并让 iOS AI 装机一次获取二手、全新、混合三套真实方案，先看 CPU + GPU 摘要，再进入八大件详情。
+**Goal:** 补齐 3000～20000 元真实可行的基底配置，并让 iOS AI 装机一次获取当前预算下可用的二手、全新、混合方案，先看 CPU + GPU 摘要，再进入八大件详情。
 
 **Architecture:** 低价位模板使用独立生成器，复用现有结构化模板、白名单、兼容性和导入链路，避免改写已验证的 7500～20000 元生成器。后端新增无 AI 依赖的 `/v1/build/options` 聚合接口，统一完成游戏分类并原子返回三种采购模式；iOS 通过现有 `AppAPIClient` 请求并将 DTO 映射到现有 `BuildPlan` 详情模型。
 
@@ -12,9 +12,9 @@
 
 ## File Map
 
-- Create `backend/app/builds/low_budget_catalog.py`: 生成 3000～7000 元的 81 套结构化基底和审核产物。
+- Create `backend/app/builds/low_budget_catalog.py`: 生成 3000～7000 元当前价格下可行的结构化基底和审核产物。
 - Create `backend/tests/test_low_budget_base_builds.py`: 验证低价位档位、采购成色、预算、兼容性和供电。
-- Create `backend/data/low-budget-base-build-templates.json`: 可导入数据库的 81 套低价位模板。
+- Create `backend/data/low-budget-base-build-templates.json`: 可导入数据库的低价位可行模板。
 - Create `backend/data/low-budget-base-reference-prices.csv`: 低价位模板涉及的参考价格。
 - Create `backend/data/low-budget-base-recommendation-ids.txt`: 低价位推荐硬件 ID。
 - Create `backend/data/low-budget-base-audit.json`: 低价位生成审计结果。
@@ -24,11 +24,11 @@
 - Modify `backend/app/api/builds.py`: 新增 `/v1/build/options`，复用模板匹配和兼容性检查。
 - Modify `backend/tests/test_build_template_matching.py`: 覆盖游戏分类规则。
 - Modify `backend/tests/test_build_api.py`: 覆盖三方案接口完整响应和缺失数据错误。
-- Modify `backend/tests/test_high_budget_base_builds.py`: 增加高低价合并后 315 套覆盖断言，保留原 234 套测试。
-- Modify `backend/progress.json`: 记录 3000～20000 元 315 套配置和三方案接口状态。
+- Modify `backend/tests/test_high_budget_base_builds.py`: 增加高低价合并后的 35 档覆盖断言，保留原 234 套测试。
+- Modify `backend/progress.json`: 记录 3000～20000 元真实可行配置和多采购方案接口状态。
 - Modify `docs/agents/backend-server-context.md`: 更新模板数量、预算覆盖和接口。
 - Modify `May/May/Networking/AppAPIClient.swift`: 增加装机请求、响应 DTO、API 方法和 `BuildPlan` 映射。
-- Create `May/May/Screens/BuildOptionsView.swift`: 展示二手、全新、混合三张 CPU + GPU 摘要卡。
+- Create `May/May/Screens/BuildOptionsView.swift`: 展示当前预算下可用的二手、全新、混合 CPU + GPU 摘要卡。
 - Modify `May/May/Screens/AIBuildView.swift`: 构造请求、显示加载/错误状态并回传真实响应。
 - Modify `May/May/ContentView.swift`: 承载三方案与所选详情，移除普通 AI 装机的模拟结果。
 - Modify `May/May/Screens/BuildResultView.swift`: 展示接口返回的八大件、优缺点和风险；保持颜值装机模拟流程不变。
@@ -42,8 +42,6 @@
 - [ ] **Step 1: Write the failing low-budget coverage test**
 
 ```python
-from collections import Counter
-
 from app.builds.low_budget_catalog import (
     BUDGET_TIERS,
     REQUIRED_PART_ROLES,
@@ -51,28 +49,17 @@ from app.builds.low_budget_catalog import (
 )
 
 
-EXPECTED_COMBINATIONS = {
-    (direction, purchase_mode)
-    for direction in ("fps", "aaa", "balanced")
-    for purchase_mode in ("new", "used", "mixed")
-}
-
-
-def test_generates_9_budget_tiers_and_81_unique_templates() -> None:
+def test_generates_every_low_budget_direction_with_only_feasible_modes() -> None:
     templates = generate_low_budget_templates()
 
     assert BUDGET_TIERS == list(range(3_000, 7_001, 500))
-    assert len(templates) == 81
-    assert len({template.id for template in templates}) == 81
-    assert Counter(template.details.target_budget for template in templates) == {
-        budget: 9 for budget in BUDGET_TIERS
-    }
+    assert len({template.id for template in templates}) == len(templates)
     for budget in BUDGET_TIERS:
         assert {
-            (template.details.direction, template.details.purchase_mode)
+            template.details.direction
             for template in templates
             if template.details.target_budget == budget
-        } == EXPECTED_COMBINATIONS
+        } == {"fps", "aaa", "balanced"}
 ```
 
 - [ ] **Step 2: Add failing invariant tests**
@@ -129,7 +116,8 @@ def generate_low_budget_templates() -> list[BuildTemplateInput]:
         for direction in ("fps", "aaa", "balanced"):
             for purchase_mode in ("new", "used", "mixed"):
                 candidate = _select_candidate(budget, direction, purchase_mode)
-                templates.append(_build_template(budget, direction, purchase_mode, candidate))
+                if candidate is not None:
+                    templates.append(_build_template(budget, direction, purchase_mode, candidate))
     return templates
 ```
 
@@ -141,13 +129,13 @@ Add only required reusable parts to `base-build-support-components-2026-07-12.js
 
 - [ ] **Step 3: Implement artifact writers**
 
-Expose `render_low_budget_markdown()` and `write_low_budget_artifacts()` mirroring the existing high-budget artifact contract. Write JSON, Markdown, CSV, recommendation IDs and audit JSON with deterministic ordering.
+Expose `render_low_budget_markdown()` and `write_low_budget_artifacts()` mirroring the existing high-budget artifact contract. Write JSON, Markdown, CSV, recommendation IDs and audit JSON with deterministic ordering. The audit records every skipped budget/direction/mode combination as `over_budget`.
 
 - [ ] **Step 4: Generate artifacts**
 
 Run: `cd backend && .venv/bin/python -m app.builds.low_budget_catalog`
 
-Expected output: `Generated 81 templates.`
+Expected output: `Generated <actual count> templates.`
 
 - [ ] **Step 5: Run low-budget and repository tests**
 
@@ -162,7 +150,7 @@ git add backend/app/builds/low_budget_catalog.py backend/data/base-build-support
 git commit -m "feat: add complete low budget build catalog"
 ```
 
-### Task 3: Combined 315-Template Validation and Import
+### Task 3: Combined 35-Tier Validation and Import
 
 **Files:**
 - Modify: `backend/tests/test_high_budget_base_builds.py`
@@ -175,8 +163,7 @@ git commit -m "feat: add complete low budget build catalog"
 ```python
 def test_low_and_high_catalogs_cover_3000_through_20000() -> None:
     templates = generate_low_budget_templates() + generate_high_budget_templates()
-    assert len(templates) == 315
-    assert len({template.id for template in templates}) == 315
+    assert len({template.id for template in templates}) == len(templates)
     assert sorted({template.details.target_budget for template in templates}) == list(
         range(3_000, 20_001, 500)
     )
@@ -184,17 +171,17 @@ def test_low_and_high_catalogs_cover_3000_through_20000() -> None:
 
 - [ ] **Step 2: Add a database import test for both files**
 
-Import low and high template inputs into the same test session with `upsert_build_templates()`, then assert 315 active rows and no duplicate IDs. Seed every referenced support component and reference price before importing.
+Import low and high template inputs into the same test session with `upsert_build_templates()`, then assert the active row count equals the two generated catalogs and there are no duplicate IDs. Seed every referenced support component and reference price before importing.
 
 - [ ] **Step 3: Run the combined tests**
 
 Run: `cd backend && .venv/bin/pytest tests/test_high_budget_base_builds.py tests/test_high_budget_base_import.py -q`
 
-Expected: PASS with 315 unique templates across 35 tiers.
+Expected: PASS with unique templates across all 35 tiers.
 
 - [ ] **Step 4: Update operational documentation**
 
-Update `backend/progress.json` and `docs/agents/backend-server-context.md` from 234/7500～20000 to 315/3000～20000. Do not change unrelated readiness or release blockers.
+Update `backend/progress.json` and `docs/agents/backend-server-context.md` from 234/7500～20000 to the verified generated count/3000～20000. Do not change unrelated readiness or release blockers.
 
 - [ ] **Step 5: Commit combined coverage metadata**
 
@@ -239,17 +226,18 @@ Add immutable game sets and `classify_game_direction(games: list[str]) -> Litera
 class BuildOptionsResponse(BaseModel):
     direction: Literal["fps", "aaa", "balanced"]
     options: List[BuildGenerationResponse]
+    unavailable_modes: List[Literal["new", "used", "mixed"]]
 ```
 
 The response order is fixed as `used`, `new`, `mixed` so the iOS screen matches the approved order.
 
 - [ ] **Step 4: Write failing API tests**
 
-Seed three templates for one budget/direction and assert one `POST /v1/build/options` request returns exactly three `ready/template` responses with purchase modes `used`, `new`, `mixed`. Add a second test with one mode omitted and assert HTTP 503 with a readable missing-mode message. Add a cross-category payload and assert `direction == "balanced"`.
+Seed three templates for one budget/direction and assert one `POST /v1/build/options` request returns exactly three `ready/template` responses with purchase modes `used`, `new`, `mixed`. Add a second test with one mode omitted and assert a successful response containing the available options plus that mode in `unavailable_modes`. Assert HTTP 503 only when no mode exists. Add a cross-category payload and assert `direction == "balanced"`.
 
 - [ ] **Step 5: Implement `/v1/build/options`**
 
-Build three forced `BuildRequest` copies from the incoming request, adding the classified direction and one purchase mode to each copy. Reuse `match_build_template()`, `get_components_by_ids()`, `evaluate_compatibility()` and `template_response()`. Do not invoke the AI provider or rules fallback from this endpoint. If any mode is missing or lacks structured details, raise HTTP 503 before returning a response.
+Build three forced `BuildRequest` copies from the incoming request, adding the classified direction and one purchase mode to each copy. Reuse `match_build_template()`, `get_components_by_ids()`, `evaluate_compatibility()` and `template_response()`. Do not invoke the AI provider or rules fallback from this endpoint. Return every valid mode and list missing modes in `unavailable_modes`; raise HTTP 503 only when no valid mode exists.
 
 - [ ] **Step 6: Run focused API tests**
 
@@ -329,7 +317,7 @@ Disable repeat submission while loading, change the final button title to “正
 
 - [ ] **Step 2: Create the summary screen**
 
-`BuildOptionsView` accepts the response, an option-selection closure and a back closure. Render three un-nested cards in backend order. Each card displays only the purchase-mode label, `CPU + GPU`, formatted total and direction label, plus a chevron button affordance. Use existing `ScreenHeader`, `SoftCard`, typography and colors; no new visual system or dependency.
+`BuildOptionsView` accepts the response, an option-selection closure and a back closure. Render the available un-nested cards in backend order. Each card displays only the purchase-mode label, `CPU + GPU`, formatted total and direction label, plus a chevron button affordance. For unavailable modes, show a compact “当前预算下没有可靠方案，建议提高预算” note instead of an empty card. Use existing `ScreenHeader`, `SoftCard`, typography and colors; no new visual system or dependency.
 
 - [ ] **Step 3: Replace the mock routing state**
 
@@ -390,11 +378,11 @@ From `/opt/ai-builder-api`, seed the updated support component file, ingest low-
 
 - [ ] **Step 5: Restart and verify the service**
 
-Run `systemctl restart ai-builder-api` and verify `systemctl is-active ai-builder-api` returns `active`. Verify `/v1/catalog/readiness` reports ready and `active_template_count == 315`.
+Run `systemctl restart ai-builder-api` and verify `systemctl is-active ai-builder-api` returns `active`. Verify `/v1/catalog/readiness` reports ready and `active_template_count` equals the locally verified high + low generated count.
 
 - [ ] **Step 6: Verify public edge requests**
 
-POST representative requests for 3000, 7000, 7500 and 20000 budgets to `https://api.uzbox.top/v1/build/options`. Assert each response contains direction plus three options in `used`, `new`, `mixed` order, each with eight parts and compatibility data.
+POST representative requests for 3000, 7000, 7500 and 20000 budgets to `https://api.uzbox.top/v1/build/options`. Assert each response contains direction, all feasible options in `used`, `new`, `mixed` order, `unavailable_modes`, and eight parts plus compatibility data for every returned option.
 
 - [ ] **Step 7: Verify the Release API path in the app**
 
@@ -402,7 +390,7 @@ Run the app against `https://api.uzbox.top`, generate a cross-category selection
 
 - [ ] **Step 8: Record final evidence**
 
-Update the backend context with the actual test count, 315-template server count, service status and public endpoint result. Do not mark unrelated production login/community blockers complete.
+Update the backend context with the actual test count, generated server template count, service status and public endpoint result. Do not mark unrelated production login/community blockers complete.
 
 - [ ] **Step 9: Commit verification metadata if changed**
 
