@@ -1,6 +1,12 @@
 import argparse
 from collections import Counter
+from dataclasses import asdict
+from datetime import datetime, timezone
+import json
 from pathlib import Path
+import tempfile
+
+import httpx
 
 from app.builds.repository import upsert_build_templates
 from app.builds.templates import read_build_template_inputs
@@ -20,7 +26,9 @@ from app.catalog.repository import update_recommended_components
 from app.catalog.seed import read_catalog_components
 from app.core.config import Settings
 from app.db import create_session_factory
+from app.perf.collector import CollectionBlocked, Collector, CollectorPolicy
 from app.perf.collector_manifest import load_manifest, target_page_count, write_manifest
+from app.perf.collector_store import CollectionTask, CollectorStore
 
 
 def main() -> None:
@@ -61,6 +69,19 @@ def main() -> None:
 
     check_perf_manifest_parser = subparsers.add_parser("check-perf-manifest")
     check_perf_manifest_parser.add_argument("manifest_json", type=Path)
+
+    seed_perf_parser = subparsers.add_parser("seed-perf-collection")
+    seed_perf_parser.add_argument("manifest_json", type=Path)
+    seed_perf_parser.add_argument("sqlite_path", type=Path)
+
+    run_perf_parser = subparsers.add_parser("run-perf-collection")
+    run_perf_parser.add_argument("sqlite_path", type=Path)
+    run_perf_parser.add_argument("--max-tasks", type=int)
+    run_perf_parser.add_argument("--delay-seconds", type=float, default=2.0)
+
+    export_perf_parser = subparsers.add_parser("export-perf-collection")
+    export_perf_parser.add_argument("sqlite_path", type=Path)
+    export_perf_parser.add_argument("output_json", type=Path)
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -147,6 +168,80 @@ def main() -> None:
         for status in ("exact", "review", "missing"):
             print(f"{status}: {counts[status]}")
         print(f"Derived result-page count: {target_page_count(manifest)}")
+    if args.command == "seed-perf-collection":
+        manifest = load_manifest(args.manifest_json)
+        cpus = [item for item in manifest.cpus if item.status == "exact"]
+        gpus = [item for item in manifest.gpus if item.status == "exact"]
+        games = [item for item in manifest.games if item.status == "exact"]
+        tasks = [
+            CollectionTask(
+                cpu.app_id,
+                gpu.app_id,
+                game.app_id,
+                "https://pc-builds.com/zh/fps-calculator/result/"
+                f"{cpu.source_id}{gpu.source_id}{game.source_id}/"
+                f"{cpu.source_slug}/{gpu.source_slug}/{game.source_slug}/1920x1080/",
+            )
+            for cpu in cpus
+            for gpu in gpus
+            for game in games
+        ]
+        with CollectorStore(args.sqlite_path) as store:
+            count = store.seed_tasks(tasks)
+        print(f"Seeded {count} tasks.")
+    if args.command == "run-perf-collection":
+        policy = CollectorPolicy(delay_seconds=args.delay_seconds)
+        try:
+            with CollectorStore(args.sqlite_path) as store, httpx.Client(
+                timeout=policy.timeout_seconds
+            ) as client:
+                summary = Collector(store, client, policy).run(args.max_tasks)
+        except CollectionBlocked as error:
+            print(f"Collection blocked: {error}")
+            raise SystemExit(2)
+        values = asdict(summary)
+        print(
+            "Collection summary: "
+            + " ".join(f"{key}={value}" for key, value in values.items())
+        )
+    if args.command == "export-perf-collection":
+        with CollectorStore(args.sqlite_path) as store:
+            records = [
+                {
+                    **{
+                        key: value
+                        for key, value in task.items()
+                        if key != "results"
+                    },
+                    **row,
+                }
+                for task in store.successful_records()
+                for row in task["results"]
+            ]
+        payload = {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "quality": "medium",
+            "records": records,
+        }
+        args.output_json.parent.mkdir(parents=True, exist_ok=True)
+        temporary_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                encoding="utf-8",
+                dir=args.output_json.parent,
+                prefix=f".{args.output_json.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as temporary_file:
+                temporary_path = Path(temporary_file.name)
+                json.dump(payload, temporary_file, ensure_ascii=False, indent=2)
+                temporary_file.write("\n")
+            temporary_path.replace(args.output_json)
+        finally:
+            if temporary_path:
+                temporary_path.unlink(missing_ok=True)
+        print(f"Exported {len(records)} records.")
 
 def _read_component_ids(path: Path) -> list[str]:
     component_ids = []

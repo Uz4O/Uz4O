@@ -50,6 +50,26 @@ def test_committed_manifest_covers_app_scope() -> None:
     warzone = next(game for game in manifest.games if game.app_id == "call-of-duty-warzone")
     assert warzone.source_name == "Call of Duty: Warzone"
 
+    exact = {
+        item.app_id: (item.source_id, item.source_slug, item.source_name)
+        for item in manifest.cpus + manifest.gpus + manifest.games
+        if item.status == "exact"
+    }
+    assert exact == {
+        "r5-5600": (
+            "1fB",
+            "ryzen-5-5600",
+            "AMD Ryzen 5 5600 3.50 GHz Desktop",
+        ),
+        "rtx-4060": (
+            "1ge",
+            "geforce-rtx-4060",
+            "NVIDIA GeForce RTX 4060 8 GB Desktop",
+        ),
+        "cyberpunk-2077": ("02g", "cyberpunk-2077", "Cyberpunk 2077"),
+    }
+    assert target_page_count(manifest) == 1
+
 
 def test_target_page_count_multiplies_exact_mapping_counts() -> None:
     exact = SourceMapping("exact", "Exact", "1", "exact", "Exact", "desktop", "exact")

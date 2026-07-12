@@ -225,6 +225,9 @@ class CollectorStore:
     def record_parse_failed(self, task_id: int, error: str) -> None:
         self._record_failure(task_id, "parse_failed", error, None)
 
+    def record_failed(self, task_id: int, error: str) -> None:
+        self._record_failure(task_id, "failed", error, None)
+
     def block_and_pause(self, task_id: int, reason: str) -> None:
         with self._connection:
             updated = self._connection.execute(
@@ -313,3 +316,42 @@ class CollectorStore:
             )
             for row in rows
         ]
+
+    def successful_records(self) -> List[dict]:
+        records: List[dict] = []
+        rows = self._connection.execute(
+            """
+            SELECT task.id, task.cpu_id, task.gpu_id, task.game_id,
+                   task.source_url, task.response_hash,
+                   result.resolution, result.average_fps, result.minimum_fps,
+                   result.maximum_fps, result.bottleneck_type,
+                   result.bottleneck_percent
+            FROM task JOIN result ON result.task_id = task.id
+            WHERE task.status = 'succeeded'
+            ORDER BY task.source_url,
+                CASE result.resolution WHEN '1080p' THEN 1 WHEN '2k' THEN 2 ELSE 3 END
+            """
+        )
+        for row in rows:
+            if not records or records[-1]["source_url"] != row["source_url"]:
+                records.append(
+                    {
+                        "cpu_id": row["cpu_id"],
+                        "gpu_id": row["gpu_id"],
+                        "game_id": row["game_id"],
+                        "source_url": row["source_url"],
+                        "response_hash": row["response_hash"],
+                        "results": [],
+                    }
+                )
+            records[-1]["results"].append(
+                {
+                    "resolution": row["resolution"],
+                    "average_fps": row["average_fps"],
+                    "minimum_fps": row["minimum_fps"],
+                    "maximum_fps": row["maximum_fps"],
+                    "bottleneck_type": row["bottleneck_type"],
+                    "bottleneck_percent": row["bottleneck_percent"],
+                }
+            )
+        return records

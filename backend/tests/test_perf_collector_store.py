@@ -289,7 +289,7 @@ def test_terminal_and_retryable_states_store_expected_error_fields(
 ) -> None:
     path = tmp_path / "collector.sqlite3"
     store = CollectorStore(path)
-    store.seed_tasks([task("retry"), task("missing"), task("parse")])
+    store.seed_tasks([task("retry"), task("missing"), task("parse"), task("failed")])
     claimed = store.claim_next(NOW)
     assert claimed is not None
     retry_at = NOW + timedelta(minutes=5)
@@ -300,6 +300,9 @@ def test_terminal_and_retryable_states_store_expected_error_fields(
     claimed = store.claim_next(NOW)
     assert claimed is not None
     store.record_parse_failed(claimed.id, "bad table")
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    store.record_failed(claimed.id, "exhausted")
 
     with sqlite3.connect(path) as connection:
         states = connection.execute(
@@ -309,12 +312,13 @@ def test_terminal_and_retryable_states_store_expected_error_fields(
         ("retryable", "temporary", retry_at.isoformat()),
         ("missing", "not found", None),
         ("parse_failed", "bad table", None),
+        ("failed", "exhausted", None),
     ]
 
 
 @pytest.mark.parametrize(
     "operation",
-    ["retryable", "missing", "parse_failed", "block_and_pause"],
+    ["retryable", "missing", "parse_failed", "failed", "block_and_pause"],
 )
 def test_status_updates_reject_unknown_task_ids(
     tmp_path: Path, operation: str
@@ -328,6 +332,8 @@ def test_status_updates_reject_unknown_task_ids(
             store.record_missing(999, "error")
         elif operation == "parse_failed":
             store.record_parse_failed(999, "error")
+        elif operation == "failed":
+            store.record_failed(999, "error")
         else:
             store.block_and_pause(999, "error")
     assert store.pause_reason() is None
@@ -357,6 +363,59 @@ def test_task_counts_include_each_present_status(tmp_path: Path) -> None:
     store.record_missing(claimed.id, "gone")
 
     assert store.task_counts() == {"missing": 1, "pending": 1, "succeeded": 1}
+
+
+def test_successful_records_returns_only_succeeded_tasks_in_stable_order(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite3")
+    store.seed_tasks([task("two"), task("one"), task("pending")])
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    store.record_success(claimed.id, rows(2), "hash-two")
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    store.record_success(claimed.id, rows(1), "hash-one")
+
+    records = store.successful_records()
+
+    assert [record["source_url"] for record in records] == [
+        "https://example.test/one",
+        "https://example.test/two",
+    ]
+    assert records[0] == {
+        "cpu_id": "cpu-one",
+        "gpu_id": "gpu-one",
+        "game_id": "game-one",
+        "source_url": "https://example.test/one",
+        "response_hash": "hash-one",
+        "results": [
+            {
+                "resolution": "1080p",
+                "average_fps": 81,
+                "minimum_fps": 70,
+                "maximum_fps": 91,
+                "bottleneck_type": "cpu",
+                "bottleneck_percent": 10,
+            },
+            {
+                "resolution": "2k",
+                "average_fps": 61,
+                "minimum_fps": 50,
+                "maximum_fps": 71,
+                "bottleneck_type": "gpu",
+                "bottleneck_percent": 8,
+            },
+            {
+                "resolution": "4k",
+                "average_fps": 41,
+                "minimum_fps": 30,
+                "maximum_fps": 51,
+                "bottleneck_type": "balanced",
+                "bottleneck_percent": 0,
+            },
+        ],
+    }
 
 
 def test_results_enforce_foreign_key_and_cascade_on_task_delete(tmp_path: Path) -> None:

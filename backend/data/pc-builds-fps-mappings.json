@@ -687,11 +687,11 @@
     {
       "app_id": "r5-5600",
       "app_name": "R5 5600",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fB",
+      "source_slug": "ryzen-5-5600",
+      "source_name": "AMD Ryzen 5 5600 3.50 GHz Desktop",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-5500",
@@ -1067,11 +1067,11 @@
     {
       "app_id": "rtx-4060",
       "app_name": "RTX 4060",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ge",
+      "source_slug": "geforce-rtx-4060",
+      "source_name": "NVIDIA GeForce RTX 4060 8 GB Desktop",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3090-ti",
@@ -1672,11 +1672,11 @@
     {
       "app_id": "cyberpunk-2077",
       "app_name": "Cyberpunk 2077",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "02g",
+      "source_slug": "cyberpunk-2077",
+      "source_name": "Cyberpunk 2077",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "red-dead-redemption-2",
