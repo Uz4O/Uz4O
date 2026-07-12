@@ -105,6 +105,90 @@ def test_success_records_rows_hash_and_sends_only_safe_get_headers(tmp_path: Pat
     assert len(store.successful_records()[0]["response_hash"]) == 64
 
 
+def test_set_cookie_from_one_response_is_not_sent_to_the_next_task(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "one", "two")
+    requests = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        assert "cookie" not in request.headers
+        if len(requests) == 1:
+            return httpx.Response(
+                200,
+                text=HTML,
+                headers={"Set-Cookie": "session=secret; Path=/"},
+            )
+        return httpx.Response(404)
+
+    summary = collector(store, handler).run()
+
+    assert summary.processed == 2
+    assert len(requests) == 2
+
+
+@pytest.mark.parametrize("credential", ["header", "auth"])
+def test_preloaded_client_credentials_are_not_sent(
+    tmp_path: Path, credential: str
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "one")
+    requests = []
+    kwargs = {"auth": ("user", "password")} if credential == "auth" else {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(400)
+
+    client = httpx.Client(
+        transport=httpx.MockTransport(handler),
+        headers={"Authorization": "Bearer secret"} if credential == "header" else None,
+        cookies={"session": "secret"},
+        **kwargs,
+    )
+
+    summary = Collector(
+        store,
+        client,
+        CollectorPolicy(delay_seconds=0, jitter_seconds=0),
+        sleep=lambda _: None,
+        now=lambda: NOW,
+    ).run()
+
+    assert summary.failed == 1
+    assert len(requests) == 1
+    assert "cookie" not in requests[0].headers
+    assert "authorization" not in requests[0].headers
+
+
+def test_redirect_is_not_followed_and_is_recorded_failed(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "redirect")
+    hosts = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        hosts.append(request.url.host)
+        return httpx.Response(302, headers={"Location": "https://evil.example/secret"})
+
+    client = httpx.Client(
+        transport=httpx.MockTransport(handler),
+        follow_redirects=True,
+    )
+    summary = Collector(
+        store,
+        client,
+        CollectorPolicy(delay_seconds=0, jitter_seconds=0),
+        sleep=lambda _: None,
+        now=lambda: NOW,
+    ).run()
+
+    assert summary.failed == 1
+    assert hosts == ["pc-builds.com"]
+    assert store.task_counts() == {"failed": 1}
+
+
 def test_404_records_missing(tmp_path: Path) -> None:
     store = CollectorStore(tmp_path / "collector.sqlite")
     seed(store, "gone")

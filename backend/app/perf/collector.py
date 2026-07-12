@@ -134,11 +134,16 @@ class Collector:
             self.store.record_failed(task.id, "invalid source URL")
             return "failed"
 
+        self.client.cookies.clear()
+        self.client.headers.pop("Cookie", None)
+        self.client.headers.pop("Authorization", None)
         try:
             response = self.client.get(
                 task.source_url,
                 headers={"User-Agent": USER_AGENT},
                 timeout=self.policy.timeout_seconds,
+                auth=None,
+                follow_redirects=False,
             )
         except httpx.TransportError as error:
             return self._record_network_failure(task, f"transport error: {error}")
@@ -154,6 +159,9 @@ class Collector:
         if response.status_code == 404:
             self.store.record_missing(task.id, "HTTP 404")
             return "missing"
+        if 300 <= response.status_code < 400:
+            self.store.record_failed(task.id, "redirect_not_allowed")
+            return "failed"
         if 500 <= response.status_code < 600:
             return self._record_network_failure(task, f"HTTP {response.status_code}")
         if response.status_code != 200:
