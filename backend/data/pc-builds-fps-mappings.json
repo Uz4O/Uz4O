@@ -1,0 +1,1745 @@
+{
+  "cpus": [
+    {
+      "app_id": "i9-14900ks",
+      "app_name": "i9-14900KS",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-14900kf",
+      "app_name": "i9-14900KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-14900k",
+      "app_name": "i9-14900K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-14700kf",
+      "app_name": "i7-14700KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-14700k",
+      "app_name": "i7-14700K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-14700",
+      "app_name": "i7-14700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-14600kf",
+      "app_name": "i5-14600KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-14600k",
+      "app_name": "i5-14600K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-14490f",
+      "app_name": "i5-14490F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-14400f",
+      "app_name": "i5-14400F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-14400",
+      "app_name": "i5-14400",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-14100f",
+      "app_name": "i3-14100F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-14100",
+      "app_name": "i3-14100",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u9-285k",
+      "app_name": "Ultra 9 285K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u9-285",
+      "app_name": "Ultra 9 285",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u7-265k",
+      "app_name": "Ultra 7 265K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u7-265",
+      "app_name": "Ultra 7 265",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u5-245k",
+      "app_name": "Ultra 5 245K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u5-245",
+      "app_name": "Ultra 5 245",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u5-235",
+      "app_name": "Ultra 5 235",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-9950x3d",
+      "app_name": "R9 9950X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-9900x",
+      "app_name": "R9 9900X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-9850x3d",
+      "app_name": "R7 9850X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-9800x3d-v2",
+      "app_name": "R7 9800X3D v2",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-9800x3d",
+      "app_name": "R7 9800X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-9700x",
+      "app_name": "R7 9700X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-9600x",
+      "app_name": "R5 9600X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-9500f",
+      "app_name": "R5 9500F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-7950x3d",
+      "app_name": "R9 7950X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-7950x",
+      "app_name": "R9 7950X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-7900x",
+      "app_name": "R9 7900X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-7900",
+      "app_name": "R9 7900",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-7800x3d",
+      "app_name": "R7 7800X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-7700x",
+      "app_name": "R7 7700X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-7700",
+      "app_name": "R7 7700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-7600x",
+      "app_name": "R5 7600X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-7600",
+      "app_name": "R5 7600",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-7500f",
+      "app_name": "R5 7500F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-13900ks",
+      "app_name": "i9-13900KS",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-13900kf",
+      "app_name": "i9-13900KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-13900k",
+      "app_name": "i9-13900K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-13900",
+      "app_name": "i9-13900",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-13700kf",
+      "app_name": "i7-13700KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-13700k",
+      "app_name": "i7-13700K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-13700",
+      "app_name": "i7-13700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-13600kf",
+      "app_name": "i5-13600KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-13600k",
+      "app_name": "i5-13600K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-13490f",
+      "app_name": "i5-13490F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-13400f",
+      "app_name": "i5-13400F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-13400",
+      "app_name": "i5-13400",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-13100f",
+      "app_name": "i3-13100F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-13100",
+      "app_name": "i3-13100",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-12900ks",
+      "app_name": "i9-12900KS",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-12900kf",
+      "app_name": "i9-12900KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-12900k",
+      "app_name": "i9-12900K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-12900",
+      "app_name": "i9-12900",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-12700kf",
+      "app_name": "i7-12700KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-12700k",
+      "app_name": "i7-12700K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-12700",
+      "app_name": "i7-12700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12600kf",
+      "app_name": "i5-12600KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12600k",
+      "app_name": "i5-12600K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12500",
+      "app_name": "i5-12500",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12490f",
+      "app_name": "i5-12490F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12400f",
+      "app_name": "i5-12400F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-12400",
+      "app_name": "i5-12400",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-12100f",
+      "app_name": "i3-12100F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-12100",
+      "app_name": "i3-12100",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-5950x",
+      "app_name": "R9 5950X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r9-5900x",
+      "app_name": "R9 5900X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-5800x3d",
+      "app_name": "R7 5800X3D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-5800x",
+      "app_name": "R7 5800X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-5700x",
+      "app_name": "R7 5700X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-5700g",
+      "app_name": "R7 5700G",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r7-5700",
+      "app_name": "R7 5700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-5600x",
+      "app_name": "R5 5600X",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-5600g",
+      "app_name": "R5 5600G",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-5600",
+      "app_name": "R5 5600",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "r5-5500",
+      "app_name": "R5 5500",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-11900kf",
+      "app_name": "i9-11900KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-11900k",
+      "app_name": "i9-11900K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-10900kf",
+      "app_name": "i9-10900KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i9-10900k",
+      "app_name": "i9-10900K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-11700kf",
+      "app_name": "i7-11700KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-11700k",
+      "app_name": "i7-11700K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-11700",
+      "app_name": "i7-11700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-10700kf",
+      "app_name": "i7-10700KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-10700k",
+      "app_name": "i7-10700K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i7-10700",
+      "app_name": "i7-10700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-11600kf",
+      "app_name": "i5-11600KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-11600k",
+      "app_name": "i5-11600K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-11500",
+      "app_name": "i5-11500",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-11400f",
+      "app_name": "i5-11400F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-11400",
+      "app_name": "i5-11400",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-10600kf",
+      "app_name": "i5-10600KF",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-10600k",
+      "app_name": "i5-10600K",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-10500",
+      "app_name": "i5-10500",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-10400f",
+      "app_name": "i5-10400F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i5-10400",
+      "app_name": "i5-10400",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-11100",
+      "app_name": "i3-11100",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-10105f",
+      "app_name": "i3-10105F",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "i3-10105",
+      "app_name": "i3-10105",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    }
+  ],
+  "gpus": [
+    {
+      "app_id": "rtx-5090",
+      "app_name": "RTX 5090",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5090-d-v2",
+      "app_name": "RTX 5090 D V2",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5090-d",
+      "app_name": "RTX 5090 D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5080",
+      "app_name": "RTX 5080",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5070-ti",
+      "app_name": "RTX 5070 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5070",
+      "app_name": "RTX 5070",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5060-ti",
+      "app_name": "RTX 5060 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5060",
+      "app_name": "RTX 5060",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-5050",
+      "app_name": "RTX 5050",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4090-d",
+      "app_name": "RTX 4090 D",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4080-super",
+      "app_name": "RTX 4080 Super",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4080",
+      "app_name": "RTX 4080",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4070-ti-super",
+      "app_name": "RTX 4070 Ti Super",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4070-ti",
+      "app_name": "RTX 4070 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4070-super",
+      "app_name": "RTX 4070 SUPER",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4070",
+      "app_name": "RTX 4070",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4060-ti",
+      "app_name": "RTX 4060 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-4060",
+      "app_name": "RTX 4060",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3090-ti",
+      "app_name": "RTX 3090 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3090",
+      "app_name": "RTX 3090",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3080-ti",
+      "app_name": "RTX 3080 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3080",
+      "app_name": "RTX 3080",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3070-ti",
+      "app_name": "RTX 3070 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3070",
+      "app_name": "RTX 3070",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3060-ti",
+      "app_name": "RTX 3060 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3060",
+      "app_name": "RTX 3060",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-3050",
+      "app_name": "RTX 3050",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-2080-ti",
+      "app_name": "RTX 2080 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-2070-super",
+      "app_name": "RTX 2070 Super",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-2060-super",
+      "app_name": "RTX 2060 Super",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rtx-2060",
+      "app_name": "RTX 2060",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1660-ti",
+      "app_name": "GTX 1660 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1660-super",
+      "app_name": "GTX 1660 Super",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1650",
+      "app_name": "GTX 1650",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1080-ti",
+      "app_name": "GTX 1080 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1080",
+      "app_name": "GTX 1080",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1070-ti",
+      "app_name": "GTX 1070 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1070",
+      "app_name": "GTX 1070",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1060-6gb",
+      "app_name": "GTX 1060 (6GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1060-5gb",
+      "app_name": "GTX 1060 (5GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1060-3gb",
+      "app_name": "GTX 1060 (3GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1050-ti",
+      "app_name": "GTX 1050 Ti",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "gtx-1050",
+      "app_name": "GTX 1050",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-9070-xt",
+      "app_name": "RX 9070 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-9070-gre",
+      "app_name": "RX 9070 GRE",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-9060-xt-8gb",
+      "app_name": "RX 9060 XT (8GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-9060-xt-12gb",
+      "app_name": "RX 9060 XT (12GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-9060-xt-16gb",
+      "app_name": "RX 9060 XT (16GB)",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7900-xtx",
+      "app_name": "RX 7900 XTX",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7900-xt",
+      "app_name": "RX 7900 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7900-gre",
+      "app_name": "RX 7900 GRE",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7850-xt",
+      "app_name": "RX 7850 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7800-xt",
+      "app_name": "RX 7800 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7750-xt",
+      "app_name": "RX 7750 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7700-xt",
+      "app_name": "RX 7700 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7650-gre",
+      "app_name": "RX 7650 GRE",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7600-xt",
+      "app_name": "RX 7600 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-7600",
+      "app_name": "RX 7600",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6950-xt",
+      "app_name": "RX 6950 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6900-xt",
+      "app_name": "RX 6900 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6800-xt",
+      "app_name": "RX 6800 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6800",
+      "app_name": "RX 6800",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6750-xt",
+      "app_name": "RX 6750 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6750-gre",
+      "app_name": "RX 6750 GRE",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6700-xt",
+      "app_name": "RX 6700 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6700",
+      "app_name": "RX 6700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6650-xt",
+      "app_name": "RX 6650 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6650-gre",
+      "app_name": "RX 6650 GRE",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6600-xt",
+      "app_name": "RX 6600 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6600",
+      "app_name": "RX 6600",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-6500-xt",
+      "app_name": "RX 6500 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5700-xt",
+      "app_name": "RX 5700 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5700",
+      "app_name": "RX 5700",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5600-xt",
+      "app_name": "RX 5600 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5600",
+      "app_name": "RX 5600",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5500-xt",
+      "app_name": "RX 5500 XT",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "rx-5500",
+      "app_name": "RX 5500",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    }
+  ],
+  "games": [
+    {
+      "app_id": "valorant",
+      "app_name": "Valorant",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "cs2",
+      "app_name": "Counter-Strike 2",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "pubg",
+      "app_name": "PUBG",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "delta-force",
+      "app_name": "Delta Force",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "teamfight-tactics",
+      "app_name": "Teamfight Tactics",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "league-of-legends",
+      "app_name": "League of Legends",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "call-of-duty-warzone",
+      "app_name": "Call of Duty: Warzone",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": "Call of Duty: Warzone",
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "cyberpunk-2077",
+      "app_name": "Cyberpunk 2077",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "red-dead-redemption-2",
+      "app_name": "Red Dead Redemption 2",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "gta-v",
+      "app_name": "Grand Theft Auto V",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "black-myth-wukong",
+      "app_name": "Black Myth: Wukong",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "forza-horizon-6",
+      "app_name": "Forza Horizon 6",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "elden-ring",
+      "app_name": "Elden Ring",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "cities-skylines",
+      "app_name": "Cities: Skylines",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    },
+    {
+      "app_id": "minecraft-java-edition",
+      "app_name": "Minecraft: Java Edition",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "game",
+      "status": "review"
+    }
+  ]
+}

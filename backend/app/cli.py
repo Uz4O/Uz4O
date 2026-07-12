@@ -1,4 +1,5 @@
 import argparse
+from collections import Counter
 from pathlib import Path
 
 from app.builds.repository import upsert_build_templates
@@ -19,6 +20,7 @@ from app.catalog.repository import update_recommended_components
 from app.catalog.seed import read_catalog_components
 from app.core.config import Settings
 from app.db import create_session_factory
+from app.perf.collector_manifest import load_manifest, target_page_count, write_manifest
 
 
 def main() -> None:
@@ -52,6 +54,13 @@ def main() -> None:
     recommendations_parser.add_argument("--replace", action="store_true")
 
     subparsers.add_parser("check-data-readiness")
+
+    perf_manifest_parser = subparsers.add_parser("build-perf-manifest")
+    perf_manifest_parser.add_argument("swift_catalog", type=Path)
+    perf_manifest_parser.add_argument("manifest_json", type=Path)
+
+    check_perf_manifest_parser = subparsers.add_parser("check-perf-manifest")
+    check_perf_manifest_parser.add_argument("manifest_json", type=Path)
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -124,6 +133,20 @@ def main() -> None:
                 "Missing priced recommended categories: "
                 + ", ".join(readiness.missing_priced_recommended_categories)
             )
+    if args.command == "build-perf-manifest":
+        manifest = write_manifest(args.swift_catalog, args.manifest_json)
+        print(
+            f"Wrote {len(manifest.cpus)} CPUs, {len(manifest.gpus)} GPUs, "
+            f"and {len(manifest.games)} games."
+        )
+    if args.command == "check-perf-manifest":
+        manifest = load_manifest(args.manifest_json)
+        counts = Counter(
+            item.status for item in manifest.cpus + manifest.gpus + manifest.games
+        )
+        for status in ("exact", "review", "missing"):
+            print(f"{status}: {counts[status]}")
+        print(f"Derived result-page count: {target_page_count(manifest)}")
 
 def _read_component_ids(path: Path) -> list[str]:
     component_ids = []
