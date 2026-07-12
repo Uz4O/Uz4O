@@ -7,6 +7,7 @@ from app.builds.repository import list_build_templates
 from app.builds.ai_provider import select_build_with_deepseek
 from app.builds.service import (
     BuildGenerationResponse,
+    BuildOptionResponse,
     BuildOptionsResponse,
     BuildRequest,
     ai_provider_response,
@@ -63,7 +64,14 @@ def get_build_options(
             BuildSelection(components=dict(template.components)),
             {component.id: component for component in components},
         )
-        options.append(template_response(template, compatibility))
+        if not compatibility.compatible:
+            unavailable_modes.append(purchase_mode)
+            continue
+        options.append(
+            BuildOptionResponse.model_validate(
+                template_response(template, compatibility).model_dump()
+            )
+        )
 
     if not options:
         raise HTTPException(

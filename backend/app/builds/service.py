@@ -219,9 +219,21 @@ class BuildGenerationResponse(BaseModel):
     compatibility: Optional[CompatibilityResult]
 
 
+class BuildOptionResponse(BaseModel):
+    status: Literal["ready"]
+    source: Literal["template"]
+    template_id: str
+    title: str
+    components: Dict[str, str]
+    estimated_total: Optional[int]
+    explanation: str
+    details: BuildTemplateDetails
+    compatibility: CompatibilityResult
+
+
 class BuildOptionsResponse(BaseModel):
     direction: Literal["fps", "aaa", "balanced"]
-    options: List[BuildGenerationResponse]
+    options: List[BuildOptionResponse]
     unavailable_modes: List[Literal["new", "used", "mixed"]]
 
 

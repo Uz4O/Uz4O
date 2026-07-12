@@ -38,7 +38,11 @@ def build_option_template(
     *,
     budget: int,
     structured: bool = True,
+    compatible: bool = True,
 ) -> BuildTemplate:
+    components = dict(OPTION_COMPONENTS)
+    if not compatible:
+        components["motherboard"] = "am5-board"
     details = {}
     if structured:
         details = {
@@ -61,7 +65,7 @@ def build_option_template(
                     "price_date": "2026-07-12",
                     "specs": {},
                 }
-                for role, component_id in OPTION_COMPONENTS.items()
+                for role, component_id in components.items()
             ],
             "advantages": ["测试优点"],
             "disadvantages": ["测试缺点"],
@@ -79,7 +83,7 @@ def build_option_template(
             {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}[direction],
             {"new": "全新", "used": "二手", "mixed": "混合采购"}[purchase_mode],
         ],
-        components=dict(OPTION_COMPONENTS),
+        components=components,
         estimated_total=7200,
         explanation="结构化测试模板。",
         details=details,
@@ -92,6 +96,7 @@ def make_client(
     ai_provider_api_key: Optional[str] = None,
     option_templates: tuple[tuple[str, str], ...] = (),
     detail_less_option_templates: tuple[tuple[str, str], ...] = (),
+    incompatible_option_templates: tuple[tuple[str, str], ...] = (),
     option_budget: int = 7500,
 ) -> TestClient:
     engine = create_engine(
@@ -128,6 +133,14 @@ def make_client(
                     brand="技嘉",
                     detail_raw="Intel · LGA1700 · B760",
                     specs={"socket": "LGA1700", "mem_type": "DDR5"},
+                ),
+                CatalogComponent(
+                    id="am5-board",
+                    category="motherboard",
+                    name="AM5 Board",
+                    brand="AMD",
+                    detail_raw="AMD · AM5",
+                    specs={"socket": "AM5", "mem_type": "DDR5"},
                 ),
                 CatalogComponent(
                     id="ram-6000-cl30",
@@ -208,7 +221,16 @@ def make_client(
                     structured=False,
                 )
             )
-        if option_templates or detail_less_option_templates:
+        for direction, purchase_mode in incompatible_option_templates:
+            session.add(
+                build_option_template(
+                    direction,
+                    purchase_mode,
+                    budget=option_budget,
+                    compatible=False,
+                )
+            )
+        if option_templates or detail_less_option_templates or incompatible_option_templates:
             session.commit()
         if with_recommended_prices:
             for component_id, price in [
@@ -314,6 +336,7 @@ def test_build_options_returns_full_high_budget_modes_in_approved_order() -> Non
     for option in body["options"]:
         assert option["status"] == "ready"
         assert option["source"] == "template"
+        assert option["template_id"] is not None
         assert option["details"] is not None
         assert len(option["details"]["parts"]) == 8
         assert len(option["components"]) == 8
@@ -373,6 +396,47 @@ def test_build_options_returns_partial_low_budget_modes_and_marks_missing_detail
         "new",
     ]
     assert body["unavailable_modes"] == ["mixed"]
+
+
+def test_build_options_marks_one_incompatible_mode_unavailable() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "used"), ("fps", "new")),
+        incompatible_option_templates=(("fps", "mixed"),),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
+        "used",
+        "new",
+    ]
+    assert all(option["compatibility"]["compatible"] is True for option in body["options"])
+    assert body["unavailable_modes"] == ["mixed"]
+
+
+def test_build_options_returns_503_when_all_modes_are_incompatible() -> None:
+    client = make_client(
+        with_template=False,
+        incompatible_option_templates=(
+            ("fps", "used"),
+            ("fps", "new"),
+            ("fps", "mixed"),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 503
+    assert "结构化配置方案" in response.json()["detail"]
 
 
 def test_build_options_returns_503_when_no_structured_mode_exists() -> None:

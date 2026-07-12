@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from app.builds import service as build_service
 from app.builds.models import BuildTemplate
@@ -47,6 +48,76 @@ from app.builds.service import BuildRequest, match_build_template
 )
 def test_classify_game_direction(games: list[str], expected: str) -> None:
     assert build_service.classify_game_direction(games) == expected
+
+
+def ready_option_payload() -> dict:
+    return {
+        "status": "ready",
+        "source": "template",
+        "template_id": "base-7500-fps-new",
+        "title": "7500 元 FPS 全新基底配置",
+        "components": {"cpu": "i5-14600k"},
+        "estimated_total": 7500,
+        "explanation": "人工审核模板。",
+        "details": {
+            "target_budget": 7500,
+            "direction": "fps",
+            "purchase_mode": "new",
+            "parts": [],
+            "advantages": [],
+            "disadvantages": [],
+            "risks": [],
+            "suitable_user": "FPS 玩家",
+            "price_date": "2026-07-12",
+        },
+        "compatibility": {
+            "compatible": True,
+            "summary": "compatible",
+            "findings": [],
+            "finding_counts": {"pass": 0, "warning": 0, "error": 0},
+            "checked_rule_codes": [],
+        },
+    }
+
+
+def test_build_option_response_accepts_ready_template_payload() -> None:
+    option = build_service.BuildOptionResponse.model_validate(ready_option_payload())
+
+    assert option.status == "ready"
+    assert option.source == "template"
+
+
+@pytest.mark.parametrize("field", ["template_id", "details", "compatibility"])
+def test_build_option_response_requires_structured_template_fields(field: str) -> None:
+    missing_payload = ready_option_payload()
+    missing_payload.pop(field)
+    with pytest.raises(ValidationError):
+        build_service.BuildOptionResponse.model_validate(missing_payload)
+
+    null_payload = ready_option_payload()
+    null_payload[field] = None
+    with pytest.raises(ValidationError):
+        build_service.BuildOptionResponse.model_validate(null_payload)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("status", "needs_ai_generation"),
+        ("source", "ai_provider"),
+        ("source", "rules_fallback"),
+        ("source", "ai_pending"),
+    ],
+)
+def test_build_option_response_rejects_non_template_variants(
+    field: str,
+    value: str,
+) -> None:
+    payload = ready_option_payload()
+    payload[field] = value
+
+    with pytest.raises(ValidationError):
+        build_service.BuildOptionResponse.model_validate(payload)
 
 
 def template(
