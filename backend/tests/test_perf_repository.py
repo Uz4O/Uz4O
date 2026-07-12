@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from sqlalchemy import create_engine, event, func, select
@@ -169,6 +169,53 @@ def test_upsert_skips_older_source_rows_and_counts_only_written_rows(session) ->
     )[0]
     assert stored.average_fps == 80
     assert stored.source_fetched_at.replace(tzinfo=timezone.utc) == newer
+
+
+def test_upsert_normalizes_source_time_to_utc_before_sqlite_persistence(session) -> None:
+    local_time = datetime(
+        2026,
+        7,
+        12,
+        8,
+        tzinfo=timezone(timedelta(hours=8)),
+    )
+    newer_utc = datetime(2026, 7, 12, 1, tzinfo=timezone.utc)
+
+    assert upsert_performance_estimates(
+        session,
+        [estimate_input(average_fps=70, source_fetched_at=local_time)],
+    ) == 1
+    session.expunge_all()
+    first_stored = get_performance_estimates(
+        session,
+        "r5-5600",
+        "rtx-4060",
+        ["cyberpunk-2077"],
+        "1080p",
+        "medium",
+    )[0]
+    assert first_stored.source_fetched_at.replace(tzinfo=timezone.utc) == datetime(
+        2026,
+        7,
+        12,
+        tzinfo=timezone.utc,
+    )
+    session.expunge_all()
+    assert upsert_performance_estimates(
+        session,
+        [estimate_input(average_fps=80, source_fetched_at=newer_utc)],
+    ) == 1
+
+    stored = get_performance_estimates(
+        session,
+        "r5-5600",
+        "rtx-4060",
+        ["cyberpunk-2077"],
+        "1080p",
+        "medium",
+    )[0]
+    assert stored.average_fps == 80
+    assert stored.source_fetched_at.replace(tzinfo=timezone.utc) == newer_utc
 
 
 def test_chunk_failure_does_not_commit_prior_chunks(session) -> None:

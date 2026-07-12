@@ -73,15 +73,17 @@ def upsert_performance_estimates(
         }
         for estimate, key in zip(chunk, keys):
             row = existing.get(key)
-            values = vars(estimate)
+            source_fetched_at = _as_utc(estimate.source_fetched_at)
+            values = {
+                **vars(estimate),
+                "source_fetched_at": source_fetched_at,
+            }
             if row is None:
                 row = GamePerformanceEstimate(**values)
                 session.add(row)
                 existing[key] = row
             else:
-                if _as_utc(estimate.source_fetched_at) < _as_utc(
-                    row.source_fetched_at
-                ):
+                if source_fetched_at < _as_utc(row.source_fetched_at):
                     continue
                 for name, value in values.items():
                     setattr(row, name, value)
