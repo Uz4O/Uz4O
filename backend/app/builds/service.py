@@ -15,6 +15,35 @@ FALLBACK_REQUIRED_ROLES = ["cpu", "motherboard", "ram", "psu"]
 FALLBACK_OPTIONAL_ROLES = ["gpu", "storage"]
 FALLBACK_MAX_CANDIDATES_PER_ROLE = 4
 FALLBACK_MAX_COMBINATIONS_TO_EVALUATE = 5000
+CPU_HEAVY_GAMES = frozenset({"瓦罗兰特", "CS2", "PUBG"})
+BALANCED_GAMES = frozenset(
+    {"什么都玩", "云顶之弈", "LOL", "COD", "城市天际线", "我的世界"}
+)
+GPU_HEAVY_GAMES = frozenset(
+    {
+        "三角洲行动",
+        "赛博朋克2077",
+        "荒野大镖客2",
+        "GTA5",
+        "黑神话悟空",
+        "地平线6",
+        "艾尔登法环",
+    }
+)
+KNOWN_GAMES = CPU_HEAVY_GAMES | BALANCED_GAMES | GPU_HEAVY_GAMES
+
+
+def classify_game_direction(
+    games: List[str],
+) -> Literal["fps", "aaa", "balanced"]:
+    selected = set(games)
+    if not selected or "什么都玩" in selected or not selected.issubset(KNOWN_GAMES):
+        return "balanced"
+    if selected.issubset(CPU_HEAVY_GAMES):
+        return "fps"
+    if selected.issubset(GPU_HEAVY_GAMES):
+        return "aaa"
+    return "balanced"
 
 
 class BuildRequest(BaseModel):
@@ -142,6 +171,29 @@ class BuildRequest(BaseModel):
         return normalized
 
 
+class BuildTemplatePart(BaseModel):
+    role: Literal["cpu", "motherboard", "gpu", "ram", "storage", "psu", "cooler", "case"]
+    component_id: str
+    name: str
+    condition: Literal["new", "used"]
+    reference_price: int = Field(gt=0)
+    price_source: str
+    price_date: str
+    specs: Dict[str, object] = Field(default_factory=dict)
+
+
+class BuildTemplateDetails(BaseModel):
+    target_budget: int = Field(ge=0)
+    direction: Literal["fps", "aaa", "balanced"]
+    purchase_mode: Literal["new", "used", "mixed"]
+    parts: List[BuildTemplatePart]
+    advantages: List[str]
+    disadvantages: List[str]
+    risks: List[str]
+    suitable_user: str
+    price_date: str
+
+
 class BuildTemplateInput(BaseModel):
     id: str
     title: str
@@ -152,6 +204,7 @@ class BuildTemplateInput(BaseModel):
     components: Dict[str, str]
     estimated_total: Optional[int] = None
     explanation: str
+    details: Optional[BuildTemplateDetails] = None
 
 
 class BuildGenerationResponse(BaseModel):
@@ -162,31 +215,129 @@ class BuildGenerationResponse(BaseModel):
     components: Dict[str, str]
     estimated_total: Optional[int]
     explanation: str
+    details: Optional[BuildTemplateDetails] = None
     compatibility: Optional[CompatibilityResult]
+
+
+class BuildOptionsResponse(BaseModel):
+    direction: Literal["fps", "aaa", "balanced"]
+    options: List[BuildGenerationResponse]
+    unavailable_modes: List[Literal["new", "used", "mixed"]]
 
 
 def match_build_template(
     request: BuildRequest,
     templates: List[BuildTemplate],
 ) -> Optional[BuildTemplate]:
+    requested_direction = _requested_direction(request.preference_tokens)
+    requested_purchase_mode = _requested_purchase_mode(request.preference_tokens)
     candidates = [
         template
         for template in templates
         if (template.status is None or template.status == "active")
         and template.budget_min <= request.budget <= template.budget_max
         and request.use_case in template.use_cases
+        and _structured_template_matches(
+            template,
+            requested_direction,
+            requested_purchase_mode,
+        )
     ]
     if not candidates:
         return None
 
     preferences = set(request.preference_tokens)
-    return max(
+    return min(
         candidates,
         key=lambda template: (
-            len(preferences.intersection(set(template.tags))),
-            -(template.budget_max - template.budget_min),
+            -_structured_match_count(
+                template,
+                requested_direction,
+                requested_purchase_mode,
+            ),
+            -len(preferences.intersection(set(template.tags))),
+            -_default_direction_rank(template),
+            -_default_purchase_rank(template),
+            template.budget_max - template.budget_min,
+            template.id,
         ),
     )
+
+
+def _requested_direction(tokens: List[str]) -> Optional[str]:
+    normalized = [token.strip().upper() for token in tokens]
+    if any("FPS" in token for token in normalized):
+        return "fps"
+    if any("3A" in token for token in normalized):
+        return "aaa"
+    if any("均衡" in token for token in normalized):
+        return "balanced"
+    return None
+
+
+def _requested_purchase_mode(tokens: List[str]) -> Optional[str]:
+    normalized = [token.replace(" ", "") for token in tokens]
+    if any(
+        "混合" in token
+        or "部分配件二手" in token
+        or "新旧" in token
+        or "半二手" in token
+        for token in normalized
+    ):
+        return "mixed"
+    if any("全新" in token for token in normalized):
+        return "new"
+    if any("二手" in token for token in normalized):
+        return "used"
+    return None
+
+
+def _structured_template_matches(
+    template: BuildTemplate,
+    direction: Optional[str],
+    purchase_mode: Optional[str],
+) -> bool:
+    template_direction = _template_detail(template, "direction")
+    template_purchase_mode = _template_detail(template, "purchase_mode")
+    if direction and template_direction and template_direction != direction:
+        return False
+    if purchase_mode and template_purchase_mode and template_purchase_mode != purchase_mode:
+        return False
+    return True
+
+
+def _structured_match_count(
+    template: BuildTemplate,
+    direction: Optional[str],
+    purchase_mode: Optional[str],
+) -> int:
+    return int(bool(direction) and _template_detail(template, "direction") == direction) + int(
+        bool(purchase_mode)
+        and _template_detail(template, "purchase_mode") == purchase_mode
+    )
+
+
+def _default_direction_rank(template: BuildTemplate) -> int:
+    return {"balanced": 3, "fps": 2, "aaa": 1}.get(
+        _template_detail(template, "direction"),
+        0,
+    )
+
+
+def _default_purchase_rank(template: BuildTemplate) -> int:
+    return {"new": 3, "mixed": 2, "used": 1}.get(
+        _template_detail(template, "purchase_mode"),
+        0,
+    )
+
+
+def _template_detail(template: BuildTemplate, key: str) -> Optional[str]:
+    details = template.details or {}
+    if isinstance(details, dict):
+        value = details.get(key)
+    else:
+        value = getattr(details, key, None)
+    return value if isinstance(value, str) else None
 
 
 def template_response(
@@ -201,6 +352,7 @@ def template_response(
         components=dict(template.components),
         estimated_total=template.estimated_total,
         explanation=template.explanation,
+        details=BuildTemplateDetails.model_validate(template.details) if template.details else None,
         compatibility=compatibility,
     )
 

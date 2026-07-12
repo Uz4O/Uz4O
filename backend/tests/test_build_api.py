@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
+import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -18,10 +19,80 @@ from app.db import Base, get_session
 from app.main import create_app
 
 
+OPTION_COMPONENTS = {
+    "cpu": "i5-14600k",
+    "motherboard": "b760m",
+    "gpu": "rtx-4060",
+    "ram": "ram-6000-cl30",
+    "storage": "ssd-1tb",
+    "psu": "psu-750w",
+    "cooler": "cooler-air",
+    "case": "case-mid-tower",
+}
+MIXED_USED_ROLES = {"cpu", "ram", "cooler", "case"}
+
+
+def build_option_template(
+    direction: str,
+    purchase_mode: str,
+    *,
+    budget: int,
+    structured: bool = True,
+) -> BuildTemplate:
+    details = {}
+    if structured:
+        details = {
+            "target_budget": budget,
+            "direction": direction,
+            "purchase_mode": purchase_mode,
+            "parts": [
+                {
+                    "role": role,
+                    "component_id": component_id,
+                    "name": component_id,
+                    "condition": (
+                        "used"
+                        if purchase_mode == "used"
+                        or purchase_mode == "mixed" and role in MIXED_USED_ROLES
+                        else "new"
+                    ),
+                    "reference_price": 900,
+                    "price_source": "test-seed",
+                    "price_date": "2026-07-12",
+                    "specs": {},
+                }
+                for role, component_id in OPTION_COMPONENTS.items()
+            ],
+            "advantages": ["测试优点"],
+            "disadvantages": ["测试缺点"],
+            "risks": ["测试风险"],
+            "suitable_user": "测试用户",
+            "price_date": "2026-07-12",
+        }
+    return BuildTemplate(
+        id=f"base-{budget}-{direction}-{purchase_mode}",
+        title=f"{budget} 元 {direction} {purchase_mode} 基底配置",
+        budget_min=budget,
+        budget_max=budget + 499,
+        use_cases=["游戏"],
+        tags=[
+            {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}[direction],
+            {"new": "全新", "used": "二手", "mixed": "混合采购"}[purchase_mode],
+        ],
+        components=dict(OPTION_COMPONENTS),
+        estimated_total=7200,
+        explanation="结构化测试模板。",
+        details=details,
+    )
+
+
 def make_client(
     with_template: bool,
     with_recommended_prices: bool = False,
     ai_provider_api_key: Optional[str] = None,
+    option_templates: tuple[tuple[str, str], ...] = (),
+    detail_less_option_templates: tuple[tuple[str, str], ...] = (),
+    option_budget: int = 7500,
 ) -> TestClient:
     engine = create_engine(
         "sqlite+pysqlite:///:memory:",
@@ -82,6 +153,22 @@ def make_client(
                     detail_raw="750W · 80+ Gold",
                     specs={"watt": 750},
                 ),
+                CatalogComponent(
+                    id="cooler-air",
+                    category="cooler",
+                    name="Air Cooler",
+                    brand="Thermalright",
+                    detail_raw="Air cooler",
+                    specs={},
+                ),
+                CatalogComponent(
+                    id="case-mid-tower",
+                    category="case",
+                    name="Mid Tower Case",
+                    brand="Montech",
+                    detail_raw="ATX mid tower",
+                    specs={"form_factor": "atx_mid_tower"},
+                ),
             ],
         )
         if with_template:
@@ -103,6 +190,25 @@ def make_client(
                     explanation="这套优先保证 2K 游戏体验。",
                 )
             )
+            session.commit()
+        for direction, purchase_mode in option_templates:
+            session.add(
+                build_option_template(
+                    direction,
+                    purchase_mode,
+                    budget=option_budget,
+                )
+            )
+        for direction, purchase_mode in detail_less_option_templates:
+            session.add(
+                build_option_template(
+                    direction,
+                    purchase_mode,
+                    budget=option_budget,
+                    structured=False,
+                )
+            )
+        if option_templates or detail_less_option_templates:
             session.commit()
         if with_recommended_prices:
             for component_id, price in [
@@ -183,6 +289,133 @@ def test_generate_build_accepts_frontend_payload_aliases() -> None:
     assert body["status"] == "ready"
     assert body["source"] == "template"
     assert body["template_id"] == "gaming-7000-2k"
+
+
+def test_build_options_returns_full_high_budget_modes_in_approved_order() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "new"), ("fps", "mixed"), ("fps", "used")),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["direction"] == "fps"
+    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
+        "used",
+        "new",
+        "mixed",
+    ]
+    assert body["unavailable_modes"] == []
+    for option in body["options"]:
+        assert option["status"] == "ready"
+        assert option["source"] == "template"
+        assert option["details"] is not None
+        assert len(option["details"]["parts"]) == 8
+        assert len(option["components"]) == 8
+        assert option["compatibility"]["compatible"] is True
+
+
+@pytest.mark.parametrize("use_case", ["游戏", "游戏兼办公", "办公"])
+def test_build_options_normalizes_frontend_use_cases_and_ignores_conflicting_tokens(
+    use_case: str,
+) -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "useCase": use_case,
+            "gameCategories": ["瓦罗兰特"],
+            "preferences": ["3A", "混合采购", "32GB"],
+            "purchasePreference": "全新优先",
+            "chassisColorPreference": "曜石黑",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["direction"] == "fps"
+    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
+        "used",
+        "new",
+        "mixed",
+    ]
+    assert all(option["details"]["direction"] == "fps" for option in body["options"])
+
+
+def test_build_options_returns_partial_low_budget_modes_and_marks_missing_details() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("aaa", "new"), ("aaa", "used")),
+        detail_less_option_templates=(("aaa", "mixed"),),
+        option_budget=7000,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7000, "use_case": "游戏", "game_categories": ["黑神话悟空"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["direction"] == "aaa"
+    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
+        "used",
+        "new",
+    ]
+    assert body["unavailable_modes"] == ["mixed"]
+
+
+def test_build_options_returns_503_when_no_structured_mode_exists() -> None:
+    client = make_client(with_template=False, with_recommended_prices=True)
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 503
+    assert "结构化配置方案" in response.json()["detail"]
+
+
+def test_build_options_uses_balanced_templates_for_cross_category_games() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(
+            ("fps", "used"),
+            ("fps", "new"),
+            ("fps", "mixed"),
+            ("balanced", "used"),
+            ("balanced", "new"),
+            ("balanced", "mixed"),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["瓦罗兰特", "黑神话悟空"],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["direction"] == "balanced"
+    assert all("-balanced-" in option["template_id"] for option in body["options"])
+    assert all(
+        option["details"]["direction"] == "balanced" for option in body["options"]
+    )
 
 
 def test_generate_build_returns_ai_pending_when_no_template_and_no_api_key() -> None:

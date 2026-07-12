@@ -1,5 +1,52 @@
+import pytest
+
+from app.builds import service as build_service
 from app.builds.models import BuildTemplate
 from app.builds.service import BuildRequest, match_build_template
+
+
+@pytest.mark.parametrize(
+    ("games", "expected"),
+    [
+        (["瓦罗兰特"], "fps"),
+        (["CS2"], "fps"),
+        (["PUBG"], "fps"),
+        (["瓦罗兰特", "CS2", "PUBG"], "fps"),
+        (["什么都玩"], "balanced"),
+        (["云顶之弈"], "balanced"),
+        (["LOL"], "balanced"),
+        (["COD"], "balanced"),
+        (["城市天际线"], "balanced"),
+        (["我的世界"], "balanced"),
+        (["云顶之弈", "LOL", "COD", "城市天际线", "我的世界"], "balanced"),
+        (["三角洲行动"], "aaa"),
+        (["赛博朋克2077"], "aaa"),
+        (["荒野大镖客2"], "aaa"),
+        (["GTA5"], "aaa"),
+        (["黑神话悟空"], "aaa"),
+        (["地平线6"], "aaa"),
+        (["艾尔登法环"], "aaa"),
+        (
+            [
+                "三角洲行动",
+                "赛博朋克2077",
+                "荒野大镖客2",
+                "GTA5",
+                "黑神话悟空",
+                "地平线6",
+                "艾尔登法环",
+            ],
+            "aaa",
+        ),
+        (["瓦罗兰特", "黑神话悟空"], "balanced"),
+        (["什么都玩", "瓦罗兰特"], "balanced"),
+        ([], "balanced"),
+        (["未知游戏"], "balanced"),
+        (["瓦罗兰特", "未知游戏"], "balanced"),
+    ],
+)
+def test_classify_game_direction(games: list[str], expected: str) -> None:
+    assert build_service.classify_game_direction(games) == expected
 
 
 def template(

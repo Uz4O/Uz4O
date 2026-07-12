@@ -1,15 +1,17 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.builds.repository import list_build_templates
 from app.builds.ai_provider import select_build_with_deepseek
 from app.builds.service import (
     BuildGenerationResponse,
+    BuildOptionsResponse,
     BuildRequest,
     ai_provider_response,
     ai_pending_response,
+    classify_game_direction,
     match_build_template,
     rules_fallback_after_ai_failure,
     rules_fallback_response,
@@ -27,6 +29,53 @@ router = APIRouter(
     tags=["build"],
     dependencies=[Depends(high_cost_rate_limit)],
 )
+BUILD_OPTION_MODES = ("used", "new", "mixed")
+BUILD_DIRECTION_TOKENS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
+BUILD_PURCHASE_TOKENS = {"used": "二手", "new": "全新", "mixed": "混合采购"}
+
+
+@router.post("/options", response_model=BuildOptionsResponse)
+def get_build_options(
+    request: BuildRequest,
+    session: Session = Depends(get_session),
+) -> BuildOptionsResponse:
+    direction = classify_game_direction(request.game_categories)
+    templates = list_build_templates(session)
+    options = []
+    unavailable_modes = []
+
+    for purchase_mode in BUILD_OPTION_MODES:
+        forced_request = BuildRequest(
+            budget=request.budget,
+            use_case="游戏",
+            preferences=[
+                BUILD_DIRECTION_TOKENS[direction],
+                BUILD_PURCHASE_TOKENS[purchase_mode],
+            ],
+        )
+        template = match_build_template(forced_request, templates)
+        if template is None or not template.details:
+            unavailable_modes.append(purchase_mode)
+            continue
+
+        components = get_components_by_ids(session, template.components.values())
+        compatibility = evaluate_compatibility(
+            BuildSelection(components=dict(template.components)),
+            {component.id: component for component in components},
+        )
+        options.append(template_response(template, compatibility))
+
+    if not options:
+        raise HTTPException(
+            status_code=503,
+            detail="当前预算和游戏方向没有可用的结构化配置方案。",
+        )
+
+    return BuildOptionsResponse(
+        direction=direction,
+        options=options,
+        unavailable_modes=unavailable_modes,
+    )
 
 
 @router.post("/generate", response_model=BuildGenerationResponse)
