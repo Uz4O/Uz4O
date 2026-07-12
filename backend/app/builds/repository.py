@@ -10,6 +10,32 @@ from app.compat.engine import BuildSelection, evaluate_compatibility
 
 
 REQUIRED_TEMPLATE_ROLES = {"cpu", "motherboard", "ram", "psu"}
+HIGH_BUDGET_TEMPLATE_ROLES = {
+    "cpu",
+    "motherboard",
+    "gpu",
+    "ram",
+    "storage",
+    "psu",
+    "cooler",
+    "case",
+}
+DETAILED_CONDITIONS = {
+    "new": {role: "new" for role in HIGH_BUDGET_TEMPLATE_ROLES},
+    "used": {role: "used" for role in HIGH_BUDGET_TEMPLATE_ROLES},
+    "mixed": {
+        "cpu": "used",
+        "motherboard": "new",
+        "gpu": "new",
+        "ram": "used",
+        "storage": "new",
+        "psu": "new",
+        "cooler": "used",
+        "case": "used",
+    },
+}
+DETAILED_DIRECTION_TAGS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
+DETAILED_PURCHASE_TAGS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
 
 
 def list_build_templates(session: Session) -> List[BuildTemplate]:
@@ -35,6 +61,7 @@ def upsert_build_templates(
             "components": template.components,
             "estimated_total": template.estimated_total,
             "explanation": template.explanation,
+            "details": template.details.model_dump(mode="json") if template.details else {},
             "status": "active",
         }
         if row is None:
@@ -70,7 +97,7 @@ def _validate_build_templates(
         )
     }
     prices = {
-        price.component_id
+        price.component_id: price
         for price in session.scalars(
             select(ComponentPrice).where(ComponentPrice.component_id.in_(component_ids))
         )
@@ -101,6 +128,14 @@ def _validate_build_templates(
     if errors:
         raise ValueError("Invalid build templates; " + "; ".join(errors))
 
+    detailed_errors = _validate_detailed_template_catalog_data(
+        templates,
+        components,
+        prices,
+    )
+    if detailed_errors:
+        raise ValueError("Invalid build templates; " + "; ".join(detailed_errors))
+
     incompatible_templates = []
     for template in templates:
         compatibility = evaluate_compatibility(
@@ -128,11 +163,14 @@ def _validate_build_template_shapes(templates: List[BuildTemplateInput]) -> None
     for template in templates:
         if template.budget_min > template.budget_max:
             errors.append(f"{template.id}: budget_min greater than budget_max")
-        if (
-            template.estimated_total is not None
-            and not template.budget_min <= template.estimated_total <= template.budget_max
-        ):
-            errors.append(f"{template.id}: estimated_total outside budget range")
+        if template.details is None:
+            if (
+                template.estimated_total is not None
+                and not template.budget_min <= template.estimated_total <= template.budget_max
+            ):
+                errors.append(f"{template.id}: estimated_total outside budget range")
+        else:
+            _validate_detailed_template(template, errors)
         missing_roles = sorted(REQUIRED_TEMPLATE_ROLES - set(template.components))
         if missing_roles:
             errors.append(
@@ -140,6 +178,80 @@ def _validate_build_template_shapes(templates: List[BuildTemplateInput]) -> None
             )
     if errors:
         raise ValueError("Invalid build templates; " + "; ".join(errors))
+
+
+def _validate_detailed_template(template: BuildTemplateInput, errors: List[str]) -> None:
+    details = template.details
+    if details is None:
+        return
+
+    component_roles = set(template.components)
+    if component_roles != HIGH_BUDGET_TEMPLATE_ROLES:
+        errors.append(f"{template.id}: detailed template must contain all eight roles")
+
+    parts_by_role = {part.role: part for part in details.parts}
+    if set(parts_by_role) != HIGH_BUDGET_TEMPLATE_ROLES or len(details.parts) != 8:
+        errors.append(f"{template.id}: details must contain eight unique parts")
+        return
+
+    expected_components = {
+        role: part.component_id for role, part in parts_by_role.items()
+    }
+    if template.components != expected_components:
+        errors.append(f"{template.id}: components do not match detailed parts")
+
+    actual_conditions = {
+        role: part.condition for role, part in parts_by_role.items()
+    }
+    if actual_conditions != DETAILED_CONDITIONS[details.purchase_mode]:
+        errors.append(f"{template.id}: conditions do not match purchase mode")
+
+    if details.target_budget != template.budget_min:
+        errors.append(f"{template.id}: target budget does not match budget_min")
+
+    required_tags = {
+        DETAILED_DIRECTION_TAGS[details.direction],
+        DETAILED_PURCHASE_TAGS[details.purchase_mode],
+    }
+    if not required_tags.issubset(set(template.tags)):
+        errors.append(f"{template.id}: tags do not match structured details")
+
+    detailed_total = sum(part.reference_price for part in details.parts)
+    if template.estimated_total != detailed_total:
+        errors.append(f"{template.id}: estimated_total does not match detailed prices")
+    if detailed_total > details.target_budget + 200:
+        errors.append(f"{template.id}: estimated_total exceeds target budget by more than 200")
+
+
+def _validate_detailed_template_catalog_data(
+    templates: List[BuildTemplateInput],
+    components: Dict[str, HardwareComponent],
+    prices: Dict[str, ComponentPrice],
+) -> List[str]:
+    errors = []
+    for template in templates:
+        if template.details is None:
+            continue
+        for part in template.details.parts:
+            component = components.get(part.component_id)
+            if component and component.category != part.role:
+                errors.append(
+                    f"{template.id}: {part.component_id} category does not match {part.role} role"
+                )
+            price = prices.get(part.component_id)
+            if price is None:
+                continue
+            expected_price = (
+                price.price_range_high
+                if part.condition == "new"
+                else price.price_range_low
+            )
+            if expected_price is None or part.reference_price != expected_price:
+                errors.append(
+                    f"{template.id}: {part.component_id} reference price does not match "
+                    f"{part.condition} price"
+                )
+    return errors
 
 
 def create_saved_build(

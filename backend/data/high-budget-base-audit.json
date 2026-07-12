@@ -1,0 +1,1072 @@
+{
+  "price_date": "2026-07-12",
+  "completed_tiers": [
+    7500,
+    8000,
+    8500,
+    9000,
+    9500,
+    10000,
+    10500,
+    11000,
+    11500,
+    12000,
+    12500,
+    13000,
+    13500,
+    14000,
+    14500,
+    15000,
+    15500,
+    16000,
+    16500,
+    17000,
+    17500,
+    18000,
+    18500,
+    19000,
+    19500,
+    20000
+  ],
+  "completed_template_count": 234,
+  "pending_review": [
+    {
+      "component_id": "base-psu-850w-gold",
+      "condition": "used",
+      "reason": "当前仅有单一公开样本，正式展示前需要重新核价"
+    }
+  ],
+  "missing_data": [],
+  "failed_templates": [],
+  "underutilized_templates": [
+    {
+      "template_id": "base-7500-balanced-used",
+      "target_budget": 7500,
+      "estimated_total": 6980,
+      "remaining_budget": 520,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-8500-fps-used",
+      "target_budget": 8500,
+      "estimated_total": 7730,
+      "remaining_budget": 770,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-9000-aaa-new",
+      "target_budget": 9000,
+      "estimated_total": 8469,
+      "remaining_budget": 531,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-9000-balanced-new",
+      "target_budget": 9000,
+      "estimated_total": 8469,
+      "remaining_budget": 531,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-9000-balanced-mixed",
+      "target_budget": 9000,
+      "estimated_total": 8499,
+      "remaining_budget": 501,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10000-fps-used",
+      "target_budget": 10000,
+      "estimated_total": 9080,
+      "remaining_budget": 920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10000-fps-mixed",
+      "target_budget": 10000,
+      "estimated_total": 9249,
+      "remaining_budget": 751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10000-aaa-used",
+      "target_budget": 10000,
+      "estimated_total": 9080,
+      "remaining_budget": 920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10000-balanced-used",
+      "target_budget": 10000,
+      "estimated_total": 9080,
+      "remaining_budget": 920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-fps-used",
+      "target_budget": 10500,
+      "estimated_total": 9080,
+      "remaining_budget": 1420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-fps-mixed",
+      "target_budget": 10500,
+      "estimated_total": 9249,
+      "remaining_budget": 1251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-aaa-new",
+      "target_budget": 10500,
+      "estimated_total": 9969,
+      "remaining_budget": 531,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-aaa-used",
+      "target_budget": 10500,
+      "estimated_total": 9080,
+      "remaining_budget": 1420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-aaa-mixed",
+      "target_budget": 10500,
+      "estimated_total": 9999,
+      "remaining_budget": 501,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-balanced-used",
+      "target_budget": 10500,
+      "estimated_total": 9080,
+      "remaining_budget": 1420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-10500-balanced-mixed",
+      "target_budget": 10500,
+      "estimated_total": 9999,
+      "remaining_budget": 501,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11000-fps-new",
+      "target_budget": 11000,
+      "estimated_total": 10119,
+      "remaining_budget": 881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11000-fps-used",
+      "target_budget": 11000,
+      "estimated_total": 9080,
+      "remaining_budget": 1920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11000-aaa-used",
+      "target_budget": 11000,
+      "estimated_total": 9080,
+      "remaining_budget": 1920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11000-balanced-used",
+      "target_budget": 11000,
+      "estimated_total": 9080,
+      "remaining_budget": 1920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-fps-used",
+      "target_budget": 11500,
+      "estimated_total": 9080,
+      "remaining_budget": 2420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-fps-mixed",
+      "target_budget": 11500,
+      "estimated_total": 10749,
+      "remaining_budget": 751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-aaa-used",
+      "target_budget": 11500,
+      "estimated_total": 9080,
+      "remaining_budget": 2420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-aaa-mixed",
+      "target_budget": 11500,
+      "estimated_total": 10749,
+      "remaining_budget": 751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-balanced-used",
+      "target_budget": 11500,
+      "estimated_total": 9080,
+      "remaining_budget": 2420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-11500-balanced-mixed",
+      "target_budget": 11500,
+      "estimated_total": 10749,
+      "remaining_budget": 751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12000-fps-used",
+      "target_budget": 12000,
+      "estimated_total": 9080,
+      "remaining_budget": 2920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12000-fps-mixed",
+      "target_budget": 12000,
+      "estimated_total": 10749,
+      "remaining_budget": 1251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12000-aaa-mixed",
+      "target_budget": 12000,
+      "estimated_total": 10749,
+      "remaining_budget": 1251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12000-balanced-used",
+      "target_budget": 12000,
+      "estimated_total": 9080,
+      "remaining_budget": 2920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12000-balanced-mixed",
+      "target_budget": 12000,
+      "estimated_total": 10749,
+      "remaining_budget": 1251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-fps-new",
+      "target_budget": 12500,
+      "estimated_total": 11619,
+      "remaining_budget": 881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-fps-used",
+      "target_budget": 12500,
+      "estimated_total": 9080,
+      "remaining_budget": 3420,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-fps-mixed",
+      "target_budget": 12500,
+      "estimated_total": 10749,
+      "remaining_budget": 1751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-aaa-new",
+      "target_budget": 12500,
+      "estimated_total": 11619,
+      "remaining_budget": 881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-aaa-mixed",
+      "target_budget": 12500,
+      "estimated_total": 10749,
+      "remaining_budget": 1751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-balanced-new",
+      "target_budget": 12500,
+      "estimated_total": 11619,
+      "remaining_budget": 881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-12500-balanced-mixed",
+      "target_budget": 12500,
+      "estimated_total": 10749,
+      "remaining_budget": 1751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-fps-new",
+      "target_budget": 13000,
+      "estimated_total": 11619,
+      "remaining_budget": 1381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-fps-used",
+      "target_budget": 13000,
+      "estimated_total": 9080,
+      "remaining_budget": 3920,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-fps-mixed",
+      "target_budget": 13000,
+      "estimated_total": 10749,
+      "remaining_budget": 2251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-aaa-new",
+      "target_budget": 13000,
+      "estimated_total": 11619,
+      "remaining_budget": 1381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-aaa-mixed",
+      "target_budget": 13000,
+      "estimated_total": 10749,
+      "remaining_budget": 2251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-balanced-new",
+      "target_budget": 13000,
+      "estimated_total": 11619,
+      "remaining_budget": 1381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13000-balanced-mixed",
+      "target_budget": 13000,
+      "estimated_total": 10749,
+      "remaining_budget": 2251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13500-fps-new",
+      "target_budget": 13500,
+      "estimated_total": 11619,
+      "remaining_budget": 1881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13500-fps-mixed",
+      "target_budget": 13500,
+      "estimated_total": 10749,
+      "remaining_budget": 2751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13500-aaa-new",
+      "target_budget": 13500,
+      "estimated_total": 11619,
+      "remaining_budget": 1881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13500-balanced-new",
+      "target_budget": 13500,
+      "estimated_total": 11619,
+      "remaining_budget": 1881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-13500-balanced-mixed",
+      "target_budget": 13500,
+      "estimated_total": 10749,
+      "remaining_budget": 2751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-fps-new",
+      "target_budget": 14000,
+      "estimated_total": 11619,
+      "remaining_budget": 2381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-fps-used",
+      "target_budget": 14000,
+      "estimated_total": 13380,
+      "remaining_budget": 620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-fps-mixed",
+      "target_budget": 14000,
+      "estimated_total": 10749,
+      "remaining_budget": 3251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-aaa-new",
+      "target_budget": 14000,
+      "estimated_total": 11619,
+      "remaining_budget": 2381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-aaa-used",
+      "target_budget": 14000,
+      "estimated_total": 13380,
+      "remaining_budget": 620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-balanced-new",
+      "target_budget": 14000,
+      "estimated_total": 11619,
+      "remaining_budget": 2381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-balanced-used",
+      "target_budget": 14000,
+      "estimated_total": 13380,
+      "remaining_budget": 620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14000-balanced-mixed",
+      "target_budget": 14000,
+      "estimated_total": 10749,
+      "remaining_budget": 3251,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-fps-new",
+      "target_budget": 14500,
+      "estimated_total": 11619,
+      "remaining_budget": 2881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-fps-used",
+      "target_budget": 14500,
+      "estimated_total": 13380,
+      "remaining_budget": 1120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-fps-mixed",
+      "target_budget": 14500,
+      "estimated_total": 10749,
+      "remaining_budget": 3751,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-aaa-used",
+      "target_budget": 14500,
+      "estimated_total": 13380,
+      "remaining_budget": 1120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-balanced-new",
+      "target_budget": 14500,
+      "estimated_total": 11619,
+      "remaining_budget": 2881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-14500-balanced-used",
+      "target_budget": 14500,
+      "estimated_total": 13380,
+      "remaining_budget": 1120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15000-fps-new",
+      "target_budget": 15000,
+      "estimated_total": 11619,
+      "remaining_budget": 3381,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15000-fps-used",
+      "target_budget": 15000,
+      "estimated_total": 13380,
+      "remaining_budget": 1620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15000-aaa-used",
+      "target_budget": 15000,
+      "estimated_total": 13380,
+      "remaining_budget": 1620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15000-balanced-used",
+      "target_budget": 15000,
+      "estimated_total": 13380,
+      "remaining_budget": 1620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15500-fps-new",
+      "target_budget": 15500,
+      "estimated_total": 11619,
+      "remaining_budget": 3881,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15500-fps-used",
+      "target_budget": 15500,
+      "estimated_total": 13380,
+      "remaining_budget": 2120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15500-aaa-used",
+      "target_budget": 15500,
+      "estimated_total": 13380,
+      "remaining_budget": 2120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-15500-balanced-used",
+      "target_budget": 15500,
+      "estimated_total": 13380,
+      "remaining_budget": 2120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-fps-used",
+      "target_budget": 16000,
+      "estimated_total": 13380,
+      "remaining_budget": 2620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-fps-mixed",
+      "target_budget": 16000,
+      "estimated_total": 15149,
+      "remaining_budget": 851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-aaa-used",
+      "target_budget": 16000,
+      "estimated_total": 13380,
+      "remaining_budget": 2620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-aaa-mixed",
+      "target_budget": 16000,
+      "estimated_total": 15149,
+      "remaining_budget": 851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-balanced-used",
+      "target_budget": 16000,
+      "estimated_total": 13380,
+      "remaining_budget": 2620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-balanced-mixed",
+      "target_budget": 16000,
+      "estimated_total": 15149,
+      "remaining_budget": 851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-fps-used",
+      "target_budget": 16500,
+      "estimated_total": 13380,
+      "remaining_budget": 3120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-fps-mixed",
+      "target_budget": 16500,
+      "estimated_total": 15149,
+      "remaining_budget": 1351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-aaa-used",
+      "target_budget": 16500,
+      "estimated_total": 13380,
+      "remaining_budget": 3120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-aaa-mixed",
+      "target_budget": 16500,
+      "estimated_total": 15149,
+      "remaining_budget": 1351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-balanced-used",
+      "target_budget": 16500,
+      "estimated_total": 13380,
+      "remaining_budget": 3120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16500-balanced-mixed",
+      "target_budget": 16500,
+      "estimated_total": 15149,
+      "remaining_budget": 1351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-fps-new",
+      "target_budget": 17000,
+      "estimated_total": 16019,
+      "remaining_budget": 981,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-fps-used",
+      "target_budget": 17000,
+      "estimated_total": 13380,
+      "remaining_budget": 3620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-fps-mixed",
+      "target_budget": 17000,
+      "estimated_total": 15149,
+      "remaining_budget": 1851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-aaa-new",
+      "target_budget": 17000,
+      "estimated_total": 16019,
+      "remaining_budget": 981,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-aaa-used",
+      "target_budget": 17000,
+      "estimated_total": 13380,
+      "remaining_budget": 3620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-aaa-mixed",
+      "target_budget": 17000,
+      "estimated_total": 15149,
+      "remaining_budget": 1851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-balanced-new",
+      "target_budget": 17000,
+      "estimated_total": 16019,
+      "remaining_budget": 981,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-balanced-used",
+      "target_budget": 17000,
+      "estimated_total": 13380,
+      "remaining_budget": 3620,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17000-balanced-mixed",
+      "target_budget": 17000,
+      "estimated_total": 15149,
+      "remaining_budget": 1851,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-fps-new",
+      "target_budget": 17500,
+      "estimated_total": 16019,
+      "remaining_budget": 1481,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-fps-used",
+      "target_budget": 17500,
+      "estimated_total": 13380,
+      "remaining_budget": 4120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-fps-mixed",
+      "target_budget": 17500,
+      "estimated_total": 15149,
+      "remaining_budget": 2351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-aaa-new",
+      "target_budget": 17500,
+      "estimated_total": 16019,
+      "remaining_budget": 1481,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-aaa-used",
+      "target_budget": 17500,
+      "estimated_total": 13380,
+      "remaining_budget": 4120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-aaa-mixed",
+      "target_budget": 17500,
+      "estimated_total": 15149,
+      "remaining_budget": 2351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-balanced-new",
+      "target_budget": 17500,
+      "estimated_total": 16019,
+      "remaining_budget": 1481,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-balanced-used",
+      "target_budget": 17500,
+      "estimated_total": 13380,
+      "remaining_budget": 4120,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-17500-balanced-mixed",
+      "target_budget": 17500,
+      "estimated_total": 15149,
+      "remaining_budget": 2351,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-fps-new",
+      "target_budget": 18000,
+      "estimated_total": 16419,
+      "remaining_budget": 1581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-fps-used",
+      "target_budget": 18000,
+      "estimated_total": 13780,
+      "remaining_budget": 4220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-fps-mixed",
+      "target_budget": 18000,
+      "estimated_total": 15549,
+      "remaining_budget": 2451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-aaa-new",
+      "target_budget": 18000,
+      "estimated_total": 16419,
+      "remaining_budget": 1581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-aaa-used",
+      "target_budget": 18000,
+      "estimated_total": 13780,
+      "remaining_budget": 4220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-aaa-mixed",
+      "target_budget": 18000,
+      "estimated_total": 15549,
+      "remaining_budget": 2451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-balanced-new",
+      "target_budget": 18000,
+      "estimated_total": 16419,
+      "remaining_budget": 1581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-balanced-used",
+      "target_budget": 18000,
+      "estimated_total": 13780,
+      "remaining_budget": 4220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-balanced-mixed",
+      "target_budget": 18000,
+      "estimated_total": 15549,
+      "remaining_budget": 2451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-fps-new",
+      "target_budget": 18500,
+      "estimated_total": 16419,
+      "remaining_budget": 2081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-fps-used",
+      "target_budget": 18500,
+      "estimated_total": 13780,
+      "remaining_budget": 4720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-fps-mixed",
+      "target_budget": 18500,
+      "estimated_total": 15549,
+      "remaining_budget": 2951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-aaa-new",
+      "target_budget": 18500,
+      "estimated_total": 16419,
+      "remaining_budget": 2081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-aaa-used",
+      "target_budget": 18500,
+      "estimated_total": 13780,
+      "remaining_budget": 4720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-aaa-mixed",
+      "target_budget": 18500,
+      "estimated_total": 15549,
+      "remaining_budget": 2951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-balanced-new",
+      "target_budget": 18500,
+      "estimated_total": 16419,
+      "remaining_budget": 2081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-balanced-used",
+      "target_budget": 18500,
+      "estimated_total": 13780,
+      "remaining_budget": 4720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18500-balanced-mixed",
+      "target_budget": 18500,
+      "estimated_total": 15549,
+      "remaining_budget": 2951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-fps-new",
+      "target_budget": 19000,
+      "estimated_total": 16419,
+      "remaining_budget": 2581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-fps-used",
+      "target_budget": 19000,
+      "estimated_total": 13780,
+      "remaining_budget": 5220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-fps-mixed",
+      "target_budget": 19000,
+      "estimated_total": 15549,
+      "remaining_budget": 3451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-aaa-new",
+      "target_budget": 19000,
+      "estimated_total": 16419,
+      "remaining_budget": 2581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-aaa-used",
+      "target_budget": 19000,
+      "estimated_total": 13780,
+      "remaining_budget": 5220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-aaa-mixed",
+      "target_budget": 19000,
+      "estimated_total": 15549,
+      "remaining_budget": 3451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-balanced-new",
+      "target_budget": 19000,
+      "estimated_total": 16419,
+      "remaining_budget": 2581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-balanced-used",
+      "target_budget": 19000,
+      "estimated_total": 13780,
+      "remaining_budget": 5220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19000-balanced-mixed",
+      "target_budget": 19000,
+      "estimated_total": 15549,
+      "remaining_budget": 3451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-fps-new",
+      "target_budget": 19500,
+      "estimated_total": 16419,
+      "remaining_budget": 3081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-fps-used",
+      "target_budget": 19500,
+      "estimated_total": 13780,
+      "remaining_budget": 5720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-fps-mixed",
+      "target_budget": 19500,
+      "estimated_total": 15549,
+      "remaining_budget": 3951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-aaa-new",
+      "target_budget": 19500,
+      "estimated_total": 16419,
+      "remaining_budget": 3081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-aaa-used",
+      "target_budget": 19500,
+      "estimated_total": 13780,
+      "remaining_budget": 5720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-aaa-mixed",
+      "target_budget": 19500,
+      "estimated_total": 15549,
+      "remaining_budget": 3951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-balanced-new",
+      "target_budget": 19500,
+      "estimated_total": 16419,
+      "remaining_budget": 3081,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-balanced-used",
+      "target_budget": 19500,
+      "estimated_total": 13780,
+      "remaining_budget": 5720,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-19500-balanced-mixed",
+      "target_budget": 19500,
+      "estimated_total": 15549,
+      "remaining_budget": 3951,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-fps-new",
+      "target_budget": 20000,
+      "estimated_total": 16419,
+      "remaining_budget": 3581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-fps-used",
+      "target_budget": 20000,
+      "estimated_total": 13780,
+      "remaining_budget": 6220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-fps-mixed",
+      "target_budget": 20000,
+      "estimated_total": 15549,
+      "remaining_budget": 4451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-aaa-new",
+      "target_budget": 20000,
+      "estimated_total": 16419,
+      "remaining_budget": 3581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-aaa-used",
+      "target_budget": 20000,
+      "estimated_total": 13780,
+      "remaining_budget": 6220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-aaa-mixed",
+      "target_budget": 20000,
+      "estimated_total": 15549,
+      "remaining_budget": 4451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-balanced-new",
+      "target_budget": 20000,
+      "estimated_total": 16419,
+      "remaining_budget": 3581,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-balanced-used",
+      "target_budget": 20000,
+      "estimated_total": 13780,
+      "remaining_budget": 6220,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-20000-balanced-mixed",
+      "target_budget": 20000,
+      "estimated_total": 15549,
+      "remaining_budget": 4451,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    }
+  ]
+}

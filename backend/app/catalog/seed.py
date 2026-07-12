@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 from typing import Dict, List
@@ -29,6 +30,16 @@ class CatalogComponent(BaseModel):
     brand: str
     detail_raw: str
     specs: Dict[str, object]
+
+
+def read_catalog_components(path: Path) -> List[CatalogComponent]:
+    path = Path(path)
+    if path.suffix.lower() != ".json":
+        return extract_catalog_components(path)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        raise ValueError("Hardware component JSON must contain a list")
+    return [CatalogComponent.model_validate(item) for item in payload]
 
 
 def extract_catalog_components(path: Path) -> List[CatalogComponent]:

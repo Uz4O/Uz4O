@@ -16,7 +16,7 @@ from app.catalog.repository import seed_gpu_whitelist_prices
 from app.catalog.repository import seed_hardware_components
 from app.catalog.repository import seed_motherboard_whitelist_prices
 from app.catalog.repository import update_recommended_components
-from app.catalog.seed import extract_catalog_components
+from app.catalog.seed import read_catalog_components
 from app.core.config import Settings
 from app.db import create_session_factory
 
@@ -55,7 +55,7 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
-        components = extract_catalog_components(args.catalog_path)
+        components = read_catalog_components(args.catalog_path)
         session_factory = create_session_factory(Settings())
         with session_factory() as session:
             count = seed_hardware_components(session, components)

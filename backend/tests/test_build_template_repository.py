@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
 from app.builds.models import BuildTemplate
+from app.builds.high_budget_catalog import generate_high_budget_templates
 from app.builds.repository import upsert_build_templates
 from app.builds.service import BuildTemplateInput
 from app.catalog.models import ComponentPrice, HardwareComponent
@@ -43,6 +44,9 @@ def seed_component(
     recommended: bool = True,
     priced: bool = True,
     specs: Optional[dict] = None,
+    reference_price: int = 1000,
+    price_range_low: Optional[int] = None,
+    price_range_high: Optional[int] = None,
 ) -> None:
     seed_hardware_components(
         session,
@@ -63,9 +67,9 @@ def seed_component(
         session.add(
             ComponentPrice(
                 component_id=component_id,
-                reference_price=1000,
-                price_range_low=900,
-                price_range_high=1100,
+                reference_price=reference_price,
+                price_range_low=price_range_low if price_range_low is not None else reference_price - 100,
+                price_range_high=price_range_high if price_range_high is not None else reference_price + 100,
                 source="manual",
                 accepted_count=3,
                 rejected_count=0,
@@ -161,6 +165,129 @@ def test_upsert_build_templates_accepts_recommended_priced_components() -> None:
 
     assert count == 1
     assert rows[0].id == "gaming-7000-2k"
+
+
+def test_upsert_build_templates_persists_structured_high_budget_details() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0]
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+
+        count = upsert_build_templates(session, [template])
+        row = session.get(BuildTemplate, template.id)
+
+    assert count == 1
+    assert row.details["target_budget"] == 7_500
+    assert row.details["direction"] == "fps"
+    assert len(row.details["parts"]) == 8
+    assert row.details["parts"][0]["reference_price"] > 0
+
+
+def test_detailed_template_rejects_purchase_mode_condition_mismatch() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    template.details.purchase_mode = "used"
+
+    with Session(engine) as session:
+        try:
+            upsert_build_templates(session, [template])
+        except ValueError as exc:
+            error = str(exc)
+        else:
+            raise AssertionError("Expected detailed condition validation to fail")
+
+    assert "conditions do not match purchase mode" in error
+
+
+def test_detailed_template_rejects_reference_price_outside_condition_range() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    original_prices = {
+        part.component_id: part.reference_price for part in template.details.parts
+    }
+    template.details.parts[0].reference_price = 1
+    template.estimated_total = sum(
+        part.reference_price for part in template.details.parts
+    )
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            expected_price = original_prices[part.component_id]
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=part.specs,
+                reference_price=expected_price,
+                price_range_low=expected_price,
+                price_range_high=expected_price,
+            )
+        try:
+            upsert_build_templates(session, [template])
+        except ValueError as exc:
+            error = str(exc)
+        else:
+            raise AssertionError("Expected detailed price validation to fail")
+
+    assert "reference price does not match new price" in error
+
+
+def test_detailed_template_rejects_role_category_mismatch() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0]
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                "gpu" if part.role == "cpu" else part.role,
+                specs=part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+        try:
+            upsert_build_templates(session, [template])
+        except ValueError as exc:
+            error = str(exc)
+        else:
+            raise AssertionError("Expected detailed role validation to fail")
+
+    assert "category does not match cpu role" in error
+
+
+def test_detailed_template_rejects_target_and_tag_mismatch() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    template.details.target_budget = 8_000
+    template.tags.remove("FPS")
+
+    with Session(engine) as session:
+        try:
+            upsert_build_templates(session, [template])
+        except ValueError as exc:
+            error = str(exc)
+        else:
+            raise AssertionError("Expected detailed metadata validation to fail")
+
+    assert "target budget does not match budget_min" in error
+    assert "tags do not match structured details" in error
 
 
 def test_upsert_build_templates_rejects_incompatible_templates() -> None:

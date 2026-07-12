@@ -1,6 +1,6 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-06-21",
+  "updated_at": "2026-07-12",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
   "current_phase": "持续精进",
   "phases": [
@@ -136,9 +136,15 @@
         },
         {
           "title": "生产推荐池与价格/模板数据发布",
-          "description": "服务器当前已有硬件库，但推荐池为 0、人工价格很少、配置模板为 0；需要人工确认推荐型号、导入足够 approved-reference-prices.csv，并发布各价位审核配置模板后，AI 一键装机才能在公网返回真实方案。",
-          "status": "not_started",
-          "owner": "user"
+          "description": "服务器已发布首批高预算审核模板所需的推荐型号、人工参考价格和234套配置模板；当前7500-20000元档可直接从模板返回真实方案。",
+          "status": "completed",
+          "completed_at": "2026-07-12"
+        },
+        {
+          "title": "3000-20000元装机基底配置库",
+          "description": "本地按每500元一个档位生成3000-7000元63套和7500-20000元234套审核基底配置，共297套；保存八大件分项价格、新旧状态、优缺点与风险，并可同步到后端模板接口。",
+          "status": "completed",
+          "completed_at": "2026-07-12"
         },
         {
           "title": "推荐硬件池导入工具",
@@ -177,9 +183,9 @@
           "completed_at": "2026-06-16"
         },
         {
-          "title": "DeepSeek API Key 与配置模板",
-          "description": "DeepSeek API Key 已在服务器配置并通过连通性测试；仍需要提供各价位几套已审核配置模板和足够推荐/价格数据，后端才能在公网返回真实方案。",
-          "status": "in_progress",
+          "title": "DeepSeek动态配置调整",
+          "description": "第一版暂不依赖运行时AI，优先直接返回审核基底模板；后续需要按用户容量、颜值、无线网络等个性需求二次调整时再启用受控DeepSeek流程。",
+          "status": "not_started",
           "owner": "user"
         },
         {

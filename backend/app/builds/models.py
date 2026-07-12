@@ -25,6 +25,7 @@ class BuildTemplate(Base):
     components: Mapped[Dict[str, str]] = mapped_column(JSON, default=dict, nullable=False)
     estimated_total: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     explanation: Mapped[str] = mapped_column(String, nullable=False)
+    details: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
     status: Mapped[str] = mapped_column(String, default="active", nullable=False)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

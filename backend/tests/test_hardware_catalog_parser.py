@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from app.catalog.seed import extract_catalog_components, parse_detail_specs
+from app.cli import main
+from app.catalog.seed import extract_catalog_components, parse_detail_specs, read_catalog_components
 
 
 FIXTURE = """
@@ -54,6 +55,87 @@ def test_extracts_all_hardware_catalog_categories(tmp_path: Path) -> None:
         "perf_index": 84,
         "tdp": 181,
     }
+
+
+def test_reads_backend_only_catalog_components_from_json(tmp_path: Path) -> None:
+    path = tmp_path / "support-components.json"
+    path.write_text(
+        """
+        [
+          {
+            "id": "base-case",
+            "category": "case",
+            "name": "普通中塔机箱",
+            "brand": "通用规格",
+            "detail_raw": "普通中塔",
+            "specs": {"form_factor": "atx_mid_tower"},
+            "used_price": 80,
+            "new_price": 100
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    components = read_catalog_components(path)
+
+    assert len(components) == 1
+    assert components[0].id == "base-case"
+    assert components[0].category == "case"
+    assert components[0].specs == {"form_factor": "atx_mid_tower"}
+
+
+def test_seed_hardware_cli_imports_backend_only_json_components(
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
+) -> None:
+    captured = {}
+    path = tmp_path / "support-components.json"
+    path.write_text(
+        """
+        [
+          {
+            "id": "base-case",
+            "category": "case",
+            "name": "普通中塔机箱",
+            "brand": "通用规格",
+            "detail_raw": "普通中塔",
+            "specs": {"form_factor": "atx_mid_tower"}
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    class FakeSession:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+    def fake_create_session_factory(settings):
+        return lambda: FakeSession()
+
+    def fake_seed_hardware_components(session, components):
+        captured["components"] = components
+        return len(components)
+
+    monkeypatch.setattr("app.cli.create_session_factory", fake_create_session_factory)
+    monkeypatch.setattr(
+        "app.cli.seed_hardware_components",
+        fake_seed_hardware_components,
+    )
+    monkeypatch.setattr(
+        "sys.argv",
+        ["ai-pc-builder-api", "seed-hardware", str(path)],
+    )
+
+    main()
+
+    assert [component.id for component in captured["components"]] == ["base-case"]
+    assert capsys.readouterr().out == "Seeded 1 hardware components.\n"
 
 
 def test_parses_reliable_specs_by_category() -> None:

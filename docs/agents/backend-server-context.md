@@ -1,6 +1,6 @@
 # Backend and Server Context
 
-Last verified: 2026-06-29.
+Last verified: 2026-07-12.
 
 Read this before backend, API, deployment, ICP/domain, or production-readiness work. Treat this file as the current operational map; some older backend docs still mention the previous server and PM2 setup.
 
@@ -163,13 +163,32 @@ Last checked health showed the backend process is reachable and PostgreSQL is co
 }
 ```
 
-The database schema is at Alembic revision `20260621_0007`. Catalog endpoints now return 200, but the production catalog/readiness data is empty until hardware components, prices, recommendations, and build templates are imported.
+The database schema is at Alembic revision `20260712_0011`.
+
+The local generated base-build catalog now contains:
+
+- Active build templates: `297` (`63` low-budget plus `234` high-budget).
+- Budget coverage: `3000` through `20000`, every `500`.
+- All templates retain structured eight-part details, condition-specific reference prices, advantages, disadvantages, and risks.
+
+These local artifacts have not been fully deployed. The current production base-build data remains the previously deployed high-budget set:
+
+- Hardware components: `730`.
+- Approved component reference prices: `20`.
+- Active build templates: `234`.
+- Budget coverage: `7500` through `20000`, every `500`.
+- Each tier contains FPS / 3A / balanced builds in new / used / mixed purchase modes.
+- `GET /v1/catalog/readiness` returns `ready: true`.
+
+`APP_PRODUCTION_DATA_READINESS_REQUIRED` is currently disabled, so `/health` reports data readiness as `not_checked` even though the dedicated readiness endpoint is ready. `/health` still reports `production.ready: false` because login secrets, production SMS, Apple login, the ops token, and community image upload are not configured; those are separate from the base-build data deployment.
 
 Because first release will not expose community, `community_image_upload_not_configured` may be handled by hiding community/image features rather than configuring OSS immediately. Do not silently remove the health gate without an explicit release decision.
 
 ## Deployment
 
-`backend/scripts/deploy.sh` is configured for the current production server:
+Do not use `backend/scripts/deploy.sh` for production work until its behavior is re-verified against the current worktree. Deploy narrowly scoped files so unrelated local changes are not copied.
+
+Current production target:
 
 - Server: `8.152.202.123`.
 - SSH key: `~/.ssh/ai_builder_aliyun`.
