@@ -29,6 +29,8 @@ from app.db import create_session_factory
 from app.perf.collector import CollectionBlocked, Collector, CollectorPolicy
 from app.perf.collector_manifest import load_manifest, target_page_count, write_manifest
 from app.perf.collector_store import CollectionTask, CollectorStore
+from app.perf.importer import read_performance_batch
+from app.perf.repository import upsert_performance_estimates
 
 
 def _non_negative_int(value: str) -> int:
@@ -89,6 +91,9 @@ def main() -> None:
     export_perf_parser = subparsers.add_parser("export-perf-collection")
     export_perf_parser.add_argument("sqlite_path", type=Path)
     export_perf_parser.add_argument("output_json", type=Path)
+
+    import_perf_parser = subparsers.add_parser("import-perf-estimates")
+    import_perf_parser.add_argument("json_path", type=Path)
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -249,6 +254,12 @@ def main() -> None:
             if temporary_path:
                 temporary_path.unlink(missing_ok=True)
         print(f"Exported {len(records)} records.")
+    if args.command == "import-perf-estimates":
+        estimates = read_performance_batch(args.json_path)
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            count = upsert_performance_estimates(session, estimates)
+        print(f"Imported {count} game performance estimates.")
 
 def _read_component_ids(path: Path) -> list[str]:
     component_ids = []
