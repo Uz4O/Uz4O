@@ -37,6 +37,60 @@ def test_seed_ignores_duplicate_urls_in_input_and_across_calls(tmp_path: Path) -
     assert store.task_counts() == {"pending": 2}
 
 
+def test_existing_store_can_backfill_source_identity_without_reseeding_work(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "legacy.sqlite3"
+    with sqlite3.connect(path) as connection:
+        connection.execute(
+            """
+            CREATE TABLE task (
+                id INTEGER PRIMARY KEY,
+                cpu_id TEXT NOT NULL,
+                gpu_id TEXT NOT NULL,
+                game_id TEXT NOT NULL,
+                source_url TEXT NOT NULL UNIQUE,
+                status TEXT NOT NULL DEFAULT 'pending',
+                attempts INTEGER NOT NULL DEFAULT 0,
+                next_attempt_at TEXT,
+                error TEXT,
+                response_hash TEXT,
+                updated_at TEXT NOT NULL
+            )
+            """
+        )
+        connection.execute(
+            """
+            INSERT INTO task (cpu_id, gpu_id, game_id, source_url, updated_at)
+            VALUES ('cpu', 'gpu', 'game', 'https://example.test/existing', ?)
+            """,
+            (NOW.isoformat(),),
+        )
+
+    with CollectorStore(path) as store:
+        assert store.seed_tasks(
+            [
+                CollectionTask(
+                    "cpu",
+                    "gpu",
+                    "game",
+                    "https://example.test/existing",
+                    source_cpu_id="source-cpu",
+                    source_gpu_id="source-gpu",
+                    source_game_id="source-game",
+                )
+            ]
+        ) == 0
+
+    with sqlite3.connect(path) as connection:
+        assert connection.execute(
+            """
+            SELECT source_cpu_id, source_gpu_id, source_game_id
+            FROM task
+            """
+        ).fetchone() == ("source-cpu", "source-gpu", "source-game")
+
+
 def test_result_schema_uses_parser_field_names_and_fps_checks(tmp_path: Path) -> None:
     path = tmp_path / "collector.sqlite3"
     store = CollectorStore(path)
@@ -464,10 +518,15 @@ def test_successful_records_returns_only_succeeded_tasks_in_stable_order(
         "https://example.test/one",
         "https://example.test/two",
     ]
+    source_fetched_at = records[0].pop("source_fetched_at")
+    assert datetime.fromisoformat(source_fetched_at).tzinfo is not None
     assert records[0] == {
         "cpu_id": "cpu-one",
         "gpu_id": "gpu-one",
         "game_id": "game-one",
+        "source_cpu_id": None,
+        "source_gpu_id": None,
+        "source_game_id": None,
         "source_url": "https://example.test/one",
         "response_hash": "hash-one",
         "results": [

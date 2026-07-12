@@ -1,5 +1,5 @@
-import sqlite3
 import json
+import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -14,6 +14,9 @@ class CollectionTask:
     gpu_id: str
     game_id: str
     source_url: str
+    source_cpu_id: Optional[str] = None
+    source_gpu_id: Optional[str] = None
+    source_game_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -53,6 +56,9 @@ class CollectorStore:
                 cpu_id TEXT NOT NULL,
                 gpu_id TEXT NOT NULL,
                 game_id TEXT NOT NULL,
+                source_cpu_id TEXT,
+                source_gpu_id TEXT,
+                source_game_id TEXT,
                 source_url TEXT NOT NULL UNIQUE,
                 status TEXT NOT NULL DEFAULT 'pending',
                 attempts INTEGER NOT NULL DEFAULT 0,
@@ -90,6 +96,15 @@ class CollectorStore:
             );
             """
         )
+        self._ensure_task_identity_columns()
+
+    def _ensure_task_identity_columns(self) -> None:
+        columns = {
+            row["name"] for row in self._connection.execute("PRAGMA table_info(task)")
+        }
+        for column in ("source_cpu_id", "source_gpu_id", "source_game_id"):
+            if column not in columns:
+                self._connection.execute(f"ALTER TABLE task ADD COLUMN {column} TEXT")
 
     def __enter__(self) -> "CollectorStore":
         return self
@@ -107,15 +122,44 @@ class CollectorStore:
             self._connection.executemany(
                 """
                 INSERT OR IGNORE INTO task
-                    (cpu_id, gpu_id, game_id, source_url, updated_at)
-                VALUES (?, ?, ?, ?, ?)
+                    (cpu_id, gpu_id, game_id, source_url, source_cpu_id,
+                     source_gpu_id, source_game_id, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
-                    (item.cpu_id, item.gpu_id, item.game_id, item.source_url, updated_at)
+                    (
+                        item.cpu_id,
+                        item.gpu_id,
+                        item.game_id,
+                        item.source_url,
+                        item.source_cpu_id,
+                        item.source_gpu_id,
+                        item.source_game_id,
+                        updated_at,
+                    )
                     for item in tasks
                 ],
             )
-        return self._connection.total_changes - before
+            inserted = self._connection.total_changes - before
+            self._connection.executemany(
+                """
+                UPDATE task
+                SET source_cpu_id = COALESCE(?, source_cpu_id),
+                    source_gpu_id = COALESCE(?, source_gpu_id),
+                    source_game_id = COALESCE(?, source_game_id)
+                WHERE source_url = ?
+                """,
+                [
+                    (
+                        item.source_cpu_id,
+                        item.source_gpu_id,
+                        item.source_game_id,
+                        item.source_url,
+                    )
+                    for item in tasks
+                ],
+            )
+        return inserted
 
     def claim_next(self, now: Optional[datetime] = None) -> Optional[StoredTask]:
         current_time = _utc_iso(now)
@@ -484,7 +528,9 @@ class CollectorStore:
         rows = self._connection.execute(
             """
             SELECT task.id, task.cpu_id, task.gpu_id, task.game_id,
+                   task.source_cpu_id, task.source_gpu_id, task.source_game_id,
                    task.source_url, task.response_hash,
+                   task.updated_at AS source_fetched_at,
                    result.resolution, result.average_fps, result.minimum_fps,
                    result.maximum_fps, result.bottleneck_type,
                    result.bottleneck_percent
@@ -501,8 +547,12 @@ class CollectorStore:
                         "cpu_id": row["cpu_id"],
                         "gpu_id": row["gpu_id"],
                         "game_id": row["game_id"],
+                        "source_cpu_id": row["source_cpu_id"],
+                        "source_gpu_id": row["source_gpu_id"],
+                        "source_game_id": row["source_game_id"],
                         "source_url": row["source_url"],
                         "response_hash": row["response_hash"],
+                        "source_fetched_at": row["source_fetched_at"],
                         "results": [],
                     }
                 )

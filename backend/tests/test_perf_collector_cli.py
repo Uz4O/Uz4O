@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from datetime import datetime
 from pathlib import Path
 
@@ -40,6 +41,12 @@ def test_seed_command_builds_exact_mapping_cross_product(
             claimed.game_id,
             claimed.source_url,
         ) == ("r5-5600", "rtx-4060", "cyberpunk-2077", EXPECTED_URL)
+    with sqlite3.connect(database) as connection:
+        assert connection.execute(
+            """
+            SELECT source_cpu_id, source_gpu_id, source_game_id FROM task
+            """
+        ).fetchone() == ("1fB", "1ge", "02g")
 
 
 def test_run_command_builds_client_and_passes_options(
@@ -167,7 +174,15 @@ def test_export_command_flattens_only_valid_succeeded_results(
     with CollectorStore(database) as store:
         store.seed_tasks(
             [
-                CollectionTask("cpu", "gpu", "game", EXPECTED_URL),
+                CollectionTask(
+                    "r5-5600",
+                    "rtx-4060",
+                    "cyberpunk-2077",
+                    EXPECTED_URL,
+                    source_cpu_id="1fB",
+                    source_gpu_id="1ge",
+                    source_game_id="02g",
+                ),
                 CollectionTask(
                     "pending", "pending", "pending", EXPECTED_URL + "pending"
                 ),
@@ -175,6 +190,11 @@ def test_export_command_flattens_only_valid_succeeded_results(
         )
         claimed = store.claim_next()
         assert claimed is not None
+        fetched_at = "2026-07-12T06:30:00+00:00"
+        monkeypatch.setattr(
+            "app.perf.collector_store._utc_iso",
+            lambda value=None: fetched_at,
+        )
         store.record_success(claimed.id, rows, "response-hash")
 
     invoke(monkeypatch, "export-perf-collection", str(database), str(output))
@@ -183,17 +203,24 @@ def test_export_command_flattens_only_valid_succeeded_results(
     payload = json.loads(output.read_text(encoding="utf-8"))
     assert payload["quality"] == "medium"
     assert datetime.fromisoformat(payload["generated_at"]).tzinfo is not None
+    assert {record["source_fetched_at"] for record in payload["records"]} == {
+        fetched_at
+    }
     assert [record["resolution"] for record in payload["records"]] == [
         "1080p",
         "2k",
         "4k",
     ]
     assert payload["records"][0] == {
-        "cpu_id": "cpu",
-        "gpu_id": "gpu",
-        "game_id": "game",
+        "cpu_id": "r5-5600",
+        "gpu_id": "rtx-4060",
+        "game_id": "cyberpunk-2077",
+        "source_cpu_id": "1fB",
+        "source_gpu_id": "1ge",
+        "source_game_id": "02g",
         "source_url": EXPECTED_URL,
         "response_hash": "response-hash",
+        "source_fetched_at": fetched_at,
         "resolution": "1080p",
         "average_fps": 77,
         "minimum_fps": 66,

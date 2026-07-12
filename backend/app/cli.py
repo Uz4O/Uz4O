@@ -29,7 +29,7 @@ from app.db import create_session_factory
 from app.perf.collector import CollectionBlocked, Collector, CollectorPolicy
 from app.perf.collector_manifest import load_manifest, target_page_count, write_manifest
 from app.perf.collector_store import CollectionTask, CollectorStore
-from app.perf.importer import read_performance_batch
+from app.perf.importer import DEFAULT_MANIFEST_PATH, read_performance_batch
 from app.perf.repository import upsert_performance_estimates
 
 
@@ -94,6 +94,11 @@ def main() -> None:
 
     import_perf_parser = subparsers.add_parser("import-perf-estimates")
     import_perf_parser.add_argument("json_path", type=Path)
+    import_perf_parser.add_argument(
+        "--manifest-json",
+        type=Path,
+        default=DEFAULT_MANIFEST_PATH,
+    )
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -193,6 +198,9 @@ def main() -> None:
                 "https://pc-builds.com/zh/fps-calculator/result/"
                 f"{cpu.source_id}{gpu.source_id}{game.source_id}/"
                 f"{cpu.source_slug}/{gpu.source_slug}/{game.source_slug}/1920x1080/",
+                source_cpu_id=cpu.source_id,
+                source_gpu_id=gpu.source_id,
+                source_game_id=game.source_id,
             )
             for cpu in cpus
             for gpu in gpus
@@ -255,7 +263,7 @@ def main() -> None:
                 temporary_path.unlink(missing_ok=True)
         print(f"Exported {len(records)} records.")
     if args.command == "import-perf-estimates":
-        estimates = read_performance_batch(args.json_path)
+        estimates = read_performance_batch(args.json_path, args.manifest_json)
         session_factory = create_session_factory(Settings())
         with session_factory() as session:
             count = upsert_performance_estimates(session, estimates)
