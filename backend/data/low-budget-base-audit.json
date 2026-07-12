@@ -1,0 +1,159 @@
+{
+  "price_date": "2026-07-12",
+  "attempted_combination_count": 81,
+  "completed_tiers": [
+    3000,
+    3500,
+    4000,
+    4500,
+    5000,
+    5500,
+    6000,
+    6500,
+    7000
+  ],
+  "completed_tier_direction_count": 27,
+  "completed_template_count": 63,
+  "skipped_combinations": [
+    {
+      "target_budget": 3000,
+      "direction": "fps",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3000,
+      "direction": "fps",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3000,
+      "direction": "aaa",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3000,
+      "direction": "aaa",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3000,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3000,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "fps",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "fps",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "aaa",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "aaa",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 3500,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "fps",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "fps",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "aaa",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "aaa",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "reason": "over_budget"
+    },
+    {
+      "target_budget": 4000,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "reason": "over_budget"
+    }
+  ],
+  "pending_review": [
+    {
+      "component_id": "base-psu-850w-gold",
+      "condition": "used",
+      "reason": "当前仅有单一公开样本，正式展示前需要重新核价"
+    }
+  ],
+  "missing_data": [],
+  "failed_templates": [],
+  "underutilized_templates": [
+    {
+      "template_id": "base-5500-aaa-used",
+      "target_budget": 5500,
+      "estimated_total": 4700,
+      "remaining_budget": 800,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-7000-aaa-new",
+      "target_budget": 7000,
+      "estimated_total": 6319,
+      "remaining_budget": 681,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-7000-aaa-mixed",
+      "target_budget": 7000,
+      "estimated_total": 6069,
+      "remaining_budget": 931,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    }
+  ]
+}

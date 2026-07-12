@@ -1,0 +1,137 @@
+[
+  {
+    "id": "base-ddr5-16gb-6000-c30",
+    "category": "ram",
+    "name": "DDR5 16GB 6000 C30",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 16GB · 6000MHz · CL30",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 16,
+      "speed_mhz": 6000,
+      "cas_latency": 30
+    },
+    "used_price": 1300,
+    "new_price": 1800,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ddr4-16gb-3200",
+    "category": "ram",
+    "name": "DDR4 16GB 3200",
+    "brand": "通用规格",
+    "detail_raw": "DDR4 · 16GB（8GB x2）· 3200MHz",
+    "specs": {
+      "type": "DDR4",
+      "capacity_gb": 16,
+      "speed_mhz": 3200,
+      "modules": 2
+    },
+    "used_price": 400,
+    "new_price": 500,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ssd-512gb-tlc",
+    "category": "storage",
+    "name": "512GB TLC SSD",
+    "brand": "通用规格",
+    "detail_raw": "512GB · NVMe · TLC",
+    "specs": {
+      "capacity_gb": 512,
+      "type": "NVMe",
+      "flash_type": "TLC"
+    },
+    "used_price": 350,
+    "new_price": 500,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-cooler-6-heatpipe",
+    "category": "cooler",
+    "name": "6热管风冷",
+    "brand": "通用规格",
+    "detail_raw": "单塔 · 6热管 · 风冷",
+    "specs": {
+      "cooling_type": "air",
+      "heatpipes": 6,
+      "towers": 1
+    },
+    "used_price": 70,
+    "new_price": 100,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-cooler-dual-tower-6-heatpipe",
+    "category": "cooler",
+    "name": "双塔6热管风冷",
+    "brand": "通用规格",
+    "detail_raw": "双塔 · 6热管 · 风冷",
+    "specs": {
+      "cooling_type": "air",
+      "heatpipes": 6,
+      "towers": 2
+    },
+    "used_price": 100,
+    "new_price": 150,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-case-mid-tower",
+    "category": "case",
+    "name": "普通中塔机箱",
+    "brand": "通用规格",
+    "detail_raw": "普通中塔 · 无颜值溢价",
+    "specs": {
+      "form_factor": "atx_mid_tower"
+    },
+    "used_price": 80,
+    "new_price": 100,
+    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-psu-650w-gold",
+    "category": "psu",
+    "name": "650W金牌电源",
+    "brand": "通用规格",
+    "detail_raw": "650W · 80+ Gold",
+    "specs": {
+      "watt": 650,
+      "rating": "80+ Gold"
+    },
+    "used_price": 150,
+    "new_price": 469,
+    "used_source": "用户历史配置中的650W二手参考价",
+    "new_source": "IT之家 2026-06-16 爱国者星璨EM650G公开售价 https://www.ithome.com/0/964/664.htm",
+    "price_date": "2026-07-12"
+  },
+  {
+    "id": "base-psu-850w-gold",
+    "category": "psu",
+    "name": "850W金牌ATX 3.1电源",
+    "brand": "通用规格",
+    "detail_raw": "850W · 80+ Gold · ATX 3.1",
+    "specs": {
+      "watt": 850,
+      "rating": "80+ Gold",
+      "standard": "ATX 3.1"
+    },
+    "used_price": 200,
+    "new_price": 569,
+    "used_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
+    "new_source": "IT之家 2026-06-16 爱国者星璨EM850G公开售价 https://www.ithome.com/0/964/664.htm",
+    "price_date": "2026-07-12"
+  }
+]
