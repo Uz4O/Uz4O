@@ -1,5 +1,6 @@
 import json
 import re
+import tempfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import List, Literal, Optional, Tuple
@@ -45,7 +46,8 @@ APPROVED_GAMES = [
 ]
 
 ITEM_PATTERN = re.compile(
-    r'HardwareCatalogItem\(id:\s*"(?P<id>[^"]+)",\s*name:\s*"(?P<name>[^"]+)"'
+    r'HardwareCatalogItem\(\s*id:\s*"(?P<id>[^"]+)",\s*'
+    r'name:\s*"(?P<name>[^"]+)"'
 )
 
 
@@ -57,13 +59,25 @@ def load_manifest(path: Path) -> CollectorManifest:
             for section in ("cpus", "gpus", "games")
         }
     )
-    for item in manifest.cpus + manifest.gpus + manifest.games:
-        if item.status not in ("exact", "review", "missing"):
-            raise ValueError(f"Invalid mapping status for {item.app_id}: {item.status}")
-        if item.status == "exact" and not all(
-            (item.source_id, item.source_slug, item.source_name)
-        ):
-            raise ValueError(f"Incomplete exact mapping for {item.app_id}")
+    for section, expected_device_type in (
+        ("cpus", "desktop"),
+        ("gpus", "desktop"),
+        ("games", "game"),
+    ):
+        items = getattr(manifest, section)
+        if len({item.app_id for item in items}) != len(items):
+            raise ValueError(f"{section} contains duplicate app_id")
+        for item in items:
+            if item.device_type != expected_device_type:
+                raise ValueError(
+                    f"{section} device_type must be {expected_device_type}"
+                )
+            if item.status not in ("exact", "review", "missing"):
+                raise ValueError(f"Invalid mapping status for {item.app_id}: {item.status}")
+            if item.status == "exact" and not all(
+                (item.source_id, item.source_slug, item.source_name)
+            ):
+                raise ValueError(f"Incomplete exact mapping for {item.app_id}")
     return manifest
 
 
@@ -94,10 +108,23 @@ def write_manifest(swift_path: Path, manifest_path: Path) -> CollectorManifest:
         games = _preserve_mappings(games, existing.games)
     manifest = CollectorManifest(cpus=cpus, gpus=gpus, games=games)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(asdict(manifest), ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    serialized = json.dumps(asdict(manifest), ensure_ascii=False, indent=2) + "\n"
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+            temporary_file.write(serialized)
+        temporary_path.replace(path)
+    finally:
+        if temporary_path:
+            temporary_path.unlink(missing_ok=True)
     return manifest
 
 
@@ -111,9 +138,25 @@ def _extract_scope(source: str, section_name: str) -> List[SourceMapping]:
     end = source.find("\n    ]", marker.end())
     if end < 0:
         raise ValueError(f"Unclosed HardwareCatalog section: {section_name}")
+    section = source[marker.end() : end]
+    matches = list(ITEM_PATTERN.finditer(section))
+    initializer_count = section.count("HardwareCatalogItem(")
+    if len(matches) != initializer_count:
+        raise ValueError(
+            f"{section_name} contains {initializer_count - len(matches)} unparsed "
+            "HardwareCatalogItem initializer(s)"
+        )
     return [
-        SourceMapping(match.group("id"), match.group("name"), None, None, None, "desktop", "review")
-        for match in ITEM_PATTERN.finditer(source, marker.end(), end)
+        SourceMapping(
+            match.group("id"),
+            match.group("name"),
+            None,
+            None,
+            None,
+            "desktop",
+            "review",
+        )
+        for match in matches
     ]
 
 

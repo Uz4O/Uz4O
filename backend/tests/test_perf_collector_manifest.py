@@ -20,8 +20,15 @@ SWIFT_CATALOG_PATH = ROOT / "May/May/Models/HardwareCatalog.swift"
 
 def test_committed_manifest_covers_app_scope() -> None:
     manifest = load_manifest(MANIFEST_PATH)
+    swift_cpus, swift_gpus = extract_hardware_scope(SWIFT_CATALOG_PATH)
 
     assert (len(manifest.cpus), len(manifest.gpus), len(manifest.games)) == (101, 77, 15)
+    assert [(item.app_id, item.app_name) for item in manifest.cpus] == [
+        (item.app_id, item.app_name) for item in swift_cpus
+    ]
+    assert [(item.app_id, item.app_name) for item in manifest.gpus] == [
+        (item.app_id, item.app_name) for item in swift_gpus
+    ]
     assert {item.device_type for item in manifest.cpus + manifest.gpus} == {"desktop"}
     assert [game.app_id for game in manifest.games] == [
         "valorant",
@@ -89,6 +96,144 @@ def test_extracts_real_swift_cpu_and_gpu_scope() -> None:
     assert (len(cpus), len(gpus)) == (101, 77)
     assert cpus[0].app_id == "i9-14900ks"
     assert gpus[0].app_id == "rtx-5090"
+
+
+def test_extracts_multiline_hardware_initializers(tmp_path: Path) -> None:
+    path = tmp_path / "HardwareCatalog.swift"
+    path.write_text(
+        """
+enum HardwareCatalog {
+    static let cpus: [HardwareCatalogItem] = [
+        HardwareCatalogItem(
+            id: "cpu-id", name: "CPU Name", brand: "Brand", detail: "Detail"
+        )
+    ]
+    static let gpus: [HardwareCatalogItem] = [
+        HardwareCatalogItem(
+            id: "gpu-id", name: "GPU Name", brand: "Brand", detail: "Detail"
+        )
+    ]
+}
+""",
+        encoding="utf-8",
+    )
+
+    cpus, gpus = extract_hardware_scope(path)
+
+    assert [(item.app_id, item.app_name) for item in cpus] == [("cpu-id", "CPU Name")]
+    assert [(item.app_id, item.app_name) for item in gpus] == [("gpu-id", "GPU Name")]
+
+
+def test_rejects_unparsed_hardware_initializer(tmp_path: Path) -> None:
+    path = tmp_path / "HardwareCatalog.swift"
+    path.write_text(
+        """
+enum HardwareCatalog {
+    static let cpus: [HardwareCatalogItem] = [
+        HardwareCatalogItem(id: cpuID, name: "CPU Name", brand: "Brand", detail: "Detail")
+    ]
+    static let gpus: [HardwareCatalogItem] = [
+    ]
+}
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match=r"cpus.*1 unparsed"):
+        extract_hardware_scope(path)
+
+
+@pytest.mark.parametrize(
+    ("section", "items", "message"),
+    [
+        (
+            "cpus",
+            [
+                {
+                    "app_id": "duplicate",
+                    "app_name": "CPU 1",
+                    "source_id": None,
+                    "source_slug": None,
+                    "source_name": None,
+                    "device_type": "desktop",
+                    "status": "review",
+                },
+                {
+                    "app_id": "duplicate",
+                    "app_name": "CPU 2",
+                    "source_id": None,
+                    "source_slug": None,
+                    "source_name": None,
+                    "device_type": "desktop",
+                    "status": "review",
+                },
+            ],
+            "duplicate app_id",
+        ),
+        (
+            "cpus",
+            [{"app_id": "cpu", "app_name": "CPU", "device_type": "mobile"}],
+            "cpus.*desktop",
+        ),
+        (
+            "gpus",
+            [{"app_id": "gpu", "app_name": "GPU", "device_type": "mobile"}],
+            "gpus.*desktop",
+        ),
+        (
+            "games",
+            [{"app_id": "game", "app_name": "Game", "device_type": "desktop"}],
+            "games.*game",
+        ),
+    ],
+)
+def test_load_manifest_rejects_duplicate_ids_and_wrong_device_types(
+    tmp_path: Path, section: str, items: list, message: str
+) -> None:
+    path = tmp_path / "manifest.json"
+    data = {"cpus": [], "gpus": [], "games": []}
+    for item in items:
+        item.setdefault("source_id", None)
+        item.setdefault("source_slug", None)
+        item.setdefault("source_name", None)
+        item.setdefault("status", "review")
+    data[section] = items
+    path.write_text(json.dumps(data), encoding="utf-8")
+
+    with pytest.raises(ValueError, match=message):
+        load_manifest(path)
+
+
+def test_write_manifest_replaces_atomically_without_overwriting_on_failure(
+    monkeypatch, tmp_path: Path
+) -> None:
+    swift_path = tmp_path / "HardwareCatalog.swift"
+    swift_path.write_text(
+        """
+enum HardwareCatalog {
+    static let cpus: [HardwareCatalogItem] = [
+    ]
+    static let gpus: [HardwareCatalogItem] = [
+    ]
+}
+""",
+        encoding="utf-8",
+    )
+    manifest_path = tmp_path / "manifest.json"
+    original = json.dumps({"cpus": [], "gpus": [], "games": []})
+    manifest_path.write_text(original, encoding="utf-8")
+
+    def fail_replace(self, target):
+        raise RuntimeError("replace failed")
+
+    monkeypatch.setattr(Path, "replace", fail_replace)
+
+    with pytest.raises(RuntimeError, match="replace failed"):
+        from app.perf.collector_manifest import write_manifest
+
+        write_manifest(swift_path, manifest_path)
+
+    assert manifest_path.read_text(encoding="utf-8") == original
 
 
 def test_build_command_preserves_manual_mapping(monkeypatch, tmp_path: Path, capsys) -> None:
