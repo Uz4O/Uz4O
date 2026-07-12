@@ -73,6 +73,22 @@ struct AppAPIClient {
         )
     }
 
+    func buildOptions(
+        budget: Int,
+        useCase: String,
+        gameCategories: [String]
+    ) async throws -> BuildOptionsResponseDTO {
+        try await request(
+            path: "/v1/build/options",
+            method: "POST",
+            body: BuildOptionsRequestDTO(
+                budget: budget,
+                useCase: useCase,
+                gameCategories: gameCategories
+            )
+        )
+    }
+
     func deleteAccount(confirmation: String, token: String) async throws {
         try await requestNoContent(
             path: "/v1/auth/me",
@@ -301,6 +317,18 @@ private extension Data {
 
 private struct EmptyBody: Encodable {}
 
+private struct BuildOptionsRequestDTO: Encodable {
+    let budget: Int
+    let useCase: String
+    let gameCategories: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case budget
+        case useCase = "use_case"
+        case gameCategories = "game_categories"
+    }
+}
+
 private struct CreateCommunityPostBody: Encodable {
     let summary: String
     let body: String
@@ -400,6 +428,107 @@ private struct CommunityCommentDTO: Decodable {
 
 private struct CommunityReportDTO: Decodable { let id: String }
 private struct CommunityBlockDTO: Decodable { let id: String }
+
+enum BuildDirectionDTO: String, Decodable {
+    case fps
+    case aaa
+    case balanced
+}
+
+enum BuildPurchaseModeDTO: String, Decodable {
+    case new
+    case used
+    case mixed
+}
+
+enum BuildOptionStatusDTO: String, Decodable {
+    case ready
+}
+
+enum BuildOptionSourceDTO: String, Decodable {
+    case template
+}
+
+enum BuildPartRoleDTO: String, CaseIterable, Decodable {
+    case cpu
+    case motherboard
+    case gpu
+    case ram
+    case storage
+    case psu
+    case cooler
+    case `case`
+}
+
+enum BuildPartConditionDTO: String, Decodable {
+    case new
+    case used
+}
+
+enum BuildCompatibilityLevelDTO: String, Decodable {
+    case pass
+    case warning
+    case error
+}
+
+struct BuildOptionsResponseDTO: Decodable {
+    let direction: BuildDirectionDTO
+    let options: [BuildOptionDTO]
+    let unavailableModes: [BuildPurchaseModeDTO]
+}
+
+struct BuildOptionDTO: Decodable, Identifiable {
+    var id: String { templateId }
+    var templateID: String { templateId }
+
+    let status: BuildOptionStatusDTO
+    let source: BuildOptionSourceDTO
+    private let templateId: String
+    let title: String
+    let components: [String: String]
+    let estimatedTotal: Int?
+    let explanation: String
+    let details: BuildOptionDetailsDTO
+    let compatibility: BuildCompatibilityDTO
+}
+
+struct BuildOptionDetailsDTO: Decodable {
+    let targetBudget: Int
+    let direction: BuildDirectionDTO
+    let purchaseMode: BuildPurchaseModeDTO
+    let parts: [BuildOptionPartDTO]
+    let advantages: [String]
+    let disadvantages: [String]
+    let risks: [String]
+    let suitableUser: String
+    let priceDate: String
+}
+
+struct BuildOptionPartDTO: Decodable {
+    let role: BuildPartRoleDTO
+    let componentId: String
+    let name: String
+    let condition: BuildPartConditionDTO
+    let referencePrice: Int
+    let priceSource: String
+    let priceDate: String
+}
+
+struct BuildCompatibilityDTO: Decodable {
+    let compatible: Bool
+    let summary: String
+    let findings: [BuildCompatibilityFindingDTO]
+    let findingCounts: [String: Int]
+    let checkedRuleCodes: [String]
+}
+
+struct BuildCompatibilityFindingDTO: Decodable {
+    let level: BuildCompatibilityLevelDTO
+    let code: String
+    let title: String
+    let detail: String
+    let componentIds: [String]
+}
 
 struct ConfigReviewResponseDTO: Decodable {
     let riskLevel: String

@@ -303,19 +303,26 @@ private struct AIBuildFlowView: View {
     let returnTarget: BuildResultReturnTarget
     let onClose: () -> Void
 
-    @State private var showsResult = false
+    @State private var response: BuildOptionsResponseDTO?
+    @State private var selectedOption: BuildOptionDTO?
 
     var body: some View {
         Group {
-            if showsResult {
+            if let selectedOption {
                 BuildResultView(
-                    plan: AppMockData.samplePlan,
-                    onBack: onClose
+                    plan: selectedOption.buildPlan,
+                    onBack: { self.selectedOption = nil }
+                )
+            } else if let response {
+                BuildOptionsView(
+                    response: response,
+                    onBack: { self.response = nil },
+                    onSelect: { selectedOption = $0 }
                 )
             } else {
                 AIBuildView(
                     onBack: onClose,
-                    onShowResult: { showsResult = true }
+                    onComplete: { response = $0 }
                 )
             }
         }

@@ -3,6 +3,8 @@ import SwiftUI
 struct AIBuildView: View {
     @State private var currentStep: AIBuildStep = .budget
     @State private var isChangingStep = false
+    @State private var isSubmitting = false
+    @State private var submissionError: String?
     @State private var budget: Double = 6850
     @State private var selectedUseCase = "游戏"
     @State private var selectedGames: Set<String> = []
@@ -17,35 +19,40 @@ struct AIBuildView: View {
     @State private var selectedAestheticStyleID = AestheticBuildStyle.featured[0].id
 
     let onBack: () -> Void
-    let onShowResult: () -> Void
+    let onComplete: (BuildOptionsResponseDTO) -> Void
 
     private let gameOptions = [
-        "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "云顶之弈", "LOL",
-        "逃离塔科夫", "COD", "赛博朋克2077", "荒野大镖客2", "GTA5",
-        "黑神话悟空", "穿越火线", "APEX英雄", "地平线6", "艾尔登法环",
-        "城市天际线", "我的世界"
+        "什么都玩", "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "云顶之弈", "LOL",
+        "COD", "赛博朋克2077", "荒野大镖客2", "GTA5", "黑神话悟空", "地平线6",
+        "艾尔登法环", "城市天际线", "我的世界"
     ]
     private let gameIcons = [
+        "什么都玩": "gamecontroller",
         "瓦罗兰特": "scope",
         "CS2": "target",
         "PUBG": "figure.run",
         "三角洲行动": "map",
         "云顶之弈": "checkerboard.shield",
         "LOL": "shield",
-        "逃离塔科夫": "backpack",
         "COD": "crosshair",
         "赛博朋克2077": "sparkles",
         "荒野大镖客2": "mountain.2",
         "GTA5": "car",
         "黑神话悟空": "flame",
-        "穿越火线": "plus.viewfinder",
-        "APEX英雄": "bolt",
         "地平线6": "steeringwheel",
         "艾尔登法环": "circle.hexagongrid",
         "城市天际线": "building.2",
         "我的世界": "cube"
     ]
     private let officeAppOptions = ["Office", "WPS", "Photoshop", "Premiere", "AutoCAD", "Blender"]
+    private let officeAppIcons = [
+        "Office": "doc.text",
+        "WPS": "doc.richtext",
+        "Photoshop": "photo",
+        "Premiere": "film",
+        "AutoCAD": "ruler",
+        "Blender": "cube.transparent"
+    ]
     private let memorySizeOptions = ["16GB", "32GB", "64GB"]
     private let storageSizeOptions = ["512GB", "1TB", "2TB", "4TB"]
 
@@ -114,7 +121,9 @@ struct AIBuildView: View {
 
                     SoftCard(radius: 22) {
                         VStack(alignment: .leading, spacing: 18) {
-                            StepTitle(step: currentStep)
+                            if currentStep != .scenario {
+                                StepTitle(step: currentStep)
+                            }
 
                             stepContent
                         }
@@ -130,6 +139,7 @@ struct AIBuildView: View {
                 canGoBack: previousStep != nil,
                 primaryTitle: nextStep == nil ? "生成配置方案" : "下一步",
                 primaryIcon: nextStep == nil ? "sparkles" : "arrow.right",
+                isLoading: isSubmitting,
                 onBack: goToPreviousStep,
                 onPrimary: handlePrimaryAction
             )
@@ -140,6 +150,17 @@ struct AIBuildView: View {
         .onAppear(perform: clampCapacitySelections)
         .onChange(of: budget) { _, _ in
             clampCapacitySelections()
+        }
+        .alert("生成失败", isPresented: showsSubmissionError) {
+            Button("重试") {
+                submissionError = nil
+                submitBuildOptions()
+            }
+            Button("取消", role: .cancel) {
+                submissionError = nil
+            }
+        } message: {
+            Text(submissionError ?? "请稍后重试")
         }
     }
 
@@ -167,6 +188,7 @@ struct AIBuildView: View {
                 gameOptions: gameOptions,
                 gameIcons: gameIcons,
                 officeAppOptions: officeAppOptions,
+                officeAppIcons: officeAppIcons,
                 selectedGames: $selectedGames,
                 selectedOfficeApps: $selectedOfficeApps
             )
@@ -227,7 +249,7 @@ struct AIBuildView: View {
             currentStep = next
         } else {
             applyLowBudgetDefaultsIfNeeded()
-            onShowResult()
+            submitBuildOptions()
         }
 
         resetStepChangeLock()
@@ -247,6 +269,41 @@ struct AIBuildView: View {
     private func resetStepChangeLock() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
             isChangingStep = false
+        }
+    }
+
+    private var showsSubmissionError: Binding<Bool> {
+        Binding(
+            get: { submissionError != nil },
+            set: { isPresented in
+                if !isPresented {
+                    submissionError = nil
+                }
+            }
+        )
+    }
+
+    private func submitBuildOptions() {
+        guard !isSubmitting else { return }
+
+        let requestBudget = Int(budget)
+        let requestUseCase = selectedUseCase
+        let requestGames = selectedGames.sorted()
+        isSubmitting = true
+
+        Task {
+            do {
+                let response = try await AppAPIClient().buildOptions(
+                    budget: requestBudget,
+                    useCase: requestUseCase,
+                    gameCategories: requestGames
+                )
+                isSubmitting = false
+                onComplete(response)
+            } catch {
+                isSubmitting = false
+                submissionError = error.localizedDescription
+            }
         }
     }
 
@@ -464,6 +521,7 @@ private struct WizardBottomBar: View {
     let canGoBack: Bool
     let primaryTitle: String
     let primaryIcon: String
+    let isLoading: Bool
     let onBack: () -> Void
     let onPrimary: () -> Void
 
@@ -477,10 +535,24 @@ private struct WizardBottomBar: View {
                     .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
             }
             .buttonStyle(.plain)
-            .disabled(!canGoBack)
+            .disabled(!canGoBack || isLoading)
             .accessibilityLabel("上一步")
 
-            PrimaryButton(title: primaryTitle, icon: primaryIcon, action: onPrimary)
+            if isLoading {
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .tint(.white)
+                    Text("正在生成...")
+                }
+                .font(.appSubheadline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(AppTheme.primaryButton, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                .accessibilityLabel("正在生成配置方案")
+            } else {
+                PrimaryButton(title: primaryTitle, icon: primaryIcon, action: onPrimary)
+            }
         }
         .padding(.vertical, 4)
     }
@@ -490,7 +562,7 @@ private struct BudgetSection: View {
     @Binding var budget: Double
 
     private let minimumBudget: Double = 3000
-    private let maximumBudget: Double = 50000
+    private let maximumBudget: Double = 20000
     private let budgetStep: Double = 100
 
     private var valueText: String {
@@ -514,7 +586,7 @@ private struct BudgetSection: View {
             HStack {
                 Text("¥ 3000")
                 Spacer()
-                Text("¥ 50000")
+                Text("¥ 20000")
             }
             .font(.system(size: 11, weight: .semibold))
             .foregroundStyle(AppTheme.secondaryText)
@@ -563,6 +635,7 @@ private struct ScenarioSelectionSection: View {
     let gameOptions: [String]
     let gameIcons: [String: String]
     let officeAppOptions: [String]
+    let officeAppIcons: [String: String]
     @Binding var selectedGames: Set<String>
     @Binding var selectedOfficeApps: Set<String>
 
@@ -574,27 +647,43 @@ private struct ScenarioSelectionSection: View {
         useCase == "办公" || useCase == "游戏兼办公"
     }
 
+    private var pageTitle: String {
+        if showsGames && showsOfficeApps { return "选择游戏和常用软件" }
+        return showsGames ? "选择你常玩的游戏" : "选择你常用的软件"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(pageTitle)
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+                Text("可多选，AI 会自动调整配置")
+                    .font(.appBody)
+                    .foregroundStyle(AppTheme.secondaryText)
+            }
+
             if showsGames {
                 MultiChoiceChipSection(
-                    title: "你玩什么游戏？",
-                    subtitle: "可多选，AI 会按这些游戏调整 CPU 和显卡侧重点",
+                    title: "热门游戏",
+                    subtitle: selectedGames.isEmpty ? "选择你玩过或准备玩的" : "已选 \(selectedGames.count) 个",
                     options: gameOptions,
                     selected: $selectedGames,
                     icons: gameIcons,
-                    minimumChipWidth: 92,
-                    usesSquareTiles: true,
-                    footer: "游戏名称仅用于描述你的配置需求，本应用与相关游戏厂商无关联。"
+                    minimumChipWidth: 76,
+                    usesSquareTiles: true
                 )
             }
 
             if showsOfficeApps {
                 MultiChoiceChipSection(
-                    title: "常用办公软件",
-                    subtitle: "可多选",
+                    title: "常用软件",
+                    subtitle: selectedOfficeApps.isEmpty ? "选择你常用的" : "已选 \(selectedOfficeApps.count) 个",
                     options: officeAppOptions,
-                    selected: $selectedOfficeApps
+                    selected: $selectedOfficeApps,
+                    icons: officeAppIcons,
+                    minimumChipWidth: 76,
+                    usesSquareTiles: true
                 )
             }
         }
@@ -686,7 +775,7 @@ private struct MultiChoiceChip: View {
                 }
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
-                .aspectRatio(1, contentMode: .fit)
+                .aspectRatio(1.18, contentMode: .fit)
                 .frame(maxWidth: .infinity)
                 .background(isSelected ? AppTheme.primaryText : AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 16))
                 .overlay(
@@ -748,5 +837,5 @@ private struct PreferenceSegmentGroup: View {
 }
 
 #Preview {
-    AIBuildView(onBack: {}, onShowResult: {})
+    AIBuildView(onBack: {}, onComplete: { _ in })
 }

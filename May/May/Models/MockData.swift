@@ -28,6 +28,8 @@ struct BuildPlan: Identifiable {
     let createdAt: String
     let parts: [PCPart]
     let risks: [BuildRisk]
+    var advantages: [String] = []
+    var disadvantages: [String] = []
 }
 
 struct BuildRisk: Identifiable {
@@ -63,6 +65,155 @@ enum RiskLevel {
             return AppTheme.error
         }
     }
+}
+
+extension BuildOptionDTO {
+    func part(for role: BuildPartRoleDTO) -> BuildOptionPartDTO? {
+        details.parts.first { $0.role == role }
+    }
+
+    var referenceTotalText: String {
+        formattedBuildPrice(estimatedTotal ?? details.parts.reduce(0) { $0 + $1.referencePrice })
+    }
+
+    var buildPlan: BuildPlan {
+        let compatibilityRisks = [
+            BuildRisk(
+                level: compatibility.compatible ? .pass : .error,
+                title: "兼容性结论",
+                detail: compatibility.summary
+            )
+        ] + compatibility.findings.map {
+            BuildRisk(level: $0.level.riskLevel, title: $0.title, detail: $0.detail)
+        }
+        let planRisks = details.risks.map {
+            BuildRisk(level: .warning, title: "方案风险", detail: $0)
+        }
+
+        return BuildPlan(
+            name: title,
+            budget: formattedBuildPrice(details.targetBudget),
+            totalPrice: referenceTotalText,
+            useCase: "\(details.direction.displayName) · \(details.suitableUser)\n\(explanation)",
+            createdAt: "参考价日期 \(details.priceDate)",
+            parts: BuildPartRoleDTO.allCases.compactMap { part(for: $0)?.model },
+            risks: compatibilityRisks + planRisks,
+            advantages: details.advantages,
+            disadvantages: details.disadvantages
+        )
+    }
+}
+
+extension BuildDirectionDTO {
+    var displayName: String {
+        switch self {
+        case .fps:
+            "FPS"
+        case .aaa:
+            "3A"
+        case .balanced:
+            "均衡"
+        }
+    }
+}
+
+extension BuildPurchaseModeDTO {
+    var displayName: String {
+        switch self {
+        case .new:
+            "全新"
+        case .used:
+            "二手"
+        case .mixed:
+            "混合采购"
+        }
+    }
+}
+
+private extension BuildOptionPartDTO {
+    var model: PCPart {
+        PCPart(
+            category: role.displayName,
+            model: name,
+            price: formattedBuildPrice(referencePrice),
+            icon: role.icon,
+            accent: role == .cpu ? .blue : AppTheme.primaryText,
+            reason: "成色：\(condition.displayName) · \(priceSource) · \(priceDate)",
+            source: "\(priceSource) · \(priceDate)"
+        )
+    }
+}
+
+private extension BuildPartRoleDTO {
+    var displayName: String {
+        switch self {
+        case .cpu:
+            "CPU"
+        case .motherboard:
+            "主板"
+        case .gpu:
+            "显卡"
+        case .ram:
+            "内存"
+        case .storage:
+            "硬盘"
+        case .psu:
+            "电源"
+        case .cooler:
+            "散热"
+        case .case:
+            "机箱"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .cpu:
+            "cpu"
+        case .motherboard:
+            "memorychip"
+        case .gpu:
+            "display"
+        case .ram:
+            "rectangle.stack"
+        case .storage:
+            "externaldrive"
+        case .psu:
+            "bolt"
+        case .cooler:
+            "fan"
+        case .case:
+            "shippingbox"
+        }
+    }
+}
+
+private extension BuildPartConditionDTO {
+    var displayName: String {
+        switch self {
+        case .new:
+            "全新"
+        case .used:
+            "二手"
+        }
+    }
+}
+
+private extension BuildCompatibilityLevelDTO {
+    var riskLevel: RiskLevel {
+        switch self {
+        case .pass:
+            .pass
+        case .warning:
+            .warning
+        case .error:
+            .error
+        }
+    }
+}
+
+private func formattedBuildPrice(_ value: Int) -> String {
+    "¥ \(value.formatted(.number.grouping(.automatic)))"
 }
 
 enum AppMockData {

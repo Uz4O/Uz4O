@@ -26,6 +26,7 @@ struct BuildResultView: View {
                                 Text(plan.useCase)
                                     .font(.appBody)
                                     .foregroundStyle(AppTheme.secondaryText)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
 
                             Spacer()
@@ -58,6 +59,63 @@ struct BuildResultView: View {
                         }
                     }
                     .padding(18)
+                }
+
+                if !plan.advantages.isEmpty || !plan.disadvantages.isEmpty {
+                    SoftCard(radius: 18) {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("方案分析")
+                                .font(.appHeadline)
+                                .foregroundStyle(AppTheme.primaryText)
+
+                            if !plan.advantages.isEmpty {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("优势")
+                                        .font(.appSubheadline)
+                                        .foregroundStyle(AppTheme.primaryText)
+
+                                    ForEach(plan.advantages.indices, id: \.self) { index in
+                                        HStack(alignment: .top, spacing: 9) {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(AppTheme.success)
+                                                .frame(width: 18)
+                                            Text(plan.advantages[index])
+                                                .font(.appCaption)
+                                                .foregroundStyle(AppTheme.secondaryText)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                        }
+                                    }
+                                }
+                            }
+
+                            if !plan.advantages.isEmpty && !plan.disadvantages.isEmpty {
+                                Divider()
+                            }
+
+                            if !plan.disadvantages.isEmpty {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("不足")
+                                        .font(.appSubheadline)
+                                        .foregroundStyle(AppTheme.primaryText)
+
+                                    ForEach(plan.disadvantages.indices, id: \.self) { index in
+                                        HStack(alignment: .top, spacing: 9) {
+                                            Image(systemName: "exclamationmark.circle.fill")
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(AppTheme.warning)
+                                                .frame(width: 18)
+                                            Text(plan.disadvantages[index])
+                                                .font(.appCaption)
+                                                .foregroundStyle(AppTheme.secondaryText)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .padding(18)
+                    }
                 }
 
                 SoftCard(radius: 18) {
