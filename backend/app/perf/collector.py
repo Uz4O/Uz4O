@@ -31,6 +31,7 @@ class CollectorPolicy:
     jitter_seconds: float = 0.4
     max_attempts: int = 3
     timeout_seconds: float = 20.0
+    max_request_seconds: float = 20.0
     max_response_bytes: int = 2_000_000
     lock_ttl_seconds: float = 60.0
 
@@ -47,8 +48,10 @@ class CollectorPolicy:
             or self.max_attempts <= 0
             or not math.isfinite(self.timeout_seconds)
             or self.timeout_seconds <= 0
+            or not math.isfinite(self.max_request_seconds)
+            or self.max_request_seconds <= 0
         ):
-            raise ValueError("max attempts and timeout must be positive")
+            raise ValueError("max attempts and request timeouts must be positive")
         if (
             not isinstance(self.max_response_bytes, int)
             or self.max_response_bytes <= 0
@@ -64,7 +67,10 @@ class CollectorPolicy:
     def effective_lock_ttl_seconds(self) -> float:
         return max(
             self.lock_ttl_seconds,
-            self.timeout_seconds + self.delay_seconds + self.jitter_seconds + 1.0,
+            max(self.timeout_seconds, self.max_request_seconds)
+            + self.delay_seconds
+            + self.jitter_seconds
+            + 1.0,
         )
 
 
@@ -106,6 +112,7 @@ class Collector:
         sleep: Callable[[float], None] = time.sleep,
         random_uniform: Callable[[float, float], float] = random.uniform,
         now: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
+        monotonic: Callable[[], float] = time.monotonic,
     ) -> None:
         self.store = store
         self.client = client
@@ -113,6 +120,7 @@ class Collector:
         self.sleep = sleep
         self.random_uniform = random_uniform
         self.now = now
+        self.monotonic = monotonic
         self.owner = uuid.uuid4().hex
 
     def run(self, max_tasks: Optional[int] = None) -> RunSummary:
@@ -231,22 +239,39 @@ class Collector:
         return "retryable"
 
     def _limited_response(self, task: StoredTask) -> Optional[httpx.Response]:
+        self._renew_lock()
+        started_at = self.monotonic()
         with self.client.stream(
             "GET",
             task.source_url,
-            headers={"User-Agent": USER_AGENT},
+            headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"},
             timeout=self.policy.timeout_seconds,
             auth=None,
             follow_redirects=False,
         ) as streamed_response:
+            content_encoding = streamed_response.headers.get(
+                "Content-Encoding", "identity"
+            ).strip().casefold()
+            if content_encoding != "identity":
+                self._block(task, "compressed response not allowed")
+            self._check_stream_deadline(started_at, streamed_response.request)
             chunks = []
             size = 0
-            for chunk in streamed_response.iter_bytes(chunk_size=65_536):
-                size += len(chunk)
-                if size > self.policy.max_response_bytes:
-                    self.store.record_failed(task.id, "response_too_large")
-                    return None
-                chunks.append(chunk)
+            raw_chunks = (
+                [streamed_response.content]
+                if streamed_response.is_stream_consumed
+                else streamed_response.iter_raw()
+            )
+            for raw_chunk in raw_chunks:
+                for offset in range(0, len(raw_chunk), 65_536):
+                    chunk = raw_chunk[offset : offset + 65_536]
+                    size += len(chunk)
+                    if size > self.policy.max_response_bytes:
+                        self.store.record_failed(task.id, "response_too_large")
+                        return None
+                    chunks.append(chunk)
+                    self._check_stream_deadline(started_at, streamed_response.request)
+                    self._renew_lock()
             headers = [
                 (name, value)
                 for name, value in streamed_response.headers.multi_items()
@@ -256,6 +281,14 @@ class Collector:
                 streamed_response.status_code,
                 headers=headers,
                 content=b"".join(chunks),
+            )
+
+    def _check_stream_deadline(
+        self, started_at: float, request: httpx.Request
+    ) -> None:
+        if self.monotonic() - started_at > self.policy.max_request_seconds:
+            raise httpx.ReadTimeout(
+                "response exceeded total time limit", request=request
             )
 
     def _block(self, task: StoredTask, reason: str) -> None:

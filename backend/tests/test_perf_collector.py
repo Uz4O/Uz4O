@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta, timezone
-import gzip
 from pathlib import Path
 import sqlite3
 
@@ -49,6 +48,7 @@ def collector(
     sleep=lambda _: None,
     random_uniform=lambda _start, _end: 0,
     now=lambda: NOW,
+    monotonic=lambda: 0.0,
 ) -> Collector:
     return Collector(
         store,
@@ -57,6 +57,7 @@ def collector(
         sleep=sleep,
         random_uniform=random_uniform,
         now=now,
+        monotonic=monotonic,
     )
 
 
@@ -73,6 +74,7 @@ def collector(
         {"timeout_seconds": float("inf")},
         {"max_response_bytes": 0},
         {"lock_ttl_seconds": 0},
+        {"max_request_seconds": 0},
     ],
 )
 def test_policy_rejects_invalid_values(kwargs: dict) -> None:
@@ -108,6 +110,7 @@ def test_success_records_rows_hash_and_sends_only_safe_get_headers(tmp_path: Pat
         assert "AI PC Builder FPS Collector" in request.headers["user-agent"]
         assert "cookie" not in request.headers
         assert "authorization" not in request.headers
+        assert request.headers["accept-encoding"] == "identity"
         return httpx.Response(200, text=HTML)
 
     summary = collector(store, handler).run()
@@ -275,80 +278,36 @@ def test_200_challenge_blocks_and_pauses(tmp_path: Path) -> None:
     assert store.task_counts() == {"blocked": 1}
 
 
-def test_gzip_challenge_is_decoded_once_then_blocks_and_pauses(tmp_path: Path) -> None:
+def test_compressed_response_blocks_before_reading_body(tmp_path: Path) -> None:
     store = CollectorStore(tmp_path / "collector.sqlite")
-    seed(store, "challenge")
-    body = gzip.compress(b"Just a moment")
+    seed(store, "compressed")
 
-    with pytest.raises(CollectionBlocked, match="challenge"):
+    class UnreadableStream(httpx.SyncByteStream):
+        reads = 0
+
+        def __iter__(self):
+            self.reads += 1
+            raise AssertionError("compressed body must not be read")
+            yield b""
+
+    stream = UnreadableStream()
+
+    with pytest.raises(CollectionBlocked, match="compressed response not allowed"):
         collector(
             store,
             lambda _: httpx.Response(
                 200,
-                content=body,
+                stream=stream,
                 headers={
                     "Content-Encoding": "gzip",
-                    "Content-Length": str(len(body)),
-                    "Content-Type": "text/html; charset=utf-8",
+                    "Content-Length": "1000000000",
                 },
             ),
         ).run()
 
     assert store.task_counts() == {"blocked": 1}
-    assert store.pause_reason() == "challenge page detected"
-
-
-def test_gzip_results_are_decoded_once_and_parsed(tmp_path: Path) -> None:
-    store = CollectorStore(tmp_path / "collector.sqlite")
-    seed(store, "results")
-    body = gzip.compress(HTML.encode())
-
-    summary = collector(
-        store,
-        lambda _: httpx.Response(
-            200,
-            content=body,
-            headers={
-                "Content-Encoding": "gzip",
-                "Content-Length": str(len(body)),
-                "Transfer-Encoding": "chunked",
-                "Content-Type": "text/html; charset=utf-8",
-            },
-        ),
-    ).run()
-
-    assert summary.succeeded == 1
-    assert store.task_counts() == {"succeeded": 1}
-
-
-@pytest.mark.parametrize(
-    ("max_attempts", "expected_status"), [(3, "retryable"), (1, "failed")]
-)
-def test_malformed_gzip_becomes_network_failure_and_releases_lock(
-    tmp_path: Path, max_attempts: int, expected_status: str
-) -> None:
-    path = tmp_path / "collector.sqlite"
-    store = CollectorStore(path)
-    seed(store, "broken")
-    runner = collector(
-        store,
-        lambda _: httpx.Response(
-            200,
-            content=b"not a gzip stream",
-            headers={"Content-Encoding": "gzip"},
-        ),
-        policy=CollectorPolicy(
-            delay_seconds=0,
-            jitter_seconds=0,
-            max_attempts=max_attempts,
-        ),
-    )
-
-    summary = runner.run()
-
-    assert getattr(summary, expected_status) == 1
-    assert store.task_counts() == {expected_status: 1}
-    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
+    assert store.pause_reason() == "compressed response not allowed"
+    assert stream.reads == 0
 
 
 def test_three_consecutive_parse_failures_pause_collection(tmp_path: Path) -> None:
@@ -551,6 +510,95 @@ class ClosingStream(httpx.SyncByteStream):
 
     def close(self) -> None:
         self.closed = True
+
+
+class ChunkStream(ClosingStream):
+    def __init__(self, chunks, before_second=None):
+        super().__init__(b"")
+        self.chunks = chunks
+        self.before_second = before_second
+
+    def __iter__(self):
+        for index, chunk in enumerate(self.chunks):
+            if index == 1 and self.before_second:
+                self.before_second()
+            yield chunk
+
+
+def test_slow_identity_stream_times_out_without_allowing_second_collector(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    first_store = CollectorStore(path)
+    second_store = CollectorStore(path)
+    seed(first_store, "slow")
+    second_requests = []
+    second = collector(second_store, second_requests.append)
+
+    def assert_locked() -> None:
+        with pytest.raises(CollectorAlreadyRunning):
+            second.run()
+
+    stream = ChunkStream([b"first", b"second"], before_second=assert_locked)
+    times = iter([0.0, 1.0, 5.0, 11.0])
+    runner = collector(
+        first_store,
+        lambda _: httpx.Response(200, stream=stream),
+        policy=CollectorPolicy(
+            delay_seconds=0,
+            jitter_seconds=0,
+            max_request_seconds=10,
+        ),
+        monotonic=lambda: next(times),
+    )
+
+    summary = runner.run()
+
+    assert summary.retryable == 1
+    assert first_store.task_counts() == {"retryable": 1}
+    assert second_requests == []
+    assert stream.closed
+
+
+def test_lost_lease_mid_stream_writes_no_terminal_state_or_results(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    first_store = CollectorStore(path)
+    second_store = CollectorStore(path)
+    seed(first_store, "lease")
+    original_renew = first_store.renew_run_lock
+    renew_calls = 0
+    takeover_time = NOW + timedelta(seconds=60)
+
+    def renew(owner: str, now: datetime, ttl_seconds: float) -> bool:
+        nonlocal renew_calls, takeover_time
+        renew_calls += 1
+        if renew_calls == 3:
+            takeover_time = NOW + timedelta(seconds=ttl_seconds)
+            assert second_store.acquire_run_lock("new-owner", takeover_time, ttl_seconds)
+        return original_renew(owner, now, ttl_seconds)
+
+    first_store.renew_run_lock = renew
+    stream = ClosingStream(HTML.encode())
+    runner = collector(
+        first_store,
+        lambda _: httpx.Response(200, stream=stream),
+    )
+
+    with pytest.raises(CollectorAlreadyRunning):
+        runner.run()
+
+    with sqlite3.connect(path) as connection:
+        assert connection.execute("SELECT status, attempts FROM task").fetchone() == (
+            "fetching",
+            1,
+        )
+        assert connection.execute("SELECT COUNT(*) FROM result").fetchone()[0] == 0
+    assert second_store.renew_run_lock(
+        "new-owner", takeover_time + timedelta(seconds=1), 60
+    )
+    assert stream.closed
 
 
 def test_oversized_response_fails_without_parsing_and_closes_stream(
