@@ -57,9 +57,9 @@ class CollectorStore:
             CREATE TABLE IF NOT EXISTS result (
                 task_id INTEGER NOT NULL,
                 resolution TEXT NOT NULL CHECK (resolution IN ('1080p', '2k', '4k')),
-                average INTEGER NOT NULL,
-                min INTEGER NOT NULL,
-                max INTEGER NOT NULL,
+                average_fps INTEGER NOT NULL,
+                minimum_fps INTEGER NOT NULL,
+                maximum_fps INTEGER NOT NULL,
                 bottleneck_type TEXT CHECK (
                     bottleneck_type IN ('cpu', 'gpu', 'balanced')
                     OR bottleneck_type IS NULL
@@ -67,6 +67,12 @@ class CollectorStore:
                 bottleneck_percent INTEGER CHECK (
                     bottleneck_percent BETWEEN 0 AND 100
                     OR bottleneck_percent IS NULL
+                ),
+                CHECK (
+                    0 < minimum_fps
+                    AND minimum_fps <= average_fps
+                    AND average_fps <= maximum_fps
+                    AND maximum_fps <= 2000
                 ),
                 PRIMARY KEY (task_id, resolution),
                 FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
@@ -77,6 +83,15 @@ class CollectorStore:
             );
             """
         )
+
+    def __enter__(self) -> "CollectorStore":
+        return self
+
+    def __exit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
+        self.close()
+
+    def close(self) -> None:
+        self._connection.close()
 
     def seed_tasks(self, tasks: Sequence[CollectionTask]) -> int:
         before = self._connection.total_changes
@@ -99,6 +114,12 @@ class CollectorStore:
         current_time = _utc_iso(now)
         self._connection.execute("BEGIN IMMEDIATE")
         try:
+            paused = self._connection.execute(
+                "SELECT 1 FROM collector_state WHERE key = 'pause_reason'"
+            ).fetchone()
+            if paused:
+                self._connection.commit()
+                return None
             self._connection.execute(
                 """
                 UPDATE task
@@ -108,12 +129,6 @@ class CollectorStore:
                 """,
                 (current_time,),
             )
-            paused = self._connection.execute(
-                "SELECT 1 FROM collector_state WHERE key = 'pause_reason'"
-            ).fetchone()
-            if paused:
-                self._connection.commit()
-                return None
             row = self._connection.execute(
                 """
                 SELECT id FROM task
@@ -127,15 +142,21 @@ class CollectorStore:
             if row is None:
                 self._connection.commit()
                 return None
-            claimed = self._connection.execute(
+            self._connection.execute(
                 """
                 UPDATE task
                 SET status = 'fetching', attempts = attempts + 1,
                     next_attempt_at = NULL, error = NULL, updated_at = ?
                 WHERE id = ?
-                RETURNING id, cpu_id, gpu_id, game_id, source_url, attempts
                 """,
                 (current_time, row["id"]),
+            )
+            claimed = self._connection.execute(
+                """
+                SELECT id, cpu_id, gpu_id, game_id, source_url, attempts
+                FROM task WHERE id = ?
+                """,
+                (row["id"],),
             ).fetchone()
             self._connection.commit()
         except Exception:
@@ -152,12 +173,21 @@ class CollectorStore:
         resolutions = [row.resolution for row in rows]
         if len(resolutions) != 3 or set(resolutions) != {"1080p", "2k", "4k"}:
             raise ValueError("result resolutions must be exactly 1080p, 2k, and 4k")
+        if any(
+            not 0
+            < row.minimum_fps
+            <= row.average_fps
+            <= row.maximum_fps
+            <= 2000
+            for row in rows
+        ):
+            raise ValueError("invalid FPS values")
         with self._connection:
             self._connection.execute("DELETE FROM result WHERE task_id = ?", (task_id,))
             self._connection.executemany(
                 """
                 INSERT INTO result
-                    (task_id, resolution, average, min, max,
+                    (task_id, resolution, average_fps, minimum_fps, maximum_fps,
                      bottleneck_type, bottleneck_percent)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
@@ -195,11 +225,32 @@ class CollectorStore:
     def record_parse_failed(self, task_id: int, error: str) -> None:
         self._record_failure(task_id, "parse_failed", error, None)
 
+    def block_and_pause(self, task_id: int, reason: str) -> None:
+        with self._connection:
+            updated = self._connection.execute(
+                """
+                UPDATE task
+                SET status = 'blocked', error = ?, next_attempt_at = NULL,
+                    updated_at = ?
+                WHERE id = ?
+                """,
+                (reason, _utc_iso(), task_id),
+            )
+            if updated.rowcount != 1:
+                raise KeyError(task_id)
+            self._connection.execute(
+                """
+                INSERT INTO collector_state (key, value) VALUES ('pause_reason', ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                """,
+                (reason,),
+            )
+
     def _record_failure(
         self, task_id: int, status: str, error: str, next_attempt_at: Optional[str]
     ) -> None:
         with self._connection:
-            self._connection.execute(
+            updated = self._connection.execute(
                 """
                 UPDATE task
                 SET status = ?, error = ?, next_attempt_at = ?, updated_at = ?
@@ -207,6 +258,8 @@ class CollectorStore:
                 """,
                 (status, error, next_attempt_at, _utc_iso(), task_id),
             )
+            if updated.rowcount != 1:
+                raise KeyError(task_id)
 
     def pause_all(self, reason: str) -> None:
         with self._connection:
@@ -241,7 +294,7 @@ class CollectorStore:
     def results_for_task(self, task_id: int) -> List[ParsedPerformanceRow]:
         rows = self._connection.execute(
             """
-            SELECT resolution, average, min, max,
+            SELECT resolution, average_fps, minimum_fps, maximum_fps,
                    bottleneck_type, bottleneck_percent
             FROM result
             WHERE task_id = ?
@@ -252,9 +305,9 @@ class CollectorStore:
         return [
             ParsedPerformanceRow(
                 row["resolution"],
-                row["average"],
-                row["min"],
-                row["max"],
+                row["average_fps"],
+                row["minimum_fps"],
+                row["maximum_fps"],
                 row["bottleneck_type"],
                 row["bottleneck_percent"],
             )
