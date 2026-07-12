@@ -39,6 +39,7 @@ def build_option_template(
     budget: int,
     structured: bool = True,
     compatible: bool = True,
+    template_id: Optional[str] = None,
 ) -> BuildTemplate:
     components = dict(OPTION_COMPONENTS)
     if not compatible:
@@ -74,7 +75,7 @@ def build_option_template(
             "price_date": "2026-07-12",
         }
     return BuildTemplate(
-        id=f"base-{budget}-{direction}-{purchase_mode}",
+        id=template_id or f"base-{budget}-{direction}-{purchase_mode}",
         title=f"{budget} 元 {direction} {purchase_mode} 基底配置",
         budget_min=budget,
         budget_max=budget + 499,
@@ -97,6 +98,7 @@ def make_client(
     option_templates: tuple[tuple[str, str], ...] = (),
     detail_less_option_templates: tuple[tuple[str, str], ...] = (),
     incompatible_option_templates: tuple[tuple[str, str], ...] = (),
+    ranked_option_templates: tuple[tuple[str, str, str, bool], ...] = (),
     option_budget: int = 7500,
 ) -> TestClient:
     engine = create_engine(
@@ -230,7 +232,22 @@ def make_client(
                     compatible=False,
                 )
             )
-        if option_templates or detail_less_option_templates or incompatible_option_templates:
+        for template_id, direction, purchase_mode, compatible in ranked_option_templates:
+            session.add(
+                build_option_template(
+                    direction,
+                    purchase_mode,
+                    budget=option_budget,
+                    compatible=compatible,
+                    template_id=template_id,
+                )
+            )
+        if (
+            option_templates
+            or detail_less_option_templates
+            or incompatible_option_templates
+            or ranked_option_templates
+        ):
             session.commit()
         if with_recommended_prices:
             for component_id, price in [
@@ -418,6 +435,26 @@ def test_build_options_marks_one_incompatible_mode_unavailable() -> None:
     ]
     assert all(option["compatibility"]["compatible"] is True for option in body["options"])
     assert body["unavailable_modes"] == ["mixed"]
+
+
+def test_build_options_tries_next_ranked_template_when_first_is_incompatible() -> None:
+    client = make_client(
+        with_template=False,
+        ranked_option_templates=(
+            ("a-bad", "fps", "used", False),
+            ("z-good", "fps", "used", True),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [option["template_id"] for option in body["options"]] == ["z-good"]
+    assert body["unavailable_modes"] == ["new", "mixed"]
 
 
 def test_build_options_returns_503_when_all_modes_are_incompatible() -> None:

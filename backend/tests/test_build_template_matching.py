@@ -158,6 +158,21 @@ def test_matches_template_by_budget_use_case_and_preferences() -> None:
     assert result.id == "gaming-7000-2k"
 
 
+def test_match_build_template_returns_first_ranked_candidate() -> None:
+    request = BuildRequest(budget=7000, use_case="gaming", preferences=["2k"])
+    templates = [
+        template("z-good", 6500, 7500, ["gaming"], ["2k"]),
+        template("a-bad", 6500, 7500, ["gaming"], ["2k"]),
+    ]
+
+    ranked = build_service.rank_build_templates(request, templates)
+    matched = match_build_template(request, templates)
+
+    assert [candidate.id for candidate in ranked] == ["a-bad", "z-good"]
+    assert matched is not None
+    assert matched.id == "a-bad"
+
+
 def test_matches_template_from_frontend_build_payload() -> None:
     request = BuildRequest.model_validate(
         {

@@ -237,10 +237,10 @@ class BuildOptionsResponse(BaseModel):
     unavailable_modes: List[Literal["new", "used", "mixed"]]
 
 
-def match_build_template(
+def rank_build_templates(
     request: BuildRequest,
     templates: List[BuildTemplate],
-) -> Optional[BuildTemplate]:
+) -> List[BuildTemplate]:
     requested_direction = _requested_direction(request.preference_tokens)
     requested_purchase_mode = _requested_purchase_mode(request.preference_tokens)
     candidates = [
@@ -255,11 +255,8 @@ def match_build_template(
             requested_purchase_mode,
         )
     ]
-    if not candidates:
-        return None
-
     preferences = set(request.preference_tokens)
-    return min(
+    return sorted(
         candidates,
         key=lambda template: (
             -_structured_match_count(
@@ -274,6 +271,14 @@ def match_build_template(
             template.id,
         ),
     )
+
+
+def match_build_template(
+    request: BuildRequest,
+    templates: List[BuildTemplate],
+) -> Optional[BuildTemplate]:
+    candidates = rank_build_templates(request, templates)
+    return candidates[0] if candidates else None
 
 
 def _requested_direction(tokens: List[str]) -> Optional[str]:

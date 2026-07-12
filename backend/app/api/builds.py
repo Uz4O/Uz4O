@@ -14,6 +14,7 @@ from app.builds.service import (
     ai_pending_response,
     classify_game_direction,
     match_build_template,
+    rank_build_templates,
     rules_fallback_after_ai_failure,
     rules_fallback_response,
     template_response,
@@ -54,24 +55,24 @@ def get_build_options(
                 BUILD_PURCHASE_TOKENS[purchase_mode],
             ],
         )
-        template = match_build_template(forced_request, templates)
-        if template is None or not template.details:
-            unavailable_modes.append(purchase_mode)
-            continue
-
-        components = get_components_by_ids(session, template.components.values())
-        compatibility = evaluate_compatibility(
-            BuildSelection(components=dict(template.components)),
-            {component.id: component for component in components},
-        )
-        if not compatibility.compatible:
-            unavailable_modes.append(purchase_mode)
-            continue
-        options.append(
-            BuildOptionResponse.model_validate(
-                template_response(template, compatibility).model_dump()
+        for template in rank_build_templates(forced_request, templates):
+            if not template.details:
+                continue
+            components = get_components_by_ids(session, template.components.values())
+            compatibility = evaluate_compatibility(
+                BuildSelection(components=dict(template.components)),
+                {component.id: component for component in components},
             )
-        )
+            if not compatibility.compatible:
+                continue
+            options.append(
+                BuildOptionResponse.model_validate(
+                    template_response(template, compatibility).model_dump()
+                )
+            )
+            break
+        else:
+            unavailable_modes.append(purchase_mode)
 
     if not options:
         raise HTTPException(
