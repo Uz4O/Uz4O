@@ -117,6 +117,25 @@ def test_run_command_exits_nonzero_when_collection_blocks(
     assert "blocked: HTTP 429 retry_after=60" in capsys.readouterr().out
 
 
+def test_run_command_rejects_negative_max_tasks(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "ai-pc-builder-api",
+            "run-perf-collection",
+            str(tmp_path / "perf.sqlite"),
+            "--max-tasks",
+            "-1",
+        ],
+    )
+
+    with pytest.raises(SystemExit) as error:
+        main()
+
+    assert error.value.code == 2
+    assert "non-negative" in capsys.readouterr().err
+
+
 def test_export_command_flattens_only_valid_succeeded_results(
     monkeypatch, tmp_path: Path, capsys
 ) -> None:

@@ -365,6 +365,87 @@ def test_task_counts_include_each_present_status(tmp_path: Path) -> None:
     assert store.task_counts() == {"missing": 1, "pending": 1, "succeeded": 1}
 
 
+def test_parse_failure_counter_pauses_atomically_at_threshold(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite3"
+    store = CollectorStore(path)
+    store.seed_tasks([task("one"), task("two"), task("three")])
+
+    for expected_paused in (False, False, True):
+        claimed = store.claim_next(NOW)
+        assert claimed is not None
+        assert (
+            store.record_parse_failure_and_maybe_pause(
+                claimed.id, "bad table", threshold=3
+            )
+            is expected_paused
+        )
+
+    with CollectorStore(path) as reopened:
+        assert reopened.task_counts() == {"parse_failed": 3}
+        assert reopened.pause_reason() == "parse_error_threshold"
+        assert reopened.claim_next(NOW) is None
+
+
+def test_reset_parse_failures_starts_counter_over(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite3")
+    store.seed_tasks([task("one"), task("two"), task("three"), task("four")])
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    assert not store.record_parse_failure_and_maybe_pause(claimed.id, "bad", 3)
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    assert not store.record_parse_failure_and_maybe_pause(claimed.id, "bad", 3)
+
+    store.reset_parse_failures()
+
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    assert not store.record_parse_failure_and_maybe_pause(claimed.id, "bad", 3)
+    assert store.pause_reason() is None
+
+
+def test_has_claimable_observes_due_time_and_pause_without_claiming(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite3")
+    store.seed_tasks([task("one")])
+    assert store.has_claimable(NOW)
+    assert store.task_counts() == {"pending": 1}
+    store.pause_all("manual")
+    assert not store.has_claimable(NOW)
+    store.resume_all()
+    claimed = store.claim_next(NOW)
+    assert claimed is not None
+    store.record_retryable(claimed.id, "later", NOW + timedelta(seconds=10))
+    assert not store.has_claimable(NOW + timedelta(seconds=9))
+    assert store.has_claimable(NOW + timedelta(seconds=10))
+
+
+def test_run_lock_excludes_other_owner_and_releases(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite3"
+    first = CollectorStore(path)
+    second = CollectorStore(path)
+
+    assert first.acquire_run_lock("first", NOW, ttl_seconds=60)
+    assert not second.acquire_run_lock("second", NOW, ttl_seconds=60)
+    assert first.renew_run_lock("first", NOW + timedelta(seconds=1), 60)
+    assert not second.renew_run_lock("second", NOW + timedelta(seconds=1), 60)
+    first.release_run_lock("first")
+    assert second.acquire_run_lock("second", NOW, ttl_seconds=60)
+
+
+def test_expired_run_lock_can_be_taken_over(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite3"
+    first = CollectorStore(path)
+    second = CollectorStore(path)
+
+    assert first.acquire_run_lock("first", NOW, ttl_seconds=5)
+    assert not first.renew_run_lock("first", NOW + timedelta(seconds=5), 60)
+    assert second.acquire_run_lock("second", NOW + timedelta(seconds=5), 60)
+    first.release_run_lock("first")
+    assert second.renew_run_lock("second", NOW + timedelta(seconds=6), 60)
+
+
 def test_successful_records_returns_only_succeeded_tasks_in_stable_order(
     tmp_path: Path,
 ) -> None:

@@ -1,6 +1,7 @@
 import sqlite3
+import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
@@ -30,6 +31,12 @@ def _utc_iso(value: Optional[datetime] = None) -> str:
     if value.tzinfo is None:
         value = value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc).isoformat()
+
+
+def _utc_datetime(value: datetime) -> datetime:
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 class CollectorStore:
@@ -164,6 +171,26 @@ class CollectorStore:
             raise
         return StoredTask(**dict(claimed))
 
+    def has_claimable(self, now: Optional[datetime] = None) -> bool:
+        current_time = _utc_iso(now)
+        paused = self._connection.execute(
+            "SELECT 1 FROM collector_state WHERE key = 'pause_reason'"
+        ).fetchone()
+        if paused:
+            return False
+        return (
+            self._connection.execute(
+                """
+                SELECT 1 FROM task
+                WHERE status IN ('pending', 'retryable')
+                  AND (next_attempt_at IS NULL OR next_attempt_at <= ?)
+                LIMIT 1
+                """,
+                (current_time,),
+            ).fetchone()
+            is not None
+        )
+
     def record_success(
         self,
         task_id: int,
@@ -225,6 +252,57 @@ class CollectorStore:
     def record_parse_failed(self, task_id: int, error: str) -> None:
         self._record_failure(task_id, "parse_failed", error, None)
 
+    def record_parse_failure_and_maybe_pause(
+        self, task_id: int, error: str, threshold: int
+    ) -> bool:
+        if threshold <= 0:
+            raise ValueError("threshold must be positive")
+        self._connection.execute("BEGIN IMMEDIATE")
+        try:
+            updated = self._connection.execute(
+                """
+                UPDATE task
+                SET status = 'parse_failed', error = ?, next_attempt_at = NULL,
+                    updated_at = ?
+                WHERE id = ?
+                """,
+                (error, _utc_iso(), task_id),
+            )
+            if updated.rowcount != 1:
+                raise KeyError(task_id)
+            row = self._connection.execute(
+                "SELECT value FROM collector_state WHERE key = 'consecutive_parse_failures'"
+            ).fetchone()
+            count = (int(row["value"]) if row else 0) + 1
+            self._connection.execute(
+                """
+                INSERT INTO collector_state (key, value)
+                VALUES ('consecutive_parse_failures', ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                """,
+                (str(count),),
+            )
+            paused = count >= threshold
+            if paused:
+                self._connection.execute(
+                    """
+                    INSERT INTO collector_state (key, value)
+                    VALUES ('pause_reason', 'parse_error_threshold')
+                    ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                    """
+                )
+            self._connection.commit()
+            return paused
+        except Exception:
+            self._connection.rollback()
+            raise
+
+    def reset_parse_failures(self) -> None:
+        with self._connection:
+            self._connection.execute(
+                "DELETE FROM collector_state WHERE key = 'consecutive_parse_failures'"
+            )
+
     def record_failed(self, task_id: int, error: str) -> None:
         self._record_failure(task_id, "failed", error, None)
 
@@ -285,6 +363,90 @@ class CollectorStore:
             "SELECT value FROM collector_state WHERE key = 'pause_reason'"
         ).fetchone()
         return row["value"] if row else None
+
+    def acquire_run_lock(
+        self, owner: str, now: datetime, ttl_seconds: float
+    ) -> bool:
+        if ttl_seconds <= 0:
+            raise ValueError("lock TTL must be positive")
+        current = _utc_datetime(now)
+        self._connection.execute("BEGIN IMMEDIATE")
+        try:
+            row = self._connection.execute(
+                "SELECT value FROM collector_state WHERE key = 'run_lock'"
+            ).fetchone()
+            if row:
+                lock = json.loads(row["value"])
+                expires_at = datetime.fromisoformat(lock["expires_at"])
+                if lock["owner"] != owner and expires_at > current:
+                    self._connection.commit()
+                    return False
+            value = json.dumps(
+                {
+                    "owner": owner,
+                    "expires_at": (current + timedelta(seconds=ttl_seconds)).isoformat(),
+                }
+            )
+            self._connection.execute(
+                """
+                INSERT INTO collector_state (key, value) VALUES ('run_lock', ?)
+                ON CONFLICT(key) DO UPDATE SET value = excluded.value
+                """,
+                (value,),
+            )
+            self._connection.commit()
+            return True
+        except Exception:
+            self._connection.rollback()
+            raise
+
+    def renew_run_lock(self, owner: str, now: datetime, ttl_seconds: float) -> bool:
+        if ttl_seconds <= 0:
+            raise ValueError("lock TTL must be positive")
+        current = _utc_datetime(now)
+        self._connection.execute("BEGIN IMMEDIATE")
+        try:
+            row = self._connection.execute(
+                "SELECT value FROM collector_state WHERE key = 'run_lock'"
+            ).fetchone()
+            lock = json.loads(row["value"]) if row else None
+            if (
+                not lock
+                or lock["owner"] != owner
+                or datetime.fromisoformat(lock["expires_at"]) <= current
+            ):
+                self._connection.commit()
+                return False
+            value = json.dumps(
+                {
+                    "owner": owner,
+                    "expires_at": (current + timedelta(seconds=ttl_seconds)).isoformat(),
+                }
+            )
+            self._connection.execute(
+                "UPDATE collector_state SET value = ? WHERE key = 'run_lock'",
+                (value,),
+            )
+            self._connection.commit()
+            return True
+        except Exception:
+            self._connection.rollback()
+            raise
+
+    def release_run_lock(self, owner: str) -> None:
+        self._connection.execute("BEGIN IMMEDIATE")
+        try:
+            row = self._connection.execute(
+                "SELECT value FROM collector_state WHERE key = 'run_lock'"
+            ).fetchone()
+            if row and json.loads(row["value"])["owner"] == owner:
+                self._connection.execute(
+                    "DELETE FROM collector_state WHERE key = 'run_lock'"
+                )
+            self._connection.commit()
+        except Exception:
+            self._connection.rollback()
+            raise
 
     def task_counts(self) -> Dict[str, int]:
         return {

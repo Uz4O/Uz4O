@@ -31,6 +31,13 @@ from app.perf.collector_manifest import load_manifest, target_page_count, write_
 from app.perf.collector_store import CollectionTask, CollectorStore
 
 
+def _non_negative_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be non-negative")
+    return parsed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="ai-pc-builder-api")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -76,7 +83,7 @@ def main() -> None:
 
     run_perf_parser = subparsers.add_parser("run-perf-collection")
     run_perf_parser.add_argument("sqlite_path", type=Path)
-    run_perf_parser.add_argument("--max-tasks", type=int)
+    run_perf_parser.add_argument("--max-tasks", type=_non_negative_int)
     run_perf_parser.add_argument("--delay-seconds", type=float, default=2.0)
 
     export_perf_parser = subparsers.add_parser("export-perf-collection")

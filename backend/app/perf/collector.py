@@ -2,6 +2,7 @@ import hashlib
 import math
 import random
 import time
+import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Callable, Optional
@@ -23,6 +24,8 @@ class CollectorPolicy:
     jitter_seconds: float = 0.4
     max_attempts: int = 3
     timeout_seconds: float = 20.0
+    max_response_bytes: int = 2_000_000
+    lock_ttl_seconds: float = 60.0
 
     def __post_init__(self) -> None:
         if (
@@ -39,6 +42,19 @@ class CollectorPolicy:
             or self.timeout_seconds <= 0
         ):
             raise ValueError("max attempts and timeout must be positive")
+        if (
+            not isinstance(self.max_response_bytes, int)
+            or self.max_response_bytes <= 0
+        ):
+            raise ValueError("max response bytes must be a positive integer")
+        minimum_lock_ttl = (
+            self.timeout_seconds + self.delay_seconds + self.jitter_seconds
+        )
+        if (
+            not math.isfinite(self.lock_ttl_seconds)
+            or self.lock_ttl_seconds <= minimum_lock_ttl
+        ):
+            raise ValueError("lock TTL must exceed timeout, delay, and jitter")
 
 
 @dataclass(frozen=True)
@@ -53,6 +69,10 @@ class RunSummary:
 
 
 class CollectionBlocked(RuntimeError):
+    pass
+
+
+class CollectorAlreadyRunning(RuntimeError):
     pass
 
 
@@ -82,8 +102,11 @@ class Collector:
         self.sleep = sleep
         self.random_uniform = random_uniform
         self.now = now
+        self.owner = uuid.uuid4().hex
 
     def run(self, max_tasks: Optional[int] = None) -> RunSummary:
+        if max_tasks is not None and max_tasks < 0:
+            raise ValueError("max_tasks must be non-negative")
         counts = {
             "processed": 0,
             "succeeded": 0,
@@ -93,30 +116,35 @@ class Collector:
             "parse_failed": 0,
             "blocked": 0,
         }
-        consecutive_parse_errors = 0
-        task = None if max_tasks == 0 else self.store.claim_next(self.now())
-        while task is not None:
-            counts["processed"] += 1
-            result = self._process(task)
-            counts[result] += 1
-            if result == "parse_failed":
-                consecutive_parse_errors += 1
-                if consecutive_parse_errors == 3:
-                    reason = "parse_error_threshold"
-                    self.store.pause_all(reason)
-                    raise CollectionBlocked(reason)
-            else:
-                consecutive_parse_errors = 0
+        if not self.store.acquire_run_lock(
+            self.owner, self.now(), self.policy.lock_ttl_seconds
+        ):
+            raise CollectorAlreadyRunning("FPS collector is already running")
+        try:
+            task = None if max_tasks == 0 else self.store.claim_next(self.now())
+            while task is not None:
+                self._renew_lock()
+                counts["processed"] += 1
+                try:
+                    result = self._process(task)
+                finally:
+                    self._renew_lock()
+                counts[result] += 1
+                if result != "parse_failed":
+                    self.store.reset_parse_failures()
 
-            if max_tasks is not None and counts["processed"] >= max_tasks:
-                break
-            task = self.store.claim_next(self.now())
-            if task is not None:
+                if max_tasks is not None and counts["processed"] >= max_tasks:
+                    break
+                if not self.store.has_claimable(self.now()):
+                    break
                 self.sleep(
                     self.policy.delay_seconds
                     + self.random_uniform(0, self.policy.jitter_seconds)
                 )
-        return RunSummary(**counts)
+                task = self.store.claim_next(self.now())
+            return RunSummary(**counts)
+        finally:
+            self.store.release_run_lock(self.owner)
 
     def _process(self, task: StoredTask) -> str:
         try:
@@ -138,13 +166,27 @@ class Collector:
         self.client.headers.pop("Cookie", None)
         self.client.headers.pop("Authorization", None)
         try:
-            response = self.client.get(
+            with self.client.stream(
+                "GET",
                 task.source_url,
                 headers={"User-Agent": USER_AGENT},
                 timeout=self.policy.timeout_seconds,
                 auth=None,
                 follow_redirects=False,
-            )
+            ) as streamed_response:
+                chunks = []
+                size = 0
+                for chunk in streamed_response.iter_bytes(chunk_size=65_536):
+                    size += len(chunk)
+                    if size > self.policy.max_response_bytes:
+                        self.store.record_failed(task.id, "response_too_large")
+                        return "failed"
+                    chunks.append(chunk)
+                response = httpx.Response(
+                    streamed_response.status_code,
+                    headers=streamed_response.headers,
+                    content=b"".join(chunks),
+                )
         except httpx.TransportError as error:
             return self._record_network_failure(task, f"transport error: {error}")
 
@@ -171,7 +213,11 @@ class Collector:
         try:
             rows = parse_medium_results(response.text)
         except ParseError as error:
-            self.store.record_parse_failed(task.id, str(error))
+            paused = self.store.record_parse_failure_and_maybe_pause(
+                task.id, str(error), threshold=3
+            )
+            if paused:
+                raise CollectionBlocked("parse_error_threshold")
             return "parse_failed"
         self.store.record_success(
             task.id,
@@ -194,3 +240,9 @@ class Collector:
     def _block(self, task: StoredTask, reason: str) -> None:
         self.store.block_and_pause(task.id, reason)
         raise CollectionBlocked(reason)
+
+    def _renew_lock(self) -> None:
+        if not self.store.renew_run_lock(
+            self.owner, self.now(), self.policy.lock_ttl_seconds
+        ):
+            raise CollectorAlreadyRunning("FPS collector lock was lost")

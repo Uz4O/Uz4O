@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import sqlite3
 
 import httpx
 import pytest
@@ -7,6 +8,7 @@ import pytest
 from app.perf.collector import (
     CollectionBlocked,
     Collector,
+    CollectorAlreadyRunning,
     CollectorPolicy,
     is_challenge,
 )
@@ -68,6 +70,9 @@ def collector(
         {"jitter_seconds": float("inf")},
         {"max_attempts": 1.5},
         {"timeout_seconds": float("inf")},
+        {"max_response_bytes": 0},
+        {"lock_ttl_seconds": 0},
+        {"lock_ttl_seconds": 22},
     ],
 )
 def test_policy_rejects_invalid_values(kwargs: dict) -> None:
@@ -273,6 +278,34 @@ def test_three_consecutive_parse_failures_pause_collection(tmp_path: Path) -> No
     assert store.pause_reason() == "parse_error_threshold"
 
 
+def test_parse_failures_accumulate_across_limited_runs(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "one", "two", "three")
+    client = httpx.Client(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200, text="bad"))
+    )
+
+    for _ in range(2):
+        assert Collector(
+            store,
+            client,
+            CollectorPolicy(delay_seconds=0, jitter_seconds=0),
+            sleep=lambda _: None,
+            now=lambda: NOW,
+        ).run(max_tasks=1).parse_failed == 1
+    with pytest.raises(CollectionBlocked, match="parse_error_threshold"):
+        Collector(
+            store,
+            client,
+            CollectorPolicy(delay_seconds=0, jitter_seconds=0),
+            sleep=lambda _: None,
+            now=lambda: NOW,
+        ).run(max_tasks=1)
+
+    assert store.task_counts() == {"parse_failed": 3}
+    assert store.pause_reason() == "parse_error_threshold"
+
+
 def test_success_resets_consecutive_parse_failure_count(tmp_path: Path) -> None:
     store = CollectorStore(tmp_path / "collector.sqlite")
     seed(store, "bad-1", "good", "bad-2", "bad-3")
@@ -285,6 +318,21 @@ def test_success_resets_consecutive_parse_failure_count(tmp_path: Path) -> None:
     assert summary.parse_failed == 3
     assert summary.succeeded == 1
     assert store.pause_reason() is None
+
+
+def test_success_resets_persisted_parse_failure_count(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "bad-1", "bad-2", "good", "bad-3", "bad-4")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, text=HTML if request.url.path == "/good" else "bad")
+
+    runner = collector(store, handler)
+    for _ in range(5):
+        runner.run(max_tasks=1)
+
+    assert store.pause_reason() is None
+    assert store.task_counts() == {"parse_failed": 4, "succeeded": 1}
 
 
 def test_sleep_uses_delay_and_jitter_only_between_processed_tasks(tmp_path: Path) -> None:
@@ -310,6 +358,30 @@ def test_sleep_uses_delay_and_jitter_only_between_processed_tasks(tmp_path: Path
     assert sleeps == [2.25]
 
 
+def test_interrupted_sleep_does_not_claim_next_task(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "one", "two")
+
+    with pytest.raises(KeyboardInterrupt):
+        collector(
+            store,
+            lambda _: httpx.Response(404),
+            sleep=lambda _: (_ for _ in ()).throw(KeyboardInterrupt()),
+        ).run()
+
+    with sqlite3.connect(path) as connection:
+        assert connection.execute(
+            "SELECT status, attempts FROM task ORDER BY id"
+        ).fetchall() == [("missing", 1), ("pending", 0)]
+
+    assert collector(store, lambda _: httpx.Response(404)).run(max_tasks=1).missing == 1
+    with sqlite3.connect(path) as connection:
+        assert connection.execute(
+            "SELECT status, attempts FROM task ORDER BY id"
+        ).fetchall() == [("missing", 1), ("missing", 1)]
+
+
 def test_max_tasks_limits_claimed_tasks(tmp_path: Path) -> None:
     store = CollectorStore(tmp_path / "collector.sqlite")
     seed(store, "one", "two")
@@ -318,6 +390,127 @@ def test_max_tasks_limits_claimed_tasks(tmp_path: Path) -> None:
 
     assert summary.processed == 1
     assert store.task_counts() == {"missing": 1, "pending": 1}
+
+
+def test_negative_max_tasks_is_rejected_before_claim(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "one")
+
+    with pytest.raises(ValueError, match="max_tasks"):
+        collector(store, lambda _: httpx.Response(404)).run(max_tasks=-1)
+
+    assert store.task_counts() == {"pending": 1}
+
+
+def test_second_collector_cannot_claim_or_request_while_lock_is_held(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    first_store = CollectorStore(path)
+    second_store = CollectorStore(path)
+    seed(first_store, "one", "two")
+    second_requests = []
+    second = collector(second_store, second_requests.append)
+
+    def sleep(_: float) -> None:
+        with pytest.raises(CollectorAlreadyRunning):
+            second.run()
+
+    summary = collector(
+        first_store,
+        lambda _: httpx.Response(404),
+        sleep=sleep,
+    ).run()
+
+    assert summary.missing == 2
+    assert second_requests == []
+
+
+def test_expired_lock_is_taken_over_and_fetching_task_recovered(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite"
+    stale_store = CollectorStore(path)
+    seed(stale_store, "one")
+    assert stale_store.acquire_run_lock("stale", NOW, ttl_seconds=60)
+    assert stale_store.claim_next(NOW) is not None
+
+    fresh_store = CollectorStore(path)
+    summary = collector(
+        fresh_store,
+        lambda _: httpx.Response(404),
+        now=lambda: NOW + timedelta(seconds=60),
+    ).run()
+
+    assert summary.missing == 1
+    with sqlite3.connect(path) as connection:
+        assert connection.execute("SELECT status, attempts FROM task").fetchone() == (
+            "missing",
+            2,
+        )
+
+
+def test_normal_run_releases_lock(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "one")
+    collector(store, lambda _: httpx.Response(404)).run()
+
+    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
+
+
+class ClosingStream(httpx.SyncByteStream):
+    def __init__(self, body: bytes):
+        self.body = body
+        self.closed = False
+
+    def __iter__(self):
+        yield self.body
+
+    def close(self) -> None:
+        self.closed = True
+
+
+def test_oversized_response_fails_without_parsing_and_closes_stream(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "large")
+    stream = ClosingStream(b"x" * 11)
+    runner = collector(
+        store,
+        lambda _: httpx.Response(200, stream=stream),
+        policy=CollectorPolicy(
+            delay_seconds=0, jitter_seconds=0, max_response_bytes=10
+        ),
+    )
+
+    summary = runner.run()
+
+    assert summary.failed == 1
+    assert store.task_counts() == {"failed": 1}
+    assert stream.closed
+
+
+def test_response_at_exact_byte_limit_is_parsed_and_stream_closed(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "exact")
+    body = HTML.encode()
+    stream = ClosingStream(body)
+    runner = collector(
+        store,
+        lambda _: httpx.Response(200, stream=stream),
+        policy=CollectorPolicy(
+            delay_seconds=0,
+            jitter_seconds=0,
+            max_response_bytes=len(body),
+        ),
+    )
+
+    summary = runner.run()
+
+    assert summary.succeeded == 1
+    assert stream.closed
 
 
 @pytest.mark.parametrize(
