@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import signal
 import sqlite3
+import time
 
 import httpx
 import pytest
@@ -523,6 +525,120 @@ class ChunkStream(ClosingStream):
             if index == 1 and self.before_second:
                 self.before_second()
             yield chunk
+
+
+class SleepingStream(ClosingStream):
+    def __init__(self, delay: float, body: bytes):
+        super().__init__(body)
+        self.delay = delay
+
+    def __iter__(self):
+        time.sleep(self.delay)
+        yield self.body
+
+
+@pytest.mark.parametrize(
+    ("max_attempts", "expected_status"), [(3, "retryable"), (1, "failed")]
+)
+def test_hard_deadline_interrupts_blocking_stream_and_releases_lock(
+    tmp_path: Path, max_attempts: int, expected_status: str
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "sleeping")
+    stream = SleepingStream(0.15, HTML.encode())
+    runner = collector(
+        store,
+        lambda _: httpx.Response(200, stream=stream),
+        policy=CollectorPolicy(
+            delay_seconds=0,
+            jitter_seconds=0,
+            max_attempts=max_attempts,
+            max_request_seconds=0.02,
+        ),
+    )
+
+    started = time.monotonic()
+    summary = runner.run()
+    elapsed = time.monotonic() - started
+
+    assert elapsed < 0.1
+    assert getattr(summary, expected_status) == 1
+    assert store.task_counts() == {expected_status: 1}
+    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
+    assert stream.closed
+
+
+def test_successful_request_restores_existing_alarm_handler_and_timer(
+    tmp_path: Path,
+) -> None:
+    original_handler = signal.getsignal(signal.SIGALRM)
+    original_timer = signal.getitimer(signal.ITIMER_REAL)
+
+    def previous_handler(_signum, _frame):
+        pass
+
+    signal.signal(signal.SIGALRM, previous_handler)
+    signal.setitimer(signal.ITIMER_REAL, 5.0)
+    try:
+        store = CollectorStore(tmp_path / "collector.sqlite")
+        seed(store, "one")
+        assert collector(store, lambda _: httpx.Response(404)).run().missing == 1
+
+        assert signal.getsignal(signal.SIGALRM) is previous_handler
+        remaining, interval = signal.getitimer(signal.ITIMER_REAL)
+        assert 0 < remaining <= 5.0
+        assert interval == 0
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, original_handler)
+        signal.setitimer(signal.ITIMER_REAL, *original_timer)
+
+
+def test_timed_out_request_restores_alarm_handler_without_residual_timer(
+    tmp_path: Path,
+) -> None:
+    original_handler = signal.getsignal(signal.SIGALRM)
+    original_timer = signal.getitimer(signal.ITIMER_REAL)
+    signal.setitimer(signal.ITIMER_REAL, 0)
+    try:
+        store = CollectorStore(tmp_path / "collector.sqlite")
+        seed(store, "slow")
+        stream = SleepingStream(0.15, HTML.encode())
+        runner = collector(
+            store,
+            lambda _: httpx.Response(200, stream=stream),
+            policy=CollectorPolicy(
+                delay_seconds=0,
+                jitter_seconds=0,
+                max_attempts=1,
+                max_request_seconds=0.02,
+            ),
+        )
+
+        assert runner.run().failed == 1
+
+        assert signal.getsignal(signal.SIGALRM) is original_handler
+        assert signal.getitimer(signal.ITIMER_REAL) == (0.0, 0.0)
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, original_handler)
+        signal.setitimer(signal.ITIMER_REAL, *original_timer)
+
+
+def test_unavailable_hard_deadline_records_task_then_raises(
+    monkeypatch, tmp_path: Path
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "one")
+    monkeypatch.delattr("app.perf.collector.signal.setitimer")
+
+    with pytest.raises(RuntimeError, match="hard deadline unavailable"):
+        collector(store, lambda _: httpx.Response(200, text=HTML)).run()
+
+    assert store.task_counts() == {"retryable": 1}
+    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
 
 
 def test_slow_identity_stream_times_out_without_allowing_second_collector(

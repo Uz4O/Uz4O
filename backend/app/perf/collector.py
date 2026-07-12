@@ -1,8 +1,11 @@
 import hashlib
 import math
 import random
+import signal
+import threading
 import time
 import uuid
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Callable, Optional
@@ -90,6 +93,14 @@ class CollectionBlocked(RuntimeError):
 
 
 class CollectorAlreadyRunning(RuntimeError):
+    pass
+
+
+class RequestDeadlineExceeded(httpx.TimeoutException):
+    pass
+
+
+class HardDeadlineUnavailable(RuntimeError):
     pass
 
 
@@ -188,6 +199,9 @@ class Collector:
             response = self._limited_response(task)
         except httpx.HTTPError as error:
             return self._record_network_failure(task, f"HTTP error: {error}")
+        except HardDeadlineUnavailable as error:
+            self._record_network_failure(task, f"hard deadline unavailable: {error}")
+            raise
         if response is None:
             return "failed"
 
@@ -241,47 +255,81 @@ class Collector:
     def _limited_response(self, task: StoredTask) -> Optional[httpx.Response]:
         self._renew_lock()
         started_at = self.monotonic()
-        with self.client.stream(
-            "GET",
-            task.source_url,
-            headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"},
-            timeout=self.policy.timeout_seconds,
-            auth=None,
-            follow_redirects=False,
-        ) as streamed_response:
-            content_encoding = streamed_response.headers.get(
-                "Content-Encoding", "identity"
-            ).strip().casefold()
-            if content_encoding != "identity":
-                self._block(task, "compressed response not allowed")
-            self._check_stream_deadline(started_at, streamed_response.request)
-            chunks = []
-            size = 0
-            raw_chunks = (
-                [streamed_response.content]
-                if streamed_response.is_stream_consumed
-                else streamed_response.iter_raw()
-            )
-            for raw_chunk in raw_chunks:
-                for offset in range(0, len(raw_chunk), 65_536):
-                    chunk = raw_chunk[offset : offset + 65_536]
-                    size += len(chunk)
-                    if size > self.policy.max_response_bytes:
-                        self.store.record_failed(task.id, "response_too_large")
-                        return None
-                    chunks.append(chunk)
-                    self._check_stream_deadline(started_at, streamed_response.request)
-                    self._renew_lock()
-            headers = [
-                (name, value)
-                for name, value in streamed_response.headers.multi_items()
-                if name.casefold() not in WIRE_BODY_HEADERS
-            ]
-            return httpx.Response(
-                streamed_response.status_code,
-                headers=headers,
-                content=b"".join(chunks),
-            )
+        with self._hard_request_deadline():
+            with self.client.stream(
+                "GET",
+                task.source_url,
+                headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"},
+                timeout=self.policy.timeout_seconds,
+                auth=None,
+                follow_redirects=False,
+            ) as streamed_response:
+                content_encoding = streamed_response.headers.get(
+                    "Content-Encoding", "identity"
+                ).strip().casefold()
+                if content_encoding != "identity":
+                    self._block(task, "compressed response not allowed")
+                self._check_stream_deadline(started_at, streamed_response.request)
+                chunks = []
+                size = 0
+                raw_chunks = (
+                    [streamed_response.content]
+                    if streamed_response.is_stream_consumed
+                    else streamed_response.iter_raw()
+                )
+                for raw_chunk in raw_chunks:
+                    for offset in range(0, len(raw_chunk), 65_536):
+                        chunk = raw_chunk[offset : offset + 65_536]
+                        size += len(chunk)
+                        if size > self.policy.max_response_bytes:
+                            self.store.record_failed(task.id, "response_too_large")
+                            return None
+                        chunks.append(chunk)
+                        self._check_stream_deadline(
+                            started_at, streamed_response.request
+                        )
+                        self._renew_lock()
+                headers = [
+                    (name, value)
+                    for name, value in streamed_response.headers.multi_items()
+                    if name.casefold() not in WIRE_BODY_HEADERS
+                ]
+                return httpx.Response(
+                    streamed_response.status_code,
+                    headers=headers,
+                    content=b"".join(chunks),
+                )
+
+    @contextmanager
+    def _hard_request_deadline(self):
+        if (
+            not hasattr(signal, "setitimer")
+            or not hasattr(signal, "SIGALRM")
+            or threading.current_thread() is not threading.main_thread()
+        ):
+            raise HardDeadlineUnavailable("hard deadline unavailable")
+
+        previous_handler = signal.getsignal(signal.SIGALRM)
+        previous_timer = signal.getitimer(signal.ITIMER_REAL)
+        started_at = time.monotonic()
+
+        def deadline_exceeded(_signum, _frame):
+            raise RequestDeadlineExceeded("FPS request deadline exceeded")
+
+        deadline = self.policy.max_request_seconds
+        if previous_timer[0] > 0:
+            deadline = min(deadline, previous_timer[0])
+        signal.signal(signal.SIGALRM, deadline_exceeded)
+        signal.setitimer(signal.ITIMER_REAL, deadline)
+        try:
+            yield
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous_handler)
+            if previous_timer[0] > 0:
+                elapsed = time.monotonic() - started_at
+                remaining = max(previous_timer[0] - elapsed, 0.000_001)
+                signal.setitimer(signal.ITIMER_REAL, remaining, previous_timer[1])
 
     def _check_stream_deadline(
         self, started_at: float, request: httpx.Request
