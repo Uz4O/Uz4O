@@ -81,6 +81,24 @@ def test_invalid_fps_order_or_range_raises(average: int, minimum: int, maximum: 
         parse_medium_results(table(*rows))
 
 
+@pytest.mark.parametrize("average", ["-5", "1,2,3", "1,000"])
+def test_signed_or_comma_separated_fps_raises(average: str) -> None:
+    rows = list(valid_rows())
+    rows[0] = row("1920 x 1080", average, 1, 1200, "CPU bottleneck 11%")
+
+    with pytest.raises(ParseError, match="FPS"):
+        parse_medium_results(table(*rows))
+
+
+@pytest.mark.parametrize("percent", ["-11%", "1,000%"])
+def test_signed_or_comma_separated_bottleneck_percent_raises(percent: str) -> None:
+    rows = list(valid_rows())
+    rows[0] = row("1920 x 1080", 77, 66, 89, f"CPU bottleneck {percent}")
+
+    with pytest.raises(ParseError, match="percentage"):
+        parse_medium_results(table(*rows))
+
+
 @pytest.mark.parametrize(
     "html",
     [
@@ -149,3 +167,41 @@ def test_ignores_emoji_and_star_noise_in_playability_column() -> None:
         ("2k", 60),
         ("4k", 40),
     ]
+
+
+def test_uses_only_complete_candidate_results_table() -> None:
+    incomplete = table(*valid_rows()[:2])
+    complete = table(
+        row("1920x1080", 80, 70, 90, "CPU 12%"),
+        row("2560x1440", 60, 50, 70, "GPU 8%"),
+        row("3840x2160", 40, 30, 50, "No bottleneck"),
+    )
+
+    parsed = parse_medium_results(incomplete + complete)
+
+    assert [item.average_fps for item in parsed] == [80, 60, 40]
+
+
+def test_skips_malformed_candidate_when_another_candidate_is_valid() -> None:
+    malformed = table(*valid_rows(), "<tr><td>unexpected summary</td></tr>")
+    valid = table(
+        row("1920x1080", 80, 70, 90, "CPU 12%"),
+        row("2560x1440", 60, 50, 70, "GPU 8%"),
+        row("3840x2160", 40, 30, 50, "No bottleneck"),
+    )
+
+    parsed = parse_medium_results(malformed + valid)
+
+    assert [item.average_fps for item in parsed] == [80, 60, 40]
+
+
+def test_multiple_complete_candidate_tables_raise_ambiguous() -> None:
+    first = table(*valid_rows())
+    second = table(
+        row("1920x1080", 80, 70, 90, "CPU 12%"),
+        row("2560x1440", 60, 50, 70, "GPU 8%"),
+        row("3840x2160", 40, 30, 50, "No bottleneck"),
+    )
+
+    with pytest.raises(ParseError, match="ambiguous"):
+        parse_medium_results(first + second)

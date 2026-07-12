@@ -75,15 +75,21 @@ def _header_kind(text: str) -> Optional[str]:
     return None
 
 
-def _find_results_table(tables: List[List[List[str]]]) -> Tuple[List[List[str]], Dict[str, int], int]:
+def _find_results_tables(
+    tables: List[List[List[str]]],
+) -> List[Tuple[List[List[str]], Dict[str, int], int]]:
     required = {"resolution", "average", "minimum", "maximum", "bottleneck"}
+    candidates = []
     for table in tables:
         for row_index, row in enumerate(table):
             columns = {_header_kind(text): index for index, text in enumerate(row)}
             columns.pop(None, None)
             if required <= columns.keys():
-                return table, columns, row_index
-    raise ParseError("results table with required columns not found")
+                candidates.append((table, columns, row_index))
+                break
+    if not candidates:
+        raise ParseError("results table with required columns not found")
+    return candidates
 
 
 def _resolution(text: str) -> Optional[Resolution]:
@@ -98,8 +104,8 @@ def _resolution(text: str) -> Optional[Resolution]:
 
 
 def _integer(text: str, label: str) -> int:
-    numbers = re.findall(r"\d+", text.replace(",", ""))
-    if len(numbers) != 1:
+    numbers = re.findall(r"[+-]?[0-9][0-9,]*", text)
+    if len(numbers) != 1 or re.fullmatch(r"[0-9]+", numbers[0]) is None:
         raise ParseError(f"invalid {label} FPS value: {text!r}")
     return int(numbers[0])
 
@@ -115,17 +121,22 @@ def _bottleneck(text: str) -> Tuple[BottleneckType, Optional[int]]:
     else:
         raise ParseError(f"unsupported bottleneck value: {text!r}")
 
-    match = re.search(r"(\d+)\s*%", value)
-    percent = int(match.group(1)) if match else None
+    percentages = re.findall(r"([+-]?[0-9][0-9,.]*)\s*%", value)
+    if len(percentages) > 1 or (
+        percentages and re.fullmatch(r"[0-9]+", percentages[0]) is None
+    ):
+        raise ParseError(f"invalid bottleneck percentage: {text!r}")
+    if "%" in value and not percentages:
+        raise ParseError(f"invalid bottleneck percentage: {text!r}")
+    percent = int(percentages[0]) if percentages else None
     if percent is not None and not 0 <= percent <= 100:
         raise ParseError(f"invalid bottleneck percentage: {percent}")
     return kind, percent
 
 
-def parse_medium_results(html: str) -> List[ParsedPerformanceRow]:
-    parser = _TableParser()
-    parser.feed(html)
-    table, columns, header_index = _find_results_table(parser.tables)
+def _parse_results_table(
+    table: List[List[str]], columns: Dict[str, int], header_index: int
+) -> List[ParsedPerformanceRow]:
     parsed: Dict[Resolution, ParsedPerformanceRow] = {}
 
     for cells in table[header_index + 1 :]:
@@ -162,3 +173,24 @@ def parse_medium_results(html: str) -> List[ParsedPerformanceRow]:
     if missing:
         raise ParseError(f"missing target resolutions: {', '.join(missing)}")
     return [parsed[resolution] for resolution in order]
+
+
+def parse_medium_results(html: str) -> List[ParsedPerformanceRow]:
+    parser = _TableParser()
+    parser.feed(html)
+    candidates = _find_results_tables(parser.tables)
+    parsed = []
+    errors = []
+    for table, columns, header_index in candidates:
+        try:
+            parsed.append(_parse_results_table(table, columns, header_index))
+        except ParseError as error:
+            errors.append(error)
+
+    if len(parsed) > 1:
+        raise ParseError("ambiguous results tables")
+    if parsed:
+        return parsed[0]
+    if len(candidates) == 1:
+        raise errors[0]
+    raise ParseError("no valid results table found")
