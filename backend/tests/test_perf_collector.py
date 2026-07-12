@@ -427,6 +427,67 @@ def test_interrupted_sleep_does_not_claim_next_task(tmp_path: Path) -> None:
         ).fetchall() == [("missing", 1), ("missing", 1)]
 
 
+def test_lock_is_revalidated_after_sleep_before_claiming_next_task(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    first_store = CollectorStore(path)
+    second_store = CollectorStore(path)
+    seed(first_store, "one", "two")
+    current = [NOW]
+    requests = []
+
+    def sleep(_: float) -> None:
+        current[0] += timedelta(seconds=60)
+        assert second_store.acquire_run_lock("new-owner", current[0], 60)
+
+    runner = collector(
+        first_store,
+        lambda request: requests.append(request) or httpx.Response(404),
+        sleep=sleep,
+        now=lambda: current[0],
+    )
+
+    with pytest.raises(CollectorAlreadyRunning, match="lock was lost"):
+        runner.run()
+
+    assert len(requests) == 1
+    with sqlite3.connect(path) as connection:
+        assert connection.execute(
+            "SELECT status, attempts FROM task ORDER BY id"
+        ).fetchall() == [("missing", 1), ("pending", 0)]
+
+
+def test_lock_is_confirmed_before_first_claim(tmp_path: Path) -> None:
+    path = tmp_path / "collector.sqlite"
+    first_store = CollectorStore(path)
+    second_store = CollectorStore(path)
+    seed(first_store, "one")
+    original_renew = first_store.renew_run_lock
+    requests = []
+
+    def lose_before_claim(owner: str, now: datetime, ttl_seconds: float) -> bool:
+        takeover_time = now + timedelta(seconds=ttl_seconds)
+        assert second_store.acquire_run_lock("new-owner", takeover_time, ttl_seconds)
+        return original_renew(owner, now, ttl_seconds)
+
+    first_store.renew_run_lock = lose_before_claim
+    runner = collector(
+        first_store,
+        lambda request: requests.append(request) or httpx.Response(404),
+    )
+
+    with pytest.raises(CollectorAlreadyRunning, match="lock was lost"):
+        runner.run()
+
+    assert requests == []
+    with sqlite3.connect(path) as connection:
+        assert connection.execute("SELECT status, attempts FROM task").fetchone() == (
+            "pending",
+            0,
+        )
+
+
 def test_max_tasks_limits_claimed_tasks(tmp_path: Path) -> None:
     store = CollectorStore(tmp_path / "collector.sqlite")
     seed(store, "one", "two")
@@ -641,6 +702,47 @@ def test_unavailable_hard_deadline_records_task_then_raises(
     assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
 
 
+def test_deadline_install_failure_restores_signal_state_and_safely_fails_task(
+    monkeypatch, tmp_path: Path
+) -> None:
+    path = tmp_path / "collector.sqlite"
+    store = CollectorStore(path)
+    seed(store, "one")
+    original_handler = signal.getsignal(signal.SIGALRM)
+    original_timer = signal.getitimer(signal.ITIMER_REAL)
+    real_setitimer = signal.setitimer
+    calls = []
+    requests = []
+
+    def fail_first_install(which, seconds=0, interval=0):
+        calls.append((which, seconds, interval))
+        if len(calls) == 1:
+            raise OverflowError("timer too large")
+        return real_setitimer(which, seconds, interval)
+
+    monkeypatch.setattr(signal, "setitimer", fail_first_install)
+    runner = collector(
+        store,
+        lambda request: requests.append(request) or httpx.Response(200, text=HTML),
+        policy=CollectorPolicy(
+            delay_seconds=0,
+            jitter_seconds=0,
+            max_attempts=1,
+            max_request_seconds=1e10,
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="deadline unavailable"):
+        runner.run()
+
+    assert requests == []
+    assert store.task_counts() == {"failed": 1}
+    assert signal.getsignal(signal.SIGALRM) is original_handler
+    assert signal.getitimer(signal.ITIMER_REAL) == original_timer
+    assert any(seconds == 0 for _, seconds, _ in calls[1:])
+    assert CollectorStore(path).acquire_run_lock("next", NOW, 60)
+
+
 def test_slow_identity_stream_times_out_without_allowing_second_collector(
     tmp_path: Path,
 ) -> None:
@@ -690,7 +792,7 @@ def test_lost_lease_mid_stream_writes_no_terminal_state_or_results(
     def renew(owner: str, now: datetime, ttl_seconds: float) -> bool:
         nonlocal renew_calls, takeover_time
         renew_calls += 1
-        if renew_calls == 3:
+        if renew_calls == 4:
             takeover_time = NOW + timedelta(seconds=ttl_seconds)
             assert second_store.acquire_run_lock("new-owner", takeover_time, ttl_seconds)
         return original_renew(owner, now, ttl_seconds)

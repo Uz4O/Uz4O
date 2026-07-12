@@ -100,7 +100,7 @@ class RequestDeadlineExceeded(httpx.TimeoutException):
     pass
 
 
-class HardDeadlineUnavailable(RuntimeError):
+class RequestDeadlineUnavailable(RuntimeError):
     pass
 
 
@@ -151,6 +151,7 @@ class Collector:
         ):
             raise CollectorAlreadyRunning("FPS collector is already running")
         try:
+            self._renew_lock()
             task = None if max_tasks == 0 else self.store.claim_next(self.now())
             while task is not None:
                 self._renew_lock()
@@ -171,6 +172,7 @@ class Collector:
                     self.policy.delay_seconds
                     + self.random_uniform(0, self.policy.jitter_seconds)
                 )
+                self._renew_lock()
                 task = self.store.claim_next(self.now())
             return RunSummary(**counts)
         finally:
@@ -199,7 +201,7 @@ class Collector:
             response = self._limited_response(task)
         except httpx.HTTPError as error:
             return self._record_network_failure(task, f"HTTP error: {error}")
-        except HardDeadlineUnavailable as error:
+        except RequestDeadlineUnavailable as error:
             self._record_network_failure(task, f"hard deadline unavailable: {error}")
             raise
         if response is None:
@@ -307,7 +309,7 @@ class Collector:
             or not hasattr(signal, "SIGALRM")
             or threading.current_thread() is not threading.main_thread()
         ):
-            raise HardDeadlineUnavailable("hard deadline unavailable")
+            raise RequestDeadlineUnavailable("hard deadline unavailable")
 
         previous_handler = signal.getsignal(signal.SIGALRM)
         previous_timer = signal.getitimer(signal.ITIMER_REAL)
@@ -319,17 +321,29 @@ class Collector:
         deadline = self.policy.max_request_seconds
         if previous_timer[0] > 0:
             deadline = min(deadline, previous_timer[0])
-        signal.signal(signal.SIGALRM, deadline_exceeded)
-        signal.setitimer(signal.ITIMER_REAL, deadline)
+        handler_replaced = False
         try:
+            try:
+                signal.signal(signal.SIGALRM, deadline_exceeded)
+                handler_replaced = True
+                signal.setitimer(signal.ITIMER_REAL, deadline)
+            except (OSError, OverflowError) as error:
+                raise RequestDeadlineUnavailable(
+                    f"request deadline unavailable: {error}"
+                ) from error
             yield
         finally:
-            signal.setitimer(signal.ITIMER_REAL, 0)
-            signal.signal(signal.SIGALRM, previous_handler)
-            if previous_timer[0] > 0:
-                elapsed = time.monotonic() - started_at
-                remaining = max(previous_timer[0] - elapsed, 0.000_001)
-                signal.setitimer(signal.ITIMER_REAL, remaining, previous_timer[1])
+            if handler_replaced:
+                try:
+                    signal.setitimer(signal.ITIMER_REAL, 0)
+                finally:
+                    signal.signal(signal.SIGALRM, previous_handler)
+                    if previous_timer[0] > 0:
+                        elapsed = time.monotonic() - started_at
+                        remaining = max(previous_timer[0] - elapsed, 0.000_001)
+                        signal.setitimer(
+                            signal.ITIMER_REAL, remaining, previous_timer[1]
+                        )
 
     def _check_stream_deadline(
         self, started_at: float, request: httpx.Request
