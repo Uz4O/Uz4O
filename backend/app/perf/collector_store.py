@@ -149,6 +149,9 @@ class CollectorStore:
         rows: Sequence[ParsedPerformanceRow],
         response_hash: str,
     ) -> None:
+        resolutions = [row.resolution for row in rows]
+        if len(resolutions) != 3 or set(resolutions) != {"1080p", "2k", "4k"}:
+            raise ValueError("result resolutions must be exactly 1080p, 2k, and 4k")
         with self._connection:
             self._connection.execute("DELETE FROM result WHERE task_id = ?", (task_id,))
             self._connection.executemany(

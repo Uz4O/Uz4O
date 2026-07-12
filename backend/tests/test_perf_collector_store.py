@@ -117,8 +117,21 @@ def test_success_saves_hash_and_replaces_results_without_duplicates(
     assert (status, response_hash) == ("succeeded", "hash-two")
 
 
-def test_failed_success_transaction_preserves_previous_results_and_status(
-    tmp_path: Path,
+@pytest.mark.parametrize(
+    "invalid_rows",
+    [
+        rows()[:2],
+        [rows()[0], rows()[0], rows()[2]],
+        [
+            rows()[0],
+            rows()[1],
+            ParsedPerformanceRow("8k", 20, 10, 30, "gpu", 5),
+        ],
+    ],
+    ids=["incomplete", "duplicate", "unknown"],
+)
+def test_invalid_result_set_preserves_previous_results_status_and_hash(
+    tmp_path: Path, invalid_rows: list
 ) -> None:
     path = tmp_path / "collector.sqlite3"
     store = CollectorStore(path)
@@ -126,10 +139,9 @@ def test_failed_success_transaction_preserves_previous_results_and_status(
     claimed = store.claim_next(NOW)
     assert claimed is not None
     store.record_success(claimed.id, rows(), "old-hash")
-    duplicate_rows = [rows()[0], rows()[0]]
 
-    with pytest.raises(sqlite3.IntegrityError):
-        store.record_success(claimed.id, duplicate_rows, "new-hash")
+    with pytest.raises(ValueError, match="resolution"):
+        store.record_success(claimed.id, invalid_rows, "new-hash")
 
     assert store.results_for_task(claimed.id) == rows()
     with sqlite3.connect(path) as connection:
