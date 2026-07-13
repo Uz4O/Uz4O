@@ -7,13 +7,16 @@ from sqlalchemy.orm import Session
 
 from app.builds.high_budget_catalog import (
     generate_high_budget_report,
+    generate_high_budget_templates,
     render_high_budget_markdown,
     write_high_budget_artifacts,
 )
+from app.builds.low_budget_catalog import generate_low_budget_templates
 from app.builds.models import BuildTemplate
 from app.builds.repository import upsert_build_templates
 from app.builds.service import BuildRequest, match_build_template
 from app.builds.templates import read_build_template_inputs
+from app.catalog.models import HardwareComponent
 from app.catalog.prices import read_approved_price_rows
 from app.catalog.repository import (
     seed_component_prices,
@@ -185,6 +188,34 @@ def test_combined_catalog_artifacts_are_complete_and_conflict_free() -> None:
             high_price.price_range_low,
             high_price.price_range_high,
         )
+
+
+def test_all_generated_cpu_gpu_rule_specs_match_seeded_hardware_catalog() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    components = [
+        *read_catalog_components(SWIFT_CATALOG_PATH),
+        *read_catalog_components(SUPPORT_PATH),
+    ]
+    templates = [
+        *generate_low_budget_templates(),
+        *generate_high_budget_templates(),
+    ]
+
+    with Session(engine) as session:
+        seed_hardware_components(session, components)
+
+        assert len(templates) == 297
+        for template in templates:
+            for part in template.details.parts:
+                if part.role not in {"cpu", "gpu"}:
+                    continue
+                component = session.get(HardwareComponent, part.component_id)
+                assert component is not None
+                for field in ("perf_index", "tdp"):
+                    assert part.specs.get(field) == component.specs.get(field), (
+                        f"{template.id}: {part.component_id} {field} differs"
+                    )
 
 
 @pytest.mark.parametrize("catalog_order", [("low", "high"), ("high", "low")])

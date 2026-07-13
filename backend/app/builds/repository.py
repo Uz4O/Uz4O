@@ -241,6 +241,19 @@ def _validate_detailed_template_catalog_data(
                 errors.append(
                     f"{template.id}: {part.component_id} category does not match {part.role} role"
                 )
+            if component and part.role in {"cpu", "gpu"}:
+                for field in ("perf_index", "tdp"):
+                    part_value = part.specs.get(field)
+                    catalog_value = component.specs.get(field)
+                    if (
+                        type(part_value) is not int
+                        or type(catalog_value) is not int
+                        or part_value != catalog_value
+                    ):
+                        errors.append(
+                            f"{template.id}: {part.component_id} {field} does not match "
+                            f"hardware catalog ({part_value!r} != {catalog_value!r})"
+                        )
             price = prices.get(part.component_id)
             if price is None:
                 continue

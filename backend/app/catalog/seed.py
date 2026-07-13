@@ -5,6 +5,8 @@ from typing import Dict, List
 
 from pydantic import BaseModel
 
+from app.catalog.rule_specs import get_rule_specs
+
 
 CATEGORY_SECTIONS = {
     "cpus": "cpu",
@@ -75,7 +77,7 @@ def parse_detail_specs(
 ) -> Dict[str, object]:
     parts = [part.strip() for part in detail.split("·")]
     if category == "cpu":
-        return _parse_cpu_specs(parts, name or component_id)
+        return _parse_cpu_specs(parts, name or component_id, component_id)
     if category == "motherboard":
         return _parse_motherboard_specs(parts, name or component_id)
     if category == "ram":
@@ -85,7 +87,7 @@ def parse_detail_specs(
     if category == "psu":
         return _parse_psu_specs(parts)
     if category == "gpu":
-        return _parse_gpu_specs(parts, name or component_id)
+        return _parse_gpu_specs(parts, name or component_id, component_id)
     return {}
 
 
@@ -106,7 +108,11 @@ def _extract_array_section(source: str, name: str) -> str:
     raise ValueError(f"Unclosed HardwareCatalog section: {name}")
 
 
-def _parse_cpu_specs(parts: List[str], name: str) -> Dict[str, object]:
+def _parse_cpu_specs(
+    parts: List[str],
+    name: str,
+    component_id: str,
+) -> Dict[str, object]:
     specs: Dict[str, object] = {}
     if len(parts) >= 1:
         generation_match = re.match(r"^(?P<generation>\S+)\s+(?P<platform>.+)$", parts[0])
@@ -118,12 +124,16 @@ def _parse_cpu_specs(parts: List[str], name: str) -> Dict[str, object]:
     socket = _first_matching(parts, r"^(LGA\d+|AM\d+)$")
     if socket:
         specs["socket"] = socket
-    perf_index = _cpu_perf_index(name, specs.get("generation", ""))
-    if perf_index:
-        specs["perf_index"] = perf_index
-    tdp = _cpu_tdp(name)
-    if tdp:
-        specs["tdp"] = tdp
+    rule_specs = get_rule_specs("cpu", component_id=component_id, name=name)
+    if rule_specs is not None:
+        specs.update(rule_specs)
+    else:
+        perf_index = _cpu_perf_index(name, specs.get("generation", ""))
+        if perf_index:
+            specs["perf_index"] = perf_index
+        tdp = _cpu_tdp(name)
+        if tdp:
+            specs["tdp"] = tdp
     return specs
 
 
@@ -183,16 +193,24 @@ def _parse_psu_specs(parts: List[str]) -> Dict[str, object]:
     return specs
 
 
-def _parse_gpu_specs(parts: List[str], name: str) -> Dict[str, object]:
+def _parse_gpu_specs(
+    parts: List[str],
+    name: str,
+    component_id: str,
+) -> Dict[str, object]:
     specs: Dict[str, object] = {"vendor": parts[0]} if parts else {}
-    perf_index = _gpu_perf_index(name)
-    if perf_index:
-        specs["perf_index"] = perf_index
-    tdp = _gpu_tdp(name)
-    if not tdp and perf_index:
-        tdp = _estimated_gpu_tdp(perf_index)
-    if tdp:
-        specs["tdp"] = tdp
+    rule_specs = get_rule_specs("gpu", component_id=component_id, name=name)
+    if rule_specs is not None:
+        specs.update(rule_specs)
+    else:
+        perf_index = _gpu_perf_index(name)
+        if perf_index:
+            specs["perf_index"] = perf_index
+        tdp = _gpu_tdp(name)
+        if not tdp and perf_index:
+            tdp = _estimated_gpu_tdp(perf_index)
+        if tdp:
+            specs["tdp"] = tdp
     return specs
 
 

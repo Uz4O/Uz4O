@@ -12,6 +12,12 @@ from app.builds.service import (
     BuildTemplateInput,
     BuildTemplatePart,
 )
+from app.catalog.rule_specs import (
+    CPU_PERFORMANCE as RULE_CPU_PERFORMANCE,
+    CPU_TDP as RULE_CPU_TDP,
+    GPU_PERFORMANCE as RULE_GPU_PERFORMANCE,
+    GPU_TDP as RULE_GPU_TDP,
+)
 
 
 Direction = Literal["fps", "aaa", "balanced"]
@@ -38,76 +44,19 @@ GPU_PRICE_PATH = DATA_DIR / "gpu-whitelist-prices-2026-07-07.csv"
 MOTHERBOARD_PRICE_PATH = DATA_DIR / "motherboard-whitelist-prices-2026-07-07.csv"
 SUPPORT_PART_PATH = DATA_DIR / "base-build-support-components-2026-07-12.json"
 
+_CPU_IDS = (
+    "r5-7500f",
+    "r5-9600x",
+    "r7-7800x3d",
+    "r7-9800x3d",
+    "r7-9850x3d",
+)
 CPU_PERFORMANCE = {
-    "r5-7500f": 60,
-    "r5-9600x": 72,
-    "r7-7800x3d": 90,
-    "r7-9800x3d": 100,
-    "r7-9850x3d": 103,
+    component_id: RULE_CPU_PERFORMANCE[component_id] for component_id in _CPU_IDS
 }
-CPU_TDP = {
-    "r5-7500f": 88,
-    "r5-9600x": 105,
-    "r7-7800x3d": 120,
-    "r7-9800x3d": 120,
-    "r7-9850x3d": 120,
-}
-GPU_PERFORMANCE = {
-    "rtx-3060-ti": 50,
-    "rx-6750-gre": 43,
-    "rx-7700-xt": 55,
-    "rx-7650-gre": 43,
-    "rx-7800-xt": 65,
-    "rx-9060-xt-8gb": 50,
-    "rx-9060-xt-12gb": 55,
-    "rx-9070-gre": 75,
-    "rx-9070-xt": 85,
-    "rtx-3070-ti": 55,
-    "rtx-3080": 60,
-    "rtx-3080-ti": 65,
-    "rtx-4060": 40,
-    "rtx-4060-ti": 50,
-    "rtx-4070": 60,
-    "rtx-4070-super": 75,
-    "rx-7900-xt": 75,
-    "rx-7900-xtx": 85,
-    "rtx-5060": 50,
-    "rtx-5060-ti": 60,
-    "rtx-5070": 75,
-    "rtx-5070-ti": 85,
-    "rtx-5080": 95,
-    "rtx-5090-d-v2": 105,
-    "rtx-5090-d": 105,
-    "rtx-5090": 110,
-}
-GPU_TDP = {
-    "rtx-3060-ti": 200,
-    "rx-6750-gre": 250,
-    "rx-7700-xt": 245,
-    "rx-7650-gre": 230,
-    "rx-7800-xt": 263,
-    "rx-9060-xt-8gb": 180,
-    "rx-9060-xt-12gb": 200,
-    "rx-9070-gre": 220,
-    "rx-9070-xt": 304,
-    "rtx-3070-ti": 290,
-    "rtx-3080": 320,
-    "rtx-3080-ti": 350,
-    "rtx-4060": 115,
-    "rtx-4060-ti": 160,
-    "rtx-4070": 200,
-    "rtx-4070-super": 220,
-    "rx-7900-xt": 315,
-    "rx-7900-xtx": 355,
-    "rtx-5060": 145,
-    "rtx-5060-ti": 180,
-    "rtx-5070": 250,
-    "rtx-5070-ti": 300,
-    "rtx-5080": 360,
-    "rtx-5090-d-v2": 575,
-    "rtx-5090-d": 575,
-    "rtx-5090": 575,
-}
+CPU_TDP = {component_id: RULE_CPU_TDP[component_id] for component_id in _CPU_IDS}
+GPU_PERFORMANCE = RULE_GPU_PERFORMANCE
+GPU_TDP = RULE_GPU_TDP
 
 CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
     "new": {role: "new" for role in PART_ROLE_ORDER},

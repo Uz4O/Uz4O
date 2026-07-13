@@ -7,11 +7,16 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Iterable, List, Literal, Optional, Sequence, Tuple
 
-from app.builds.high_budget_catalog import GPU_PERFORMANCE, GPU_TDP
 from app.builds.service import (
     BuildTemplateDetails,
     BuildTemplateInput,
     BuildTemplatePart,
+)
+from app.catalog.rule_specs import (
+    CPU_PERFORMANCE as RULE_CPU_PERFORMANCE,
+    CPU_TDP as RULE_CPU_TDP,
+    GPU_PERFORMANCE as RULE_GPU_PERFORMANCE,
+    GPU_TDP as RULE_GPU_TDP,
 )
 
 
@@ -50,24 +55,6 @@ MOTHERBOARD_PRICE_PATH = DATA_DIR / "motherboard-whitelist-prices-2026-07-07.csv
 SUPPORT_PART_PATH = DATA_DIR / "base-build-support-components-2026-07-12.json"
 REVIEW_MARKDOWN_PATH = PROJECT_ROOT / "docs" / "3000-7000-yuan-base-builds.md"
 
-CPU_PERFORMANCE = {
-    "r5-5600": 50,
-    "r5-5600x": 52,
-    "r5-7500f": 60,
-    "r5-9600x": 72,
-    "i5-13600kf": 78,
-    "r7-7800x3d": 90,
-    "r7-9800x3d": 100,
-}
-CPU_TDP = {
-    "r5-5600": 65,
-    "r5-5600x": 65,
-    "r5-7500f": 88,
-    "r5-9600x": 105,
-    "i5-13600kf": 181,
-    "r7-7800x3d": 120,
-    "r7-9800x3d": 120,
-}
 CPU_SOCKET = {
     "r5-5600": "AM4",
     "r5-5600x": "AM4",
@@ -77,6 +64,15 @@ CPU_SOCKET = {
     "r7-7800x3d": "AM5",
     "r7-9800x3d": "AM5",
 }
+CPU_PERFORMANCE = {
+    component_id: RULE_CPU_PERFORMANCE[component_id]
+    for component_id in CPU_SOCKET
+}
+CPU_TDP = {
+    component_id: RULE_CPU_TDP[component_id] for component_id in CPU_SOCKET
+}
+GPU_PERFORMANCE = RULE_GPU_PERFORMANCE
+GPU_TDP = RULE_GPU_TDP
 
 CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
     "new": {role: "new" for role in PART_ROLE_ORDER},

@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
+import pytest
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
@@ -298,6 +299,99 @@ def test_detailed_template_rejects_role_category_mismatch() -> None:
             raise AssertionError("Expected detailed role validation to fail")
 
     assert "category does not match cpu role" in error
+
+
+@pytest.mark.parametrize("field", ["perf_index", "tdp"])
+def test_detailed_template_rejects_cpu_gpu_rule_spec_mismatch(field: str) -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    gpu_part = next(part for part in template.details.parts if part.role == "gpu")
+    catalog_gpu_specs = dict(gpu_part.specs)
+    gpu_part.specs[field] += 1
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=catalog_gpu_specs if part.role == "gpu" else part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+        try:
+            upsert_build_templates(session, [template])
+        except ValueError as exc:
+            error = str(exc)
+        else:
+            raise AssertionError("Expected detailed rule spec validation to fail")
+
+    assert f"{gpu_part.component_id} {field} does not match hardware catalog" in error
+
+
+@pytest.mark.parametrize(
+    ("template_value", "catalog_value"),
+    [(None, None), (True, 1), (43.0, 43)],
+)
+def test_detailed_template_rejects_missing_or_non_integer_rule_specs(
+    template_value: object,
+    catalog_value: object,
+) -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    gpu_part = next(part for part in template.details.parts if part.role == "gpu")
+    catalog_gpu_specs = dict(gpu_part.specs)
+    if template_value is None:
+        gpu_part.specs.pop("perf_index")
+    else:
+        gpu_part.specs["perf_index"] = template_value
+    if catalog_value is None:
+        catalog_gpu_specs.pop("perf_index")
+    else:
+        catalog_gpu_specs["perf_index"] = catalog_value
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=catalog_gpu_specs if part.role == "gpu" else part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+
+        with pytest.raises(ValueError, match="perf_index does not match hardware catalog"):
+            upsert_build_templates(session, [template])
+
+
+def test_detailed_template_ignores_non_rule_spec_differences() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    cpu_part = next(part for part in template.details.parts if part.role == "cpu")
+    catalog_cpu_specs = dict(cpu_part.specs)
+    cpu_part.specs["socket"] = "template-only-value"
+
+    with Session(engine) as session:
+        for part in template.details.parts:
+            seed_component(
+                session,
+                part.component_id,
+                part.role,
+                specs=catalog_cpu_specs if part.role == "cpu" else part.specs,
+                reference_price=part.reference_price,
+                price_range_low=part.reference_price,
+                price_range_high=part.reference_price,
+            )
+
+        count = upsert_build_templates(session, [template])
+
+    assert count == 1
 
 
 def test_detailed_template_rejects_target_and_tag_mismatch() -> None:

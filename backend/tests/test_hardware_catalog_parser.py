@@ -177,3 +177,25 @@ def test_enriches_cpu_gpu_and_motherboard_specs_for_rules() -> None:
 
     lga1200_board_specs = parse_detail_specs("motherboard", "Intel · LGA1200 · B460", name="B460M Mortar")
     assert lga1200_board_specs["mem_type"] == "DDR4"
+
+
+def test_whitelist_gpu_rule_specs_override_seed_heuristics() -> None:
+    assert parse_detail_specs(
+        "gpu",
+        "AMD",
+        name="RX 7650 GRE",
+        component_id="rx-7650-gre",
+    ) == {
+        "vendor": "AMD",
+        "perf_index": 43,
+        "tdp": 230,
+    }
+    assert parse_detail_specs(
+        "gpu",
+        "AMD",
+        name="RX 7700 XT",
+    ) == {
+        "vendor": "AMD",
+        "perf_index": 55,
+        "tdp": 245,
+    }
