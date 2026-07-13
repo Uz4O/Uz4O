@@ -99,6 +99,7 @@ def make_client(
     detail_less_option_templates: tuple[tuple[str, str], ...] = (),
     incompatible_option_templates: tuple[tuple[str, str], ...] = (),
     ranked_option_templates: tuple[tuple[str, str, str, bool], ...] = (),
+    invalid_ranked_option_templates: tuple[tuple[str, str, str, str], ...] = (),
     option_budget: int = 7500,
 ) -> TestClient:
     engine = create_engine(
@@ -242,11 +243,26 @@ def make_client(
                     template_id=template_id,
                 )
             )
+        for template_id, direction, purchase_mode, invalid_kind in invalid_ranked_option_templates:
+            template = build_option_template(
+                direction,
+                purchase_mode,
+                budget=option_budget,
+                template_id=template_id,
+            )
+            if invalid_kind == "incomplete":
+                template.details["parts"].pop()
+            elif invalid_kind == "malformed":
+                template.details.pop("parts")
+            else:
+                raise ValueError(f"Unknown invalid detail kind: {invalid_kind}")
+            session.add(template)
         if (
             option_templates
             or detail_less_option_templates
             or incompatible_option_templates
             or ranked_option_templates
+            or invalid_ranked_option_templates
         ):
             session.commit()
         if with_recommended_prices:
@@ -444,6 +460,27 @@ def test_build_options_tries_next_ranked_template_when_first_is_incompatible() -
             ("a-bad", "fps", "used", False),
             ("z-good", "fps", "used", True),
         ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [option["template_id"] for option in body["options"]] == ["z-good"]
+    assert body["unavailable_modes"] == ["new", "mixed"]
+
+
+@pytest.mark.parametrize("invalid_kind", ["incomplete", "malformed"])
+def test_build_options_tries_next_ranked_template_when_details_are_invalid(
+    invalid_kind: str,
+) -> None:
+    client = make_client(
+        with_template=False,
+        ranked_option_templates=(("z-good", "fps", "used", True),),
+        invalid_ranked_option_templates=(("a-bad", "fps", "used", invalid_kind),),
     )
 
     response = client.post(

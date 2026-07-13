@@ -1,7 +1,14 @@
 from itertools import product
 from typing import Dict, Iterable, List, Literal, Optional
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
+from pydantic import (
+    AliasChoices,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 from app.builds.models import BuildTemplate
 from app.catalog.models import ComponentPrice, HardwareComponent
@@ -230,6 +237,15 @@ class BuildOptionResponse(BaseModel):
     details: BuildTemplateDetails
     compatibility: CompatibilityResult
 
+    @model_validator(mode="after")
+    def require_complete_matching_parts(self) -> "BuildOptionResponse":
+        parts_by_role = {part.role: part.component_id for part in self.details.parts}
+        if len(self.details.parts) != 8 or len(parts_by_role) != 8:
+            raise ValueError("details must contain eight unique parts")
+        if self.components != parts_by_role:
+            raise ValueError("components must match detailed parts")
+        return self
+
 
 class BuildOptionsResponse(BaseModel):
     direction: Literal["fps", "aaa", "balanced"]
@@ -265,9 +281,9 @@ def rank_build_templates(
                 requested_purchase_mode,
             ),
             -len(preferences.intersection(set(template.tags))),
+            template.budget_max - template.budget_min,
             -_default_direction_rank(template),
             -_default_purchase_rank(template),
-            template.budget_max - template.budget_min,
             template.id,
         ),
     )

@@ -1,6 +1,8 @@
+import logging
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.builds.repository import list_build_templates
@@ -31,6 +33,7 @@ router = APIRouter(
     tags=["build"],
     dependencies=[Depends(high_cost_rate_limit)],
 )
+logger = logging.getLogger(__name__)
 BUILD_OPTION_MODES = ("used", "new", "mixed")
 BUILD_DIRECTION_TOKENS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 BUILD_PURCHASE_TOKENS = {"used": "二手", "new": "全新", "mixed": "混合采购"}
@@ -65,11 +68,18 @@ def get_build_options(
             )
             if not compatibility.compatible:
                 continue
-            options.append(
-                BuildOptionResponse.model_validate(
+            try:
+                option = BuildOptionResponse.model_validate(
                     template_response(template, compatibility).model_dump()
                 )
-            )
+            except ValidationError as exc:
+                logger.warning(
+                    "Skipping invalid build option template %s: %s",
+                    template.id,
+                    exc,
+                )
+                continue
+            options.append(option)
             break
         else:
             unavailable_modes.append(purchase_mode)

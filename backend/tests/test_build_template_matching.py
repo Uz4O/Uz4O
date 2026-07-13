@@ -51,19 +51,41 @@ def test_classify_game_direction(games: list[str], expected: str) -> None:
 
 
 def ready_option_payload() -> dict:
+    components = {
+        "cpu": "i5-14600k",
+        "motherboard": "b760m",
+        "gpu": "rtx-4060",
+        "ram": "ram-6000-cl30",
+        "storage": "ssd-1tb",
+        "psu": "psu-750w",
+        "cooler": "cooler-air",
+        "case": "case-mid-tower",
+    }
     return {
         "status": "ready",
         "source": "template",
         "template_id": "base-7500-fps-new",
         "title": "7500 元 FPS 全新基底配置",
-        "components": {"cpu": "i5-14600k"},
+        "components": components,
         "estimated_total": 7500,
         "explanation": "人工审核模板。",
         "details": {
             "target_budget": 7500,
             "direction": "fps",
             "purchase_mode": "new",
-            "parts": [],
+            "parts": [
+                {
+                    "role": role,
+                    "component_id": component_id,
+                    "name": component_id,
+                    "condition": "new",
+                    "reference_price": 100,
+                    "price_source": "test",
+                    "price_date": "2026-07-12",
+                    "specs": {},
+                }
+                for role, component_id in components.items()
+            ],
             "advantages": [],
             "disadvantages": [],
             "risks": [],
@@ -85,6 +107,22 @@ def test_build_option_response_accepts_ready_template_payload() -> None:
 
     assert option.status == "ready"
     assert option.source == "template"
+
+
+def test_build_option_response_requires_eight_unique_part_roles() -> None:
+    payload = ready_option_payload()
+    payload["details"]["parts"].pop()
+
+    with pytest.raises(ValidationError, match="eight unique parts"):
+        build_service.BuildOptionResponse.model_validate(payload)
+
+
+def test_build_option_response_requires_components_to_match_parts() -> None:
+    payload = ready_option_payload()
+    payload["components"]["gpu"] = "different-gpu"
+
+    with pytest.raises(ValidationError, match="components must match detailed parts"):
+        build_service.BuildOptionResponse.model_validate(payload)
 
 
 @pytest.mark.parametrize("field", ["template_id", "details", "compatibility"])
@@ -171,6 +209,17 @@ def test_match_build_template_returns_first_ranked_candidate() -> None:
     assert [candidate.id for candidate in ranked] == ["a-bad", "z-good"]
     assert matched is not None
     assert matched.id == "a-bad"
+
+
+def test_structured_defaults_do_not_outrank_a_closer_legacy_template() -> None:
+    request = BuildRequest(budget=7000, use_case="gaming")
+    legacy = template("legacy-close", 6900, 7100, ["gaming"], [])
+    structured = template("structured-wide", 6000, 8000, ["gaming"], [])
+    structured.details = {"direction": "balanced", "purchase_mode": "new"}
+
+    ranked = build_service.rank_build_templates(request, [structured, legacy])
+
+    assert [candidate.id for candidate in ranked] == ["legacy-close", "structured-wide"]
 
 
 def test_matches_template_from_frontend_build_payload() -> None:
