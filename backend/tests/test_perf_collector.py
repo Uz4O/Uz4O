@@ -580,11 +580,13 @@ class ChunkStream(ClosingStream):
         super().__init__(b"")
         self.chunks = chunks
         self.before_second = before_second
+        self.reads = 0
 
     def __iter__(self):
         for index, chunk in enumerate(self.chunks):
             if index == 1 and self.before_second:
                 self.before_second()
+            self.reads += 1
             yield chunk
 
 
@@ -592,10 +594,135 @@ class SleepingStream(ClosingStream):
     def __init__(self, delay: float, body: bytes):
         super().__init__(body)
         self.delay = delay
+        self.reads = 0
 
     def __iter__(self):
+        self.reads += 1
         time.sleep(self.delay)
         yield self.body
+
+
+@pytest.mark.parametrize(
+    ("status", "headers", "reason"),
+    [(403, {}, "HTTP 403"), (429, {"Retry-After": "120"}, "retry_after=120")],
+)
+def test_blocking_status_pauses_before_reading_oversized_body(
+    tmp_path: Path, status: int, headers: dict, reason: str
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "blocked")
+    stream = ChunkStream([b"x" * 11])
+
+    with pytest.raises(CollectionBlocked, match=reason):
+        collector(
+            store,
+            lambda _: httpx.Response(status, headers=headers, stream=stream),
+            policy=CollectorPolicy(
+                delay_seconds=0, jitter_seconds=0, max_response_bytes=10
+            ),
+        ).run()
+
+    assert store.task_counts() == {"blocked": 1}
+    assert reason in store.pause_reason()
+    assert stream.reads == 0
+    assert stream.closed
+
+
+def test_429_pauses_before_reading_slow_body(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "rate-limited")
+    stream = SleepingStream(0.15, b"late body")
+
+    with pytest.raises(CollectionBlocked, match="retry_after=60"):
+        collector(
+            store,
+            lambda _: httpx.Response(
+                429, headers={"Retry-After": "60"}, stream=stream
+            ),
+            policy=CollectorPolicy(
+                delay_seconds=0,
+                jitter_seconds=0,
+                max_attempts=1,
+                max_request_seconds=0.02,
+            ),
+        ).run()
+
+    assert store.task_counts() == {"blocked": 1}
+    assert store.pause_reason() == "HTTP 429 retry_after=60"
+    assert stream.reads == 0
+    assert stream.closed
+
+
+def test_split_challenge_marker_blocks_before_later_body_exceeds_limit(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "challenge")
+    stream = ChunkStream([b"<html>Just a mo", b"ment", b"x" * 100])
+
+    with pytest.raises(CollectionBlocked, match="challenge page detected"):
+        collector(
+            store,
+            lambda _: httpx.Response(200, stream=stream),
+            policy=CollectorPolicy(
+                delay_seconds=0, jitter_seconds=0, max_response_bytes=30
+            ),
+        ).run()
+
+    assert store.task_counts() == {"blocked": 1}
+    assert store.pause_reason() == "challenge page detected"
+    assert stream.reads == 2
+    assert stream.closed
+
+
+def test_early_challenge_marker_blocks_before_slow_tail(tmp_path: Path) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "challenge")
+    tail_started = []
+
+    def stall() -> None:
+        tail_started.append(True)
+        time.sleep(0.15)
+
+    stream = ChunkStream([b"<html>captcha", b"late tail"], before_second=stall)
+
+    with pytest.raises(CollectionBlocked, match="challenge page detected"):
+        collector(
+            store,
+            lambda _: httpx.Response(200, stream=stream),
+            policy=CollectorPolicy(
+                delay_seconds=0,
+                jitter_seconds=0,
+                max_attempts=1,
+                max_request_seconds=0.02,
+            ),
+        ).run()
+
+    assert store.task_counts() == {"blocked": 1}
+    assert store.pause_reason() == "challenge page detected"
+    assert tail_started == []
+    assert stream.reads == 1
+    assert stream.closed
+
+
+def test_partial_challenge_phrase_is_not_classified_as_challenge(
+    tmp_path: Path,
+) -> None:
+    store = CollectorStore(tmp_path / "collector.sqlite")
+    seed(store, "partial")
+    stream = ChunkStream([b"<html>Just a mo", b"x" * 100])
+
+    summary = collector(
+        store,
+        lambda _: httpx.Response(200, stream=stream),
+        policy=CollectorPolicy(
+            delay_seconds=0, jitter_seconds=0, max_response_bytes=30
+        ),
+    ).run()
+
+    assert summary.failed == 1
+    assert store.task_counts() == {"failed": 1}
+    assert store.pause_reason() is None
 
 
 @pytest.mark.parametrize(

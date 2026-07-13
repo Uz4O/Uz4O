@@ -26,6 +26,9 @@ WIRE_BODY_HEADERS = {
     "digest",
     "transfer-encoding",
 }
+CHALLENGE_SCAN_BYTES = 80_000
+CHALLENGE_SCAN_CHARS = 20_000
+CHALLENGE_MARKERS = ("challenge-platform", "cf-chl", "captcha", "just a moment")
 
 
 @dataclass(frozen=True)
@@ -104,14 +107,15 @@ class RequestDeadlineUnavailable(RuntimeError):
     pass
 
 
+def _contains_challenge(content: bytes, encoding: Optional[str] = None) -> bool:
+    text = content[:CHALLENGE_SCAN_BYTES].decode(
+        encoding or "utf-8", errors="ignore"
+    )[:CHALLENGE_SCAN_CHARS]
+    return any(marker in text.casefold() for marker in CHALLENGE_MARKERS)
+
+
 def is_challenge(response: httpx.Response) -> bool:
-    text = response.content[:80_000].decode(
-        response.encoding or "utf-8", errors="ignore"
-    )[:20_000]
-    return any(
-        marker in text.casefold()
-        for marker in ("challenge-platform", "cf-chl", "captcha", "just a moment")
-    )
+    return _contains_challenge(response.content, response.encoding)
 
 
 class Collector:
@@ -207,14 +211,6 @@ class Collector:
         if response is None:
             return "failed"
 
-        if is_challenge(response):
-            self._block(task, "challenge page detected")
-        if response.status_code in (403, 429):
-            reason = f"HTTP {response.status_code}"
-            retry_after = response.headers.get("Retry-After", "").strip()
-            if response.status_code == 429 and retry_after.isdigit():
-                reason += f" retry_after={retry_after}"
-            self._block(task, reason)
         if response.status_code == 404:
             self.store.record_missing(task.id, "HTTP 404")
             return "missing"
@@ -266,6 +262,15 @@ class Collector:
                 auth=None,
                 follow_redirects=False,
             ) as streamed_response:
+                self._renew_lock()
+                if streamed_response.status_code in (403, 429):
+                    reason = f"HTTP {streamed_response.status_code}"
+                    retry_after = streamed_response.headers.get(
+                        "Retry-After", ""
+                    ).strip()
+                    if streamed_response.status_code == 429 and retry_after.isdigit():
+                        reason += f" retry_after={retry_after}"
+                    self._block(task, reason)
                 content_encoding = streamed_response.headers.get(
                     "Content-Encoding", "identity"
                 ).strip().casefold()
@@ -273,6 +278,7 @@ class Collector:
                     self._block(task, "compressed response not allowed")
                 self._check_stream_deadline(started_at, streamed_response.request)
                 chunks = []
+                challenge_prefix = bytearray()
                 size = 0
                 raw_chunks = (
                     [streamed_response.content]
@@ -283,6 +289,14 @@ class Collector:
                     for offset in range(0, len(raw_chunk), 65_536):
                         chunk = raw_chunk[offset : offset + 65_536]
                         size += len(chunk)
+                        remaining = CHALLENGE_SCAN_BYTES - len(challenge_prefix)
+                        if remaining > 0:
+                            challenge_prefix.extend(chunk[:remaining])
+                        self._renew_lock()
+                        if _contains_challenge(
+                            challenge_prefix, streamed_response.encoding
+                        ):
+                            self._block(task, "challenge page detected")
                         if size > self.policy.max_response_bytes:
                             self.store.record_failed(task.id, "response_too_large")
                             return None
@@ -290,7 +304,6 @@ class Collector:
                         self._check_stream_deadline(
                             started_at, streamed_response.request
                         )
-                        self._renew_lock()
                 headers = [
                     (name, value)
                     for name, value in streamed_response.headers.multi_items()
