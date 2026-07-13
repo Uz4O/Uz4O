@@ -1,7 +1,7 @@
 """create game_performance_estimate table
 
-Revision ID: 20260712_0011
-Revises: 20260707_0010
+Revision ID: 20260713_0012
+Revises: 20260712_0011
 Create Date: 2026-07-12
 """
 
@@ -9,8 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 
 
-revision = "20260712_0011"
-down_revision = "20260707_0010"
+revision = "20260713_0012"
+down_revision = "20260712_0011"
 branch_labels = None
 depends_on = None
 
