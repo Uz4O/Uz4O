@@ -12,7 +12,7 @@ private enum ConfigReviewState {
 struct ConfigReviewView: View {
     let onBack: () -> Void
 
-    @State private var inputText = "i7-14700F + RTX4060 + H610 主板 + 500W 电源，商家报价 6999"
+    @State private var inputText = ""
     @State private var selectedImageItem: PhotosPickerItem?
     @State private var state: ConfigReviewState = .landing
 
@@ -32,60 +32,50 @@ struct ConfigReviewView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     ConfigReviewHeroView()
 
-                    ConfigReviewActionCard(
-                        icon: "doc",
-                        title: "上传配置单",
-                        subtitle: "支持截图、照片、聊天记录"
-                    ) {
-                        PhotosPicker(selection: $selectedImageItem, matching: .images) {
-                            Text("选择图片")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundStyle(.white)
-                                .frame(width: 100, height: 38)
-                                .background(Color.black, in: Capsule())
-                        }
-                    }
-
-                    ConfigReviewActionCard(
-                        icon: "list.clipboard",
-                        title: "粘贴配置单",
-                        subtitle: "直接粘贴整段配置文本"
-                    ) {
-                        Button("去粘贴") {
-                            state = .input
-                        }
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(Color.black)
-                        .frame(width: 100, height: 38)
-                        .background(Color.white, in: Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(Color.black, lineWidth: 2)
-                        )
-                        .buttonStyle(.plain)
-                    }
-
-                    ConfigReviewExampleLink()
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("AI 将为你检查")
-                            .font(.system(size: 13, weight: .regular))
-                            .foregroundStyle(AppTheme.secondaryText)
-
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 116), spacing: 10)], alignment: .leading, spacing: 10) {
-                            ConfigReviewCheckPill(icon: "puzzlepiece", title: "兼容性")
-                            ConfigReviewCheckPill(icon: "yensign", title: "预算")
-                            ConfigReviewCheckPill(icon: "speedometer", title: "性能瓶颈")
-                            ConfigReviewCheckPill(icon: "tag", title: "是否买贵")
-                        }
-                    }
-                    .padding(.top, 4)
-
                     switch state {
                     case .landing:
-                        EmptyView()
+                        ConfigReviewActionCard(
+                            icon: "doc",
+                            title: "上传配置单",
+                            subtitle: "支持截图、照片、聊天记录"
+                        ) {
+                            PhotosPicker(selection: $selectedImageItem, matching: .images) {
+                                Text("选择图片")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundStyle(.white)
+                                    .frame(width: 100, height: 38)
+                                    .background(Color.black, in: Capsule())
+                            }
+                        }
+
+                        ConfigReviewActionCard(
+                            icon: "list.clipboard",
+                            title: "粘贴配置单",
+                            subtitle: "直接粘贴整段配置文本"
+                        ) {
+                            Button("去粘贴") {
+                                state = .input
+                            }
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(Color.black)
+                            .frame(width: 100, height: 38)
+                            .background(Color.white, in: Capsule())
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.black, lineWidth: 2)
+                            )
+                            .buttonStyle(.plain)
+                        }
+
+                        ConfigReviewExampleLink()
+                        ConfigReviewChecksView()
                     case .input:
-                        ConfigReviewInputPanel(inputText: $inputText, onSubmit: startTextReview)
+                        ConfigReviewInputPanel(
+                            inputText: $inputText,
+                            onCancel: { state = .landing },
+                            onSubmit: startTextReview
+                        )
+                        ConfigReviewChecksView()
                     case .loading:
                         ConfigReviewLoadingView()
                     case .result(let result):
@@ -253,40 +243,94 @@ private struct ConfigReviewCheckPill: View {
     let title: String
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 4) {
             Image(systemName: icon)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
+                .frame(width: 14)
             Text(title)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
         .foregroundStyle(Color.black)
-        .padding(.horizontal, 12)
-        .frame(height: 36)
+        .padding(.horizontal, 7)
+        .frame(maxWidth: .infinity, minHeight: 36)
         .background(AppTheme.softSurface, in: Capsule())
+    }
+}
+
+private struct ConfigReviewChecksView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("AI 将为你检查")
+                .font(.system(size: 13, weight: .regular))
+                .foregroundStyle(AppTheme.secondaryText)
+
+            HStack(spacing: 8) {
+                ConfigReviewCheckPill(icon: "puzzlepiece", title: "兼容性")
+                ConfigReviewCheckPill(icon: "yensign", title: "预算")
+                ConfigReviewCheckPill(icon: "speedometer", title: "性能瓶颈")
+                ConfigReviewCheckPill(icon: "tag", title: "是否买贵")
+            }
+        }
+        .padding(.top, 4)
     }
 }
 
 private struct ConfigReviewInputPanel: View {
     @Binding var inputText: String
+    let onCancel: () -> Void
     let onSubmit: () -> Void
 
-    var body: some View {
-        SoftCard(radius: 22) {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("粘贴配置单或报价")
-                    .font(.appHeadline)
-                    .foregroundStyle(AppTheme.primaryText)
+    private var isEmpty: Bool {
+        inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
-                TextEditor(text: $inputText)
-                    .font(.appBody)
-                    .frame(minHeight: 116)
-                    .padding(10)
-                    .scrollContentBackground(.hidden)
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button(action: onCancel) {
+                Label("重新选择输入方式", systemImage: "chevron.left")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+            }
+            .buttonStyle(.plain)
+
+            SoftCard(radius: 22) {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("粘贴配置单")
+                        .font(.appHeadline)
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    Text("把商家发来的配置、报价或聊天内容整段粘贴进来。")
+                        .font(.appCaption)
+                        .foregroundStyle(AppTheme.secondaryText)
+
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $inputText)
+                            .font(.appBody)
+                            .padding(10)
+                            .scrollContentBackground(.hidden)
+
+                        if isEmpty {
+                            Text("例如：CPU、显卡、主板、内存、电源和商家报价……")
+                                .font(.appBody)
+                                .foregroundStyle(AppTheme.secondaryText.opacity(0.72))
+                                .padding(.horizontal, 15)
+                                .padding(.vertical, 18)
+                                .allowsHitTesting(false)
+                        }
+                    }
+                    .frame(minHeight: 190)
                     .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
 
-                PrimaryButton(title: "开始诊断", icon: "magnifyingglass", action: onSubmit)
+                    ConfigReviewExampleLink()
+
+                    PrimaryButton(title: "开始诊断", icon: "magnifyingglass", action: onSubmit)
+                        .disabled(isEmpty)
+                        .opacity(isEmpty ? 0.42 : 1)
+                }
+                .padding(18)
             }
-            .padding(18)
         }
     }
 }

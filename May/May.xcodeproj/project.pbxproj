@@ -16,6 +16,11 @@
 			path = May;
 			sourceTree = "<group>";
 		};
+		6C9576953004062700703548 /* Legal */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Legal;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +39,7 @@
 			children = (
 				6C5036DA2FC9451000C96065 /* May */,
 				6C5036D92FC9451000C96065 /* Products */,
+				6C9576953004062700703548 /* Legal */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +68,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				6C5036DA2FC9451000C96065 /* May */,
+				6C9576953004062700703548 /* Legal */,
 			);
 			name = May;
 			packageProductDependencies = (
