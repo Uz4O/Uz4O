@@ -1,6 +1,6 @@
 # Backend and Server Context
 
-Last verified: 2026-07-12.
+Last verified: 2026-07-13.
 
 Read this before backend, API, deployment, ICP/domain, or production-readiness work. Treat this file as the current operational map; some older backend docs still mention the previous server and PM2 setup.
 
@@ -165,19 +165,16 @@ Last checked health showed the backend process is reachable and PostgreSQL is co
 
 The database schema is at Alembic revision `20260712_0011`.
 
-The local generated base-build catalog now contains:
+The production base-build catalog now contains:
 
 - Active build templates: `297` (`63` low-budget plus `234` high-budget).
 - Budget coverage: `3000` through `20000`, every `500`.
 - All templates retain structured eight-part details, condition-specific reference prices, advantages, disadvantages, and risks.
-
-These local artifacts have not been fully deployed. The current production base-build data remains the previously deployed high-budget set:
-
-- Hardware components: `730`.
-- Approved component reference prices: `20`.
-- Active build templates: `234`.
-- Budget coverage: `7500` through `20000`, every `500`.
-- Each tier contains FPS / 3A / balanced builds in new / used / mixed purchase modes.
+- Hardware components: `731`.
+- Approved component reference prices: `27`.
+- Budgets from `3000` through `4000` return only purchase modes that are feasible with approved prices instead of inventing unavailable new/mixed builds.
+- Budgets from `4500` through `20000` currently contain FPS / 3A / balanced builds in new / used / mixed purchase modes.
+- `POST /v1/build/options` returns available purchase summaries plus structured eight-part details and reports infeasible modes in `unavailable_modes`.
 - `GET /v1/catalog/readiness` returns `ready: true`.
 
 `APP_PRODUCTION_DATA_READINESS_REQUIRED` is currently disabled, so `/health` reports data readiness as `not_checked` even though the dedicated readiness endpoint is ready. `/health` still reports `production.ready: false` because login secrets, production SMS, Apple login, the ops token, and community image upload are not configured; those are separate from the base-build data deployment.
