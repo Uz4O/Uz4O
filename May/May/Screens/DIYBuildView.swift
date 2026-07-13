@@ -246,7 +246,7 @@ private struct TestConditionStep: View {
                 FlowIntroCard(
                     icon: "display",
                     title: "选择屏幕分辨率和测试游戏",
-                    subtitle: "分辨率越高越吃显卡，游戏可以多选，结果会优先参考第一个游戏。"
+                    subtitle: "分辨率越高越吃显卡；多选游戏时，会汇总可用游戏数据的平均、最低和最高帧率。"
                 )
 
                 Text("屏幕分辨率")
