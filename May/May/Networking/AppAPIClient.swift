@@ -549,12 +549,6 @@ enum BuildPartConditionDTO: String, Decodable {
     case used
 }
 
-enum BuildCompatibilityLevelDTO: String, Decodable {
-    case pass
-    case warning
-    case error
-}
-
 struct BuildOptionsResponseDTO: Decodable {
     let direction: BuildDirectionDTO
     let options: [BuildOptionDTO]
@@ -573,7 +567,6 @@ struct BuildOptionDTO: Decodable, Identifiable {
     let estimatedTotal: Int?
     let explanation: String
     let details: BuildOptionDetailsDTO
-    let compatibility: BuildCompatibilityDTO
 }
 
 struct BuildOptionDetailsDTO: Decodable {
@@ -581,9 +574,6 @@ struct BuildOptionDetailsDTO: Decodable {
     let direction: BuildDirectionDTO
     let purchaseMode: BuildPurchaseModeDTO
     let parts: [BuildOptionPartDTO]
-    let advantages: [String]
-    let disadvantages: [String]
-    let risks: [String]
     let suitableUser: String
     let priceDate: String
 }
@@ -596,22 +586,6 @@ struct BuildOptionPartDTO: Decodable {
     let referencePrice: Int
     let priceSource: String
     let priceDate: String
-}
-
-struct BuildCompatibilityDTO: Decodable {
-    let compatible: Bool
-    let summary: String
-    let findings: [BuildCompatibilityFindingDTO]
-    let findingCounts: [String: Int]
-    let checkedRuleCodes: [String]
-}
-
-struct BuildCompatibilityFindingDTO: Decodable {
-    let level: BuildCompatibilityLevelDTO
-    let code: String
-    let title: String
-    let detail: String
-    let componentIds: [String]
 }
 
 private extension BuildOptionsResponseDTO {

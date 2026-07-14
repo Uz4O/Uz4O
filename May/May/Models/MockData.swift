@@ -27,9 +27,6 @@ struct BuildPlan: Identifiable {
     let useCase: String
     let createdAt: String
     let parts: [PCPart]
-    let risks: [BuildRisk]
-    var advantages: [String] = []
-    var disadvantages: [String] = []
 }
 
 struct BuildRisk: Identifiable {
@@ -80,29 +77,13 @@ extension BuildOptionDTO {
     }
 
     var buildPlan: BuildPlan {
-        let compatibilityRisks = [
-            BuildRisk(
-                level: compatibility.compatible ? .pass : .error,
-                title: "兼容性结论",
-                detail: compatibility.summary
-            )
-        ] + compatibility.findings.map {
-            BuildRisk(level: $0.level.riskLevel, title: $0.title, detail: $0.detail)
-        }
-        let planRisks = details.risks.map {
-            BuildRisk(level: .warning, title: "方案风险", detail: $0)
-        }
-
         return BuildPlan(
             name: title,
             budget: formattedBuildPrice(details.targetBudget),
             totalPrice: referenceTotalText,
             useCase: "\(details.direction.displayName) · \(details.suitableUser)\n\(explanation)",
             createdAt: "参考价日期 \(details.priceDate)",
-            parts: BuildPartRoleDTO.allCases.map { part(for: $0).model },
-            risks: compatibilityRisks + planRisks,
-            advantages: details.advantages,
-            disadvantages: details.disadvantages
+            parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
         )
     }
 }
@@ -202,19 +183,6 @@ private extension BuildPartConditionDTO {
     }
 }
 
-private extension BuildCompatibilityLevelDTO {
-    var riskLevel: RiskLevel {
-        switch self {
-        case .pass:
-            .pass
-        case .warning:
-            .warning
-        case .error:
-            .error
-        }
-    }
-}
-
 private func formattedBuildPrice(_ value: Int) -> String {
     "¥ \(value.formatted(.number.grouping(.automatic)))"
 }
@@ -247,12 +215,7 @@ enum AppMockData {
         totalPrice: "¥ 8566",
         useCase: "2K 游戏 / 日常剪辑 / 可升级",
         createdAt: "今天 17:20",
-        parts: parts,
-        risks: [
-            BuildRisk(level: .warning, title: "价格波动", detail: "显卡价格波动较大，购买前建议再比价。"),
-            BuildRisk(level: .pass, title: "兼容性", detail: "CPU、主板、内存、电源和机箱空间匹配。"),
-            BuildRisk(level: .pass, title: "升级空间", detail: "后期可升级 2TB SSD 或更高功率电源。")
-        ]
+        parts: parts
     )
 
     static func aestheticSamplePlan(for flow: AestheticBuildFlow) -> BuildPlan {
@@ -273,18 +236,14 @@ enum AppMockData {
             totalPrice: flow.quote.total.midpointLabel,
             useCase: "\(flow.resolvedResolution.title) · \(flow.selectedExperience.title) · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
             createdAt: "演示方案",
-            parts: Array(parts.prefix(6)) + [stylePart],
-            risks: [
-                BuildRisk(level: .warning, title: "演示价格", detail: "当前价格只用于验证颜值装机流程，不作为购买报价。"),
-                BuildRisk(level: .warning, title: "兼容性待接入", detail: "生产版必须用真实机箱、散热器和风扇数据重新检查空间与散热。")
-            ]
+            parts: Array(parts.prefix(6)) + [stylePart]
         )
     }
 
     static let savedPlans = [
         samplePlan,
-        BuildPlan(name: "5000 办公剪辑配置", budget: "5000 档", totalPrice: "¥ 5188", useCase: "办公 / 轻剪辑", createdAt: "昨天 21:08", parts: parts, risks: samplePlan.risks),
-        BuildPlan(name: "万元 4K 游戏配置", budget: "10000+ 档", totalPrice: "¥ 10880", useCase: "4K 游戏 / 直播", createdAt: "5 月 29 日", parts: parts, risks: samplePlan.risks)
+        BuildPlan(name: "5000 办公剪辑配置", budget: "5000 档", totalPrice: "¥ 5188", useCase: "办公 / 轻剪辑", createdAt: "昨天 21:08", parts: parts),
+        BuildPlan(name: "万元 4K 游戏配置", budget: "10000+ 档", totalPrice: "¥ 10880", useCase: "4K 游戏 / 直播", createdAt: "5 月 29 日", parts: parts)
     ]
 
     static let beginnerTopics = [

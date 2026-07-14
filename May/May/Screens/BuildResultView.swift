@@ -61,106 +61,8 @@ struct BuildResultView: View {
                     .padding(18)
                 }
 
-                if !plan.advantages.isEmpty || !plan.disadvantages.isEmpty {
-                    SoftCard(radius: 18) {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("方案分析")
-                                .font(.appHeadline)
-                                .foregroundStyle(AppTheme.primaryText)
-
-                            if !plan.advantages.isEmpty {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text("优势")
-                                        .font(.appSubheadline)
-                                        .foregroundStyle(AppTheme.primaryText)
-
-                                    ForEach(plan.advantages.indices, id: \.self) { index in
-                                        HStack(alignment: .top, spacing: 9) {
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .font(.system(size: 13, weight: .semibold))
-                                                .foregroundStyle(AppTheme.success)
-                                                .frame(width: 18)
-                                            Text(plan.advantages[index])
-                                                .font(.appCaption)
-                                                .foregroundStyle(AppTheme.secondaryText)
-                                                .fixedSize(horizontal: false, vertical: true)
-                                        }
-                                    }
-                                }
-                            }
-
-                            if !plan.advantages.isEmpty && !plan.disadvantages.isEmpty {
-                                Divider()
-                            }
-
-                            if !plan.disadvantages.isEmpty {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text("不足")
-                                        .font(.appSubheadline)
-                                        .foregroundStyle(AppTheme.primaryText)
-
-                                    ForEach(plan.disadvantages.indices, id: \.self) { index in
-                                        HStack(alignment: .top, spacing: 9) {
-                                            Image(systemName: "exclamationmark.circle.fill")
-                                                .font(.system(size: 13, weight: .semibold))
-                                                .foregroundStyle(AppTheme.warning)
-                                                .frame(width: 18)
-                                            Text(plan.disadvantages[index])
-                                                .font(.appCaption)
-                                                .foregroundStyle(AppTheme.secondaryText)
-                                                .fixedSize(horizontal: false, vertical: true)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        .padding(18)
-                    }
-                }
-
-                SoftCard(radius: 18) {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("风险提示")
-                            .font(.appHeadline)
-                            .foregroundStyle(AppTheme.primaryText)
-
-                        ForEach(plan.risks) { risk in
-                            HStack(alignment: .top, spacing: 10) {
-                                Text(risk.level.title)
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 5)
-                                    .background(risk.level.color, in: Capsule())
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(risk.title)
-                                        .font(.appSubheadline)
-                                        .foregroundStyle(AppTheme.primaryText)
-                                    Text(risk.detail)
-                                        .font(.appCaption)
-                                        .foregroundStyle(AppTheme.secondaryText)
-                                }
-                            }
-                        }
-                    }
-                    .padding(18)
-                }
-
-                VStack(spacing: 10) {
-                    PrimaryButton(title: "保存配置单", icon: "tray.and.arrow.down", action: {})
-
-                    HStack(spacing: 10) {
-                        SecondaryActionButton(title: "复制文本", icon: "doc.on.doc")
-                        SecondaryActionButton(title: "分享图片", icon: "square.and.arrow.up")
-                    }
-
-                    HStack(spacing: 10) {
-                        SecondaryActionButton(title: "重新生成", icon: "arrow.clockwise")
-                        SecondaryActionButton(title: "继续优化", icon: "wand.and.stars")
-                    }
-                }
-                .padding(.bottom, 22)
+                PrimaryButton(title: "保存配置单", icon: "tray.and.arrow.down", action: {})
+                    .padding(.bottom, 22)
             }
             .padding(.horizontal, AppTheme.screenPadding)
         }
@@ -183,26 +85,6 @@ private struct SummaryBadge: View {
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
-    }
-}
-
-private struct SecondaryActionButton: View {
-    let title: String
-    let icon: String
-
-    var body: some View {
-        Button(action: {}) {
-            HStack(spacing: 6) {
-                Image(systemName: icon)
-                Text(title)
-            }
-            .font(.appSubheadline)
-            .foregroundStyle(AppTheme.primaryText)
-            .frame(maxWidth: .infinity)
-            .frame(height: 42)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-        }
-        .buttonStyle(.plain)
     }
 }
 
