@@ -17,30 +17,21 @@ struct BuildResultView: View {
                     .padding(.horizontal, 4)
 
                 SoftCard(radius: 22) {
-                    VStack(alignment: .leading, spacing: 16) {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(plan.name)
-                                    .font(.appTitle)
-                                    .foregroundStyle(AppTheme.primaryText)
-                                Text(plan.useCase)
-                                    .font(.appBody)
-                                    .foregroundStyle(AppTheme.secondaryText)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text(plan.name)
+                                .font(.appTitle)
+                                .foregroundStyle(AppTheme.primaryText)
 
                             Spacer()
 
                             Image("PCTower")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 86, height: 86)
+                                .frame(width: 72, height: 72)
                         }
 
-                        HStack(spacing: 10) {
-                            SummaryBadge(title: "预算", value: plan.budget)
-                            SummaryBadge(title: "总价", value: plan.totalPrice)
-                        }
+                        SummaryBadge(title: "配置总价", value: plan.totalPrice)
                     }
                     .padding(20)
                 }

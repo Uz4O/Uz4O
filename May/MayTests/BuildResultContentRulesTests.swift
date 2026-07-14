@@ -20,7 +20,19 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, "Text(part.model)", "The component model should be shown directly.")
         assertContains(viewSource, "Text(part.price)", "The component price should be shown directly.")
         assertContains(viewSource, "Text(part.condition)", "The new or used condition should be shown directly.")
+        assertContains(
+            modelSource,
+            "name: details.direction.resultTitle",
+            "The result title should describe the gaming focus without exposing template wording."
+        )
+        assertContains(
+            viewSource,
+            "SummaryBadge(title: \"配置总价\", value: plan.totalPrice)",
+            "The summary should focus on the generated build total."
+        )
         assertNotContains(viewSource, "part.reason", "Selection explanations should not appear in the result list.")
+        assertNotContains(viewSource, "Text(plan.useCase)", "The verbose generated explanation should not appear in the result summary.")
+        assertNotContains(viewSource, "SummaryBadge(title: \"预算\"", "The user's original budget should not be repeated.")
         assertNotContains(
             modelSource,
             "reason: \"成色：",

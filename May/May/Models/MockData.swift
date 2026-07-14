@@ -76,10 +76,10 @@ extension BuildOptionDTO {
 
     var buildPlan: BuildPlan {
         return BuildPlan(
-            name: title,
+            name: details.direction.resultTitle,
             budget: formattedBuildPrice(details.targetBudget),
             totalPrice: referenceTotalText,
-            useCase: "\(details.direction.displayName) · \(details.suitableUser)\n\(explanation)",
+            useCase: "\(details.direction.displayName) · \(details.purchaseMode.displayName)",
             createdAt: "参考价日期 \(details.priceDate)",
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
         )
@@ -95,6 +95,17 @@ extension BuildDirectionDTO {
             "3A"
         case .balanced:
             "均衡"
+        }
+    }
+
+    var resultTitle: String {
+        switch self {
+        case .fps:
+            "高帧率游戏配置"
+        case .aaa:
+            "大型游戏配置"
+        case .balanced:
+            "均衡游戏配置"
         }
     }
 }

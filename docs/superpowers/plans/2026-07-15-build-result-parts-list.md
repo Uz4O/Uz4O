@@ -99,3 +99,29 @@ Expected: `BUILD SUCCEEDED`。
 git add May/May/Models/MockData.swift May/May/Screens/BuildResultView.swift May/May/Components/AppComponents.swift May/MayTests/BuildResultContentRulesTests.swift
 git commit -m "refactor: focus build result parts list"
 ```
+
+### Task 3: 精简结果摘要
+
+**Files:**
+- Modify: `May/May/Models/MockData.swift`
+- Modify: `May/May/Screens/BuildResultView.swift`
+- Test: `May/MayTests/BuildResultContentRulesTests.swift`
+
+- [ ] **Step 1: 将后端模板标题映射为简短游戏方向标题**
+
+FPS、3A 和均衡方向分别显示“高帧率游戏配置”“大型游戏配置”和“均衡游戏配置”，不展示预算档位、“基底配置”或生成逻辑。
+
+- [ ] **Step 2: 只展示配置总价**
+
+删除结果摘要中的用途说明和用户原始预算，只保留全宽的“配置总价”。
+
+- [ ] **Step 3: 运行规则测试和 iOS 构建**
+
+Run:
+
+```bash
+swiftc -parse-as-library May/MayTests/BuildResultContentRulesTests.swift -o /tmp/build-result-content-rules && /tmp/build-result-content-rules
+xcodebuild -project May/May.xcodeproj -scheme May -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug build
+```
+
+Expected: 规则测试通过并且 iOS 构建成功。
