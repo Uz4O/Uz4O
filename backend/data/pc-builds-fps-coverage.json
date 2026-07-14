@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "cpus": {
+      "total": 101,
+      "exact": 1,
+      "review": 100,
+      "missing": 0
+    },
+    "gpus": {
+      "total": 77,
+      "exact": 1,
+      "review": 76,
+      "missing": 0
+    },
+    "games": {
+      "total": 15,
+      "exact": 1,
+      "review": 14,
+      "missing": 0
+    }
+  },
+  "overall": {
+    "total": 193,
+    "exact": 3,
+    "review": 190,
+    "missing": 0
+  },
+  "derived_result_page_count": 1
+}

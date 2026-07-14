@@ -7,6 +7,7 @@ from app.auth.models import Account, AuthSmsCode
 from app.builds.models import BuildTemplate
 from app.catalog.models import ComponentPrice, CPUWhitelistPrice, GPUWhitelistPrice, HardwareComponent, MotherboardWhitelistPrice
 from app.profile.models import HardwareProfile, OnboardingProfile
+from app.perf.models import GamePerformanceEstimate
 from app.core.config import Settings
 from app.db import Base
 

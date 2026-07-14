@@ -7,12 +7,9 @@ enum PerformanceTestStep: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .hardware:
-            return "电脑配置"
-        case .conditions:
-            return "测试条件"
-        case .result:
-            return "性能结果"
+        case .hardware: "电脑配置"
+        case .conditions: "测试条件"
+        case .result: "性能结果"
         }
     }
 }
@@ -26,23 +23,25 @@ enum PerformanceResolution: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .fullHD:
-            return "1080P"
-        case .twoK:
-            return "2K"
-        case .fourK:
-            return "4K"
+        case .fullHD: "1080P"
+        case .twoK: "2K"
+        case .fourK: "4K"
+        }
+    }
+
+    var apiValue: String {
+        switch self {
+        case .fullHD: "1080p"
+        case .twoK: "2k"
+        case .fourK: "4k"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .fullHD:
-            return "主流高刷显示器"
-        case .twoK:
-            return "画质和帧率平衡"
-        case .fourK:
-            return "更吃显卡性能"
+        case .fullHD: "主流高刷显示器"
+        case .twoK: "画质和帧率平衡"
+        case .fourK: "更吃显卡性能"
         }
     }
 }
@@ -52,29 +51,93 @@ struct PerformanceGame: Equatable, Identifiable {
     let name: String
     let mark: String
 
-    static let cyberpunk = PerformanceGame(id: "cyberpunk", name: "赛博朋克 2077", mark: "2077")
-    static let valorant = PerformanceGame(id: "valorant", name: "无畏契约", mark: "V")
+    static let allGames = PerformanceGame(id: "all-games", name: "什么都玩", mark: "全部")
+    static let valorant = PerformanceGame(id: "valorant", name: "瓦罗兰特", mark: "V")
+    static let cyberpunk = PerformanceGame(id: "cyberpunk-2077", name: "赛博朋克2077", mark: "2077")
 
     static let samples = [
-        cyberpunk,
+        valorant,
         PerformanceGame(id: "cs2", name: "CS2", mark: "CS"),
         PerformanceGame(id: "pubg", name: "PUBG", mark: "PUBG"),
-        PerformanceGame(id: "lol", name: "英雄联盟", mark: "LOL"),
+        PerformanceGame(id: "delta-force", name: "三角洲行动", mark: "三角洲"),
+        PerformanceGame(id: "teamfight-tactics", name: "云顶之弈", mark: "云顶"),
+        PerformanceGame(id: "league-of-legends", name: "LOL", mark: "LOL"),
+        PerformanceGame(id: "call-of-duty-warzone", name: "COD", mark: "COD"),
+        cyberpunk,
+        PerformanceGame(id: "red-dead-redemption-2", name: "荒野大镖客2", mark: "RDR2"),
+        PerformanceGame(id: "gta-v", name: "GTA5", mark: "GTA"),
+        PerformanceGame(id: "black-myth-wukong", name: "黑神话悟空", mark: "悟空"),
+        PerformanceGame(id: "forza-horizon-6", name: "地平线6", mark: "FH6"),
         PerformanceGame(id: "elden-ring", name: "艾尔登法环", mark: "环"),
-        PerformanceGame(id: "genshin", name: "原神", mark: "原"),
-        PerformanceGame(id: "apex", name: "APEX 英雄", mark: "A"),
-        valorant,
-        PerformanceGame(id: "cod", name: "使命召唤", mark: "COD")
+        PerformanceGame(id: "cities-skylines", name: "城市天际线", mark: "城市"),
+        PerformanceGame(id: "minecraft-java-edition", name: "我的世界", mark: "MC")
     ]
+
+    static func name(for id: String) -> String {
+        ([allGames] + samples).first(where: { $0.id == id })?.name ?? id
+    }
+}
+
+enum PerformanceEstimateStatus: String, Equatable {
+    case ready
+    case partial
+    case needsMoreData = "needs_more_data"
+}
+
+struct GamePerformanceResult: Equatable {
+    let gameID: String
+    let averageFPS: Int
+    let lowFPS: Int
+    let maximumFPS: Int
+    let bottleneck: String?
+    let bottleneckPercent: Int?
+    let sourceFetchedAt: String
+}
+
+struct PerformanceEstimatePayload: Equatable {
+    let status: PerformanceEstimateStatus
+    let averageFPS: Int?
+    let lowFPS: Int?
+    let maximumFPS: Int?
+    let bottleneck: String?
+    let bottleneckPercent: Int?
+    let sourceFetchedAt: String?
+    let missingGames: [String]
+    let gameResults: [GamePerformanceResult]
+}
+
+struct PerformanceEstimateInput: Equatable {
+    let cpuID: String
+    let gpuID: String
+    let resolution: String
+    let gameIDs: [String]
+}
+
+struct PerformanceRequestContext: Equatable {
+    let token: Int
+    let input: PerformanceEstimateInput
+    let resolutionTitle: String
+}
+
+enum PerformanceLoadState: Equatable {
+    case idle
+    case loading
+    case loaded
+    case partial
+    case empty
+    case failed(String)
 }
 
 struct PerformanceTestResult: Equatable {
     let resolution: String
-    let primaryGame: String
     let averageFPS: String
     let lowFPS: String
+    let maximumFPS: String
+    let smoothness: String
     let bottleneck: String
-    let advice: String
+    let sourceFetchedAt: String
+    let missingGameNames: [String]
+    let gameResults: [GamePerformanceResult]
 }
 
 struct PerformanceTestFlow: Equatable {
@@ -89,31 +152,27 @@ struct PerformanceTestFlow: Equatable {
     )
     var selectedResolution: PerformanceResolution = .twoK
     var selectedGames: [PerformanceGame] = [.cyberpunk]
+    private(set) var loadState: PerformanceLoadState = .idle
+    private(set) var result: PerformanceTestResult?
+    private var requestGeneration = 0
+    private var activeRequestToken: Int?
 
-    var result: PerformanceTestResult {
-        let baseFPS: Int
-        switch selectedResolution {
-        case .fullHD:
-            baseFPS = 142
-        case .twoK:
-            baseFPS = 118
-        case .fourK:
-            baseFPS = 72
-        }
+    var requestInput: PerformanceEstimateInput? {
+        guard
+            let cpuID = HardwareCatalog.cpus.first(where: { $0.name == hardwareProfile.cpu })?.id,
+            let gpuID = HardwareCatalog.gpus.first(where: { $0.name == hardwareProfile.gpu })?.id
+        else { return nil }
 
-        let bottleneck = selectedResolution == .fourK ? "显卡" : "显卡余量"
-        let primaryGame = selectedGames.first?.name ?? "未选择游戏"
-
-        return PerformanceTestResult(
-            resolution: selectedResolution.title,
-            primaryGame: primaryGame,
-            averageFPS: "\(baseFPS) FPS",
-            lowFPS: "\(max(baseFPS - 28, 45)) FPS",
-            bottleneck: bottleneck,
-            advice: selectedResolution == .fourK
-                ? "4K 下主要压力在显卡，想提升体验优先看显卡和电源余量。"
-                : "当前配置更适合 \(selectedResolution.title) 游戏，优先保证显卡驱动和内存容量。"
+        return PerformanceEstimateInput(
+            cpuID: cpuID,
+            gpuID: gpuID,
+            resolution: selectedResolution.apiValue,
+            gameIDs: selectedGames.map(\.id)
         )
+    }
+
+    var selectedGamesDisplay: String {
+        selectedGames == [.allGames] ? "全部 \(PerformanceGame.samples.count) 款" : "\(selectedGames.count) 款"
     }
 
     mutating func goNext() {
@@ -131,12 +190,106 @@ struct PerformanceTestFlow: Equatable {
     }
 
     mutating func toggleGame(_ game: PerformanceGame) {
-        if selectedGames.contains(game) {
+        if game == .allGames {
+            selectedGames = selectedGames == [.allGames] ? [.cyberpunk] : [.allGames]
+        } else if selectedGames.contains(game) {
             if selectedGames.count > 1 {
                 selectedGames.removeAll { $0 == game }
             }
         } else {
+            selectedGames.removeAll { $0 == .allGames }
             selectedGames.append(game)
+        }
+    }
+
+    mutating func beginRequest() -> PerformanceRequestContext? {
+        guard loadState != .loading else { return nil }
+        currentStep = .result
+        result = nil
+        guard let input = requestInput else {
+            activeRequestToken = nil
+            loadState = .empty
+            return nil
+        }
+
+        requestGeneration += 1
+        activeRequestToken = requestGeneration
+        loadState = .loading
+        return PerformanceRequestContext(
+            token: requestGeneration,
+            input: input,
+            resolutionTitle: selectedResolution.title
+        )
+    }
+
+    mutating func apply(_ payload: PerformanceEstimatePayload, for request: PerformanceRequestContext) {
+        guard activeRequestToken == request.token else { return }
+        activeRequestToken = nil
+        guard
+            payload.status != .needsMoreData,
+            let averageFPS = payload.averageFPS,
+            let lowFPS = payload.lowFPS,
+            let maximumFPS = payload.maximumFPS,
+            let sourceFetchedAt = payload.sourceFetchedAt
+        else {
+            loadState = .empty
+            result = nil
+            return
+        }
+
+        result = PerformanceTestResult(
+            resolution: request.resolutionTitle,
+            averageFPS: "\(averageFPS) FPS",
+            lowFPS: "\(lowFPS) FPS",
+            maximumFPS: "\(maximumFPS) FPS",
+            smoothness: Self.smoothness(for: averageFPS),
+            bottleneck: Self.bottleneckText(payload.bottleneck, percent: payload.bottleneckPercent),
+            sourceFetchedAt: sourceFetchedAt,
+            missingGameNames: payload.missingGames.map { PerformanceGame.name(for: $0) },
+            gameResults: payload.gameResults
+        )
+        loadState = payload.status == .partial ? .partial : .loaded
+    }
+
+    mutating func failRequest(_ message: String, for request: PerformanceRequestContext) {
+        guard activeRequestToken == request.token else { return }
+        activeRequestToken = nil
+        loadState = .failed(message)
+        result = nil
+    }
+
+    mutating func cancelRequest() {
+        activeRequestToken = nil
+        if loadState == .loading {
+            loadState = .idle
+            result = nil
+        }
+    }
+
+    mutating func reset() {
+        cancelRequest()
+        currentStep = .hardware
+        loadState = .idle
+        result = nil
+    }
+
+    private static func bottleneckText(_ value: String?, percent: Int?) -> String {
+        let name: String
+        switch value {
+        case "cpu": name = "CPU"
+        case "gpu": name = "显卡"
+        case "balanced": name = "均衡"
+        default: name = "暂无明显瓶颈"
+        }
+        return percent.map { "\(name) \($0)%" } ?? name
+    }
+
+    static func smoothness(for averageFPS: Int) -> String {
+        switch averageFPS {
+        case 120...: "非常流畅"
+        case 60...: "流畅"
+        case 30...: "基本流畅"
+        default: "不够流畅"
         }
     }
 }

@@ -7,10 +7,12 @@ struct DIYBuildView: View {
     @State private var flow = PerformanceTestFlow()
     @State private var selectedHardwareCategory: HardwareOptionCategory?
     @State private var feedbackMessage: String?
+    @State private var requestTask: Task<Void, Never>?
 
     var body: some View {
         VStack(spacing: 18) {
             ScreenHeader(title: "游戏性能测试", trailingIcon: nil) {
+                cancelRequest()
                 if flow.currentStep == .hardware {
                     onBack()
                 } else {
@@ -41,7 +43,8 @@ struct DIYBuildView: View {
                 case .conditions:
                     TestConditionStep(
                         selectedResolution: $flow.selectedResolution,
-                        selectedGames: $flow.selectedGames
+                        selectedGames: flow.selectedGames,
+                        onToggle: { flow.toggleGame($0) }
                     )
                 case .result:
                     PerformanceResultStep(flow: flow)
@@ -53,12 +56,21 @@ struct DIYBuildView: View {
             Spacer(minLength: 0)
 
             PrimaryButton(title: primaryButtonTitle, icon: primaryButtonIcon) {
-                if flow.currentStep == .result {
-                    flow.currentStep = .hardware
-                } else {
+                switch flow.currentStep {
+                case .hardware:
                     flow.goNext()
+                case .conditions:
+                    startTest()
+                case .result:
+                    if case .failed = flow.loadState {
+                        startTest()
+                    } else {
+                        cancelRequest()
+                        flow.reset()
+                    }
                 }
             }
+            .disabled(flow.loadState == .loading)
             .frame(maxWidth: 520)
             .padding(.bottom, 22)
         }
@@ -74,6 +86,7 @@ struct DIYBuildView: View {
             )
             .presentationDetents([.large])
         }
+        .onDisappear(perform: cancelRequest)
     }
 
     private var primaryButtonTitle: String {
@@ -83,12 +96,42 @@ struct DIYBuildView: View {
         case .conditions:
             return "开始测试"
         case .result:
+            if flow.loadState == .loading { return "测试中" }
+            if case .failed = flow.loadState { return "重试" }
             return "重新测试"
         }
     }
 
     private var primaryButtonIcon: String? {
-        flow.currentStep == .result ? "arrow.clockwise" : "arrow.right"
+        flow.currentStep == .result && flow.loadState != .loading ? "arrow.clockwise" : "arrow.right"
+    }
+
+    private func startTest() {
+        guard flow.loadState != .loading else { return }
+        requestTask?.cancel()
+        guard let request = flow.beginRequest() else { return }
+        requestTask = Task {
+            do {
+                let response = try await AppAPIClient().estimatePerformance(
+                    cpuID: request.input.cpuID,
+                    gpuID: request.input.gpuID,
+                    resolution: request.input.resolution,
+                    gameIDs: request.input.gameIDs
+                )
+                try Task.checkCancellation()
+                flow.apply(response.model, for: request)
+            } catch is CancellationError {
+                return
+            } catch {
+                flow.failRequest(error.localizedDescription, for: request)
+            }
+        }
+    }
+
+    private func cancelRequest() {
+        requestTask?.cancel()
+        requestTask = nil
+        flow.cancelRequest()
     }
 
     private func binding(for title: String) -> Binding<String> {
@@ -194,7 +237,8 @@ private struct HardwareSelectionStep: View {
 
 private struct TestConditionStep: View {
     @Binding var selectedResolution: PerformanceResolution
-    @Binding var selectedGames: [PerformanceGame]
+    let selectedGames: [PerformanceGame]
+    let onToggle: (PerformanceGame) -> Void
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -202,7 +246,7 @@ private struct TestConditionStep: View {
                 FlowIntroCard(
                     icon: "display",
                     title: "选择屏幕分辨率和测试游戏",
-                    subtitle: "分辨率越高越吃显卡，游戏可以多选，结果会优先参考第一个游戏。"
+                    subtitle: "分辨率越高越吃显卡；多选游戏时，会汇总可用游戏数据的平均、最低和最高帧率。"
                 )
 
                 Text("屏幕分辨率")
@@ -236,31 +280,28 @@ private struct TestConditionStep: View {
                     .padding(.top, 4)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 9), count: 3), spacing: 10) {
+                    PerformanceGameCard(
+                        game: .allGames,
+                        isSelected: selectedGames.contains(.allGames)
+                    ) {
+                        onToggle(.allGames)
+                    }
+
                     ForEach(PerformanceGame.samples) { game in
                         PerformanceGameCard(
                             game: game,
                             isSelected: selectedGames.contains(game)
                         ) {
-                            toggle(game)
+                            onToggle(game)
                         }
                     }
 
-                    ManualPerformanceGameCard()
                 }
             }
             .padding(.bottom, 10)
         }
     }
 
-    private func toggle(_ game: PerformanceGame) {
-        if selectedGames.contains(game) {
-            if selectedGames.count > 1 {
-                selectedGames.removeAll { $0 == game }
-            }
-        } else {
-            selectedGames.append(game)
-        }
-    }
 }
 
 private struct PerformanceResultStep: View {
@@ -269,16 +310,61 @@ private struct PerformanceResultStep: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 14) {
+                resultContent
+
+                Text("结果为中等画质下的性能估算，实际表现会受驱动、散热、内存、游戏版本和画质设置影响。")
+                    .font(.appCaption)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .lineSpacing(3)
+                    .padding(.horizontal, 4)
+            }
+            .padding(.bottom, 10)
+        }
+    }
+
+    @ViewBuilder
+    private var resultContent: some View {
+        switch flow.loadState {
+        case .idle, .loading:
+            PerformanceStateCard(
+                icon: "hourglass",
+                title: "正在查询性能数据",
+                detail: "正在按当前 CPU、显卡、分辨率和游戏查找可靠结果。",
+                showsProgress: true
+            )
+        case .empty:
+            PerformanceStateCard(
+                icon: "database",
+                title: "暂时没有可靠数据",
+                detail: "当前 CPU、显卡或所选游戏组合还没有可用结果，请更换条件后再试。"
+            )
+        case .failed(let message):
+            PerformanceStateCard(
+                icon: "wifi.exclamationmark",
+                title: "查询失败",
+                detail: message
+            )
+        case .loaded, .partial:
+            if let result = flow.result {
+                if flow.loadState == .partial {
+                    SoftCard(radius: 14) {
+                        Text("部分游戏暂无数据：\(result.missingGameNames.joined(separator: "、"))")
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                            .padding(14)
+                    }
+                }
+
                 SoftCard(radius: 18) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("\(flow.result.resolution) · \(flow.result.primaryGame)")
+                            Text("\(result.resolution) · 中等画质")
                                 .font(.appSubheadline)
                                 .foregroundStyle(AppTheme.secondaryText)
-                            Text("平均 \(flow.result.averageFPS)")
+                            Text("平均 \(result.averageFPS)")
                                 .font(.system(size: 26, weight: .bold))
                                 .foregroundStyle(AppTheme.primaryText)
-                            Text("1% Low \(flow.result.lowFPS)")
+                            Text("最低 \(result.lowFPS) · 最高 \(result.maximumFPS)")
                                 .font(.appCaption)
                                 .foregroundStyle(AppTheme.secondaryText)
                         }
@@ -296,11 +382,30 @@ private struct PerformanceResultStep: View {
 
                 SoftCard(radius: 16) {
                     VStack(spacing: 16) {
-                        PerformanceMetricRow(title: "屏幕分辨率", value: flow.result.resolution, detail: "按你选择的显示器目标估算")
-                        PerformanceMetricRow(title: "测试游戏", value: "\(flow.selectedGames.count) 款", detail: flow.selectedGames.map(\.name).joined(separator: "、"))
-                        PerformanceMetricRow(title: "性能瓶颈", value: flow.result.bottleneck, detail: flow.result.advice)
+                        PerformanceMetricRow(title: "屏幕分辨率", value: result.resolution, detail: "按你选择的显示器目标估算")
+                        PerformanceMetricRow(title: "测试游戏", value: flow.selectedGamesDisplay, detail: flow.selectedGames.map(\.name).joined(separator: "、"))
+                        PerformanceMetricRow(title: "流畅度评价", value: result.smoothness, detail: "根据平均帧率判断")
+                        PerformanceMetricRow(title: "性能瓶颈", value: result.bottleneck, detail: "来自当前组合的估算结果")
+                        PerformanceMetricRow(title: "数据更新时间", value: result.sourceFetchedAt, detail: "结果所用数据的最早采集时间")
                     }
                     .padding(18)
+                }
+
+                ForEach(result.gameResults, id: \.gameID) { game in
+                    SoftCard(radius: 16) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(PerformanceGame.name(for: game.gameID))
+                                .font(.appSubheadline)
+                                .foregroundStyle(AppTheme.primaryText)
+                            Text("平均 \(game.averageFPS) FPS · 最低 \(game.lowFPS) FPS · 最高 \(game.maximumFPS) FPS")
+                                .font(.appCaption)
+                                .foregroundStyle(AppTheme.secondaryText)
+                            Text("瓶颈：\(bottleneckText(game)) · 数据时间：\(game.sourceFetchedAt)")
+                                .font(.appCaption)
+                                .foregroundStyle(AppTheme.secondaryText)
+                        }
+                        .padding(16)
+                    }
                 }
 
                 SoftCard(radius: 16) {
@@ -316,7 +421,47 @@ private struct PerformanceResultStep: View {
                     .padding(18)
                 }
             }
-            .padding(.bottom, 10)
+        }
+    }
+
+    private func bottleneckText(_ result: GamePerformanceResult) -> String {
+        let name: String
+        switch result.bottleneck {
+        case "cpu": name = "CPU"
+        case "gpu": name = "显卡"
+        case "balanced": name = "均衡"
+        default: name = "暂无明显瓶颈"
+        }
+        return result.bottleneckPercent.map { "\(name) \($0)%" } ?? name
+    }
+}
+
+private struct PerformanceStateCard: View {
+    let icon: String
+    let title: String
+    let detail: String
+    var showsProgress = false
+
+    var body: some View {
+        SoftCard(radius: 18) {
+            VStack(spacing: 12) {
+                if showsProgress {
+                    ProgressView()
+                } else {
+                    Image(systemName: icon)
+                        .font(.system(size: 30, weight: .semibold))
+                        .foregroundStyle(AppTheme.secondaryText)
+                }
+                Text(title)
+                    .font(.appSubheadline)
+                    .foregroundStyle(AppTheme.primaryText)
+                Text(detail)
+                    .font(.appCaption)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(24)
         }
     }
 }
@@ -370,22 +515,9 @@ private struct PerformanceGameCard: View {
             .overlay(RoundedRectangle(cornerRadius: 10).stroke(isSelected ? AppTheme.success.opacity(0.55) : AppTheme.border, lineWidth: 1))
         }
         .buttonStyle(.plain)
-    }
-}
-
-private struct ManualPerformanceGameCard: View {
-    var body: some View {
-        VStack(spacing: 7) {
-            Image(systemName: "plus.circle")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(AppTheme.secondaryText)
-            Text("手动添加")
-                .font(.appCaption)
-                .foregroundStyle(AppTheme.secondaryText)
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 60)
-        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 10))
+        .accessibilityLabel(game.name)
+        .accessibilityValue(isSelected ? "已选择" : "未选择")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

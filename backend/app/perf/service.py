@@ -1,32 +1,22 @@
+from datetime import datetime, timezone
 from statistics import mean
-from typing import Dict, List, Literal, Optional
+from typing import List, Literal, Optional, Sequence
 
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.catalog.models import HardwareComponent
 from app.catalog.repository import get_components_by_ids
+from app.perf.collector_manifest import APPROVED_GAMES
+from app.perf.models import GamePerformanceEstimate
+from app.perf.repository import get_performance_estimates
 
 
-PerfStatus = Literal["ready", "needs_more_data"]
+PerfStatus = Literal["ready", "partial", "needs_more_data"]
 Confidence = Literal["low", "medium", "high"]
 Resolution = Literal["1080p", "2k", "4k"]
 
-RESOLUTION_FACTORS: Dict[str, float] = {
-    "1080p": 1.25,
-    "2k": 1.0,
-    "4k": 0.58,
-}
-
-GAME_WEIGHTS: Dict[str, float] = {
-    "CS2": 1.28,
-    "无畏契约": 1.35,
-    "PUBG": 0.92,
-    "赛博朋克2077": 0.58,
-    "黑神话悟空": 0.55,
-    "原神": 1.08,
-    "永劫无间": 0.82,
-}
+ALL_GAME_IDS = [game[0] for game in APPROVED_GAMES]
 
 
 class PerfHardwareInput(BaseModel):
@@ -37,88 +27,122 @@ class PerfHardwareInput(BaseModel):
 class PerfEstimateRequest(BaseModel):
     hardware: PerfHardwareInput
     resolution: Resolution
-    games: List[str] = Field(min_length=1, max_length=12)
+    games: List[str] = Field(min_length=1, max_length=15)
 
 
 class GamePerfEstimate(BaseModel):
     game: str
     average_fps: int
     low_fps: int
+    maximum_fps: int
+    bottleneck: Optional[str]
+    bottleneck_percent: Optional[int]
     confidence: Confidence
+    source_fetched_at: datetime
 
 
 class PerfEstimateResponse(BaseModel):
     status: PerfStatus
     average_fps: Optional[int]
     low_fps: Optional[int]
+    maximum_fps: Optional[int]
     bottleneck: Optional[str]
+    bottleneck_percent: Optional[int]
     confidence: Confidence
     advice: str
     missing_data: List[str]
+    missing_games: List[str]
+    source_fetched_at: Optional[datetime]
     game_results: List[GamePerfEstimate]
 
 
 def estimate_performance(session: Session, request: PerfEstimateRequest) -> PerfEstimateResponse:
+    requested_games = _requested_games(request.games)
     components = {
         component.id: component
         for component in get_components_by_ids(session, [request.hardware.cpu, request.hardware.gpu])
     }
-    cpu = components.get(request.hardware.cpu)
-    gpu = components.get(request.hardware.gpu)
-    missing_data = _missing_data(cpu, gpu)
+    missing_data = _missing_data(
+        components.get(request.hardware.cpu),
+        components.get(request.hardware.gpu),
+    )
     if missing_data:
-        return PerfEstimateResponse(
-            status="needs_more_data",
-            average_fps=None,
-            low_fps=None,
-            bottleneck=None,
-            confidence="low",
-            advice="当前硬件缺少性能指标，暂时不能给出可信 FPS 估算。",
-            missing_data=missing_data,
-            game_results=[],
-        )
+        return _no_data_response(requested_games, missing_data)
 
-    assert cpu is not None
-    assert gpu is not None
-    cpu_perf = _int_spec(cpu, "perf_index")
-    gpu_perf = _int_spec(gpu, "perf_index")
-    bottleneck = _bottleneck(cpu_perf, gpu_perf, request.resolution)
-    game_results = [
-        _estimate_game(game, cpu_perf, gpu_perf, request.resolution)
-        for game in request.games
-    ]
-    average_fps = round(mean(result.average_fps for result in game_results))
-    low_fps = round(mean(result.low_fps for result in game_results))
-    confidence: Confidence = "medium"
+    rows_by_game = {
+        row.game_id: row
+        for row in get_performance_estimates(
+            session,
+            request.hardware.cpu,
+            request.hardware.gpu,
+            requested_games,
+            request.resolution,
+            "medium",
+        )
+    }
+    rows = [rows_by_game[game_id] for game_id in requested_games if game_id in rows_by_game]
+    missing_games = [game_id for game_id in requested_games if game_id not in rows_by_game]
+    if not rows:
+        return _no_data_response(missing_games, [])
+
+    game_results = [_game_result(row) for row in rows]
+    bottleneck_row = max(
+        (row for row in rows if row.bottleneck_percent is not None),
+        key=lambda row: row.bottleneck_percent,
+        default=None,
+    )
     return PerfEstimateResponse(
-        status="ready",
-        average_fps=average_fps,
-        low_fps=low_fps,
-        bottleneck=bottleneck,
-        confidence=confidence,
-        advice=_advice(bottleneck, request.resolution),
+        status="partial" if missing_games else "ready",
+        average_fps=round(mean(row.average_fps for row in rows)),
+        low_fps=min(row.minimum_fps for row in rows),
+        maximum_fps=max(row.maximum_fps for row in rows),
+        bottleneck=bottleneck_row.bottleneck_type if bottleneck_row else None,
+        bottleneck_percent=bottleneck_row.bottleneck_percent if bottleneck_row else None,
+        confidence="medium",
+        advice="结果为中等画质下的性能估算。",
         missing_data=[],
+        missing_games=missing_games,
+        source_fetched_at=min(_as_utc(row.source_fetched_at) for row in rows),
         game_results=game_results,
     )
 
 
-def _estimate_game(
-    game: str,
-    cpu_perf: int,
-    gpu_perf: int,
-    resolution: str,
-) -> GamePerfEstimate:
-    game_weight = GAME_WEIGHTS.get(game, 0.85)
-    resolution_factor = RESOLUTION_FACTORS[resolution]
-    cpu_limited = cpu_perf * 2.1
-    gpu_limited = gpu_perf * 2.35 * resolution_factor
-    average_fps = round(min(cpu_limited, gpu_limited) * game_weight)
-    low_fps = max(round(average_fps * 0.78), 1)
+def _requested_games(games: Sequence[str]) -> List[str]:
+    if "all-games" in games:
+        return ALL_GAME_IDS
+    return list(dict.fromkeys(games))
+
+
+def _game_result(row: GamePerformanceEstimate) -> GamePerfEstimate:
     return GamePerfEstimate(
-        game=game,
-        average_fps=max(average_fps, 1),
-        low_fps=low_fps,
-        confidence="medium" if game in GAME_WEIGHTS else "low",
+        game=row.game_id,
+        average_fps=row.average_fps,
+        low_fps=row.minimum_fps,
+        maximum_fps=row.maximum_fps,
+        bottleneck=row.bottleneck_type,
+        bottleneck_percent=row.bottleneck_percent,
+        confidence="medium",
+        source_fetched_at=_as_utc(row.source_fetched_at),
+    )
+
+
+def _no_data_response(
+    missing_games: List[str],
+    missing_data: List[str],
+) -> PerfEstimateResponse:
+    return PerfEstimateResponse(
+        status="needs_more_data",
+        average_fps=None,
+        low_fps=None,
+        maximum_fps=None,
+        bottleneck=None,
+        bottleneck_percent=None,
+        confidence="low",
+        advice="当前硬件和游戏组合暂时没有可靠的 FPS 数据。",
+        missing_data=missing_data,
+        missing_games=missing_games,
+        source_fetched_at=None,
+        game_results=[],
     )
 
 
@@ -129,35 +153,12 @@ def _missing_data(
     missing = []
     if cpu is None:
         missing.append("cpu")
-    elif _int_spec(cpu, "perf_index") <= 0:
-        missing.append("cpu.perf_index")
     if gpu is None:
         missing.append("gpu")
-    elif _int_spec(gpu, "perf_index") <= 0:
-        missing.append("gpu.perf_index")
-    if any(item.endswith(".perf_index") for item in missing):
-        missing.insert(0, "perf_index")
     return missing
 
 
-def _bottleneck(cpu_perf: int, gpu_perf: int, resolution: str) -> str:
-    gpu_pressure = {"1080p": 0.85, "2k": 1.0, "4k": 1.35}[resolution]
-    adjusted_gpu = gpu_perf / gpu_pressure
-    if adjusted_gpu < cpu_perf * 0.95:
-        return "gpu"
-    if cpu_perf < adjusted_gpu * 0.85:
-        return "cpu"
-    return "balanced"
-
-
-def _advice(bottleneck: str, resolution: str) -> str:
-    if bottleneck == "gpu":
-        return f"{resolution} 下主要瓶颈在显卡，优先升级显卡会更直接提升帧率。"
-    if bottleneck == "cpu":
-        return "当前更容易受 CPU 影响，尤其是高刷电竞游戏，优先升级 CPU/平台更稳。"
-    return "CPU 和显卡比较均衡，建议结合预算和游戏类型决定下一步升级。"
-
-
-def _int_spec(component: HardwareComponent, key: str) -> int:
-    value = component.specs.get(key)
-    return value if isinstance(value, int) else 0
+def _as_utc(value: datetime) -> datetime:
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
