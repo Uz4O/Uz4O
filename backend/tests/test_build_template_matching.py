@@ -86,18 +86,8 @@ def ready_option_payload() -> dict:
                 }
                 for role, component_id in components.items()
             ],
-            "advantages": [],
-            "disadvantages": [],
-            "risks": [],
             "suitable_user": "FPS 玩家",
             "price_date": "2026-07-12",
-        },
-        "compatibility": {
-            "compatible": True,
-            "summary": "compatible",
-            "findings": [],
-            "finding_counts": {"pass": 0, "warning": 0, "error": 0},
-            "checked_rule_codes": [],
         },
     }
 
@@ -107,6 +97,10 @@ def test_build_option_response_accepts_ready_template_payload() -> None:
 
     assert option.status == "ready"
     assert option.source == "template"
+    assert {"advantages", "disadvantages", "risks"}.isdisjoint(
+        option.details.model_dump()
+    )
+    assert "compatibility" not in option.model_dump()
 
 
 def test_build_option_response_requires_eight_unique_part_roles() -> None:
@@ -125,7 +119,7 @@ def test_build_option_response_requires_components_to_match_parts() -> None:
         build_service.BuildOptionResponse.model_validate(payload)
 
 
-@pytest.mark.parametrize("field", ["template_id", "details", "compatibility"])
+@pytest.mark.parametrize("field", ["template_id", "details"])
 def test_build_option_response_requires_structured_template_fields(field: str) -> None:
     missing_payload = ready_option_payload()
     missing_payload.pop(field)

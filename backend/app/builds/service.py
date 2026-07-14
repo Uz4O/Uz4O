@@ -194,9 +194,6 @@ class BuildTemplateDetails(BaseModel):
     direction: Literal["fps", "aaa", "balanced"]
     purchase_mode: Literal["new", "used", "mixed"]
     parts: List[BuildTemplatePart]
-    advantages: List[str]
-    disadvantages: List[str]
-    risks: List[str]
     suitable_user: str
     price_date: str
 
@@ -235,7 +232,6 @@ class BuildOptionResponse(BaseModel):
     estimated_total: Optional[int]
     explanation: str
     details: BuildTemplateDetails
-    compatibility: CompatibilityResult
 
     @model_validator(mode="after")
     def require_complete_matching_parts(self) -> "BuildOptionResponse":

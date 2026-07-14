@@ -312,12 +312,6 @@ def render_low_budget_markdown(
                     "",
                     f"**总价：¥{template.estimated_total}**",
                     "",
-                    f"**优点：** {'；'.join(details.advantages)}",
-                    "",
-                    f"**缺点：** {'；'.join(details.disadvantages)}",
-                    "",
-                    f"**风险：** {'；'.join(details.risks)}",
-                    "",
                     f"**适用用户：** {details.suitable_user}",
                     "",
                 ]
@@ -546,60 +540,18 @@ def _details_for_candidate(
     purchase_mode: PurchaseMode,
     candidate: Candidate,
 ) -> BuildTemplateDetails:
-    parts = candidate.parts_by_role
-    cpu_name = parts["cpu"].name
-    gpu_name = parts["gpu"].name
     if direction == "fps":
-        advantages = [
-            f"{cpu_name}优先保证高帧率和1% Low",
-            f"{gpu_name}来自当前预算内可行的显卡档位",
-        ]
-        disadvantages = ["显卡预算低于同价位3A方案时，高画质单机性能不是第一优先级"]
         suitable_user = "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户"
     elif direction == "aaa":
-        advantages = [
-            f"预算优先投入{gpu_name}，更适合高画质3A游戏",
-            f"{cpu_name}来自当前预算内可行的平台",
-        ]
-        disadvantages = ["CPU投入低于FPS方案时，不以极限高刷新率为首要目标"]
         suitable_user = "主要玩高画质3A单机、重视分辨率和画质的用户"
     else:
-        advantages = [
-            f"{cpu_name}与{gpu_name}之间没有刻意单边堆料",
-            "同时兼顾高帧率网游与3A游戏",
-        ]
-        disadvantages = ["不会在单一FPS或3A指标上达到同价位专项方案的极限"]
         suitable_user = "游戏类型比较杂，希望兼顾FPS和3A的用户"
-
-    remaining_budget = budget - candidate.total
-    if remaining_budget >= 500:
-        disadvantages.append(
-            f"当前白名单的下一档有效性能升级无法在预算上限内装下，保留约¥{remaining_budget}"
-        )
-
-    if purchase_mode == "new":
-        risks = ["全新价格为阶段性参考价，下单前仍需复核当天成交价和保修渠道"]
-    elif purchase_mode == "used":
-        risks = [
-            "二手显卡需要排查矿卡、维修和显存稳定性风险",
-            "二手电源需要核对使用年限、拆修记录、线材完整性和质保",
-            "二手SSD需要检查通电时间、写入量、健康度和坏块",
-            "二手主板需要检查针脚、接口和暗病",
-        ]
-    else:
-        risks = [
-            "CPU、内存、散热和机箱按二手采购，需要核对成色与附件",
-            "主板、显卡、电源和SSD按全新采购，不能用二手价替代",
-        ]
 
     return BuildTemplateDetails(
         target_budget=budget,
         direction=direction,
         purchase_mode=purchase_mode,
         parts=list(candidate.parts),
-        advantages=advantages,
-        disadvantages=disadvantages,
-        risks=risks,
         suitable_user=suitable_user,
         price_date=PRICE_DATE,
     )

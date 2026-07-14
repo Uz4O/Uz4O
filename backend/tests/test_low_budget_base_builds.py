@@ -129,9 +129,6 @@ def test_every_template_has_eight_source_priced_parts_and_an_exact_total() -> No
             part.reference_price for part in parts.values()
         )
         assert template.estimated_total <= details.target_budget + 200
-        assert details.advantages
-        assert details.disadvantages
-        assert details.risks
         assert details.suitable_user
 
         for part in parts.values():
@@ -485,10 +482,22 @@ def test_writes_deterministic_review_and_import_artifacts(tmp_path) -> None:
     lines = markdown.splitlines()
     assert sum(line.startswith("## ") for line in lines) == len(BUDGET_TIERS)
     assert sum(line.startswith("### ") for line in lines) == len(templates)
+    assert "**优点：**" not in markdown
+    assert "**缺点：**" not in markdown
+    assert "**风险：**" not in markdown
 
     payload = json.loads(paths.templates_json.read_text(encoding="utf-8"))
     assert len(payload) == len(templates)
     assert payload[0]["details"]["target_budget"] == 3_000
+    assert all(
+        {"advantages", "disadvantages", "risks"}.isdisjoint(item["details"])
+        for item in payload
+    )
+    committed_payload = json.loads(TEMPLATE_PATH.read_text(encoding="utf-8"))
+    assert all(
+        {"advantages", "disadvantages", "risks"}.isdisjoint(item["details"])
+        for item in committed_payload
+    )
     assert paths.review_markdown.read_text(encoding="utf-8") == markdown
     assert paths.templates_json.read_bytes() == TEMPLATE_PATH.read_bytes()
     assert paths.reference_prices_csv.read_bytes() == PRICE_PATH.read_bytes()

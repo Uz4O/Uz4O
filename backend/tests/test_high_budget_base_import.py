@@ -1,3 +1,4 @@
+import json
 from collections import Counter
 from pathlib import Path
 
@@ -46,8 +47,14 @@ def test_committed_artifacts_match_the_deterministic_generator(tmp_path) -> None
     report = generate_high_budget_report()
     generated = list(report.templates)
     committed = read_build_template_inputs(TEMPLATE_PATH)
+    committed_payload = json.loads(TEMPLATE_PATH.read_text(encoding="utf-8"))
     generated_paths = write_high_budget_artifacts(tmp_path, report=report)
 
+    assert len(committed_payload) == 234
+    assert all(
+        {"advantages", "disadvantages", "risks"}.isdisjoint(item["details"])
+        for item in committed_payload
+    )
     assert [item.model_dump(mode="json") for item in committed] == [
         item.model_dump(mode="json") for item in generated
     ]

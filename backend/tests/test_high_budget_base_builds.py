@@ -168,19 +168,11 @@ def test_direction_allocations_are_consistent_with_fps_and_aaa_priorities() -> N
             ]
 
 
-def test_explanations_and_used_risks_are_present() -> None:
+def test_template_details_keep_user_and_price_metadata() -> None:
     for template in generated_templates():
         details = template.details
-        assert details.advantages
-        assert details.disadvantages
-        assert details.risks
         assert details.suitable_user
         assert details.price_date == "2026-07-12"
-        if details.purchase_mode == "used":
-            joined_risks = " ".join(details.risks)
-            assert "电源" in joined_risks
-            assert "SSD" in joined_risks
-            assert "显卡" in joined_risks
 
 
 def test_writes_review_markdown_and_backend_json(tmp_path) -> None:
@@ -190,12 +182,19 @@ def test_writes_review_markdown_and_backend_json(tmp_path) -> None:
     lines = markdown.splitlines()
     assert sum(line.startswith("## ") for line in lines) == 26
     assert sum(line.startswith("### ") for line in lines) == 234
+    assert "**优点：**" not in markdown
+    assert "**缺点：**" not in markdown
+    assert "**风险：**" not in markdown
 
     paths = write_high_budget_artifacts(tmp_path, templates)
     payload = json.loads(paths.templates_json.read_text(encoding="utf-8"))
 
     assert len(payload) == 234
     assert payload[0]["details"]["target_budget"] == 7_500
+    assert all(
+        {"advantages", "disadvantages", "risks"}.isdisjoint(item["details"])
+        for item in payload
+    )
     assert paths.review_markdown.read_text(encoding="utf-8") == markdown
     assert paths.reference_prices_csv.exists()
     assert paths.recommendation_ids.exists()

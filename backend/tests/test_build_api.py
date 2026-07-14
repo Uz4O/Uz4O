@@ -68,9 +68,6 @@ def build_option_template(
                 }
                 for role, component_id in components.items()
             ],
-            "advantages": ["测试优点"],
-            "disadvantages": ["测试缺点"],
-            "risks": ["测试风险"],
             "suitable_user": "测试用户",
             "price_date": "2026-07-12",
         }
@@ -373,7 +370,12 @@ def test_build_options_returns_full_high_budget_modes_in_approved_order() -> Non
         assert option["details"] is not None
         assert len(option["details"]["parts"]) == 8
         assert len(option["components"]) == 8
-        assert option["compatibility"]["compatible"] is True
+        assert {
+            "advantages",
+            "disadvantages",
+            "risks",
+        }.isdisjoint(option["details"])
+        assert "compatibility" not in option
 
 
 @pytest.mark.parametrize("use_case", ["游戏", "游戏兼办公", "办公"])
@@ -449,7 +451,7 @@ def test_build_options_marks_one_incompatible_mode_unavailable() -> None:
         "used",
         "new",
     ]
-    assert all(option["compatibility"]["compatible"] is True for option in body["options"])
+    assert all("compatibility" not in option for option in body["options"])
     assert body["unavailable_modes"] == ["mixed"]
 
 
