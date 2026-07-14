@@ -620,10 +620,6 @@ struct ConfigReviewFindingDTO: Decodable, Identifiable {
 
 enum AppConfiguration {
     static var apiBaseURL: URL {
-#if DEBUG
-        return URL(string: "http://127.0.0.1:8790")!
-#else
         return URL(string: "https://api.uzbox.top")!
-#endif
     }
 }
