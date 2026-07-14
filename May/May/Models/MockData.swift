@@ -5,11 +5,9 @@ struct PCPart: Identifiable {
     let category: String
     let model: String
     let price: String
+    let condition: String
     let icon: String
     let accent: Color
-    var reason: String = ""
-    var alternative: String = ""
-    var source: String = "参考价"
 }
 
 struct BuildStep: Identifiable {
@@ -120,10 +118,9 @@ private extension BuildOptionPartDTO {
             category: role.displayName,
             model: name,
             price: formattedBuildPrice(referencePrice),
+            condition: condition.displayName,
             icon: role.icon,
-            accent: role == .cpu ? .blue : AppTheme.primaryText,
-            reason: "成色：\(condition.displayName) · \(priceSource) · \(priceDate)",
-            source: "\(priceSource) · \(priceDate)"
+            accent: role == .cpu ? .blue : AppTheme.primaryText
         )
     }
 }
@@ -189,14 +186,14 @@ private func formattedBuildPrice(_ value: Int) -> String {
 
 enum AppMockData {
     static let parts = [
-        PCPart(category: "CPU", model: "Intel Core i5-14600K", price: "¥ 1499", icon: "cpu", accent: .blue, reason: "游戏和生产力都够用，避免 i7 级别预算浪费。", alternative: "Ryzen 5 7500F"),
-        PCPart(category: "主板", model: "B760M AORUS ELITE", price: "¥ 899", icon: "memorychip", accent: AppTheme.primaryText, reason: "供电和接口足够，不做过度消费。", alternative: "ROG STRIX B760-G"),
-        PCPart(category: "显卡", model: "RTX 4070 Super 12GB", price: "¥ 4399", icon: "display", accent: AppTheme.primaryText, reason: "适合 2K 高画质游戏，功耗和性能平衡。", alternative: "RTX 4060 Ti / RX 7800 XT"),
-        PCPart(category: "内存", model: "DDR5 6000 32GB", price: "¥ 699", icon: "rectangle.stack", accent: AppTheme.primaryText, reason: "32GB 更适合剪辑、多任务和长期使用。", alternative: "DDR5 5600 32GB"),
-        PCPart(category: "硬盘", model: "1TB PCIe 4.0 SSD", price: "¥ 459", icon: "externaldrive", accent: AppTheme.primaryText, reason: "系统和常用游戏都能放下，后期可加盘。", alternative: "2TB PCIe 4.0 SSD"),
-        PCPart(category: "电源", model: "650W 金牌全模组", price: "¥ 499", icon: "bolt", accent: AppTheme.primaryText, reason: "功率有余量，避开虚标杂牌电源。", alternative: "750W 金牌"),
-        PCPart(category: "散热", model: "单塔风冷 6 热管", price: "¥ 159", icon: "fan", accent: AppTheme.primaryText, reason: "压制 i5 足够，维护成本低。", alternative: "240 水冷"),
-        PCPart(category: "机箱", model: "MATX 白色海景房", price: "¥ 399", icon: "shippingbox", accent: AppTheme.primaryText, reason: "空间够用，兼顾外观和安装难度。", alternative: "静音 MATX 机箱")
+        PCPart(category: "CPU", model: "Intel Core i5-14600K", price: "¥ 1499", condition: "全新", icon: "cpu", accent: .blue),
+        PCPart(category: "主板", model: "B760M AORUS ELITE", price: "¥ 899", condition: "全新", icon: "memorychip", accent: AppTheme.primaryText),
+        PCPart(category: "显卡", model: "RTX 4070 Super 12GB", price: "¥ 4399", condition: "全新", icon: "display", accent: AppTheme.primaryText),
+        PCPart(category: "内存", model: "DDR5 6000 32GB", price: "¥ 699", condition: "全新", icon: "rectangle.stack", accent: AppTheme.primaryText),
+        PCPart(category: "硬盘", model: "1TB PCIe 4.0 SSD", price: "¥ 459", condition: "全新", icon: "externaldrive", accent: AppTheme.primaryText),
+        PCPart(category: "电源", model: "650W 金牌全模组", price: "¥ 499", condition: "全新", icon: "bolt", accent: AppTheme.primaryText),
+        PCPart(category: "散热", model: "单塔风冷 6 热管", price: "¥ 159", condition: "全新", icon: "fan", accent: AppTheme.primaryText),
+        PCPart(category: "机箱", model: "MATX 白色海景房", price: "¥ 399", condition: "全新", icon: "shippingbox", accent: AppTheme.primaryText)
     ]
 
     static let guideSteps = [
@@ -223,11 +220,9 @@ enum AppMockData {
             category: "外观与散热",
             model: "\(flow.style.title) · \(flow.restoration.tier.title)",
             price: flow.quote.styleModule.midpointLabel,
+            condition: "全新",
             icon: "fan",
-            accent: AppTheme.primaryText,
-            reason: flow.restoration.keeps,
-            alternative: flow.restoration.tradeoff,
-            source: "演示估价"
+            accent: AppTheme.primaryText
         )
 
         return BuildPlan(

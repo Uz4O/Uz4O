@@ -668,38 +668,6 @@ struct MascotAvatar: View {
     }
 }
 
-struct DetailedPartRow: View {
-    let part: PCPart
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            PartRow(part: part)
-
-            if !part.reason.isEmpty {
-                Text(part.reason)
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            if !part.alternative.isEmpty {
-                HStack(spacing: 6) {
-                    Text("可替代")
-                        .font(.appCaption.weight(.semibold))
-                        .foregroundStyle(AppTheme.secondaryText)
-                    Text(part.alternative)
-                        .font(.appCaption.weight(.semibold))
-                        .foregroundStyle(AppTheme.primaryText)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(AppTheme.softSurface, in: Capsule())
-            }
-        }
-        .padding(.vertical, 4)
-    }
-}
-
 struct PCIllustration: View {
     var body: some View {
         ZStack {

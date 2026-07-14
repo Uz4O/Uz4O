@@ -35,7 +35,7 @@ assertNotContains(viewSource, "part.reason")
 Run:
 
 ```bash
-swiftc May/MayTests/BuildResultContentRulesTests.swift -o /tmp/build-result-content-rules && /tmp/build-result-content-rules
+swiftc -parse-as-library May/MayTests/BuildResultContentRulesTests.swift -o /tmp/build-result-content-rules && /tmp/build-result-content-rules
 ```
 
 Expected: FAIL，因为 `PCPart` 尚无 `condition` 映射，结果页也尚未直接展示三个重点字段。
@@ -78,7 +78,7 @@ struct PCPart: Identifiable {
 Run:
 
 ```bash
-swiftc May/MayTests/BuildResultContentRulesTests.swift -o /tmp/build-result-content-rules && /tmp/build-result-content-rules
+swiftc -parse-as-library May/MayTests/BuildResultContentRulesTests.swift -o /tmp/build-result-content-rules && /tmp/build-result-content-rules
 ```
 
 Expected: `BuildResultContentRulesTests passed`。

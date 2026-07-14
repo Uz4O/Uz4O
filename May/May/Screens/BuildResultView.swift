@@ -46,13 +46,13 @@ struct BuildResultView: View {
                 }
 
                 SoftCard(radius: 18) {
-                    VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("配件清单")
                             .font(.appHeadline)
                             .foregroundStyle(AppTheme.primaryText)
 
                         ForEach(plan.parts) { part in
-                            DetailedPartRow(part: part)
+                            ResultPartRow(part: part)
                             if part.id != plan.parts.last?.id {
                                 Divider()
                             }
@@ -66,6 +66,48 @@ struct BuildResultView: View {
             }
             .padding(.horizontal, AppTheme.screenPadding)
         }
+    }
+}
+
+private struct ResultPartRow: View {
+    let part: PCPart
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: part.icon)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 34, height: 34)
+                .background(part.accent, in: RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 5) {
+                HStack(spacing: 7) {
+                    Text(part.category)
+                        .font(.appCaption.weight(.semibold))
+                        .foregroundStyle(AppTheme.secondaryText)
+
+                    Text(part.condition)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(AppTheme.primaryText)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(AppTheme.softSurface, in: Capsule())
+                }
+
+                Text(part.model)
+                    .font(.appSubheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(part.price)
+                .font(.appSubheadline.weight(.bold))
+                .foregroundStyle(AppTheme.primaryText)
+                .fixedSize()
+        }
+        .padding(.vertical, 7)
     }
 }
 
