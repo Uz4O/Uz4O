@@ -1,0 +1,867 @@
+{
+  "ready": false,
+  "hardware_profile_count": 0,
+  "required_hardware_profile_count": 178,
+  "anchor_count": 0,
+  "active_model_count": 0,
+  "required_model_count": 45,
+  "missing_hardware_profiles": [
+    "gtx-1050",
+    "gtx-1050-ti",
+    "gtx-1060-3gb",
+    "gtx-1060-5gb",
+    "gtx-1060-6gb",
+    "gtx-1070",
+    "gtx-1070-ti",
+    "gtx-1080",
+    "gtx-1080-ti",
+    "gtx-1650",
+    "gtx-1660-super",
+    "gtx-1660-ti",
+    "i3-10105",
+    "i3-10105f",
+    "i3-11100",
+    "i3-12100",
+    "i3-12100f",
+    "i3-13100",
+    "i3-13100f",
+    "i3-14100",
+    "i3-14100f",
+    "i5-10400",
+    "i5-10400f",
+    "i5-10500",
+    "i5-10600k",
+    "i5-10600kf",
+    "i5-11400",
+    "i5-11400f",
+    "i5-11500",
+    "i5-11600k",
+    "i5-11600kf",
+    "i5-12400",
+    "i5-12400f",
+    "i5-12490f",
+    "i5-12500",
+    "i5-12600k",
+    "i5-12600kf",
+    "i5-13400",
+    "i5-13400f",
+    "i5-13490f",
+    "i5-13600k",
+    "i5-13600kf",
+    "i5-14400",
+    "i5-14400f",
+    "i5-14490f",
+    "i5-14600k",
+    "i5-14600kf",
+    "i7-10700",
+    "i7-10700k",
+    "i7-10700kf",
+    "i7-11700",
+    "i7-11700k",
+    "i7-11700kf",
+    "i7-12700",
+    "i7-12700k",
+    "i7-12700kf",
+    "i7-13700",
+    "i7-13700k",
+    "i7-13700kf",
+    "i7-14700",
+    "i7-14700k",
+    "i7-14700kf",
+    "i9-10900k",
+    "i9-10900kf",
+    "i9-11900k",
+    "i9-11900kf",
+    "i9-12900",
+    "i9-12900k",
+    "i9-12900kf",
+    "i9-12900ks",
+    "i9-13900",
+    "i9-13900k",
+    "i9-13900kf",
+    "i9-13900ks",
+    "i9-14900k",
+    "i9-14900kf",
+    "i9-14900ks",
+    "r5-5500",
+    "r5-5600",
+    "r5-5600g",
+    "r5-5600x",
+    "r5-7500f",
+    "r5-7600",
+    "r5-7600x",
+    "r5-9500f",
+    "r5-9600x",
+    "r7-5700",
+    "r7-5700g",
+    "r7-5700x",
+    "r7-5800x",
+    "r7-5800x3d",
+    "r7-7700",
+    "r7-7700x",
+    "r7-7800x3d",
+    "r7-9700x",
+    "r7-9800x3d",
+    "r7-9800x3d-v2",
+    "r7-9850x3d",
+    "r9-5900x",
+    "r9-5950x",
+    "r9-7900",
+    "r9-7900x",
+    "r9-7950x",
+    "r9-7950x3d",
+    "r9-9900x",
+    "r9-9950x3d",
+    "rtx-2060",
+    "rtx-2060-super",
+    "rtx-2070-super",
+    "rtx-2080-ti",
+    "rtx-3050",
+    "rtx-3060",
+    "rtx-3060-ti",
+    "rtx-3070",
+    "rtx-3070-ti",
+    "rtx-3080",
+    "rtx-3080-ti",
+    "rtx-3090",
+    "rtx-3090-ti",
+    "rtx-4060",
+    "rtx-4060-ti",
+    "rtx-4070",
+    "rtx-4070-super",
+    "rtx-4070-ti",
+    "rtx-4070-ti-super",
+    "rtx-4080",
+    "rtx-4080-super",
+    "rtx-4090-d",
+    "rtx-5050",
+    "rtx-5060",
+    "rtx-5060-ti",
+    "rtx-5070",
+    "rtx-5070-ti",
+    "rtx-5080",
+    "rtx-5090",
+    "rtx-5090-d",
+    "rtx-5090-d-v2",
+    "rx-5500",
+    "rx-5500-xt",
+    "rx-5600",
+    "rx-5600-xt",
+    "rx-5700",
+    "rx-5700-xt",
+    "rx-6500-xt",
+    "rx-6600",
+    "rx-6600-xt",
+    "rx-6650-gre",
+    "rx-6650-xt",
+    "rx-6700",
+    "rx-6700-xt",
+    "rx-6750-gre",
+    "rx-6750-xt",
+    "rx-6800",
+    "rx-6800-xt",
+    "rx-6900-xt",
+    "rx-6950-xt",
+    "rx-7600",
+    "rx-7600-xt",
+    "rx-7650-gre",
+    "rx-7700-xt",
+    "rx-7750-xt",
+    "rx-7800-xt",
+    "rx-7850-xt",
+    "rx-7900-gre",
+    "rx-7900-xt",
+    "rx-7900-xtx",
+    "rx-9060-xt-12gb",
+    "rx-9060-xt-16gb",
+    "rx-9060-xt-8gb",
+    "rx-9070-gre",
+    "rx-9070-xt",
+    "u5-235",
+    "u5-245",
+    "u5-245k",
+    "u7-265",
+    "u7-265k",
+    "u9-285",
+    "u9-285k"
+  ],
+  "missing_models": [
+    "valorant/1080p/native",
+    "valorant/2k/native",
+    "valorant/4k/native",
+    "cs2/1080p/native",
+    "cs2/2k/native",
+    "cs2/4k/native",
+    "pubg/1080p/native",
+    "pubg/2k/native",
+    "pubg/4k/native",
+    "delta-force/1080p/native",
+    "delta-force/2k/native",
+    "delta-force/4k/native",
+    "teamfight-tactics/1080p/native",
+    "teamfight-tactics/2k/native",
+    "teamfight-tactics/4k/native",
+    "league-of-legends/1080p/native",
+    "league-of-legends/2k/native",
+    "league-of-legends/4k/native",
+    "call-of-duty-warzone/1080p/native",
+    "call-of-duty-warzone/2k/native",
+    "call-of-duty-warzone/4k/native",
+    "cyberpunk-2077/1080p/native",
+    "cyberpunk-2077/2k/native",
+    "cyberpunk-2077/4k/native",
+    "red-dead-redemption-2/1080p/native",
+    "red-dead-redemption-2/2k/native",
+    "red-dead-redemption-2/4k/native",
+    "gta-v/1080p/native",
+    "gta-v/2k/native",
+    "gta-v/4k/native",
+    "black-myth-wukong/1080p/native",
+    "black-myth-wukong/2k/native",
+    "black-myth-wukong/4k/native",
+    "forza-horizon-6/1080p/native",
+    "forza-horizon-6/2k/native",
+    "forza-horizon-6/4k/native",
+    "elden-ring/1080p/native",
+    "elden-ring/2k/native",
+    "elden-ring/4k/native",
+    "cities-skylines/1080p/native",
+    "cities-skylines/2k/native",
+    "cities-skylines/4k/native",
+    "minecraft-java-edition/1080p/native",
+    "minecraft-java-edition/2k/native",
+    "minecraft-java-edition/4k/native"
+  ],
+  "models": {
+    "valorant/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "valorant/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "valorant/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cs2/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cs2/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cs2/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "pubg/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "pubg/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "pubg/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "delta-force/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "delta-force/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "delta-force/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "teamfight-tactics/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "teamfight-tactics/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "teamfight-tactics/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "league-of-legends/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "league-of-legends/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "league-of-legends/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "call-of-duty-warzone/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "call-of-duty-warzone/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "call-of-duty-warzone/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cyberpunk-2077/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cyberpunk-2077/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cyberpunk-2077/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "red-dead-redemption-2/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "red-dead-redemption-2/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "red-dead-redemption-2/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "gta-v/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "gta-v/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "gta-v/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "black-myth-wukong/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "black-myth-wukong/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "black-myth-wukong/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "forza-horizon-6/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "forza-horizon-6/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "forza-horizon-6/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "elden-ring/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "elden-ring/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "elden-ring/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cities-skylines/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cities-skylines/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "cities-skylines/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "minecraft-java-edition/1080p/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "minecraft-java-edition/2k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    },
+    "minecraft-java-edition/4k/native": {
+      "ready": false,
+      "cpu_fit_score_count": 0,
+      "gpu_fit_score_count": 0,
+      "validation_count": 0,
+      "validation_share": 0.0,
+      "common_validation_count": 0,
+      "active_model_version": "",
+      "validation_mape": 0.0,
+      "common_validation_mape": 0.0,
+      "reasons": [
+        "active_calibration_missing"
+      ]
+    }
+  }
+}

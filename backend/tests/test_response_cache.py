@@ -183,7 +183,7 @@ def test_perf_estimate_reuses_cached_response_for_identical_input() -> None:
     payload = {
         "hardware": {"cpu": "i5-14600k", "gpu": "rtx-4060"},
         "resolution": "2k",
-        "games": ["CS2"],
+        "games": ["cs2"],
     }
 
     first = client.post("/v1/perf/estimate", json=payload)
