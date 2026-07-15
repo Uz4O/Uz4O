@@ -7,6 +7,7 @@ from pathlib import Path
 import tempfile
 
 import httpx
+from sqlalchemy import select
 
 from app.builds.repository import upsert_build_templates
 from app.builds.templates import read_build_template_inputs
@@ -17,6 +18,7 @@ from app.catalog.prices import (
     read_motherboard_whitelist_price_rows,
 )
 from app.catalog.readiness import REQUIRED_RECOMMENDED_CATEGORIES, build_data_readiness
+from app.catalog.models import HardwareComponent
 from app.catalog.repository import seed_component_prices
 from app.catalog.repository import seed_cpu_whitelist_prices
 from app.catalog.repository import seed_gpu_whitelist_prices
@@ -29,7 +31,13 @@ from app.db import create_session_factory
 from app.perf.collector import CollectionBlocked, Collector, CollectorPolicy
 from app.perf.collector_manifest import load_manifest, target_page_count, write_manifest
 from app.perf.collector_store import CollectionTask, CollectorStore
+from app.perf.anchor_importer import read_reviewed_fps_bundle
+from app.perf.anchor_repository import (
+    upsert_game_performance_anchors,
+    upsert_hardware_performance_profiles,
+)
 from app.perf.importer import DEFAULT_MANIFEST_PATH, read_performance_batch
+from app.perf.models import GamePerformanceAnchor, HardwarePerformanceProfile
 from app.perf.repository import upsert_performance_estimates
 
 
@@ -100,6 +108,9 @@ def main() -> None:
         type=Path,
         default=DEFAULT_MANIFEST_PATH,
     )
+
+    import_model_inputs_parser = subparsers.add_parser("import-fps-model-inputs")
+    import_model_inputs_parser.add_argument("json_path", type=Path)
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -271,6 +282,42 @@ def main() -> None:
         with session_factory() as session:
             count = upsert_performance_estimates(session, estimates)
         print(f"Imported {count} game performance estimates.")
+    if args.command == "import-fps-model-inputs":
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            component_rows = session.execute(
+                select(HardwareComponent.id, HardwareComponent.category).where(
+                    HardwareComponent.category.in_(("cpu", "gpu"))
+                )
+            )
+            component_ids = {"cpu": set(), "gpu": set()}
+            for component_id, category in component_rows:
+                component_ids[category].add(component_id)
+            bundle = read_reviewed_fps_bundle(
+                args.json_path,
+                component_ids["cpu"],
+                component_ids["gpu"],
+            )
+            try:
+                profile_count = upsert_hardware_performance_profiles(
+                    session,
+                    [
+                        HardwarePerformanceProfile(**asdict(item))
+                        for item in bundle.hardware_profiles
+                    ],
+                )
+                anchor_count = upsert_game_performance_anchors(
+                    session,
+                    [GamePerformanceAnchor(**asdict(item)) for item in bundle.anchors],
+                )
+                session.commit()
+            except Exception:
+                session.rollback()
+                raise
+        print(
+            f"Imported {profile_count} reviewed hardware profiles and "
+            f"{anchor_count} reviewed FPS anchors."
+        )
 
 def _read_component_ids(path: Path) -> list[str]:
     component_ids = []

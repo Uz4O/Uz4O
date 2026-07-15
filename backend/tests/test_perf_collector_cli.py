@@ -4,11 +4,19 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
+from sqlalchemy import create_engine, func, select
+from sqlalchemy.orm import Session
 
+from app.catalog.repository import seed_hardware_components
+from app.catalog.seed import CatalogComponent
 from app.cli import main
+from app.db import Base
 from app.perf.collector import CollectionBlocked, RunSummary
 from app.perf.collector_parser import ParsedPerformanceRow
 from app.perf.collector_store import CollectionTask, CollectorStore
+from app.perf.models import GamePerformanceAnchor, HardwarePerformanceProfile
+
+from tests.test_perf_anchor_importer import valid_document
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -229,3 +237,51 @@ def test_export_command_flattens_only_valid_succeeded_results(
         "bottleneck_percent": 5,
     }
     assert list(output.parent.glob(f".{output.name}.*.tmp")) == []
+
+
+def test_import_fps_model_inputs_commits_one_reviewed_bundle(
+    monkeypatch,
+    tmp_path: Path,
+    capsys,
+) -> None:
+    database_url = f"sqlite+pysqlite:///{tmp_path / 'fps-model.sqlite3'}"
+    input_path = tmp_path / "reviewed-fps.json"
+    input_path.write_text(json.dumps(valid_document()), encoding="utf-8")
+    monkeypatch.setenv("APP_POSTGRES_URL", database_url)
+    engine = create_engine(database_url)
+    Base.metadata.create_all(engine)
+    with Session(engine) as session:
+        seed_hardware_components(
+            session,
+            [
+                CatalogComponent(
+                    id="r7-9800x3d",
+                    category="cpu",
+                    name="R7 9800X3D",
+                    brand="AMD",
+                    detail_raw="AM5",
+                    specs={},
+                ),
+                CatalogComponent(
+                    id="rtx-4070",
+                    category="gpu",
+                    name="RTX 4070",
+                    brand="NVIDIA",
+                    detail_raw="12GB",
+                    specs={},
+                ),
+            ],
+        )
+
+    invoke(monkeypatch, "import-fps-model-inputs", str(input_path))
+
+    assert capsys.readouterr().out == (
+        "Imported 2 reviewed hardware profiles and 1 reviewed FPS anchors.\n"
+    )
+    with Session(engine) as session:
+        assert session.scalar(
+            select(func.count()).select_from(HardwarePerformanceProfile)
+        ) == 2
+        assert session.scalar(
+            select(func.count()).select_from(GamePerformanceAnchor)
+        ) == 1
