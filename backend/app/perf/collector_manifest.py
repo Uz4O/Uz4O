@@ -82,10 +82,19 @@ def load_manifest(path: Path) -> CollectorManifest:
 
 
 def target_page_count(manifest: CollectorManifest) -> int:
+    def unique_sources(items: List[SourceMapping]) -> int:
+        return len(
+            {
+                (item.source_id, item.source_slug)
+                for item in items
+                if item.status == "exact"
+            }
+        )
+
     return (
-        sum(item.status == "exact" for item in manifest.cpus)
-        * sum(item.status == "exact" for item in manifest.gpus)
-        * sum(item.status == "exact" for item in manifest.games)
+        unique_sources(manifest.cpus)
+        * unique_sources(manifest.gpus)
+        * unique_sources(manifest.games)
     )
 
 

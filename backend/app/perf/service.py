@@ -19,6 +19,7 @@ from app.perf.profiles import (
     GPUCapabilities,
     render_mode_for,
 )
+from app.perf.repository import get_performance_estimates
 
 
 PerfStatus = Literal["ready", "partial", "needs_more_data"]
@@ -65,23 +66,50 @@ def estimate_performance(
     gpu = components.get(request.hardware.gpu)
     _validate_hardware(cpu, gpu)
 
-    profiles = get_hardware_performance_profiles(session, component_ids)
+    exact_rows = get_performance_estimates(
+        session,
+        request.hardware.cpu,
+        request.hardware.gpu,
+        requested_games,
+        request.resolution,
+        "medium",
+    )
+    exact_by_game = {row.game_id: row for row in exact_rows}
+    unresolved_games = [
+        game_id for game_id in requested_games if game_id not in exact_by_game
+    ]
+    profiles = (
+        get_hardware_performance_profiles(session, component_ids)
+        if unresolved_games
+        else {}
+    )
     missing_data = []
-    if request.hardware.cpu not in profiles:
+    if unresolved_games and request.hardware.cpu not in profiles:
         missing_data.append("cpu_profile")
-    if request.hardware.gpu not in profiles:
+    if unresolved_games and request.hardware.gpu not in profiles:
         missing_data.append("gpu_profile")
-    if missing_data:
-        return _no_data_response(requested_games, missing_data)
-
-    cpu_profile = profiles[request.hardware.cpu]
-    gpu_profile = profiles[request.hardware.gpu]
-    if cpu_profile.category != "cpu" or gpu_profile.category != "gpu":
+    if not missing_data and unresolved_games:
+        cpu_profile = profiles[request.hardware.cpu]
+        gpu_profile = profiles[request.hardware.gpu]
+    else:
+        cpu_profile = gpu_profile = None
+    if cpu_profile is not None and (
+        cpu_profile.category != "cpu" or gpu_profile.category != "gpu"
+    ):
         raise HTTPException(status_code=422, detail="硬件性能档案类型不匹配")
 
     game_results = []
     missing_games = []
     for game_id in requested_games:
+        exact = exact_by_game.get(game_id)
+        if exact is not None:
+            game_results.append(
+                GamePerfEstimate(game=game_id, average_fps=exact.average_fps)
+            )
+            continue
+        if missing_data:
+            missing_games.append(game_id)
+            continue
         result = _estimate_game(
             session,
             game_id,
@@ -94,12 +122,16 @@ def estimate_performance(
         else:
             game_results.append(result)
     if not game_results:
-        return _no_data_response(missing_games, [])
+        return _no_data_response(missing_games, missing_data)
     return PerfEstimateResponse(
-        status="partial" if missing_games else "ready",
+        status="partial" if missing_games or missing_data else "ready",
         average_fps=round(mean(row.average_fps for row in game_results)),
-        advice="高画质，支持时开启质量档超分和标准帧生成。",
-        missing_data=[],
+        advice=(
+            "第三方网站中等画质估算，实际帧数会因游戏设置和版本变化。"
+            if exact_rows
+            else "高画质，支持时开启质量档超分和标准帧生成。"
+        ),
+        missing_data=missing_data,
         missing_games=missing_games,
         game_results=game_results,
     )

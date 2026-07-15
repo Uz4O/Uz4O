@@ -12,6 +12,7 @@ from app.catalog.seed import CatalogComponent
 from app.cli import main
 from app.db import Base
 from app.perf.collector import CollectionBlocked, RunSummary
+from app.perf.collector_manifest import load_manifest
 from app.perf.collector_parser import ParsedPerformanceRow
 from app.perf.collector_store import CollectionTask, CollectorStore
 from app.perf.models import GamePerformanceAnchor, HardwarePerformanceProfile
@@ -39,7 +40,16 @@ def test_seed_command_builds_exact_mapping_cross_product(
 
     invoke(monkeypatch, "seed-perf-collection", str(MANIFEST_PATH), str(database))
 
-    assert capsys.readouterr().out == "Seeded 1 tasks.\n"
+    assert capsys.readouterr().out == "Seeded 79152 tasks.\n"
+    manifest = load_manifest(MANIFEST_PATH)
+    cpu = next(item for item in manifest.cpus if item.status == "exact")
+    gpu = next(item for item in manifest.gpus if item.status == "exact")
+    game = next(item for item in manifest.games if item.status == "exact")
+    expected_url = (
+        "https://pc-builds.com/zh/fps-calculator/result/"
+        f"{cpu.source_id}{gpu.source_id}{game.source_id}/"
+        f"{cpu.source_slug}/{gpu.source_slug}/{game.source_slug}/1920x1080/"
+    )
     with CollectorStore(database) as store:
         claimed = store.claim_next()
         assert claimed is not None
@@ -48,13 +58,13 @@ def test_seed_command_builds_exact_mapping_cross_product(
             claimed.gpu_id,
             claimed.game_id,
             claimed.source_url,
-        ) == ("r5-5600", "rtx-4060", "cyberpunk-2077", EXPECTED_URL)
+        ) == (cpu.app_id, gpu.app_id, game.app_id, expected_url)
     with sqlite3.connect(database) as connection:
         assert connection.execute(
             """
             SELECT source_cpu_id, source_gpu_id, source_game_id FROM task
             """
-        ).fetchone() == ("1fB", "1ge", "02g")
+        ).fetchone() == (cpu.source_id, gpu.source_id, game.source_id)
 
 
 def test_run_command_builds_client_and_passes_options(

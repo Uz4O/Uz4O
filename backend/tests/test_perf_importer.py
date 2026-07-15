@@ -11,6 +11,11 @@ EXPECTED_URL = (
     "https://pc-builds.com/zh/fps-calculator/result/1fB1ge02g/"
     "ryzen-5-5600/geforce-rtx-4060/cyberpunk-2077/1920x1080/"
 )
+DATA_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "data"
+    / "pc-builds-fps-reference-2026-07-15.json"
+)
 
 
 def batch_payload(**record_overrides):
@@ -75,6 +80,17 @@ def test_import_reads_reviewed_medium_record(tmp_path) -> None:
     assert records[0].resolution == "1080p"
     assert records[0].source_fetched_at.utcoffset() is not None
     assert records[0].import_batch == "reviewed-20260712"
+
+
+def test_bundled_pc_builds_reference_is_importable() -> None:
+    records = read_performance_batch(DATA_PATH)
+
+    assert [row.average_fps for row in records] == [77, 58, 38, 77, 58, 38]
+    assert records[0].source_url == EXPECTED_URL
+    assert records[3].source_url.endswith(
+        "/1Ek1ge02g/ryzen-7-9800x3d/geforce-rtx-4060/"
+        "cyberpunk-2077/1920x1080/"
+    )
 
 
 def test_import_uses_each_record_collection_time(tmp_path) -> None:

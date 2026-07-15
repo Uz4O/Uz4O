@@ -55,23 +55,31 @@ def test_committed_manifest_covers_app_scope() -> None:
         for item in manifest.cpus + manifest.gpus + manifest.games
         if item.status == "exact"
     }
-    assert exact == {
-        "r5-5600": (
-            "1fB",
-            "ryzen-5-5600",
-            "AMD Ryzen 5 5600 3.50 GHz Desktop",
-        ),
-        "rtx-4060": (
-            "1ge",
-            "geforce-rtx-4060",
-            "NVIDIA GeForce RTX 4060 8 GB Desktop",
-        ),
-        "cyberpunk-2077": ("02g", "cyberpunk-2077", "Cyberpunk 2077"),
-    }
-    assert target_page_count(manifest) == 1
+    assert len(exact) == 179
+    assert exact["r5-5600"] == (
+        "1fB",
+        "ryzen-5-5600",
+        "AMD Ryzen 5 5600 3.50 GHz Desktop",
+    )
+    assert exact["r7-9800x3d"] == (
+        "1Ek",
+        "ryzen-7-9800x3d",
+        "AMD Ryzen 7 9800X3D (Desktop) 4.70 GHz",
+    )
+    assert exact["rtx-4060"] == (
+        "1ge",
+        "geforce-rtx-4060",
+        "NVIDIA GeForce RTX 4060 8 GB Desktop",
+    )
+    assert exact["cyberpunk-2077"] == (
+        "02g",
+        "cyberpunk-2077",
+        "Cyberpunk 2077",
+    )
+    assert target_page_count(manifest) == 79_152
 
 
-def test_target_page_count_multiplies_exact_mapping_counts() -> None:
+def test_target_page_count_multiplies_unique_exact_source_counts() -> None:
     exact = SourceMapping("exact", "Exact", "1", "exact", "Exact", "desktop", "exact")
     review = SourceMapping("review", "Review", None, None, None, "desktop", "review")
     manifest = CollectorManifest(
@@ -80,7 +88,7 @@ def test_target_page_count_multiplies_exact_mapping_counts() -> None:
         games=[exact, review],
     )
 
-    assert target_page_count(manifest) == 2
+    assert target_page_count(manifest) == 1
 
 
 def test_load_manifest_rejects_incomplete_exact_mapping(tmp_path: Path) -> None:
@@ -316,15 +324,15 @@ def test_check_command_writes_json_coverage_report(monkeypatch, tmp_path, capsys
     report = json.loads(output_path.read_text(encoding="utf-8"))
     assert report == {
         "sections": {
-            "cpus": {"total": 101, "exact": 1, "review": 100, "missing": 0},
-            "gpus": {"total": 77, "exact": 1, "review": 76, "missing": 0},
-            "games": {"total": 15, "exact": 1, "review": 14, "missing": 0},
+            "cpus": {"total": 101, "exact": 98, "review": 0, "missing": 3},
+            "gpus": {"total": 77, "exact": 69, "review": 0, "missing": 8},
+            "games": {"total": 15, "exact": 12, "review": 0, "missing": 3},
         },
-        "overall": {"total": 193, "exact": 3, "review": 190, "missing": 0},
-        "derived_result_page_count": 1,
+        "overall": {"total": 193, "exact": 179, "review": 0, "missing": 14},
+        "derived_result_page_count": 79_152,
     }
     output = capsys.readouterr().out
-    assert "exact: 3\n" in output
-    assert "review: 190\n" in output
-    assert "missing: 0\n" in output
-    assert "Derived result-page count: 1\n" in output
+    assert "exact: 179\n" in output
+    assert "review: 0\n" in output
+    assert "missing: 14\n" in output
+    assert "Derived result-page count: 79152\n" in output

@@ -3,74 +3,74 @@
     {
       "app_id": "i9-14900ks",
       "app_name": "i9-14900KS",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1y5",
+      "source_slug": "core-i9-14900ks",
+      "source_name": "Intel Core i9-14900KS (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-14900kf",
       "app_name": "i9-14900KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1tG",
+      "source_slug": "core-i9-14900kf",
+      "source_name": "Intel Core i9-14900KF (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-14900k",
       "app_name": "i9-14900K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ud",
+      "source_slug": "core-i9-14900k",
+      "source_name": "Intel Core i9-14900K (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-14700kf",
       "app_name": "i7-14700KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1uj",
+      "source_slug": "core-i7-14700kf",
+      "source_name": "Intel Core i7-14700KF (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-14700k",
       "app_name": "i7-14700K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1uf",
+      "source_slug": "core-i7-14700k",
+      "source_name": "Intel Core i7-14700K (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-14700",
       "app_name": "i7-14700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1wo",
+      "source_slug": "core-i7-14700",
+      "source_name": "Intel Core i7-14700 (Desktop) 2.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-14600kf",
       "app_name": "i5-14600KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ui",
+      "source_slug": "core-i5-14600kf",
+      "source_name": "Intel Core i5-14600KF (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-14600k",
       "app_name": "i5-14600K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ug",
+      "source_slug": "core-i5-14600k",
+      "source_name": "Intel Core i5-14600K (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-14490f",
@@ -79,169 +79,169 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "i5-14400f",
       "app_name": "i5-14400F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1w9",
+      "source_slug": "core-i5-14400f",
+      "source_name": "Intel Core i5-14400F (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-14400",
       "app_name": "i5-14400",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1wE",
+      "source_slug": "core-i5-14400",
+      "source_name": "Intel Core i5-14400 (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-14100f",
       "app_name": "i3-14100F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1wp",
+      "source_slug": "core-i3-14100f",
+      "source_name": "Intel Core i3-14100F (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-14100",
       "app_name": "i3-14100",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1w3",
+      "source_slug": "core-i3-14100",
+      "source_name": "Intel Core i3-14100 (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u9-285k",
       "app_name": "Ultra 9 285K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Dy",
+      "source_slug": "core-ultra-9-285k",
+      "source_name": "Intel Core Ultra 9 285K (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u9-285",
       "app_name": "Ultra 9 285",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1FV",
+      "source_slug": "core-ultra-9-285",
+      "source_name": "Intel Core Ultra 9 285 (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u7-265k",
       "app_name": "Ultra 7 265K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1E2",
+      "source_slug": "core-ultra-7-265k",
+      "source_name": "Intel Core Ultra 7 265K (Desktop) 3.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u7-265",
       "app_name": "Ultra 7 265",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1FB",
+      "source_slug": "core-ultra-7-265",
+      "source_name": "Intel Core Ultra 7 265 (Desktop) 2.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u5-245k",
       "app_name": "Ultra 5 245K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1E0",
+      "source_slug": "core-ultra-5-245k",
+      "source_name": "Intel Core Ultra 5 245K (Desktop) 4.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u5-245",
       "app_name": "Ultra 5 245",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1JF",
+      "source_slug": "core-ultra-5-245",
+      "source_name": "Intel Core Ultra 5 245 (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "u5-235",
       "app_name": "Ultra 5 235",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Hg",
+      "source_slug": "core-ultra-5-235",
+      "source_name": "Intel Core Ultra 5 235 (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-9950x3d",
       "app_name": "R9 9950X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1HD",
+      "source_slug": "ryzen-9-9950x3d",
+      "source_name": "AMD Ryzen 9 9950X3D (Desktop) 4.30 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-9900x",
       "app_name": "R9 9900X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Bx",
+      "source_slug": "ryzen-9-9900x",
+      "source_name": "AMD Ryzen 9 9900X (Desktop) 4.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-9850x3d",
       "app_name": "R7 9850X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Q6",
+      "source_slug": "ryzen-7-9850x3d",
+      "source_name": "AMD Ryzen 7 9850X3D (Desktop) 5.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-9800x3d-v2",
       "app_name": "R7 9800X3D v2",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Ek",
+      "source_slug": "ryzen-7-9800x3d",
+      "source_name": "AMD Ryzen 7 9800X3D (Desktop) 4.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-9800x3d",
       "app_name": "R7 9800X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Ek",
+      "source_slug": "ryzen-7-9800x3d",
+      "source_name": "AMD Ryzen 7 9800X3D (Desktop) 4.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-9700x",
       "app_name": "R7 9700X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1C5",
+      "source_slug": "ryzen-7-9700x",
+      "source_name": "AMD Ryzen 7 9700X (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-9600x",
       "app_name": "R5 9600X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1BZ",
+      "source_slug": "ryzen-5-9600x",
+      "source_name": "AMD Ryzen 5 9600X (Desktop) 3.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-9500f",
@@ -250,439 +250,439 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "r9-7950x3d",
       "app_name": "R9 7950X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1mq",
+      "source_slug": "ryzen-9-7950x3d",
+      "source_name": "AMD Ryzen 9 7950X3D (Desktop) 4.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-7950x",
       "app_name": "R9 7950X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1j9",
+      "source_slug": "ryzen-9-7950x",
+      "source_name": "AMD Ryzen 9 7950X (Desktop) 4.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-7900x",
       "app_name": "R9 7900X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1j5",
+      "source_slug": "ryzen-9-7900x",
+      "source_name": "AMD Ryzen 9 7900X (Desktop) 4.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-7900",
       "app_name": "R9 7900",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ll",
+      "source_slug": "ryzen-9-7900",
+      "source_name": "AMD Ryzen 9 7900 (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-7800x3d",
       "app_name": "R7 7800X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1nt",
+      "source_slug": "ryzen-7-7800x3d",
+      "source_name": "AMD Ryzen 7 7800X3D (Desktop) 4.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-7700x",
       "app_name": "R7 7700X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1je",
+      "source_slug": "ryzen-7-7700x",
+      "source_name": "AMD Ryzen 7 7700X (Desktop) 4.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-7700",
       "app_name": "R7 7700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ln",
+      "source_slug": "ryzen-7-7700",
+      "source_name": "AMD Ryzen 7 7700 (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-7600x",
       "app_name": "R5 7600X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1jb",
+      "source_slug": "ryzen-5-7600x",
+      "source_name": "AMD Ryzen 5 7600X (Desktop) 4.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-7600",
       "app_name": "R5 7600",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1lq",
+      "source_slug": "ryzen-5-7600",
+      "source_name": "AMD Ryzen 5 7600 (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-7500f",
       "app_name": "R5 7500F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1t6",
+      "source_slug": "ryzen-5-7500f",
+      "source_name": "AMD Ryzen 5 7500F (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-13900ks",
       "app_name": "i9-13900KS",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1le",
+      "source_slug": "core-i9-13900ks",
+      "source_name": "Intel Core i9-13900KS (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-13900kf",
       "app_name": "i9-13900KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1jx",
+      "source_slug": "core-i9-13900kf",
+      "source_name": "Intel Core i9-13900KF (Desktop) 3.00 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-13900k",
       "app_name": "i9-13900K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1j0",
+      "source_slug": "core-i9-13900k",
+      "source_name": "Intel Core i9-13900K (Desktop) 3.00 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-13900",
       "app_name": "i9-13900",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1lu",
+      "source_slug": "core-i9-13900",
+      "source_name": "Intel Core i9-13900 (Desktop) 2.00 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-13700kf",
       "app_name": "i7-13700KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1jD",
+      "source_slug": "core-i7-13700kf",
+      "source_name": "Intel Core i7-13700KF (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-13700k",
       "app_name": "i7-13700K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1jC",
+      "source_slug": "core-i7-13700k",
+      "source_name": "Intel Core i7-13700K (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-13700",
       "app_name": "i7-13700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1iw",
+      "source_slug": "core-i7-13700",
+      "source_name": "Intel Core i7-13700 (Desktop) 2.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-13600kf",
       "app_name": "i5-13600KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1jB",
+      "source_slug": "core-i5-13600kf",
+      "source_name": "Intel Core i5-13600KF (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-13600k",
       "app_name": "i5-13600K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1iM",
+      "source_slug": "core-i5-13600k",
+      "source_name": "Intel Core i5-13600K (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-13490f",
       "app_name": "i5-13490F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1pi",
+      "source_slug": "core-i5-13490f",
+      "source_name": "Intel Core i5-13490F (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-13400f",
       "app_name": "i5-13400F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1lk",
+      "source_slug": "core-i5-13400f",
+      "source_name": "Intel Core i5-13400F (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-13400",
       "app_name": "i5-13400",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1iy",
+      "source_slug": "core-i5-13400",
+      "source_name": "Intel Core i5-13400 (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-13100f",
       "app_name": "i3-13100F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1la",
+      "source_slug": "core-i3-13100f",
+      "source_name": "Intel Core i3-13100F (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-13100",
       "app_name": "i3-13100",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1lo",
+      "source_slug": "core-i3-13100",
+      "source_name": "Intel Core i3-13100 (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-12900ks",
       "app_name": "i9-12900KS",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fD",
+      "source_slug": "core-i9-12900ks",
+      "source_name": "Intel Core i9-12900KS (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-12900kf",
       "app_name": "i9-12900KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cn",
+      "source_slug": "core-i9-12900kf",
+      "source_name": "Intel Core i9-12900KF (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-12900k",
       "app_name": "i9-12900K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1c9",
+      "source_slug": "core-i9-12900k",
+      "source_name": "Intel Core i9-12900K (Desktop) 3.20 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-12900",
       "app_name": "i9-12900",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1eh",
+      "source_slug": "core-i9-12900",
+      "source_name": "Intel Core i9-12900 (Desktop) 2.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-12700kf",
       "app_name": "i7-12700KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ck",
+      "source_slug": "core-i7-12700kf",
+      "source_name": "Intel Core i7-12700KF (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-12700k",
       "app_name": "i7-12700K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cl",
+      "source_slug": "core-i7-12700k",
+      "source_name": "Intel Core i7-12700K (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-12700",
       "app_name": "i7-12700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dj",
+      "source_slug": "core-i7-12700",
+      "source_name": "Intel Core i7-12700 (Desktop) 2.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12600kf",
       "app_name": "i5-12600KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cB",
+      "source_slug": "core-i5-12600kf",
+      "source_name": "Intel Core i5-12600KF (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12600k",
       "app_name": "i5-12600K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cf",
+      "source_slug": "core-i5-12600k",
+      "source_name": "Intel Core i5-12600K (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12500",
       "app_name": "i5-12500",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dp",
+      "source_slug": "core-i5-12500",
+      "source_name": "Intel Core i5-12500 (Desktop) 3.00 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12490f",
       "app_name": "i5-12490F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1h5",
+      "source_slug": "core-i5-12490f",
+      "source_name": "Intel Core i5-12490F (Desktop) 3.00 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12400f",
       "app_name": "i5-12400F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dv",
+      "source_slug": "core-i5-12400f",
+      "source_name": "Intel Core i5-12400F (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-12400",
       "app_name": "i5-12400",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dr",
+      "source_slug": "core-i5-12400",
+      "source_name": "Intel Core i5-12400 (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-12100f",
       "app_name": "i3-12100F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dk",
+      "source_slug": "core-i3-12100f",
+      "source_name": "Intel Core i3-12100F (Desktop) 3.30 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-12100",
       "app_name": "i3-12100",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dB",
+      "source_slug": "core-i3-12100",
+      "source_name": "Intel Core i3-12100 (Desktop) 3.30 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-5950x",
       "app_name": "R9 5950X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10i",
+      "source_slug": "ryzen-9-5950x",
+      "source_name": "AMD Ryzen 9 5950X (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r9-5900x",
       "app_name": "R9 5900X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10q",
+      "source_slug": "ryzen-9-5900x",
+      "source_name": "AMD Ryzen 9 5900X (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-5800x3d",
       "app_name": "R7 5800X3D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fN",
+      "source_slug": "ryzen-7-5800x3d",
+      "source_name": "AMD Ryzen 7 5800X3D (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-5800x",
       "app_name": "R7 5800X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10p",
+      "source_slug": "ryzen-7-5800x",
+      "source_name": "AMD Ryzen 7 5800X (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-5700x",
       "app_name": "R7 5700X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fE",
+      "source_slug": "ryzen-7-5700x",
+      "source_name": "AMD Ryzen 7 5700X (Desktop) 3.40 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-5700g",
       "app_name": "R7 5700G",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17J",
+      "source_slug": "ryzen-7-5700g",
+      "source_name": "AMD Ryzen 7 5700G (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r7-5700",
       "app_name": "R7 5700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1i8",
+      "source_slug": "ryzen-7-5700",
+      "source_name": "AMD Ryzen 7 5700 (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-5600x",
       "app_name": "R5 5600X",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10f",
+      "source_slug": "ryzen-5-5600x",
+      "source_name": "AMD Ryzen 5 5600X (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-5600g",
       "app_name": "R5 5600G",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17L",
+      "source_slug": "ryzen-5-5600g",
+      "source_name": "AMD Ryzen 5 5600G (Desktop) 3.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "r5-5600",
@@ -696,191 +696,191 @@
     {
       "app_id": "r5-5500",
       "app_name": "R5 5500",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fx",
+      "source_slug": "ryzen-5-5500",
+      "source_name": "AMD Ryzen 5 5500 (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-11900kf",
       "app_name": "i9-11900KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16o",
+      "source_slug": "core-i9-11900kf",
+      "source_name": "Intel Core i9-11900KF (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-11900k",
       "app_name": "i9-11900K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10Y",
+      "source_slug": "core-i9-11900k",
+      "source_name": "Intel Core i9-11900K (Desktop) 3.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-10900kf",
       "app_name": "i9-10900KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yy",
+      "source_slug": "core-i9-10900kf",
+      "source_name": "Intel Core i9-10900KF (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i9-10900k",
       "app_name": "i9-10900K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Ya",
+      "source_slug": "core-i9-10900k",
+      "source_name": "Intel Core i9-10900K (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-11700kf",
       "app_name": "i7-11700KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16i",
+      "source_slug": "core-i7-11700kf",
+      "source_name": "Intel Core i7-11700KF (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-11700k",
       "app_name": "i7-11700K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "10Q",
+      "source_slug": "core-i7-11700k",
+      "source_name": "Intel Core i7-11700K (Desktop) 3.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-11700",
       "app_name": "i7-11700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "11F",
+      "source_slug": "core-i7-11700",
+      "source_name": "Intel Core i7-11700 (Desktop) 2.50 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-10700kf",
       "app_name": "i7-10700KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0YB",
+      "source_slug": "core-i7-10700kf",
+      "source_name": "Intel Core i7-10700KF (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-10700k",
       "app_name": "i7-10700K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yd",
+      "source_slug": "core-i7-10700k",
+      "source_name": "Intel Core i7-10700K (Desktop) 3.80 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i7-10700",
       "app_name": "i7-10700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yr",
+      "source_slug": "core-i7-10700",
+      "source_name": "Intel Core i7-10700 (Desktop) 2.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-11600kf",
       "app_name": "i5-11600KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16J",
+      "source_slug": "core-i5-11600kf",
+      "source_name": "Intel Core i5-11600KF (Desktop) 3.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-11600k",
       "app_name": "i5-11600K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16k",
+      "source_slug": "core-i5-11600k",
+      "source_name": "Intel Core i5-11600K (Desktop) 3.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-11500",
       "app_name": "i5-11500",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16m",
+      "source_slug": "core-i5-11500",
+      "source_name": "Intel Core i5-11500 (Desktop) 2.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-11400f",
       "app_name": "i5-11400F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16a",
+      "source_slug": "core-i5-11400f",
+      "source_name": "Intel Core i5-11400F (Desktop) 2.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-11400",
       "app_name": "i5-11400",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16h",
+      "source_slug": "core-i5-11400",
+      "source_name": "Intel Core i5-11400 (Desktop) 2.60 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-10600kf",
       "app_name": "i5-10600KF",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Zs",
+      "source_slug": "core-i5-10600kf",
+      "source_name": "Intel Core i5-10600KF (Desktop) 4.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-10600k",
       "app_name": "i5-10600K",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yf",
+      "source_slug": "core-i5-10600k",
+      "source_name": "Intel Core i5-10600K (Desktop) 4.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-10500",
       "app_name": "i5-10500",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yt",
+      "source_slug": "core-i5-10500",
+      "source_name": "Intel Core i5-10500 (Desktop) 3.10 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-10400f",
       "app_name": "i5-10400F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0YL",
+      "source_slug": "core-i5-10400f",
+      "source_name": "Intel Core i5-10400F (Desktop) 2.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i5-10400",
       "app_name": "i5-10400",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Yh",
+      "source_slug": "core-i5-10400",
+      "source_name": "Intel Core i5-10400 (Desktop) 2.90 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-11100",
@@ -889,180 +889,180 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "i3-10105f",
       "app_name": "i3-10105F",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "15l",
+      "source_slug": "core-i3-10105f",
+      "source_name": "Intel Core i3-10105F (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "i3-10105",
       "app_name": "i3-10105",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "16H",
+      "source_slug": "core-i3-10105",
+      "source_name": "Intel Core i3-10105 (Desktop) 3.70 GHz",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     }
   ],
   "gpus": [
     {
       "app_id": "rtx-5090",
       "app_name": "RTX 5090",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ul",
+      "source_slug": "geforce-rtx-5090",
+      "source_name": "NVIDIA GeForce RTX 5090 (Desktop) 32768 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5090-d-v2",
       "app_name": "RTX 5090 D V2",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1x8",
+      "source_slug": "geforce-rtx-5090-d",
+      "source_name": "NVIDIA GeForce RTX 5090 D (Desktop) 32768 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5090-d",
       "app_name": "RTX 5090 D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1x8",
+      "source_slug": "geforce-rtx-5090-d",
+      "source_name": "NVIDIA GeForce RTX 5090 D (Desktop) 32768 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5080",
       "app_name": "RTX 5080",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1uh",
+      "source_slug": "geforce-rtx-5080",
+      "source_name": "NVIDIA GeForce RTX 5080 (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5070-ti",
       "app_name": "RTX 5070 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1wO",
+      "source_slug": "geforce-rtx-5070-ti",
+      "source_name": "NVIDIA GeForce RTX 5070 Ti (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5070",
       "app_name": "RTX 5070",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1xO",
+      "source_slug": "geforce-rtx-5070",
+      "source_name": "NVIDIA GeForce RTX 5070 (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5060-ti",
       "app_name": "RTX 5060 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Bm",
+      "source_slug": "geforce-rtx-5060-ti",
+      "source_name": "NVIDIA GeForce RTX 5060 Ti (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5060",
       "app_name": "RTX 5060",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1sm",
+      "source_slug": "geforce-rtx-5060",
+      "source_name": "NVIDIA GeForce RTX 5060 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-5050",
       "app_name": "RTX 5050",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1Jy",
+      "source_slug": "geforce-rtx-5050",
+      "source_name": "NVIDIA GeForce RTX 5050 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4090-d",
       "app_name": "RTX 4090 D",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1iQ",
+      "source_slug": "geforce-rtx-4090-d",
+      "source_name": "NVIDIA GeForce RTX 4090 D (Desktop)",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4080-super",
       "app_name": "RTX 4080 Super",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1io",
+      "source_slug": "geforce-rtx-4080-super",
+      "source_name": "NVIDIA GeForce RTX 4080 SUPER (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4080",
       "app_name": "RTX 4080",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cy",
+      "source_slug": "geforce-rtx-4080",
+      "source_name": "NVIDIA GeForce RTX 4080 (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4070-ti-super",
       "app_name": "RTX 4070 Ti Super",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ik",
+      "source_slug": "geforce-rtx-4070-ti-super",
+      "source_name": "NVIDIA GeForce RTX 4070 Ti SUPER (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4070-ti",
       "app_name": "RTX 4070 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1dN",
+      "source_slug": "geforce-rtx-4070-ti",
+      "source_name": "NVIDIA GeForce RTX 4070 Ti (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4070-super",
       "app_name": "RTX 4070 SUPER",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1id",
+      "source_slug": "geforce-rtx-4070-super",
+      "source_name": "NVIDIA GeForce RTX 4070 SUPER (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4070",
       "app_name": "RTX 4070",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fl",
+      "source_slug": "geforce-rtx-4070",
+      "source_name": "NVIDIA GeForce RTX 4070 (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4060-ti",
       "app_name": "RTX 4060 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fR",
+      "source_slug": "geforce-rtx-4060-ti",
+      "source_name": "NVIDIA GeForce RTX 4060 Ti (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-4060",
@@ -1076,182 +1076,182 @@
     {
       "app_id": "rtx-3090-ti",
       "app_name": "RTX 3090 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1aY",
+      "source_slug": "geforce-rtx-3090-ti",
+      "source_name": "NVIDIA GeForce RTX 3090 Ti (Desktop) 24576 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3090",
       "app_name": "RTX 3090",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "176",
+      "source_slug": "geforce-rtx-3090",
+      "source_name": "NVIDIA GeForce RTX 3090 (Desktop) 24576 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3080-ti",
       "app_name": "RTX 3080 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "197",
+      "source_slug": "geforce-rtx-3080-ti",
+      "source_name": "NVIDIA GeForce RTX 3080 Ti (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3080",
       "app_name": "RTX 3080",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "174",
+      "source_slug": "geforce-rtx-3080",
+      "source_name": "NVIDIA GeForce RTX 3080 (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3070-ti",
       "app_name": "RTX 3070 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "19b",
+      "source_slug": "geforce-rtx-3070-ti",
+      "source_name": "NVIDIA GeForce RTX 3070 Ti (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3070",
       "app_name": "RTX 3070",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "175",
+      "source_slug": "geforce-rtx-3070",
+      "source_name": "NVIDIA GeForce RTX 3070 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3060-ti",
       "app_name": "RTX 3060 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17E",
+      "source_slug": "geforce-rtx-3060-ti",
+      "source_name": "NVIDIA GeForce RTX 3060 Ti (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3060",
       "app_name": "RTX 3060",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "185",
+      "source_slug": "geforce-rtx-3060",
+      "source_name": "NVIDIA GeForce RTX 3060 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-3050",
       "app_name": "RTX 3050",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1av",
+      "source_slug": "geforce-rtx-3050",
+      "source_name": "NVIDIA GeForce RTX 3050 (Desktop) 6144 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-2080-ti",
       "app_name": "RTX 2080 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "12n",
+      "source_slug": "geforce-rtx-2080-ti",
+      "source_name": "NVIDIA GeForce RTX 2080 Ti (Desktop) 11264 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-2070-super",
       "app_name": "RTX 2070 Super",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "14o",
+      "source_slug": "geforce-rtx-2070-super",
+      "source_name": "NVIDIA GeForce RTX 2070 SUPER (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-2060-super",
       "app_name": "RTX 2060 Super",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "14p",
+      "source_slug": "geforce-rtx-2060-super",
+      "source_name": "NVIDIA GeForce RTX 2060 SUPER (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rtx-2060",
       "app_name": "RTX 2060",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "137",
+      "source_slug": "geforce-rtx-2060",
+      "source_name": "NVIDIA GeForce RTX 2060 (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1660-ti",
       "app_name": "GTX 1660 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "13f",
+      "source_slug": "geforce-gtx-1660-ti",
+      "source_name": "NVIDIA GeForce GTX 1660 Ti (Desktop) 6144 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1660-super",
       "app_name": "GTX 1660 Super",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "155",
+      "source_slug": "geforce-gtx-1660-super",
+      "source_name": "NVIDIA GeForce GTX 1660 SUPER (Desktop) 6144 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1650",
       "app_name": "GTX 1650",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "13M",
+      "source_slug": "geforce-gtx-1650",
+      "source_name": "NVIDIA GeForce GTX 1650 (Desktop) 4096 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1080-ti",
       "app_name": "GTX 1080 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0XF",
+      "source_slug": "geforce-gtx-1080-ti",
+      "source_name": "NVIDIA GeForce GTX 1080 Ti (Desktop) 11264 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1080",
       "app_name": "GTX 1080",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Uu",
+      "source_slug": "geforce-gtx-1080",
+      "source_name": "NVIDIA GeForce GTX 1080 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1070-ti",
       "app_name": "GTX 1070 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0ZY",
+      "source_slug": "geforce-gtx-1070-ti",
+      "source_name": "NVIDIA GeForce GTX 1070 Ti (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1070",
       "app_name": "GTX 1070",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0UN",
+      "source_slug": "geforce-gtx-1070",
+      "source_name": "NVIDIA GeForce GTX 1070 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1060-6gb",
@@ -1260,16 +1260,16 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "gtx-1060-5gb",
       "app_name": "GTX 1060 (5GB)",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0Vw",
+      "source_slug": "geforce-gtx-1060",
+      "source_name": "NVIDIA GeForce GTX 1060 (Desktop) 5120 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1060-3gb",
@@ -1278,34 +1278,34 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "gtx-1050-ti",
       "app_name": "GTX 1050 Ti",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0VZ",
+      "source_slug": "geforce-gtx-1050-ti",
+      "source_name": "NVIDIA GeForce GTX 1050 Ti (Desktop) 4096 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gtx-1050",
       "app_name": "GTX 1050",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0W0",
+      "source_slug": "geforce-gtx-1050",
+      "source_name": "NVIDIA GeForce GTX 1050 (Desktop) 3072 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-9070-xt",
       "app_name": "RX 9070 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1y4",
+      "source_slug": "radeon-rx-9070-xt",
+      "source_name": "AMD Radeon RX 9070 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-9070-gre",
@@ -1314,16 +1314,16 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-9060-xt-8gb",
       "app_name": "RX 9060 XT (8GB)",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1y5",
+      "source_slug": "radeon-rx-9060-xt",
+      "source_name": "AMD Radeon RX 9060 XT (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-9060-xt-12gb",
@@ -1332,7 +1332,7 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-9060-xt-16gb",
@@ -1341,34 +1341,34 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-7900-xtx",
       "app_name": "RX 7900 XTX",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cU",
+      "source_slug": "radeon-rx-7900-xtx",
+      "source_name": "AMD Radeon RX 7900 XTX (Desktop) 24576 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7900-xt",
       "app_name": "RX 7900 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1cW",
+      "source_slug": "radeon-rx-7900-xt",
+      "source_name": "AMD Radeon RX 7900 XT (Desktop) 20480 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7900-gre",
       "app_name": "RX 7900 GRE",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1h8",
+      "source_slug": "radeon-rx-7900-gre",
+      "source_name": "AMD Radeon RX 7900 GRE (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7850-xt",
@@ -1377,16 +1377,16 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-7800-xt",
       "app_name": "RX 7800 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1hj",
+      "source_slug": "radeon-rx-7800-xt",
+      "source_name": "AMD Radeon RX 7800 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7750-xt",
@@ -1395,124 +1395,124 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-7700-xt",
       "app_name": "RX 7700 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1hl",
+      "source_slug": "radeon-rx-7700-xt",
+      "source_name": "AMD Radeon RX 7700 XT (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7650-gre",
       "app_name": "RX 7650 GRE",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1DK",
+      "source_slug": "radeon-rx-7650-gre",
+      "source_name": "AMD Radeon RX 7650 GRE (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7600-xt",
       "app_name": "RX 7600 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1im",
+      "source_slug": "radeon-rx-7600-xt",
+      "source_name": "AMD Radeon RX 7600 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-7600",
       "app_name": "RX 7600",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1fW",
+      "source_slug": "radeon-rx-7600",
+      "source_name": "AMD Radeon RX 7600 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6950-xt",
       "app_name": "RX 6950 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1be",
+      "source_slug": "radeon-rx-6950-xt",
+      "source_name": "AMD Radeon RX 6950 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6900-xt",
       "app_name": "RX 6900 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17I",
+      "source_slug": "radeon-rx-6900-xt",
+      "source_name": "AMD Radeon RX 6900 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6800-xt",
       "app_name": "RX 6800 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17y",
+      "source_slug": "radeon-rx-6800-xt",
+      "source_name": "AMD Radeon RX 6800 XT (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6800",
       "app_name": "RX 6800",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "17A",
+      "source_slug": "radeon-rx-6800",
+      "source_name": "AMD Radeon RX 6800 (Desktop) 16384 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6750-xt",
       "app_name": "RX 6750 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1bh",
+      "source_slug": "radeon-rx-6750-xt",
+      "source_name": "AMD Radeon RX 6750 XT (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6750-gre",
       "app_name": "RX 6750 GRE",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1iu",
+      "source_slug": "radeon-rx-6750-gre",
+      "source_name": "AMD Radeon RX 6750 GRE (Desktop) 10 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6700-xt",
       "app_name": "RX 6700 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "18t",
+      "source_slug": "radeon-rx-6700-xt",
+      "source_name": "AMD Radeon RX 6700 XT (Desktop) 12288 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6700",
       "app_name": "RX 6700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1bC",
+      "source_slug": "radeon-rx-6700",
+      "source_name": "AMD Radeon RX 6700 (Desktop) 10240 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6650-xt",
       "app_name": "RX 6650 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1bf",
+      "source_slug": "radeon-rx-6650-xt",
+      "source_name": "AMD Radeon RX 6650 XT (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6650-gre",
@@ -1521,117 +1521,117 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "desktop",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "rx-6600-xt",
       "app_name": "RX 6600 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "19G",
+      "source_slug": "radeon-rx-6600-xt",
+      "source_name": "AMD Radeon RX 6600 XT (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6600",
       "app_name": "RX 6600",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1a1",
+      "source_slug": "radeon-rx-6600",
+      "source_name": "AMD Radeon RX 6600 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-6500-xt",
       "app_name": "RX 6500 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "1ao",
+      "source_slug": "radeon-rx-6500-xt",
+      "source_name": "AMD Radeon RX 6500 XT (Desktop) 4096 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5700-xt",
       "app_name": "RX 5700 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "14j",
+      "source_slug": "radeon-rx-5700-xt",
+      "source_name": "AMD Radeon RX 5700 XT (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5700",
       "app_name": "RX 5700",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "14f",
+      "source_slug": "radeon-rx-5700",
+      "source_name": "AMD Radeon RX 5700 (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5600-xt",
       "app_name": "RX 5600 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "15w",
+      "source_slug": "radeon-rx-5600-xt",
+      "source_name": "AMD Radeon RX 5600 XT (Desktop) 6144 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5600",
       "app_name": "RX 5600",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "15P",
+      "source_slug": "radeon-rx-5600",
+      "source_name": "AMD Radeon RX 5600 (Desktop) 6144 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5500-xt",
       "app_name": "RX 5500 XT",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "15k",
+      "source_slug": "radeon-rx-5500-xt",
+      "source_name": "AMD Radeon RX 5500 XT (Desktop) 8192 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "rx-5500",
       "app_name": "RX 5500",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "15a",
+      "source_slug": "radeon-rx-5500",
+      "source_name": "AMD Radeon RX 5500 (Desktop) 4096 MB",
       "device_type": "desktop",
-      "status": "review"
+      "status": "exact"
     }
   ],
   "games": [
     {
       "app_id": "valorant",
       "app_name": "Valorant",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "01W",
+      "source_slug": "valorant",
+      "source_name": "Valorant",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "cs2",
       "app_name": "Counter-Strike 2",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "09b",
+      "source_slug": "counter-strike-2",
+      "source_name": "Counter-Strike 2",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "pubg",
       "app_name": "PUBG",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0jh",
+      "source_slug": "pubg-battlegrounds",
+      "source_name": "PUBG: Battlegrounds",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "delta-force",
@@ -1640,7 +1640,7 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "game",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "teamfight-tactics",
@@ -1649,25 +1649,25 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "game",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "league-of-legends",
       "app_name": "League of Legends",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "046",
+      "source_slug": "league-of-legends",
+      "source_name": "League of Legends",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "call-of-duty-warzone",
       "app_name": "Call of Duty: Warzone",
-      "source_id": null,
-      "source_slug": null,
+      "source_id": "01R",
+      "source_slug": "call-of-duty-warzone",
       "source_name": "Call of Duty: Warzone",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "cyberpunk-2077",
@@ -1681,29 +1681,29 @@
     {
       "app_id": "red-dead-redemption-2",
       "app_name": "Red Dead Redemption 2",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "03G",
+      "source_slug": "red-dead-redemption-2",
+      "source_name": "Red Dead Redemption 2",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "gta-v",
       "app_name": "Grand Theft Auto V",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "04w",
+      "source_slug": "grand-theft-auto-v",
+      "source_name": "Grand Theft Auto V",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "black-myth-wukong",
       "app_name": "Black Myth: Wukong",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "0ju",
+      "source_slug": "black-myth-wukong",
+      "source_name": "Black Myth: Wukong",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "forza-horizon-6",
@@ -1712,34 +1712,34 @@
       "source_slug": null,
       "source_name": null,
       "device_type": "game",
-      "status": "review"
+      "status": "missing"
     },
     {
       "app_id": "elden-ring",
       "app_name": "Elden Ring",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "04C",
+      "source_slug": "elden-ring",
+      "source_name": "Elden Ring",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "cities-skylines",
       "app_name": "Cities: Skylines",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "03g",
+      "source_slug": "cities-skylines",
+      "source_name": "Cities: Skylines",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     },
     {
       "app_id": "minecraft-java-edition",
       "app_name": "Minecraft: Java Edition",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
+      "source_id": "040",
+      "source_slug": "minecraft-java-edition",
+      "source_name": "Minecraft: Java Edition",
       "device_type": "game",
-      "status": "review"
+      "status": "exact"
     }
   ]
 }

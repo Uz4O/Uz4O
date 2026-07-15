@@ -322,7 +322,7 @@ def test_missing_profile_or_inactive_model_needs_more_data() -> None:
     assert inactive_model["missing_games"] == ["cs2"]
 
 
-def test_historical_exact_rows_are_not_a_numeric_fallback() -> None:
+def test_pc_builds_exact_rows_are_used_before_the_model() -> None:
     def setup(session):
         session.add(
             GamePerformanceEstimate(
@@ -336,19 +336,23 @@ def test_historical_exact_rows_are_not_a_numeric_fallback() -> None:
                 maximum_fps=999,
                 bottleneck_type=None,
                 bottleneck_percent=None,
-                source_url="https://pc-builds.com/example",
+                source_url="https://pc-builds.com/zh/fps-calculator/result/example",
                 source_fetched_at=NOW,
-                import_batch="historical",
+                import_batch="pc-builds-reference",
             )
         )
 
     body = post_estimate(
-        make_client(setup=setup),
+        make_client(["cyberpunk-2077"], setup=setup),
         ["cyberpunk-2077"],
     ).json()
 
-    assert body["status"] == "needs_more_data"
-    assert body["average_fps"] is None
+    assert body["status"] == "ready"
+    assert body["average_fps"] == 999
+    assert body["game_results"] == [
+        {"game": "cyberpunk-2077", "average_fps": 999}
+    ]
+    assert body["advice"] == "第三方网站中等画质估算，实际帧数会因游戏设置和版本变化。"
 
 
 def test_request_limits_and_sse_result_use_the_average_only_shape() -> None:
