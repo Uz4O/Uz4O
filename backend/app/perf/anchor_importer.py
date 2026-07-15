@@ -70,6 +70,7 @@ def read_reviewed_fps_bundle(
     if not isinstance(document, dict):
         raise ValueError("reviewed FPS input must be a JSON object")
     import_batch = _required_text(document, "import_batch")
+    _validate_test_conditions(document.get("test_conditions"))
     hardware_profiles = _parse_hardware_profiles(
         document.get("hardware_profiles"),
         import_batch,
@@ -85,6 +86,16 @@ def read_reviewed_fps_bundle(
         known_gpu_ids,
     )
     return ReviewedFPSBundle(hardware_profiles, anchors)
+
+
+def _validate_test_conditions(conditions) -> None:
+    if not isinstance(conditions, dict) or conditions != {
+        "quality": "high",
+        "ray_tracing": False,
+    }:
+        raise ValueError(
+            "test conditions must use high quality with ray tracing disabled"
+        )
 
 
 def _parse_hardware_profiles(

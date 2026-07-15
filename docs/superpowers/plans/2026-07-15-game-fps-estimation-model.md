@@ -633,6 +633,10 @@ Use this valid fixture so the performance score and GPU features are reviewed da
 ```json
 {
   "import_batch": "self-measured-20260715",
+  "test_conditions": {
+    "quality": "high",
+    "ray_tracing": false
+  },
   "hardware_profiles": [
     {
       "component_id": "r7-9800x3d",
@@ -679,7 +683,7 @@ Use this valid fixture so the performance score and GPU features are reviewed da
 }
 ```
 
-Tests must reject unknown games, unknown hardware IDs, mismatched component categories, non-positive performance scores, CPU capability flags, unsupported render modes, medium/ultra quality fields, ray tracing, non-positive FPS, missing source proof, naive timestamps, duplicate keys, and `source_kind` outside `self_measured`, `licensed`, or `open_license`.
+Tests must reject missing or non-high test conditions, enabled ray tracing, unknown games, unknown hardware IDs, mismatched component categories, non-positive performance scores, CPU capability flags, unsupported render modes, per-row quality/ray-tracing overrides, non-positive FPS, missing source proof, naive timestamps, duplicate keys, and `source_kind` outside `self_measured`, `licensed`, or `open_license`.
 
 - [ ] **Step 2: Verify RED**
 

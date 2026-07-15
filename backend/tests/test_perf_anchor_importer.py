@@ -13,6 +13,10 @@ GPU_IDS = {"rtx-4070"}
 def valid_document() -> dict:
     return {
         "import_batch": "self-measured-20260715",
+        "test_conditions": {
+            "quality": "high",
+            "ray_tracing": False,
+        },
         "hardware_profiles": [
             {
                 "component_id": "r7-9800x3d",
@@ -81,6 +85,32 @@ def test_reads_a_fully_reviewed_bundle(tmp_path) -> None:
     assert len(bundle.anchors) == 1
     assert bundle.anchors[0].render_mode == "dlss_quality_fg"
     assert bundle.anchors[0].import_batch == "self-measured-20260715"
+
+
+@pytest.mark.parametrize(
+    "conditions",
+    [
+        None,
+        {"quality": "medium", "ray_tracing": False},
+        {"quality": "high", "ray_tracing": True},
+    ],
+)
+def test_requires_high_quality_with_ray_tracing_disabled(
+    tmp_path,
+    conditions,
+) -> None:
+    document = valid_document()
+    if conditions is None:
+        document.pop("test_conditions")
+    else:
+        document["test_conditions"] = conditions
+
+    with pytest.raises(ValueError, match="high quality.*ray tracing disabled"):
+        read_reviewed_fps_bundle(
+            write_document(tmp_path, document),
+            CPU_IDS,
+            GPU_IDS,
+        )
 
 
 @pytest.mark.parametrize(
