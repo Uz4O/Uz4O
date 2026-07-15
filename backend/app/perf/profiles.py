@@ -36,7 +36,7 @@ class GPUCapabilities:
 
 APPROVED_GAME_PROFILES: Dict[str, GameProfile] = {
     "valorant": GameProfile("valorant", GameLoadType.CPU),
-    "cs2": GameProfile("cs2", GameLoadType.CPU, supports_fsr=True),
+    "cs2": GameProfile("cs2", GameLoadType.CPU),
     "pubg": GameProfile("pubg", GameLoadType.MIXED, supports_dlss=True),
     "delta-force": GameProfile(
         "delta-force",

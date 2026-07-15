@@ -233,6 +233,7 @@ def _parse_anchors(
                 axis,
                 cpu_id,
                 gpu_id,
+                resolution,
                 known_cpu_ids,
                 known_gpu_ids,
             )
@@ -345,6 +346,7 @@ def _public_reference_sources(
     axis: str,
     cpu_id: str,
     gpu_id: str,
+    resolution: str,
     known_cpu_ids: Set[str],
     known_gpu_ids: Set[str],
 ):
@@ -383,6 +385,14 @@ def _public_reference_sources(
             tested_cpu_id != cpu_id or tested_gpu_id != gpu_id
         ):
             raise ValueError("validation sources must test the anchor hardware")
+        gpu_bottleneck_observed = None
+        if axis == "cpu":
+            gpu_bottleneck_observed = _required_bool(
+                row,
+                "gpu_bottleneck_observed",
+            )
+            if gpu_bottleneck_observed:
+                raise ValueError("CPU-axis sources must not be GPU bottlenecked")
         average_fps, measurement_kind, samples = _public_source_average(
             row,
             fps_cap,
@@ -395,9 +405,12 @@ def _public_reference_sources(
             "measurement_kind": measurement_kind,
             "published_at": published_at.isoformat(),
             "publisher": publisher,
-            "quality": _source_quality(row),
+            "quality": _source_quality(row, axis),
+            "resolution": _source_resolution(row, axis, resolution),
             "url": url,
         }
+        if gpu_bottleneck_observed is not None:
+            source["gpu_bottleneck_observed"] = gpu_bottleneck_observed
         if samples is not None:
             source["samples"] = samples
         sources.append(source)
@@ -453,11 +466,23 @@ def _public_source_average(row: Mapping, fps_cap, game_id: str):
     return sampled_average, "realtime_samples", samples
 
 
-def _source_quality(row: Mapping) -> str:
+def _source_quality(row: Mapping, axis: str) -> str:
     quality = row.get("quality", "high")
-    if quality not in {"high", "ultra"}:
-        raise ValueError("public source quality must be high or ultra")
+    allowed = {"high", "ultra"}
+    if axis == "cpu":
+        allowed.add("unknown")
+    if quality not in allowed:
+        raise ValueError("unsupported public source quality")
     return quality
+
+
+def _source_resolution(row: Mapping, axis: str, default: str) -> str:
+    resolution = row.get("resolution", default)
+    if resolution not in RESOLUTIONS and not (
+        axis == "cpu" and resolution == "unknown"
+    ):
+        raise ValueError("unsupported public source resolution")
+    return resolution
 
 
 def _validated_fps(value, fps_cap, game_id: str) -> int:

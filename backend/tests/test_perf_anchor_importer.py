@@ -165,6 +165,42 @@ def test_public_reference_can_estimate_average_from_realtime_samples(
     assert sources[0]["samples"] == source["samples"]
 
 
+def test_cpu_references_allow_unknown_settings_only_without_a_gpu_bottleneck(
+    tmp_path,
+) -> None:
+    document = public_reference_document()
+    record = document["records"][0]
+    record.update(
+        game_id="valorant",
+        axis="cpu",
+        resolution="1080p",
+        render_mode="native",
+    )
+    for source in record["sources"]:
+        source.pop("cpu_id", None)
+        source["gpu_bottleneck_observed"] = False
+    record["sources"][1].update(quality="unknown", resolution="unknown")
+
+    bundle = read_reviewed_fps_bundle(
+        write_document(tmp_path, document),
+        CPU_IDS,
+        GPU_IDS,
+    )
+
+    sources = json.loads(bundle.anchors[0].source_reference)["sources"]
+    assert sources[1]["quality"] == "unknown"
+    assert sources[1]["resolution"] == "unknown"
+    assert sources[1]["gpu_bottleneck_observed"] is False
+
+    record["sources"][1]["gpu_bottleneck_observed"] = True
+    with pytest.raises(ValueError, match="must not be GPU bottlenecked"):
+        read_reviewed_fps_bundle(
+            write_document(tmp_path, document),
+            CPU_IDS,
+            GPU_IDS,
+        )
+
+
 @pytest.mark.parametrize(
     ("change", "message"),
     [

@@ -1,5 +1,5 @@
 {
-  "import_batch": "public-reference-20260715-rdr2-rtx4070-v1",
+  "import_batch": "public-reference-20260715-rdr2-valorant-v2",
   "test_conditions": {
     "quality": "high",
     "ray_tracing": false
@@ -27,6 +27,18 @@
       "supports_standard_frame_generation": true,
       "source_kind": "public_reference",
       "source_reference": "https://www.youtube.com/watch?v=uXKnzl9Tkr0",
+      "reviewed_at": "2026-07-15T00:00:00+08:00"
+    },
+    {
+      "component_id": "r7-9800x3d",
+      "category": "cpu",
+      "performance_score": 140,
+      "is_common": true,
+      "supports_dlss": false,
+      "supports_fsr": false,
+      "supports_standard_frame_generation": false,
+      "source_kind": "public_reference",
+      "source_reference": "https://www.bilibili.com/video/BV1CbiyYbE6L/",
       "reviewed_at": "2026-07-15T00:00:00+08:00"
     }
   ],
@@ -67,6 +79,46 @@
             {
               "at_seconds": 30,
               "fps": 116
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "game_id": "valorant",
+      "axis": "cpu",
+      "cpu_id": "r7-9800x3d",
+      "gpu_id": "rtx-4070",
+      "resolution": "1080p",
+      "render_mode": "native",
+      "sample_role": "fit",
+      "game_version": "mixed-2024-12-2025-05",
+      "driver_version": "mixed-2024-12-2025-05",
+      "source_kind": "public_reference",
+      "tested_at": "2025-05-25T00:21:38+08:00",
+      "sources": [
+        {
+          "publisher": "野生的装机宅",
+          "url": "https://www.bilibili.com/video/BV1CbiyYbE6L/",
+          "published_at": "2024-12-07T16:09:01+08:00",
+          "gpu_id": "rtx-4090-d",
+          "quality": "ultra",
+          "resolution": "1080p",
+          "gpu_bottleneck_observed": false,
+          "average_fps": 521
+        },
+        {
+          "publisher": "星瀞萧宇",
+          "url": "https://www.bilibili.com/video/BV1dWj8zKEHz/",
+          "published_at": "2025-05-25T00:21:38+08:00",
+          "gpu_id": "rtx-4070-super",
+          "quality": "unknown",
+          "resolution": "unknown",
+          "gpu_bottleneck_observed": false,
+          "samples": [
+            {
+              "at_seconds": 30,
+              "fps": 571
             }
           ]
         }

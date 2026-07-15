@@ -46,3 +46,7 @@ def test_render_mode_uses_supported_quality_upscaling_and_standard_fg() -> None:
         render_mode_for(APPROVED_GAME_PROFILES["valorant"], dlss_fg)
         is RenderMode.NATIVE
     )
+    assert (
+        render_mode_for(APPROVED_GAME_PROFILES["cs2"], dlss_fg)
+        is RenderMode.NATIVE
+    )
