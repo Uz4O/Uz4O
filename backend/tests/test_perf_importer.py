@@ -85,12 +85,23 @@ def test_import_reads_reviewed_medium_record(tmp_path) -> None:
 def test_bundled_pc_builds_reference_is_importable() -> None:
     records = read_performance_batch(DATA_PATH)
 
-    assert [row.average_fps for row in records] == [77, 58, 38, 77, 58, 38]
+    assert [row.average_fps for row in records] == [
+        77,
+        58,
+        38,
+        77,
+        58,
+        38,
+        317,
+        210,
+        117,
+    ]
     assert records[0].source_url == EXPECTED_URL
     assert records[3].source_url.endswith(
         "/1Ek1ge02g/ryzen-7-9800x3d/geforce-rtx-4060/"
         "cyberpunk-2077/1920x1080/"
     )
+    assert records[6].game_id == "cs2"
 
 
 def test_import_uses_each_record_collection_time(tmp_path) -> None:

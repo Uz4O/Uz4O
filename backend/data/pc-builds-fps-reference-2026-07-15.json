@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-07-15T22:59:49+08:00",
-  "import_batch": "pc-builds-reference-20260715-cyberpunk-v2",
+  "import_batch": "pc-builds-reference-20260715-v3",
   "quality": "medium",
   "records": [
     {
@@ -98,6 +98,54 @@
       "bottleneck_percent": null,
       "source_url": "https://pc-builds.com/zh/fps-calculator/result/1Ek1ge02g/ryzen-7-9800x3d/geforce-rtx-4060/cyberpunk-2077/1920x1080/",
       "source_fetched_at": "2026-07-15T23:28:51+08:00"
+    },
+    {
+      "cpu_id": "r7-9800x3d",
+      "gpu_id": "rtx-4060",
+      "game_id": "cs2",
+      "resolution": "1080p",
+      "source_cpu_id": "1Ek",
+      "source_gpu_id": "1ge",
+      "source_game_id": "09b",
+      "average_fps": 317,
+      "minimum_fps": 270,
+      "maximum_fps": 365,
+      "bottleneck_type": null,
+      "bottleneck_percent": null,
+      "source_url": "https://pc-builds.com/zh/fps-calculator/result/1Ek1ge09b/ryzen-7-9800x3d/geforce-rtx-4060/counter-strike-2/1920x1080/",
+      "source_fetched_at": "2026-07-15T23:55:40+08:00"
+    },
+    {
+      "cpu_id": "r7-9800x3d",
+      "gpu_id": "rtx-4060",
+      "game_id": "cs2",
+      "resolution": "2k",
+      "source_cpu_id": "1Ek",
+      "source_gpu_id": "1ge",
+      "source_game_id": "09b",
+      "average_fps": 210,
+      "minimum_fps": 179,
+      "maximum_fps": 242,
+      "bottleneck_type": null,
+      "bottleneck_percent": null,
+      "source_url": "https://pc-builds.com/zh/fps-calculator/result/1Ek1ge09b/ryzen-7-9800x3d/geforce-rtx-4060/counter-strike-2/1920x1080/",
+      "source_fetched_at": "2026-07-15T23:55:40+08:00"
+    },
+    {
+      "cpu_id": "r7-9800x3d",
+      "gpu_id": "rtx-4060",
+      "game_id": "cs2",
+      "resolution": "4k",
+      "source_cpu_id": "1Ek",
+      "source_gpu_id": "1ge",
+      "source_game_id": "09b",
+      "average_fps": 117,
+      "minimum_fps": 100,
+      "maximum_fps": 135,
+      "bottleneck_type": null,
+      "bottleneck_percent": null,
+      "source_url": "https://pc-builds.com/zh/fps-calculator/result/1Ek1ge09b/ryzen-7-9800x3d/geforce-rtx-4060/counter-strike-2/1920x1080/",
+      "source_fetched_at": "2026-07-15T23:55:40+08:00"
     }
   ]
 }
