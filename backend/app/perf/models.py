@@ -122,7 +122,8 @@ class HardwarePerformanceProfile(Base):
             name="ck_hardware_perf_cpu_capabilities",
         ),
         CheckConstraint(
-            "source_kind IN ('self_measured', 'licensed', 'open_license')",
+            "source_kind IN ('self_measured', 'licensed', 'open_license', "
+            "'public_reference')",
             name="ck_hardware_perf_source_kind",
         ),
         CheckConstraint(
@@ -202,7 +203,8 @@ class GamePerformanceAnchor(Base):
             name="ck_game_perf_anchor_role_axis",
         ),
         CheckConstraint(
-            "source_kind IN ('self_measured', 'licensed', 'open_license')",
+            "source_kind IN ('self_measured', 'licensed', 'open_license', "
+            "'public_reference')",
             name="ck_game_perf_anchor_source_kind",
         ),
         CheckConstraint(

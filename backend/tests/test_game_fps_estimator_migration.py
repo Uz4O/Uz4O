@@ -35,6 +35,15 @@ def test_game_fps_estimator_migration_round_trip(tmp_path, monkeypatch) -> None:
         item["name"]
         for item in inspector.get_indexes("game_performance_calibration")
     }
+    for table_name, constraint_name in (
+        ("hardware_performance_profile", "ck_hardware_perf_source_kind"),
+        ("game_performance_anchor", "ck_game_perf_anchor_source_kind"),
+    ):
+        constraints = {
+            item["name"]: item["sqltext"]
+            for item in inspector.get_check_constraints(table_name)
+        }
+        assert "public_reference" in constraints[constraint_name]
 
     command.downgrade(config, "20260713_0012")
     assert NEW_TABLES.isdisjoint(inspect(engine).get_table_names())

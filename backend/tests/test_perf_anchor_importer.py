@@ -6,7 +6,7 @@ import pytest
 from app.perf.anchor_importer import read_reviewed_fps_bundle
 
 
-CPU_IDS = {"r7-9800x3d"}
+CPU_IDS = {"r7-9800x3d", "i5-13600k"}
 GPU_IDS = {"rtx-4070"}
 
 
@@ -69,6 +69,31 @@ def write_document(tmp_path, document: dict):
     return path
 
 
+def public_reference_document() -> dict:
+    document = valid_document()
+    document["records"][0].pop("average_fps")
+    document["records"][0].pop("source_reference")
+    document["records"][0].update(
+        source_kind="public_reference",
+        sources=[
+            {
+                "publisher": "独立频道 A",
+                "url": "https://www.youtube.com/watch?v=source-a",
+                "published_at": "2026-07-01T00:00:00Z",
+                "average_fps": 100,
+            },
+            {
+                "publisher": "独立频道 B",
+                "url": "https://www.bilibili.com/video/BV1sourceB",
+                "published_at": "2026-07-02T00:00:00+08:00",
+                "cpu_id": "i5-13600k",
+                "average_fps": 109,
+            },
+        ],
+    )
+    return document
+
+
 def test_reads_a_fully_reviewed_bundle(tmp_path) -> None:
     bundle = read_reviewed_fps_bundle(
         write_document(tmp_path, valid_document()),
@@ -85,6 +110,93 @@ def test_reads_a_fully_reviewed_bundle(tmp_path) -> None:
     assert len(bundle.anchors) == 1
     assert bundle.anchors[0].render_mode == "dlss_quality_fg"
     assert bundle.anchors[0].import_batch == "self-measured-20260715"
+
+
+def test_public_references_use_rounded_median_and_preserve_sources(tmp_path) -> None:
+    bundle = read_reviewed_fps_bundle(
+        write_document(tmp_path, public_reference_document()),
+        CPU_IDS,
+        GPU_IDS,
+    )
+
+    anchor = bundle.anchors[0]
+    assert anchor.average_fps == 105
+    reference = json.loads(anchor.source_reference)
+    assert reference["test_conditions"] == {
+        "cpu_id": "r7-9800x3d",
+        "game_id": "cyberpunk-2077",
+        "gpu_id": "rtx-4070",
+        "quality": "high",
+        "ray_tracing": False,
+        "render_mode": "dlss_quality_fg",
+        "resolution": "2k",
+    }
+    assert [item["publisher"] for item in reference["sources"]] == [
+        "独立频道 A",
+        "独立频道 B",
+    ]
+    assert reference["sources"][1]["cpu_id"] == "i5-13600k"
+
+
+def test_public_reference_can_estimate_average_from_realtime_samples(
+    tmp_path,
+) -> None:
+    document = public_reference_document()
+    source = document["records"][0]["sources"][0]
+    source.pop("average_fps")
+    source["samples"] = [
+        {"at_seconds": 20, "fps": 95},
+        {"at_seconds": 40, "fps": 100},
+        {"at_seconds": 60, "fps": 105},
+        {"at_seconds": 80, "fps": 110},
+        {"at_seconds": 100, "fps": 115},
+    ]
+
+    bundle = read_reviewed_fps_bundle(
+        write_document(tmp_path, document),
+        CPU_IDS,
+        GPU_IDS,
+    )
+
+    assert bundle.anchors[0].average_fps == 107
+    sources = json.loads(bundle.anchors[0].source_reference)["sources"]
+    assert sources[0]["measurement_kind"] == "realtime_samples"
+    assert sources[0]["average_fps"] == 105
+    assert sources[0]["samples"] == source["samples"]
+
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (lambda sources: sources.pop(), "2 or 3"),
+        (
+            lambda sources: sources[1].update(publisher="独立频道 A"),
+            "independent publishers",
+        ),
+        (
+            lambda sources: sources[1].update(url="not-a-url"),
+            "HTTP URL",
+        ),
+        (
+            lambda sources: sources[1].update(average_fps=130),
+            "differ by more than 15%",
+        ),
+    ],
+)
+def test_rejects_unusable_public_reference_groups(
+    tmp_path,
+    change,
+    message,
+) -> None:
+    document = public_reference_document()
+    change(document["records"][0]["sources"])
+
+    with pytest.raises(ValueError, match=message):
+        read_reviewed_fps_bundle(
+            write_document(tmp_path, document),
+            CPU_IDS,
+            GPU_IDS,
+        )
 
 
 @pytest.mark.parametrize(

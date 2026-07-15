@@ -2,7 +2,9 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from statistics import mean, median
 from typing import Dict, List, Mapping, Set
+from urllib.parse import urlparse
 
 from app.perf.profiles import (
     APPROVED_GAME_PROFILES,
@@ -11,7 +13,12 @@ from app.perf.profiles import (
 )
 
 
-SOURCE_KINDS = {"self_measured", "licensed", "open_license"}
+SOURCE_KINDS = {
+    "self_measured",
+    "licensed",
+    "open_license",
+    "public_reference",
+}
 RESOLUTIONS = {"1080p", "2k", "4k"}
 FORBIDDEN_ANCHOR_FIELDS = {
     "quality",
@@ -146,6 +153,8 @@ def _parse_hardware_profiles(
 
         source_kind = _source_kind(row)
         source_reference = _required_text(row, "source_reference", "source reference")
+        if source_kind == "public_reference":
+            _http_url(source_reference)
         reviewed_at = _aware_datetime(row.get("reviewed_at"), "reviewed_at")
         profiles.append(
             HardwarePerformanceProfileInput(
@@ -209,12 +218,30 @@ def _parse_anchors(
         resolution = _required_text(row, "resolution")
         if resolution not in RESOLUTIONS:
             raise ValueError(f"unsupported resolution: {resolution}")
-        average_fps = _positive_int(row.get("average_fps"), "average FPS")
-        if average_fps > 2000:
-            raise ValueError("average FPS must be at most 2000")
         fps_cap = APPROVED_GAME_PROFILES[game_id].fps_cap
-        if fps_cap is not None and average_fps > fps_cap:
-            raise ValueError(f"average FPS exceeds {game_id} FPS cap")
+        source_kind = _source_kind(row)
+        public_sources = None
+        if source_kind == "public_reference":
+            if "average_fps" in row or "source_reference" in row:
+                raise ValueError(
+                    "public reference FPS is derived from its sources"
+                )
+            average_fps, public_sources = _public_reference_sources(
+                row.get("sources"),
+                fps_cap,
+                game_id,
+                axis,
+                cpu_id,
+                gpu_id,
+                known_cpu_ids,
+                known_gpu_ids,
+            )
+        else:
+            average_fps = _validated_fps(
+                row.get("average_fps"),
+                fps_cap,
+                game_id,
+            )
 
         gpu = profiles_by_id[gpu_id]
         expected_mode = render_mode_for(
@@ -233,8 +260,30 @@ def _parse_anchors(
 
         game_version = _required_text(row, "game_version")
         driver_version = _required_text(row, "driver_version")
-        source_kind = _source_kind(row)
-        source_reference = _required_text(row, "source_reference", "source reference")
+        if public_sources is None:
+            source_reference = _required_text(
+                row,
+                "source_reference",
+                "source reference",
+            )
+        else:
+            source_reference = json.dumps(
+                {
+                    "test_conditions": {
+                        "cpu_id": cpu_id,
+                        "game_id": game_id,
+                        "gpu_id": gpu_id,
+                        "quality": "high",
+                        "ray_tracing": False,
+                        "render_mode": render_mode,
+                        "resolution": resolution,
+                    },
+                    "sources": public_sources,
+                },
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
         tested_at = _aware_datetime(row.get("tested_at"), "tested_at")
         key = (
             game_id,
@@ -286,6 +335,144 @@ def _source_kind(row: Mapping) -> str:
     value = _required_text(row, "source_kind", "source kind")
     if value not in SOURCE_KINDS:
         raise ValueError(f"unsupported source kind: {value}")
+    return value
+
+
+def _public_reference_sources(
+    raw_sources,
+    fps_cap,
+    game_id: str,
+    axis: str,
+    cpu_id: str,
+    gpu_id: str,
+    known_cpu_ids: Set[str],
+    known_gpu_ids: Set[str],
+):
+    if not isinstance(raw_sources, list) or len(raw_sources) not in {2, 3}:
+        raise ValueError("public reference needs 2 or 3 sources")
+    sources = []
+    publishers = set()
+    urls = set()
+    for row in raw_sources:
+        if not isinstance(row, dict):
+            raise ValueError("public reference source must be an object")
+        publisher = _required_text(row, "publisher")
+        publisher_key = publisher.casefold()
+        if publisher_key in publishers:
+            raise ValueError("public references need independent publishers")
+        publishers.add(publisher_key)
+        url = _http_url(_required_text(row, "url"))
+        if url in urls:
+            raise ValueError("public references need unique URLs")
+        urls.add(url)
+        published_at = _aware_datetime(
+            row.get("published_at"),
+            "published_at",
+        )
+        tested_cpu_id = row.get("cpu_id", cpu_id)
+        tested_gpu_id = row.get("gpu_id", gpu_id)
+        if tested_cpu_id not in known_cpu_ids:
+            raise ValueError(f"unknown source CPU: {tested_cpu_id}")
+        if tested_gpu_id not in known_gpu_ids:
+            raise ValueError(f"unknown source GPU: {tested_gpu_id}")
+        if axis == "gpu" and tested_gpu_id != gpu_id:
+            raise ValueError("GPU-axis sources must test the anchor GPU")
+        if axis == "cpu" and tested_cpu_id != cpu_id:
+            raise ValueError("CPU-axis sources must test the anchor CPU")
+        if axis == "cross" and (
+            tested_cpu_id != cpu_id or tested_gpu_id != gpu_id
+        ):
+            raise ValueError("validation sources must test the anchor hardware")
+        average_fps, measurement_kind, samples = _public_source_average(
+            row,
+            fps_cap,
+            game_id,
+        )
+        source = {
+            "average_fps": average_fps,
+            "cpu_id": tested_cpu_id,
+            "gpu_id": tested_gpu_id,
+            "measurement_kind": measurement_kind,
+            "published_at": published_at.isoformat(),
+            "publisher": publisher,
+            "quality": _source_quality(row),
+            "url": url,
+        }
+        if samples is not None:
+            source["samples"] = samples
+        sources.append(source)
+    fps_values = [item["average_fps"] for item in sources]
+    median_fps = median(fps_values)
+    if (max(fps_values) - min(fps_values)) / median_fps > 0.15:
+        raise ValueError("public reference FPS values differ by more than 15%")
+    return int(median_fps + 0.5), sources
+
+
+def _public_source_average(row: Mapping, fps_cap, game_id: str):
+    has_average = "average_fps" in row
+    has_samples = "samples" in row
+    if has_average == has_samples:
+        raise ValueError(
+            "public source needs average_fps or realtime samples"
+        )
+    if has_average:
+        return (
+            _validated_fps(row.get("average_fps"), fps_cap, game_id),
+            "published_average",
+            None,
+        )
+    raw_samples = row.get("samples")
+    if not isinstance(raw_samples, list) or not 1 <= len(raw_samples) <= 20:
+        raise ValueError("realtime estimate needs 1 to 20 samples")
+    samples = []
+    timestamps = set()
+    for sample in raw_samples:
+        if not isinstance(sample, dict):
+            raise ValueError("realtime sample must be an object")
+        at_seconds = sample.get("at_seconds")
+        if (
+            isinstance(at_seconds, bool)
+            or not isinstance(at_seconds, int)
+            or at_seconds < 0
+        ):
+            raise ValueError("sample timestamp must be non-negative")
+        if at_seconds in timestamps:
+            raise ValueError("realtime sample timestamps must be unique")
+        timestamps.add(at_seconds)
+        samples.append(
+            {
+                "at_seconds": at_seconds,
+                "fps": _validated_fps(
+                    sample.get("fps"),
+                    fps_cap,
+                    game_id,
+                ),
+            }
+        )
+    sampled_average = int(mean(item["fps"] for item in samples) + 0.5)
+    return sampled_average, "realtime_samples", samples
+
+
+def _source_quality(row: Mapping) -> str:
+    quality = row.get("quality", "high")
+    if quality not in {"high", "ultra"}:
+        raise ValueError("public source quality must be high or ultra")
+    return quality
+
+
+def _validated_fps(value, fps_cap, game_id: str) -> int:
+    average_fps = _positive_int(value, "average FPS")
+    if average_fps > 2000:
+        raise ValueError("average FPS must be at most 2000")
+    if fps_cap is not None and average_fps > fps_cap:
+        raise ValueError(f"average FPS exceeds {game_id} FPS cap")
+    return average_fps
+
+
+def _http_url(value: str) -> str:
+    parsed = urlparse(value)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise ValueError("public reference must use an HTTP URL")
     return value
 
 

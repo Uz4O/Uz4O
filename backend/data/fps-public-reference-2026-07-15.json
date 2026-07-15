@@ -1,0 +1,76 @@
+{
+  "import_batch": "public-reference-20260715-rdr2-rtx4070-v1",
+  "test_conditions": {
+    "quality": "high",
+    "ray_tracing": false
+  },
+  "hardware_profiles": [
+    {
+      "component_id": "r7-5800x3d",
+      "category": "cpu",
+      "performance_score": 100,
+      "is_common": true,
+      "supports_dlss": false,
+      "supports_fsr": false,
+      "supports_standard_frame_generation": false,
+      "source_kind": "public_reference",
+      "source_reference": "https://www.youtube.com/watch?v=aBvVujXOWQs",
+      "reviewed_at": "2026-07-15T00:00:00+08:00"
+    },
+    {
+      "component_id": "rtx-4070",
+      "category": "gpu",
+      "performance_score": 100,
+      "is_common": true,
+      "supports_dlss": true,
+      "supports_fsr": true,
+      "supports_standard_frame_generation": true,
+      "source_kind": "public_reference",
+      "source_reference": "https://www.youtube.com/watch?v=uXKnzl9Tkr0",
+      "reviewed_at": "2026-07-15T00:00:00+08:00"
+    }
+  ],
+  "records": [
+    {
+      "game_id": "red-dead-redemption-2",
+      "axis": "gpu",
+      "cpu_id": "r7-5800x3d",
+      "gpu_id": "rtx-4070",
+      "resolution": "2k",
+      "render_mode": "dlss_quality",
+      "sample_role": "fit",
+      "game_version": "mixed-2023-04",
+      "driver_version": "mixed-2023-04",
+      "source_kind": "public_reference",
+      "tested_at": "2023-04-25T10:16:23-07:00",
+      "sources": [
+        {
+          "publisher": "zWORMz Gaming",
+          "url": "https://www.youtube.com/watch?v=uXKnzl9Tkr0",
+          "published_at": "2023-04-23T06:45:05-07:00",
+          "cpu_id": "i5-13600k",
+          "quality": "ultra",
+          "samples": [
+            {
+              "at_seconds": 594,
+              "fps": 116
+            }
+          ]
+        },
+        {
+          "publisher": "BornInGame",
+          "url": "https://www.youtube.com/watch?v=aBvVujXOWQs",
+          "published_at": "2023-04-25T10:16:23-07:00",
+          "cpu_id": "r7-5800x3d",
+          "quality": "ultra",
+          "samples": [
+            {
+              "at_seconds": 30,
+              "fps": 116
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
