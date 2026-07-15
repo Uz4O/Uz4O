@@ -79,7 +79,7 @@ extension BuildOptionDTO {
             name: details.direction.resultTitle,
             budget: formattedBuildPrice(details.targetBudget),
             totalPrice: referenceTotalText,
-            useCase: "\(details.direction.displayName) · \(details.purchaseMode.displayName)",
+            useCase: details.direction.resultSubtitle,
             createdAt: "参考价日期 \(details.priceDate)",
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
         )
@@ -106,6 +106,17 @@ extension BuildDirectionDTO {
             "大型游戏配置"
         case .balanced:
             "均衡游戏配置"
+        }
+    }
+
+    var resultSubtitle: String {
+        switch self {
+        case .fps:
+            "优先保证高帧率游戏体验"
+        case .aaa:
+            "优先保证大型游戏画质与流畅度"
+        case .balanced:
+            "兼顾高帧率与大型游戏"
         }
     }
 }

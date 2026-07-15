@@ -16,41 +16,30 @@ struct BuildResultView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 4)
 
-                SoftCard(radius: 22) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text(plan.name)
-                                .font(.appTitle)
-                                .foregroundStyle(AppTheme.primaryText)
+                BuildHeroCard(plan: plan)
 
-                            Spacer()
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("配件清单")
+                        .font(.appHeadline)
+                        .foregroundStyle(AppTheme.primaryText)
+                        .padding(.bottom, 8)
 
-                            Image("PCTower")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 72, height: 72)
-                        }
-
-                        SummaryBadge(title: "配置总价", value: plan.totalPrice)
-                    }
-                    .padding(20)
-                }
-
-                SoftCard(radius: 18) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("配件清单")
-                            .font(.appHeadline)
-                            .foregroundStyle(AppTheme.primaryText)
-
-                        ForEach(plan.parts) { part in
-                            ResultPartRow(part: part)
-                            if part.id != plan.parts.last?.id {
-                                Divider()
-                            }
+                    ForEach(plan.parts) { part in
+                        ResultPartRow(part: part)
+                        if part.id != plan.parts.last?.id {
+                            Divider()
+                                .padding(.leading, 56)
                         }
                     }
-                    .padding(18)
                 }
+
+                HStack(spacing: 6) {
+                    Image(systemName: "info.circle")
+                    Text("价格可能随市场波动，请以实际购买时为准。")
+                }
+                .font(.appCaption)
+                .foregroundStyle(AppTheme.secondaryText)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 PrimaryButton(title: "保存配置单", icon: "tray.and.arrow.down", action: {})
                     .padding(.bottom, 22)
@@ -60,21 +49,68 @@ struct BuildResultView: View {
     }
 }
 
+private struct BuildHeroCard: View {
+    let plan: BuildPlan
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .trailing) {
+                RoundedRectangle(cornerRadius: 18)
+                    .fill(Color(red: 0.035, green: 0.039, blue: 0.047))
+
+                Image("PCTower")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: proxy.size.width * 0.58, height: proxy.size.height * 0.92)
+                    .offset(x: 16, y: 8)
+
+                VStack(alignment: .leading, spacing: 7) {
+                    Text(plan.name)
+                        .font(.system(size: 23, weight: .bold))
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.82)
+
+                    Text(plan.useCase)
+                        .font(.appBody)
+                        .foregroundStyle(.white.opacity(0.64))
+                        .lineLimit(2)
+
+                    Spacer(minLength: 10)
+
+                    Text("配置总价")
+                        .font(.appCaption)
+                        .foregroundStyle(.white.opacity(0.58))
+
+                    Text(plan.totalPrice)
+                        .font(.system(size: 27, weight: .bold))
+                        .foregroundStyle(.white)
+                }
+                .padding(22)
+                .frame(width: proxy.size.width * 0.62, height: proxy.size.height, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+        }
+        .aspectRatio(1.72, contentMode: .fit)
+    }
+}
+
 private struct ResultPartRow: View {
     let part: PCPart
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 14) {
             Image(systemName: part.icon)
-                .font(.system(size: 14, weight: .bold))
+                .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: 34, height: 34)
-                .background(part.accent, in: RoundedRectangle(cornerRadius: 8))
+                .frame(width: 42, height: 42)
+                .background(Color.black, in: RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack(spacing: 7) {
                     Text(part.category)
-                        .font(.appCaption.weight(.semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(AppTheme.secondaryText)
 
                     Text(part.condition)
@@ -86,7 +122,7 @@ private struct ResultPartRow: View {
                 }
 
                 Text(part.model)
-                    .font(.appSubheadline.weight(.semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
@@ -94,30 +130,11 @@ private struct ResultPartRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(part.price)
-                .font(.appSubheadline.weight(.bold))
+                .font(.system(size: 14, weight: .bold))
                 .foregroundStyle(AppTheme.primaryText)
                 .fixedSize()
         }
-        .padding(.vertical, 7)
-    }
-}
-
-private struct SummaryBadge: View {
-    let title: String
-    let value: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.appCaption)
-                .foregroundStyle(AppTheme.secondaryText)
-            Text(value)
-                .font(.appSubheadline)
-                .foregroundStyle(AppTheme.primaryText)
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+        .padding(.vertical, 10)
     }
 }
 

@@ -26,12 +26,18 @@ struct BuildResultContentRulesTests {
             "The result title should describe the gaming focus without exposing template wording."
         )
         assertContains(
-            viewSource,
-            "SummaryBadge(title: \"配置总价\", value: plan.totalPrice)",
-            "The summary should focus on the generated build total."
+            modelSource,
+            "useCase: details.direction.resultSubtitle",
+            "The hero should use a short beginner-friendly direction summary."
         )
+        assertContains(viewSource, "BuildHeroCard(plan: plan)", "The result should use the reference hero layout.")
+        assertContains(viewSource, "Image(\"PCTower\")", "The hero should reuse the existing PC image.")
+        assertContains(viewSource, "Text(plan.useCase)", "The hero should show the short direction summary.")
+        assertContains(viewSource, "价格可能随市场波动", "The result should explain that prices can change.")
+        assertContains(viewSource, "PrimaryButton(title: \"保存配置单\"", "Saving the build should remain available.")
         assertNotContains(viewSource, "part.reason", "Selection explanations should not appear in the result list.")
-        assertNotContains(viewSource, "Text(plan.useCase)", "The verbose generated explanation should not appear in the result summary.")
+        assertNotContains(viewSource, "SoftCard", "The hero and parts list should not use the old card containers.")
+        assertNotContains(viewSource, "复制清单", "The removed copy action should not return.")
         assertNotContains(viewSource, "SummaryBadge(title: \"预算\"", "The user's original budget should not be repeated.")
         assertNotContains(
             modelSource,
