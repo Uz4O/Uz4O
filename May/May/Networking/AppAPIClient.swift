@@ -54,22 +54,11 @@ struct PerformanceEstimateRequestDTO: Encodable {
 struct GamePerformanceResultDTO: Decodable {
     let game: String
     let averageFPS: Int
-    let lowFPS: Int
-    let maximumFPS: Int
-    let bottleneck: String?
-    let bottleneckPercent: Int?
-    let confidence: String
-    let sourceFetchedAt: String
 
     var model: GamePerformanceResult {
         GamePerformanceResult(
             gameID: game,
-            averageFPS: averageFPS,
-            lowFPS: lowFPS,
-            maximumFPS: maximumFPS,
-            bottleneck: bottleneck,
-            bottleneckPercent: bottleneckPercent,
-            sourceFetchedAt: sourceFetchedAt
+            averageFPS: averageFPS
         )
     }
 }
@@ -77,26 +66,13 @@ struct GamePerformanceResultDTO: Decodable {
 struct PerformanceEstimateResponseDTO: Decodable {
     let status: String
     let averageFPS: Int?
-    let lowFPS: Int?
-    let maximumFPS: Int?
-    let bottleneck: String?
-    let bottleneckPercent: Int?
-    let confidence: String
-    let advice: String
-    let missingData: [String]
     let missingGames: [String]
-    let sourceFetchedAt: String?
     let gameResults: [GamePerformanceResultDTO]
 
     var model: PerformanceEstimatePayload {
         PerformanceEstimatePayload(
             status: PerformanceEstimateStatus(rawValue: status) ?? .needsMoreData,
             averageFPS: averageFPS,
-            lowFPS: lowFPS,
-            maximumFPS: maximumFPS,
-            bottleneck: bottleneck,
-            bottleneckPercent: bottleneckPercent,
-            sourceFetchedAt: sourceFetchedAt,
             missingGames: missingGames,
             gameResults: gameResults.map(\.model)
         )

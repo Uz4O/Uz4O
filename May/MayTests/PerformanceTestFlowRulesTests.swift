@@ -21,13 +21,6 @@ struct PerformanceTestFlowRulesTests {
             false,
             "The aggregate selection must not be included in the 15 collected games."
         )
-        assertEqual(PerformanceTestFlow.smoothness(for: 29), "不够流畅", "29 FPS should stay below the basic threshold.")
-        assertEqual(PerformanceTestFlow.smoothness(for: 30), "基本流畅", "30 FPS should enter the basic threshold.")
-        assertEqual(PerformanceTestFlow.smoothness(for: 59), "基本流畅", "59 FPS should stay below the smooth threshold.")
-        assertEqual(PerformanceTestFlow.smoothness(for: 60), "流畅", "60 FPS should enter the smooth threshold.")
-        assertEqual(PerformanceTestFlow.smoothness(for: 119), "流畅", "119 FPS should stay below the very smooth threshold.")
-        assertEqual(PerformanceTestFlow.smoothness(for: 120), "非常流畅", "120 FPS should enter the very smooth threshold.")
-
         var flow = PerformanceTestFlow()
         assertEqual(flow.currentStep, .hardware, "Performance test should begin with hardware selection.")
         assertEqual(flow.selectedResolution.title, "2K", "Default resolution should match the current result copy.")
@@ -60,22 +53,12 @@ struct PerformanceTestFlowRulesTests {
 
         let response = PerformanceEstimatePayload(
             status: .ready,
-            averageFPS: 77,
-            lowFPS: 66,
-            maximumFPS: 89,
-            bottleneck: "cpu",
-            bottleneckPercent: 11,
-            sourceFetchedAt: "2026-07-12T00:00:00Z",
+            averageFPS: 128,
             missingGames: [],
             gameResults: [
                 GamePerformanceResult(
                     gameID: "cyberpunk-2077",
-                    averageFPS: 77,
-                    lowFPS: 66,
-                    maximumFPS: 89,
-                    bottleneck: "cpu",
-                    bottleneckPercent: 11,
-                    sourceFetchedAt: "2026-07-12T00:00:00Z"
+                    averageFPS: 128
                 )
             ]
         )
@@ -83,23 +66,14 @@ struct PerformanceTestFlowRulesTests {
         flow.apply(response, for: request)
         assertEqual(flow.loadState, .loaded, "A ready response should show loaded content.")
         assertEqual(flow.result?.resolution, "4K", "Results must retain the resolution captured when the request began.")
-        assertEqual(flow.result?.averageFPS, "77 FPS", "Results must use backend data.")
-        assertEqual(flow.result?.lowFPS, "66 FPS", "Low FPS must use backend data.")
-        assertEqual(flow.result?.maximumFPS, "89 FPS", "Maximum FPS must use backend data.")
-        assertEqual(flow.result?.smoothness, "流畅", "Smoothness should be derived from the backend average FPS.")
-        assertEqual(flow.result?.bottleneck, "CPU 11%", "Bottleneck and percentage must use backend data.")
-        assertEqual(flow.result?.sourceFetchedAt, "2026-07-12T00:00:00Z", "Freshness must use backend data.")
+        assertEqual(flow.result?.averageFPS, "128 FPS", "Results must use the backend average FPS.")
+        assertEqual(flow.result?.gameResults, response.gameResults, "Per-game results must retain average FPS only.")
 
         let partialRequest = require(flow.beginRequest(), "A new request should be allowed after completion.")
         flow.apply(
             PerformanceEstimatePayload(
                 status: .partial,
-                averageFPS: 77,
-                lowFPS: 66,
-                maximumFPS: 89,
-                bottleneck: nil,
-                bottleneckPercent: nil,
-                sourceFetchedAt: "2026-07-12T00:00:00Z",
+                averageFPS: 128,
                 missingGames: ["cs2"],
                 gameResults: response.gameResults
             ),
@@ -113,11 +87,6 @@ struct PerformanceTestFlowRulesTests {
             PerformanceEstimatePayload(
                 status: .needsMoreData,
                 averageFPS: nil,
-                lowFPS: nil,
-                maximumFPS: nil,
-                bottleneck: nil,
-                bottleneckPercent: nil,
-                sourceFetchedAt: nil,
                 missingGames: ["cs2"],
                 gameResults: []
             ),
@@ -150,6 +119,8 @@ struct PerformanceTestFlowRulesTests {
         flow.hardwareProfile.cpu = "不知道"
         assertEqual(flow.requestInput, nil, "Unknown exact hardware should stop before any network request.")
 
+        assertAverageOnlySources()
+
         print("PerformanceTestFlowRulesTests passed")
     }
 
@@ -162,5 +133,37 @@ struct PerformanceTestFlowRulesTests {
     private static func require<T>(_ value: T?, _ message: String) -> T {
         guard let value else { fatalError(message) }
         return value
+    }
+
+    private static func assertAverageOnlySources() {
+        let repository = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let paths = [
+            "May/Networking/AppAPIClient.swift",
+            "May/Models/PerformanceTestFlow.swift",
+            "May/Screens/DIYBuildView.swift"
+        ]
+        let forbidden = [
+            "lowFPS",
+            "maximumFPS",
+            "confidence",
+            "bottleneck",
+            "sourceFetchedAt",
+            "smoothness"
+        ]
+        for path in paths {
+            let source = try! String(
+                contentsOf: repository.appendingPathComponent(path),
+                encoding: .utf8
+            )
+            for term in forbidden {
+                assertEqual(
+                    source.contains(term),
+                    false,
+                    "Performance sources must not expose \(term)."
+                )
+            }
+        }
     }
 }

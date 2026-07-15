@@ -87,21 +87,11 @@ enum PerformanceEstimateStatus: String, Equatable {
 struct GamePerformanceResult: Equatable {
     let gameID: String
     let averageFPS: Int
-    let lowFPS: Int
-    let maximumFPS: Int
-    let bottleneck: String?
-    let bottleneckPercent: Int?
-    let sourceFetchedAt: String
 }
 
 struct PerformanceEstimatePayload: Equatable {
     let status: PerformanceEstimateStatus
     let averageFPS: Int?
-    let lowFPS: Int?
-    let maximumFPS: Int?
-    let bottleneck: String?
-    let bottleneckPercent: Int?
-    let sourceFetchedAt: String?
     let missingGames: [String]
     let gameResults: [GamePerformanceResult]
 }
@@ -131,11 +121,6 @@ enum PerformanceLoadState: Equatable {
 struct PerformanceTestResult: Equatable {
     let resolution: String
     let averageFPS: String
-    let lowFPS: String
-    let maximumFPS: String
-    let smoothness: String
-    let bottleneck: String
-    let sourceFetchedAt: String
     let missingGameNames: [String]
     let gameResults: [GamePerformanceResult]
 }
@@ -227,10 +212,7 @@ struct PerformanceTestFlow: Equatable {
         activeRequestToken = nil
         guard
             payload.status != .needsMoreData,
-            let averageFPS = payload.averageFPS,
-            let lowFPS = payload.lowFPS,
-            let maximumFPS = payload.maximumFPS,
-            let sourceFetchedAt = payload.sourceFetchedAt
+            let averageFPS = payload.averageFPS
         else {
             loadState = .empty
             result = nil
@@ -240,11 +222,6 @@ struct PerformanceTestFlow: Equatable {
         result = PerformanceTestResult(
             resolution: request.resolutionTitle,
             averageFPS: "\(averageFPS) FPS",
-            lowFPS: "\(lowFPS) FPS",
-            maximumFPS: "\(maximumFPS) FPS",
-            smoothness: Self.smoothness(for: averageFPS),
-            bottleneck: Self.bottleneckText(payload.bottleneck, percent: payload.bottleneckPercent),
-            sourceFetchedAt: sourceFetchedAt,
             missingGameNames: payload.missingGames.map { PerformanceGame.name(for: $0) },
             gameResults: payload.gameResults
         )
@@ -273,23 +250,4 @@ struct PerformanceTestFlow: Equatable {
         result = nil
     }
 
-    private static func bottleneckText(_ value: String?, percent: Int?) -> String {
-        let name: String
-        switch value {
-        case "cpu": name = "CPU"
-        case "gpu": name = "显卡"
-        case "balanced": name = "均衡"
-        default: name = "暂无明显瓶颈"
-        }
-        return percent.map { "\(name) \($0)%" } ?? name
-    }
-
-    static func smoothness(for averageFPS: Int) -> String {
-        switch averageFPS {
-        case 120...: "非常流畅"
-        case 60...: "流畅"
-        case 30...: "基本流畅"
-        default: "不够流畅"
-        }
-    }
 }

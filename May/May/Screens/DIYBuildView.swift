@@ -312,7 +312,7 @@ private struct PerformanceResultStep: View {
             VStack(alignment: .leading, spacing: 14) {
                 resultContent
 
-                Text("结果为中等画质下的性能估算，实际表现会受驱动、散热、内存、游戏版本和画质设置影响。")
+                Text("结果为统一测试条件下的估算，实际表现会受游戏版本、驱动、散热、内存和后台程序影响。")
                     .font(.appCaption)
                     .foregroundStyle(AppTheme.secondaryText)
                     .lineSpacing(3)
@@ -358,15 +358,12 @@ private struct PerformanceResultStep: View {
                 SoftCard(radius: 18) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("\(result.resolution) · 中等画质")
+                            Text("\(result.resolution) · 高画质")
                                 .font(.appSubheadline)
                                 .foregroundStyle(AppTheme.secondaryText)
                             Text("平均 \(result.averageFPS)")
                                 .font(.system(size: 26, weight: .bold))
                                 .foregroundStyle(AppTheme.primaryText)
-                            Text("最低 \(result.lowFPS) · 最高 \(result.maximumFPS)")
-                                .font(.appCaption)
-                                .foregroundStyle(AppTheme.secondaryText)
                         }
 
                         Spacer()
@@ -380,27 +377,13 @@ private struct PerformanceResultStep: View {
                     .padding(18)
                 }
 
-                SoftCard(radius: 16) {
-                    VStack(spacing: 16) {
-                        PerformanceMetricRow(title: "屏幕分辨率", value: result.resolution, detail: "按你选择的显示器目标估算")
-                        PerformanceMetricRow(title: "测试游戏", value: flow.selectedGamesDisplay, detail: flow.selectedGames.map(\.name).joined(separator: "、"))
-                        PerformanceMetricRow(title: "流畅度评价", value: result.smoothness, detail: "根据平均帧率判断")
-                        PerformanceMetricRow(title: "性能瓶颈", value: result.bottleneck, detail: "来自当前组合的估算结果")
-                        PerformanceMetricRow(title: "数据更新时间", value: result.sourceFetchedAt, detail: "结果所用数据的最早采集时间")
-                    }
-                    .padding(18)
-                }
-
                 ForEach(result.gameResults, id: \.gameID) { game in
                     SoftCard(radius: 16) {
                         VStack(alignment: .leading, spacing: 10) {
                             Text(PerformanceGame.name(for: game.gameID))
                                 .font(.appSubheadline)
                                 .foregroundStyle(AppTheme.primaryText)
-                            Text("平均 \(game.averageFPS) FPS · 最低 \(game.lowFPS) FPS · 最高 \(game.maximumFPS) FPS")
-                                .font(.appCaption)
-                                .foregroundStyle(AppTheme.secondaryText)
-                            Text("瓶颈：\(bottleneckText(game)) · 数据时间：\(game.sourceFetchedAt)")
+                            Text("平均 \(game.averageFPS) FPS")
                                 .font(.appCaption)
                                 .foregroundStyle(AppTheme.secondaryText)
                         }
@@ -422,17 +405,6 @@ private struct PerformanceResultStep: View {
                 }
             }
         }
-    }
-
-    private func bottleneckText(_ result: GamePerformanceResult) -> String {
-        let name: String
-        switch result.bottleneck {
-        case "cpu": name = "CPU"
-        case "gpu": name = "显卡"
-        case "balanced": name = "均衡"
-        default: name = "暂无明显瓶颈"
-        }
-        return result.bottleneckPercent.map { "\(name) \($0)%" } ?? name
     }
 }
 
@@ -518,33 +490,6 @@ private struct PerformanceGameCard: View {
         .accessibilityLabel(game.name)
         .accessibilityValue(isSelected ? "已选择" : "未选择")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-}
-
-private struct PerformanceMetricRow: View {
-    let title: String
-    let value: String
-    let detail: String
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.appSubheadline)
-                    .foregroundStyle(AppTheme.primaryText)
-                Text(detail)
-                    .font(.appCaption)
-                    .foregroundStyle(AppTheme.secondaryText)
-                    .lineLimit(2)
-            }
-
-            Spacer()
-
-            Text(value)
-                .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(AppTheme.primaryText)
-                .frame(minWidth: 66, alignment: .trailing)
-        }
     }
 }
 
