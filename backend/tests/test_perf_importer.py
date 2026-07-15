@@ -82,6 +82,21 @@ def test_import_reads_reviewed_medium_record(tmp_path) -> None:
     assert records[0].import_batch == "reviewed-20260712"
 
 
+def test_import_accepts_average_only_when_range_is_unavailable(tmp_path) -> None:
+    payload = batch_payload()
+    for record in payload["records"]:
+        record.pop("minimum_fps")
+        record.pop("maximum_fps")
+        record["range_unavailable"] = True
+
+    records = read_performance_batch(write_batch(tmp_path / "average.json", payload))
+
+    assert all(
+        row.minimum_fps == row.average_fps == row.maximum_fps
+        for row in records
+    )
+
+
 def test_bundled_pc_builds_reference_is_importable() -> None:
     records = read_performance_batch(DATA_PATH)
 
@@ -95,6 +110,21 @@ def test_bundled_pc_builds_reference_is_importable() -> None:
         317,
         210,
         117,
+        465,
+        397,
+        317,
+        365,
+        231,
+        121,
+        149,
+        101,
+        58,
+        82,
+        61,
+        41,
+        208,
+        185,
+        157,
     ]
     assert records[0].source_url == EXPECTED_URL
     assert records[3].source_url.endswith(
@@ -102,6 +132,8 @@ def test_bundled_pc_builds_reference_is_importable() -> None:
         "cyberpunk-2077/1920x1080/"
     )
     assert records[6].game_id == "cs2"
+    assert records[9].game_id == "valorant"
+    assert records[9].minimum_fps == records[9].average_fps
 
 
 def test_import_uses_each_record_collection_time(tmp_path) -> None:

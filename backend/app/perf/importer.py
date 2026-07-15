@@ -83,9 +83,17 @@ def read_performance_batch(
         if values["source_url"] != expected_url:
             raise ValueError("source identity does not match reviewed manifest")
 
-        minimum_fps = _required_int(record, "minimum_fps")
         average_fps = _required_int(record, "average_fps")
-        maximum_fps = _required_int(record, "maximum_fps")
+        range_unavailable = record.get("range_unavailable", False)
+        if not isinstance(range_unavailable, bool):
+            raise ValueError("range_unavailable must be a boolean")
+        if range_unavailable:
+            if "minimum_fps" in record or "maximum_fps" in record:
+                raise ValueError("unavailable FPS range must be omitted")
+            minimum_fps = maximum_fps = average_fps
+        else:
+            minimum_fps = _required_int(record, "minimum_fps")
+            maximum_fps = _required_int(record, "maximum_fps")
         if not 0 < minimum_fps <= average_fps <= maximum_fps <= 2000:
             raise ValueError("invalid FPS ordering or range")
 
