@@ -40,7 +40,7 @@ def catalog_component(component_id: str, category: str) -> CatalogComponent:
         name=component_id,
         brand="Test",
         detail_raw="",
-        specs={},
+        specs={"perf_index": 100 if category == "cpu" else 40},
     )
 
 
@@ -232,7 +232,7 @@ def test_ready_response_contains_average_fps_only() -> None:
     }
 
 
-def test_partial_and_multi_game_average_keep_requested_order() -> None:
+def test_multi_game_average_keeps_requested_order_with_ai_fallback() -> None:
     def setup(session):
         seed_active_model(
             session,
@@ -245,15 +245,19 @@ def test_partial_and_multi_game_average_keep_requested_order() -> None:
     client = make_client(["cyberpunk-2077"], setup=setup)
 
     ready = post_estimate(client, ["valorant", "cyberpunk-2077"]).json()
-    partial = post_estimate(client, ["cyberpunk-2077", "cs2"]).json()
+    fallback = post_estimate(client, ["cyberpunk-2077", "cs2"]).json()
 
     assert ready["average_fps"] == 124
     assert [row["game"] for row in ready["game_results"]] == [
         "valorant",
         "cyberpunk-2077",
     ]
-    assert partial["status"] == "partial"
-    assert partial["missing_games"] == ["cs2"]
+    assert fallback["status"] == "ready"
+    assert fallback["missing_games"] == []
+    assert [row["game"] for row in fallback["game_results"]] == [
+        "cyberpunk-2077",
+        "cs2",
+    ]
 
 
 def test_elden_ring_result_is_capped_at_60_fps() -> None:
@@ -309,17 +313,19 @@ def test_unknown_hardware_or_game_is_rejected() -> None:
     assert post_estimate(client, ["cs2"], cpu="gpu-mid").status_code == 422
 
 
-def test_missing_profile_or_inactive_model_needs_more_data() -> None:
+def test_missing_profile_or_inactive_model_uses_ai_fallback() -> None:
     missing_profile = post_estimate(
         make_client(include_profiles=False),
         ["cs2"],
     ).json()
     inactive_model = post_estimate(make_client(), ["cs2"]).json()
 
-    assert missing_profile["status"] == "needs_more_data"
-    assert missing_profile["missing_data"] == ["cpu_profile", "gpu_profile"]
-    assert inactive_model["status"] == "needs_more_data"
-    assert inactive_model["missing_games"] == ["cs2"]
+    assert missing_profile["status"] == "ready"
+    assert missing_profile["average_fps"] == 210
+    assert missing_profile["missing_data"] == []
+    assert inactive_model["status"] == "ready"
+    assert inactive_model["average_fps"] == 210
+    assert inactive_model["advice"].startswith("平均帧为 AI 估算值")
 
 
 def test_pc_builds_exact_rows_are_used_before_the_model() -> None:

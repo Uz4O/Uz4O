@@ -13,6 +13,10 @@ from app.perf.anchor_repository import (
     list_axis_anchors,
 )
 from app.perf.estimator import LimitPoint, predict_average_fps
+from app.perf.generated_estimator import (
+    generated_average_fps,
+    hardware_performance_score,
+)
 from app.perf.models import GamePerformanceAnchor, HardwarePerformanceProfile
 from app.perf.profiles import (
     APPROVED_GAME_PROFILES,
@@ -83,23 +87,28 @@ def estimate_performance(
         if unresolved_games
         else {}
     )
-    missing_data = []
-    if unresolved_games and request.hardware.cpu not in profiles:
-        missing_data.append("cpu_profile")
-    if unresolved_games and request.hardware.gpu not in profiles:
-        missing_data.append("gpu_profile")
-    if not missing_data and unresolved_games:
-        cpu_profile = profiles[request.hardware.cpu]
-        gpu_profile = profiles[request.hardware.gpu]
-    else:
-        cpu_profile = gpu_profile = None
-    if cpu_profile is not None and (
-        cpu_profile.category != "cpu" or gpu_profile.category != "gpu"
-    ):
+    cpu_profile = profiles.get(request.hardware.cpu)
+    gpu_profile = profiles.get(request.hardware.gpu)
+    if cpu_profile is not None and cpu_profile.category != "cpu":
         raise HTTPException(status_code=422, detail="硬件性能档案类型不匹配")
+    if gpu_profile is not None and gpu_profile.category != "gpu":
+        raise HTTPException(status_code=422, detail="硬件性能档案类型不匹配")
+    cpu_generated_score = hardware_performance_score(
+        cpu.id,
+        cpu.category,
+        cpu.name,
+        cpu.specs,
+    )
+    gpu_generated_score = hardware_performance_score(
+        gpu.id,
+        gpu.category,
+        gpu.name,
+        gpu.specs,
+    )
 
     game_results = []
     missing_games = []
+    generated_used = False
     for game_id in requested_games:
         exact = exact_by_game.get(game_id)
         if exact is not None:
@@ -107,29 +116,52 @@ def estimate_performance(
                 GamePerfEstimate(game=game_id, average_fps=exact.average_fps)
             )
             continue
-        if missing_data:
-            missing_games.append(game_id)
-            continue
-        result = _estimate_game(
-            session,
-            game_id,
-            request.resolution,
-            cpu_profile,
-            gpu_profile,
-        )
+        result = None
+        if cpu_profile is not None and gpu_profile is not None:
+            result = _estimate_game(
+                session,
+                game_id,
+                request.resolution,
+                cpu_profile,
+                gpu_profile,
+            )
+        if (
+            result is None
+            and cpu_generated_score is not None
+            and gpu_generated_score is not None
+        ):
+            result = GamePerfEstimate(
+                game=game_id,
+                average_fps=generated_average_fps(
+                    game_id,
+                    request.resolution,
+                    cpu_generated_score,
+                    gpu_generated_score,
+                ),
+            )
+            generated_used = True
         if result is None:
             missing_games.append(game_id)
         else:
             game_results.append(result)
+    missing_data = []
+    if missing_games and cpu_generated_score is None and cpu_profile is None:
+        missing_data.append("cpu_profile")
+    if missing_games and gpu_generated_score is None and gpu_profile is None:
+        missing_data.append("gpu_profile")
     if not game_results:
         return _no_data_response(missing_games, missing_data)
     return PerfEstimateResponse(
         status="partial" if missing_games or missing_data else "ready",
         average_fps=round(mean(row.average_fps for row in game_results)),
         advice=(
-            "第三方网站中等画质估算，实际帧数会因游戏设置和版本变化。"
-            if exact_rows
-            else "高画质，支持时开启质量档超分和标准帧生成。"
+            "平均帧为 AI 估算值，实际会受画质、版本和散热影响。"
+            if generated_used
+            else (
+                "第三方网站中等画质估算，实际帧数会因游戏设置和版本变化。"
+                if exact_rows
+                else "高画质，支持时开启质量档超分和标准帧生成。"
+            )
         ),
         missing_data=missing_data,
         missing_games=missing_games,
