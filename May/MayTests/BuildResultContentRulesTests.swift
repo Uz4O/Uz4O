@@ -20,6 +20,8 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, "Text(part.model)", "The component model should be shown directly.")
         assertContains(viewSource, "Text(part.price)", "The component price should be shown directly.")
         assertContains(viewSource, "Text(part.condition)", "The new or used condition should be shown directly.")
+        assertContains(viewSource, ".foregroundStyle(.black)", "Part symbols should be black.")
+        assertContains(viewSource, ".background(Color.white", "Part icon tiles should be white.")
         assertContains(
             modelSource,
             "name: details.direction.resultTitle",
@@ -38,6 +40,11 @@ struct BuildResultContentRulesTests {
         assertNotContains(viewSource, "part.reason", "Selection explanations should not appear in the result list.")
         assertNotContains(viewSource, "SoftCard", "The hero and parts list should not use the old card containers.")
         assertNotContains(viewSource, "复制清单", "The removed copy action should not return.")
+        assertNotContains(
+            viewSource,
+            ".background(Color.black, in: RoundedRectangle(cornerRadius: 10))",
+            "Part icon tiles should no longer use a black background."
+        )
         assertNotContains(viewSource, "SummaryBadge(title: \"预算\"", "The user's original budget should not be repeated.")
         assertNotContains(
             modelSource,

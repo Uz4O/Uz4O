@@ -310,12 +310,15 @@ private struct AIBuildFlowView: View {
         ZStack {
             AIBuildView(
                 onBack: onClose,
-                onComplete: { response = $0 }
+                onComplete: { response in
+                    self.response = response
+                    selectedOption = shouldSkipOptionSelection(for: response) ? response.options.first : nil
+                }
             )
             .allowsHitTesting(response == nil)
             .accessibilityHidden(response != nil)
 
-            if let response {
+            if let response, !shouldSkipOptionSelection(for: response) {
                 BuildOptionsView(
                     response: response,
                     onBack: { self.response = nil },
@@ -331,13 +334,24 @@ private struct AIBuildFlowView: View {
             if let selectedOption {
                 BuildResultView(
                     plan: selectedOption.buildPlan,
-                    onBack: { self.selectedOption = nil }
+                    onBack: {
+                        self.selectedOption = nil
+                        if let response = self.response {
+                            if shouldSkipOptionSelection(for: response) {
+                                self.response = nil
+                            }
+                        }
+                    }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(AppTheme.background.ignoresSafeArea())
                 .zIndex(2)
             }
         }
+    }
+
+    private func shouldSkipOptionSelection(for response: BuildOptionsResponseDTO) -> Bool {
+        AIBuildFlowRules.shouldSkipOptionSelection(optionCount: response.options.count)
     }
 }
 

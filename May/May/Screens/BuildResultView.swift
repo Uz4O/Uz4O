@@ -103,9 +103,13 @@ private struct ResultPartRow: View {
         HStack(spacing: 14) {
             Image(systemName: part.icon)
                 .font(.system(size: 17, weight: .bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
                 .frame(width: 42, height: 42)
-                .background(Color.black, in: RoundedRectangle(cornerRadius: 10))
+                .background(Color.white, in: RoundedRectangle(cornerRadius: 10))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppTheme.border, lineWidth: 1)
+                )
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack(spacing: 7) {

@@ -85,6 +85,10 @@ struct AIBuildLowBudgetDefaults: Equatable {
 enum AIBuildFlowRules {
     static let lowBudgetThreshold = 4000
 
+    static func shouldSkipOptionSelection(optionCount: Int) -> Bool {
+        optionCount == 1
+    }
+
     static func visibleSteps(budget: Int, ownedParts: Set<AIBuildOwnedPart>) -> [AIBuildStep] {
         usesLowBudgetMode(budget: budget, ownedParts: ownedParts)
             ? [.budget, .scenario]
