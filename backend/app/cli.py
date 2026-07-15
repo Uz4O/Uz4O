@@ -36,9 +36,11 @@ from app.perf.anchor_repository import (
     upsert_game_performance_anchors,
     upsert_hardware_performance_profiles,
 )
+from app.perf.calibration import calibrate_available_models
 from app.perf.importer import DEFAULT_MANIFEST_PATH, read_performance_batch
 from app.perf.models import GamePerformanceAnchor, HardwarePerformanceProfile
 from app.perf.repository import upsert_performance_estimates
+from app.perf.readiness import build_estimator_readiness, write_estimator_readiness
 
 
 def _non_negative_int(value: str) -> int:
@@ -111,6 +113,12 @@ def main() -> None:
 
     import_model_inputs_parser = subparsers.add_parser("import-fps-model-inputs")
     import_model_inputs_parser.add_argument("json_path", type=Path)
+
+    calibrate_models_parser = subparsers.add_parser("calibrate-fps-models")
+    calibrate_models_parser.add_argument("--version", required=True)
+
+    check_model_parser = subparsers.add_parser("check-fps-model-readiness")
+    check_model_parser.add_argument("--json", type=Path, required=True)
 
     args = parser.parse_args()
     if args.command == "seed-hardware":
@@ -317,6 +325,23 @@ def main() -> None:
         print(
             f"Imported {profile_count} reviewed hardware profiles and "
             f"{anchor_count} reviewed FPS anchors."
+        )
+    if args.command == "calibrate-fps-models":
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            summary = calibrate_available_models(session, args.version)
+        print(
+            f"Activated {summary.activated_count} of "
+            f"{summary.evaluated_count} calibratable FPS models."
+        )
+    if args.command == "check-fps-model-readiness":
+        session_factory = create_session_factory(Settings())
+        with session_factory() as session:
+            readiness = build_estimator_readiness(session)
+        write_estimator_readiness(readiness, args.json)
+        print(
+            "FPS model readiness: "
+            + ("ready" if readiness.ready else "not_ready")
         )
 
 def _read_component_ids(path: Path) -> list[str]:

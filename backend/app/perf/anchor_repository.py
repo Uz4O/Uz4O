@@ -99,6 +99,7 @@ def list_axis_anchors(
     resolution: str,
     render_mode: str,
     axis: str,
+    model_version: Optional[str] = None,
 ) -> List[GamePerformanceAnchor]:
     statement = select(GamePerformanceAnchor).where(
         GamePerformanceAnchor.game_id == game_id,
@@ -107,6 +108,10 @@ def list_axis_anchors(
         GamePerformanceAnchor.axis == axis,
         GamePerformanceAnchor.sample_role == "fit",
     )
+    if model_version is not None:
+        statement = statement.where(
+            GamePerformanceAnchor.import_batch == model_version
+        )
     return list(session.scalars(statement))
 
 
@@ -115,6 +120,7 @@ def list_validation_anchors(
     game_id: str,
     resolution: str,
     render_mode: str,
+    model_version: Optional[str] = None,
 ) -> List[GamePerformanceAnchor]:
     statement = select(GamePerformanceAnchor).where(
         GamePerformanceAnchor.game_id == game_id,
@@ -122,6 +128,10 @@ def list_validation_anchors(
         GamePerformanceAnchor.render_mode == render_mode,
         GamePerformanceAnchor.sample_role == "validation",
     )
+    if model_version is not None:
+        statement = statement.where(
+            GamePerformanceAnchor.import_batch == model_version
+        )
     return list(session.scalars(statement))
 
 

@@ -285,3 +285,23 @@ def test_import_fps_model_inputs_commits_one_reviewed_bundle(
         assert session.scalar(
             select(func.count()).select_from(GamePerformanceAnchor)
         ) == 1
+
+    invoke(
+        monkeypatch,
+        "calibrate-fps-models",
+        "--version",
+        "self-measured-20260715",
+    )
+    assert capsys.readouterr().out == (
+        "Activated 0 of 0 calibratable FPS models.\n"
+    )
+
+    report_path = tmp_path / "fps-readiness.json"
+    invoke(
+        monkeypatch,
+        "check-fps-model-readiness",
+        "--json",
+        str(report_path),
+    )
+    assert capsys.readouterr().out == "FPS model readiness: not_ready\n"
+    assert json.loads(report_path.read_text(encoding="utf-8"))["ready"] is False
