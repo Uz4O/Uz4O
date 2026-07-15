@@ -6,7 +6,6 @@ from app.api.builds import router as build_router
 from app.api.catalog import router as catalog_router
 from app.api.community import router as community_router
 from app.api.compat import router as compat_router
-from app.api.guide import router as guide_router
 from app.api.health import create_health_router
 from app.api.ops import router as ops_router
 from app.api.perf import router as perf_router
@@ -82,7 +81,6 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(catalog_router)
     app.include_router(community_router)
     app.include_router(compat_router)
-    app.include_router(guide_router)
     app.include_router(ops_router)
     app.include_router(profile_router)
     app.include_router(review_router)

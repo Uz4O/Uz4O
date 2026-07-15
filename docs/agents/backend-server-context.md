@@ -56,7 +56,6 @@ Important backend modules:
 - `backend/app/review`: quote/config risk review.
 - `backend/app/upgrade`: upgrade advice.
 - `backend/app/perf`: performance estimates.
-- `backend/app/guide`: guide content.
 - `backend/app/community`: community APIs; do not expose in first release unless asked.
 - `backend/app/core`: config, database, security headers, rate limits.
 

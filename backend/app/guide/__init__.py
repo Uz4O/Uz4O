@@ -1,1 +1,0 @@
-"""Assembly guide content service."""

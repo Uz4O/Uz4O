@@ -119,7 +119,6 @@ private enum MainRoute: Hashable {
     case upgrade
     case configReview
     case compatibility
-    case guide
     case buildResult
     case contactComplaint
 }
@@ -163,7 +162,6 @@ private struct MainTabView: View {
                     onOpenDIY: { onPresentFullScreen(.diy(.home)) },
                     onOpenConfigReview: { homePath.append(.configReview) },
                     onOpenUpgrade: { homePath.append(.upgrade) },
-                    onOpenGuide: { homePath.append(.guide) },
                     onOpenAestheticStyle: { styleID in
                         onPresentFullScreen(.aestheticBuild(styleID: styleID))
                     }
@@ -269,10 +267,6 @@ private struct MainTabView: View {
         case .compatibility:
             CompatibilityView(onBack: { pop(path) })
                 .toolbar(.hidden, for: .navigationBar)
-        case .guide:
-            GuideView(onBack: { pop(path) })
-                .toolbar(.hidden, for: .navigationBar)
-                .toolbar(.hidden, for: .tabBar)
         case .buildResult:
             BuildResultView(
                 plan: AppMockData.samplePlan,
@@ -300,6 +294,8 @@ private struct MainTabView: View {
 }
 
 private struct AIBuildFlowView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     let returnTarget: BuildResultReturnTarget
     let onClose: () -> Void
 
@@ -311,8 +307,10 @@ private struct AIBuildFlowView: View {
             AIBuildView(
                 onBack: onClose,
                 onComplete: { response in
-                    self.response = response
-                    selectedOption = shouldSkipOptionSelection(for: response) ? response.options.first : nil
+                    withAnimation(resultAnimation) {
+                        self.response = response
+                        selectedOption = shouldSkipOptionSelection(for: response) ? response.options.first : nil
+                    }
                 }
             )
             .allowsHitTesting(response == nil)
@@ -321,13 +319,22 @@ private struct AIBuildFlowView: View {
             if let response, !shouldSkipOptionSelection(for: response) {
                 BuildOptionsView(
                     response: response,
-                    onBack: { self.response = nil },
-                    onSelect: { selectedOption = $0 }
+                    onBack: {
+                        withAnimation(resultAnimation) {
+                            self.response = nil
+                        }
+                    },
+                    onSelect: { option in
+                        withAnimation(resultAnimation) {
+                            selectedOption = option
+                        }
+                    }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(AppTheme.background.ignoresSafeArea())
                 .allowsHitTesting(selectedOption == nil)
                 .accessibilityHidden(selectedOption != nil)
+                .transition(resultTransition)
                 .zIndex(1)
             }
 
@@ -335,16 +342,19 @@ private struct AIBuildFlowView: View {
                 BuildResultView(
                     plan: selectedOption.buildPlan,
                     onBack: {
-                        self.selectedOption = nil
-                        if let response = self.response {
-                            if shouldSkipOptionSelection(for: response) {
-                                self.response = nil
+                        withAnimation(resultAnimation) {
+                            self.selectedOption = nil
+                            if let response = self.response {
+                                if shouldSkipOptionSelection(for: response) {
+                                    self.response = nil
+                                }
                             }
                         }
                     }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(AppTheme.background.ignoresSafeArea())
+                .transition(resultTransition)
                 .zIndex(2)
             }
         }
@@ -352,6 +362,20 @@ private struct AIBuildFlowView: View {
 
     private func shouldSkipOptionSelection(for response: BuildOptionsResponseDTO) -> Bool {
         AIBuildFlowRules.shouldSkipOptionSelection(optionCount: response.options.count)
+    }
+
+    private var resultAnimation: Animation {
+        reduceMotion ? .easeOut(duration: 0.18) : .spring(response: 0.52, dampingFraction: 0.86)
+    }
+
+    private var resultTransition: AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .asymmetric(
+            insertion: .opacity
+                .combined(with: .scale(scale: 0.96, anchor: .bottom))
+                .combined(with: .move(edge: .bottom)),
+            removal: .opacity
+        )
     }
 }
 

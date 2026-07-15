@@ -6,7 +6,6 @@ struct HomeView: View {
     let onOpenDIY: () -> Void
     let onOpenConfigReview: () -> Void
     let onOpenUpgrade: () -> Void
-    let onOpenGuide: () -> Void
     let onOpenAestheticStyle: (String) -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
@@ -53,16 +52,6 @@ struct HomeView: View {
                 icon: "arrow.up.right",
                 bullets: ["定位升级短板", "排序更换优先级", "匹配预算方案"],
                 action: onOpenUpgrade
-            ),
-            HomeDashboardFeature(
-                id: "guide",
-                title: "装机指南",
-                subtitle: "按步骤了解装机流程",
-                buttonTitle: "查看指南",
-                heroImage: "HomeHeroGuideBook",
-                icon: "book.closed",
-                bullets: ["装机前准备", "八大件认识", "常见问题答疑"],
-                action: onOpenGuide
             )
         ]
     }
@@ -218,8 +207,6 @@ private struct HomeHeroCard: View {
             return (cardWidth * 0.36, 236)
         case "upgrade":
             return (cardWidth * 0.40, 232)
-        case "guide":
-            return (cardWidth * 0.34, 236)
         default:
             return (cardWidth * 0.42, 242)
         }
@@ -393,10 +380,8 @@ private struct HomeFeatureSelector: View {
             return "性能测试"
         case "configReview":
             return "配置排雷"
-        case "upgrade":
-            return "升级建议"
         default:
-            return "装机指南"
+            return feature.title
         }
     }
 }
@@ -531,7 +516,6 @@ private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
         onOpenDIY: {},
         onOpenConfigReview: {},
         onOpenUpgrade: {},
-        onOpenGuide: {},
         onOpenAestheticStyle: { _ in }
     )
 }

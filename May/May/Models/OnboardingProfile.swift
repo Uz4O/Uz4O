@@ -12,7 +12,6 @@ enum AppScreen: Hashable {
     case upgrade
     case configReview
     case compatibility
-    case guide
     case diy
     case buildResult
 }
@@ -57,7 +56,6 @@ enum BuildPreference: String, CaseIterable, Identifiable {
 enum HomeFeatureKind: String {
     case aiBuild
     case configReview
-    case guide
     case builds
     case upgrade
     case compatibility
@@ -261,7 +259,6 @@ struct OnboardingProfile: Equatable {
             .diy,
             .configReview,
             .upgrade,
-            .guide,
             .compatibility
         ]
     }
@@ -287,13 +284,6 @@ private extension HomeFeatureDisplay {
         title: "配置排雷",
         subtitle: "判断配置能不能买",
         icon: "doc.text.magnifyingglass"
-    )
-
-    static let guide = HomeFeatureDisplay(
-        kind: .guide,
-        title: "装机指南",
-        subtitle: "按步骤了解装机流程",
-        icon: "book.closed"
     )
 
     static let upgrade = HomeFeatureDisplay(

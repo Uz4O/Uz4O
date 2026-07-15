@@ -3,6 +3,8 @@ import SwiftUI
 struct AIBuildView: View {
     typealias LoadOptions = (Int, String, [String]) async throws -> BuildOptionsResponseDTO
 
+    private let minimumGenerationDuration: TimeInterval = 2.4
+
     @State private var currentStep: AIBuildStep = .budget
     @State private var isChangingStep = false
     @State private var isSubmitting = false
@@ -165,8 +167,15 @@ struct AIBuildView: View {
             )
             .padding(.horizontal, AppTheme.screenPadding)
             .padding(.bottom, 18)
+
+            if isSubmitting {
+                AIBuildGeneratingView()
+                    .transition(.opacity.combined(with: .scale(scale: 0.98)))
+                    .zIndex(2)
+            }
         }
         .animation(.easeInOut(duration: 0.18), value: currentStep)
+        .animation(.easeOut(duration: 0.28), value: isSubmitting)
         .onAppear(perform: clampCapacitySelections)
         .onChange(of: budget) { _, _ in
             clampCapacitySelections()
@@ -310,15 +319,20 @@ struct AIBuildView: View {
         let requestBudget = Int(budget)
         let requestUseCase = selectedUseCase
         let requestGames = selectedGames.sorted()
+        let minimumGenerationEnd = Date().addingTimeInterval(minimumGenerationDuration)
         isSubmitting = true
 
         generationTask = Task {
             do {
                 let response = try await loadOptions(requestBudget, requestUseCase, requestGames)
+                let remainingDuration = minimumGenerationEnd.timeIntervalSinceNow
+                if remainingDuration > 0 {
+                    try await Task.sleep(nanoseconds: UInt64(remainingDuration * 1_000_000_000))
+                }
                 guard !Task.isCancelled else { return }
                 generationTask = nil
-                isSubmitting = false
                 onComplete(response)
+                isSubmitting = false
             } catch {
                 guard !Task.isCancelled else { return }
                 generationTask = nil
@@ -354,6 +368,121 @@ struct AIBuildView: View {
            let fallback = availableStorageSizeOptions.last {
             selectedStorageSize = fallback
         }
+    }
+}
+
+private struct AIBuildGeneratingView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var currentStage = 0
+    @State private var isPulsing = false
+
+    private let stages = [
+        ("slider.horizontal.3", "分析预算与用途"),
+        ("cpu", "匹配硬件组合"),
+        ("checkmark.shield", "检查预算与兼容性")
+    ]
+
+    var body: some View {
+        ZStack {
+            AppTheme.background
+                .ignoresSafeArea()
+
+            VStack(spacing: 28) {
+                ZStack {
+                    Circle()
+                        .stroke(AppTheme.primaryText.opacity(0.12), lineWidth: 2)
+                        .frame(width: 112, height: 112)
+                        .scaleEffect(isPulsing ? 1.12 : 0.94)
+                        .opacity(isPulsing ? 0.25 : 0.8)
+
+                    Circle()
+                        .fill(AppTheme.primaryText)
+                        .frame(width: 84, height: 84)
+                        .modifier(AppTheme.cardShadow)
+
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 31, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .scaleEffect(isPulsing ? 1.08 : 0.94)
+                }
+
+                VStack(spacing: 8) {
+                    Text("AI 正在为你生成配置")
+                        .font(.appTitle)
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    Text("正在根据你的选择寻找更合适的硬件组合")
+                        .font(.appBody)
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .multilineTextAlignment(.center)
+                }
+
+                VStack(spacing: 0) {
+                    ForEach(stages.indices, id: \.self) { index in
+                        HStack(spacing: 13) {
+                            Image(systemName: stageIcon(at: index))
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundStyle(index <= currentStage ? .white : AppTheme.mutedText)
+                                .frame(width: 30, height: 30)
+                                .background(
+                                    index <= currentStage ? AppTheme.primaryText : AppTheme.softSurface,
+                                    in: Circle()
+                                )
+
+                            Text(stages[index].1)
+                                .font(.appSubheadline)
+                                .foregroundStyle(index <= currentStage ? AppTheme.primaryText : AppTheme.secondaryText)
+
+                            Spacer()
+
+                            if index == currentStage {
+                                ProgressView()
+                                    .controlSize(.small)
+                                    .tint(AppTheme.primaryText)
+                            }
+                        }
+                        .padding(.horizontal, 18)
+                        .frame(height: 54)
+
+                        if index < stages.count - 1 {
+                            Divider()
+                                .padding(.leading, 61)
+                        }
+                    }
+                }
+                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(AppTheme.border, lineWidth: 1)
+                )
+                .modifier(AppTheme.cardShadow)
+            }
+            .padding(.horizontal, 32)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("AI 正在生成配置方案，\(stages[currentStage].1)")
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                isPulsing = true
+            }
+        }
+        .task {
+            for stage in 1..<stages.count {
+                do {
+                    try await Task.sleep(nanoseconds: 700_000_000)
+                } catch {
+                    return
+                }
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    currentStage = stage
+                }
+            }
+        }
+    }
+
+    private func stageIcon(at index: Int) -> String {
+        index < currentStage ? "checkmark" : stages[index].0
     }
 }
 

@@ -5,14 +5,14 @@ struct OnboardingProfileRulesTests {
     static func main() {
         assertEqual(
             OnboardingProfile.skipped.toolFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            ["游戏性能测试", "配置排雷", "升级建议", "兼容性检查"],
             "Skipped users should see the default tools priority."
         )
 
         let onboardingProfile = OnboardingProfile()
         assertEqual(
             onboardingProfile.toolFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            ["游戏性能测试", "配置排雷", "升级建议", "兼容性检查"],
             "Onboarding should keep the default tools priority."
         )
 
@@ -77,7 +77,7 @@ struct OnboardingProfileRulesTests {
 
         assertEqual(
             completedHardwareProfile.toolFeatureOrder.map(\.title),
-            ["游戏性能测试", "配置排雷", "升级建议", "装机指南", "兼容性检查"],
+            ["游戏性能测试", "配置排雷", "升级建议", "兼容性检查"],
             "Hardware selections should not change tool functions."
         )
 

@@ -40,7 +40,6 @@ Backend core directories:
 - `backend/app/review`
 - `backend/app/upgrade`
 - `backend/app/perf`
-- `backend/app/guide`
 - `backend/app/core`
 
 ## Important Product Principles
@@ -112,7 +111,7 @@ Backend core directories:
   - Authoritative summary of implemented backend capabilities, deployment state, verification, and remaining user-provided production configuration/data.
 
 - `backend/`
-  - FastAPI backend implementing auth/profile sync, hardware catalog, price ingest, compatibility rules, build generation, review, upgrade, performance, community, guide content, security checks, limits, and production health gates.
+  - FastAPI backend implementing auth/profile sync, hardware catalog, price ingest, compatibility rules, build generation, review, upgrade, performance, community, security checks, limits, and production health gates.
 
 ## Build and Verification
 

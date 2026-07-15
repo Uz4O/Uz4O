@@ -3,7 +3,6 @@ import SwiftUI
 struct ToolsView: View {
     let profile: OnboardingProfile
     let onOpenUpgrade: () -> Void
-    let onOpenGuide: () -> Void
     let onOpenDIY: () -> Void
     let onOpenConfigReview: () -> Void
     let onOpenCompatibility: () -> Void
@@ -47,8 +46,6 @@ struct ToolsView: View {
             return {}
         case .configReview:
             return onOpenConfigReview
-        case .guide:
-            return onOpenGuide
         case .builds:
             return {}
         case .upgrade:
@@ -68,7 +65,7 @@ private struct ToolsIntroCard: View {
                 .font(.system(size: 26, weight: .bold))
                 .foregroundStyle(AppTheme.primaryText)
 
-            Text("性能测试、配置排雷、升级建议和装机知识都放在这里。")
+            Text("性能测试、配置排雷、升级建议和兼容性检查都放在这里。")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(AppTheme.secondaryText)
                 .lineSpacing(3)
@@ -125,7 +122,6 @@ private struct ToolFeatureCard: View {
     ToolsView(
         profile: OnboardingProfile(),
         onOpenUpgrade: {},
-        onOpenGuide: {},
         onOpenDIY: {},
         onOpenConfigReview: {},
         onOpenCompatibility: {}

@@ -59,17 +59,6 @@ def test_high_cost_endpoint_returns_429_after_limit_is_exceeded() -> None:
     assert int(limited.headers["retry-after"]) > 0
 
 
-def test_content_endpoint_is_not_counted_as_high_cost() -> None:
-    client = make_client(max_requests=1)
-
-    assert client.get("/v1/guide").status_code == 200
-    assert client.get("/v1/guide").status_code == 200
-
-    payload = {"text": "i7-14700F + RTX4060 + H610 主板 + 500W 电源，商家报价 6999"}
-    assert client.post("/v1/review/analyze", json=payload).status_code == 200
-    assert client.post("/v1/review/analyze", json=payload).status_code == 429
-
-
 def test_sms_send_returns_429_after_limit_is_exceeded() -> None:
     client = make_client(max_requests=2)
     payload = {"phone": "13800138000"}
