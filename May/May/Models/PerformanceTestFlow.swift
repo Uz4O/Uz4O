@@ -51,7 +51,6 @@ struct PerformanceGame: Equatable, Identifiable {
     let name: String
     let mark: String
 
-    static let allGames = PerformanceGame(id: "all-games", name: "什么都玩", mark: "全部")
     static let valorant = PerformanceGame(id: "valorant", name: "瓦罗兰特", mark: "V")
     static let cyberpunk = PerformanceGame(id: "cyberpunk-2077", name: "赛博朋克2077", mark: "2077")
 
@@ -74,7 +73,7 @@ struct PerformanceGame: Equatable, Identifiable {
     ]
 
     static func name(for id: String) -> String {
-        ([allGames] + samples).first(where: { $0.id == id })?.name ?? id
+        samples.first(where: { $0.id == id })?.name ?? id
     }
 }
 
@@ -156,10 +155,6 @@ struct PerformanceTestFlow: Equatable {
         )
     }
 
-    var selectedGamesDisplay: String {
-        selectedGames == [.allGames] ? "全部 \(PerformanceGame.samples.count) 款" : "\(selectedGames.count) 款"
-    }
-
     mutating func goNext() {
         guard let next = PerformanceTestStep(rawValue: currentStep.rawValue + 1) else { return }
         currentStep = next
@@ -175,14 +170,11 @@ struct PerformanceTestFlow: Equatable {
     }
 
     mutating func toggleGame(_ game: PerformanceGame) {
-        if game == .allGames {
-            selectedGames = selectedGames == [.allGames] ? [.cyberpunk] : [.allGames]
-        } else if selectedGames.contains(game) {
+        if selectedGames.contains(game) {
             if selectedGames.count > 1 {
                 selectedGames.removeAll { $0 == game }
             }
         } else {
-            selectedGames.removeAll { $0 == .allGames }
             selectedGames.append(game)
         }
     }

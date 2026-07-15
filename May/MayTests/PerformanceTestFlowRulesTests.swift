@@ -11,21 +11,48 @@ struct PerformanceTestFlowRulesTests {
         assertEqual(PerformanceGame.samples.count, 15, "Only the approved real games should be collected.")
         assertEqual(PerformanceGame.samples.first?.name, "瓦罗兰特", "Game order should match the approved grid.")
         assertEqual(
+            PerformanceGame.samples.map(\.name).contains("什么都玩"),
+            false,
+            "The popular game grid should only contain real games."
+        )
+        assertEqual(
             PerformanceGame.samples.first(where: { $0.id == "call-of-duty-warzone" })?.name,
             "COD",
             "COD should map to Warzone while keeping the approved App label."
-        )
-        assertEqual(PerformanceGame.allGames.id, "all-games", "All games should be a separate aggregate selection.")
-        assertEqual(
-            PerformanceGame.samples.contains(PerformanceGame.allGames),
-            false,
-            "The aggregate selection must not be included in the 15 collected games."
         )
         var flow = PerformanceTestFlow()
         assertEqual(flow.currentStep, .hardware, "Performance test should begin with hardware selection.")
         assertEqual(flow.selectedResolution.title, "2K", "Default resolution should match the current result copy.")
         assertEqual(flow.selectedGames.map(\.id), ["cyberpunk-2077"], "Default game should use its canonical backend ID.")
         assertEqual(flow.result, nil, "No fixed demo result should exist before a backend response.")
+
+        let legacyResponse = """
+        {
+          "status": "ready",
+          "average_fps": 120,
+          "missing_data": [],
+          "game_results": [
+            {"game": "cyberpunk-2077", "average_fps": 120}
+          ]
+        }
+        """.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let decodedResponse = try! decoder.decode(
+            PerformanceEstimateResponseDTO.self,
+            from: legacyResponse
+        )
+        assertEqual(
+            decodedResponse.model.missingGames,
+            [],
+            "The App should accept the production response while missing_games is absent."
+        )
+        assertEqual(decodedResponse.model.averageFPS, 120, "The production average_fps key should decode.")
+        assertEqual(
+            decodedResponse.model.gameResults.first?.averageFPS,
+            120,
+            "The production per-game average_fps key should decode."
+        )
 
         let savedProfile = HardwareProfile(
             cpu: "i7-14700",
@@ -112,10 +139,6 @@ struct PerformanceTestFlowRulesTests {
         raceFlow.apply(response, for: activeRequest)
         assertEqual(raceFlow.result?.resolution, "1080P", "The active result must use its immutable request snapshot.")
 
-        var allGamesFlow = PerformanceTestFlow()
-        allGamesFlow.toggleGame(.allGames)
-        assertEqual(allGamesFlow.selectedGamesDisplay, "全部 15 款", "The aggregate selection should report the full approved scope.")
-
         flow.hardwareProfile.cpu = "不知道"
         assertEqual(flow.requestInput, nil, "Unknown exact hardware should stop before any network request.")
 
@@ -141,6 +164,7 @@ struct PerformanceTestFlowRulesTests {
             .deletingLastPathComponent()
         let paths = [
             "May/Networking/AppAPIClient.swift",
+            "May/Networking/PerformanceAPIModels.swift",
             "May/Models/PerformanceTestFlow.swift",
             "May/Screens/DIYBuildView.swift"
         ]

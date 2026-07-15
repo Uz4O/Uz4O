@@ -40,45 +40,6 @@ struct SMSResponse: Decodable {
     let debugCode: String?
 }
 
-struct PerformanceHardwareDTO: Encodable {
-    let cpu: String
-    let gpu: String
-}
-
-struct PerformanceEstimateRequestDTO: Encodable {
-    let hardware: PerformanceHardwareDTO
-    let resolution: String
-    let games: [String]
-}
-
-struct GamePerformanceResultDTO: Decodable {
-    let game: String
-    let averageFPS: Int
-
-    var model: GamePerformanceResult {
-        GamePerformanceResult(
-            gameID: game,
-            averageFPS: averageFPS
-        )
-    }
-}
-
-struct PerformanceEstimateResponseDTO: Decodable {
-    let status: String
-    let averageFPS: Int?
-    let missingGames: [String]
-    let gameResults: [GamePerformanceResultDTO]
-
-    var model: PerformanceEstimatePayload {
-        PerformanceEstimatePayload(
-            status: PerformanceEstimateStatus(rawValue: status) ?? .needsMoreData,
-            averageFPS: averageFPS,
-            missingGames: missingGames,
-            gameResults: gameResults.map(\.model)
-        )
-    }
-}
-
 struct AppAPIClient {
     let baseURL: URL
     private let transport: APITransport

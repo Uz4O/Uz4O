@@ -280,13 +280,6 @@ private struct TestConditionStep: View {
                     .padding(.top, 4)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 9), count: 3), spacing: 10) {
-                    PerformanceGameCard(
-                        game: .allGames,
-                        isSelected: selectedGames.contains(.allGames)
-                    ) {
-                        onToggle(.allGames)
-                    }
-
                     ForEach(PerformanceGame.samples) { game in
                         PerformanceGameCard(
                             game: game,
