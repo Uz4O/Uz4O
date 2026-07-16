@@ -1,6 +1,6 @@
 import re
 from math import pow
-from typing import Mapping, Optional
+from typing import Mapping, Optional, Tuple
 
 from app.catalog.rule_specs import get_rule_specs
 from app.perf.profiles import APPROVED_GAME_PROFILES, GameLoadType
@@ -38,6 +38,23 @@ def generated_average_fps(
     cpu_score: int,
     gpu_score: int,
 ) -> int:
+    cpu_limit, gpu_limit = generated_fps_limits(
+        game_id,
+        resolution,
+        cpu_score,
+        gpu_score,
+    )
+    estimated = min(cpu_limit, gpu_limit)
+    fps_cap = APPROVED_GAME_PROFILES[game_id].fps_cap
+    return min(estimated, fps_cap) if fps_cap is not None else estimated
+
+
+def generated_fps_limits(
+    game_id: str,
+    resolution: str,
+    cpu_score: int,
+    gpu_score: int,
+) -> Tuple[int, int]:
     base = BASE_FPS[game_id][RESOLUTION_INDEX[resolution]]
     index = RESOLUTION_INDEX[resolution]
     load_type = APPROVED_GAME_PROFILES[game_id].load_type
@@ -67,9 +84,10 @@ def generated_average_fps(
             (0.55, 0.75, 0.9)[index],
         )
 
-    estimated = max(1, min(round(min(cpu_limit, gpu_limit)), 2000))
-    fps_cap = APPROVED_GAME_PROFILES[game_id].fps_cap
-    return min(estimated, fps_cap) if fps_cap is not None else estimated
+    return (
+        max(1, min(round(cpu_limit), 2000)),
+        max(1, min(round(gpu_limit), 2000)),
+    )
 
 
 def hardware_performance_score(

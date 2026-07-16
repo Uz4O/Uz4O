@@ -1,8 +1,8 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-07-16",
+  "updated_at": "2026-07-17",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
-  "current_phase": "游戏平均 FPS 已由精确结果、正式模型和 AI 公式三级覆盖",
+  "current_phase": "正在把配置排雷收口为整机电源、FPS 模型瓶颈和主板供电三项检查",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -202,9 +202,8 @@
         },
         {
           "title": "配置排雷",
-          "description": "分析商家配置单并生成风险说明和回复话术。",
-          "status": "completed",
-          "completed_at": "2026-06-16"
+          "description": "只检查整机电源余量、复用 FPS 模型得到的 CPU/显卡严重瓶颈，以及主板持续供电能否带动 CPU；主板供电数据待用户提供。",
+          "status": "in_progress"
         },
         {
           "title": "配置中心 CRUD",

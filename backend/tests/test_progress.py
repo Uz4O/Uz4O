@@ -14,8 +14,8 @@ def test_progress_file_tracks_the_backend_roadmap() -> None:
     assert progress.estimated_completion == "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间"
     assert len(progress.phases) == 6
     assert progress.total_items == 96
-    assert progress.completed_items == 83
-    assert progress.completion_percentage == 86
+    assert progress.completed_items == 82
+    assert progress.completion_percentage == 85
     assert [item.title for item in progress.user_action_items] == [
         "硬件尺寸字段人工补充",
         "生产短信服务与登录密钥配置",
@@ -45,6 +45,7 @@ def test_progress_separates_local_catalog_coverage_from_production_data() -> Non
     local_catalog = items["3000-20000元装机基底配置库"]
     production_catalog = items["生产推荐池与价格/模板数据发布"]
     build_options = items["AI装机三种采购方案接口与前端联调"]
+    config_review = items["配置排雷"]
 
     assert local_catalog.status == "completed"
     assert "297套" in local_catalog.description
@@ -54,6 +55,8 @@ def test_progress_separates_local_catalog_coverage_from_production_data() -> Non
     assert "3000-20000元" in production_catalog.description
     assert build_options.status == "completed"
     assert "/v1/build/options" in build_options.description
+    assert config_review.status == "in_progress"
+    assert "主板供电数据待用户提供" in config_review.description
 
 
 def test_postgres_foundation_is_completed_before_seed_import_starts() -> None:
@@ -79,7 +82,7 @@ def test_progress_dashboard_renders_summary_and_phases() -> None:
 
     assert response.status_code == 200
     assert "AI 装机助手后端" in response.text
-    assert "86%" in response.text
+    assert "85%" in response.text
     assert "预计完成时间" in response.text
     assert "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间" in response.text
     assert "需要你完成" in response.text

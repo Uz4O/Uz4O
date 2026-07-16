@@ -32,7 +32,7 @@ def make_client() -> TestClient:
                     name="i7-14700F",
                     brand="Intel",
                     detail_raw="14代 Raptor Lake Refresh · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 219},
+                    specs={"socket": "LGA1700", "perf_index": 100, "tdp": 219},
                 ),
                 CatalogComponent(
                     id="rtx-4060",
@@ -48,7 +48,7 @@ def make_client() -> TestClient:
                     name="H610M",
                     brand="华硕",
                     detail_raw="Intel · LGA1700 · H610",
-                    specs={"socket": "LGA1700"},
+                    specs={"socket": "LGA1700", "cpu_power_limit": 120},
                 ),
                 CatalogComponent(
                     id="psu-500w",
@@ -64,7 +64,7 @@ def make_client() -> TestClient:
                     name="i5-12400F",
                     brand="Intel",
                     detail_raw="12代 Alder Lake · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 117},
+                    specs={"socket": "LGA1700", "perf_index": 71, "tdp": 117},
                 ),
                 CatalogComponent(
                     id="i3-12100f",
@@ -72,7 +72,7 @@ def make_client() -> TestClient:
                     name="i3-12100F",
                     brand="Intel",
                     detail_raw="12代 Alder Lake · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 89},
+                    specs={"socket": "LGA1700", "perf_index": 43, "tdp": 89},
                 ),
                 CatalogComponent(
                     id="e5-2680v4",
@@ -104,6 +104,14 @@ def make_client() -> TestClient:
                     name="B760M",
                     brand="微星",
                     detail_raw="Intel · LGA1700 · B760",
+                    specs={"socket": "LGA1700", "cpu_power_limit": 180},
+                ),
+                CatalogComponent(
+                    id="b660m-unknown-power",
+                    category="motherboard",
+                    name="B660M-A",
+                    brand="华硕",
+                    detail_raw="Intel · LGA1700 · B660",
                     specs={"socket": "LGA1700"},
                 ),
                 CatalogComponent(
@@ -266,14 +274,15 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
     assert body["risk_level"] == "error"
     assert body["seller_price"] == 6999
     assert body["reference_total"] == 4930
-    assert "不建议直接买" in body["summary"]
+    assert "电源或主板供电" in body["summary"]
     assert body["detected_components"]["cpu"]["component_id"] == "i7-14700f"
     assert body["detected_components"]["gpu"]["component_id"] == "rtx-4060"
     assert body["detected_components"]["motherboard"]["component_id"] == "h610m"
-    assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
-    assert any(finding["code"] == "low_end_board_for_i7" for finding in body["findings"])
-    assert any(finding["code"] == "seller_price_high" for finding in body["findings"])
-    assert "具体品牌和型号" in body["questions_for_seller"][0]
+    assert {finding["code"] for finding in body["findings"]} == {
+        "gpu_bottleneck",
+        "motherboard_power_insufficient",
+        "psu_wattage_tight",
+    }
     assert "重新配一套" not in body["reply_text"]
 
 
@@ -296,8 +305,8 @@ def test_review_analyze_blocks_marketing_terms_without_models() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
-    assert any(finding["code"] == "marketing_terms_without_models" for finding in body["findings"])
     assert any(finding["code"] == "insufficient_core_information" for finding in body["findings"])
+    assert not any(finding["code"] == "marketing_terms_without_models" for finding in body["findings"])
     assert "信息不足" in body["summary"]
 
 
@@ -311,7 +320,7 @@ def test_review_analyze_warns_for_low_cpu_high_gpu() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert any(finding["code"] == "gpu_cpu_imbalance" for finding in body["findings"])
+    assert any(finding["code"] == "cpu_bottleneck" for finding in body["findings"])
 
 
 def test_review_analyze_errors_when_psu_wattage_cannot_cover_detected_parts() -> None:
@@ -328,7 +337,7 @@ def test_review_analyze_errors_when_psu_wattage_cannot_cover_detected_parts() ->
     assert any(finding["code"] == "psu_wattage_insufficient" for finding in body["findings"])
 
 
-def test_review_analyze_warns_when_seller_price_is_above_ten_percent() -> None:
+def test_review_analyze_only_returns_power_and_bottleneck_checks() -> None:
     client = make_client()
 
     response = client.post(
@@ -338,13 +347,16 @@ def test_review_analyze_warns_when_seller_price_is_above_ten_percent() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert body["risk_level"] == "warning"
+    assert body["risk_level"] == "pass"
     assert body["reference_total"] == 4650
-    assert any(finding["code"] == "seller_price_above_market" for finding in body["findings"])
-    assert not any(finding["code"] == "seller_price_high" for finding in body["findings"])
+    assert {finding["code"] for finding in body["findings"]} == {
+        "cpu_gpu_balanced",
+        "motherboard_power_ok",
+        "psu_wattage_ok",
+    }
 
 
-def test_review_analyze_flags_outdated_clearance_hardware() -> None:
+def test_review_analyze_does_not_add_unrequested_clearance_checks() -> None:
     client = make_client()
 
     response = client.post(
@@ -354,8 +366,29 @@ def test_review_analyze_flags_outdated_clearance_hardware() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert body["risk_level"] == "error"
-    assert any(finding["code"] == "outdated_clearance_hardware" for finding in body["findings"])
+    assert body["risk_level"] == "warning"
+    assert {finding["code"] for finding in body["findings"]} == {
+        "bottleneck_data_missing",
+        "missing_motherboard",
+        "psu_wattage_ok",
+    }
+
+
+def test_review_analyze_reports_missing_motherboard_power_data() -> None:
+    client = make_client()
+
+    response = client.post(
+        "/v1/review/analyze",
+        json={"text": "i5-12400F + RTX4060 + B660M-A 主板 + 650W 金牌电源"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["risk_level"] == "warning"
+    assert any(
+        finding["code"] == "motherboard_power_data_missing"
+        for finding in body["findings"]
+    )
 
 
 def test_review_analyze_image_uses_ocr_text(monkeypatch) -> None:
@@ -376,7 +409,7 @@ def test_review_analyze_image_uses_ocr_text(monkeypatch) -> None:
     body = response.json()
     assert body["risk_level"] == "error"
     assert body["source_text"].startswith("i7-14700F")
-    assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
+    assert any(finding["code"] == "gpu_bottleneck" for finding in body["findings"])
 
 
 def test_review_analyze_image_allows_phone_screenshot_size(monkeypatch) -> None:

@@ -137,15 +137,15 @@ private struct ConfigReviewHeroView: View {
                     .font(.system(size: 36, weight: .black))
                     .foregroundStyle(Color.black)
 
-                Text("上传配置单或粘贴配置，AI 帮你找出哪里有坑")
+                Text("上传或粘贴配置，检查整机电源、主板供电和性能瓶颈")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.black.opacity(0.74))
             }
 
             HStack(spacing: 10) {
-                ConfigReviewHeroPoint(title: "识别搭配风险")
-                ConfigReviewHeroPoint(title: "检查兼容问题")
-                ConfigReviewHeroPoint(title: "给出修改建议")
+                ConfigReviewHeroPoint(title: "检查电源余量")
+                ConfigReviewHeroPoint(title: "检查主板供电")
+                ConfigReviewHeroPoint(title: "检查性能瓶颈")
             }
             .padding(.top, 6)
         }
@@ -262,15 +262,14 @@ private struct ConfigReviewCheckPill: View {
 private struct ConfigReviewChecksView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("AI 将为你检查")
+            Text("将为你检查")
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(AppTheme.secondaryText)
 
             HStack(spacing: 8) {
-                ConfigReviewCheckPill(icon: "puzzlepiece", title: "兼容性")
-                ConfigReviewCheckPill(icon: "yensign", title: "预算")
+                ConfigReviewCheckPill(icon: "bolt", title: "电源余量")
+                ConfigReviewCheckPill(icon: "memorychip", title: "主板供电")
                 ConfigReviewCheckPill(icon: "speedometer", title: "性能瓶颈")
-                ConfigReviewCheckPill(icon: "tag", title: "是否买贵")
             }
         }
         .padding(.top, 4)
@@ -301,7 +300,7 @@ private struct ConfigReviewInputPanel: View {
                         .font(.appHeadline)
                         .foregroundStyle(AppTheme.primaryText)
 
-                    Text("把商家发来的配置、报价或聊天内容整段粘贴进来。")
+                    Text("把 CPU、显卡、主板和电源的具体型号粘贴进来。")
                         .font(.appCaption)
                         .foregroundStyle(AppTheme.secondaryText)
 
@@ -312,7 +311,7 @@ private struct ConfigReviewInputPanel: View {
                             .scrollContentBackground(.hidden)
 
                         if isEmpty {
-                            Text("例如：CPU、显卡、主板、内存、电源和商家报价……")
+                            Text("例如：i5-14600K、RTX 4070、B760M 主板、650W 电源……")
                                 .font(.appBody)
                                 .foregroundStyle(AppTheme.secondaryText.opacity(0.72))
                                 .padding(.horizontal, 15)
@@ -345,7 +344,7 @@ private struct ConfigReviewLoadingView: View {
                     Text("正在诊断配置单")
                         .font(.appHeadline)
                         .foregroundStyle(AppTheme.primaryText)
-                    Text("正在核对配置搭配、报价和适合直接回复的话术。")
+                    Text("正在计算整机功耗、主板供电和 CPU、显卡瓶颈。")
                         .font(.appCaption)
                         .foregroundStyle(AppTheme.secondaryText)
                 }
@@ -418,7 +417,7 @@ private struct ConfigReviewResultView: View {
 
             SoftCard(radius: 18) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("主要问题")
+                    Text("检测结果")
                         .font(.appHeadline)
                         .foregroundStyle(AppTheme.primaryText)
 

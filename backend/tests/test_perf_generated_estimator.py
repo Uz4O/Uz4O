@@ -3,6 +3,7 @@ from pathlib import Path
 from app.catalog.seed import extract_catalog_components
 from app.perf.generated_estimator import (
     generated_average_fps,
+    generated_fps_limits,
     hardware_performance_score,
 )
 
@@ -27,6 +28,13 @@ def test_cpu_and_gpu_limits_follow_the_game_load_type() -> None:
     assert generated_average_fps("cyberpunk-2077", "4k", 100, 95) > (
         generated_average_fps("cyberpunk-2077", "4k", 100, 40)
     )
+
+
+def test_average_fps_uses_the_shared_cpu_and_gpu_limits() -> None:
+    cpu_limit, gpu_limit = generated_fps_limits("pubg", "2k", 100, 40)
+
+    assert cpu_limit > gpu_limit
+    assert generated_average_fps("pubg", "2k", 100, 40) == gpu_limit
 
 
 def test_every_catalog_cpu_and_gpu_has_a_generated_score() -> None:
