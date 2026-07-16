@@ -272,8 +272,8 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
-    assert body["seller_price"] == 6999
-    assert body["reference_total"] == 4930
+    assert body["seller_price"] is None
+    assert body["reference_total"] is None
     assert "电源或主板供电" in body["summary"]
     assert body["detected_components"]["cpu"]["component_id"] == "i7-14700f"
     assert body["detected_components"]["gpu"]["component_id"] == "rtx-4060"
@@ -348,7 +348,7 @@ def test_review_analyze_only_returns_power_and_bottleneck_checks() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "pass"
-    assert body["reference_total"] == 4650
+    assert body["reference_total"] is None
     assert {finding["code"] for finding in body["findings"]} == {
         "cpu_gpu_balanced",
         "motherboard_power_ok",
@@ -445,7 +445,7 @@ def test_review_analyze_stream_returns_progress_and_result_events() -> None:
     assert events[1]["data"]["stage"] == "analyzing"
     assert events[2]["data"] == {"status": "MISS"}
     assert events[3]["data"]["risk_level"] == "error"
-    assert events[3]["data"]["seller_price"] == 6999
+    assert events[3]["data"]["seller_price"] is None
 
 
 def test_review_analyze_stream_reuses_cached_result() -> None:

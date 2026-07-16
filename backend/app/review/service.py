@@ -4,8 +4,8 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from app.catalog.models import ComponentPrice, HardwareComponent
-from app.catalog.repository import list_component_prices, list_components
+from app.catalog.models import HardwareComponent
+from app.catalog.repository import list_components
 from app.perf.generated_estimator import (
     generated_fps_limits,
     hardware_performance_score,
@@ -23,7 +23,7 @@ ROLE_LABELS = {
     "psu": "电源",
 }
 
-REVIEW_ROLES = ["cpu", "gpu", "motherboard", "ram", "storage", "psu"]
+REVIEW_ROLES = ["cpu", "gpu", "motherboard", "psu"]
 SYSTEM_POWER_OVERHEAD_WATTS = 75
 PSU_HEADROOM_FACTOR = 1.3
 SEVERE_BOTTLENECK_PERCENT = 35
@@ -65,10 +65,7 @@ class ConfigReviewResponse(BaseModel):
 def analyze_configuration_text(session: Session, text: str) -> ConfigReviewResponse:
     normalized_text = _normalize(text)
     components = list_components(session)
-    prices = {price.component_id: price for price in list_component_prices(session)}
     detected = _detect_components(normalized_text, components)
-    seller_price = _parse_seller_price(text)
-    reference_total = _reference_total(detected, prices)
     findings = _build_findings(detected)
     questions = _questions_for_seller(detected, findings)
     risk_level = _overall_level(findings)
@@ -78,8 +75,8 @@ def analyze_configuration_text(session: Session, text: str) -> ConfigReviewRespo
         risk_level=risk_level,
         summary=summary,
         source_text=text,
-        seller_price=seller_price,
-        reference_total=reference_total,
+        seller_price=None,
+        reference_total=None,
         detected_components=detected,
         findings=findings,
         questions_for_seller=questions,
@@ -396,31 +393,6 @@ def _reply_text(
         suffix = f" {question_text}" if question_text else ""
         return f"{summary} 我主要担心：{problem_titles}。{suffix}".strip()
     return f"{summary} {question_text}".strip()
-
-
-def _reference_total(
-    detected: Dict[str, Optional[DetectedReviewComponent]],
-    prices: Dict[str, ComponentPrice],
-) -> Optional[int]:
-    total = 0
-    matched = 0
-    for component in detected.values():
-        if component is None:
-            continue
-        price = prices.get(component.component_id)
-        if price is None:
-            continue
-        total += price.reference_price
-        matched += 1
-    return total if matched else None
-
-
-def _parse_seller_price(text: str) -> Optional[int]:
-    labeled_match = re.search(r"(?:报价|价格|售价|总价|整机)[^\d]{0,8}(\d{3,6})", text)
-    if labeled_match:
-        return int(labeled_match.group(1))
-    numbers = [int(value) for value in re.findall(r"\d{4,6}", text)]
-    return numbers[-1] if numbers else None
 
 
 def _int_spec(component: DetectedReviewComponent, key: str) -> int:
