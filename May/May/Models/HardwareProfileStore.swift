@@ -11,11 +11,12 @@ struct HardwareProfileStore {
     func load() -> HardwareProfile {
         guard
             let data = defaults.data(forKey: key),
-            let profile = try? JSONDecoder().decode(HardwareProfile.self, from: data)
+            var profile = try? JSONDecoder().decode(HardwareProfile.self, from: data)
         else {
             return .skipped
         }
 
+        profile.motherboard = HardwareCatalog.canonicalMotherboardName(for: profile.motherboard)
         return profile
     }
 

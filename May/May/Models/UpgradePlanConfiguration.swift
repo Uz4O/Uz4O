@@ -9,7 +9,7 @@ struct UpgradePlanConfiguration: Equatable {
         hardwareProfile: HardwareProfile(
             cpu: "i5-10400F",
             gpu: "GTX 1660 Super",
-            motherboard: "B460M Mortar",
+            motherboard: "MAG B560 TORPEDO 鱼雷",
             memory: "16GB DDR4",
             storage: "不知道",
             powerSupply: "550W"

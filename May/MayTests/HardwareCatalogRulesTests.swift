@@ -40,6 +40,12 @@ struct HardwareCatalogRulesTests {
         )
 
         assertEqual(
+            HardwareCatalog.motherboardOptions.contains("ROG STRIX B860-A GAMING WIFI S吹雪"),
+            true,
+            "Every motherboard picker should use the official Chinese product name."
+        )
+
+        assertEqual(
             HardwareCatalog.filters(for: "CPU").map(\.title),
             ["Intel", "AMD"],
             "CPU picker should use the source category logic and filter by brand."

@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import re
 from typing import Dict, Optional
 
@@ -42,6 +44,28 @@ GPU_RULE_SPECS = {
     "rtx-5090": {"perf_index": 110, "tdp": 575},
 }
 
+MOTHERBOARD_RULE_SPECS = {
+    row["component_id"]: {
+        **({"legacy_name": row["legacy_name"]} if row.get("legacy_name") else {}),
+        **(
+            {
+                "cpu_power_phases": row["cpu_power_phases"],
+                "phase_watts": row["phase_watts"],
+                "cpu_power_limit": row["cpu_power_limit"],
+            }
+            if row.get("status") == "exact" and row.get("cpu_power_phases") is not None
+            else {}
+        ),
+    }
+    for row in json.loads(
+        (Path(__file__).resolve().parents[2] / "data" / "motherboard-official-specs.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    if row.get("legacy_name")
+    or (row.get("status") == "exact" and row.get("cpu_power_phases") is not None)
+}
+
 CPU_PERFORMANCE = {
     component_id: specs["perf_index"]
     for component_id, specs in CPU_RULE_SPECS.items()
@@ -63,8 +87,12 @@ def get_rule_specs(
     *,
     component_id: str = "",
     name: str = "",
-) -> Optional[Dict[str, int]]:
-    specs_by_id = {"cpu": CPU_RULE_SPECS, "gpu": GPU_RULE_SPECS}.get(category)
+) -> Optional[Dict[str, object]]:
+    specs_by_id = {
+        "cpu": CPU_RULE_SPECS,
+        "gpu": GPU_RULE_SPECS,
+        "motherboard": MOTHERBOARD_RULE_SPECS,
+    }.get(category)
     if specs_by_id is None:
         return None
     for candidate in (component_id.strip().lower(), _component_key(name)):

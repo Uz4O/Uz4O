@@ -10,6 +10,19 @@ struct UpgradePlanConfigurationRulesTests {
             ["CPU", "显卡", "主板", "内存", "硬盘", "电源"],
             "Upgrade plan should use the same selectable hardware categories as performance testing."
         )
+        assertEqual(
+            HardwareCatalog.motherboardOptions.contains(configuration.hardwareProfile.motherboard),
+            true,
+            "Upgrade plan sample should use the shared motherboard catalog."
+        )
+        assertEqual(
+            HardwareCatalog.areCompatible(
+                cpu: configuration.hardwareProfile.cpu,
+                motherboard: configuration.hardwareProfile.motherboard
+            ),
+            true,
+            "Upgrade plan sample CPU and motherboard should be compatible."
+        )
 
         configuration.setValue("RTX 4070", for: "显卡")
         configuration.setValue("32GB DDR5", for: "内存")

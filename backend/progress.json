@@ -2,7 +2,7 @@
   "project": "AI 装机助手后端",
   "updated_at": "2026-07-17",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
-  "current_phase": "正在把配置排雷收口为整机电源、FPS 模型瓶颈和主板供电三项检查",
+  "current_phase": "配置排雷已完成整机电源、FPS 模型瓶颈和主板供电三项检查",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -202,8 +202,9 @@
         },
         {
           "title": "配置排雷",
-          "description": "只检查整机电源余量、复用 FPS 模型得到的 CPU/显卡严重瓶颈，以及主板持续供电能否带动 CPU；主板供电数据待用户提供。",
-          "status": "in_progress"
+          "description": "只检查整机电源余量、复用 FPS 模型得到的 CPU/显卡严重瓶颈，以及主板持续供电能否带动 CPU；现有 507 块主板中 268 块已按厂商官网 CPU 供电相数和每相 25W 接入，缺少可靠依据的型号不猜测。",
+          "status": "completed",
+          "completed_at": "2026-07-17"
         },
         {
           "title": "配置中心 CRUD",

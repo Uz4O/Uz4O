@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from app.cli import main
@@ -177,6 +178,38 @@ def test_enriches_cpu_gpu_and_motherboard_specs_for_rules() -> None:
 
     lga1200_board_specs = parse_detail_specs("motherboard", "Intel · LGA1200 · B460", name="B460M Mortar")
     assert lga1200_board_specs["mem_type"] == "DDR4"
+
+    board_power_specs = parse_detail_specs(
+        "motherboard",
+        "Intel · LGA1851 · B860",
+        name="B860 DS3H",
+        component_id="gigabyte-b860-ds3h",
+    )
+    assert board_power_specs["cpu_power_phases"] == 8
+    assert board_power_specs["phase_watts"] == 25
+    assert board_power_specs["cpu_power_limit"] == 200
+
+
+def test_official_motherboard_power_data_is_traceable_and_uses_25_watts_per_phase() -> None:
+    backend_root = Path(__file__).resolve().parents[1]
+    data = json.loads(
+        (backend_root / "data" / "motherboard-official-specs.json").read_text(encoding="utf-8")
+    )
+    catalog = extract_catalog_components(
+        backend_root.parent / "May" / "May" / "Models" / "HardwareCatalog.swift"
+    )
+    motherboard_ids = {item.id for item in catalog if item.category == "motherboard"}
+    exact = [row for row in data if row["status"] == "exact" and row["cpu_power_phases"]]
+
+    assert len(exact) >= 260
+    assert len({row["component_id"] for row in data}) == len(data)
+    assert {row["component_id"] for row in data} <= motherboard_ids
+    for row in exact:
+        assert 3 <= row["cpu_power_phases"] <= 30
+        assert row["phase_watts"] == 25
+        assert row["cpu_power_limit"] == row["cpu_power_phases"] * 25
+        assert row["source_url"].startswith("https://")
+        assert row["evidence"] == "manufacturer_official"
 
 
 def test_whitelist_gpu_rule_specs_override_seed_heuristics() -> None:

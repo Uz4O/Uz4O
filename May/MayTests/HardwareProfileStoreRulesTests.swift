@@ -20,6 +20,15 @@ struct HardwareProfileStoreRulesTests {
         assertEqual(restored.memory, "32GB DDR5", "Saved memory selection should be restored after relaunch.")
         assertEqual(restored.wasSkipped, false, "Selecting a component should mark the profile as recorded.")
 
+        var legacyProfile = HardwareProfile.skipped
+        legacyProfile.setValue("ROG STRIX B860-A GAMING WIFI", for: "主板")
+        store.save(legacyProfile)
+        assertEqual(
+            store.load().motherboard,
+            "ROG STRIX B860-A GAMING WIFI S吹雪",
+            "Saved motherboard names should migrate to the official Chinese catalog name."
+        )
+
         var compatibleProfile = HardwareProfile(
             cpu: "i7-14700",
             gpu: "不知道",
