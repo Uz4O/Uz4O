@@ -136,6 +136,15 @@
       "status": "review"
     },
     {
+      "app_id": "u7-270-plus",
+      "app_name": "Ultra 7 270 Plus",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
       "app_id": "u7-265k",
       "app_name": "Ultra 7 265K",
       "source_id": null,
@@ -147,6 +156,15 @@
     {
       "app_id": "u7-265",
       "app_name": "Ultra 7 265",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u5-250-plus",
+      "app_name": "Ultra 5 250 Plus",
       "source_id": null,
       "source_slug": null,
       "source_name": null,
@@ -174,6 +192,15 @@
     {
       "app_id": "u5-235",
       "app_name": "Ultra 5 235",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "u5-225f",
+      "app_name": "Ultra 5 225F",
       "source_id": null,
       "source_slug": null,
       "source_name": null,
@@ -911,6 +938,42 @@
     }
   ],
   "gpus": [
+    {
+      "app_id": "arc-b580-12gb",
+      "app_name": "Intel Arc B580 12GB",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "arc-b570-10gb",
+      "app_name": "Intel Arc B570 10GB",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "arc-a770-16gb",
+      "app_name": "Intel Arc A770 16GB",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
+    {
+      "app_id": "arc-a580-8gb",
+      "app_name": "Intel Arc A580 8GB",
+      "source_id": null,
+      "source_slug": null,
+      "source_name": null,
+      "device_type": "desktop",
+      "status": "review"
+    },
     {
       "app_id": "rtx-5090",
       "app_name": "RTX 5090",

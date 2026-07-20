@@ -126,8 +126,8 @@ def test_real_cli_catalog_imports_are_order_safe(
             component.id: component
             for component in session.scalars(select(HardwareComponent))
         }
-        assert len(stored_templates) == 297
-        assert len({template.id for template in stored_templates}) == 297
+        assert len(stored_templates) == 275
+        assert len({template.id for template in stored_templates}) == 275
         for template in stored_templates:
             details = BuildTemplateDetails.model_validate(template.details)
             assert len(details.parts) == 8
@@ -142,7 +142,7 @@ def test_real_cli_catalog_imports_are_order_safe(
                 assert components[part.component_id].is_recommended is True
         revalidated_count = upsert_build_templates(session, expected_templates)
 
-    assert revalidated_count == 297
+    assert revalidated_count == 275
 
 
 def _run_cli(monkeypatch, *args) -> None:

@@ -7,6 +7,7 @@ from app.builds.models import BuildTemplate, SavedBuild
 from app.builds.service import BuildTemplateInput
 from app.catalog.models import ComponentPrice, HardwareComponent
 from app.compat.engine import BuildSelection, evaluate_compatibility
+from app.catalog.rule_specs import GPU_MIN_CPU_PERFORMANCE
 
 
 REQUIRED_TEMPLATE_ROLES = {"cpu", "motherboard", "ram", "psu"}
@@ -36,6 +37,10 @@ DETAILED_CONDITIONS = {
 }
 DETAILED_DIRECTION_TAGS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 DETAILED_PURCHASE_TAGS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
+DETAILED_GPU_VENDOR_TAGS = {"nvidia": "NVIDIA", "amd": "AMD", "intel": "Intel"}
+MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL = 100
+MAX_DETAILED_FPS_COVERAGE_SHORTFALL = 550
+MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE = 300
 
 
 def list_build_templates(session: Session) -> List[BuildTemplate]:
@@ -215,6 +220,7 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     required_tags = {
         DETAILED_DIRECTION_TAGS[details.direction],
         DETAILED_PURCHASE_TAGS[details.purchase_mode],
+        DETAILED_GPU_VENDOR_TAGS[details.gpu_vendor],
     }
     if not required_tags.issubset(set(template.tags)):
         errors.append(f"{template.id}: tags do not match structured details")
@@ -222,8 +228,76 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     detailed_total = sum(part.reference_price for part in details.parts)
     if template.estimated_total != detailed_total:
         errors.append(f"{template.id}: estimated_total does not match detailed prices")
-    if detailed_total > details.target_budget + 200:
-        errors.append(f"{template.id}: estimated_total exceeds target budget by more than 200")
+    is_office_template = "办公" in template.use_cases
+    max_shortfall = (
+        120
+        if template.id == "base-14000-balanced-mixed"
+        and parts_by_role["cpu"].component_id == "r7-9800x3d"
+        and parts_by_role["gpu"].component_id == "rtx-5070-ti"
+        and parts_by_role["motherboard"].component_id == "msi-x870e-tomahawk"
+        else MAX_DETAILED_FPS_COVERAGE_SHORTFALL
+        if details.target_budget >= 15_000
+        and details.direction in {"aaa", "balanced"}
+        else MAX_DETAILED_FPS_COVERAGE_SHORTFALL
+        if details.direction == "fps" and details.target_budget >= 10_000
+        else MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL
+    )
+    if detailed_total < details.target_budget - max_shortfall:
+        errors.append(
+            f"{template.id}: estimated_total is more than {max_shortfall} below target budget"
+        )
+    max_overage = (
+        500
+        if is_office_template and details.target_budget < 10_000
+        else
+        800
+        if details.target_budget >= 10_000
+        else 330
+        if template.id == "base-6500-fps-mixed"
+        and parts_by_role["gpu"].component_id == "rtx-5060"
+        else MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE
+    )
+    if detailed_total > details.target_budget + max_overage:
+        errors.append(f"{template.id}: estimated_total exceeds allowed budget overage")
+
+    ram_latency = parts_by_role["ram"].specs.get("cas_latency")
+    ram_capacity = parts_by_role["ram"].specs.get("capacity_gb")
+    expected_ram_capacity = (
+        16 if is_office_template else 32 if details.target_budget >= 18_000 else 16
+    )
+    if ram_capacity != expected_ram_capacity:
+        errors.append(
+            f"{template.id}: expected {expected_ram_capacity}GB base RAM capacity"
+        )
+    if (
+        not is_office_template
+        and details.target_budget >= 10_000
+        and (type(ram_latency) is not int or ram_latency > 32)
+    ):
+        errors.append(f"{template.id}: 10000+ templates require DDR5 C32 or better")
+
+    gpu_id = parts_by_role["gpu"].component_id
+    expected_gpu_vendor = (
+        "nvidia"
+        if gpu_id.startswith("rtx-")
+        else "intel"
+        if gpu_id.startswith("arc-")
+        else "amd"
+    )
+    if details.gpu_vendor != expected_gpu_vendor:
+        errors.append(f"{template.id}: gpu_vendor does not match gpu component")
+    minimum_gpu_cpu_performance = GPU_MIN_CPU_PERFORMANCE.get(gpu_id)
+    cpu_performance = parts_by_role["cpu"].specs.get("perf_index")
+    if (
+        minimum_gpu_cpu_performance is not None
+        and (
+            type(cpu_performance) is not int
+            or cpu_performance < minimum_gpu_cpu_performance
+        )
+    ):
+        errors.append(
+            f"{template.id}: {gpu_id} requires R7 9700X-class or faster CPU"
+        )
 
 
 def _validate_detailed_template_catalog_data(

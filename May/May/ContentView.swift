@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     private let hardwareProfileStore = HardwareProfileStore()
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("hasCompletedLaunchIntro") private var hasCompletedLaunchIntro = false
     @StateObject private var session: AppSession
     @State private var appPhase: AppPhase = .login
@@ -17,6 +18,7 @@ struct ContentView: View {
     @State private var onboardingProfile: OnboardingProfile
     @State private var selectedConfigSection = ConfigHubSection.defaultSelection
     @State private var presentedFullScreen: FullScreenRoute?
+    @State private var showsSplash = true
 
     init() {
         _session = StateObject(wrappedValue: AppSession())
@@ -40,10 +42,14 @@ struct ContentView: View {
             } else {
                 switch appPhase {
                 case .login:
-                    LoginView {
-                        selectedTab = .home
-                        appPhase = .main
-                    }
+                    LoginView(onLogin: enterMainApp)
+                        .transition(
+                            .asymmetric(
+                                insertion: .opacity,
+                                removal: .scale(scale: 1.035).combined(with: .opacity)
+                            )
+                        )
+                        .zIndex(1)
                 case .main:
                     MainTabView(
                         session: session,
@@ -53,7 +59,20 @@ struct ContentView: View {
                         onPresentFullScreen: { presentedFullScreen = $0 },
                         onAccountDeleted: resetAfterAccountDeletion
                     )
+                    .transition(
+                        .asymmetric(
+                            insertion: .scale(scale: 0.975).combined(with: .opacity),
+                            removal: .opacity
+                        )
+                    )
                 }
+            }
+
+            if showsSplash {
+                AppSplashView {
+                    showsSplash = false
+                }
+                .zIndex(10)
             }
         }
         .onChange(of: onboardingProfile.hardwareProfile) { _, profile in
@@ -69,6 +88,18 @@ struct ContentView: View {
         }
     }
 
+    private func enterMainApp() {
+        selectedTab = .home
+
+        if reduceMotion {
+            appPhase = .main
+        } else {
+            withAnimation(.smooth(duration: 0.48)) {
+                appPhase = .main
+            }
+        }
+    }
+
     @ViewBuilder
     private func fullScreenDestination(for route: FullScreenRoute) -> some View {
         switch route {
@@ -79,8 +110,8 @@ struct ContentView: View {
             )
         case .aestheticBuild(let styleID):
             AestheticBuildFlowView(styleID: styleID, onClose: { presentedFullScreen = nil })
-        case .diy(let returnTab):
-            DIYBuildView(
+        case .performanceTest(let returnTab):
+            GamePerformanceView(
                 savedHardwareProfile: onboardingProfile.hardwareProfile,
                 onBack: {
                     selectedTab = returnTab
@@ -126,7 +157,7 @@ private enum MainRoute: Hashable {
 private enum FullScreenRoute: Identifiable, Equatable {
     case aiBuild(BuildResultReturnTarget)
     case aestheticBuild(styleID: String)
-    case diy(AppTab)
+    case performanceTest(AppTab)
 
     var id: String {
         switch self {
@@ -134,8 +165,8 @@ private enum FullScreenRoute: Identifiable, Equatable {
             return "aiBuild-\(returnTarget)"
         case .aestheticBuild(let styleID):
             return "aesthetic-build-\(styleID)"
-        case .diy(let returnTab):
-            return "diy-\(returnTab)"
+        case .performanceTest(let returnTab):
+            return "performance-test-\(returnTab)"
         }
     }
 }
@@ -152,14 +183,12 @@ private struct MainTabView: View {
     @State private var homePath: [MainRoute] = []
     @State private var buildsPath: [MainRoute] = []
     @State private var profilePath: [MainRoute] = []
-    @State private var showsDIYConfigurator = false
-
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack(path: $homePath) {
                 HomeView(
                     onOpenAI: { onPresentFullScreen(.aiBuild(.fromAIBuild)) },
-                    onOpenDIY: { onPresentFullScreen(.diy(.home)) },
+                    onOpenPerformanceTest: { onPresentFullScreen(.performanceTest(.home)) },
                     onOpenConfigReview: { homePath.append(.configReview) },
                     onOpenUpgrade: { homePath.append(.upgrade) },
                     onOpenAestheticStyle: { styleID in
@@ -177,20 +206,15 @@ private struct MainTabView: View {
             .tag(AppTab.home)
 
             NavigationStack {
-                DIYHomeView {
-                    showsDIYConfigurator = true
+                AestheticStylesView { styleID in
+                    onPresentFullScreen(.aestheticBuild(styleID: styleID))
                 }
                 .toolbar(.hidden, for: .navigationBar)
-                .navigationDestination(isPresented: $showsDIYConfigurator) {
-                    DIYConfiguratorView(onBack: { showsDIYConfigurator = false })
-                        .toolbar(.hidden, for: .navigationBar)
-                        .toolbar(.hidden, for: .tabBar)
-                }
             }
             .tabItem {
-                Label(AppTab.diy.rawValue, systemImage: "wrench.and.screwdriver")
+                Label(AppTab.styles.rawValue, systemImage: "paintpalette")
             }
-            .tag(AppTab.diy)
+            .tag(AppTab.styles)
 
             NavigationStack(path: $buildsPath) {
                 MyBuildsView(
@@ -207,7 +231,7 @@ private struct MainTabView: View {
                     },
                     onOpenPerformanceTest: {
                         selectedConfigSection = .currentComputer
-                        onPresentFullScreen(.diy(.builds))
+                        onPresentFullScreen(.performanceTest(.builds))
                     },
                     selectedSection: $selectedConfigSection
                 )
@@ -241,6 +265,7 @@ private struct MainTabView: View {
             .tag(AppTab.profile)
         }
         .tint(AppTheme.primaryText)
+        .preferredColorScheme(.light)
         .background(NativeTabBarTuner(verticalOffset: -14))
     }
 
@@ -307,9 +332,15 @@ private struct AIBuildFlowView: View {
             AIBuildView(
                 onBack: onClose,
                 onComplete: { response in
+                    let automaticSelection = shouldSkipOptionSelection(for: response)
+                        ? response.options.first
+                        : nil
                     withAnimation(resultAnimation) {
                         self.response = response
-                        selectedOption = shouldSkipOptionSelection(for: response) ? response.options.first : nil
+                        selectedOption = automaticSelection
+                    }
+                    if let automaticSelection {
+                        confirmSelection(automaticSelection)
                     }
                 }
             )
@@ -325,9 +356,7 @@ private struct AIBuildFlowView: View {
                         }
                     },
                     onSelect: { option in
-                        withAnimation(resultAnimation) {
-                            selectedOption = option
-                        }
+                        openOption(option)
                     }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -364,18 +393,27 @@ private struct AIBuildFlowView: View {
         AIBuildFlowRules.shouldSkipOptionSelection(optionCount: response.options.count)
     }
 
+    private func openOption(_ option: BuildOptionDTO) {
+        withAnimation(resultAnimation) {
+            selectedOption = option
+        }
+        confirmSelection(option)
+    }
+
+    private func confirmSelection(_ option: BuildOptionDTO) {
+        guard let selectionID = option.selectionId else { return }
+        Task {
+            try? await AppAPIClient().selectBuildOption(selectionID: selectionID)
+        }
+    }
+
     private var resultAnimation: Animation {
-        reduceMotion ? .easeOut(duration: 0.18) : .spring(response: 0.52, dampingFraction: 0.86)
+        reduceMotion ? .easeOut(duration: 0.18) : .easeOut(duration: 0.48)
     }
 
     private var resultTransition: AnyTransition {
         guard !reduceMotion else { return .opacity }
-        return .asymmetric(
-            insertion: .opacity
-                .combined(with: .scale(scale: 0.96, anchor: .bottom))
-                .combined(with: .move(edge: .bottom)),
-            removal: .opacity
-        )
+        return .opacity.combined(with: .scale(scale: 0.985))
     }
 }
 

@@ -4,6 +4,7 @@ import Foundation
 struct AestheticBuildFlowRulesTests {
     static func main() {
         assertEqual(AestheticBuildStyle.featured.map(\.title), ["黑武士", "海景房", "白色极简"], "Only unique styles should ship in the prototype.")
+        assertEqual(AestheticBuildStyle.featured, Array(AestheticBuildStyle.all.prefix(3)), "Home should preview only the first three catalog styles.")
 
         let panorama = AestheticBuildStyle.featured[1]
         assertEqual(panorama.options.map(\.tier), [.core, .high, .complete], "Restoration choices should be ordered.")

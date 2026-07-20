@@ -1,0 +1,23 @@
+[
+  {
+    "id": "office-ddr5-16gb-7200-c36",
+    "category": "ram",
+    "name": "DDR5 16GB 7200 C36",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 16GB · 7200MHz · CL36 · 单条",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 16,
+      "speed_mhz": 7200,
+      "cas_latency": 36,
+      "modules": 1,
+      "cpu_vendor": "Intel",
+      "usage_scope": "productivity"
+    },
+    "used_price": null,
+    "new_price": 1800,
+    "used_source": "",
+    "new_source": "用户2026-07-20提供的Intel DDR5办公配置参考价",
+    "price_date": "2026-07-20"
+  }
+]

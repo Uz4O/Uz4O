@@ -38,6 +38,11 @@ GPU_HEAVY_GAMES = frozenset(
     }
 )
 KNOWN_GAMES = CPU_HEAVY_GAMES | BALANCED_GAMES | GPU_HEAVY_GAMES
+GENERAL_OFFICE_APPS = frozenset({"Office", "WPS", "Photoshop", "AutoCAD"})
+MEDIA_OFFICE_APPS = frozenset({"Premiere", "DaVinci Resolve", "剪映"})
+CUDA_OFFICE_APPS = frozenset(
+    {"Blender", "After Effects", "MATLAB", "本地 AI", "本地AI"}
+)
 
 
 def classify_game_direction(
@@ -51,6 +56,19 @@ def classify_game_direction(
     if selected.issubset(GPU_HEAVY_GAMES):
         return "aaa"
     return "balanced"
+
+
+def classify_office_workload(
+    apps: List[str],
+) -> Literal["general", "media", "cuda"]:
+    selected = set(apps)
+    if selected & CUDA_OFFICE_APPS:
+        return "cuda"
+    if selected & MEDIA_OFFICE_APPS:
+        return "media"
+    if selected and not selected.issubset(GENERAL_OFFICE_APPS):
+        return "cuda"
+    return "general"
 
 
 class BuildRequest(BaseModel):
@@ -67,6 +85,35 @@ class BuildRequest(BaseModel):
         default_factory=list,
         max_length=20,
         validation_alias=AliasChoices("gameCategories", "game_categories"),
+    )
+    direction: Optional[Literal["fps", "aaa", "balanced"]] = None
+    ray_tracing: Optional[bool] = Field(
+        default=None,
+        validation_alias=AliasChoices("rayTracing", "ray_tracing"),
+    )
+    needs_wireless_network: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "needsWirelessNetwork",
+            "needs_wireless_network",
+        ),
+    )
+    memory_size: Optional[Literal["16GB", "32GB"]] = Field(
+        default=None,
+        validation_alias=AliasChoices("memorySize", "memory_size"),
+    )
+    storage_size: Optional[Literal["512GB", "1TB", "2TB"]] = Field(
+        default=None,
+        validation_alias=AliasChoices("storageSize", "storage_size"),
+    )
+    no_gpu_build: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("noGPUBuild", "no_gpu_build"),
+    )
+    owned_gpu_model: Optional[str] = Field(
+        default=None,
+        max_length=128,
+        validation_alias=AliasChoices("ownedGPUModel", "owned_gpu_model"),
     )
     office_apps: List[str] = Field(
         default_factory=list,
@@ -143,6 +190,7 @@ class BuildRequest(BaseModel):
         "gpu_preference",
         "specified_cpu",
         "specified_gpu",
+        "owned_gpu_model",
         "notes",
     )
     @classmethod
@@ -151,6 +199,25 @@ class BuildRequest(BaseModel):
             return None
         normalized = value.strip()
         return normalized or None
+
+    @model_validator(mode="after")
+    def owned_gpu_is_required_for_no_gpu_build(self) -> "BuildRequest":
+        if self.no_gpu_build and not self.owned_gpu_model:
+            raise ValueError("无显卡方案必须提供自备显卡型号")
+        return self
+
+    @property
+    def requires_customization(self) -> bool:
+        return any(
+            (
+                self.needs_wireless_network,
+                self.memory_size not in {None, "16GB"},
+                self.storage_size not in {None, "512GB"},
+                self.no_gpu_build,
+                bool(self.office_apps) and self.use_case != "办公",
+                bool(self.notes),
+            )
+        )
 
     @property
     def preference_tokens(self) -> List[str]:
@@ -182,20 +249,61 @@ class BuildTemplatePart(BaseModel):
     role: Literal["cpu", "motherboard", "gpu", "ram", "storage", "psu", "cooler", "case"]
     component_id: str
     name: str
-    condition: Literal["new", "used"]
-    reference_price: int = Field(gt=0)
+    condition: Literal["new", "used", "owned"]
+    reference_price: int = Field(ge=0)
     price_source: str
     price_date: str
     specs: Dict[str, object] = Field(default_factory=dict)
+
+
+class BuildTemplateExtra(BaseModel):
+    id: str
+    name: str
+    condition: Literal["new", "used"]
+    reference_price: int = Field(gt=0)
 
 
 class BuildTemplateDetails(BaseModel):
     target_budget: int = Field(ge=0)
     direction: Literal["fps", "aaa", "balanced"]
     purchase_mode: Literal["new", "used", "mixed"]
+    gpu_vendor: Literal["nvidia", "amd", "intel"]
     parts: List[BuildTemplatePart]
+    extras: List[BuildTemplateExtra] = Field(
+        default_factory=list,
+        exclude_if=lambda value: not value,
+    )
     suitable_user: str
     price_date: str
+
+    @model_validator(mode="before")
+    @classmethod
+    def infer_legacy_gpu_vendor(cls, value):
+        if not isinstance(value, dict) or value.get("gpu_vendor"):
+            return value
+        gpu = next(
+            (
+                part
+                for part in value.get("parts", [])
+                if isinstance(part, dict) and part.get("role") == "gpu"
+            ),
+            None,
+        )
+        if gpu is None:
+            return value
+        vendor = gpu.get("specs", {}).get("vendor")
+        component_id = gpu.get("component_id", "")
+        if isinstance(vendor, str):
+            vendor = vendor.lower()
+        if vendor not in {"nvidia", "amd", "intel"}:
+            vendor = (
+                "nvidia"
+                if component_id.startswith("rtx-")
+                else "intel"
+                if component_id.startswith("arc-")
+                else "amd"
+            )
+        return {**value, "gpu_vendor": vendor}
 
 
 class BuildTemplateInput(BaseModel):
@@ -225,8 +333,9 @@ class BuildGenerationResponse(BaseModel):
 
 class BuildOptionResponse(BaseModel):
     status: Literal["ready"]
-    source: Literal["template"]
+    source: Literal["template", "ai_provider", "selection_cache"]
     template_id: str
+    selection_id: Optional[str] = None
     title: str
     components: Dict[str, str]
     estimated_total: Optional[int]
@@ -249,22 +358,35 @@ class BuildOptionsResponse(BaseModel):
     unavailable_modes: List[Literal["new", "used", "mixed"]]
 
 
+class BuildSelectionConfirmationResponse(BaseModel):
+    selection_id: str
+    selected_count: int = Field(ge=1)
+
+
 def rank_build_templates(
     request: BuildRequest,
     templates: List[BuildTemplate],
 ) -> List[BuildTemplate]:
     requested_direction = _requested_direction(request.preference_tokens)
     requested_purchase_mode = _requested_purchase_mode(request.preference_tokens)
+    requested_gpu_vendor = _requested_gpu_vendor(request.preference_tokens)
+    requested_office_workload = (
+        classify_office_workload(request.office_apps)
+        if request.use_case == "办公"
+        else None
+    )
     candidates = [
         template
         for template in templates
         if (template.status is None or template.status == "active")
         and template.budget_min <= request.budget <= template.budget_max
         and request.use_case in template.use_cases
+        and _office_workload_matches(template, requested_office_workload)
         and _structured_template_matches(
             template,
             requested_direction,
             requested_purchase_mode,
+            requested_gpu_vendor,
         )
     ]
     preferences = set(request.preference_tokens)
@@ -275,11 +397,13 @@ def rank_build_templates(
                 template,
                 requested_direction,
                 requested_purchase_mode,
+                requested_gpu_vendor,
             ),
             -len(preferences.intersection(set(template.tags))),
             template.budget_max - template.budget_min,
             -_default_direction_rank(template),
             -_default_purchase_rank(template),
+            -_default_gpu_vendor_rank(template),
             template.id,
         ),
     )
@@ -321,16 +445,41 @@ def _requested_purchase_mode(tokens: List[str]) -> Optional[str]:
     return None
 
 
+def _requested_gpu_vendor(tokens: List[str]) -> Optional[str]:
+    normalized = [token.replace(" ", "").lower() for token in tokens]
+    if any(token in {"nvidia", "n卡", "英伟达"} for token in normalized):
+        return "nvidia"
+    if any(token in {"amd", "a卡"} for token in normalized):
+        return "amd"
+    if any(token in {"intel", "arc", "英特尔"} for token in normalized):
+        return "intel"
+    return None
+
+
+def _office_workload_matches(
+    template: BuildTemplate,
+    workload: Optional[str],
+) -> bool:
+    if workload is None:
+        return True
+    office_tags = {tag for tag in template.tags if tag.startswith("office-")}
+    return not office_tags or f"office-{workload}" in office_tags
+
+
 def _structured_template_matches(
     template: BuildTemplate,
     direction: Optional[str],
     purchase_mode: Optional[str],
+    gpu_vendor: Optional[str],
 ) -> bool:
     template_direction = _template_detail(template, "direction")
     template_purchase_mode = _template_detail(template, "purchase_mode")
     if direction and template_direction and template_direction != direction:
         return False
     if purchase_mode and template_purchase_mode and template_purchase_mode != purchase_mode:
+        return False
+    template_gpu_vendor = _template_gpu_vendor(template)
+    if gpu_vendor and template_gpu_vendor and template_gpu_vendor != gpu_vendor:
         return False
     return True
 
@@ -339,10 +488,15 @@ def _structured_match_count(
     template: BuildTemplate,
     direction: Optional[str],
     purchase_mode: Optional[str],
+    gpu_vendor: Optional[str],
 ) -> int:
-    return int(bool(direction) and _template_detail(template, "direction") == direction) + int(
-        bool(purchase_mode)
-        and _template_detail(template, "purchase_mode") == purchase_mode
+    return (
+        int(bool(direction) and _template_detail(template, "direction") == direction)
+        + int(
+            bool(purchase_mode)
+            and _template_detail(template, "purchase_mode") == purchase_mode
+        )
+        + int(bool(gpu_vendor) and _template_gpu_vendor(template) == gpu_vendor)
     )
 
 
@@ -360,6 +514,10 @@ def _default_purchase_rank(template: BuildTemplate) -> int:
     )
 
 
+def _default_gpu_vendor_rank(template: BuildTemplate) -> int:
+    return {"nvidia": 2, "amd": 1}.get(_template_gpu_vendor(template), 0)
+
+
 def _template_detail(template: BuildTemplate, key: str) -> Optional[str]:
     details = template.details or {}
     if isinstance(details, dict):
@@ -367,6 +525,20 @@ def _template_detail(template: BuildTemplate, key: str) -> Optional[str]:
     else:
         value = getattr(details, key, None)
     return value if isinstance(value, str) else None
+
+
+def _template_gpu_vendor(template: BuildTemplate) -> Optional[str]:
+    structured = _template_detail(template, "gpu_vendor")
+    if structured in {"nvidia", "amd", "intel"}:
+        return structured
+    gpu_id = (template.components or {}).get("gpu", "")
+    if not gpu_id:
+        return None
+    if gpu_id.startswith("rtx-"):
+        return "nvidia"
+    if gpu_id.startswith("arc-"):
+        return "intel"
+    return "amd"
 
 
 def template_response(

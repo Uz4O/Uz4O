@@ -12,7 +12,7 @@ enum AppScreen: Hashable {
     case upgrade
     case configReview
     case compatibility
-    case diy
+    case performanceTest
     case buildResult
 }
 
@@ -59,7 +59,7 @@ enum HomeFeatureKind: String {
     case builds
     case upgrade
     case compatibility
-    case diy
+    case performanceTest
 }
 
 struct HardwareOptionCategory: Equatable, Identifiable {
@@ -256,7 +256,7 @@ struct OnboardingProfile: Equatable {
 
     var toolFeatureOrder: [HomeFeatureDisplay] {
         [
-            .diy,
+            .performanceTest,
             .configReview,
             .upgrade,
             .compatibility
@@ -272,8 +272,8 @@ private extension HomeFeatureDisplay {
         icon: "sparkles"
     )
 
-    static let diy = HomeFeatureDisplay(
-        kind: .diy,
+    static let performanceTest = HomeFeatureDisplay(
+        kind: .performanceTest,
         title: "游戏性能测试",
         subtitle: "测测游戏帧率表现",
         icon: "gamecontroller"

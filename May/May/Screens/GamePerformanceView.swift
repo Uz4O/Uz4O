@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DIYBuildView: View {
+struct GamePerformanceView: View {
     let savedHardwareProfile: HardwareProfile
     let onBack: () -> Void
 
@@ -494,5 +494,5 @@ private struct PerformanceGameCard: View {
 }
 
 #Preview {
-    DIYBuildView(savedHardwareProfile: .skipped, onBack: {})
+    GamePerformanceView(savedHardwareProfile: .skipped, onBack: {})
 }

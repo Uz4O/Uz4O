@@ -3,14 +3,12 @@ import UIKit
 
 struct HomeView: View {
     let onOpenAI: () -> Void
-    let onOpenDIY: () -> Void
+    let onOpenPerformanceTest: () -> Void
     let onOpenConfigReview: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenAestheticStyle: (String) -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
-    @State private var selectedBuildStyleID = AestheticBuildStyle.featured[0].id
-
     private var features: [HomeDashboardFeature] {
         [
             HomeDashboardFeature(
@@ -31,7 +29,7 @@ struct HomeView: View {
                 heroImage: "HomeHeroPerformanceGPU",
                 icon: "gamecontroller",
                 bullets: ["帧率表现评估", "硬件瓶颈分析", "游戏场景建议"],
-                action: onOpenDIY
+                action: onOpenPerformanceTest
             ),
             HomeDashboardFeature(
                 id: "configReview",
@@ -87,14 +85,7 @@ struct HomeView: View {
 
                     HomeBuildStyleSection(
                         styles: AestheticBuildStyle.featured,
-                        selectedID: selectedBuildStyleID,
-                        onSelect: { style in
-                            withAnimation(.easeOut(duration: 0.22)) {
-                                selectedBuildStyleID = style.id
-                            }
-                        },
                         onOpen: { style in
-                            selectedBuildStyleID = style.id
                             onOpenAestheticStyle(style.id)
                         }
                     )
@@ -388,16 +379,7 @@ private struct HomeFeatureSelector: View {
 
 private struct HomeBuildStyleSection: View {
     let styles: [AestheticBuildStyle]
-    let selectedID: String
-    let onSelect: (AestheticBuildStyle) -> Void
     let onOpen: (AestheticBuildStyle) -> Void
-
-    private var orderedStyles: [AestheticBuildStyle] {
-        guard let selected = styles.first(where: { $0.id == selectedID }) else {
-            return styles
-        }
-        return [selected] + styles.filter { $0.id != selectedID }
-    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -413,36 +395,13 @@ private struct HomeBuildStyleSection: View {
                 }
             }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 15) {
-                    ForEach(styles) { style in
-                        Button {
-                            onSelect(style)
-                        } label: {
-                            Text(style.title)
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(selectedID == style.id ? .white : .black.opacity(0.72))
-                                .frame(height: 28)
-                                .padding(.horizontal, 15)
-                                .background(
-                                    selectedID == style.id ? Color.black : Color.black.opacity(0.045),
-                                    in: Capsule()
-                                )
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal, 1)
-            }
-            .scrollClipDisabled()
-
             VStack(spacing: 0) {
-                ForEach(Array(orderedStyles.enumerated()), id: \.element.id) { index, style in
-                    HomeBuildStyleRow(style: style) {
+                ForEach(Array(styles.enumerated()), id: \.element.id) { index, style in
+                    AestheticStyleRow(style: style) {
                         onOpen(style)
                     }
 
-                    if index < orderedStyles.count - 1 {
+                    if index < styles.count - 1 {
                         Rectangle()
                             .fill(Color.black.opacity(0.07))
                             .frame(height: 1)
@@ -453,67 +412,12 @@ private struct HomeBuildStyleSection: View {
     }
 }
 
-private struct HomeBuildStyleRow: View {
-    let style: AestheticBuildStyle
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(alignment: .center, spacing: 10) {
-                VStack(alignment: .leading, spacing: 7) {
-                    HStack(spacing: 7) {
-                        Text(style.title)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(.black)
-
-                        Text(style.startingCostLabel)
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(.black.opacity(0.52))
-                    }
-
-                    Text(style.summary)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(.black.opacity(0.66))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.76)
-
-                    Text("按这个风格装机  →")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(.black)
-
-                    HStack(spacing: 8) {
-                        ForEach(style.tags, id: \.self) { tag in
-                            Text(tag)
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.62))
-                                .frame(height: 22)
-                                .padding(.horizontal, 10)
-                                .background(Color.black.opacity(0.04), in: Capsule())
-                        }
-                    }
-                }
-
-                Spacer(minLength: 6)
-
-                Image(style.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 148, height: 106)
-                    .offset(x: 12)
-            }
-            .padding(.vertical, 10)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-}
-
 private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
 
 #Preview {
     HomeView(
         onOpenAI: {},
-        onOpenDIY: {},
+        onOpenPerformanceTest: {},
         onOpenConfigReview: {},
         onOpenUpgrade: {},
         onOpenAestheticStyle: { _ in }

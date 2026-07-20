@@ -3,7 +3,7 @@ import SwiftUI
 struct ToolsView: View {
     let profile: OnboardingProfile
     let onOpenUpgrade: () -> Void
-    let onOpenDIY: () -> Void
+    let onOpenPerformanceTest: () -> Void
     let onOpenConfigReview: () -> Void
     let onOpenCompatibility: () -> Void
 
@@ -52,8 +52,8 @@ struct ToolsView: View {
             return onOpenUpgrade
         case .compatibility:
             return onOpenCompatibility
-        case .diy:
-            return onOpenDIY
+        case .performanceTest:
+            return onOpenPerformanceTest
         }
     }
 }
@@ -122,7 +122,7 @@ private struct ToolFeatureCard: View {
     ToolsView(
         profile: OnboardingProfile(),
         onOpenUpgrade: {},
-        onOpenDIY: {},
+        onOpenPerformanceTest: {},
         onOpenConfigReview: {},
         onOpenCompatibility: {}
     )

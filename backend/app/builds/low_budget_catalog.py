@@ -15,6 +15,7 @@ from app.builds.service import (
 from app.catalog.rule_specs import (
     CPU_PERFORMANCE as RULE_CPU_PERFORMANCE,
     CPU_TDP as RULE_CPU_TDP,
+    GPU_MIN_CPU_PERFORMANCE,
     GPU_PERFORMANCE as RULE_GPU_PERFORMANCE,
     GPU_TDP as RULE_GPU_TDP,
 )
@@ -23,6 +24,7 @@ from app.catalog.rule_specs import (
 Direction = Literal["fps", "aaa", "balanced"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
+GpuVendor = Literal["nvidia", "amd"]
 SkipReason = Literal[
     "over_budget",
     "no_feasible_candidate",
@@ -61,6 +63,7 @@ CPU_SOCKET = {
     "r5-7500f": "AM5",
     "r5-9600x": "AM5",
     "i5-13600kf": "LGA1700",
+    "r7-9700x": "AM5",
     "r7-7800x3d": "AM5",
     "r7-9800x3d": "AM5",
 }
@@ -91,12 +94,13 @@ CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
 
 DIRECTION_LABELS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 PURCHASE_LABELS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
-PENDING_REVIEW_CONDITIONS: Dict[Tuple[str, Condition], str] = {
-    (
-        "base-psu-850w-gold",
-        "used",
-    ): "当前仅有单一公开样本，正式展示前需要重新核价",
-}
+GPU_VENDOR_LABELS = {"nvidia": "NVIDIA", "amd": "AMD"}
+ALLOWED_B850_MOTHERBOARDS = {"msi-b850m-power", "asus-b850m-awy"}
+MOTHERBOARD_MODEL_RANK = {"msi-b850m-power": 2, "asus-b850m-awy": 1}
+MAX_MOTHERBOARD_BUDGET_SHARE = 0.15
+MAX_3A_MOTHERBOARD_STEP_UP = 300
+MAX_BUDGET_SHORTFALL = 100
+PENDING_REVIEW_CONDITIONS: Dict[Tuple[str, Condition], str] = {}
 
 
 @dataclass(frozen=True)
@@ -147,18 +151,27 @@ class SkippedCombination:
     direction: Direction
     purchase_mode: PurchaseMode
     reason: SkipReason
+    gpu_vendor: Optional[GpuVendor] = None
 
     @property
-    def key(self) -> Tuple[int, Direction, PurchaseMode]:
-        return (self.target_budget, self.direction, self.purchase_mode)
+    def key(self) -> Tuple[int, Direction, PurchaseMode, Optional[GpuVendor]]:
+        return (
+            self.target_budget,
+            self.direction,
+            self.purchase_mode,
+            self.gpu_vendor,
+        )
 
     def as_dict(self) -> Dict[str, object]:
-        return {
+        payload = {
             "target_budget": self.target_budget,
             "direction": self.direction,
             "purchase_mode": self.purchase_mode,
             "reason": self.reason,
         }
+        if self.gpu_vendor is not None:
+            payload["gpu_vendor"] = self.gpu_vendor
+        return payload
 
 
 @dataclass(frozen=True)
@@ -186,34 +199,37 @@ def generate_low_budget_report() -> GenerationReport:
     for budget in BUDGET_TIERS:
         for direction in DIRECTIONS:
             for purchase_mode in PURCHASE_MODES:
-                selection = _select_candidate(
-                    budget,
-                    direction,
-                    purchase_mode,
-                    cpus,
-                    motherboards,
-                    gpus,
-                    support_parts,
-                )
-                if selection.candidate is not None:
-                    templates.append(
-                        _build_template(
-                            budget,
-                            direction,
-                            purchase_mode,
-                            selection.candidate,
-                        )
+                for gpu_vendor in _gpu_vendors_for(budget, direction):
+                    selection = _select_candidate(
+                        budget,
+                        direction,
+                        purchase_mode,
+                        cpus,
+                        motherboards,
+                        gpus,
+                        support_parts,
+                        gpu_vendor,
                     )
-                else:
-                    skipped.append(
-                        SkippedCombination(
-                            target_budget=budget,
-                            direction=direction,
-                            purchase_mode=purchase_mode,
-                            reason=selection.skip_reason
-                            or "no_feasible_candidate",
+                    if selection.candidate is not None:
+                        templates.append(
+                            _build_template(
+                                budget,
+                                direction,
+                                purchase_mode,
+                                selection.candidate,
+                            )
                         )
-                    )
+                    else:
+                        skipped.append(
+                            SkippedCombination(
+                                target_budget=budget,
+                                direction=direction,
+                                purchase_mode=purchase_mode,
+                                reason=selection.skip_reason
+                                or "no_feasible_candidate",
+                                gpu_vendor=gpu_vendor,
+                            )
+                        )
     return GenerationReport(
         templates=tuple(templates),
         skipped_combinations=tuple(skipped),
@@ -227,6 +243,15 @@ def generate_low_budget_templates() -> List[BuildTemplateInput]:
 
 def minimum_psu_watt(cpu_id: str, gpu_id: str) -> int:
     return math.ceil((CPU_TDP[cpu_id] + GPU_TDP[gpu_id]) * 1.5 + 100)
+
+
+def _gpu_vendors_for(
+    budget: int,
+    direction: Direction,
+) -> Tuple[Optional[GpuVendor], ...]:
+    if budget >= 5_000 and direction in {"aaa", "balanced"}:
+        return ("nvidia", "amd")
+    return (None,)
 
 
 def _completed_tiers(templates: Sequence[BuildTemplateInput]) -> List[int]:
@@ -277,7 +302,7 @@ def render_low_budget_markdown(
         f"价格日期：{PRICE_DATE}",
         "",
         "说明：每500元一个档位，分别尝试FPS、3A、均衡方向的全新、二手和混合采购。",
-        "只保留八大件参考价合计不超过目标预算加200元的真实可行方案；未生成组合记录在审计文件中。",
+        "只保留八大件参考价合计位于目标预算至目标预算加300元的真实可行方案；未生成组合记录在审计文件中。",
         (
             f"生成状态：{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位有可行配置，"
             f"覆盖{len(completed_tier_directions)}/{len(BUDGET_TIERS) * len(DIRECTIONS)}个价位方向，"
@@ -296,7 +321,7 @@ def render_low_budget_markdown(
                 continue
             lines.extend(
                 [
-                    f"### {DIRECTION_LABELS[details.direction]} / {PURCHASE_LABELS[details.purchase_mode]}",
+                    f"### {DIRECTION_LABELS[details.direction]} / {PURCHASE_LABELS[details.purchase_mode]} / {GPU_VENDOR_LABELS[details.gpu_vendor]}",
                     "",
                     "| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |",
                     "| --- | --- | --- | ---: | --- | --- |",
@@ -378,13 +403,77 @@ def _select_candidate(
     motherboards: Sequence[PricedPart],
     gpus: Sequence[PricedPart],
     support_parts: Dict[str, PricedPart],
+    gpu_vendor: Optional[GpuVendor] = None,
 ) -> SelectionOutcome:
+    if budget >= 5_000 and direction == "fps" and gpu_vendor is None:
+        by_vendor = {
+            vendor: _select_candidate(
+                budget,
+                direction,
+                purchase_mode,
+                cpus,
+                motherboards,
+                gpus,
+                support_parts,
+                vendor,
+            )
+            for vendor in ("nvidia", "amd")
+        }
+        nvidia = by_vendor["nvidia"].candidate
+        amd = by_vendor["amd"].candidate
+        if nvidia is None:
+            return by_vendor["amd"]
+        if amd is None:
+            return by_vendor["nvidia"]
+        if (
+            amd.cpu_performance > nvidia.cpu_performance
+            and amd.gpu_performance >= nvidia.gpu_performance
+        ):
+            return by_vendor["amd"]
+        if (
+            amd.cpu_performance >= nvidia.cpu_performance
+            and amd.gpu_performance * 100 >= nvidia.gpu_performance * 115
+        ):
+            return by_vendor["amd"]
+        return by_vendor["nvidia"]
+
     best: Optional[Candidate] = None
     best_score: Optional[Tuple[int, ...]] = None
     saw_complete_candidate = False
     conditions = CONDITIONS_BY_MODE[purchase_mode]
+    required_6000_new_parts = (
+        {
+            "fps": ("r5-9600x", "rtx-5060"),
+            "balanced": ("r5-9600x", "rtx-5060"),
+            "aaa": ("r5-7500f", "rtx-5060-ti"),
+        }.get(direction)
+        if budget == 6_000
+        and purchase_mode == "new"
+        and (direction == "fps" or gpu_vendor != "amd")
+        else None
+    )
+    required_7000_mixed_aaa = (
+        budget == 7_000
+        and direction == "aaa"
+        and purchase_mode == "mixed"
+        and gpu_vendor == "nvidia"
+    )
+    required_6500_mixed_fps = (
+        budget == 6_500
+        and direction == "fps"
+        and purchase_mode == "mixed"
+        and gpu_vendor == "nvidia"
+    )
 
     for cpu in cpus:
+        if required_6000_new_parts and cpu.component_id != required_6000_new_parts[0]:
+            continue
+        if required_7000_mixed_aaa and cpu.component_id != "r5-9600x":
+            continue
+        if required_6500_mixed_fps and cpu.component_id != "r7-7800x3d":
+            continue
+        if budget >= 6_000 and cpu.component_id in {"r5-5600", "r5-5600x"}:
+            continue
         if not _condition_is_allowed(cpu, conditions["cpu"]):
             continue
         cooler_id = (
@@ -393,27 +482,90 @@ def _select_candidate(
             else "base-cooler-6-heatpipe"
         )
         cooler = support_parts[cooler_id]
-
+        value_motherboard = (
+            _cheapest_adequate_motherboard(
+                cpu.component_id,
+                str(cpu.specs["socket"]),
+                conditions["motherboard"],
+                motherboards,
+            )
+            if direction == "aaa"
+            else None
+        )
         for motherboard in motherboards:
             if not _condition_is_allowed(
                 motherboard,
                 conditions["motherboard"],
             ):
                 continue
+            if (
+                motherboard.specs.get("chipset") == "B850"
+                and motherboard.component_id not in ALLOWED_B850_MOTHERBOARDS
+            ):
+                continue
+            motherboard_price = motherboard.price(conditions["motherboard"])
+            if (
+                direction == "aaa"
+                and motherboard_price is not None
+                and motherboard_price > budget * MAX_MOTHERBOARD_BUDGET_SHARE
+                and not required_7000_mixed_aaa
+            ):
+                continue
+            if (
+                value_motherboard is not None
+                and motherboard_price is not None
+                and motherboard_price
+                > value_motherboard.price(conditions["motherboard"])
+                + MAX_3A_MOTHERBOARD_STEP_UP
+                and not required_7000_mixed_aaa
+            ):
+                continue
+            if (
+                required_7000_mixed_aaa
+                and motherboard.component_id != "asus-b850m-awy"
+            ):
+                continue
             if cpu.specs["socket"] != motherboard.specs["socket"]:
                 continue
-            ram_id = (
-                "base-ddr4-16gb-3200"
-                if motherboard.specs["mem_type"] == "DDR4"
-                else "base-ddr5-16gb-6000-c30"
-            )
+            if (
+                motherboard.component_id == "asus-prime-b650m-k"
+                and cpu.component_id in {"r7-9800x3d"}
+            ):
+                continue
 
             for gpu in gpus:
-                if conditions["gpu"] == "new" and gpu.component_id.startswith(
-                    "rtx-40"
+                if (
+                    required_6000_new_parts
+                    and gpu.component_id != required_6000_new_parts[1]
                 ):
                     continue
+                if required_7000_mixed_aaa and gpu.component_id != "rtx-5060-ti":
+                    continue
+                if required_6500_mixed_fps and gpu.component_id != "rtx-5060":
+                    continue
+                if gpu_vendor and gpu.brand.lower() != gpu_vendor:
+                    continue
                 if not _condition_is_allowed(gpu, conditions["gpu"]):
+                    continue
+                minimum_gpu_cpu_performance = GPU_MIN_CPU_PERFORMANCE.get(
+                    gpu.component_id
+                )
+                if (
+                    minimum_gpu_cpu_performance is not None
+                    and CPU_PERFORMANCE[cpu.component_id]
+                    < minimum_gpu_cpu_performance
+                ):
+                    continue
+                if (
+                    cpu.component_id == "r7-9700x"
+                    and minimum_gpu_cpu_performance is None
+                ):
+                    continue
+                if (
+                    cpu.component_id == "r7-9800x3d"
+                    and GPU_PERFORMANCE[gpu.component_id]
+                    < GPU_PERFORMANCE["rtx-5060-ti"]
+                ):
                     continue
                 psu = _smallest_psu(
                     minimum_psu_watt(cpu.component_id, gpu.component_id),
@@ -422,50 +574,73 @@ def _select_candidate(
                 )
                 if psu is None:
                     continue
-                fixed_parts = {
-                    "cpu": cpu,
-                    "motherboard": motherboard,
-                    "gpu": gpu,
-                    "ram": support_parts[ram_id],
-                    "storage": support_parts["base-ssd-512gb-tlc"],
-                    "psu": psu,
-                    "cooler": cooler,
-                    "case": support_parts["base-case-mid-tower"],
-                }
-                parts = []
-                for role in PART_ROLE_ORDER:
-                    part = fixed_parts[role]
-                    condition = conditions[role]
-                    if not _condition_is_allowed(part, condition):
-                        break
-                    price = part.price(condition)
-                    assert price is not None
-                    parts.append(_template_part(role, part, condition, price))
-                if len(parts) != len(PART_ROLE_ORDER):
-                    continue
-
-                saw_complete_candidate = True
-                total = sum(part.reference_price for part in parts)
-                if total > budget + 200:
-                    continue
-                candidate = Candidate(
-                    parts=tuple(parts),
-                    total=total,
-                    cpu_performance=CPU_PERFORMANCE[cpu.component_id],
-                    gpu_performance=GPU_PERFORMANCE[gpu.component_id],
-                )
-                score = _score_candidate(candidate, direction)
-                if (
-                    best_score is None
-                    or score > best_score
-                    or (
-                        score == best_score
-                        and best is not None
-                        and candidate.tie_key < best.tie_key
-                    )
+                storage = support_parts["base-ssd-512gb-tlc"]
+                for ram in _support_candidates(
+                    "ram",
+                    conditions["ram"],
+                    support_parts,
+                    memory_type=str(motherboard.specs["mem_type"]),
                 ):
-                    best = candidate
-                    best_score = score
+                    if ram.specs.get("capacity_gb") != 16:
+                        continue
+                    if (
+                        required_6000_new_parts
+                        and ram.component_id != "base-ddr5-16gb-6000-c36"
+                    ):
+                        continue
+                    fixed_parts = {
+                        "cpu": cpu,
+                        "motherboard": motherboard,
+                        "gpu": gpu,
+                        "ram": ram,
+                        "storage": storage,
+                        "psu": psu,
+                        "cooler": cooler,
+                        "case": support_parts["base-case-mid-tower"],
+                    }
+                    if any(
+                        not _condition_is_allowed(part, conditions[role])
+                        for role, part in fixed_parts.items()
+                    ):
+                        continue
+
+                    parts = []
+                    for role in PART_ROLE_ORDER:
+                        part = fixed_parts[role]
+                        condition = conditions[role]
+                        price = part.price(condition)
+                        assert price is not None
+                        parts.append(_template_part(role, part, condition, price))
+
+                    saw_complete_candidate = True
+                    total = sum(part.reference_price for part in parts)
+                    max_total = budget + (330 if required_6500_mixed_fps else 300)
+                    if not budget - MAX_BUDGET_SHORTFALL <= total <= max_total:
+                        continue
+                    candidate = Candidate(
+                        parts=tuple(parts),
+                        total=total,
+                        cpu_performance=CPU_PERFORMANCE[cpu.component_id],
+                        gpu_performance=GPU_PERFORMANCE[gpu.component_id],
+                    )
+                    score = _score_candidate(
+                        candidate,
+                        direction,
+                        prefer_modern_gpu=(
+                            budget >= 5_000 and conditions["gpu"] == "used"
+                        ),
+                    )
+                    if (
+                        best_score is None
+                        or score > best_score
+                        or (
+                            score == best_score
+                            and best is not None
+                            and candidate.tie_key < best.tie_key
+                        )
+                    ):
+                        best = candidate
+                        best_score = score
     if best is not None:
         return SelectionOutcome(candidate=best, skip_reason=None)
     return SelectionOutcome(
@@ -479,30 +654,74 @@ def _select_candidate(
 def _score_candidate(
     candidate: Candidate,
     direction: Direction,
+    prefer_modern_gpu: bool = False,
 ) -> Tuple[int, ...]:
-    gpu_id = candidate.parts_by_role["gpu"].component_id
-    old_gpu_risk = int(gpu_id.startswith("rtx-30"))
+    parts = candidate.parts_by_role
+    gpu_id = parts["gpu"].component_id
+    old_gpu_risk = int(_has_legacy_mining_risk(gpu_id))
+    modern_gpu_rank = -old_gpu_risk if prefer_modern_gpu else 0
+    ram_capacity = (
+        int(parts["ram"].specs.get("capacity_gb", 0)) if "ram" in parts else 0
+    )
+    ram_latency_score = (
+        -int(parts["ram"].specs.get("cas_latency", 99))
+        if "ram" in parts
+        else -99
+    )
+    motherboard = parts.get("motherboard")
+    motherboard_tier_score = (
+        -{"B650": 0, "B850": 1, "X870E": 2}.get(
+            str(motherboard.specs.get("chipset")),
+            0,
+        )
+        if motherboard is not None
+        else 0
+    )
+    motherboard_model_score = (
+        MOTHERBOARD_MODEL_RANK.get(motherboard.component_id, 0)
+        if motherboard is not None
+        else 0
+    )
     if direction == "fps":
         return (
+            modern_gpu_rank,
             candidate.cpu_performance,
             candidate.gpu_performance,
+            motherboard_tier_score,
+            motherboard_model_score,
+            ram_capacity,
+            ram_latency_score,
             -old_gpu_risk,
             -candidate.total,
         )
     if direction == "aaa":
         return (
+            modern_gpu_rank,
             candidate.gpu_performance,
             candidate.cpu_performance,
+            motherboard_tier_score,
+            motherboard_model_score,
+            ram_capacity,
+            ram_latency_score,
             -old_gpu_risk,
             -candidate.total,
         )
     return (
+        modern_gpu_rank,
         min(candidate.cpu_performance, candidate.gpu_performance),
         candidate.cpu_performance + candidate.gpu_performance,
         -abs(candidate.cpu_performance - candidate.gpu_performance),
+        motherboard_tier_score,
+        motherboard_model_score,
+        ram_capacity,
+        ram_latency_score,
         -old_gpu_risk,
         -candidate.total,
     )
+
+
+def _has_legacy_mining_risk(gpu_id: str) -> bool:
+    return gpu_id.startswith(("rtx-30", "rx-6"))
 
 
 def _build_template(
@@ -513,13 +732,27 @@ def _build_template(
 ) -> BuildTemplateInput:
     direction_label = DIRECTION_LABELS[direction]
     purchase_label = PURCHASE_LABELS[purchase_mode]
+    gpu_vendor = _candidate_gpu_vendor(candidate)
+    vendor_label = GPU_VENDOR_LABELS[gpu_vendor]
+    vendor_suffix = (
+        "-amd"
+        if budget >= 5_000 and direction != "fps" and gpu_vendor == "amd"
+        else ""
+    )
     return BuildTemplateInput(
-        id=f"base-{budget}-{direction}-{purchase_mode}",
-        title=f"{budget}元 {direction_label} {purchase_label}基底配置",
+        id=f"base-{budget}-{direction}-{purchase_mode}{vendor_suffix}",
+        title=f"{budget}元 {direction_label} {purchase_label} {vendor_label}基底配置",
         budget_min=budget,
         budget_max=budget + 499,
         use_cases=["游戏"],
-        tags=[direction_label, purchase_label, direction, purchase_mode],
+        tags=[
+            direction_label,
+            purchase_label,
+            vendor_label,
+            direction,
+            purchase_mode,
+            gpu_vendor,
+        ],
         components={part.role: part.component_id for part in candidate.parts},
         estimated_total=candidate.total,
         explanation=(
@@ -551,6 +784,7 @@ def _details_for_candidate(
         target_budget=budget,
         direction=direction,
         purchase_mode=purchase_mode,
+        gpu_vendor=_candidate_gpu_vendor(candidate),
         parts=list(candidate.parts),
         suitable_user=suitable_user,
         price_date=PRICE_DATE,
@@ -601,6 +835,57 @@ def _smallest_psu(
         (part for part in psus if int(part.specs["watt"]) >= required_watt),
         None,
     )
+
+
+def _cheapest_adequate_motherboard(
+    cpu_id: str,
+    socket: str,
+    condition: Condition,
+    motherboards: Sequence[PricedPart],
+    max_price: Optional[float] = None,
+) -> Optional[PricedPart]:
+    candidates = [
+        part
+        for part in motherboards
+        if part.specs.get("socket") == socket
+        and _condition_is_allowed(part, condition)
+        and (max_price is None or part.price(condition) <= max_price)
+        and not (
+            part.component_id == "asus-prime-b650m-k"
+            and cpu_id in {"r7-9800x3d", "r7-9850x3d"}
+        )
+    ]
+    return min(
+        candidates,
+        key=lambda part: (part.price(condition), part.component_id),
+        default=None,
+    )
+
+
+def _support_candidates(
+    category: str,
+    condition: Condition,
+    support_parts: Dict[str, PricedPart],
+    memory_type: Optional[str] = None,
+) -> List[PricedPart]:
+    return sorted(
+        (
+            part
+            for part in support_parts.values()
+            if part.category == category
+            and _condition_is_allowed(part, condition)
+            and (memory_type is None or part.specs.get("type") == memory_type)
+        ),
+        key=lambda part: (
+            int(part.specs.get("capacity_gb", 0)),
+            part.component_id,
+        ),
+    )
+
+
+def _candidate_gpu_vendor(candidate: Candidate) -> GpuVendor:
+    gpu = candidate.parts_by_role["gpu"]
+    return "nvidia" if gpu.component_id.startswith("rtx-") else "amd"
 
 
 def _load_catalog() -> Tuple[
@@ -747,16 +1032,8 @@ def _write_reference_prices(
                 "category": source.category,
                 "name": source.name,
                 "brand": source.brand,
-                "used_price": (
-                    None
-                    if (component_id, "used") in PENDING_REVIEW_CONDITIONS
-                    else source.used_price
-                ),
-                "new_price": (
-                    None
-                    if (component_id, "new") in PENDING_REVIEW_CONDITIONS
-                    else source.new_price
-                ),
+                "used_price": source.used_price,
+                "new_price": source.new_price,
             }
         for part in generated_parts:
             if (part.component_id, part.condition) in PENDING_REVIEW_CONDITIONS:
@@ -912,6 +1189,12 @@ def _complete_skipped_combinations(
             template.details.target_budget,
             template.details.direction,
             template.details.purchase_mode,
+            (
+                template.details.gpu_vendor
+                if template.details.target_budget >= 5_000
+                and template.details.direction != "fps"
+                else None
+            ),
         )
         for template in templates
         if template.details is not None
@@ -921,18 +1204,20 @@ def _complete_skipped_combinations(
     }
     return [
         provided_by_key.get(
-            (budget, direction, purchase_mode),
+            (budget, direction, purchase_mode, gpu_vendor),
             SkippedCombination(
                 target_budget=budget,
                 direction=direction,
                 purchase_mode=purchase_mode,
                 reason="missing_evidence",
+                gpu_vendor=gpu_vendor,
             ),
         )
         for budget in BUDGET_TIERS
         for direction in DIRECTIONS
         for purchase_mode in PURCHASE_MODES
-        if (budget, direction, purchase_mode) not in generated_keys
+        for gpu_vendor in _gpu_vendors_for(budget, direction)
+        if (budget, direction, purchase_mode, gpu_vendor) not in generated_keys
     ]
 
 

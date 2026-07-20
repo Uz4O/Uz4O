@@ -38,11 +38,14 @@ enum HardwareCatalog {
         HardwareCatalogItem(id: "i3-14100", name: "i3-14100", brand: "Intel", detail: "14代 Raptor Lake Refresh · LGA1700"),
         HardwareCatalogItem(id: "u9-285k", name: "Ultra 9 285K", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
         HardwareCatalogItem(id: "u9-285", name: "Ultra 9 285", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
+        HardwareCatalogItem(id: "u7-270-plus", name: "Ultra 7 270 Plus", brand: "Intel", detail: "酷睿Ultra 200 Plus · LGA1851"),
         HardwareCatalogItem(id: "u7-265k", name: "Ultra 7 265K", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
         HardwareCatalogItem(id: "u7-265", name: "Ultra 7 265", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
+        HardwareCatalogItem(id: "u5-250-plus", name: "Ultra 5 250 Plus", brand: "Intel", detail: "酷睿Ultra 200 Plus · LGA1851"),
         HardwareCatalogItem(id: "u5-245k", name: "Ultra 5 245K", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
         HardwareCatalogItem(id: "u5-245", name: "Ultra 5 245", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
         HardwareCatalogItem(id: "u5-235", name: "Ultra 5 235", brand: "Intel", detail: "15代酷睿Ultra Arrow Lake · LGA1851"),
+        HardwareCatalogItem(id: "u5-225f", name: "Ultra 5 225F", brand: "Intel", detail: "酷睿Ultra 200 · LGA1851"),
         HardwareCatalogItem(id: "r9-9950x3d", name: "R9 9950X3D", brand: "AMD", detail: "锐龙9000 (Zen5) · AM5"),
         HardwareCatalogItem(id: "r9-9900x", name: "R9 9900X", brand: "AMD", detail: "锐龙9000 (Zen5) · AM5"),
         HardwareCatalogItem(id: "r7-9850x3d", name: "R7 9850X3D", brand: "AMD", detail: "锐龙9000 (Zen5) · AM5"),
@@ -127,6 +130,10 @@ enum HardwareCatalog {
     ]
 
     static let gpus: [HardwareCatalogItem] = [
+        HardwareCatalogItem(id: "arc-b580-12gb", name: "Intel Arc B580 12GB", brand: "Intel", detail: "Intel Arc · 12GB"),
+        HardwareCatalogItem(id: "arc-b570-10gb", name: "Intel Arc B570 10GB", brand: "Intel", detail: "Intel Arc · 10GB"),
+        HardwareCatalogItem(id: "arc-a770-16gb", name: "Intel Arc A770 16GB", brand: "Intel", detail: "Intel Arc · 16GB"),
+        HardwareCatalogItem(id: "arc-a580-8gb", name: "Intel Arc A580 8GB", brand: "Intel", detail: "Intel Arc · 8GB"),
         HardwareCatalogItem(id: "rtx-5090", name: "RTX 5090", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-5090-d-v2", name: "RTX 5090 D V2", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-5090-d", name: "RTX 5090 D", brand: "NVIDIA", detail: "NVIDIA"),
@@ -435,6 +442,7 @@ enum HardwareCatalog {
         HardwareCatalogItem(id: "msi-b650m-mortar", name: "MAG B650M MORTAR (迫击炮)", brand: "微星", detail: "AMD · AM5 · B650"),
         HardwareCatalogItem(id: "msi-b650m-mortar-wifi", name: "MAG B650M MORTAR WIFI (迫击炮)", brand: "微星", detail: "AMD · AM5 · B650"),
         HardwareCatalogItem(id: "asus-prime-b650m-f", name: "PRIME B650M-F", brand: "华硕", detail: "AMD · AM5 · B650"),
+        HardwareCatalogItem(id: "asus-prime-b650m-k", name: "PRIME B650M-K", brand: "华硕", detail: "AMD · AM5 · B650"),
         HardwareCatalogItem(id: "asus-prime-b650m-r", name: "PRIME B650M-R", brand: "华硕", detail: "AMD · AM5 · B650"),
         HardwareCatalogItem(id: "msi-b650m-b", name: "PRO B650M-B", brand: "微星", detail: "AMD · AM5 · B650"),
         HardwareCatalogItem(id: "msi-b650m-e", name: "PRO B650M-E", brand: "微星", detail: "AMD · AM5 · B650"),

@@ -71,7 +71,11 @@ extension BuildOptionDTO {
     }
 
     var referenceTotalText: String {
-        formattedBuildPrice(estimatedTotal ?? details.parts.reduce(0) { $0 + $1.referencePrice })
+        formattedBuildPrice(
+            estimatedTotal
+                ?? details.parts.reduce(0) { $0 + $1.referencePrice }
+                + (details.extras ?? []).reduce(0) { $0 + $1.referencePrice }
+        )
     }
 
     var buildPlan: BuildPlan {
@@ -82,6 +86,7 @@ extension BuildOptionDTO {
             useCase: details.direction.resultSubtitle,
             createdAt: "参考价日期 \(details.priceDate)",
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
+                + (details.extras ?? []).map(\.model)
         )
     }
 }
@@ -139,10 +144,23 @@ private extension BuildOptionPartDTO {
         PCPart(
             category: role.displayName,
             model: name,
-            price: formattedBuildPrice(referencePrice),
+            price: condition == .owned ? "自备" : formattedBuildPrice(referencePrice),
             condition: condition.displayName,
             icon: role.icon,
             accent: role == .cpu ? .blue : AppTheme.primaryText
+        )
+    }
+}
+
+private extension BuildOptionExtraDTO {
+    var model: PCPart {
+        PCPart(
+            category: "其他",
+            model: name,
+            price: formattedBuildPrice(referencePrice),
+            condition: condition.displayName,
+            icon: "wifi",
+            accent: AppTheme.primaryText
         )
     }
 }
@@ -198,6 +216,8 @@ private extension BuildPartConditionDTO {
             "全新"
         case .used:
             "二手"
+        case .owned:
+            "自备"
         }
     }
 }

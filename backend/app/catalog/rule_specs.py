@@ -8,6 +8,7 @@ CPU_RULE_SPECS = {
     "r5-7500f": {"perf_index": 60, "tdp": 88},
     "r5-9600x": {"perf_index": 72, "tdp": 105},
     "i5-13600kf": {"perf_index": 78, "tdp": 181},
+    "r7-9700x": {"perf_index": 80, "tdp": 120},
     "r7-7800x3d": {"perf_index": 90, "tdp": 120},
     "r7-9800x3d": {"perf_index": 100, "tdp": 120},
     "r7-9850x3d": {"perf_index": 103, "tdp": 120},
@@ -42,6 +43,15 @@ GPU_RULE_SPECS = {
     "rtx-5090": {"perf_index": 110, "tdp": 575},
 }
 
+# Intel Arc is cataloged for office-only productivity builds. Keeping these
+# separate prevents the gaming base generators from treating Arc as AMD.
+OFFICE_ONLY_GPU_RULE_SPECS = {
+    "arc-a580-8gb": {"perf_index": 40, "tdp": 185},
+    "arc-a770-16gb": {"perf_index": 50, "tdp": 225},
+    "arc-b570-10gb": {"perf_index": 45, "tdp": 150},
+    "arc-b580-12gb": {"perf_index": 50, "tdp": 190},
+}
+
 CPU_PERFORMANCE = {
     component_id: specs["perf_index"]
     for component_id, specs in CPU_RULE_SPECS.items()
@@ -56,6 +66,16 @@ GPU_PERFORMANCE = {
 GPU_TDP = {
     component_id: specs["tdp"] for component_id, specs in GPU_RULE_SPECS.items()
 }
+GPU_MIN_CPU_PERFORMANCE = {
+    component_id: CPU_PERFORMANCE["r7-9700x"]
+    for component_id in (
+        "rtx-5070-ti",
+        "rtx-5080",
+        "rtx-5090-d-v2",
+        "rtx-5090-d",
+        "rtx-5090",
+    )
+}
 
 
 def get_rule_specs(
@@ -64,7 +84,10 @@ def get_rule_specs(
     component_id: str = "",
     name: str = "",
 ) -> Optional[Dict[str, int]]:
-    specs_by_id = {"cpu": CPU_RULE_SPECS, "gpu": GPU_RULE_SPECS}.get(category)
+    specs_by_id = {
+        "cpu": CPU_RULE_SPECS,
+        "gpu": {**GPU_RULE_SPECS, **OFFICE_ONLY_GPU_RULE_SPECS},
+    }.get(category)
     if specs_by_id is None:
         return None
     for candidate in (component_id.strip().lower(), _component_key(name)):

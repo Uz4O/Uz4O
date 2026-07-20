@@ -82,11 +82,68 @@ struct AIBuildLowBudgetDefaults: Equatable {
     let colorPreference: String
 }
 
+enum AIBuildDirection: String, CaseIterable, Identifiable {
+    case fps
+    case aaa
+    case balanced
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .fps:
+            return "FPS主机"
+        case .aaa:
+            return "3A主机"
+        case .balanced:
+            return "全能均衡"
+        }
+    }
+
+    var recommendation: String {
+        switch self {
+        case .fps:
+            return "这类游戏更依赖 CPU，预算会适当向 CPU 倾斜，优先保证高帧率和低帧稳定性。"
+        case .aaa:
+            return "这类游戏更依赖显卡，预算会适当向显卡倾斜，优先保证高画质下的流畅度。"
+        case .balanced:
+            return "你选择的游戏类型比较丰富，预算会在 CPU 和显卡之间保持均衡。"
+        }
+    }
+
+    var summary: String {
+        switch self {
+        case .fps:
+            return "CPU 优先，适合高帧率竞技游戏"
+        case .aaa:
+            return "显卡优先，适合高画质大型游戏"
+        case .balanced:
+            return "CPU 与显卡均衡，适合多种游戏"
+        }
+    }
+}
+
 enum AIBuildFlowRules {
     static let lowBudgetThreshold = 4000
 
+    private static let fpsGames: Set<String> = ["瓦罗兰特", "CS2", "PUBG"]
+    private static let aaaGames: Set<String> = ["三角洲行动", "赛博朋克2077", "荒野大镖客2", "GTA5", "黑神话悟空", "地平线6", "艾尔登法环"]
+
     static func shouldSkipOptionSelection(optionCount: Int) -> Bool {
         optionCount == 1
+    }
+
+    static func recommendedDirection(for games: Set<String>) -> AIBuildDirection {
+        if games.isEmpty || games.contains("什么都玩") {
+            return .balanced
+        }
+        if games.isSubset(of: fpsGames) {
+            return .fps
+        }
+        if games.isSubset(of: aaaGames) {
+            return .aaa
+        }
+        return .balanced
     }
 
     static func visibleSteps(budget: Int, ownedParts: Set<AIBuildOwnedPart>) -> [AIBuildStep] {

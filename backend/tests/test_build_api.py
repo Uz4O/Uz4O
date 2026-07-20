@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 import pytest
@@ -9,7 +9,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.builds.models import BuildTemplate
 from app.builds import service as build_service
-from app.builds.ai_provider import AIProviderResult
+from app.builds.ai_provider import AIProviderError, AIProviderResult
 from app.catalog.models import ComponentPrice, HardwareComponent
 from app.catalog.repository import seed_hardware_components
 from app.catalog.seed import CatalogComponent
@@ -30,6 +30,23 @@ OPTION_COMPONENTS = {
     "case": "case-mid-tower",
 }
 MIXED_USED_ROLES = {"cpu", "ram", "cooler", "case"}
+OPTION_SPECS = {
+    "i5-14600k": {"socket": "LGA1700", "tdp": 125, "perf_index": 78},
+    "b760m": {"socket": "LGA1700", "mem_type": "DDR5", "chipset": "B760"},
+    "am5-board": {"socket": "AM5", "mem_type": "DDR5", "chipset": "B650"},
+    "rtx-4060": {"vendor": "NVIDIA", "tdp": 115, "perf_index": 72},
+    "rx-7800-xt": {"vendor": "AMD", "tdp": 263, "perf_index": 82},
+    "ram-6000-cl30": {
+        "type": "DDR5",
+        "capacity_gb": 16,
+        "speed_mhz": 6000,
+        "cas_latency": 30,
+    },
+    "ssd-1tb": {"capacity_gb": 1024},
+    "psu-750w": {"watt": 750},
+    "cooler-air": {"cooling_type": "air"},
+    "case-mid-tower": {"form_factor": "atx_mid_tower"},
+}
 
 
 def build_option_template(
@@ -37,11 +54,14 @@ def build_option_template(
     purchase_mode: str,
     *,
     budget: int,
+    gpu_vendor: str = "nvidia",
     structured: bool = True,
     compatible: bool = True,
     template_id: Optional[str] = None,
 ) -> BuildTemplate:
     components = dict(OPTION_COMPONENTS)
+    if gpu_vendor == "amd":
+        components["gpu"] = "rx-7800-xt"
     if not compatible:
         components["motherboard"] = "am5-board"
     details = {}
@@ -50,6 +70,7 @@ def build_option_template(
             "target_budget": budget,
             "direction": direction,
             "purchase_mode": purchase_mode,
+            "gpu_vendor": gpu_vendor,
             "parts": [
                 {
                     "role": role,
@@ -64,7 +85,7 @@ def build_option_template(
                     "reference_price": 900,
                     "price_source": "test-seed",
                     "price_date": "2026-07-12",
-                    "specs": {},
+                    "specs": OPTION_SPECS[component_id],
                 }
                 for role, component_id in components.items()
             ],
@@ -72,7 +93,9 @@ def build_option_template(
             "price_date": "2026-07-12",
         }
     return BuildTemplate(
-        id=template_id or f"base-{budget}-{direction}-{purchase_mode}",
+        id=template_id
+        or f"base-{budget}-{direction}-{purchase_mode}"
+        + ("-amd" if gpu_vendor == "amd" else ""),
         title=f"{budget} 元 {direction} {purchase_mode} 基底配置",
         budget_min=budget,
         budget_max=budget + 499,
@@ -93,6 +116,7 @@ def make_client(
     with_recommended_prices: bool = False,
     ai_provider_api_key: Optional[str] = None,
     option_templates: tuple[tuple[str, str], ...] = (),
+    vendor_option_templates: tuple[tuple[str, str, str], ...] = (),
     detail_less_option_templates: tuple[tuple[str, str], ...] = (),
     incompatible_option_templates: tuple[tuple[str, str], ...] = (),
     ranked_option_templates: tuple[tuple[str, str, str, bool], ...] = (),
@@ -125,6 +149,14 @@ def make_client(
                     brand="NVIDIA",
                     detail_raw="8GB · Ada",
                     specs={"tdp": 115, "perf_index": 72},
+                ),
+                CatalogComponent(
+                    id="rx-7800-xt",
+                    category="gpu",
+                    name="RX 7800 XT",
+                    brand="AMD",
+                    detail_raw="16GB · RDNA 3",
+                    specs={"tdp": 263, "perf_index": 82},
                 ),
                 CatalogComponent(
                     id="b760m",
@@ -212,6 +244,15 @@ def make_client(
                     budget=option_budget,
                 )
             )
+        for direction, purchase_mode, gpu_vendor in vendor_option_templates:
+            session.add(
+                build_option_template(
+                    direction,
+                    purchase_mode,
+                    budget=option_budget,
+                    gpu_vendor=gpu_vendor,
+                )
+            )
         for direction, purchase_mode in detail_less_option_templates:
             session.add(
                 build_option_template(
@@ -256,6 +297,7 @@ def make_client(
             session.add(template)
         if (
             option_templates
+            or vendor_option_templates
             or detail_less_option_templates
             or incompatible_option_templates
             or ranked_option_templates
@@ -376,6 +418,160 @@ def test_build_options_returns_full_high_budget_modes_in_approved_order() -> Non
             "risks",
         }.isdisjoint(option["details"])
         assert "compatibility" not in option
+
+
+def test_build_options_defaults_to_nvidia_for_aaa_when_ray_tracing_is_absent() -> None:
+    templates = tuple(
+        ("aaa", purchase_mode, gpu_vendor)
+        for purchase_mode in ("used", "new", "mixed")
+        for gpu_vendor in ("nvidia", "amd")
+    )
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=templates,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["黑神话悟空"],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [option["details"]["gpu_vendor"] for option in body["options"]] == [
+        "nvidia",
+        "nvidia",
+        "nvidia",
+    ]
+
+
+def test_build_options_falls_back_to_amd_for_a_mode_without_nvidia() -> None:
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=(
+            ("aaa", "used", "nvidia"),
+            ("aaa", "new", "nvidia"),
+            ("aaa", "mixed", "amd"),
+        ),
+        option_budget=5_000,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 5_000,
+            "use_case": "游戏",
+            "game_categories": ["黑神话悟空"],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [
+        (option["details"]["purchase_mode"], option["details"]["gpu_vendor"])
+        for option in body["options"]
+    ] == [
+        ("used", "nvidia"),
+        ("new", "nvidia"),
+        ("mixed", "amd"),
+    ]
+    assert body["unavailable_modes"] == []
+
+
+def test_build_options_returns_nvidia_and_amd_when_ray_tracing_is_off() -> None:
+    templates = tuple(
+        ("aaa", purchase_mode, gpu_vendor)
+        for purchase_mode in ("used", "new", "mixed")
+        for gpu_vendor in ("nvidia", "amd")
+    )
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=templates,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "useCase": "游戏",
+            "gameCategories": ["黑神话悟空"],
+            "rayTracing": False,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [
+        (option["details"]["purchase_mode"], option["details"]["gpu_vendor"])
+        for option in body["options"]
+    ] == [
+        ("used", "nvidia"),
+        ("used", "amd"),
+        ("new", "nvidia"),
+        ("new", "amd"),
+        ("mixed", "nvidia"),
+        ("mixed", "amd"),
+    ]
+    assert body["unavailable_modes"] == []
+
+
+def test_build_options_returns_only_nvidia_when_ray_tracing_is_on() -> None:
+    templates = tuple(
+        ("balanced", purchase_mode, gpu_vendor)
+        for purchase_mode in ("used", "new", "mixed")
+        for gpu_vendor in ("nvidia", "amd")
+    )
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=templates,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["什么都玩"],
+            "ray_tracing": True,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["options"]) == 3
+    assert all(
+        option["details"]["gpu_vendor"] == "nvidia"
+        for option in body["options"]
+    )
+
+
+def test_build_options_ignores_ray_tracing_branch_for_fps() -> None:
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=(
+            ("fps", "used", "nvidia"),
+            ("fps", "used", "amd"),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "ray_tracing": False,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["options"]) == 1
+    assert body["options"][0]["details"]["gpu_vendor"] == "nvidia"
 
 
 @pytest.mark.parametrize("use_case", ["游戏", "游戏兼办公", "办公"])
@@ -558,6 +754,32 @@ def test_build_options_uses_balanced_templates_for_cross_category_games() -> Non
     )
 
 
+def test_build_options_respects_explicit_direction_override() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(
+            ("fps", "used"),
+            ("aaa", "used"),
+            ("balanced", "used"),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "direction": "aaa",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["direction"] == "aaa"
+    assert body["options"][0]["details"]["direction"] == "aaa"
+
+
 def test_generate_build_returns_ai_pending_when_no_template_and_no_api_key() -> None:
     client = make_client(with_template=False)
 
@@ -683,109 +905,235 @@ def test_generate_build_falls_back_to_recommended_priced_catalog_when_no_templat
     assert body["source"] == "rules_fallback"
 
 
-def test_generate_build_degrades_to_rules_fallback_when_ai_provider_fails(monkeypatch) -> None:
+def test_generate_build_never_asks_deepseek_to_create_a_build_from_catalog(monkeypatch) -> None:
     client = make_client(
         with_template=False,
         with_recommended_prices=True,
         ai_provider_api_key="deepseek-secret",
     )
 
+    def forbidden_provider(*args, **kwargs):
+        raise AssertionError("DeepSeek must start from an approved base template")
+
+    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", forbidden_provider, raising=False)
+
+    response = client.post(
+        "/v1/build/generate",
+        json={"budget": 7000, "use_case": "gaming", "preferences": ["2k"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ready"
+    assert body["source"] == "rules_fallback"
+
+    usage = client.app.state.high_cost_usage_metrics.snapshot()
+    assert usage["external_ai_failures"] == 0
+
+
+def test_build_options_retries_ai_once_then_uses_customized_base_fallback(monkeypatch) -> None:
+    client = make_client(
+        with_template=False,
+        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    calls = {"count": 0}
+
     def failing_provider(*args, **kwargs):
-        raise RuntimeError("provider timeout")
+        calls["count"] += 1
+        raise AIProviderError("invalid controlled output")
 
     monkeypatch.setattr("app.api.builds.select_build_with_deepseek", failing_provider, raising=False)
 
     response = client.post(
-        "/v1/build/generate",
-        json={"budget": 7000, "use_case": "gaming", "preferences": ["2k"]},
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "needs_wireless_network": True,
+        },
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body["status"] == "ready"
-    assert body["source"] == "rules_fallback"
-    assert "外部 AI 暂不可用" in body["explanation"]
+    assert calls["count"] == 6
+    assert len(body["options"]) == 3
+    assert all(option["source"] == "template" for option in body["options"])
+    assert all(
+        option["details"]["parts"][1]["name"].endswith(" WIFI")
+        for option in body["options"]
+    )
 
     usage = client.app.state.high_cost_usage_metrics.snapshot()
-    assert usage["external_ai_failures"] == 1
-    assert usage["by_endpoint"]["/v1/build/generate"]["external_ai_failures"] == 1
+    assert usage["external_ai_failures"] == 3
 
 
-def test_generate_build_rejects_ai_provider_components_outside_candidate_pool(monkeypatch) -> None:
+def test_build_options_can_apply_controlled_base_patch(monkeypatch) -> None:
     client = make_client(
         with_template=False,
         with_recommended_prices=True,
         ai_provider_api_key="deepseek-secret",
-    )
-
-    def invented_provider(*args, **kwargs):
-        return AIProviderResult(
-            components={
-                "cpu": "invented-cpu",
-                "motherboard": "b760m",
-                "ram": "ram-6000-cl30",
-                "gpu": "rtx-4060",
-                "storage": "ssd-1tb",
-                "psu": "psu-750w",
-            },
-            explanation="模型返回了候选池外型号。",
-            actual_cost_cents=0,
-        )
-
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", invented_provider, raising=False)
-
-    response = client.post(
-        "/v1/build/generate",
-        json={"budget": 7000, "use_case": "gaming", "preferences": ["2k"]},
-    )
-
-    assert response.status_code == 200
-    body = response.json()
-    assert body["status"] == "ready"
-    assert body["source"] == "rules_fallback"
-    assert "invented-cpu" not in body["components"].values()
-
-    usage = client.app.state.high_cost_usage_metrics.snapshot()
-    assert usage["external_ai_failures"] == 1
-
-
-def test_generate_build_can_use_ai_provider_when_selection_is_controlled(monkeypatch) -> None:
-    client = make_client(
-        with_template=False,
-        with_recommended_prices=True,
-        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "used"),),
     )
 
     def successful_provider(*args, **kwargs):
         return AIProviderResult(
-            components={
-                "cpu": "i5-14600k",
-                "motherboard": "b760m",
-                "ram": "ram-6000-cl30",
-                "gpu": "rtx-4060",
-                "storage": "ssd-1tb",
-                "psu": "psu-750w",
-            },
-            explanation="从候选池中选择的受控配置。",
+            base_template_id="base-7500-fps-used",
+            patches={"cpu": "i5-14600k"},
+            reasons=["保留 FPS 的 CPU 性能并增加无线网络。"],
             actual_cost_cents=12,
         )
 
     monkeypatch.setattr("app.api.builds.select_build_with_deepseek", successful_provider, raising=False)
 
     response = client.post(
-        "/v1/build/generate",
-        json={"budget": 7000, "use_case": "gaming", "preferences": ["2k"]},
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "needs_wireless_network": True,
+        },
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body["status"] == "ready"
-    assert body["source"] == "ai_provider"
-    assert body["components"]["cpu"] == "i5-14600k"
-    assert body["compatibility"]["compatible"] is True
+    assert len(body["options"]) == 1
+    option = body["options"][0]
+    assert option["source"] == "ai_provider"
+    assert option["components"]["cpu"] == "i5-14600k"
+    assert option["estimated_total"] == 8000
+    assert option["details"]["parts"][1]["name"].endswith(" WIFI")
 
     usage = client.app.state.high_cost_usage_metrics.snapshot()
     assert usage["actual_ai_cost_cents"] == 12
+
+
+def test_unselected_build_options_are_not_reused(monkeypatch) -> None:
+    client = make_client(
+        with_template=False,
+        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    calls = {"count": 0}
+
+    def provider(request, candidates, *args, **kwargs):
+        calls["count"] += 1
+        return AIProviderResult(
+            base_template_id=candidates[0].id,
+            patches={},
+            reasons=["使用审核基底满足无线需求。"],
+        )
+
+    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
+    payload = {
+        "budget": 7500,
+        "use_case": "游戏",
+        "game_categories": ["CS2"],
+        "needs_wireless_network": True,
+    }
+
+    first = client.post("/v1/build/options", json=payload)
+    second = client.post("/v1/build/options", json=payload)
+
+    assert first.status_code == second.status_code == 200
+    assert calls["count"] == 6
+    assert all(option["selection_id"] for option in first.json()["options"])
+    assert all(option["source"] == "ai_provider" for option in second.json()["options"])
+
+
+def test_selected_option_is_reused_without_ai_for_the_same_requirements(monkeypatch) -> None:
+    client = make_client(
+        with_template=False,
+        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    calls = {"count": 0}
+
+    def provider(request, candidates, *args, **kwargs):
+        calls["count"] += 1
+        return AIProviderResult(
+            base_template_id=candidates[0].id,
+            patches={},
+            reasons=["使用审核基底满足无线需求。"],
+        )
+
+    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
+    payload = {
+        "budget": 7500,
+        "use_case": "游戏",
+        "game_categories": ["CS2"],
+        "needs_wireless_network": True,
+    }
+    first = client.post("/v1/build/options", json=payload)
+    selected = first.json()["options"][0]
+
+    confirmation = client.post(
+        f"/v1/build/options/{selected['selection_id']}/select",
+        json={},
+    )
+    second = client.post("/v1/build/options", json=payload)
+
+    assert confirmation.status_code == 200
+    assert confirmation.json()["selected_count"] == 1
+    assert calls["count"] == 5
+    assert second.status_code == 200
+    assert second.json()["options"][0]["source"] == "selection_cache"
+    assert second.json()["options"][0]["components"] == selected["components"]
+
+
+def test_selected_option_cache_invalidates_after_catalog_change(monkeypatch) -> None:
+    client = make_client(
+        with_template=False,
+        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    calls = {"count": 0}
+
+    def provider(request, candidates, *args, **kwargs):
+        calls["count"] += 1
+        return AIProviderResult(
+            base_template_id=candidates[0].id,
+            patches={},
+            reasons=["使用审核基底满足无线需求。"],
+        )
+
+    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
+    payload = {
+        "budget": 7500,
+        "use_case": "游戏",
+        "game_categories": ["CS2"],
+        "needs_wireless_network": True,
+    }
+    first = client.post("/v1/build/options", json=payload)
+    selection_id = first.json()["options"][0]["selection_id"]
+    assert client.post(f"/v1/build/options/{selection_id}/select", json={}).status_code == 200
+
+    session_override = client.app.dependency_overrides[get_session]()
+    session = next(session_override)
+    component = session.get(HardwareComponent, "i5-14600k")
+    component.updated_at = datetime.now(timezone.utc) + timedelta(seconds=1)
+    session.commit()
+    with pytest.raises(StopIteration):
+        next(session_override)
+
+    second = client.post("/v1/build/options", json=payload)
+
+    assert second.status_code == 200
+    assert calls["count"] == 6
+    assert all(option["source"] == "ai_provider" for option in second.json()["options"])
+
+
+def test_select_build_option_rejects_unknown_selection_id() -> None:
+    client = make_client(with_template=False)
+
+    response = client.post(
+        "/v1/build/options/00000000-0000-0000-0000-000000000000/select",
+        json={},
+    )
+
+    assert response.status_code == 404
 
 
 def test_fallback_candidates_keep_only_top_four_per_role() -> None:

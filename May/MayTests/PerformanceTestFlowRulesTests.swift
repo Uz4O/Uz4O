@@ -142,7 +142,7 @@ struct PerformanceTestFlowRulesTests {
         let paths = [
             "May/Networking/AppAPIClient.swift",
             "May/Models/PerformanceTestFlow.swift",
-            "May/Screens/DIYBuildView.swift"
+            "May/Screens/GamePerformanceView.swift"
         ]
         let forbidden = [
             "lowFPS",

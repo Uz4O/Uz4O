@@ -1,20 +1,38 @@
 import SwiftUI
 
-struct AIBuildView: View {
-    typealias LoadOptions = (Int, String, [String]) async throws -> BuildOptionsResponseDTO
+struct AIBuildOptionsInput {
+    let budget: Int
+    let useCase: String
+    let games: [String]
+    let direction: AIBuildDirection
+    let officeApps: [String]
+    let needsWirelessNetwork: Bool
+    let memorySize: String
+    let storageSize: String
+    let noGPUBuild: Bool
+    let ownedGPUModel: String?
+}
 
-    private let minimumGenerationDuration: TimeInterval = 2.4
+struct AIBuildView: View {
+    typealias LoadOptions = (AIBuildOptionsInput) async throws -> BuildOptionsResponseDTO
+
+    private let minimumGenerationDuration: TimeInterval = 7.0
+    private let completionAnimationDuration: TimeInterval = 0.8
 
     @State private var currentStep: AIBuildStep = .budget
     @State private var isChangingStep = false
     @State private var isSubmitting = false
+    @State private var isGenerationComplete = false
+    @State private var directionRecommendation: AIBuildDirection?
     @State private var submissionError: String?
     @State private var generationTask: Task<Void, Never>?
     @State private var budget: Double = 6850
     @State private var selectedUseCase = "游戏"
     @State private var selectedGames: Set<String> = []
+    @State private var selectedDirection = AIBuildDirection.balanced
     @State private var selectedOfficeApps: Set<String> = []
     @State private var usesNoGpuBuild = false
+    @State private var ownedGPUModel = ""
     @State private var needsWirelessNetwork = false
     @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
@@ -30,11 +48,18 @@ struct AIBuildView: View {
     init(
         onBack: @escaping () -> Void,
         onComplete: @escaping (BuildOptionsResponseDTO) -> Void,
-        loadOptions: @escaping LoadOptions = { budget, useCase, games in
+        loadOptions: @escaping LoadOptions = { input in
             try await AppAPIClient().buildOptions(
-                budget: budget,
-                useCase: useCase,
-                gameCategories: games
+                budget: input.budget,
+                useCase: input.useCase,
+                gameCategories: input.games,
+                direction: input.direction.rawValue,
+                officeApps: input.officeApps,
+                needsWirelessNetwork: input.needsWirelessNetwork,
+                memorySize: input.memorySize,
+                storageSize: input.storageSize,
+                noGPUBuild: input.noGPUBuild,
+                ownedGPUModel: input.ownedGPUModel
             )
         }
     ) {
@@ -75,8 +100,8 @@ struct AIBuildView: View {
         "AutoCAD": "ruler",
         "Blender": "cube.transparent"
     ]
-    private let memorySizeOptions = ["16GB", "32GB", "64GB"]
-    private let storageSizeOptions = ["512GB", "1TB", "2TB", "4TB"]
+    private let memorySizeOptions = ["16GB", "32GB"]
+    private let storageSizeOptions = ["512GB", "1TB", "2TB"]
 
     private var availableMemorySizeOptions: [String] {
         let budgetValue = Int(budget)
@@ -132,6 +157,10 @@ struct AIBuildView: View {
         )
     }
 
+    private var recommendedDirection: AIBuildDirection {
+        AIBuildFlowRules.recommendedDirection(for: selectedGames)
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
@@ -169,7 +198,7 @@ struct AIBuildView: View {
             .padding(.bottom, 18)
 
             if isSubmitting {
-                AIBuildGeneratingView()
+                AIBuildGeneratingView(isComplete: isGenerationComplete)
                     .transition(.opacity.combined(with: .scale(scale: 0.98)))
                     .zIndex(2)
             }
@@ -192,6 +221,19 @@ struct AIBuildView: View {
         } message: {
             Text(submissionError ?? "请稍后重试")
         }
+        .sheet(item: $directionRecommendation) { recommendation in
+            BuildDirectionRecommendationSheet(
+                recommendedDirection: recommendation,
+                selectedDirection: $selectedDirection
+            ) {
+                directionRecommendation = nil
+                advanceFlow()
+            }
+            .presentationDetents([.height(510)])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(28)
+            .presentationBackground(Color.white)
+        }
     }
 
     @ViewBuilder
@@ -211,6 +253,13 @@ struct AIBuildView: View {
                 }
             }
             .tint(AppTheme.primaryText)
+            if usesNoGpuBuild {
+                TextField("例如 RTX 5070", text: $ownedGPUModel)
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityLabel("自备显卡型号")
+            }
 
         case .scenario:
             ScenarioSelectionSection(
@@ -273,6 +322,19 @@ struct AIBuildView: View {
 
     private func handlePrimaryAction() {
         guard !isChangingStep else { return }
+
+        if currentStep == .scenario,
+           selectedUseCase != "办公",
+           !selectedGames.isEmpty {
+            selectedDirection = recommendedDirection
+            directionRecommendation = recommendedDirection
+            return
+        }
+
+        advanceFlow()
+    }
+
+    private func advanceFlow() {
         isChangingStep = true
 
         if let next = nextStep {
@@ -315,20 +377,42 @@ struct AIBuildView: View {
 
     private func submitBuildOptions() {
         guard !isSubmitting else { return }
+        if usesNoGpuBuild && ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            submissionError = "请填写自备显卡型号"
+            return
+        }
 
-        let requestBudget = Int(budget)
-        let requestUseCase = selectedUseCase
-        let requestGames = selectedGames.sorted()
+        let input = AIBuildOptionsInput(
+            budget: Int(budget),
+            useCase: selectedUseCase,
+            games: selectedGames.sorted(),
+            direction: selectedDirection,
+            officeApps: selectedOfficeApps.sorted(),
+            needsWirelessNetwork: needsWirelessNetwork,
+            memorySize: selectedMemorySize,
+            storageSize: selectedStorageSize,
+            noGPUBuild: usesNoGpuBuild,
+            ownedGPUModel: usesNoGpuBuild
+                ? ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines)
+                : nil
+        )
         let minimumGenerationEnd = Date().addingTimeInterval(minimumGenerationDuration)
+        let completionStart = minimumGenerationEnd.addingTimeInterval(-completionAnimationDuration)
+        isGenerationComplete = false
         isSubmitting = true
 
         generationTask = Task {
             do {
-                let response = try await loadOptions(requestBudget, requestUseCase, requestGames)
-                let remainingDuration = minimumGenerationEnd.timeIntervalSinceNow
-                if remainingDuration > 0 {
-                    try await Task.sleep(nanoseconds: UInt64(remainingDuration * 1_000_000_000))
+                let response = try await loadOptions(input)
+                let remainingBeforeCompletion = completionStart.timeIntervalSinceNow
+                if remainingBeforeCompletion > 0 {
+                    try await Task.sleep(nanoseconds: UInt64(remainingBeforeCompletion * 1_000_000_000))
                 }
+                guard !Task.isCancelled else { return }
+                withAnimation(.easeOut(duration: 0.3)) {
+                    isGenerationComplete = true
+                }
+                try await Task.sleep(nanoseconds: UInt64(completionAnimationDuration * 1_000_000_000))
                 guard !Task.isCancelled else { return }
                 generationTask = nil
                 onComplete(response)
@@ -336,6 +420,7 @@ struct AIBuildView: View {
             } catch {
                 guard !Task.isCancelled else { return }
                 generationTask = nil
+                isGenerationComplete = false
                 isSubmitting = false
                 submissionError = error.localizedDescription
             }
@@ -373,116 +458,377 @@ struct AIBuildView: View {
 
 private struct AIBuildGeneratingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var currentStage = 0
+    @State private var progress = 3
     @State private var isPulsing = false
+    @State private var isFloating = false
+    @State private var ringRotation = 0.0
+    @State private var hasAppeared = false
+    @State private var completionBloom = false
 
-    private let stages = [
-        ("slider.horizontal.3", "分析预算与用途"),
-        ("cpu", "匹配硬件组合"),
-        ("checkmark.shield", "检查预算与兼容性")
-    ]
+    let isComplete: Bool
+
+    private let stages = ["分析需求", "检查兼容性", "优化配置方案", "生成最终结果"]
+
+    private var currentStage: Int {
+        min(stages.count - 1, progress / 25)
+    }
 
     var body: some View {
-        ZStack {
-            AppTheme.background
-                .ignoresSafeArea()
+        GeometryReader { proxy in
+            let usesCompactLayout = proxy.size.height < 900
+            let contentWidth = min(proxy.size.width - 32, 398)
+            let dialSize = min(contentWidth - 10, usesCompactLayout ? 304 : 342)
 
-            VStack(spacing: 28) {
-                ZStack {
-                    Circle()
-                        .stroke(AppTheme.primaryText.opacity(0.12), lineWidth: 2)
-                        .frame(width: 112, height: 112)
-                        .scaleEffect(isPulsing ? 1.12 : 0.94)
-                        .opacity(isPulsing ? 0.25 : 0.8)
+            ZStack {
+                Color.white
+                    .ignoresSafeArea()
 
-                    Circle()
-                        .fill(AppTheme.primaryText)
-                        .frame(width: 84, height: 84)
-                        .modifier(AppTheme.cardShadow)
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        Text("UzBox")
+                            .font(.system(size: 28, weight: .heavy))
+                            .foregroundStyle(.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, usesCompactLayout ? 4 : 10)
+                            .opacity(hasAppeared ? 1 : 0)
+                            .offset(y: hasAppeared ? 0 : -8)
+                            .animation(.easeOut(duration: 0.42).delay(0.03), value: hasAppeared)
 
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 31, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .scaleEffect(isPulsing ? 1.08 : 0.94)
-                }
+                        VStack(spacing: 8) {
+                            Text("AI 正在生成配置单")
+                                .font(.system(size: 30, weight: .bold))
+                                .foregroundStyle(.black)
 
-                VStack(spacing: 8) {
-                    Text("AI 正在为你生成配置")
-                        .font(.appTitle)
-                        .foregroundStyle(AppTheme.primaryText)
-
-                    Text("正在根据你的选择寻找更合适的硬件组合")
-                        .font(.appBody)
-                        .foregroundStyle(AppTheme.secondaryText)
+                            Text("正在根据你的需求匹配更适合的硬件方案")
+                                .font(.system(size: 15))
+                                .foregroundStyle(Color.black.opacity(0.45))
+                        }
                         .multilineTextAlignment(.center)
-                }
+                        .padding(.top, usesCompactLayout ? 26 : 42)
+                        .opacity(hasAppeared ? 1 : 0)
+                        .offset(y: hasAppeared ? 0 : 14)
+                        .animation(.easeOut(duration: 0.48).delay(0.08), value: hasAppeared)
 
-                VStack(spacing: 0) {
-                    ForEach(stages.indices, id: \.self) { index in
-                        HStack(spacing: 13) {
-                            Image(systemName: stageIcon(at: index))
-                                .font(.system(size: 13, weight: .bold))
-                                .foregroundStyle(index <= currentStage ? .white : AppTheme.mutedText)
-                                .frame(width: 30, height: 30)
-                                .background(
-                                    index <= currentStage ? AppTheme.primaryText : AppTheme.softSurface,
-                                    in: Circle()
-                                )
+                        GenerationProgressDial(
+                            progress: progress,
+                            size: dialSize,
+                            isComplete: isComplete,
+                            isPulsing: isPulsing,
+                            isFloating: isFloating,
+                            ringRotation: ringRotation
+                        )
+                        .padding(.top, usesCompactLayout ? 14 : 24)
+                        .opacity(hasAppeared ? 1 : 0)
+                        .scaleEffect(hasAppeared ? 1 : 0.9)
+                        .blur(radius: hasAppeared ? 0 : 8)
+                        .animation(.spring(response: 0.7, dampingFraction: 0.84).delay(0.14), value: hasAppeared)
 
-                            Text(stages[index].1)
-                                .font(.appSubheadline)
-                                .foregroundStyle(index <= currentStage ? AppTheme.primaryText : AppTheme.secondaryText)
+                        GenerationStageCard(
+                            stages: stages,
+                            currentStage: currentStage,
+                            isComplete: isComplete,
+                            isPulsing: isPulsing,
+                            isCompact: usesCompactLayout
+                        )
+                        .padding(.top, usesCompactLayout ? 10 : 18)
+                        .opacity(hasAppeared ? 1 : 0)
+                        .offset(y: hasAppeared ? 0 : 22)
+                        .animation(.spring(response: 0.62, dampingFraction: 0.88).delay(0.24), value: hasAppeared)
 
-                            Spacer()
+                        GenerationProgressDots(progress: progress)
+                            .padding(.top, usesCompactLayout ? 16 : 26)
+                            .opacity(hasAppeared ? 1 : 0)
+                            .offset(y: hasAppeared ? 0 : 10)
+                            .animation(.easeOut(duration: 0.42).delay(0.34), value: hasAppeared)
 
-                            if index == currentStage {
-                                ProgressView()
-                                    .controlSize(.small)
-                                    .tint(AppTheme.primaryText)
-                            }
-                        }
-                        .padding(.horizontal, 18)
-                        .frame(height: 54)
-
-                        if index < stages.count - 1 {
-                            Divider()
-                                .padding(.leading, 61)
-                        }
+                        Text("通常需要几秒钟，请稍候")
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.black.opacity(0.42))
+                            .padding(.top, usesCompactLayout ? 8 : 13)
+                            .padding(.bottom, usesCompactLayout ? 10 : 22)
+                            .opacity(hasAppeared ? 1 : 0)
+                            .animation(.easeOut(duration: 0.38).delay(0.4), value: hasAppeared)
                     }
+                    .frame(width: contentWidth)
+                    .frame(maxWidth: .infinity)
                 }
-                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18)
-                        .stroke(AppTheme.border, lineWidth: 1)
-                )
-                .modifier(AppTheme.cardShadow)
+
+                Circle()
+                    .fill(.white)
+                    .frame(width: 132, height: 132)
+                    .scaleEffect(completionBloom ? 12 : 0.1)
+                    .opacity(completionBloom && !reduceMotion ? 1 : 0)
+                    .position(x: proxy.size.width / 2, y: proxy.size.height * 0.39)
+                    .allowsHitTesting(false)
+                    .zIndex(10)
             }
-            .padding(.horizontal, 32)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("AI 正在生成配置方案，\(stages[currentStage].1)")
+        .accessibilityLabel("AI 正在生成配置方案，当前进度百分之\(progress)，\(stages[currentStage])")
         .onAppear {
-            guard !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+            if reduceMotion {
+                hasAppeared = true
+                return
+            }
+            withAnimation(.smooth(duration: 0.5)) {
+                hasAppeared = true
+            }
+            withAnimation(.easeInOut(duration: 1.25).repeatForever(autoreverses: true)) {
                 isPulsing = true
+            }
+            withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
+                isFloating = true
+            }
+            withAnimation(.linear(duration: 120).repeatForever(autoreverses: false)) {
+                ringRotation = 360
             }
         }
         .task {
-            for stage in 1..<stages.count {
+            while progress < 90, !Task.isCancelled, !isComplete {
                 do {
-                    try await Task.sleep(nanoseconds: 700_000_000)
+                    try await Task.sleep(nanoseconds: 70_000_000)
                 } catch {
                     return
                 }
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    currentStage = stage
+                if reduceMotion {
+                    progress = min(90, progress + 1)
+                } else {
+                    progress = min(90, progress + 1)
                 }
             }
         }
+        .onChange(of: isComplete) { _, complete in
+            guard complete else { return }
+            withAnimation(reduceMotion ? .none : .easeOut(duration: 0.32)) {
+                progress = 100
+            }
+            guard !reduceMotion else { return }
+            withAnimation(.easeIn(duration: 0.55).delay(0.16)) {
+                completionBloom = true
+            }
+        }
+    }
+}
+
+private struct GenerationProgressDial: View {
+    let progress: Int
+    let size: CGFloat
+    let isComplete: Bool
+    let isPulsing: Bool
+    let isFloating: Bool
+    let ringRotation: Double
+
+    var body: some View {
+        ZStack {
+            RadialGradient(
+                colors: [Color.black.opacity(0.045), .clear],
+                center: .center,
+                startRadius: 10,
+                endRadius: size * 0.48
+            )
+            .clipShape(Circle())
+
+            ZStack {
+                ForEach(0..<96, id: \.self) { index in
+                    Capsule()
+                        .fill(Color.black.opacity(index.isMultiple(of: 4) ? 0.12 : 0.065))
+                        .frame(width: 1, height: index.isMultiple(of: 4) ? 9 : 6)
+                        .offset(y: -size / 2 + 8)
+                        .rotationEffect(.degrees(Double(index) / 96 * 360))
+                }
+            }
+            .frame(width: size, height: size)
+            .rotationEffect(.degrees(ringRotation))
+
+            Circle()
+                .stroke(Color.black.opacity(0.035), lineWidth: 14)
+                .padding(22)
+                .scaleEffect(isPulsing ? 1.012 : 0.992)
+                .opacity(isPulsing ? 0.72 : 1)
+
+            Circle()
+                .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                .padding(15)
+
+            Circle()
+                .trim(from: 0, to: CGFloat(progress) / 100)
+                .stroke(.black, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+                .padding(24)
+                .animation(.linear(duration: 0.07), value: progress)
+
+            Circle()
+                .fill(.white)
+                .frame(width: 13, height: 13)
+                .shadow(color: Color.black.opacity(0.08), radius: 8)
+                .offset(y: -size / 2 + 24)
+                .rotationEffect(.degrees(Double(progress) * 3.6))
+                .scaleEffect(isPulsing ? 1.16 : 0.88)
+                .animation(.linear(duration: 0.07), value: progress)
+                .animation(.easeInOut(duration: 1.25), value: isPulsing)
+
+            Image("PCTower")
+                .resizable()
+                .scaledToFit()
+                .saturation(0)
+                .brightness(0.055)
+                .contrast(0.9)
+                .frame(width: size * 0.58, height: size * 0.58)
+                .scaleEffect(isFloating ? 1.022 : 0.985)
+                .rotationEffect(.degrees(isFloating ? 0.45 : -0.35), anchor: .bottom)
+                .offset(y: isFloating ? -10 : -3)
+                .shadow(
+                    color: Color.black.opacity(isFloating ? 0.075 : 0.12),
+                    radius: isFloating ? 18 : 12,
+                    x: 0,
+                    y: isFloating ? 16 : 9
+                )
+
+            VStack(spacing: 2) {
+                HStack(alignment: .firstTextBaseline, spacing: 1) {
+                    Text("\(progress)")
+                        .font(.system(size: 42, weight: .medium))
+                        .monospacedDigit()
+                        .transaction { transaction in
+                            transaction.animation = nil
+                        }
+                    Text("%")
+                        .font(.system(size: 17, weight: .semibold))
+                }
+                Text(isComplete ? "已完成" : "生成中")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.black.opacity(0.46))
+            }
+            .foregroundStyle(.black)
+            .frame(width: 112, height: 112)
+            .background(.white, in: Circle())
+            .shadow(color: Color.black.opacity(0.1), radius: 18, x: 0, y: 10)
+            .offset(y: size * 0.38)
+            .scaleEffect(isPulsing ? 1.012 : 0.995)
+        }
+        .frame(width: size, height: size)
+        .padding(.bottom, 18)
+    }
+}
+
+private struct GenerationStageCard: View {
+    let stages: [String]
+    let currentStage: Int
+    let isComplete: Bool
+    let isPulsing: Bool
+    let isCompact: Bool
+
+    var body: some View {
+        VStack(spacing: isCompact ? 6 : 10) {
+            ForEach(stages.indices, id: \.self) { index in
+                HStack(spacing: 12) {
+                    ZStack {
+                        if index < stages.count - 1 {
+                            Rectangle()
+                                .fill(Color.black.opacity(index < currentStage || isComplete ? 0.38 : 0.16))
+                                .frame(width: 1, height: isCompact ? 30 : 34)
+                                .offset(y: isCompact ? 28 : 31)
+                        }
+
+                        GenerationStageIndicator(
+                            isCompleted: isComplete || index < currentStage,
+                            isCurrent: !isComplete && index == currentStage,
+                            isPulsing: isPulsing
+                        )
+                    }
+                    .frame(width: 42, height: isCompact ? 40 : 44)
+
+                    Text("\(index + 1).  \(stages[index])")
+                        .font(.system(size: 16, weight: index == currentStage ? .medium : .regular))
+                        .foregroundStyle(index > currentStage && !isComplete ? Color.black.opacity(0.38) : .black)
+
+                    Spacer(minLength: 8)
+
+                    Text(status(for: index))
+                        .font(.system(size: 14, weight: index == currentStage ? .medium : .regular))
+                        .foregroundStyle(index == currentStage && !isComplete ? .black : Color.black.opacity(0.42))
+                        .contentTransition(.opacity)
+                }
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, isCompact ? 12 : 16)
+        .background(.white, in: RoundedRectangle(cornerRadius: 22))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(Color.black.opacity(0.055), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.075), radius: 20, x: 0, y: 10)
+        .animation(.spring(response: 0.48, dampingFraction: 0.8), value: currentStage)
+        .animation(.spring(response: 0.5, dampingFraction: 0.82), value: isComplete)
     }
 
-    private func stageIcon(at index: Int) -> String {
-        index < currentStage ? "checkmark" : stages[index].0
+    private func status(for index: Int) -> String {
+        if isComplete || index < currentStage { return "已完成" }
+        if index == currentStage { return "进行中" }
+        return "待开始"
+    }
+}
+
+private struct GenerationStageIndicator: View {
+    let isCompleted: Bool
+    let isCurrent: Bool
+    let isPulsing: Bool
+
+    var body: some View {
+        ZStack {
+            if isCurrent {
+                ForEach(0..<3, id: \.self) { ring in
+                    Circle()
+                        .stroke(Color.black.opacity(0.08 + Double(ring) * 0.04), lineWidth: 3)
+                        .frame(width: CGFloat(30 + ring * 10), height: CGFloat(30 + ring * 10))
+                        .scaleEffect(isPulsing ? 1.16 : 0.76)
+                        .opacity(isPulsing ? 0.38 : 0.88)
+                        .animation(
+                            .easeInOut(duration: 1.25)
+                                .repeatForever(autoreverses: true)
+                                .delay(Double(ring) * 0.1),
+                            value: isPulsing
+                        )
+                }
+                .transition(.scale(scale: 0.72).combined(with: .opacity))
+            }
+
+            Circle()
+                .fill(isCompleted || isCurrent ? Color.black : Color.white)
+                .frame(width: 23, height: 23)
+                .overlay(
+                    Circle()
+                        .stroke(isCompleted || isCurrent ? Color.clear : Color.black.opacity(0.3), lineWidth: 1.5)
+                )
+
+            if isCompleted {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.white)
+                    .transition(.scale(scale: 0.25).combined(with: .opacity))
+            }
+        }
+        .animation(.spring(response: 0.38, dampingFraction: 0.64), value: isCompleted)
+        .animation(.spring(response: 0.42, dampingFraction: 0.72), value: isCurrent)
+    }
+}
+
+private struct GenerationProgressDots: View {
+    let progress: Int
+
+    var body: some View {
+        HStack(spacing: 14) {
+            ForEach(0..<10, id: \.self) { index in
+                Circle()
+                    .fill(index <= progress / 10 ? Color.black : Color.black.opacity(0.18))
+                    .frame(width: index == min(9, progress / 10) ? 9 : 5, height: index == min(9, progress / 10) ? 9 : 5)
+            }
+        }
+        .frame(width: 262, height: 34)
+        .background(Color.black.opacity(0.018), in: Capsule())
+        .overlay(Capsule().stroke(Color.black.opacity(0.07), lineWidth: 1))
+        .animation(.spring(response: 0.34, dampingFraction: 0.7), value: progress / 10)
     }
 }
 
@@ -846,6 +1192,78 @@ private struct ScenarioSelectionSection: View {
                 )
             }
         }
+    }
+}
+
+private struct BuildDirectionRecommendationSheet: View {
+    let recommendedDirection: AIBuildDirection
+    @Binding var selectedDirection: AIBuildDirection
+    let onConfirm: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("为你推荐「\(recommendedDirection.title)」")
+                    .font(.appTitle)
+                    .foregroundStyle(AppTheme.primaryText)
+
+                Text(recommendedDirection.recommendation)
+                    .font(.appBody)
+                    .foregroundStyle(AppTheme.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(spacing: 10) {
+                ForEach(AIBuildDirection.allCases, id: \.self) { direction in
+                    Button {
+                        selectedDirection = direction
+                    } label: {
+                        HStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack(spacing: 8) {
+                                    Text(direction.title)
+                                        .font(.appSubheadline)
+
+                                    if direction == recommendedDirection {
+                                        Text("推荐")
+                                            .font(.system(size: 10, weight: .bold))
+                                            .padding(.horizontal, 7)
+                                            .frame(height: 21)
+                                            .background(AppTheme.softSurface, in: Capsule())
+                                    }
+                                }
+
+                                Text(direction.summary)
+                                    .font(.appCaption)
+                                    .foregroundStyle(AppTheme.secondaryText)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Image(systemName: selectedDirection == direction ? "checkmark.circle.fill" : "circle")
+                                .font(.system(size: 20, weight: .semibold))
+                        }
+                        .foregroundStyle(AppTheme.primaryText)
+                        .padding(.horizontal, 16)
+                        .frame(maxWidth: .infinity, minHeight: 64)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(
+                                    selectedDirection == direction ? AppTheme.primaryText : AppTheme.border,
+                                    lineWidth: selectedDirection == direction ? 1.5 : 1
+                                )
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            PrimaryButton(title: "按此方向继续", icon: "arrow.right", action: onConfirm)
+        }
+        .padding(.horizontal, AppTheme.screenPadding)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .background(Color.white.ignoresSafeArea())
     }
 }
 

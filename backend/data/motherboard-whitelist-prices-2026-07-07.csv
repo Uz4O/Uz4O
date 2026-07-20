@@ -2,10 +2,14 @@ target_id,name,platform,used_price,new_price,status
 asus-a520m-k,华硕 A520M-K,AM4,230,330,active
 asus-b450m-pro-gaming,华硕 B450M PRO 重炮手,AM4,280,,discontinued
 asus-b550m-plus,华硕 B550M PLUS 重炮手,AM4,400,,discontinued
+asus-prime-b650m-k,华硕 PRIME B650M-K,AM5,,700,active
 asus-b650m-tuf,华硕 B650M PLUS 重炮手,AM5,650,900,active
 msi-b850m-power,微星 B850M POWER,AM5,1150,1400,active
 msi-b850m-mortar,微星 B850M 迫击炮,AM5,900,1099,active
 asus-b850m-awy,华硕 B850M AYW OC,AM5,1000,1299,active
+asus-b860m-k,华硕 PRIME B860M-K,LGA1851,550,700,active
+msi-pro-b860m-a,微星 PRO B860M-A WIFI,LGA1851,750,1050,active
+msi-b860m-mortar,微星 MAG B860M MORTAR WIFI,LGA1851,900,1200,active
 msi-x870e-tomahawk,微星 X870E 战斧导弹,AM5,1500,1900,active
 msi-x870e-edge-ti,微星 X870E 刀锋钛,AM5,1700,2200,active
 asus-x870e-neo,华硕 ROG X870E NEO,AM5,3000,3400,active

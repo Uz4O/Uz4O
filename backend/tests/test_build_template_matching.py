@@ -73,6 +73,7 @@ def ready_option_payload() -> dict:
             "target_budget": 7500,
             "direction": "fps",
             "purchase_mode": "new",
+            "gpu_vendor": "nvidia",
             "parts": [
                 {
                     "role": role,
@@ -97,6 +98,7 @@ def test_build_option_response_accepts_ready_template_payload() -> None:
 
     assert option.status == "ready"
     assert option.source == "template"
+    assert option.details.gpu_vendor == "nvidia"
     assert {"advantages", "disadvantages", "risks"}.isdisjoint(
         option.details.model_dump()
     )
@@ -136,7 +138,6 @@ def test_build_option_response_requires_structured_template_fields(field: str) -
     ("field", "value"),
     [
         ("status", "needs_ai_generation"),
-        ("source", "ai_provider"),
         ("source", "rules_fallback"),
         ("source", "ai_pending"),
     ],

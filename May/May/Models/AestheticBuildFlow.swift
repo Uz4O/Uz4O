@@ -66,7 +66,8 @@ struct AestheticBuildStyle: Equatable, Identifiable {
 
     var startingCostLabel: String { "外观方案约 ¥\(options[0].styleCost.low.formatted()) 起" }
 
-    static let featured = AestheticDemoCatalog.styles
+    static let all = AestheticDemoCatalog.styles
+    static let featured = Array(all.prefix(3))
 }
 
 enum AestheticExperience: String, CaseIterable, Identifiable {
@@ -169,13 +170,13 @@ struct AestheticBuildFlow: Equatable {
     private(set) var isQuoteConfirmed = false
 
     init(styleID: String = AestheticBuildStyle.featured[0].id) {
-        self.styleID = AestheticBuildStyle.featured.contains { $0.id == styleID }
+        self.styleID = AestheticBuildStyle.all.contains { $0.id == styleID }
             ? styleID
-            : AestheticBuildStyle.featured[0].id
+            : AestheticBuildStyle.all[0].id
     }
 
     var style: AestheticBuildStyle {
-        AestheticBuildStyle.featured.first { $0.id == styleID } ?? AestheticBuildStyle.featured[0]
+        AestheticBuildStyle.all.first { $0.id == styleID } ?? AestheticBuildStyle.all[0]
     }
 
     var restoration: AestheticRestorationOption {

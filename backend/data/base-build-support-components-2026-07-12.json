@@ -12,10 +12,121 @@
       "cas_latency": 30
     },
     "used_price": 1300,
-    "new_price": 1800,
+    "new_price": null,
     "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "new_source": "",
     "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ddr5-16gb-6000-c28",
+    "category": "ram",
+    "name": "DDR5 16GB 6000 C28",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 16GB · 6000MHz · CL28",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 16,
+      "speed_mhz": 6000,
+      "cas_latency": 28
+    },
+    "used_price": null,
+    "new_price": 1900,
+    "used_source": "",
+    "new_source": "用户2026-07-17提供的DDR5 6000 C28 16GB参考价",
+    "price_date": "2026-07-17"
+  },
+  {
+    "id": "base-ddr5-16gb-6000-c32",
+    "category": "ram",
+    "name": "DDR5 16GB 6000 C32",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 16GB · 6000MHz · CL32",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 16,
+      "speed_mhz": 6000,
+      "cas_latency": 32
+    },
+    "used_price": null,
+    "new_price": 1700,
+    "used_source": "",
+    "new_source": "用户2026-07-17提供的DDR5 6000 C32 16GB参考价",
+    "price_date": "2026-07-17"
+  },
+  {
+    "id": "base-ddr5-16gb-6000-c36",
+    "category": "ram",
+    "name": "DDR5 16GB 6000 C36",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 16GB · 6000MHz · CL36",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 16,
+      "speed_mhz": 6000,
+      "cas_latency": 36
+    },
+    "used_price": null,
+    "new_price": 1300,
+    "used_source": "",
+    "new_source": "用户2026-07-19提供的6000元全新配置参考价",
+    "price_date": "2026-07-19"
+  },
+  {
+    "id": "base-ddr5-32gb-6000-c30",
+    "category": "ram",
+    "name": "DDR5 32GB 6000 C30",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 32GB（16GB x2）· 6000MHz · CL30",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 32,
+      "speed_mhz": 6000,
+      "cas_latency": 30,
+      "modules": 2
+    },
+    "used_price": 2600,
+    "new_price": null,
+    "used_source": "由用户提供的DDR5 16GB历史参考价按两根计算",
+    "new_source": "",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ddr5-32gb-6000-c28",
+    "category": "ram",
+    "name": "DDR5 32GB 6000 C28",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 32GB（16GB x2）· 6000MHz · CL28",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 32,
+      "speed_mhz": 6000,
+      "cas_latency": 28,
+      "modules": 2
+    },
+    "used_price": null,
+    "new_price": 3800,
+    "used_source": "",
+    "new_source": "由用户提供的DDR5 6000 C28 16GB参考价按两根计算",
+    "price_date": "2026-07-17"
+  },
+  {
+    "id": "base-ddr5-32gb-6000-c32",
+    "category": "ram",
+    "name": "DDR5 32GB 6000 C32",
+    "brand": "通用规格",
+    "detail_raw": "DDR5 · 32GB（16GB x2）· 6000MHz · CL32",
+    "specs": {
+      "type": "DDR5",
+      "capacity_gb": 32,
+      "speed_mhz": 6000,
+      "cas_latency": 32,
+      "modules": 2
+    },
+    "used_price": null,
+    "new_price": 3400,
+    "used_source": "",
+    "new_source": "由用户提供的DDR5 6000 C32 16GB参考价按两根计算",
+    "price_date": "2026-07-17"
   },
   {
     "id": "base-ddr4-16gb-3200",
@@ -36,6 +147,24 @@
     "price_date": "2026-07-07"
   },
   {
+    "id": "base-ddr4-32gb-3200",
+    "category": "ram",
+    "name": "DDR4 32GB 3200",
+    "brand": "通用规格",
+    "detail_raw": "DDR4 · 32GB（16GB x2）· 3200MHz",
+    "specs": {
+      "type": "DDR4",
+      "capacity_gb": 32,
+      "speed_mhz": 3200,
+      "modules": 2
+    },
+    "used_price": 800,
+    "new_price": 1000,
+    "used_source": "由用户提供的DDR4 16GB历史参考价按容量比例计算",
+    "new_source": "由用户提供的DDR4 16GB历史参考价按容量比例计算",
+    "price_date": "2026-07-07"
+  },
+  {
     "id": "base-ssd-512gb-tlc",
     "category": "storage",
     "name": "512GB TLC SSD",
@@ -50,6 +179,40 @@
     "new_price": 500,
     "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
     "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ssd-1tb-tlc",
+    "category": "storage",
+    "name": "1TB TLC SSD",
+    "brand": "通用规格",
+    "detail_raw": "1TB · NVMe · TLC",
+    "specs": {
+      "capacity_gb": 1024,
+      "type": "NVMe",
+      "flash_type": "TLC"
+    },
+    "used_price": 600,
+    "new_price": 800,
+    "used_source": "用户6500元历史配置参考价",
+    "new_source": "用户6500元历史配置参考价",
+    "price_date": "2026-07-07"
+  },
+  {
+    "id": "base-ssd-2tb-tlc",
+    "category": "storage",
+    "name": "2TB TLC SSD",
+    "brand": "通用规格",
+    "detail_raw": "2TB · NVMe · TLC",
+    "specs": {
+      "capacity_gb": 2048,
+      "type": "NVMe",
+      "flash_type": "TLC"
+    },
+    "used_price": 1200,
+    "new_price": 1600,
+    "used_source": "由用户提供的1TB历史参考价按容量比例计算",
+    "new_source": "由用户提供的1TB历史参考价按容量比例计算",
     "price_date": "2026-07-07"
   },
   {
@@ -112,10 +275,10 @@
       "rating": "80+ Gold"
     },
     "used_price": 150,
-    "new_price": 469,
+    "new_price": 200,
     "used_source": "用户历史配置中的650W二手参考价",
-    "new_source": "IT之家 2026-06-16 爱国者星璨EM650G公开售价 https://www.ithome.com/0/964/664.htm",
-    "price_date": "2026-07-12"
+    "new_source": "用户2026-07-19提供的6000元全新配置参考价",
+    "price_date": "2026-07-19"
   },
   {
     "id": "base-psu-850w-gold",
@@ -128,10 +291,10 @@
       "rating": "80+ Gold",
       "standard": "ATX 3.1"
     },
-    "used_price": 200,
-    "new_price": 569,
-    "used_source": "低置信度：2026-07-12必应收录的二手850W电源200元单一样本，正式展示前需复核",
-    "new_source": "IT之家 2026-06-16 爱国者星璨EM850G公开售价 https://www.ithome.com/0/964/664.htm",
-    "price_date": "2026-07-12"
+    "used_price": 250,
+    "new_price": 400,
+    "used_source": "用户2026-07-19提供的850W金牌电源二手参考价",
+    "new_source": "用户2026-07-19提供的850W金牌电源全新参考价",
+    "price_date": "2026-07-19"
   }
 ]

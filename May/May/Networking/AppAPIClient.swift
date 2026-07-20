@@ -53,26 +53,26 @@ struct PerformanceEstimateRequestDTO: Encodable {
 
 struct GamePerformanceResultDTO: Decodable {
     let game: String
-    let averageFPS: Int
+    let averageFps: Int
 
     var model: GamePerformanceResult {
         GamePerformanceResult(
             gameID: game,
-            averageFPS: averageFPS
+            averageFPS: averageFps
         )
     }
 }
 
 struct PerformanceEstimateResponseDTO: Decodable {
     let status: String
-    let averageFPS: Int?
+    let averageFps: Int?
     let missingGames: [String]
     let gameResults: [GamePerformanceResultDTO]
 
     var model: PerformanceEstimatePayload {
         PerformanceEstimatePayload(
             status: PerformanceEstimateStatus(rawValue: status) ?? .needsMoreData,
-            averageFPS: averageFPS,
+            averageFPS: averageFps,
             missingGames: missingGames,
             gameResults: gameResults.map(\.model)
         )
@@ -115,7 +115,14 @@ struct AppAPIClient {
     func buildOptions(
         budget: Int,
         useCase: String,
-        gameCategories: [String]
+        gameCategories: [String],
+        direction: String,
+        officeApps: [String],
+        needsWirelessNetwork: Bool,
+        memorySize: String,
+        storageSize: String,
+        noGPUBuild: Bool,
+        ownedGPUModel: String?
     ) async throws -> BuildOptionsResponseDTO {
         let response: BuildOptionsResponseDTO = try await request(
             path: "/v1/build/options",
@@ -123,13 +130,28 @@ struct AppAPIClient {
             body: BuildOptionsRequestDTO(
                 budget: budget,
                 useCase: useCase,
-                gameCategories: gameCategories
+                gameCategories: gameCategories,
+                direction: direction,
+                officeApps: officeApps,
+                needsWirelessNetwork: needsWirelessNetwork,
+                memorySize: memorySize,
+                storageSize: storageSize,
+                noGPUBuild: noGPUBuild,
+                ownedGPUModel: ownedGPUModel
             )
         )
         guard response.hasValidPartRoles else {
             throw APIError.invalidResponse
         }
         return response
+    }
+
+    func selectBuildOption(selectionID: String) async throws {
+        let _: BuildSelectionConfirmationDTO = try await request(
+            path: "/v1/build/options/\(selectionID)/select",
+            method: "POST",
+            body: EmptyBody()
+        )
     }
 
     func deleteAccount(confirmation: String, token: String) async throws {
@@ -381,11 +403,25 @@ private struct BuildOptionsRequestDTO: Encodable {
     let budget: Int
     let useCase: String
     let gameCategories: [String]
+    let direction: String
+    let officeApps: [String]
+    let needsWirelessNetwork: Bool
+    let memorySize: String
+    let storageSize: String
+    let noGPUBuild: Bool
+    let ownedGPUModel: String?
 
     enum CodingKeys: String, CodingKey {
         case budget
         case useCase = "use_case"
         case gameCategories = "game_categories"
+        case direction
+        case officeApps = "office_apps"
+        case needsWirelessNetwork = "needs_wireless_network"
+        case memorySize = "memory_size"
+        case storageSize = "storage_size"
+        case noGPUBuild = "no_gpu_build"
+        case ownedGPUModel = "owned_gpu_model"
     }
 }
 
@@ -507,6 +543,8 @@ enum BuildOptionStatusDTO: String, Decodable {
 
 enum BuildOptionSourceDTO: String, Decodable {
     case template
+    case aiProvider = "ai_provider"
+    case selectionCache = "selection_cache"
 }
 
 enum BuildPartRoleDTO: String, CaseIterable, Decodable, Hashable {
@@ -523,6 +561,7 @@ enum BuildPartRoleDTO: String, CaseIterable, Decodable, Hashable {
 enum BuildPartConditionDTO: String, Decodable {
     case new
     case used
+    case owned
 }
 
 struct BuildOptionsResponseDTO: Decodable {
@@ -538,6 +577,7 @@ struct BuildOptionDTO: Decodable, Identifiable {
     let status: BuildOptionStatusDTO
     let source: BuildOptionSourceDTO
     private let templateId: String
+    let selectionId: String?
     let title: String
     let components: [String: String]
     let estimatedTotal: Int?
@@ -545,13 +585,26 @@ struct BuildOptionDTO: Decodable, Identifiable {
     let details: BuildOptionDetailsDTO
 }
 
+private struct BuildSelectionConfirmationDTO: Decodable {
+    let selectionId: String
+    let selectedCount: Int
+}
+
 struct BuildOptionDetailsDTO: Decodable {
     let targetBudget: Int
     let direction: BuildDirectionDTO
     let purchaseMode: BuildPurchaseModeDTO
     let parts: [BuildOptionPartDTO]
+    let extras: [BuildOptionExtraDTO]?
     let suitableUser: String
     let priceDate: String
+}
+
+struct BuildOptionExtraDTO: Decodable {
+    let id: String
+    let name: String
+    let condition: BuildPartConditionDTO
+    let referencePrice: Int
 }
 
 struct BuildOptionPartDTO: Decodable {

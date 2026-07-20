@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String
+from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 import app.auth.models  # noqa: F401
@@ -27,6 +27,40 @@ class BuildTemplate(Base):
     explanation: Mapped[str] = mapped_column(String, nullable=False)
     details: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
     status: Mapped[str] = mapped_column(String, default="active", nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+
+class BuildSelectionCache(Base):
+    __tablename__ = "build_selection_cache"
+    __table_args__ = (
+        UniqueConstraint(
+            "request_hash",
+            "option_key",
+            name="uq_build_selection_cache_request_option",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=_uuid)
+    request_hash: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
+    option_key: Mapped[str] = mapped_column(String(32), nullable=False)
+    request_payload: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=False)
+    response_payload: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=False)
+    cache_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    selected_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    last_selected_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

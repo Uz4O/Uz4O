@@ -1,29 +1,55 @@
 import SwiftUI
 
 struct BuildOptionsView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var hasRevealed = false
+
     let response: BuildOptionsResponseDTO
     let onBack: () -> Void
     let onSelect: (BuildOptionDTO) -> Void
 
+    private var isVisible: Bool {
+        hasRevealed || reduceMotion
+    }
+
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 0) {
                 ScreenHeader(title: "选择配置方案", trailingIcon: nil, onBack: onBack)
                     .padding(.top, 8)
+                    .opacity(isVisible ? 1 : 0)
+                    .offset(y: isVisible ? 0 : 10)
+                    .animation(.easeOut(duration: 0.28).delay(0.06), value: hasRevealed)
 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text("可选方案")
-                        .font(.appTitle)
+                        .font(.system(size: 30, weight: .bold))
                         .foregroundStyle(AppTheme.primaryText)
+
                     Text("配置方向：\(response.direction.displayName)")
-                        .font(.appBody)
+                        .font(.system(size: 16))
                         .foregroundStyle(AppTheme.secondaryText)
                 }
+                .padding(.top, 40)
                 .padding(.horizontal, 4)
+                .padding(.bottom, 22)
+                .opacity(isVisible ? 1 : 0)
+                .offset(y: isVisible ? 0 : 14)
+                .animation(.spring(response: 0.5, dampingFraction: 0.88).delay(0.12), value: hasRevealed)
 
-                ForEach(response.options) { option in
-                    BuildOptionCard(option: option) {
-                        onSelect(option)
+                LazyVStack(spacing: 16) {
+                    ForEach(Array(response.options.enumerated()), id: \.element.id) { index, option in
+                        BuildOptionCard(option: option) {
+                            onSelect(option)
+                        }
+                        .opacity(isVisible ? 1 : 0)
+                        .offset(y: isVisible ? 0 : 22)
+                        .blur(radius: isVisible ? 0 : 4)
+                        .animation(
+                            .spring(response: 0.56, dampingFraction: 0.86)
+                                .delay(0.18 + Double(index) * 0.09),
+                            value: hasRevealed
+                        )
                     }
                 }
 
@@ -44,13 +70,19 @@ struct BuildOptionsView: View {
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                            .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
                         }
                     }
+                    .padding(.top, 16)
                 }
             }
-            .padding(.horizontal, AppTheme.screenPadding)
-            .padding(.bottom, 24)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 28)
+        }
+        .background(Color(red: 0.975, green: 0.981, blue: 0.988).ignoresSafeArea())
+        .onAppear {
+            guard !reduceMotion else { return }
+            hasRevealed = true
         }
     }
 }
@@ -67,54 +99,68 @@ private struct BuildOptionCard: View {
         option.part(for: .gpu).name
     }
 
+    private var mode: BuildPurchaseModeDTO {
+        option.details.purchaseMode
+    }
+
     var body: some View {
         Button(action: onSelect) {
-            HStack(spacing: 14) {
-                VStack(alignment: .leading, spacing: 13) {
-                    HStack(spacing: 10) {
-                        Text("\(option.details.purchaseMode.displayName)方案")
-                            .font(.appHeadline)
-                            .foregroundStyle(AppTheme.primaryText)
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 13) {
+                        HStack(spacing: 10) {
+                            Text("\(mode.displayName)方案")
+                                .font(.system(size: 23, weight: .bold))
+                                .foregroundStyle(.black)
 
-                        Text(option.details.direction.displayName)
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .padding(.horizontal, 8)
-                            .frame(height: 24)
-                            .background(AppTheme.softSurface, in: Capsule())
+                            Text(mode.badgeTitle)
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 9)
+                                .frame(height: 22)
+                                .background(mode.badgeColor, in: Capsule())
+                        }
 
-                        Spacer(minLength: 0)
+                        Text("\(cpuName) + \(gpuName)")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Color(red: 0.30, green: 0.31, blue: 0.34))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.82)
                     }
 
-                    ComponentNameRow(label: "CPU", name: cpuName)
-                    ComponentNameRow(label: "显卡", name: gpuName)
+                    Spacer(minLength: 8)
 
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("参考总价")
-                            .font(.appCaption)
-                            .foregroundStyle(AppTheme.secondaryText)
-                        Spacer()
-                        Text(option.referenceTotalText)
-                            .font(.appSubheadline)
-                            .foregroundStyle(AppTheme.primaryText)
-                            .monospacedDigit()
-                    }
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.black)
+                        .frame(width: 20)
+                        .offset(x: 6)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(AppTheme.mutedText)
-                    .frame(width: 18)
+                Divider()
+                    .overlay(AppTheme.border.opacity(0.9))
+                    .padding(.top, 22)
+
+                HStack(alignment: .firstTextBaseline) {
+                    Text("参考总价")
+                        .font(.system(size: 14))
+                        .foregroundStyle(AppTheme.secondaryText)
+
+                    Spacer()
+
+                    Text(option.referenceTotalText)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(.black)
+                        .monospacedDigit()
+                }
+                .padding(.top, 18)
             }
-            .padding(18)
+            .padding(.horizontal, 24)
+            .padding(.top, 25)
+            .padding(.bottom, 24)
             .frame(maxWidth: .infinity, minHeight: 176, alignment: .leading)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 18))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(AppTheme.border, lineWidth: 1)
-            )
-            .modifier(AppTheme.cardShadow)
+            .background(Color.white, in: RoundedRectangle(cornerRadius: 22))
+            .shadow(color: Color.black.opacity(0.07), radius: 16, x: 0, y: 8)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
@@ -122,24 +168,20 @@ private struct BuildOptionCard: View {
     }
 }
 
-private struct ComponentNameRow: View {
-    let label: String
-    let name: String
+private extension BuildPurchaseModeDTO {
+    var badgeTitle: String {
+        switch self {
+        case .new: "全新"
+        case .used: "二手"
+        case .mixed: "混合"
+        }
+    }
 
-    var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Text(label)
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(AppTheme.secondaryText)
-                .frame(width: 32, alignment: .leading)
-
-            Text(name)
-                .font(.appBody.weight(.semibold))
-                .foregroundStyle(AppTheme.primaryText)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, minHeight: 32, alignment: .topLeading)
-                .layoutPriority(1)
+    var badgeColor: Color {
+        switch self {
+        case .new: Color(red: 0.29, green: 0.43, blue: 0.68)
+        case .used: Color(red: 0.27, green: 0.52, blue: 0.43)
+        case .mixed: Color(red: 0.76, green: 0.43, blue: 0.27)
         }
     }
 }

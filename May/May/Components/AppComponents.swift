@@ -36,6 +36,7 @@ struct PrimaryButton: View {
     let title: String
     var icon: String?
     let action: () -> Void
+    var backgroundColor: Color = AppTheme.primaryButton
 
     var body: some View {
         Button(action: action) {
@@ -49,7 +50,7 @@ struct PrimaryButton: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 48)
-            .background(AppTheme.primaryButton, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+            .background(backgroundColor, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
         }
         .buttonStyle(.plain)
     }
@@ -658,11 +659,11 @@ struct MascotAvatar: View {
     var size: CGFloat = 42
 
     var body: some View {
-        Image("RobotMascot")
-            .resizable()
-            .scaledToFill()
+        Image(systemName: "person.fill")
+            .font(.system(size: size * 0.42, weight: .medium))
+            .foregroundStyle(Color.white)
             .frame(width: size, height: size)
-            .background(Color.white)
+            .background(Color.black)
             .clipShape(Circle())
             .overlay(Circle().stroke(AppTheme.border, lineWidth: 0.8))
     }

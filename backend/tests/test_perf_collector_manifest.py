@@ -22,7 +22,7 @@ def test_committed_manifest_covers_app_scope() -> None:
     manifest = load_manifest(MANIFEST_PATH)
     swift_cpus, swift_gpus = extract_hardware_scope(SWIFT_CATALOG_PATH)
 
-    assert (len(manifest.cpus), len(manifest.gpus), len(manifest.games)) == (101, 77, 15)
+    assert (len(manifest.cpus), len(manifest.gpus), len(manifest.games)) == (104, 81, 15)
     assert [(item.app_id, item.app_name) for item in manifest.cpus] == [
         (item.app_id, item.app_name) for item in swift_cpus
     ]
@@ -113,9 +113,10 @@ def test_load_manifest_rejects_incomplete_exact_mapping(tmp_path: Path) -> None:
 def test_extracts_real_swift_cpu_and_gpu_scope() -> None:
     cpus, gpus = extract_hardware_scope(SWIFT_CATALOG_PATH)
 
-    assert (len(cpus), len(gpus)) == (101, 77)
+    assert (len(cpus), len(gpus)) == (104, 81)
     assert cpus[0].app_id == "i9-14900ks"
-    assert gpus[0].app_id == "rtx-5090"
+    assert gpus[0].app_id == "arc-b580-12gb"
+    assert gpus[4].app_id == "rtx-5090"
 
 
 def test_extracts_multiline_hardware_initializers(tmp_path: Path) -> None:
@@ -278,7 +279,7 @@ def test_build_command_preserves_manual_mapping(monkeypatch, tmp_path: Path, cap
     assert rebuilt.cpus[0].source_slug == "confirmed-slug"
     assert rebuilt.cpus[0].source_name == "Confirmed CPU"
     assert rebuilt.cpus[0].status == "exact"
-    assert capsys.readouterr().out == "Wrote 101 CPUs, 77 GPUs, and 15 games.\n"
+    assert capsys.readouterr().out == "Wrote 104 CPUs, 81 GPUs, and 15 games.\n"
 
 
 def test_check_command_reports_status_and_page_count(monkeypatch, capsys) -> None:
@@ -316,15 +317,15 @@ def test_check_command_writes_json_coverage_report(monkeypatch, tmp_path, capsys
     report = json.loads(output_path.read_text(encoding="utf-8"))
     assert report == {
         "sections": {
-            "cpus": {"total": 101, "exact": 1, "review": 100, "missing": 0},
-            "gpus": {"total": 77, "exact": 1, "review": 76, "missing": 0},
+            "cpus": {"total": 104, "exact": 1, "review": 103, "missing": 0},
+            "gpus": {"total": 81, "exact": 1, "review": 80, "missing": 0},
             "games": {"total": 15, "exact": 1, "review": 14, "missing": 0},
         },
-        "overall": {"total": 193, "exact": 3, "review": 190, "missing": 0},
+        "overall": {"total": 200, "exact": 3, "review": 197, "missing": 0},
         "derived_result_page_count": 1,
     }
     output = capsys.readouterr().out
     assert "exact: 3\n" in output
-    assert "review: 190\n" in output
+    assert "review: 197\n" in output
     assert "missing: 0\n" in output
     assert "Derived result-page count: 1\n" in output

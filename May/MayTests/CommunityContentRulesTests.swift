@@ -5,8 +5,8 @@ struct CommunityContentRulesTests {
     static func main() {
         assertEqual(
             AppTab.allCases.map(\.rawValue),
-            ["首页", "DIY", "配置", "我的"],
-            "Bottom navigation should expose DIY while keeping community dormant before launch."
+            ["首页", "风格", "配置", "我的"],
+            "Bottom navigation should keep unreleased destinations dormant."
         )
 
         assertEqual(

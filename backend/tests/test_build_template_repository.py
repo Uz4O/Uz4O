@@ -241,6 +241,93 @@ def test_detailed_template_rejects_purchase_mode_condition_mismatch() -> None:
     assert "conditions do not match purchase mode" in error
 
 
+def test_detailed_template_rejects_total_more_than_100_below_target_budget() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = generate_high_budget_templates()[0].model_copy(deep=True)
+    difference = template.estimated_total - template.details.target_budget + 101
+    template.details.parts[-1].reference_price -= difference
+    template.estimated_total = template.details.target_budget - 101
+
+    with Session(engine) as session:
+        with pytest.raises(
+            ValueError,
+            match="estimated_total is more than 100 below target budget",
+        ):
+            upsert_build_templates(session, [template])
+
+
+def test_10000_plus_template_rejects_c36_ram() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = next(
+        item
+        for item in generate_high_budget_templates()
+        if item.details.target_budget >= 10_000
+    ).model_copy(deep=True)
+    ram = next(part for part in template.details.parts if part.role == "ram")
+    ram.specs["cas_latency"] = 36
+
+    with Session(engine) as session:
+        with pytest.raises(ValueError, match="require DDR5 C32 or better"):
+            upsert_build_templates(session, [template])
+
+
+def test_18000_plus_template_rejects_16gb_ram() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = next(
+        item
+        for item in generate_high_budget_templates()
+        if item.details.target_budget >= 18_000
+    ).model_copy(deep=True)
+    ram = next(part for part in template.details.parts if part.role == "ram")
+    ram.specs["capacity_gb"] = 16
+
+    with Session(engine) as session:
+        with pytest.raises(ValueError, match="expected 32GB base RAM capacity"):
+            upsert_build_templates(session, [template])
+
+
+def test_10000_plus_template_rejects_more_than_800_over_budget() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = next(
+        item
+        for item in generate_high_budget_templates()
+        if item.details.target_budget >= 10_000
+    ).model_copy(deep=True)
+    excess = template.details.target_budget + 801 - template.estimated_total
+    template.details.parts[-1].reference_price += excess
+    template.estimated_total += excess
+
+    with Session(engine) as session:
+        with pytest.raises(ValueError, match="exceeds allowed budget overage"):
+            upsert_build_templates(session, [template])
+
+
+def test_detailed_template_rejects_weak_cpu_for_5070ti() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    template = next(
+        item
+        for item in generate_high_budget_templates()
+        if item.components["gpu"] == "rtx-5070-ti"
+    ).model_copy(deep=True)
+    cpu_part = next(part for part in template.details.parts if part.role == "cpu")
+    cpu_part.component_id = "r5-9600x"
+    cpu_part.name = "R5 9600X"
+    cpu_part.specs = {"socket": "AM5", "perf_index": 72, "tdp": 105}
+    template.components["cpu"] = "r5-9600x"
+
+    with Session(engine) as session:
+        with pytest.raises(
+            ValueError,
+            match="requires R7 9700X-class or faster CPU",
+        ):
+            upsert_build_templates(session, [template])
+
+
 def test_detailed_template_rejects_reference_price_outside_condition_range() -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     Base.metadata.create_all(engine)
@@ -248,7 +335,11 @@ def test_detailed_template_rejects_reference_price_outside_condition_range() -> 
     original_prices = {
         part.component_id: part.reference_price for part in template.details.parts
     }
-    template.details.parts[0].reference_price = 1
+    changed_part = template.details.parts[0]
+    compensating_part = template.details.parts[-1]
+    difference = changed_part.reference_price - 1
+    changed_part.reference_price = 1
+    compensating_part.reference_price += difference
     template.estimated_total = sum(
         part.reference_price for part in template.details.parts
     )
