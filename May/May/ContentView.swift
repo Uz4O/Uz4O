@@ -110,6 +110,8 @@ struct ContentView: View {
             )
         case .aestheticBuild(let styleID):
             AestheticBuildFlowView(styleID: styleID, onClose: { presentedFullScreen = nil })
+        case .aestheticOverview(let styleID):
+            AestheticStyleRouteView(styleID: styleID, onClose: { presentedFullScreen = nil })
         case .performanceTest(let returnTab):
             GamePerformanceView(
                 savedHardwareProfile: onboardingProfile.hardwareProfile,
@@ -157,6 +159,7 @@ private enum MainRoute: Hashable {
 private enum FullScreenRoute: Identifiable, Equatable {
     case aiBuild(BuildResultReturnTarget)
     case aestheticBuild(styleID: String)
+    case aestheticOverview(styleID: String)
     case performanceTest(AppTab)
 
     var id: String {
@@ -165,6 +168,8 @@ private enum FullScreenRoute: Identifiable, Equatable {
             return "aiBuild-\(returnTarget)"
         case .aestheticBuild(let styleID):
             return "aesthetic-build-\(styleID)"
+        case .aestheticOverview(let styleID):
+            return "aesthetic-overview-\(styleID)"
         case .performanceTest(let returnTab):
             return "performance-test-\(returnTab)"
         }
@@ -192,7 +197,7 @@ private struct MainTabView: View {
                     onOpenConfigReview: { homePath.append(.configReview) },
                     onOpenUpgrade: { homePath.append(.upgrade) },
                     onOpenAestheticStyle: { styleID in
-                        onPresentFullScreen(.aestheticBuild(styleID: styleID))
+                        onPresentFullScreen(.aestheticOverview(styleID: styleID))
                     }
                 )
                 .toolbar(.hidden, for: .navigationBar)
@@ -207,7 +212,7 @@ private struct MainTabView: View {
 
             NavigationStack {
                 AestheticStylesView { styleID in
-                    onPresentFullScreen(.aestheticBuild(styleID: styleID))
+                    onPresentFullScreen(.aestheticOverview(styleID: styleID))
                 }
                 .toolbar(.hidden, for: .navigationBar)
             }
@@ -414,6 +419,29 @@ private struct AIBuildFlowView: View {
     private var resultTransition: AnyTransition {
         guard !reduceMotion else { return .opacity }
         return .opacity.combined(with: .scale(scale: 0.985))
+    }
+}
+
+private struct AestheticStyleRouteView: View {
+    let styleID: String
+    let onClose: () -> Void
+
+    @State private var showsBuildFlow = false
+
+    var body: some View {
+        if showsBuildFlow {
+            AestheticBuildFlowView(styleID: styleID, onClose: onClose)
+        } else {
+            AestheticStyleOverviewView(
+                styleID: styleID,
+                onClose: onClose,
+                onStartBuild: {
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        showsBuildFlow = true
+                    }
+                }
+            )
+        }
     }
 }
 

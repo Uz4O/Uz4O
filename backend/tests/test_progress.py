@@ -13,9 +13,9 @@ def test_progress_file_tracks_the_backend_roadmap() -> None:
     assert progress.project == "AI 装机助手后端"
     assert progress.estimated_completion == "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间"
     assert len(progress.phases) == 6
-    assert progress.total_items == 96
-    assert progress.completed_items == 83
-    assert progress.completion_percentage == 86
+    assert progress.total_items == 97
+    assert progress.completed_items == 84
+    assert progress.completion_percentage == 87
     assert [item.title for item in progress.user_action_items] == [
         "硬件尺寸字段人工补充",
         "生产短信服务与登录密钥配置",
@@ -81,7 +81,7 @@ def test_progress_dashboard_renders_summary_and_phases() -> None:
 
     assert response.status_code == 200
     assert "AI 装机助手后端" in response.text
-    assert "86%" in response.text
+    assert "87%" in response.text
     assert "预计完成时间" in response.text
     assert "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间" in response.text
     assert "需要你完成" in response.text

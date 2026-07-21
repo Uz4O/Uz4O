@@ -1,0 +1,35 @@
+target_id,category,name,brand,reference_price,normal_price_min,normal_price_max,accepted_count,rejected_count,review_reasons
+arc-a580-8gb,gpu,Intel Arc A580 8GB,Intel,1400,850,1400,1,0,用户提供的办公硬件白名单与参考价格
+arc-a770-16gb,gpu,Intel Arc A770 16GB,Intel,2000,1300,2000,1,0,用户提供的办公硬件白名单与参考价格
+arc-b570-10gb,gpu,Intel Arc B570 10GB,Intel,2000,1300,2000,1,0,用户提供的办公硬件白名单与参考价格
+arc-b580-12gb,gpu,Intel Arc B580 12GB,Intel,2500,1500,2500,1,0,用户提供的办公硬件白名单与参考价格
+asus-a520m-k,motherboard,华硕 A520M-K,华硕,330,230,330,1,0,用户提供的办公硬件白名单与参考价格
+asus-b860m-k,motherboard,华硕 PRIME B860M-K,华硕,700,550,700,1,0,用户提供的办公硬件白名单与参考价格
+base-case-mid-tower,case,普通中塔机箱,通用规格,100,80,100,1,0,用户提供的办公硬件白名单与参考价格
+base-cooler-6-heatpipe,cooler,6热管风冷,通用规格,100,70,100,1,0,用户提供的办公硬件白名单与参考价格
+base-cooler-dual-tower-6-heatpipe,cooler,双塔6热管风冷,通用规格,150,100,150,1,0,用户提供的办公硬件白名单与参考价格
+base-ddr4-16gb-3200,ram,DDR4 16GB 3200,通用规格,500,400,500,1,0,用户提供的办公硬件白名单与参考价格
+base-ddr5-16gb-6000-c30,ram,DDR5 16GB 6000 C30,通用规格,1300,1300,,1,0,用户提供的办公硬件白名单与参考价格
+base-psu-650w-gold,psu,650W金牌电源,通用规格,200,150,200,1,0,用户提供的办公硬件白名单与参考价格
+base-psu-850w-gold,psu,850W金牌ATX 3.1电源,通用规格,400,250,400,1,0,用户提供的办公硬件白名单与参考价格
+base-ssd-512gb-tlc,storage,512GB TLC SSD,通用规格,500,350,500,1,0,用户提供的办公硬件白名单与参考价格
+msi-b860m-mortar,motherboard,微星 MAG B860M MORTAR WIFI,微星,1200,900,1200,1,0,用户提供的办公硬件白名单与参考价格
+msi-pro-b860m-a,motherboard,微星 PRO B860M-A WIFI,微星,1050,750,1050,1,0,用户提供的办公硬件白名单与参考价格
+office-ddr5-16gb-7200-c36,ram,DDR5 16GB 7200 C36,通用规格,1800,,1800,1,0,用户提供的办公硬件白名单与参考价格
+r5-5600x,cpu,R5 5600X,AMD,820,720,820,1,0,用户提供的办公硬件白名单与参考价格
+rtx-4060,gpu,RTX 4060,NVIDIA,2100,1700,2100,1,0,用户提供的办公硬件白名单与参考价格
+rtx-4060-ti,gpu,RTX 4060 Ti,NVIDIA,1900,1900,,1,0,用户提供的办公硬件白名单与参考价格
+rtx-4070,gpu,RTX 4070,NVIDIA,3000,3000,,1,0,用户提供的办公硬件白名单与参考价格
+rtx-4070-super,gpu,RTX 4070 SUPER,NVIDIA,3700,3700,,1,0,用户提供的办公硬件白名单与参考价格
+rtx-5060,gpu,RTX 5060,NVIDIA,2300,2200,2300,1,0,用户提供的办公硬件白名单与参考价格
+rtx-5060-ti,gpu,RTX 5060 Ti,NVIDIA,2800,2700,2800,1,0,用户提供的办公硬件白名单与参考价格
+rtx-5070,gpu,RTX 5070,NVIDIA,5000,4300,5000,1,0,用户提供的办公硬件白名单与参考价格
+rtx-5070-ti,gpu,RTX 5070 Ti,NVIDIA,7200,6400,7200,1,0,用户提供的办公硬件白名单与参考价格
+rtx-5080,gpu,RTX 5080,NVIDIA,9300,8300,9300,1,0,用户提供的办公硬件白名单与参考价格
+rx-7650-gre,gpu,RX 7650 GRE,AMD,1850,1200,1850,1,0,用户提供的办公硬件白名单与参考价格
+rx-7800-xt,gpu,RX 7800 XT,AMD,3700,2300,3700,1,0,用户提供的办公硬件白名单与参考价格
+rx-7900-xt,gpu,RX 7900 XT,AMD,3200,3200,,1,0,用户提供的办公硬件白名单与参考价格
+u5-245k,cpu,Ultra 5 245K,Intel,1090,850,1090,1,0,用户提供的办公硬件白名单与参考价格
+u5-250-plus,cpu,Ultra 5 250 Plus,Intel,1450,1300,1450,1,0,用户提供的办公硬件白名单与参考价格
+u7-265k,cpu,Ultra 7 265K,Intel,1799,1500,1799,1,0,用户提供的办公硬件白名单与参考价格
+u7-270-plus,cpu,Ultra 7 270 Plus,Intel,2100,2000,2100,1,0,用户提供的办公硬件白名单与参考价格

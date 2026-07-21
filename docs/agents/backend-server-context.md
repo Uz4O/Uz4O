@@ -8,7 +8,8 @@ Read this before backend, API, deployment, ICP/domain, or production-readiness w
 
 - Added three priced LGA1851 motherboard whitelist entries for 15th-generation/Core Ultra 200S productivity builds: ASUS PRIME B860M-K at `550/700`, MSI PRO B860M-A WIFI at `750/1050`, and MSI MAG B860M MORTAR WIFI at `900/1200` yuan used/new.
 - Added the Intel-productivity-only default memory component `DDR5 16GB 7200 C36` at the user-provided all-new price of `1800` yuan. It is isolated from the existing AMD gaming base-template pool.
-- Production now contains `749` hardware components, `62` approved component reference prices, and `20` motherboard whitelist price rows. The existing `275` active gaming templates were unchanged.
+- Production now contains `749` hardware components, `73` approved component reference prices, and `20` motherboard whitelist price rows. It has `340` active templates: `275` reviewed gaming templates plus `65` office templates.
+- Office requests use separate general/2D, media-editing, and Blender/CUDA profiles. Pure office may use Intel Arc, Blender/CUDA is NVIDIA-only, and gaming-plus-office is forced to NVIDIA while retaining the selected gaming direction.
 - Production verification passed: Alembic is `20260720_0015 (head)`, `ai-builder-api` is active, and `/v1/catalog/readiness` returns `ready: true`.
 
 ## Product Scope

@@ -59,8 +59,8 @@ struct AIBuildFlowRulesTests {
         )
         assertContains(
             buildViewSource,
-            "minimumGenerationDuration: TimeInterval = 7.0",
-            "Successful generation should remain visible long enough to feel intentional."
+            "minimumGenerationDuration: TimeInterval = 14.5",
+            "Successful generation should remain visible for the slower loading experience."
         )
         assertContains(
             buildViewSource,
@@ -99,6 +99,71 @@ struct AIBuildFlowRulesTests {
         )
         assertContains(
             buildViewSource,
+            ".frame(width: 90, height: 90)",
+            "The central progress badge should stay compact around the percentage."
+        )
+        assertNotContains(
+            buildViewSource,
+            ".scaleEffect(isPulsing ? 1.012 : 0.995)",
+            "The central progress badge should remain still instead of pulsing."
+        )
+        assertContains(
+            buildViewSource,
+            "proxy.size.width * 0.6",
+            "The generation stage separators should end around the reference timeline width."
+        )
+        assertNotContains(
+            buildViewSource,
+            ".background(.white, in: RoundedRectangle(cornerRadius: 22))",
+            "The generation stages should not be presented inside a card."
+        )
+        assertNotContains(
+            buildViewSource,
+            "Text(status(for: index))",
+            "The generation stages should follow the reference layout without right-side status labels."
+        )
+        assertContains(
+            buildViewSource,
+            "isCompact ? 54 : 64",
+            "The generation timeline should retain its original readable row height."
+        )
+        assertContains(
+            buildViewSource,
+            "HStack(alignment: .top, spacing: 16)",
+            "The timeline dots and labels should share the same top alignment."
+        )
+        assertContains(
+            buildViewSource,
+            "ZStack(alignment: .top)",
+            "The connector line should start from each dot center instead of the row center."
+        )
+        assertContains(
+            buildViewSource,
+            ".animation(.smooth(duration: 0.45), value: currentStage)",
+            "The active stage dot should use the smoother stage transition."
+        )
+        assertContains(
+            buildViewSource,
+            "CGFloat(currentStage) * rowHeight",
+            "The active stage dot should move using the fixed row spacing."
+        )
+        assertNotContains(
+            buildViewSource,
+            "LiquidStageDot(",
+            "The removed liquid deformation should not return to the stage timeline."
+        )
+        assertContains(
+            buildViewSource,
+            "while progress < 99",
+            "The loading progress should approach 99% before waiting for generation to finish."
+        )
+        assertContains(
+            buildViewSource,
+            ".linear(duration: 0.12)",
+            "The progress arc should use a longer linear interpolation to avoid visible stepping."
+        )
+        assertContains(
+            buildViewSource,
             "ringRotation = 360",
             "The loading dial should include a slow continuous scanning motion."
         )
@@ -107,10 +172,10 @@ struct AIBuildFlowRulesTests {
             ".linear(duration: 120)",
             "The outer dial ticks should rotate slowly enough to feel nearly still."
         )
-        assertContains(
+        assertNotContains(
             buildViewSource,
-            ".scaleEffect(isPulsing ? 1.16 : 0.76)",
-            "The active stage rings should visibly shrink and expand."
+            "ForEach(0..<3, id: \\.self) { ring in",
+            "The active stage rings should be removed from the transition page."
         )
         assertContains(
             buildViewSource,
@@ -132,6 +197,21 @@ struct AIBuildFlowRulesTests {
             "ScrollView(showsIndicators: false)",
             "The generation dashboard should retain scrolling as an accessibility fallback."
         )
+        assertNotContains(
+            buildViewSource,
+            "GenerationProgressDots(progress: progress)",
+            "The removed bottom progress dots should not return to the transition page."
+        )
+        assertNotContains(
+            buildViewSource,
+            "Color(red: 0.62, green: 0.64, blue: 0.66)",
+            "The removed active stage rings should not leave a gray-ring implementation behind."
+        )
+        assertNotContains(
+            buildViewSource,
+            "isFloating",
+            "The host image should remain still inside the progress dial."
+        )
         print("AIBuildFlowRulesTests passed")
     }
 
@@ -144,6 +224,12 @@ struct AIBuildFlowRulesTests {
     private static func assertContains(_ text: String, _ fragment: String, _ message: String) {
         guard text.contains(fragment) else {
             fatalError("\(message)\nMissing: \(fragment)")
+        }
+    }
+
+    private static func assertNotContains(_ text: String, _ fragment: String, _ message: String) {
+        guard !text.contains(fragment) else {
+            fatalError("\(message)\nUnexpected: \(fragment)")
         }
     }
 }

@@ -589,7 +589,11 @@ def rules_fallback_response(
 ) -> Optional[BuildGenerationResponse]:
     price_by_component_id = {price.component_id: price for price in prices}
     components_by_id = {component.id: component for component in components}
-    candidates_by_role = fallback_candidates_by_role(components, price_by_component_id)
+    candidates_by_role = fallback_candidates_by_role(
+        components,
+        price_by_component_id,
+        use_case=request.use_case,
+    )
     required_roles = _required_fallback_roles(request, candidates_by_role)
 
     if any(not candidates_by_role.get(role) for role in required_roles):
@@ -680,12 +684,20 @@ def ai_pending_response(ai_provider_configured: bool = False) -> BuildGeneration
 def fallback_candidates_by_role(
     components: Iterable[HardwareComponent],
     price_by_component_id: Dict[str, ComponentPrice],
+    *,
+    use_case: str = "游戏",
 ) -> Dict[str, List[HardwareComponent]]:
     candidates_by_role: Dict[str, List[HardwareComponent]] = {}
     for component in components:
         if not component.is_recommended or component.status != "active":
             continue
         if component.id not in price_by_component_id:
+            continue
+        if (
+            component.category == "gpu"
+            and component.id.startswith("arc-")
+            and use_case != "办公"
+        ):
             continue
         candidates_by_role.setdefault(component.category, []).append(component)
 

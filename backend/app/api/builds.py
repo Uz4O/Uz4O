@@ -275,6 +275,8 @@ def _option_gpu_vendors(
         return (None,)
     if request.use_case == "办公":
         return (None,)
+    if request.use_case == "游戏兼办公":
+        return ("nvidia",)
     if request.budget < 5_000 or direction == "fps":
         return (None,)
     if request.ray_tracing is False:

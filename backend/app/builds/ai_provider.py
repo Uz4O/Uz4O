@@ -4,7 +4,11 @@ from typing import Dict, List, Optional
 
 import httpx
 
-from app.builds.customization import condition_price, customized_budget_limit
+from app.builds.customization import (
+    component_allowed_for_request,
+    condition_price,
+    customized_budget_limit,
+)
 from app.builds.models import BuildTemplate
 from app.builds.service import BuildRequest, BuildTemplateDetails
 from app.catalog.models import ComponentPrice, HardwareComponent
@@ -48,6 +52,7 @@ def select_build_with_deepseek(
                     "你是 AI 装机功能的受控配置优化器，不是配置生成器。"
                     "必须选择一个给定的 base_template_id，只能用 allowed_patches 中的 component_id 修改它。"
                     "禁止改变 fps/3A/均衡方向，禁止编造型号，禁止返回完整配置单。"
+                    "纯办公只能使用办公白名单；Intel Arc 不得用于游戏或游戏兼办公，CUDA/Blender 必须使用 NVIDIA。"
                     "内存容量、硬盘容量、Wi-Fi/蓝牙和自备显卡由服务器自动应用，禁止为这些硬需求返回补丁。"
                     "用户硬需求优先，最终价格必须在服务器给出的预算上限内。只返回 JSON。"
                 ),
@@ -208,6 +213,7 @@ def _patch_candidate_payload(
             price is None
             or component.status != "active"
             or not component.is_recommended
+            or not component_allowed_for_request(request, component)
         ):
             continue
         prices = {
@@ -258,6 +264,7 @@ def _validate_patches(
             or component.status != "active"
             or not component.is_recommended
             or component_id not in price_by_component_id
+            or not component_allowed_for_request(request, component)
         ):
             raise AIProviderError("AI provider returned a patch outside the approved pool")
         normalized[role] = component_id

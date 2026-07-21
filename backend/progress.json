@@ -2,7 +2,7 @@
   "project": "AI 装机助手后端",
   "updated_at": "2026-07-20",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
-  "current_phase": "DeepSeek基底配置受控调整与用户选择缓存已部署；颜值价格规则与自有游戏平均 FPS 数据等待补充",
+  "current_phase": "游戏与办公生产力基底配置均已接入受控匹配；颜值价格规则与自有游戏平均 FPS 数据等待补充",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -197,6 +197,12 @@
         {
           "title": "DeepSeek动态配置调整",
           "description": "官方DeepSeek API已接入审核基底流程；模型只能选择同方向基底并返回白名单补丁，服务器负责容量、无线、自备显卡、成色、价格、兼容性、功耗和预算复核。用户实际选择的方案会按精确需求持久化复用，价格、基底、硬件或规则变化后自动失效，从而减少重复AI调用。",
+          "status": "completed",
+          "completed_at": "2026-07-20"
+        },
+        {
+          "title": "办公生产力基底配置",
+          "description": "已生成65套纯办公审核基底：5000元及以下复用现有综合性能最强方案，6000-20000元按日常平面、视频剪辑和3D/CUDA负载匹配15代Intel平台、Intel Arc或NVIDIA显卡，固定16GB内存与512GB TLC固态，并隔离游戏兼办公流程。",
           "status": "completed",
           "completed_at": "2026-07-20"
         },

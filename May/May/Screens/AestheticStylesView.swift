@@ -3,92 +3,178 @@ import SwiftUI
 struct AestheticStylesView: View {
     let onOpenStyle: (String) -> Void
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
-    ]
-
     var body: some View {
         GeometryReader { proxy in
-            let contentWidth = AppTheme.responsiveContentWidth(
-                for: proxy.size.width,
-                compactWidth: 344,
-                expandedWidth: 406,
-                sideMargin: 34
-            )
+            let contentWidth = min(proxy.size.width - 40, 430)
 
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("装机风格")
                         .font(.system(size: 29, weight: .heavy))
-                        .foregroundStyle(AppTheme.primaryText)
+                        .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
                         .padding(.top, 12)
 
-                    LazyVGrid(columns: columns, alignment: .leading, spacing: 12) {
-                        ForEach(AestheticBuildStyle.all) { style in
-                            AestheticStyleGridCard(style: style) {
+                    Text("多种高性能整机设计，找到属于你的风格")
+                        .font(.system(size: 11, weight: .regular))
+                        .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
+                        .padding(.top, 4)
+
+                    LazyVStack(spacing: 0) {
+                        ForEach(AestheticBuildStyle.all.indices, id: \.self) { index in
+                            let style = AestheticBuildStyle.all[index]
+
+                            AestheticStyleShowcaseRow(
+                                index: index,
+                                style: style,
+                                contentWidth: contentWidth
+                            ) {
                                 onOpenStyle(style.id)
                             }
                         }
                     }
+                    .padding(.top, 14)
                 }
                 .frame(width: contentWidth, alignment: .leading)
-                .padding(.bottom, 112)
+                .padding(.bottom, 88)
                 .frame(maxWidth: .infinity)
             }
-            .background(AppTheme.background.ignoresSafeArea())
+            .background {
+                RadialGradient(
+                    colors: [
+                        Color.white,
+                        Color(red: 0.94, green: 0.96, blue: 0.98).opacity(0.72)
+                    ],
+                    center: .center,
+                    startRadius: 80,
+                    endRadius: 520
+                )
+                .ignoresSafeArea()
+            }
         }
     }
 }
 
-private struct AestheticStyleGridCard: View {
+private struct AestheticStyleShowcaseRow: View {
+    let index: Int
     let style: AestheticBuildStyle
+    let contentWidth: CGFloat
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 0) {
-                Image(style.image)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(8)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 158)
+            ZStack(alignment: .topLeading) {
+                Ellipse()
+                    .fill(Color.black.opacity(0.09))
+                    .frame(width: 156, height: 7)
+                    .blur(radius: 5)
+                    .offset(x: contentWidth * 0.57, y: rowHeight - 22)
+
+                caseImage
+                    .scaleEffect(x: 1, y: -1)
+                    .frame(height: 25, alignment: .top)
                     .clipped()
-                    .overlay {
-                        UnevenRoundedRectangle(
-                            topLeadingRadius: 14,
-                            topTrailingRadius: 14
+                    .mask(
+                        LinearGradient(
+                            colors: [.white.opacity(0.22), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
                         )
-                        .stroke(AppTheme.border.opacity(0.75), lineWidth: 0.8)
-                    }
+                    )
+                    .opacity(0.32)
+                    .blur(radius: 1.2)
+                    .offset(x: contentWidth * 0.40, y: rowHeight - 21)
+
+                caseImage
+                    .offset(x: contentWidth * 0.40, y: imageYOffset)
+
+                HStack(spacing: 12) {
+                    Text(String(format: "%02d", index + 1))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+
+                    Text("/")
+                        .font(.system(size: 18, weight: .light))
+                }
+                .foregroundStyle(Color(red: 0.67, green: 0.70, blue: 0.75))
 
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(style.title)
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(AppTheme.primaryText)
-                        .lineLimit(1)
+                    Text(displayTitle)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    Text(style.startingCostLabel)
+                    Text("外观方案约")
                         .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(AppTheme.secondaryText)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+                        .foregroundStyle(Color(red: 0.50, green: 0.53, blue: 0.58))
+
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text("¥ \(style.minimumOverviewCost.formatted())")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
+
+                        Text("起")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(Color(red: 0.50, green: 0.53, blue: 0.58))
+                    }
+
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 19, height: 19)
+                        .background(Color(red: 0.035, green: 0.051, blue: 0.067), in: Circle())
+                        .padding(.top, 5)
                 }
-                .padding(12)
-                .frame(maxWidth: .infinity, minHeight: 70, alignment: .topLeading)
-                .background(
-                    Color.white,
-                    in: UnevenRoundedRectangle(
-                        bottomLeadingRadius: 14,
-                        bottomTrailingRadius: 14
-                    )
-                )
+                .frame(width: 154, alignment: .leading)
+                .offset(y: 42)
             }
-            .frame(maxWidth: .infinity)
+            .frame(width: contentWidth, height: rowHeight, alignment: .topLeading)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(style.title)，\(style.startingCostLabel)")
+    }
+
+    private var caseImage: some View {
+        Image(style.image)
+            .resizable()
+            .scaledToFit()
+            .frame(width: contentWidth * 0.69, height: 156)
+            .scaleEffect(imageScale)
+    }
+
+    private var displayTitle: String {
+        style.id == "blackKnight" ? "联立 VISION\nCOMPACT" : style.title
+    }
+
+    private var rowHeight: CGFloat {
+        switch style.id {
+        case "blackKnight": 178
+        case "panorama": 172
+        case "whiteMinimal": 172
+        case "bo400": 142
+        default: 140
+        }
+    }
+
+    private var imageScale: CGFloat {
+        switch style.id {
+        case "blackKnight": 1.10
+        case "panorama": 1.04
+        case "whiteMinimal": 1.03
+        case "bo400": 1.04
+        default: 0.78
+        }
+    }
+
+    private var imageYOffset: CGFloat {
+        switch style.id {
+        case "blackKnight": 0
+        case "panorama": -6
+        case "whiteMinimal": -8
+        case "bo400": -4
+        default: -2
+        }
     }
 }
 
@@ -100,30 +186,13 @@ struct AestheticStyleRow: View {
         Button(action: action) {
             HStack(alignment: .center, spacing: 10) {
                 VStack(alignment: .leading, spacing: 9) {
-                    HStack(spacing: 7) {
-                        Text(style.title)
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(.black)
-
-                        Text(style.startingCostLabel)
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(.black.opacity(0.52))
-                    }
-
-                    Text("按这个风格装机  →")
-                        .font(.system(size: 12, weight: .bold))
+                    Text(style.title)
+                        .font(.system(size: 18, weight: .bold))
                         .foregroundStyle(.black)
 
-                    HStack(spacing: 8) {
-                        ForEach(style.tags, id: \.self) { tag in
-                            Text(tag)
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.62))
-                                .frame(height: 22)
-                                .padding(.horizontal, 10)
-                                .background(Color.black.opacity(0.04), in: Capsule())
-                        }
-                    }
+                    Text("按这个风格装机  →")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(AppTheme.secondaryText)
                 }
 
                 Spacer(minLength: 6)

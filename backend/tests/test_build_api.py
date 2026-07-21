@@ -574,7 +574,37 @@ def test_build_options_ignores_ray_tracing_branch_for_fps() -> None:
     assert body["options"][0]["details"]["gpu_vendor"] == "nvidia"
 
 
-@pytest.mark.parametrize("use_case", ["游戏", "游戏兼办公", "办公"])
+def test_game_plus_office_only_returns_nvidia_options() -> None:
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=(
+            ("fps", "used", "nvidia"),
+            ("fps", "used", "amd"),
+            ("fps", "new", "nvidia"),
+            ("fps", "mixed", "nvidia"),
+        ),
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏兼办公",
+            "game_categories": ["CS2"],
+            "office_apps": ["Premiere"],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["options"]) == 3
+    assert all(
+        option["details"]["gpu_vendor"] == "nvidia"
+        for option in body["options"]
+    )
+
+
+@pytest.mark.parametrize("use_case", ["游戏", "游戏兼办公"])
 def test_build_options_normalizes_frontend_use_cases_and_ignores_conflicting_tokens(
     use_case: str,
 ) -> None:

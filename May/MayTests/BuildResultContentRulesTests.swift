@@ -33,14 +33,21 @@ struct BuildResultContentRulesTests {
             "The hero should use a short beginner-friendly direction summary."
         )
         assertContains(viewSource, "PerformanceCard()", "The result should show the reference performance card.")
-        assertContains(viewSource, "BuildSummaryCard(plan: plan)", "The result should show price, power, and scenario metrics.")
         assertContains(viewSource, "PartsListCard(plan: plan", "The parts should use the reference list card.")
+        assertContains(viewSource, "TotalPriceSection(totalPrice: plan.totalPrice)", "The total should have its own full-width row.")
+        assertContains(viewSource, "Text(plan.useCase)", "The header should keep the short plan subtitle.")
         assertContains(viewSource, "Text(\"游戏性能表现\")", "The performance card title should match the reference.")
         assertContains(viewSource, "\"1080P 电竞\"", "The esports performance metric should remain visible.")
         assertContains(viewSource, "\"4K 高画质\"", "The high-quality performance metric should remain visible.")
-        assertContains(viewSource, "价格可能随市场波动", "The result should explain that prices can change.")
         assertContains(viewSource, "PrimaryButton(title: \"保存配置单\"", "Saving the build should remain available.")
         assertContains(viewSource, "backgroundColor: .black", "The save button should be black.")
+        assertContains(viewSource, ".frame(maxWidth: 420)", "The save button should fill phones without growing too wide on larger screens.")
+        assertOrdered(
+            viewSource,
+            "TotalPriceSection(totalPrice: plan.totalPrice)",
+            "PrimaryButton(title: \"保存配置单\"",
+            "The total row must appear above the save button."
+        )
         assertContains(
             viewSource,
             "ForEach(Array(plan.parts.enumerated())",
@@ -51,6 +58,12 @@ struct BuildResultContentRulesTests {
         assertNotContains(viewSource, "BuildHeroCard", "The old dark PC hero should not return.")
         assertNotContains(viewSource, "Image(\"PCTower\")", "The old tower artwork should not return.")
         assertNotContains(viewSource, "复制清单", "The removed copy action should not return.")
+        assertNotContains(viewSource, "BuildSummaryCard", "The old three-column summary should not return.")
+        assertNotContains(viewSource, "AIContentDisclosure", "The extra AI disclosure should not crowd the result page.")
+        assertNotContains(viewSource, "价格可能随市场波动", "The extra market-price note should not crowd the result page.")
+        assertNotContains(viewSource, "ShareLink", "The removed share control should not return.")
+        assertNotContains(viewSource, "info.circle", "The performance card should not show an info icon.")
+        assertNotContains(viewSource, "ForEach(0..<48", "The performance gauge should not show radial tick marks.")
         assertNotContains(
             viewSource,
             ".background(Color.black, in: RoundedRectangle(cornerRadius: 10))",
@@ -75,6 +88,20 @@ struct BuildResultContentRulesTests {
     private static func assertNotContains(_ text: String, _ fragment: String, _ message: String) {
         guard !text.contains(fragment) else {
             fatalError("\(message)\nUnexpected: \(fragment)")
+        }
+    }
+
+    private static func assertOrdered(
+        _ text: String,
+        _ first: String,
+        _ second: String,
+        _ message: String
+    ) {
+        guard let firstRange = text.range(of: first),
+              let secondRange = text.range(of: second),
+              firstRange.lowerBound < secondRange.lowerBound
+        else {
+            fatalError(message)
         }
     }
 }

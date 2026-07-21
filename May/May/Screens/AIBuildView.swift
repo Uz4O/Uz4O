@@ -16,7 +16,7 @@ struct AIBuildOptionsInput {
 struct AIBuildView: View {
     typealias LoadOptions = (AIBuildOptionsInput) async throws -> BuildOptionsResponseDTO
 
-    private let minimumGenerationDuration: TimeInterval = 7.0
+    private let minimumGenerationDuration: TimeInterval = 14.5
     private let completionAnimationDuration: TimeInterval = 0.8
 
     @State private var currentStep: AIBuildStep = .budget
@@ -460,7 +460,6 @@ private struct AIBuildGeneratingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var progress = 3
     @State private var isPulsing = false
-    @State private var isFloating = false
     @State private var ringRotation = 0.0
     @State private var hasAppeared = false
     @State private var completionBloom = false
@@ -514,7 +513,6 @@ private struct AIBuildGeneratingView: View {
                             size: dialSize,
                             isComplete: isComplete,
                             isPulsing: isPulsing,
-                            isFloating: isFloating,
                             ringRotation: ringRotation
                         )
                         .padding(.top, usesCompactLayout ? 14 : 24)
@@ -527,31 +525,25 @@ private struct AIBuildGeneratingView: View {
                             stages: stages,
                             currentStage: currentStage,
                             isComplete: isComplete,
-                            isPulsing: isPulsing,
                             isCompact: usesCompactLayout
                         )
-                        .padding(.top, usesCompactLayout ? 10 : 18)
+                        .padding(.top, usesCompactLayout ? 16 : 28)
                         .opacity(hasAppeared ? 1 : 0)
                         .offset(y: hasAppeared ? 0 : 22)
-                        .animation(.spring(response: 0.62, dampingFraction: 0.88).delay(0.24), value: hasAppeared)
+                        .animation(.smooth(duration: 0.55).delay(0.24), value: hasAppeared)
 
-                        GenerationProgressDots(progress: progress)
-                            .padding(.top, usesCompactLayout ? 16 : 26)
-                            .opacity(hasAppeared ? 1 : 0)
-                            .offset(y: hasAppeared ? 0 : 10)
-                            .animation(.easeOut(duration: 0.42).delay(0.34), value: hasAppeared)
-
-                        Text("通常需要几秒钟，请稍候")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.black.opacity(0.42))
-                            .padding(.top, usesCompactLayout ? 8 : 13)
-                            .padding(.bottom, usesCompactLayout ? 10 : 22)
-                            .opacity(hasAppeared ? 1 : 0)
-                            .animation(.easeOut(duration: 0.38).delay(0.4), value: hasAppeared)
                     }
                     .frame(width: contentWidth)
                     .frame(maxWidth: .infinity)
                 }
+
+                Text("通常需要几秒钟，请稍候")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.black.opacity(0.42))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, usesCompactLayout ? 12 : 24)
+                    .opacity(hasAppeared ? 1 : 0)
+                    .animation(.easeOut(duration: 0.38).delay(0.4), value: hasAppeared)
 
                 Circle()
                     .fill(.white)
@@ -576,25 +568,18 @@ private struct AIBuildGeneratingView: View {
             withAnimation(.easeInOut(duration: 1.25).repeatForever(autoreverses: true)) {
                 isPulsing = true
             }
-            withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
-                isFloating = true
-            }
             withAnimation(.linear(duration: 120).repeatForever(autoreverses: false)) {
                 ringRotation = 360
             }
         }
         .task {
-            while progress < 90, !Task.isCancelled, !isComplete {
+            while progress < 99, !Task.isCancelled, !isComplete {
                 do {
-                    try await Task.sleep(nanoseconds: 70_000_000)
+                    try await Task.sleep(nanoseconds: 140_000_000)
                 } catch {
                     return
                 }
-                if reduceMotion {
-                    progress = min(90, progress + 1)
-                } else {
-                    progress = min(90, progress + 1)
-                }
+                progress = min(99, progress + 1)
             }
         }
         .onChange(of: isComplete) { _, complete in
@@ -615,7 +600,6 @@ private struct GenerationProgressDial: View {
     let size: CGFloat
     let isComplete: Bool
     let isPulsing: Bool
-    let isFloating: Bool
     let ringRotation: Double
 
     var body: some View {
@@ -655,7 +639,7 @@ private struct GenerationProgressDial: View {
                 .stroke(.black, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .padding(24)
-                .animation(.linear(duration: 0.07), value: progress)
+                .animation(.linear(duration: 0.12), value: progress)
 
             Circle()
                 .fill(.white)
@@ -664,7 +648,7 @@ private struct GenerationProgressDial: View {
                 .offset(y: -size / 2 + 24)
                 .rotationEffect(.degrees(Double(progress) * 3.6))
                 .scaleEffect(isPulsing ? 1.16 : 0.88)
-                .animation(.linear(duration: 0.07), value: progress)
+                .animation(.linear(duration: 0.12), value: progress)
                 .animation(.easeInOut(duration: 1.25), value: isPulsing)
 
             Image("PCTower")
@@ -674,15 +658,8 @@ private struct GenerationProgressDial: View {
                 .brightness(0.055)
                 .contrast(0.9)
                 .frame(width: size * 0.58, height: size * 0.58)
-                .scaleEffect(isFloating ? 1.022 : 0.985)
-                .rotationEffect(.degrees(isFloating ? 0.45 : -0.35), anchor: .bottom)
-                .offset(y: isFloating ? -10 : -3)
-                .shadow(
-                    color: Color.black.opacity(isFloating ? 0.075 : 0.12),
-                    radius: isFloating ? 18 : 12,
-                    x: 0,
-                    y: isFloating ? 16 : 9
-                )
+                .offset(y: -3)
+                .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 9)
 
             VStack(spacing: 2) {
                 HStack(alignment: .firstTextBaseline, spacing: 1) {
@@ -700,11 +677,10 @@ private struct GenerationProgressDial: View {
                     .foregroundStyle(Color.black.opacity(0.46))
             }
             .foregroundStyle(.black)
-            .frame(width: 112, height: 112)
+            .frame(width: 90, height: 90)
             .background(.white, in: Circle())
             .shadow(color: Color.black.opacity(0.1), radius: 18, x: 0, y: 10)
             .offset(y: size * 0.38)
-            .scaleEffect(isPulsing ? 1.012 : 0.995)
         }
         .frame(width: size, height: size)
         .padding(.bottom, 18)
@@ -715,120 +691,94 @@ private struct GenerationStageCard: View {
     let stages: [String]
     let currentStage: Int
     let isComplete: Bool
-    let isPulsing: Bool
     let isCompact: Bool
 
     var body: some View {
-        VStack(spacing: isCompact ? 6 : 10) {
-            ForEach(stages.indices, id: \.self) { index in
-                HStack(spacing: 12) {
-                    ZStack {
-                        if index < stages.count - 1 {
-                            Rectangle()
-                                .fill(Color.black.opacity(index < currentStage || isComplete ? 0.38 : 0.16))
-                                .frame(width: 1, height: isCompact ? 30 : 34)
-                                .offset(y: isCompact ? 28 : 31)
+        ZStack(alignment: .topLeading) {
+            VStack(spacing: 0) {
+                ForEach(stages.indices, id: \.self) { index in
+                    HStack(alignment: .top, spacing: 16) {
+                        ZStack(alignment: .top) {
+                            if index < stages.count - 1 {
+                                Rectangle()
+                                    .fill(Color.black.opacity(index < currentStage || isComplete ? 0.38 : 0.16))
+                                    .frame(width: 1, height: rowHeight)
+                                    .offset(y: 11.5)
+                            }
+
+                            GenerationStageIndicator(
+                                isCompleted: isComplete || index < currentStage,
+                                isCurrent: !isComplete && index == currentStage,
+                                isMovingCurrent: !isComplete && index == currentStage
+                            )
                         }
+                        .frame(width: 42, height: rowHeight)
 
-                        GenerationStageIndicator(
-                            isCompleted: isComplete || index < currentStage,
-                            isCurrent: !isComplete && index == currentStage,
-                            isPulsing: isPulsing
-                        )
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("\(index + 1).  \(stages[index])")
+                                .font(.system(size: 16, weight: index == currentStage ? .medium : .regular))
+                                .foregroundStyle(index > currentStage && !isComplete ? Color.black.opacity(0.38) : .black)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            if index < stages.count - 1 {
+                                GeometryReader { proxy in
+                                    Divider()
+                                        .frame(width: proxy.size.width * 0.6, alignment: .leading)
+                                        .overlay(Color.black.opacity(0.08))
+                                }
+                                .padding(.top, isCompact ? 13 : 18)
+                                .frame(height: isCompact ? 35 : 45)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .frame(width: 42, height: isCompact ? 40 : 44)
-
-                    Text("\(index + 1).  \(stages[index])")
-                        .font(.system(size: 16, weight: index == currentStage ? .medium : .regular))
-                        .foregroundStyle(index > currentStage && !isComplete ? Color.black.opacity(0.38) : .black)
-
-                    Spacer(minLength: 8)
-
-                    Text(status(for: index))
-                        .font(.system(size: 14, weight: index == currentStage ? .medium : .regular))
-                        .foregroundStyle(index == currentStage && !isComplete ? .black : Color.black.opacity(0.42))
-                        .contentTransition(.opacity)
+                    .frame(minHeight: rowHeight)
                 }
             }
+
+            if !isComplete {
+                Circle()
+                    .fill(.black)
+                    .frame(width: 23, height: 23)
+                    .offset(x: 9.5, y: CGFloat(currentStage) * rowHeight)
+            }
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, isCompact ? 12 : 16)
-        .background(.white, in: RoundedRectangle(cornerRadius: 22))
-        .overlay(
-            RoundedRectangle(cornerRadius: 22)
-                .stroke(Color.black.opacity(0.055), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.075), radius: 20, x: 0, y: 10)
-        .animation(.spring(response: 0.48, dampingFraction: 0.8), value: currentStage)
-        .animation(.spring(response: 0.5, dampingFraction: 0.82), value: isComplete)
+        .padding(.horizontal, 4)
+        .animation(.smooth(duration: 0.45), value: currentStage)
+        .animation(.smooth(duration: 0.5), value: isComplete)
     }
 
-    private func status(for index: Int) -> String {
-        if isComplete || index < currentStage { return "已完成" }
-        if index == currentStage { return "进行中" }
-        return "待开始"
+    private var rowHeight: CGFloat {
+        isCompact ? 54 : 64
     }
 }
 
 private struct GenerationStageIndicator: View {
     let isCompleted: Bool
     let isCurrent: Bool
-    let isPulsing: Bool
+    let isMovingCurrent: Bool
 
     var body: some View {
         ZStack {
-            if isCurrent {
-                ForEach(0..<3, id: \.self) { ring in
-                    Circle()
-                        .stroke(Color.black.opacity(0.08 + Double(ring) * 0.04), lineWidth: 3)
-                        .frame(width: CGFloat(30 + ring * 10), height: CGFloat(30 + ring * 10))
-                        .scaleEffect(isPulsing ? 1.16 : 0.76)
-                        .opacity(isPulsing ? 0.38 : 0.88)
-                        .animation(
-                            .easeInOut(duration: 1.25)
-                                .repeatForever(autoreverses: true)
-                                .delay(Double(ring) * 0.1),
-                            value: isPulsing
-                        )
-                }
-                .transition(.scale(scale: 0.72).combined(with: .opacity))
+            if !isMovingCurrent {
+                Circle()
+                    .fill(isCompleted || isCurrent ? Color.black : Color.white)
+                    .frame(width: 23, height: 23)
+                    .overlay(
+                        Circle()
+                            .stroke(isCompleted || isCurrent ? Color.clear : Color.black.opacity(0.3), lineWidth: 1.5)
+                    )
             }
-
-            Circle()
-                .fill(isCompleted || isCurrent ? Color.black : Color.white)
-                .frame(width: 23, height: 23)
-                .overlay(
-                    Circle()
-                        .stroke(isCompleted || isCurrent ? Color.clear : Color.black.opacity(0.3), lineWidth: 1.5)
-                )
 
             if isCompleted {
                 Image(systemName: "checkmark")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.white)
-                    .transition(.scale(scale: 0.25).combined(with: .opacity))
+                    .transition(.scale(scale: 0.7).combined(with: .opacity))
             }
         }
-        .animation(.spring(response: 0.38, dampingFraction: 0.64), value: isCompleted)
-        .animation(.spring(response: 0.42, dampingFraction: 0.72), value: isCurrent)
-    }
-}
-
-private struct GenerationProgressDots: View {
-    let progress: Int
-
-    var body: some View {
-        HStack(spacing: 14) {
-            ForEach(0..<10, id: \.self) { index in
-                Circle()
-                    .fill(index <= progress / 10 ? Color.black : Color.black.opacity(0.18))
-                    .frame(width: index == min(9, progress / 10) ? 9 : 5, height: index == min(9, progress / 10) ? 9 : 5)
-            }
-        }
-        .frame(width: 262, height: 34)
-        .background(Color.black.opacity(0.018), in: Capsule())
-        .overlay(Capsule().stroke(Color.black.opacity(0.07), lineWidth: 1))
-        .animation(.spring(response: 0.34, dampingFraction: 0.7), value: progress / 10)
+        .animation(.smooth(duration: 0.35), value: isCompleted)
+        .animation(.smooth(duration: 0.38), value: isCurrent)
     }
 }
 

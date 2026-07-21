@@ -230,7 +230,9 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
         errors.append(f"{template.id}: estimated_total does not match detailed prices")
     is_office_template = "办公" in template.use_cases
     max_shortfall = (
-        120
+        550
+        if is_office_template
+        else 120
         if template.id == "base-14000-balanced-mixed"
         and parts_by_role["cpu"].component_id == "r7-9800x3d"
         and parts_by_role["gpu"].component_id == "rtx-5070-ti"

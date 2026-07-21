@@ -3,6 +3,12 @@ from math import ceil
 from typing import Dict, Iterable, List, Optional
 
 from app.builds.models import BuildTemplate
+from app.builds.office_catalog import (
+    OFFICE_CPU_IDS,
+    OFFICE_GPU_IDS,
+    OFFICE_MOTHERBOARD_IDS,
+    OFFICE_ONLY_GPU_IDS,
+)
 from app.builds.service import (
     BuildOptionResponse,
     BuildRequest,
@@ -34,12 +40,6 @@ STORAGE_IDS = {
 }
 A520_WIFI_EXCEPTION_ID = "asus-a520m-k"
 WIRELESS_ADAPTER_PRICE = 50
-OFFICE_ONLY_GPU_IDS = {
-    "arc-a580-8gb",
-    "arc-a770-16gb",
-    "arc-b570-10gb",
-    "arc-b580-12gb",
-}
 
 
 class CustomizationError(ValueError):
@@ -122,6 +122,9 @@ def customize_template(
     for role, component_id in patches.items():
         if request.no_gpu_build and role == "gpu":
             raise CustomizationError("自备显卡不能被 AI 替换")
+        component = components_by_id.get(component_id)
+        if component is None or not component_allowed_for_request(request, component):
+            raise CustomizationError("AI 返回了当前用途不可用的配件")
         parts[role] = _priced_part(
             role,
             component_id,
@@ -260,6 +263,33 @@ def condition_price(price: ComponentPrice, condition: str) -> Optional[int]:
     if condition == "used":
         return price.price_range_low
     return None
+
+
+def component_allowed_for_request(
+    request: BuildRequest,
+    component: HardwareComponent,
+) -> bool:
+    if request.use_case != "办公":
+        requested_gpu = (request.gpu_preference or "").replace(" ", "").lower()
+        if (
+            component.category == "gpu"
+            and requested_gpu in {"nvidia", "n卡", "英伟达"}
+        ):
+            return component.id.startswith("rtx-")
+        return not (
+            component.category == "gpu"
+            and component.id in OFFICE_ONLY_GPU_IDS
+        )
+    if component.category == "cpu":
+        return component.id in OFFICE_CPU_IDS
+    if component.category == "motherboard":
+        return component.id in OFFICE_MOTHERBOARD_IDS
+    if component.category == "gpu":
+        if component.id not in OFFICE_GPU_IDS:
+            return False
+        if classify_office_workload(request.office_apps) == "cuda":
+            return component.id.startswith("rtx-")
+    return True
 
 
 def find_owned_gpu(

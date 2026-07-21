@@ -59,6 +59,32 @@ def test_customization_adds_separate_adapter_for_a520m_k() -> None:
     assert option.details.extras[0].reference_price == 50
 
 
+def test_customization_does_not_charge_again_for_integrated_wifi() -> None:
+    motherboard_id = "msi-pro-b860m-a"
+    components, prices = catalog(motherboard_id=motherboard_id)
+    template = base_template(motherboard_id=motherboard_id)
+    template.details["parts"][1]["name"] = "微星 PRO B860M-A WIFI"
+
+    option = customize_template(
+        BuildRequest(
+            budget=6500,
+            use_case="游戏",
+            direction="balanced",
+            needs_wireless_network=True,
+        ),
+        template,
+        {},
+        components,
+        prices,
+        source="template",
+    )
+
+    motherboard = next(part for part in option.details.parts if part.role == "motherboard")
+    assert motherboard.name == "微星 PRO B860M-A WIFI"
+    assert motherboard.reference_price == 700
+    assert option.estimated_total == 6650
+
+
 def test_customization_rejects_requirement_over_budget_ceiling() -> None:
     components, prices = catalog()
     with pytest.raises(CustomizationError, match="超过预算上限"):
