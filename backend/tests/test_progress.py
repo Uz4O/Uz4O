@@ -41,13 +41,13 @@ def test_progress_separates_local_catalog_coverage_from_production_data() -> Non
     phase = next(phase for phase in progress.phases if phase.name == "Phase 1 · 决策类 AI")
     items = {item.title: item for item in phase.items}
 
-    local_catalog = items["3000-20000元装机基底配置库"]
+    local_catalog = items["3000-30000元装机基底配置库"]
     production_catalog = items["生产推荐池与价格/模板数据发布"]
     build_options = items["AI装机三种采购方案接口与前端联调"]
     gpu_budget_optimization = items["显卡厂商与预算利用率优化"]
 
     assert local_catalog.status == "completed"
-    assert "275套" in local_catalog.description
+    assert "320套" in local_catalog.description
     assert "每1000元" in local_catalog.description
     assert production_catalog.status == "completed"
     assert "275套" in production_catalog.description

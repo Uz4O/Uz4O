@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a SwiftUI iOS app plus FastAPI backend at `/Users/may/Documents/AI装机`.
+This is a SwiftUI iOS app, Jetpack Compose Android app, and FastAPI backend at `/Users/may/Documents/AI装机`.
 
 The product is an AI PC-building assistant for Chinese users, especially beginners who do not understand PC hardware. The iOS frontend lives under `May/`, and the backend has been implemented under `backend/` with FastAPI + PostgreSQL. The deployed backend PM2 app is `new-site` on port `8790`; use `docs/后端开发完成总结-2026-06-16.md` as the authoritative backend progress summary.
 
@@ -11,15 +11,16 @@ Core product direction:
 - Help beginners generate PC build suggestions.
 - Help users check whether a quoted PC configuration has obvious problems.
 - Help users record their current computer and get upgrade advice.
-- Provide a configuration/community area so users can share builds and ask others to review them.
+- Community is not part of the current product plan. Do not add community UI, navigation, launch requirements, or new community work unless the user explicitly reverses this decision.
 
 The product should feel like a practical PC decision assistant, not a generic hardware encyclopedia or shopping app.
 
 ## Current Tech Stack
 
-- Platform: iOS
-- UI: SwiftUI
+- Platforms: iOS and Android
+- UI: SwiftUI (iOS), Jetpack Compose (Android)
 - Project: `May/May.xcodeproj`
+- Android project: `android/`
 - Scheme: `May`
 - Main entry: `May/May/MayApp.swift`
 - Root routing: `May/May/ContentView.swift`
@@ -49,7 +50,7 @@ Backend core directories:
 - Do not frame the app as a shopping or affiliate product.
 - Configuration results should be explainable and easy to share.
 - AI should not freely invent hardware models in the future backend design; specific recommendations should come from a maintained recommendation/hardware database.
-- Community features should center on configuration review, build sharing, upgrade questions, and avoiding bad configurations, not generic chat.
+- Existing community code is dormant legacy code. Preserve it unless removal is requested, but do not expose or expand it.
 
 ## Key Files
 
@@ -90,10 +91,10 @@ Backend core directories:
   - Currently reused as a game performance test flow.
 
 - `May/May/Screens/CommunityView.swift`
-  - Community/configuration sharing screen.
+  - Dormant legacy community screen; do not expose or expand it.
 
 - `May/May/Screens/CommunityComposerView.swift`
-  - Community post composer.
+  - Dormant legacy community composer; do not expose or expand it.
 
 - `May/May/Screens/MyBuildsView.swift`
   - Configuration tab, saved builds, and current-computer entry.

@@ -128,7 +128,7 @@ struct ContentView: View {
         case .fromAIBuild:
             selectedTab = .home
         case .fromConfigTab, .fromConfigAIBuild:
-            selectedTab = .builds
+            selectedTab = .profile
         }
         presentedFullScreen = nil
     }
@@ -153,6 +153,7 @@ private enum MainRoute: Hashable {
     case configReview
     case compatibility
     case buildResult
+    case builds
     case contactComplaint
 }
 
@@ -186,7 +187,6 @@ private struct MainTabView: View {
     let onAccountDeleted: () -> Void
 
     @State private var homePath: [MainRoute] = []
-    @State private var buildsPath: [MainRoute] = []
     @State private var profilePath: [MainRoute] = []
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -221,40 +221,20 @@ private struct MainTabView: View {
             }
             .tag(AppTab.styles)
 
-            NavigationStack(path: $buildsPath) {
-                MyBuildsView(
-                    hardwareProfile: onboardingProfile.hardwareProfile,
-                    onOpenPlan: { buildsPath.append(.buildResult) },
-                    onCreate: {
-                        selectedConfigSection = .currentComputer
-                        onPresentFullScreen(.aiBuild(.fromConfigAIBuild))
-                    },
-                    onOpenComputerProfile: { buildsPath.append(.computerProfile) },
-                    onOpenUpgrade: {
-                        selectedConfigSection = .currentComputer
-                        buildsPath.append(.upgrade)
-                    },
-                    onOpenPerformanceTest: {
-                        selectedConfigSection = .currentComputer
-                        onPresentFullScreen(.performanceTest(.builds))
-                    },
-                    selectedSection: $selectedConfigSection
-                )
-                .toolbar(.hidden, for: .navigationBar)
-                .navigationDestination(for: MainRoute.self) { route in
-                    destination(for: route, path: $buildsPath)
-                }
+            NavigationStack {
+                DIYView()
+                    .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label(AppTab.builds.rawValue, systemImage: "doc.text")
+                Label(AppTab.diy.rawValue, systemImage: AppTab.diy.icon(isSelected: false))
             }
-            .tag(AppTab.builds)
+            .tag(AppTab.diy)
 
             NavigationStack(path: $profilePath) {
                 ProfileView(
                     session: session,
                     hardwareProfile: onboardingProfile.hardwareProfile,
-                    onOpenBuilds: { selectedTab = .builds },
+                    onOpenBuilds: { profilePath.append(.builds) },
                     onOpenComputerProfile: { profilePath.append(.computerProfile) },
                     onOpenContactComplaint: { profilePath.append(.contactComplaint) },
                     onAccountDeleted: onAccountDeleted
@@ -277,6 +257,27 @@ private struct MainTabView: View {
     @ViewBuilder
     private func destination(for route: MainRoute, path: Binding<[MainRoute]>) -> some View {
         switch route {
+        case .builds:
+            MyBuildsView(
+                hardwareProfile: onboardingProfile.hardwareProfile,
+                onOpenPlan: { path.wrappedValue.append(.buildResult) },
+                onCreate: {
+                    selectedConfigSection = .currentComputer
+                    onPresentFullScreen(.aiBuild(.fromConfigAIBuild))
+                },
+                onOpenComputerProfile: { path.wrappedValue.append(.computerProfile) },
+                onOpenUpgrade: {
+                    selectedConfigSection = .currentComputer
+                    path.wrappedValue.append(.upgrade)
+                },
+                onOpenPerformanceTest: {
+                    selectedConfigSection = .currentComputer
+                    onPresentFullScreen(.performanceTest(.profile))
+                },
+                onBack: { pop(path) },
+                selectedSection: $selectedConfigSection
+            )
+            .toolbar(.hidden, for: .navigationBar)
         case .computerProfile:
             ComputerProfileView(
                 hardwareProfile: hardwareProfileBinding,

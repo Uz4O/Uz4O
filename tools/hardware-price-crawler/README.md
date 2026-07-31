@@ -2,6 +2,25 @@
 
 本工具用于每周人工监督采集淘宝或京东 CPU、显卡和主板搜索结果，并生成供 AI 装机使用的参考价格复核文件。
 
+对于无需登录的 diyxx 显卡公开接口，也可以直接采集全部具体品牌型号，并按芯片白名单选择最低价：
+
+```bash
+python3 run.py crawl-diyxx-gpus
+```
+
+输出目录包含全部显卡商品明细、最低价及对应品牌型号，以及一份保留原二手价并更新网站零售参考价的白名单 CSV。该命令不会直接覆盖后端数据库。
+
+## 装机 DIY 目录导入
+
+`zhuangjidiy.com` 的公开目录可以一次抓取 CPU、显卡、主板、内存、固态、散热和机箱：
+
+```bash
+PYTHONPATH=. python3 import_zhuangjidiy.py --dry-run
+PYTHONPATH=. python3 import_zhuangjidiy.py --apply --output data/runs/zhuangjidiy.json
+```
+
+导入器按“类别 + 厂商 + 规范化型号”去重，只新增数据库没有的型号，不覆盖已有组件或价格；原始商品 ID、图片和来源会保存到 `specs`。生产导入前应先执行 dry-run 并保留数据库备份。
+
 它完全独立于 SwiftUI 前端，不会修改 `May/`，也不会自动把价格发布到 App。
 
 ## 工作方式

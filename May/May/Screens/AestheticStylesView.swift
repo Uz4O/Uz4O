@@ -3,21 +3,45 @@ import SwiftUI
 struct AestheticStylesView: View {
     let onOpenStyle: (String) -> Void
 
+    @State private var showsExplorer = false
+    @State private var pendingStyleID: String?
+
     var body: some View {
         GeometryReader { proxy in
             let contentWidth = min(proxy.size.width - 40, 430)
 
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("装机风格")
-                        .font(.system(size: 29, weight: .heavy))
-                        .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
-                        .padding(.top, 12)
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("装机风格")
+                                .font(.system(size: 29, weight: .heavy))
+                                .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
 
-                    Text("多种高性能整机设计，找到属于你的风格")
-                        .font(.system(size: 11, weight: .regular))
-                        .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
-                        .padding(.top, 4)
+                            Text("多种高性能整机设计，找到属于你的风格")
+                                .font(.system(size: 11, weight: .regular))
+                                .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
+                        }
+
+                        Spacer()
+
+                        Button {
+                            showsExplorer = true
+                        } label: {
+                            Image(systemName: "cube.transparent")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(AppTheme.primaryText)
+                                .frame(width: 42, height: 42)
+                                .background(.ultraThinMaterial, in: Circle())
+                                .overlay {
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.7), lineWidth: 1)
+                                }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("进入沉浸风格浏览")
+                    }
+                    .padding(.top, 12)
 
                     LazyVStack(spacing: 0) {
                         ForEach(AestheticBuildStyle.all.indices, id: \.self) { index in
@@ -51,6 +75,22 @@ struct AestheticStylesView: View {
                 .ignoresSafeArea()
             }
         }
+        .fullScreenCover(isPresented: $showsExplorer, onDismiss: openPendingStyle) {
+            AestheticStyleExplorerView(
+                styles: AestheticBuildStyle.all,
+                onClose: { showsExplorer = false },
+                onOpenStyle: { styleID in
+                    pendingStyleID = styleID
+                    showsExplorer = false
+                }
+            )
+        }
+    }
+
+    private func openPendingStyle() {
+        guard let styleID = pendingStyleID else { return }
+        pendingStyleID = nil
+        onOpenStyle(styleID)
     }
 }
 
@@ -153,6 +193,10 @@ private struct AestheticStyleShowcaseRow: View {
         case "panorama": 172
         case "whiteMinimal": 172
         case "bo400": 142
+        case "asusAP202": 150
+        case "hyteY70": 166
+        case "aocShockingBow": 166
+        case "bo400cg": 150
         default: 140
         }
     }
@@ -163,6 +207,10 @@ private struct AestheticStyleShowcaseRow: View {
         case "panorama": 1.04
         case "whiteMinimal": 1.03
         case "bo400": 1.04
+        case "asusAP202": 0.88
+        case "hyteY70": 0.91
+        case "aocShockingBow": 0.82
+        case "bo400cg": 0.94
         default: 0.78
         }
     }
@@ -173,6 +221,10 @@ private struct AestheticStyleShowcaseRow: View {
         case "panorama": -6
         case "whiteMinimal": -8
         case "bo400": -4
+        case "asusAP202": -3
+        case "hyteY70": -5
+        case "aocShockingBow": -4
+        case "bo400cg": -4
         default: -2
         }
     }

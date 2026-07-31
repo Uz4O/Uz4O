@@ -11,6 +11,7 @@ from app.builds.service import (
     BuildTemplateInput,
     BuildTemplatePart,
 )
+from app.builds.gpu_rules import gpu_brand_allowed_for_budget
 from app.builds.templates import read_build_template_inputs
 from app.catalog.seed import extract_catalog_components, read_catalog_components
 
@@ -19,8 +20,8 @@ Profile = Literal["general", "media", "cuda"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 
-PRICE_DATE = "2026-07-20"
-BUDGET_TIERS = tuple(range(6_000, 20_001, 1_000))
+PRICE_DATE = "2026-07-30"
+BUDGET_TIERS = tuple(range(6_000, 30_001, 1_000))
 LOW_BUDGET_TIERS = (3_000, 4_000, 5_000)
 PART_ROLES = (
     "cpu",
@@ -202,7 +203,7 @@ def generate_office_templates() -> List[BuildTemplateInput]:
                 last_by_profile_mode[key] = template
 
     for template in last_by_profile_mode.values():
-        template.budget_max = 20_000
+        template.budget_max = 30_000
     return templates
 
 
@@ -268,6 +269,8 @@ def _select_candidate(
                 cpu = catalog[cpu_id]
                 motherboard = catalog[motherboard_id]
                 gpu = catalog[gpu_id]
+                if not gpu_brand_allowed_for_budget(gpu.name, budget):
+                    continue
                 psu = _smallest_psu(cpu, gpu, conditions["psu"], catalog)
                 if psu is None:
                     continue
@@ -489,7 +492,7 @@ def _load_catalog() -> Dict[str, PricedPart]:
                 new_price=_optional_int(row.get(new_column)),
                 used_source=path.name,
                 new_source=path.name,
-                price_date="2026-07-20",
+                price_date=PRICE_DATE if category == "gpu" else "2026-07-20",
             )
     for path in (BASE_SUPPORT_PATH, OFFICE_SUPPORT_PATH):
         for item in json.loads(path.read_text(encoding="utf-8")):
@@ -524,7 +527,7 @@ def _write_reference_prices(
     referenced_ids.update(OFFICE_GPU_IDS)
     referenced_ids.update(OFFICE_RAM_IDS)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.writer(handle)
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(
             [
                 "target_id",

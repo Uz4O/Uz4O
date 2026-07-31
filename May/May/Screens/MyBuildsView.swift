@@ -7,6 +7,7 @@ struct MyBuildsView: View {
     let onOpenComputerProfile: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenPerformanceTest: () -> Void
+    var onBack: (() -> Void)? = nil
 
     @Binding var selectedSection: ConfigHubSection
 
@@ -17,7 +18,17 @@ struct MyBuildsView: View {
             ZStack(alignment: .bottom) {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        HStack {
+                        HStack(spacing: 10) {
+                            if let onBack {
+                                Button(action: onBack) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundStyle(AppTheme.primaryText)
+                                        .frame(width: 28, height: 28)
+                                }
+                                .buttonStyle(.plain)
+                            }
+
                             VStack(alignment: .leading, spacing: 5) {
                                 Text("配置")
                                     .font(.system(size: 29, weight: .heavy))

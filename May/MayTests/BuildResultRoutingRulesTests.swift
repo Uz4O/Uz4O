@@ -5,8 +5,8 @@ struct BuildResultRoutingRulesTests {
     static func main() {
         assertEqual(
             BuildResultReturnTarget.fromConfigTab.destination,
-            .builds,
-            "Build detail opened from the config tab should return to the config tab."
+            .profile,
+            "Build detail opened from configuration management should return to the profile."
         )
 
         assertEqual(
@@ -17,8 +17,8 @@ struct BuildResultRoutingRulesTests {
 
         assertEqual(
             BuildResultReturnTarget.fromConfigAIBuild.destination,
-            .builds,
-            "AI generation opened from the current computer config section should return to the config tab."
+            .profile,
+            "AI generation opened from the current computer config section should return to the profile."
         )
 
         print("BuildResultRoutingRulesTests passed")

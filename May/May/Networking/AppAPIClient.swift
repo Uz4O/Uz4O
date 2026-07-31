@@ -40,6 +40,93 @@ struct SMSResponse: Decodable {
     let debugCode: String?
 }
 
+enum CatalogJSONValue: Codable {
+    case string(String)
+    case number(Double)
+    case bool(Bool)
+    case object([String: CatalogJSONValue])
+    case array([CatalogJSONValue])
+    case null
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .number(value)
+        } else if let value = try? container.decode([String: CatalogJSONValue].self) {
+            self = .object(value)
+        } else if let value = try? container.decode([CatalogJSONValue].self) {
+            self = .array(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "无法解析目录规格"
+            )
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .string(let value): try container.encode(value)
+        case .number(let value): try container.encode(value)
+        case .bool(let value): try container.encode(value)
+        case .object(let value): try container.encode(value)
+        case .array(let value): try container.encode(value)
+        case .null: try container.encodeNil()
+        }
+    }
+}
+
+struct CatalogComponentDTO: Codable, Identifiable {
+    let id: String
+    let category: String
+    let name: String
+    let brand: String
+    let detailRaw: String
+    let specs: [String: CatalogJSONValue]
+    let isRecommended: Bool
+    let status: String
+}
+
+struct CatalogPriceDTO: Codable {
+    let componentId: String
+    let referencePrice: Int
+    let priceRangeLow: Int?
+    let priceRangeHigh: Int?
+    let source: String
+}
+
+struct DIYCatalogSnapshot: Codable {
+    let components: [CatalogComponentDTO]
+    let prices: [String: CatalogPriceDTO]
+}
+
+enum DIYCatalogCache {
+    private static let fileName = "diy-catalog-v1.json"
+
+    private static var fileURL: URL? {
+        FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName)
+    }
+
+    static func load() -> DIYCatalogSnapshot? {
+        guard let fileURL,
+              let data = try? Data(contentsOf: fileURL) else { return nil }
+        return try? JSONDecoder().decode(DIYCatalogSnapshot.self, from: data)
+    }
+
+    static func save(_ snapshot: DIYCatalogSnapshot) {
+        guard let fileURL,
+              let data = try? JSONEncoder().encode(snapshot) else { return }
+        try? data.write(to: fileURL, options: .atomic)
+    }
+}
+
 struct PerformanceHardwareDTO: Encodable {
     let cpu: String
     let gpu: String
@@ -306,6 +393,48 @@ struct AppAPIClient {
         )
     }
 
+    func diyCatalog() async throws -> DIYCatalogSnapshot {
+        DIYCatalogSnapshot(
+            components: try await diyComponents(),
+            prices: try await diyPrices()
+        )
+    }
+
+    func diyComponents(category: String? = nil) async throws -> [CatalogComponentDTO] {
+        var components: [CatalogComponentDTO] = []
+        var offset = 0
+        let pageSize = 500
+        let categoryQuery = category.map { "&category=\($0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? $0)" } ?? ""
+        while true {
+            let page: [CatalogComponentDTO] = try await request(
+                path: "/v1/catalog/components?limit=\(pageSize)&offset=\(offset)\(categoryQuery)",
+                method: "GET"
+            )
+            components.append(contentsOf: page)
+            if page.count < pageSize { break }
+            offset += page.count
+        }
+        return components
+    }
+
+    func diyPrices() async throws -> [String: CatalogPriceDTO] {
+        var prices: [String: CatalogPriceDTO] = [:]
+        var offset = 0
+        let pageSize = 500
+        while true {
+            let page: [CatalogPriceDTO] = try await request(
+                path: "/v1/catalog/prices?limit=\(pageSize)&offset=\(offset)",
+                method: "GET"
+            )
+            for price in page {
+                prices[price.componentId] = price
+            }
+            if page.count < pageSize { break }
+            offset += page.count
+        }
+        return prices
+    }
+
     private func request<Response: Decodable>(
         path: String,
         method: String,
@@ -348,7 +477,9 @@ struct AppAPIClient {
     }
 
     private func makeRequest(path: String, method: String, token: String?) -> URLRequest {
-        var request = URLRequest(url: baseURL.appending(path: path))
+        let url = URL(string: path, relativeTo: baseURL)?.absoluteURL ?? baseURL.appending(path: path)
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 15
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if let token {

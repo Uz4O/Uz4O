@@ -10,7 +10,7 @@
 | --- | --- | --- | ---: |
 | cpu | R5 5600X | used | ¥720 |
 | motherboard | 华硕 A520M-K | used | ¥230 |
-| gpu | RX 7650 GRE | used | ¥1200 |
+| gpu | 华硕 ATS RX7650GRE O10G巨齿鲨 | used | ¥1200 |
 | ram | DDR4 16GB 3200 | used | ¥400 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 650W金牌电源 | used | ¥150 |
@@ -109,7 +109,7 @@
 
 ## 6000元 视频剪辑 二手配置
 
-覆盖预算：¥6000–¥8999；总价：¥6380
+覆盖预算：¥6000–¥7999；总价：¥6380
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
@@ -154,13 +154,13 @@
 
 ## 6000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥6000–¥6999；总价：¥6030
+覆盖预算：¥6000–¥6999；总价：¥5830
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 245K | used | ¥850 |
 | motherboard | 华硕 PRIME B860M-K | new | ¥700 |
-| gpu | RTX 5060 | new | ¥2300 |
+| gpu | RTX 4060 | new | ¥2100 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -184,13 +184,13 @@
 
 ## 7000元 日常与平面办公 二手配置
 
-覆盖预算：¥7000–¥7999；总价：¥7080
+覆盖预算：¥7000–¥7999；总价：¥7480
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5060 | used | ¥2200 |
+| gpu | 微星 RTX5060幻影师 2X | used | ¥2600 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 650W金牌电源 | used | ¥150 |
@@ -250,7 +250,7 @@
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 245K | new | ¥1090 |
 | motherboard | 华硕 PRIME B860M-K | new | ¥700 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| gpu | 微星 RTX5060幻影师 2X | new | ¥2800 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -259,13 +259,13 @@
 
 ## 7000元 3D与CUDA 二手配置
 
-覆盖预算：¥7000–¥7999；总价：¥7180
+覆盖预算：¥7000–¥7999；总价：¥7080
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 245K | used | ¥850 |
 | motherboard | 华硕 PRIME B860M-K | used | ¥550 |
-| gpu | RTX 4070 SUPER | used | ¥3700 |
+| gpu | RTX 4070 SUPER | used | ¥3600 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
@@ -274,13 +274,13 @@
 
 ## 7000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥7000–¥7999；总价：¥7330
+覆盖预算：¥7000–¥7999；总价：¥7030
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 5 250 Plus | used | ¥1300 |
-| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| cpu | Ultra 5 245K | used | ¥850 |
+| motherboard | 华硕 PRIME B860M-K | new | ¥700 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -289,13 +289,13 @@
 
 ## 8000元 日常与平面办公 全新配置
 
-覆盖预算：¥8000–¥8999；总价：¥8350
+覆盖预算：¥8000–¥8999；总价：¥8050
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5060 | new | ¥2300 |
+| gpu | Intel Arc A770 16GB | new | ¥2000 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -304,13 +304,13 @@
 
 ## 8000元 日常与平面办公 二手配置
 
-覆盖预算：¥8000–¥8999；总价：¥7880
+覆盖预算：¥8000–¥9999；总价：¥8480
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 4070 | used | ¥3000 |
+| gpu | RTX 4070 SUPER | used | ¥3600 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 650W金牌电源 | used | ¥150 |
@@ -319,13 +319,13 @@
 
 ## 8000元 日常与平面办公 混合采购配置
 
-覆盖预算：¥8000–¥9999；总价：¥8180
+覆盖预算：¥8000–¥8999；总价：¥8180
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| gpu | 微星 RTX5060幻影师 2X | new | ¥2800 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -347,9 +347,24 @@
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
+## 8000元 视频剪辑 二手配置
+
+覆盖预算：¥8000–¥9999；总价：¥8480
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | RTX 4070 SUPER | used | ¥3600 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 650W金牌电源 | used | ¥150 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
 ## 8000元 视频剪辑 混合采购配置
 
-覆盖预算：¥8000–¥9999；总价：¥7880
+覆盖预算：¥8000–¥10999；总价：¥7880
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
@@ -364,13 +379,13 @@
 
 ## 8000元 3D与CUDA 全新配置
 
-覆盖预算：¥8000–¥8999；总价：¥8399
+覆盖预算：¥8000–¥8999；总价：¥7840
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 265K | new | ¥1799 |
-| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| cpu | Ultra 5 245K | new | ¥1090 |
+| motherboard | 华硕 PRIME B860M-K | new | ¥700 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -379,28 +394,28 @@
 
 ## 8000元 3D与CUDA 二手配置
 
-覆盖预算：¥8000–¥8999；总价：¥8030
+覆盖预算：¥8000–¥9999；总价：¥8480
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 265K | used | ¥1500 |
-| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
-| gpu | RTX 4070 SUPER | used | ¥3700 |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | RTX 4070 SUPER | used | ¥3600 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| psu | 650W金牌电源 | used | ¥150 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
 ## 8000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥8000–¥8999；总价：¥8180
+覆盖预算：¥8000–¥8999；总价：¥8030
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| cpu | Ultra 7 265K | used | ¥1500 |
+| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
@@ -409,31 +424,31 @@
 
 ## 9000元 日常与平面办公 全新配置
 
-覆盖预算：¥9000–¥10999；总价：¥8850
+覆盖预算：¥9000–¥10999；总价：¥9350
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 9000元 日常与平面办公 二手配置
+## 9000元 日常与平面办公 混合采购配置
 
-覆盖预算：¥9000–¥10999；总价：¥9280
+覆盖预算：¥9000–¥10999；总价：¥8680
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 | used | ¥4300 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| storage | 512GB TLC SSD | new | ¥500 |
+| psu | 650W金牌电源 | new | ¥200 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
@@ -452,120 +467,75 @@
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 9000元 视频剪辑 二手配置
-
-覆盖预算：¥9000–¥9999；总价：¥9280
-
-| 配件 | 型号 | 状态 | 价格 |
-| --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 | used | ¥4300 |
-| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
-| cooler | 双塔6热管风冷 | used | ¥100 |
-| case | 普通中塔机箱 | used | ¥80 |
-
 ## 9000元 3D与CUDA 全新配置
 
-覆盖预算：¥9000–¥9999；总价：¥8850
+覆盖预算：¥9000–¥9999；总价：¥9350
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5060 Ti | new | ¥2800 |
+| gpu | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | new | ¥3300 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 650W金牌电源 | new | ¥200 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 9000元 3D与CUDA 二手配置
-
-覆盖预算：¥9000–¥9999；总价：¥9280
-
-| 配件 | 型号 | 状态 | 价格 |
-| --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 | used | ¥4300 |
-| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
-| cooler | 双塔6热管风冷 | used | ¥100 |
-| case | 普通中塔机箱 | used | ¥80 |
-
 ## 9000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥9000–¥9999；总价：¥8930
+覆盖预算：¥9000–¥9999；总价：¥9330
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 245K | used | ¥850 |
 | motherboard | 华硕 PRIME B860M-K | new | ¥700 |
-| gpu | RTX 5070 | new | ¥5000 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
-## 10000元 日常与平面办公 混合采购配置
+## 10000元 日常与平面办公 二手配置
 
-覆盖预算：¥10000–¥11999；总价：¥10580
+覆盖预算：¥10000–¥11999；总价：¥10280
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
-| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | new | ¥500 |
-| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
-| cooler | 双塔6热管风冷 | used | ¥100 |
-| case | 普通中塔机箱 | used | ¥80 |
-
-## 10000元 视频剪辑 二手配置
-
-覆盖预算：¥10000–¥10999；总价：¥10730
-
-| 配件 | 型号 | 状态 | 价格 |
-| --- | --- | --- | ---: |
-| cpu | Ultra 7 265K | used | ¥1500 |
-| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
-| gpu | RTX 5070 Ti | used | ¥6400 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5070白魔龙 3X | used | ¥5300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
-## 10000元 视频剪辑 混合采购配置
+## 10000元 视频剪辑 二手配置
 
-覆盖预算：¥10000–¥11999；总价：¥10580
+覆盖预算：¥10000–¥10999；总价：¥10280
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5070白魔龙 3X | used | ¥5300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | new | ¥500 |
-| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
 ## 10000元 3D与CUDA 全新配置
 
-覆盖预算：¥10000–¥10999；总价：¥10799
+覆盖预算：¥10000–¥10999；总价：¥10140
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 265K | new | ¥1799 |
-| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5070 | new | ¥5000 |
+| cpu | Ultra 5 245K | new | ¥1090 |
+| motherboard | 华硕 PRIME B860M-K | new | ¥700 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -574,13 +544,13 @@
 
 ## 10000元 3D与CUDA 二手配置
 
-覆盖预算：¥10000–¥10999；总价：¥10730
+覆盖预算：¥10000–¥10999；总价：¥10280
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 265K | used | ¥1500 |
-| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
-| gpu | RTX 5070 Ti | used | ¥6400 |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5070白魔龙 3X | used | ¥5300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
@@ -589,13 +559,13 @@
 
 ## 10000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥10000–¥11999；总价：¥10580
+覆盖预算：¥10000–¥10999；总价：¥10330
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
+| cpu | Ultra 7 265K | used | ¥1500 |
+| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -604,43 +574,43 @@
 
 ## 11000元 日常与平面办公 全新配置
 
-覆盖预算：¥11000–¥12999；总价：¥11250
+覆盖预算：¥11000–¥12999；总价：¥11650
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 11000元 日常与平面办公 二手配置
+## 11000元 日常与平面办公 混合采购配置
 
-覆盖预算：¥11000–¥12999；总价：¥11380
+覆盖预算：¥11000–¥11999；总价：¥10980
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 Ti | used | ¥6400 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| storage | 512GB TLC SSD | new | ¥500 |
+| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
 ## 11000元 视频剪辑 全新配置
 
-覆盖预算：¥11000–¥12999；总价：¥11250
+覆盖预算：¥11000–¥12999；总价：¥11650
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -649,28 +619,43 @@
 
 ## 11000元 视频剪辑 二手配置
 
-覆盖预算：¥11000–¥12999；总价：¥11380
+覆盖预算：¥11000–¥11999；总价：¥11530
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 Ti | used | ¥6400 |
+| cpu | Ultra 7 265K | used | ¥1500 |
+| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
+| gpu | 微星 RTX5070TI万图师 3X | used | ¥7200 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
+## 11000元 视频剪辑 混合采购配置
+
+覆盖预算：¥11000–¥11999；总价：¥10980
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | new | ¥500 |
+| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
 ## 11000元 3D与CUDA 全新配置
 
-覆盖预算：¥11000–¥11999；总价：¥11250
+覆盖预算：¥11000–¥11999；总价：¥11650
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 | new | ¥5000 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -679,13 +664,43 @@
 
 ## 11000元 3D与CUDA 二手配置
 
-覆盖预算：¥11000–¥11999；总价：¥11380
+覆盖预算：¥11000–¥11999；总价：¥11530
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 265K | used | ¥1500 |
+| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
+| gpu | 微星 RTX5070TI万图师 3X | used | ¥7200 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
+## 11000元 3D与CUDA 混合采购配置
+
+覆盖预算：¥11000–¥11999；总价：¥10980
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
+| gpu | 微星 RTX5070白魔龙 3X | new | ¥5400 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | new | ¥500 |
+| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
+## 12000元 日常与平面办公 二手配置
+
+覆盖预算：¥12000–¥13999；总价：¥12180
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5070 Ti | used | ¥6400 |
+| gpu | 微星 RTX5070TI万图师 3X | used | ¥7200 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
@@ -694,28 +709,43 @@
 
 ## 12000元 日常与平面办公 混合采购配置
 
-覆盖预算：¥12000–¥14999；总价：¥12780
+覆盖预算：¥12000–¥14999；总价：¥12680
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
+## 12000元 视频剪辑 二手配置
+
+覆盖预算：¥12000–¥13999；总价：¥12180
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5070TI万图师 3X | used | ¥7200 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
 ## 12000元 视频剪辑 混合采购配置
 
-覆盖预算：¥12000–¥14999；总价：¥12780
+覆盖预算：¥12000–¥13999；总价：¥12680
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -724,13 +754,13 @@
 
 ## 12000元 3D与CUDA 全新配置
 
-覆盖预算：¥12000–¥12999；总价：¥12650
+覆盖预算：¥12000–¥12999；总价：¥12550
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 250 Plus | new | ¥1450 |
 | motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -739,13 +769,13 @@
 
 ## 12000元 3D与CUDA 二手配置
 
-覆盖预算：¥12000–¥12999；总价：¥12430
+覆盖预算：¥12000–¥12999；总价：¥12180
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 5 250 Plus | used | ¥1300 |
-| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
-| gpu | RTX 5080 | used | ¥8300 |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5070TI万图师 3X | used | ¥7200 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
@@ -754,13 +784,13 @@
 
 ## 12000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥12000–¥13999；总价：¥12780
+覆盖预算：¥12000–¥13999；总价：¥12680
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -769,73 +799,43 @@
 
 ## 13000元 日常与平面办公 全新配置
 
-覆盖预算：¥13000–¥14999；总价：¥13450
+覆盖预算：¥13000–¥14999；总价：¥13350
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
-
-## 13000元 日常与平面办公 二手配置
-
-覆盖预算：¥13000–¥20000；总价：¥13280
-
-| 配件 | 型号 | 状态 | 价格 |
-| --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5080 | used | ¥8300 |
-| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
-| cooler | 双塔6热管风冷 | used | ¥100 |
-| case | 普通中塔机箱 | used | ¥80 |
 
 ## 13000元 视频剪辑 全新配置
 
-覆盖预算：¥13000–¥14999；总价：¥13450
+覆盖预算：¥13000–¥14999；总价：¥13350
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 13000元 视频剪辑 二手配置
-
-覆盖预算：¥13000–¥20000；总价：¥13280
-
-| 配件 | 型号 | 状态 | 价格 |
-| --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5080 | used | ¥8300 |
-| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
-| storage | 512GB TLC SSD | used | ¥350 |
-| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
-| cooler | 双塔6热管风冷 | used | ¥100 |
-| case | 普通中塔机箱 | used | ¥80 |
-
 ## 13000元 3D与CUDA 全新配置
 
-覆盖预算：¥13000–¥13999；总价：¥13450
+覆盖预算：¥13000–¥13999；总价：¥13350
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5070 Ti | new | ¥7200 |
+| gpu | 微星 RTX5070TI万图师 3X | new | ¥7100 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -844,58 +844,118 @@
 
 ## 13000元 3D与CUDA 二手配置
 
-覆盖预算：¥13000–¥20000；总价：¥13280
+覆盖预算：¥13000–¥13999；总价：¥13430
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 7 270 Plus | used | ¥2000 |
-| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
-| gpu | RTX 5080 | used | ¥8300 |
+| cpu | Ultra 5 250 Plus | used | ¥1300 |
+| motherboard | 微星 PRO B860M-A WIFI | used | ¥750 |
+| gpu | 微星 RTX5080万图师 3X | used | ¥9300 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | used | ¥350 |
 | psu | 850W金牌ATX 3.1电源 | used | ¥250 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
+## 14000元 日常与平面办公 二手配置
+
+覆盖预算：¥14000–¥30000；总价：¥14280
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5080万图师 3X | used | ¥9300 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
+## 14000元 视频剪辑 二手配置
+
+覆盖预算：¥14000–¥30000；总价：¥14280
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5080万图师 3X | used | ¥9300 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
+## 14000元 视频剪辑 混合采购配置
+
+覆盖预算：¥14000–¥14999；总价：¥14530
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 265K | used | ¥1500 |
+| motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | new | ¥500 |
+| psu | 九州风神 PQ1200G 金牌全模组电源 | new | ¥650 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
 ## 14000元 3D与CUDA 全新配置
 
-覆盖预算：¥14000–¥14999；总价：¥14750
+覆盖预算：¥14000–¥14999；总价：¥14800
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 5 250 Plus | new | ¥1450 |
 | motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
 | cooler | 双塔6热管风冷 | new | ¥150 |
 | case | 普通中塔机箱 | new | ¥100 |
 
-## 14000元 3D与CUDA 混合采购配置
+## 14000元 3D与CUDA 二手配置
 
-覆盖预算：¥14000–¥14999；总价：¥14030
+覆盖预算：¥14000–¥30000；总价：¥14280
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
-| cpu | Ultra 5 250 Plus | used | ¥1300 |
+| cpu | Ultra 7 270 Plus | used | ¥2000 |
+| motherboard | 微星 MAG B860M MORTAR WIFI | used | ¥900 |
+| gpu | 微星 RTX5080万图师 3X | used | ¥9300 |
+| ram | DDR5 16GB 6000 C30 | used | ¥1300 |
+| storage | 512GB TLC SSD | used | ¥350 |
+| psu | 850W金牌ATX 3.1电源 | used | ¥250 |
+| cooler | 双塔6热管风冷 | used | ¥100 |
+| case | 普通中塔机箱 | used | ¥80 |
+
+## 14000元 3D与CUDA 混合采购配置
+
+覆盖预算：¥14000–¥14999；总价：¥14530
+
+| 配件 | 型号 | 状态 | 价格 |
+| --- | --- | --- | ---: |
+| cpu | Ultra 7 265K | used | ¥1500 |
 | motherboard | 微星 PRO B860M-A WIFI | new | ¥1050 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
-| psu | 850W金牌ATX 3.1电源 | new | ¥400 |
+| psu | 九州风神 PQ1200G 金牌全模组电源 | new | ¥650 |
 | cooler | 双塔6热管风冷 | used | ¥100 |
 | case | 普通中塔机箱 | used | ¥80 |
 
 ## 15000元 日常与平面办公 全新配置
 
-覆盖预算：¥15000–¥20000；总价：¥15550
+覆盖预算：¥15000–¥30000；总价：¥15600
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -904,13 +964,13 @@
 
 ## 15000元 日常与平面办公 混合采购配置
 
-覆盖预算：¥15000–¥20000；总价：¥14880
+覆盖预算：¥15000–¥30000；总价：¥14930
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -919,13 +979,13 @@
 
 ## 15000元 视频剪辑 全新配置
 
-覆盖预算：¥15000–¥20000；总价：¥15550
+覆盖预算：¥15000–¥30000；总价：¥15600
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -934,13 +994,13 @@
 
 ## 15000元 视频剪辑 混合采购配置
 
-覆盖预算：¥15000–¥20000；总价：¥14880
+覆盖预算：¥15000–¥30000；总价：¥14930
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -949,13 +1009,13 @@
 
 ## 15000元 3D与CUDA 全新配置
 
-覆盖预算：¥15000–¥20000；总价：¥15550
+覆盖预算：¥15000–¥30000；总价：¥15600
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | new | ¥2100 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 7200 C36 | new | ¥1800 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |
@@ -964,13 +1024,13 @@
 
 ## 15000元 3D与CUDA 混合采购配置
 
-覆盖预算：¥15000–¥20000；总价：¥14880
+覆盖预算：¥15000–¥30000；总价：¥14930
 
 | 配件 | 型号 | 状态 | 价格 |
 | --- | --- | --- | ---: |
 | cpu | Ultra 7 270 Plus | used | ¥2000 |
 | motherboard | 微星 MAG B860M MORTAR WIFI | new | ¥1200 |
-| gpu | RTX 5080 | new | ¥9300 |
+| gpu | 微星 RTX5080万图师 3X | new | ¥9350 |
 | ram | DDR5 16GB 6000 C30 | used | ¥1300 |
 | storage | 512GB TLC SSD | new | ¥500 |
 | psu | 850W金牌ATX 3.1电源 | new | ¥400 |

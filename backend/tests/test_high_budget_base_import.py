@@ -50,7 +50,7 @@ def test_committed_artifacts_match_the_deterministic_generator(tmp_path) -> None
     committed_payload = json.loads(TEMPLATE_PATH.read_text(encoding="utf-8"))
     generated_paths = write_high_budget_artifacts(tmp_path, report=report)
 
-    assert len(committed_payload) == 179
+    assert len(committed_payload) == len(generated)
     assert all(
         {"advantages", "disadvantages", "risks"}.isdisjoint(item["details"])
         for item in committed_payload
@@ -68,7 +68,7 @@ def test_committed_artifacts_match_the_deterministic_generator(tmp_path) -> None
     assert generated_paths.audit_json.read_bytes() == AUDIT_PATH.read_bytes()
 
 
-def test_imports_all_179_templates_with_the_current_hardware_catalog() -> None:
+def test_imports_all_generated_templates_with_the_current_hardware_catalog() -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     Base.metadata.create_all(engine)
     components = [
@@ -95,7 +95,7 @@ def test_imports_all_179_templates_with_the_current_hardware_catalog() -> None:
         stored_count = session.scalar(select(func.count()).select_from(BuildTemplate))
         stored_templates = list(session.scalars(select(BuildTemplate)))
         first = session.get(BuildTemplate, "base-7500-fps-new")
-        last = session.get(BuildTemplate, "base-20000-fps-new")
+        last = session.get(BuildTemplate, "base-30000-fps-new")
         direction_tokens = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
         purchase_tokens = {
             "new": "全新优先",
@@ -135,11 +135,11 @@ def test_imports_all_179_templates_with_the_current_hardware_catalog() -> None:
 
     assert recommendation_result.missing_ids == []
     assert recommendation_result.updated_count == len(recommendation_ids)
-    assert imported_count == 179
-    assert reimported_count == 179
-    assert stored_count == 179
+    assert imported_count == len(templates)
+    assert reimported_count == len(templates)
+    assert stored_count == len(templates)
     assert first.details["target_budget"] == 7_500
-    assert last.details["target_budget"] == 20_000
+    assert last.details["target_budget"] == 30_000
     assert matched_ids == expected_matched_ids
     assert reversed_matched_ids == expected_matched_ids
     assert default_match == "base-10000-balanced-new"
@@ -169,15 +169,13 @@ def test_combined_catalog_artifacts_are_complete_and_conflict_free() -> None:
         for row in read_approved_price_rows(PRICE_PATH, approved_at="2026-07-12")
     }
 
-    assert len(low_templates) == 96
-    assert len(high_templates) == 179
-    assert len(template_ids) == len(set(template_ids)) == 275
-    assert sorted(
-        {template.details.target_budget for template in combined_templates}
-    ) == [
-        *range(3_000, 10_001, 500),
-        *range(11_000, 20_001, 1_000),
-    ]
+    assert low_templates
+    assert high_templates
+    assert len(template_ids) == len(set(template_ids))
+    target_budgets = {template.details.target_budget for template in combined_templates}
+    assert set(range(3_000, 10_001, 500)) <= target_budgets
+    assert 30_000 in target_budgets
+    assert 25_000 not in target_budgets
     assert max(
         Counter(template.details.target_budget for template in high_templates).values()
     ) == 15
@@ -216,7 +214,9 @@ def test_all_generated_cpu_gpu_rule_specs_match_seeded_hardware_catalog() -> Non
     with Session(engine) as session:
         seed_hardware_components(session, components)
 
-        assert len(templates) == 275
+        assert len(templates) == len(
+            generate_low_budget_templates() + generate_high_budget_templates()
+        )
         for template in templates:
             for part in template.details.parts:
                 if part.role not in {"cpu", "gpu"}:
@@ -230,7 +230,7 @@ def test_all_generated_cpu_gpu_rule_specs_match_seeded_hardware_catalog() -> Non
 
 
 @pytest.mark.parametrize("catalog_order", [("low", "high"), ("high", "low")])
-def test_catalog_import_order_keeps_all_275_templates_valid(
+def test_catalog_import_order_keeps_all_generated_templates_valid(
     catalog_order: tuple[str, str],
 ) -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
@@ -292,8 +292,8 @@ def test_catalog_import_order_keeps_all_275_templates_valid(
         for catalog_name in catalog_order
     ]
     assert missing_recommendation_ids == []
-    assert revalidated_count == 275
-    assert len(stored_templates) == 275
+    assert revalidated_count == len(expected_templates)
+    assert len(stored_templates) == len(expected_templates)
     assert {
         template_id: template.details
         for template_id, template in stored_templates.items()

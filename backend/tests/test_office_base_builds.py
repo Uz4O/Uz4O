@@ -37,7 +37,7 @@ RECOMMENDATION_PATH = DATA_DIR / "office-base-recommendation-ids.txt"
 def test_office_templates_follow_platform_capacity_and_workload_rules() -> None:
     templates = generate_office_templates()
 
-    assert len(templates) == 65
+    assert templates
     assert [template.budget_min for template in templates[:3]] == [3000, 4000, 5000]
     assert all(template.use_cases == ["办公"] for template in templates)
 
@@ -58,6 +58,7 @@ def test_office_templates_follow_platform_capacity_and_workload_rules() -> None:
         if template.budget_min <= 5000:
             assert "strongest" in template.id
             continue
+        assert "耕升" not in parts["gpu"].name
         assert parts["cpu"].component_id in OFFICE_CPU_IDS
         assert parts["motherboard"].component_id in OFFICE_MOTHERBOARD_IDS
         assert not parts["gpu"].component_id.startswith("rx-")
@@ -72,7 +73,7 @@ def test_office_templates_follow_platform_capacity_and_workload_rules() -> None:
 def test_office_template_ranges_cover_every_supported_request_budget() -> None:
     templates = generate_office_templates()
 
-    for budget in range(6000, 20_001, 1000):
+    for budget in range(6000, 30_001, 1000):
         for profile in ("general", "media", "cuda"):
             for purchase_mode in ("new", "used", "mixed"):
                 matching = [

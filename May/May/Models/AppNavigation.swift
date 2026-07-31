@@ -3,10 +3,10 @@ import Foundation
 enum AppTab: String, CaseIterable {
     case home = "首页"
     case styles = "风格"
-    case builds = "配置"
+    case diy = "DIY"
     case profile = "我的"
 
-    static let bottomNavigationTabs: [AppTab] = [.home, .styles, .builds, .profile]
+    static let bottomNavigationTabs: [AppTab] = [.home, .styles, .diy, .profile]
 
     func icon(isSelected: Bool) -> String {
         switch self {
@@ -14,8 +14,8 @@ enum AppTab: String, CaseIterable {
             return isSelected ? "house.fill" : "house"
         case .styles:
             return isSelected ? "paintpalette.fill" : "paintpalette"
-        case .builds:
-            return isSelected ? "doc.text.fill" : "doc.text"
+        case .diy:
+            return isSelected ? "wrench.and.screwdriver.fill" : "wrench.and.screwdriver"
         case .profile:
             return isSelected ? "person.fill" : "person"
         }

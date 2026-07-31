@@ -1017,7 +1017,7 @@ private struct BudgetSection: View {
     @Binding var budget: Double
 
     private let minimumBudget: Double = 3000
-    private let maximumBudget: Double = 20000
+    private let maximumBudget: Double = 30000
     private let budgetStep: Double = 100
 
     private var valueText: String {
@@ -1041,7 +1041,7 @@ private struct BudgetSection: View {
             HStack {
                 Text("¥ 3000")
                 Spacer()
-                Text("¥ 20000")
+                Text("¥ 30000")
             }
             .font(.system(size: 11, weight: .semibold))
             .foregroundStyle(AppTheme.secondaryText)

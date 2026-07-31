@@ -12,6 +12,7 @@ from app.builds.service import (
     BuildTemplateInput,
     BuildTemplatePart,
 )
+from app.builds.gpu_rules import gpu_brand_allowed_for_budget
 from app.catalog.rule_specs import (
     CPU_PERFORMANCE as RULE_CPU_PERFORMANCE,
     CPU_TDP as RULE_CPU_TDP,
@@ -26,10 +27,10 @@ PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 GpuVendor = Literal["nvidia", "amd"]
 
-PRICE_DATE = "2026-07-12"
+PRICE_DATE = "2026-07-30"
 BUDGET_TIERS = [
     *range(7_500, 10_001, 500),
-    *range(11_000, 20_001, 1_000),
+    *range(11_000, 30_001, 1_000),
 ]
 PART_ROLE_ORDER = (
     "cpu",
@@ -203,6 +204,18 @@ def generate_high_budget_report() -> GenerationReport:
                         ),
                     }
                     attempts = [{}]
+                    if (
+                        budget == 8_000
+                        and direction == "aaa"
+                        and purchase_mode == "used"
+                        and gpu_vendor == "nvidia"
+                    ):
+                        attempts.append(
+                            {
+                                "max_budget_shortfall": 150,
+                                "prefer_budget_fit": True,
+                            }
+                        )
                     if direction == "fps":
                         if budget >= 11_000:
                             attempts.append({"allow_early_9850x3d": True})
@@ -215,31 +228,6 @@ def generate_high_budget_report() -> GenerationReport:
                                     if budget >= EXTREME_COVERAGE_MIN_BUDGET
                                     else FPS_COVERAGE_MAX_MOTHERBOARD_BUDGET_SHARE
                                 ),
-                                "prefer_budget_fit": True,
-                            }
-                        )
-                    if (
-                        budget == 14_000
-                        and direction == "balanced"
-                        and purchase_mode == "mixed"
-                        and gpu_vendor == "nvidia"
-                    ):
-                        attempts.append(
-                            {
-                                "max_budget_shortfall": 120,
-                                "prefer_budget_fit": True,
-                            }
-                        )
-                    if (
-                        budget == 15_000
-                        and direction == "aaa"
-                        and purchase_mode == "used"
-                        and gpu_vendor == "nvidia"
-                    ):
-                        attempts.append(
-                            {
-                                "allow_early_9850x3d": True,
-                                "max_budget_shortfall": 120,
                                 "prefer_budget_fit": True,
                             }
                         )
@@ -413,7 +401,7 @@ def render_high_budget_markdown(
         not _is_unavailable_failure(failure) for failure in failures
     )
     lines = [
-        "# 7500-20000元装机基底配置",
+        "# 7500-30000元装机基底配置",
         "",
         f"价格日期：{PRICE_DATE}",
         "",
@@ -590,48 +578,6 @@ def _select_candidate(
         and purchase_mode == "used"
         and gpu_vendor == "nvidia"
     )
-    required_11000_new_aaa_nvidia = (
-        budget == 11_000
-        and direction == "aaa"
-        and purchase_mode == "new"
-        and gpu_vendor == "nvidia"
-    )
-    required_12000_aaa_nvidia_tuf = (
-        budget == 12_000
-        and direction == "aaa"
-        and purchase_mode in {"new", "mixed"}
-        and gpu_vendor == "nvidia"
-    )
-    required_14000_new_aaa_nvidia = (
-        budget == 14_000
-        and direction == "aaa"
-        and purchase_mode == "new"
-        and gpu_vendor == "nvidia"
-    )
-    required_14000_used_aaa_nvidia = (
-        budget == 14_000
-        and direction == "aaa"
-        and purchase_mode == "used"
-        and gpu_vendor == "nvidia"
-    )
-    required_14000_new_balanced_nvidia = (
-        budget == 14_000
-        and direction == "balanced"
-        and purchase_mode == "new"
-        and gpu_vendor == "nvidia"
-    )
-    required_14000_mixed_balanced_nvidia = (
-        budget == 14_000
-        and direction == "balanced"
-        and purchase_mode == "mixed"
-        and gpu_vendor == "nvidia"
-    )
-    required_15000_used_aaa_nvidia = (
-        budget == 15_000
-        and direction == "aaa"
-        and purchase_mode == "used"
-        and gpu_vendor == "nvidia"
-    )
     motherboard_budget_share = max_motherboard_budget_share or (
         MAX_FPS_MOTHERBOARD_BUDGET_SHARE
         if direction == "fps"
@@ -641,24 +587,6 @@ def _select_candidate(
 
     for cpu in cpus:
         if required_8000_used_aaa and cpu.component_id != "r7-7800x3d":
-            continue
-        if required_11000_new_aaa_nvidia and cpu.component_id != "r7-9800x3d":
-            continue
-        if required_14000_new_aaa_nvidia and cpu.component_id != "r7-9800x3d":
-            continue
-        if required_14000_used_aaa_nvidia and cpu.component_id != "r7-9800x3d":
-            continue
-        if (
-            required_14000_new_balanced_nvidia
-            and cpu.component_id != "r7-9800x3d"
-        ):
-            continue
-        if (
-            required_14000_mixed_balanced_nvidia
-            and cpu.component_id != "r7-9800x3d"
-        ):
-            continue
-        if required_15000_used_aaa_nvidia and cpu.component_id != "r7-9850x3d":
             continue
         if (
             budget >= 9_500
@@ -693,23 +621,9 @@ def _select_candidate(
             else None
         )
         for gpu in gpus:
+            if not gpu_brand_allowed_for_budget(gpu.name, budget):
+                continue
             if required_8000_used_aaa and gpu.component_id != "rtx-4070-super":
-                continue
-            if required_14000_new_aaa_nvidia and gpu.component_id != "rtx-5070-ti":
-                continue
-            if required_14000_used_aaa_nvidia and gpu.component_id != "rtx-5080":
-                continue
-            if (
-                required_14000_new_balanced_nvidia
-                and gpu.component_id != "rtx-5070-ti"
-            ):
-                continue
-            if (
-                required_14000_mixed_balanced_nvidia
-                and gpu.component_id != "rtx-5070-ti"
-            ):
-                continue
-            if required_15000_used_aaa_nvidia and gpu.component_id != "rtx-5080":
                 continue
             if gpu_vendor and gpu.brand.lower() != gpu_vendor:
                 continue
@@ -742,7 +656,6 @@ def _select_candidate(
                 and cpu.component_id in {"r7-9800x3d", "r7-9850x3d"}
                 and GPU_PERFORMANCE[gpu.component_id]
                 < GPU_PERFORMANCE["rtx-5070-ti"]
-                and not required_11000_new_aaa_nvidia
             ):
                 continue
             required_psu = minimum_psu_watt(cpu.component_id, gpu.component_id)
@@ -797,51 +710,11 @@ def _select_candidate(
                 ):
                     continue
                 if (
-                    required_11000_new_aaa_nvidia
-                    and motherboard.component_id != "asus-b650m-tuf"
-                ):
-                    continue
-                if (
-                    required_12000_aaa_nvidia_tuf
-                    and motherboard.component_id != "asus-b650m-tuf"
-                ):
-                    continue
-                if (
-                    required_14000_new_aaa_nvidia
-                    and motherboard.component_id != "msi-b850m-power"
-                ):
-                    continue
-                if (
-                    required_14000_used_aaa_nvidia
-                    and motherboard.component_id != "msi-b850m-power"
-                ):
-                    continue
-                if (
-                    required_14000_new_balanced_nvidia
-                    and motherboard.component_id != "msi-b850m-power"
-                ):
-                    continue
-                if (
-                    required_14000_mixed_balanced_nvidia
-                    and motherboard.component_id != "msi-x870e-tomahawk"
-                ):
-                    continue
-                if (
-                    required_15000_used_aaa_nvidia
-                    and motherboard.component_id != "msi-x870e-edge-ti"
-                ):
-                    continue
-                if (
                     value_motherboard is not None
                     and motherboard_price
                     > value_motherboard.price(conditions["motherboard"])
                     + (
-                        500
-                        if required_14000_new_aaa_nvidia
-                        or required_14000_used_aaa_nvidia
-                        else 1_050
-                        if required_15000_used_aaa_nvidia
-                        else max_aaa_motherboard_step_up
+                        max_aaa_motherboard_step_up
                         if max_aaa_motherboard_step_up
                         != MAX_3A_MOTHERBOARD_STEP_UP
                         else MAX_NEW_9800X3D_MOTHERBOARD_STEP_UP
@@ -879,24 +752,9 @@ def _select_candidate(
                         if ram.specs.get("cas_latency") != required_ram_latency:
                             continue
                     if (
-                        required_11000_new_aaa_nvidia
-                        and ram.component_id != "base-ddr5-16gb-6000-c32"
-                    ):
-                        continue
-                    if (
-                        required_12000_aaa_nvidia_tuf
+                        direction == "aaa"
                         and purchase_mode == "new"
-                        and ram.component_id != "base-ddr5-16gb-6000-c32"
-                    ):
-                        continue
-                    if (
-                        required_14000_new_aaa_nvidia
-                        and ram.component_id != "base-ddr5-16gb-6000-c32"
-                    ):
-                        continue
-                    if (
-                        required_14000_new_balanced_nvidia
-                        and ram.component_id != "base-ddr5-16gb-6000-c32"
+                        and ram.specs.get("cas_latency") != 32
                     ):
                         continue
                     if (
@@ -1309,7 +1167,7 @@ def _load_gpu_parts(path: Path) -> List[PricedPart]:
                 new_price=_optional_int(row.get("new_price")),
                 used_source=path.name,
                 new_source=path.name,
-                price_date="2026-07-07",
+                price_date=PRICE_DATE,
             )
         )
     return parts

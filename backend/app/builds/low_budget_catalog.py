@@ -12,6 +12,7 @@ from app.builds.service import (
     BuildTemplateInput,
     BuildTemplatePart,
 )
+from app.builds.gpu_rules import gpu_brand_allowed_for_budget
 from app.catalog.rule_specs import (
     CPU_PERFORMANCE as RULE_CPU_PERFORMANCE,
     CPU_TDP as RULE_CPU_TDP,
@@ -32,7 +33,7 @@ SkipReason = Literal[
     "generation_error",
 ]
 
-PRICE_DATE = "2026-07-12"
+PRICE_DATE = "2026-07-30"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
 DIRECTIONS: Tuple[Direction, ...] = ("fps", "aaa", "balanced")
 PURCHASE_MODES: Tuple[PurchaseMode, ...] = ("new", "used", "mixed")
@@ -441,37 +442,7 @@ def _select_candidate(
     best_score: Optional[Tuple[int, ...]] = None
     saw_complete_candidate = False
     conditions = CONDITIONS_BY_MODE[purchase_mode]
-    required_6000_new_parts = (
-        {
-            "fps": ("r5-9600x", "rtx-5060"),
-            "balanced": ("r5-9600x", "rtx-5060"),
-            "aaa": ("r5-7500f", "rtx-5060-ti"),
-        }.get(direction)
-        if budget == 6_000
-        and purchase_mode == "new"
-        and (direction == "fps" or gpu_vendor != "amd")
-        else None
-    )
-    required_7000_mixed_aaa = (
-        budget == 7_000
-        and direction == "aaa"
-        and purchase_mode == "mixed"
-        and gpu_vendor == "nvidia"
-    )
-    required_6500_mixed_fps = (
-        budget == 6_500
-        and direction == "fps"
-        and purchase_mode == "mixed"
-        and gpu_vendor == "nvidia"
-    )
-
     for cpu in cpus:
-        if required_6000_new_parts and cpu.component_id != required_6000_new_parts[0]:
-            continue
-        if required_7000_mixed_aaa and cpu.component_id != "r5-9600x":
-            continue
-        if required_6500_mixed_fps and cpu.component_id != "r7-7800x3d":
-            continue
         if budget >= 6_000 and cpu.component_id in {"r5-5600", "r5-5600x"}:
             continue
         if not _condition_is_allowed(cpu, conditions["cpu"]):
@@ -508,7 +479,6 @@ def _select_candidate(
                 direction == "aaa"
                 and motherboard_price is not None
                 and motherboard_price > budget * MAX_MOTHERBOARD_BUDGET_SHARE
-                and not required_7000_mixed_aaa
             ):
                 continue
             if (
@@ -517,12 +487,6 @@ def _select_candidate(
                 and motherboard_price
                 > value_motherboard.price(conditions["motherboard"])
                 + MAX_3A_MOTHERBOARD_STEP_UP
-                and not required_7000_mixed_aaa
-            ):
-                continue
-            if (
-                required_7000_mixed_aaa
-                and motherboard.component_id != "asus-b850m-awy"
             ):
                 continue
             if cpu.specs["socket"] != motherboard.specs["socket"]:
@@ -534,16 +498,9 @@ def _select_candidate(
                 continue
 
             for gpu in gpus:
-                if (
-                    required_6000_new_parts
-                    and gpu.component_id != required_6000_new_parts[1]
-                ):
-                    continue
-                if required_7000_mixed_aaa and gpu.component_id != "rtx-5060-ti":
-                    continue
-                if required_6500_mixed_fps and gpu.component_id != "rtx-5060":
-                    continue
                 if gpu_vendor and gpu.brand.lower() != gpu_vendor:
+                    continue
+                if not gpu_brand_allowed_for_budget(gpu.name, budget):
                     continue
                 if not _condition_is_allowed(gpu, conditions["gpu"]):
                     continue
@@ -583,11 +540,6 @@ def _select_candidate(
                 ):
                     if ram.specs.get("capacity_gb") != 16:
                         continue
-                    if (
-                        required_6000_new_parts
-                        and ram.component_id != "base-ddr5-16gb-6000-c36"
-                    ):
-                        continue
                     fixed_parts = {
                         "cpu": cpu,
                         "motherboard": motherboard,
@@ -614,8 +566,7 @@ def _select_candidate(
 
                     saw_complete_candidate = True
                     total = sum(part.reference_price for part in parts)
-                    max_total = budget + (330 if required_6500_mixed_fps else 300)
-                    if not budget - MAX_BUDGET_SHORTFALL <= total <= max_total:
+                    if not budget - MAX_BUDGET_SHORTFALL <= total <= budget + 300:
                         continue
                     candidate = Candidate(
                         parts=tuple(parts),
@@ -981,7 +932,7 @@ def _load_gpu_parts(path: Path) -> List[PricedPart]:
                 new_price=_optional_int(row.get("new_price")),
                 used_source=path.name,
                 new_source=path.name,
-                price_date="2026-07-07",
+                price_date=PRICE_DATE,
             )
         )
     return parts

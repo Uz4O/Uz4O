@@ -64,11 +64,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -145,7 +145,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -213,11 +213,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -294,7 +294,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -362,11 +362,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -443,7 +443,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -515,7 +515,7 @@
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -592,7 +592,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -664,7 +664,7 @@
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -741,7 +741,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -813,7 +813,7 @@
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -890,7 +890,156 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
+    }
+  },
+  {
+    "id": "base-4000-fps-new",
+    "title": "4000元 FPS 全新 AMD基底配置",
+    "budget_min": 4000,
+    "budget_max": 4499,
+    "use_cases": [
+      "游戏"
+    ],
+    "tags": [
+      "FPS",
+      "全新",
+      "AMD",
+      "fps",
+      "new",
+      "amd"
+    ],
+    "components": {
+      "cpu": "r5-5600",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rx-7650-gre",
+      "ram": "base-ddr4-16gb-3200",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-650w-gold",
+      "cooler": "base-cooler-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 4290,
+    "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
+    "details": {
+      "target_budget": 4000,
+      "direction": "fps",
+      "purchase_mode": "new",
+      "gpu_vendor": "amd",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "r5-5600",
+          "name": "R5 5600",
+          "condition": "new",
+          "reference_price": 740,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "perf_index": 50,
+            "tdp": 65
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
+          "condition": "new",
+          "reference_price": 330,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
+          "condition": "new",
+          "reference_price": 1820,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-30",
+          "specs": {
+            "vendor": "AMD",
+            "perf_index": 43,
+            "tdp": 230
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR4",
+            "capacity_gb": 16,
+            "speed_mhz": 3200,
+            "modules": 2
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "512GB TLC SSD",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
+          "condition": "new",
+          "reference_price": 200,
+          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
+          "price_date": "2026-07-19",
+          "specs": {
+            "watt": 650,
+            "rating": "80+ Gold"
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-6-heatpipe",
+          "name": "6热管风冷",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 1
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -962,7 +1111,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -1039,7 +1188,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -1068,7 +1217,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4150,
+    "estimated_total": 4120,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1107,11 +1256,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 1850,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1188,7 +1337,156 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
+    }
+  },
+  {
+    "id": "base-4000-aaa-new",
+    "title": "4000元 3A 全新 AMD基底配置",
+    "budget_min": 4000,
+    "budget_max": 4499,
+    "use_cases": [
+      "游戏"
+    ],
+    "tags": [
+      "3A",
+      "全新",
+      "AMD",
+      "aaa",
+      "new",
+      "amd"
+    ],
+    "components": {
+      "cpu": "r5-5600",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rx-7650-gre",
+      "ram": "base-ddr4-16gb-3200",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-650w-gold",
+      "cooler": "base-cooler-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 4290,
+    "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
+    "details": {
+      "target_budget": 4000,
+      "direction": "aaa",
+      "purchase_mode": "new",
+      "gpu_vendor": "amd",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "r5-5600",
+          "name": "R5 5600",
+          "condition": "new",
+          "reference_price": 740,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "perf_index": 50,
+            "tdp": 65
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
+          "condition": "new",
+          "reference_price": 330,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
+          "condition": "new",
+          "reference_price": 1820,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-30",
+          "specs": {
+            "vendor": "AMD",
+            "perf_index": 43,
+            "tdp": 230
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR4",
+            "capacity_gb": 16,
+            "speed_mhz": 3200,
+            "modules": 2
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "512GB TLC SSD",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
+          "condition": "new",
+          "reference_price": 200,
+          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
+          "price_date": "2026-07-19",
+          "specs": {
+            "watt": 650,
+            "rating": "80+ Gold"
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-6-heatpipe",
+          "name": "6热管风冷",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 1
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -1260,7 +1558,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -1337,7 +1635,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -1366,7 +1664,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4150,
+    "estimated_total": 4120,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1405,11 +1703,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 1850,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1486,7 +1784,156 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
+    }
+  },
+  {
+    "id": "base-4000-balanced-new",
+    "title": "4000元 均衡 全新 AMD基底配置",
+    "budget_min": 4000,
+    "budget_max": 4499,
+    "use_cases": [
+      "游戏"
+    ],
+    "tags": [
+      "均衡",
+      "全新",
+      "AMD",
+      "balanced",
+      "new",
+      "amd"
+    ],
+    "components": {
+      "cpu": "r5-5600",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rx-7650-gre",
+      "ram": "base-ddr4-16gb-3200",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-650w-gold",
+      "cooler": "base-cooler-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 4290,
+    "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
+    "details": {
+      "target_budget": 4000,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "gpu_vendor": "amd",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "r5-5600",
+          "name": "R5 5600",
+          "condition": "new",
+          "reference_price": 740,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "perf_index": 50,
+            "tdp": 65
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
+          "condition": "new",
+          "reference_price": 330,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
+          "condition": "new",
+          "reference_price": 1820,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-30",
+          "specs": {
+            "vendor": "AMD",
+            "perf_index": 43,
+            "tdp": 230
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR4",
+            "capacity_gb": 16,
+            "speed_mhz": 3200,
+            "modules": 2
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "512GB TLC SSD",
+          "condition": "new",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
+          "condition": "new",
+          "reference_price": 200,
+          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
+          "price_date": "2026-07-19",
+          "specs": {
+            "watt": 650,
+            "rating": "80+ Gold"
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-6-heatpipe",
+          "name": "6热管风冷",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 1
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -1558,7 +2005,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -1635,7 +2082,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -1664,7 +2111,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4150,
+    "estimated_total": 4120,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -1703,11 +2150,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 1850,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1784,12 +2231,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-4500-fps-new",
-    "title": "4500元 FPS 全新 AMD基底配置",
+    "title": "4500元 FPS 全新 NVIDIA基底配置",
     "budget_min": 4500,
     "budget_max": 4999,
     "use_cases": [
@@ -1798,28 +2245,28 @@
     "tags": [
       "FPS",
       "全新",
-      "AMD",
+      "NVIDIA",
       "fps",
       "new",
-      "amd"
+      "nvidia"
     ],
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rx-7650-gre",
+      "gpu": "rtx-4060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4400,
+    "estimated_total": 4650,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
       "direction": "fps",
       "purchase_mode": "new",
-      "gpu_vendor": "amd",
+      "gpu_vendor": "nvidia",
       "parts": [
         {
           "role": "cpu",
@@ -1851,16 +2298,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "component_id": "rtx-4060",
+          "name": "RTX 4060",
           "condition": "new",
-          "reference_price": 1850,
+          "reference_price": 2100,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "AMD",
-            "perf_index": 43,
-            "tdp": 230
+            "vendor": "NVIDIA",
+            "perf_index": 40,
+            "tdp": 115
           }
         },
         {
@@ -1933,7 +2380,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -2001,11 +2448,11 @@
         {
           "role": "gpu",
           "component_id": "rx-7650-gre",
-          "name": "RX 7650 GRE",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -2082,12 +2529,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-4500-fps-mixed",
-    "title": "4500元 FPS 混合采购 NVIDIA基底配置",
+    "title": "4500元 FPS 混合采购 AMD基底配置",
     "budget_min": 4500,
     "budget_max": 4999,
     "use_cases": [
@@ -2096,28 +2543,28 @@
     "tags": [
       "FPS",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "fps",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-9060-xt-8gb",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4600,
+    "estimated_total": 4700,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
       "direction": "fps",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -2149,16 +2596,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "AMD",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 180
           }
         },
         {
@@ -2231,7 +2678,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -2251,16 +2698,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-5600",
+      "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rtx-4060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4770,
+    "estimated_total": 4650,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
@@ -2270,15 +2717,15 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-5600",
-          "name": "R5 5600",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "new",
-          "reference_price": 740,
+          "reference_price": 820,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM4",
-            "perf_index": 50,
+            "perf_index": 52,
             "tdp": 65
           }
         },
@@ -2298,16 +2745,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-4060",
+          "name": "RTX 4060",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2100,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 40,
+            "tdp": 115
           }
         },
         {
@@ -2380,7 +2827,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -2452,7 +2899,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -2529,12 +2976,12 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-4500-aaa-mixed",
-    "title": "4500元 3A 混合采购 NVIDIA基底配置",
+    "title": "4500元 3A 混合采购 AMD基底配置",
     "budget_min": 4500,
     "budget_max": 4999,
     "use_cases": [
@@ -2543,28 +2990,28 @@
     "tags": [
       "3A",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "aaa",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-9060-xt-8gb",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4600,
+    "estimated_total": 4700,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
       "direction": "aaa",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -2596,16 +3043,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "AMD",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 180
           }
         },
         {
@@ -2678,7 +3125,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -2698,16 +3145,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-5600",
+      "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rtx-4060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4770,
+    "estimated_total": 4650,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
@@ -2717,15 +3164,15 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-5600",
-          "name": "R5 5600",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "new",
-          "reference_price": 740,
+          "reference_price": 820,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM4",
-            "perf_index": 50,
+            "perf_index": 52,
             "tdp": 65
           }
         },
@@ -2745,16 +3192,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-4060",
+          "name": "RTX 4060",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2100,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 40,
+            "tdp": 115
           }
         },
         {
@@ -2827,12 +3274,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-4500-balanced-used",
-    "title": "4500元 均衡 二手 NVIDIA基底配置",
+    "title": "4500元 均衡 二手 AMD基底配置",
     "budget_min": 4500,
     "budget_max": 4999,
     "use_cases": [
@@ -2841,84 +3288,84 @@
     "tags": [
       "均衡",
       "二手",
-      "NVIDIA",
+      "AMD",
       "balanced",
       "used",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-3070-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "cpu": "r5-5600x",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rx-9070-gre",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4750,
+    "estimated_total": 4700,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
       "direction": "balanced",
       "purchase_mode": "used",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 720,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 52,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-b650m-tuf",
-          "name": "华硕 B650M PLUS 重炮手",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "used",
-          "reference_price": 650,
+          "reference_price": 230,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-3070-ti",
-          "name": "RTX 3070 Ti",
+          "component_id": "rx-9070-gre",
+          "name": "RX 9070 GRE",
           "condition": "used",
-          "reference_price": 1500,
+          "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 55,
-            "tdp": 290
+            "vendor": "AMD",
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -2937,16 +3384,15 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "850W金牌ATX 3.1电源",
+          "component_id": "base-psu-650w-gold",
+          "name": "650W金牌电源",
           "condition": "used",
-          "reference_price": 250,
-          "price_source": "用户2026-07-19提供的850W金牌电源二手参考价",
+          "reference_price": 150,
+          "price_source": "用户历史配置中的650W二手参考价",
           "price_date": "2026-07-19",
           "specs": {
-            "watt": 850,
-            "rating": "80+ Gold",
-            "standard": "ATX 3.1"
+            "watt": 650,
+            "rating": "80+ Gold"
           }
         },
         {
@@ -2977,12 +3423,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-4500-balanced-mixed",
-    "title": "4500元 均衡 混合采购 NVIDIA基底配置",
+    "title": "4500元 均衡 混合采购 AMD基底配置",
     "budget_min": 4500,
     "budget_max": 4999,
     "use_cases": [
@@ -2991,28 +3437,28 @@
     "tags": [
       "均衡",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "balanced",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-9060-xt-8gb",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4600,
+    "estimated_total": 4700,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4500,
       "direction": "balanced",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -3044,16 +3490,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "AMD",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 180
           }
         },
         {
@@ -3126,12 +3572,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-5000-fps-new",
-    "title": "5000元 FPS 全新 NVIDIA基底配置",
+    "title": "5000元 FPS 全新 AMD基底配置",
     "budget_min": 5000,
     "budget_max": 5499,
     "use_cases": [
@@ -3140,40 +3586,40 @@
     "tags": [
       "FPS",
       "全新",
-      "NVIDIA",
+      "AMD",
       "fps",
       "new",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-5600",
+      "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5270,
+    "estimated_total": 5150,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
       "direction": "fps",
       "purchase_mode": "new",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-5600",
-          "name": "R5 5600",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "new",
-          "reference_price": 740,
+          "reference_price": 820,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM4",
-            "perf_index": 50,
+            "perf_index": 52,
             "tdp": 65
           }
         },
@@ -3193,16 +3639,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -3275,7 +3721,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -3295,16 +3741,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-4060",
+      "gpu": "rtx-4060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5250,
+    "estimated_total": 5150,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -3314,16 +3760,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -3342,16 +3788,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4060",
-          "name": "RTX 4060",
+          "component_id": "rtx-4060-ti",
+          "name": "RTX 4060 Ti",
           "condition": "used",
-          "reference_price": 1700,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 40,
-            "tdp": 115
+            "perf_index": 50,
+            "tdp": 160
           }
         },
         {
@@ -3424,7 +3870,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -3446,7 +3892,7 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -3491,16 +3937,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -3573,7 +4019,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -3595,7 +4041,7 @@
     "components": {
       "cpu": "r5-5600",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -3640,16 +4086,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -3722,7 +4168,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -3794,7 +4240,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -3871,7 +4317,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -3943,7 +4389,7 @@
           "condition": "used",
           "reference_price": 3000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -4020,7 +4466,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4092,7 +4538,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -4170,7 +4616,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4192,7 +4638,7 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -4237,16 +4683,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -4319,7 +4765,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4391,7 +4837,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -4468,7 +4914,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4490,7 +4936,7 @@
     "components": {
       "cpu": "r5-5600",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -4535,16 +4981,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -4617,7 +5063,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4689,7 +5135,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -4766,7 +5212,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4838,7 +5284,7 @@
           "condition": "used",
           "reference_price": 3000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -4915,7 +5361,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -4987,7 +5433,7 @@
           "condition": "used",
           "reference_price": 1800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5064,7 +5510,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -5086,7 +5532,7 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -5131,16 +5577,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -5213,7 +5659,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -5285,7 +5731,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5362,12 +5808,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-5500-fps-new",
-    "title": "5500元 FPS 全新 NVIDIA基底配置",
+    "title": "5500元 FPS 全新 AMD基底配置",
     "budget_min": 5500,
     "budget_max": 5999,
     "use_cases": [
@@ -5376,41 +5822,41 @@
     "tags": [
       "FPS",
       "全新",
-      "NVIDIA",
+      "AMD",
       "fps",
       "new",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-7500f",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-7650-gre",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5800,
+    "estimated_total": 5770,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
       "direction": "fps",
       "purchase_mode": "new",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "new",
-          "reference_price": 600,
+          "reference_price": 1050,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -5429,16 +5875,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "vendor": "AMD",
+            "perf_index": 43,
+            "tdp": 230
           }
         },
         {
@@ -5511,7 +5957,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -5540,7 +5986,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5450,
+    "estimated_total": 5550,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -5581,9 +6027,9 @@
           "component_id": "rtx-4060-ti",
           "name": "RTX 4060 Ti",
           "condition": "used",
-          "reference_price": 1900,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -5660,12 +6106,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-5500-fps-mixed",
-    "title": "5500元 FPS 混合采购 NVIDIA基底配置",
+    "title": "5500元 FPS 混合采购 AMD基底配置",
     "budget_min": 5500,
     "budget_max": 5999,
     "use_cases": [
@@ -5674,41 +6120,41 @@
     "tags": [
       "FPS",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "fps",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-7500f",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-7650-gre",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5700,
+    "estimated_total": 5620,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
       "direction": "fps",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 950,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -5727,16 +6173,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "vendor": "AMD",
+            "perf_index": 43,
+            "tdp": 230
           }
         },
         {
@@ -5809,7 +6255,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -5829,16 +6275,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
-      "ram": "base-ddr5-16gb-6000-c36",
+      "cpu": "r5-5600",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5800,
+    "estimated_total": 5770,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -5848,59 +6294,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600",
+          "name": "R5 5600",
           "condition": "new",
-          "reference_price": 600,
+          "reference_price": 740,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 50,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 330,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 60,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c36",
-          "name": "DDR5 16GB 6000 C36",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "new",
-          "reference_price": 1300,
-          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
-          "price_date": "2026-07-19",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 36
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -5958,7 +6404,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -5978,16 +6424,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r5-7500f",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-9060-xt-8gb",
+      "gpu": "rx-7650-gre",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5800,
+    "estimated_total": 5770,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -5997,16 +6443,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "new",
-          "reference_price": 600,
+          "reference_price": 1050,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -6025,16 +6471,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-9060-xt-8gb",
-          "name": "RX 9060 XT 8G",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 50,
-            "tdp": 180
+            "perf_index": 43,
+            "tdp": 230
           }
         },
         {
@@ -6107,7 +6553,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6136,7 +6582,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5700,
+    "estimated_total": 5600,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6177,9 +6623,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3700,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6256,7 +6702,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6328,7 +6774,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -6406,7 +6852,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6426,16 +6872,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "cpu": "r5-5600x",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5700,
+    "estimated_total": 5600,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6445,59 +6891,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 720,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 52,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 330,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 60,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -6555,7 +7001,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6627,7 +7073,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -6704,7 +7150,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6724,16 +7170,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
-      "ram": "base-ddr5-16gb-6000-c36",
+      "cpu": "r5-5600",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5800,
+    "estimated_total": 5770,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6743,59 +7189,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600",
+          "name": "R5 5600",
           "condition": "new",
-          "reference_price": 600,
+          "reference_price": 740,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 50,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 330,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 60,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c36",
-          "name": "DDR5 16GB 6000 C36",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "new",
-          "reference_price": 1300,
-          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
-          "price_date": "2026-07-19",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 36
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -6853,7 +7299,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -6873,16 +7319,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r5-7500f",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-9060-xt-8gb",
+      "gpu": "rx-7650-gre",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5800,
+    "estimated_total": 5770,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6892,16 +7338,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "new",
-          "reference_price": 600,
+          "reference_price": 1050,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -6920,16 +7366,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-9060-xt-8gb",
-          "name": "RX 9060 XT 8G",
+          "component_id": "rx-7650-gre",
+          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 1820,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 50,
-            "tdp": 180
+            "perf_index": 43,
+            "tdp": 230
           }
         },
         {
@@ -7002,7 +7448,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7031,7 +7477,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5700,
+    "estimated_total": 5600,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -7072,9 +7518,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3700,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -7151,7 +7597,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7223,7 +7669,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -7300,7 +7746,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7320,16 +7766,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-7500f",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "cpu": "r5-5600x",
+      "motherboard": "asus-a520m-k",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5700,
+    "estimated_total": 5600,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -7339,59 +7785,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-7500f",
-          "name": "R5 7500F",
+          "component_id": "r5-5600x",
+          "name": "R5 5600X",
           "condition": "used",
-          "reference_price": 550,
+          "reference_price": 720,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 60,
-            "tdp": 88
+            "socket": "AM4",
+            "perf_index": 52,
+            "tdp": 65
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-a520m-k",
+          "name": "华硕 A520M-K",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 330,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "AM4",
+            "mem_type": "DDR4",
+            "chipset": "A520"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 60,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 16GB 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -7449,7 +7895,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7521,7 +7967,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -7598,7 +8044,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7620,14 +8066,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rtx-4060",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6250,
+    "estimated_total": 6050,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -7665,16 +8111,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-4060",
+          "name": "RTX 4060",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2100,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 40,
+            "tdp": 115
           }
         },
         {
@@ -7747,7 +8193,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -7776,7 +8222,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6180,
+    "estimated_total": 6280,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -7817,9 +8263,9 @@
           "component_id": "rtx-4060-ti",
           "name": "RTX 4060 Ti",
           "condition": "used",
-          "reference_price": 1900,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -7896,12 +8342,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-6000-fps-mixed",
-    "title": "6000元 FPS 混合采购 NVIDIA基底配置",
+    "title": "6000元 FPS 混合采购 AMD基底配置",
     "budget_min": 6000,
     "budget_max": 6499,
     "use_cases": [
@@ -7910,28 +8356,28 @@
     "tags": [
       "FPS",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "fps",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-9060-xt-8gb",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6100,
+    "estimated_total": 6200,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
       "direction": "fps",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -7963,16 +8409,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "AMD",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 180
           }
         },
         {
@@ -8045,7 +8491,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8067,7 +8513,7 @@
     "components": {
       "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -8112,16 +8558,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -8194,7 +8640,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8266,7 +8712,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -8343,7 +8789,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8363,16 +8809,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-4070",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6250,
+    "estimated_total": 6150,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -8382,16 +8828,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -8410,16 +8856,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-4070",
+          "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 2700,
+          "reference_price": 3000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 180
+            "tdp": 200
           }
         },
         {
@@ -8492,7 +8938,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8564,7 +9010,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -8641,7 +9087,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8663,7 +9109,7 @@
     "components": {
       "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -8708,16 +9154,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -8790,7 +9236,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8862,7 +9308,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -8939,7 +9385,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -8959,7 +9405,7 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c36",
@@ -8968,7 +9414,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6250,
+    "estimated_total": 6300,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -8978,16 +9424,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 600,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -9007,11 +9453,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -9088,7 +9534,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9160,7 +9606,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -9237,7 +9683,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9257,16 +9703,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-4070",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6250,
+    "estimated_total": 6150,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -9276,16 +9722,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -9304,16 +9750,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-4070",
+          "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 2700,
+          "reference_price": 3000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 180
+            "tdp": 200
           }
         },
         {
@@ -9386,7 +9832,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9458,7 +9904,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -9535,7 +9981,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9557,7 +10003,7 @@
     "components": {
       "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -9602,16 +10048,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -9684,7 +10130,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9756,7 +10202,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -9833,7 +10279,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -9855,7 +10301,7 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
@@ -9900,16 +10346,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
           "reference_price": 2800,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -9982,7 +10428,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10054,7 +10500,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -10132,7 +10578,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10154,14 +10600,14 @@
     "components": {
       "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rtx-4060",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6830,
+    "estimated_total": 6630,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -10199,16 +10645,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rtx-4060",
+          "name": "RTX 4060",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2100,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 40,
+            "tdp": 115
           }
         },
         {
@@ -10281,7 +10727,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10301,7 +10747,7 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c36",
@@ -10310,7 +10756,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6750,
+    "estimated_total": 6800,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -10320,16 +10766,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 600,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -10349,11 +10795,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -10430,7 +10876,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10502,7 +10948,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -10579,7 +11025,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10599,16 +11045,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6550,
+    "estimated_total": 6750,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -10618,16 +11064,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -10646,16 +11092,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-4070-super",
+          "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 200
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
@@ -10728,7 +11174,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10800,7 +11246,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -10878,7 +11324,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -10898,7 +11344,7 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
@@ -10907,7 +11353,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6600,
+    "estimated_total": 6700,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -10917,16 +11363,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -10946,11 +11392,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -11027,7 +11473,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11099,7 +11545,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -11176,7 +11622,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11196,7 +11642,7 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c36",
@@ -11205,7 +11651,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6750,
+    "estimated_total": 6800,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -11215,16 +11661,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 600,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -11244,11 +11690,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -11325,7 +11771,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11397,7 +11843,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -11474,7 +11920,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11494,16 +11940,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6550,
+    "estimated_total": 6750,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -11513,16 +11959,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -11541,16 +11987,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-4070-super",
+          "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 200
+            "perf_index": 75,
+            "tdp": 220
           }
         },
         {
@@ -11623,7 +12069,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11695,7 +12141,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -11772,7 +12218,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11792,7 +12238,7 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
@@ -11801,7 +12247,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6600,
+    "estimated_total": 6700,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -11811,16 +12257,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -11840,11 +12286,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -11921,7 +12367,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -11993,7 +12439,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -12070,12 +12516,12 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-7000-fps-new",
-    "title": "7000元 FPS 全新 NVIDIA基底配置",
+    "title": "7000元 FPS 全新 AMD基底配置",
     "budget_min": 7000,
     "budget_max": 7499,
     "use_cases": [
@@ -12084,28 +12530,28 @@
     "tags": [
       "FPS",
       "全新",
-      "NVIDIA",
+      "AMD",
       "fps",
       "new",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
+      "gpu": "rx-9060-xt-8gb",
       "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7050,
+    "estimated_total": 7150,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
       "direction": "fps",
       "purchase_mode": "new",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -12137,16 +12583,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "AMD",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 180
           }
         },
         {
@@ -12219,7 +12665,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -12291,7 +12737,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -12368,12 +12814,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
     "id": "base-7000-fps-mixed",
-    "title": "7000元 FPS 混合采购 NVIDIA基底配置",
+    "title": "7000元 FPS 混合采购 AMD基底配置",
     "budget_min": 7000,
     "budget_max": 7499,
     "use_cases": [
@@ -12382,28 +12828,28 @@
     "tags": [
       "FPS",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "fps",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
       "cpu": "r7-7800x3d",
-      "motherboard": "asus-b650m-tuf",
-      "gpu": "rtx-5060",
+      "motherboard": "asus-prime-b650m-k",
+      "gpu": "rx-7700-xt",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7030,
+    "estimated_total": 7130,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
       "direction": "fps",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
@@ -12421,10 +12867,10 @@
         },
         {
           "role": "motherboard",
-          "component_id": "asus-b650m-tuf",
-          "name": "华硕 B650M PLUS 重炮手",
+          "component_id": "asus-prime-b650m-k",
+          "name": "华硕 PRIME B650M-K",
           "condition": "new",
-          "reference_price": 900,
+          "reference_price": 700,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
@@ -12435,16 +12881,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "RTX 5060",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "new",
-          "reference_price": 2300,
+          "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
@@ -12517,7 +12963,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -12540,13 +12986,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
-      "ram": "base-ddr5-16gb-6000-c32",
+      "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7150,
+    "estimated_total": 7250,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -12585,11 +13031,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -12598,17 +13044,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c32",
-          "name": "DDR5 16GB 6000 C32",
+          "component_id": "base-ddr5-16gb-6000-c36",
+          "name": "DDR5 16GB 6000 C36",
           "condition": "new",
-          "reference_price": 1700,
-          "price_source": "用户2026-07-17提供的DDR5 6000 C32 16GB参考价",
-          "price_date": "2026-07-17",
+          "reference_price": 1300,
+          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
+          "price_date": "2026-07-19",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 32
+            "cas_latency": 36
           }
         },
         {
@@ -12666,7 +13112,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -12738,7 +13184,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -12815,7 +13261,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -12844,7 +13290,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7250,
+    "estimated_total": 7150,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -12885,9 +13331,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3700,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -12964,7 +13410,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13032,11 +13478,11 @@
         {
           "role": "gpu",
           "component_id": "rx-9070-xt",
-          "name": "RX 9070 XT",
+          "name": "蓝宝石 9070XT 16G 脉动",
           "condition": "used",
           "reference_price": 4000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 85,
@@ -13114,7 +13560,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13135,7 +13581,7 @@
     ],
     "components": {
       "cpu": "r5-9600x",
-      "motherboard": "asus-b850m-awy",
+      "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
@@ -13143,7 +13589,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7199,
+    "estimated_total": 7100,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -13167,26 +13613,26 @@
         },
         {
           "role": "motherboard",
-          "component_id": "asus-b850m-awy",
-          "name": "华硕 B850M AYW OC",
+          "component_id": "asus-prime-b650m-k",
+          "name": "华硕 PRIME B650M-K",
           "condition": "new",
-          "reference_price": 1299,
+          "reference_price": 700,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
             "mem_type": "DDR5",
-            "chipset": "B850"
+            "chipset": "B650"
           }
         },
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -13263,7 +13709,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13335,7 +13781,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -13412,7 +13858,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13435,13 +13881,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
-      "ram": "base-ddr5-16gb-6000-c32",
+      "ram": "base-ddr5-16gb-6000-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7150,
+    "estimated_total": 7250,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -13480,11 +13926,11 @@
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -13493,17 +13939,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c32",
-          "name": "DDR5 16GB 6000 C32",
+          "component_id": "base-ddr5-16gb-6000-c36",
+          "name": "DDR5 16GB 6000 C36",
           "condition": "new",
-          "reference_price": 1700,
-          "price_source": "用户2026-07-17提供的DDR5 6000 C32 16GB参考价",
-          "price_date": "2026-07-17",
+          "reference_price": 1300,
+          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
+          "price_date": "2026-07-19",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 32
+            "cas_latency": 36
           }
         },
         {
@@ -13561,7 +14007,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13633,7 +14079,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -13710,7 +14156,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13739,7 +14185,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7250,
+    "estimated_total": 7150,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -13780,9 +14226,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3700,
+          "reference_price": 3600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -13859,7 +14305,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -13931,7 +14377,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -14008,7 +14454,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -14029,7 +14475,7 @@
     ],
     "components": {
       "cpu": "r5-9600x",
-      "motherboard": "msi-b850m-power",
+      "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-5060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
@@ -14037,7 +14483,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7300,
+    "estimated_total": 7100,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -14061,26 +14507,26 @@
         },
         {
           "role": "motherboard",
-          "component_id": "msi-b850m-power",
-          "name": "微星 B850M POWER",
+          "component_id": "asus-prime-b650m-k",
+          "name": "华硕 PRIME B650M-K",
           "condition": "new",
-          "reference_price": 1400,
+          "reference_price": 700,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
             "mem_type": "DDR5",
-            "chipset": "B850"
+            "chipset": "B650"
           }
         },
         {
           "role": "gpu",
           "component_id": "rtx-5060-ti",
-          "name": "RTX 5060 Ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 2800,
+          "reference_price": 3300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -14157,7 +14603,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   },
   {
@@ -14229,7 +14675,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
+          "price_date": "2026-07-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -14306,7 +14752,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-07-12"
+      "price_date": "2026-07-30"
     }
   }
 ]

@@ -5,8 +5,8 @@ struct BottomNavigationRulesTests {
     static func main() {
         assertEqual(
             AppTab.bottomNavigationTabs,
-            [.home, .styles, .builds, .profile],
-            "Bottom navigation should expose the full style catalog before builds."
+            [.home, .styles, .diy, .profile],
+            "Bottom navigation should expose DIY before the profile."
         )
 
         assertEqual(

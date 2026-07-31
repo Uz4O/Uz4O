@@ -105,6 +105,26 @@ struct AestheticBuildStyle: Equatable, Identifiable {
                 ? "StyleAigoXingcanChenBlack"
                 : "StyleAigoXingcanChenWhite"
         }
+        if id == "asusAP202" {
+            return color == .black
+                ? "StyleASUSAP202Black"
+                : "StyleASUSAP202White"
+        }
+        if id == "hyteY70" {
+            return color == .black
+                ? "StyleHYTEY70Black"
+                : "StyleHYTEY70White"
+        }
+        if id == "aocShockingBow" {
+            return color == .black
+                ? "StyleAOCShockingBowBlack"
+                : "StyleAOCShockingBowWhite"
+        }
+        if id == "bo400cg" {
+            return color == .black
+                ? "StyleJonsboBO400CGBlack"
+                : "StyleJonsboBO400CGWhite"
+        }
 
         return image
     }
@@ -410,6 +430,18 @@ private enum AestheticOverviewCatalog {
         if styleID == "xingcanChen" {
             return xingcanChenParts
         }
+        if styleID == "asusAP202" {
+            return asusAP202Parts
+        }
+        if styleID == "hyteY70" {
+            return hyteY70Parts
+        }
+        if styleID == "aocShockingBow" {
+            return aocShockingBowParts
+        }
+        if styleID == "bo400cg" {
+            return bo400CGParts
+        }
 
         let prefix: String
         let caseName: String
@@ -523,6 +555,71 @@ private enum AestheticOverviewCatalog {
         ])
     ]
 
+    private static let asusAP202Parts = [
+        part("asus-ap202", "机箱", "华硕灵光岛 AP202", 599, [], whitePrice: 649),
+        part("asus-ap202", "一体式水冷", "联立隐流 1 代", 499, [
+            alternative("联立隐流 2 代", 1599, "同系列现有型号平替"),
+            alternative("展域 SE360", 1799, "现有 360 水冷平替"),
+            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有 360 水冷平替"),
+            alternative("利民 LV360", 899, "现有 360 水冷平替"),
+            alternative("瓦尔基里 N360", 950, "现有 360 水冷平替")
+        ]),
+        part("asus-ap202", "风扇套装", "乔思伯 ZA360 2 把 + ZA240 1 把 + ZA120 1 把", 499, [
+            alternative("联立 4 代积木 LED 风扇 4 把", 800, "现有灯效风扇平替"),
+            alternative("丛林豹星际积木 V4 无屏 × 4", 120, "无屏灯效风扇平替"),
+            alternative("棱镜 8 Pro × 4", 40, "4 把 × 9.9 元，按现有参考价格取整")
+        ])
+    ]
+
+    private static let hyteY70Parts = [
+        part("hyte-y70", "机箱", "HYTE Y70 TOUCH", 3799, [
+            alternative("HYTE Y70 TOUCH（二手）", 1700, "原型号二手，成色以实际为准")
+        ]),
+        part("hyte-y70", "一体式水冷", "ROG 龙王 4 代水冷颜值版", 2599, [
+            alternative("展域 SE360（全新）", 1799, "常规全新参考价格"),
+            alternative("展域 SE360（闲鱼全新）", 1499, "闲鱼供货商全新价格"),
+            alternative("展域 SE360（二手）", 1000, "原型号二手参考价格"),
+            alternative("利民 LV360", 899, "外观相近的全新平替")
+        ], whitePrice: 2699),
+        part("hyte-y70", "LCD 风扇", "联立 4 代积木 LCD 风扇 4 把", 1465, [
+            alternative("丛林豹星际积木 V4 LCD × 4", 796, "带屏风扇 4 把 × 199 元")
+        ]),
+        part("hyte-y70", "LED 风扇", "联立 4 代积木 LED 风扇 3 把", 600, [
+            alternative("丛林豹星际积木 V4 无屏 × 3", 90, "无屏风扇 3 把 × 30 元")
+        ])
+    ]
+
+    private static let aocShockingBowParts = [
+        part("aoc-shocking-bow", "机箱", "AOC CG455B", 299, [
+            alternative("AOC CG455B（二手）", 150, "原型号二手，成色以实际为准")
+        ], whitePrice: 309),
+        part("aoc-shocking-bow", "风扇套装", "棱镜 8 Pro × 10", 99, [
+            alternative("丛林豹星际积木 V4 无屏 × 10", 300, "无屏风扇 10 把 × 30 元"),
+            alternative("联立 4 代积木 LED 风扇 × 10", 2000, "沿用现有 LED 风扇价格")
+        ]),
+        part("aoc-shocking-bow", "一体式水冷", "钛坦 LA300", 499, [
+            alternative("利民 LV360", 899, "现有水冷型号平替"),
+            alternative("瓦尔基里 N360", 950, "现有水冷型号平替"),
+            alternative("展域 SE360", 1799, "现有水冷型号平替"),
+            alternative("联立隐流 1 代", 499, "现有水冷型号平替"),
+            alternative("联立隐流 2 代", 1599, "现有水冷型号平替"),
+            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有水冷型号平替")
+        ])
+    ]
+
+    private static let bo400CGParts = [
+        part("bo400cg", "机箱", "乔思伯 BO400CG", 1599, []),
+        part("bo400cg", "风扇套装", "ZA360 风扇 3 把 + ZA120 风扇 1 把", 499, [
+            alternative("海中神 ZA 风扇组合", 165, "ZA360 3 把 × 50 元 + ZA120 1 把 × 15 元")
+        ]),
+        part("bo400cg", "一体式水冷", "ROG 龙王 4 代水冷颜值版", 2599, [
+            alternative("展域 SE360（全新）", 1799, "常规全新参考价格"),
+            alternative("展域 SE360（闲鱼全新）", 1499, "闲鱼供货商全新价格"),
+            alternative("展域 SE360（二手）", 1000, "原型号二手参考价格"),
+            alternative("利民 LV360", 899, "外观相近的全新平替")
+        ], whitePrice: 2699)
+    ]
+
     private static func part(
         _ prefix: String,
         _ name: String,
@@ -616,6 +713,54 @@ private enum AestheticDemoCatalog {
             completeDetail: "完整保留机箱、水冷和四风扇组合",
             costs: [AestheticPriceRange(low: 1363, high: 1500), AestheticPriceRange(low: 1600, high: 1750), AestheticPriceRange(low: 1884, high: 1884)],
             premiums: [AestheticPriceRange(low: 200, high: 300), AestheticPriceRange(low: 450, high: 600), AestheticPriceRange(low: 650, high: 800)]
+        ),
+        style(
+            id: "asusAP202",
+            title: "华硕灵光岛 AP202",
+            summary: "悬浮灯带与双面玻璃结合的紧凑展示方案",
+            image: "StyleASUSAP202Black",
+            tags: ["悬浮灯带", "紧凑海景房"],
+            signature: "保留灵光岛 AP202 机箱和基础灯效结构",
+            highDetail: "保留隐流水冷与四风扇布局",
+            completeDetail: "完整保留 AP202、隐流水冷和 ZA 风扇组合",
+            costs: [AestheticPriceRange(low: 1138, high: 1250), AestheticPriceRange(low: 1350, high: 1500), AestheticPriceRange(low: 1597, high: 1647)],
+            premiums: [AestheticPriceRange(low: 180, high: 260), AestheticPriceRange(low: 360, high: 480), AestheticPriceRange(low: 520, high: 680)]
+        ),
+        style(
+            id: "hyteY70",
+            title: "HYTE Y70 鱼缸机箱",
+            summary: "纵向触控副屏与七把积木风扇组成的沉浸式展示方案",
+            image: "StyleHYTEY70Black",
+            tags: ["触控副屏", "鱼缸机箱"],
+            signature: "保留 HYTE Y70 TOUCH 机箱与正面触控屏",
+            highDetail: "保留龙王水冷和 LCD 风扇展示效果",
+            completeDetail: "完整保留 Y70 TOUCH、龙王水冷与七把积木风扇",
+            costs: [AestheticPriceRange(low: 3485, high: 4000), AestheticPriceRange(low: 6000, high: 7000), AestheticPriceRange(low: 8463, high: 8563)],
+            premiums: [AestheticPriceRange(low: 850, high: 1100), AestheticPriceRange(low: 1600, high: 2100), AestheticPriceRange(low: 2500, high: 3200)]
+        ),
+        style(
+            id: "aocShockingBow",
+            title: "AOC 震天弓",
+            summary: "超宽鱼缸机箱与十把灯效风扇组成的沉浸式展示方案",
+            image: "StyleAOCShockingBowBlack",
+            tags: ["超宽鱼缸", "十把风扇"],
+            signature: "保留 AOC CG455B 机箱与基础灯效布局",
+            highDetail: "保留钛坦水冷和十把棱镜风扇",
+            completeDetail: "完整保留震天弓机箱、LA300 与十把风扇",
+            costs: [AestheticPriceRange(low: 748, high: 900), AestheticPriceRange(low: 1000, high: 1150), AestheticPriceRange(low: 1297, high: 1307)],
+            premiums: [AestheticPriceRange(low: 120, high: 180), AestheticPriceRange(low: 280, high: 380), AestheticPriceRange(low: 500, high: 700)]
+        ),
+        style(
+            id: "bo400cg",
+            title: "乔思伯 BO400CG",
+            summary: "四面圆角铝框与环形灯效风扇组成的高端展示方案",
+            image: "StyleJonsboBO400CGBlack",
+            tags: ["圆角铝框", "环形灯效"],
+            signature: "保留 BO400CG 机箱和基础灯效布局",
+            highDetail: "保留龙王水冷与 ZA 风扇组合",
+            completeDetail: "完整保留 BO400CG、龙王水冷和四风扇布局",
+            costs: [AestheticPriceRange(low: 2663, high: 3000), AestheticPriceRange(low: 3800, high: 4200), AestheticPriceRange(low: 4697, high: 4797)],
+            premiums: [AestheticPriceRange(low: 400, high: 550), AestheticPriceRange(low: 1000, high: 1400), AestheticPriceRange(low: 1900, high: 2400)]
         )
     ]
 

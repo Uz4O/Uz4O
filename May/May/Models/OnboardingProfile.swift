@@ -26,7 +26,7 @@ enum BuildResultReturnTarget: Equatable {
         case .fromAIBuild:
             return .home
         case .fromConfigTab, .fromConfigAIBuild:
-            return .builds
+            return .profile
         }
     }
 }

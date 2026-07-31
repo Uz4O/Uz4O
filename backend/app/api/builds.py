@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.builds.ai_provider import AIProviderError, select_build_with_deepseek
+from app.builds.gpu_rules import gpu_brand_allowed_for_budget
 from app.builds.customization import (
     CustomizationError,
     customization_candidates,
@@ -36,7 +37,12 @@ from app.builds.service import (
     rules_fallback_response,
     template_response,
 )
-from app.catalog.repository import get_components_by_ids, list_component_prices, list_components
+from app.catalog.repository import (
+    get_components_by_ids,
+    list_component_prices,
+    list_components,
+    list_gpu_whitelist_prices,
+)
 from app.compat.engine import BuildSelection, evaluate_compatibility
 from app.core.rate_limit import high_cost_rate_limit
 from app.db import get_session
@@ -71,6 +77,18 @@ def get_build_options(
     if request.requires_customization:
         request_hash, request_payload = request_identity(request)
         cache_version = current_cache_version(session)
+        if request.budget > 5_000 and not request.no_gpu_build:
+            excluded_gpu_ids = {
+                row.component_id
+                for row in list_gpu_whitelist_prices(session)
+                if not gpu_brand_allowed_for_budget(row.name, request.budget)
+            }
+            components = [
+                component
+                for component in components
+                if component.id not in excluded_gpu_ids
+            ]
+            components_by_id = {component.id: component for component in components}
     if request.no_gpu_build:
         try:
             find_owned_gpu(request.owned_gpu_model or "", components)

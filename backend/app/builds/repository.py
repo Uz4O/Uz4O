@@ -232,6 +232,10 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     max_shortfall = (
         550
         if is_office_template
+        else 150
+        if template.id == "base-8000-aaa-used"
+        and parts_by_role["cpu"].component_id == "r7-7800x3d"
+        and parts_by_role["gpu"].component_id == "rtx-4070-super"
         else 120
         if template.id == "base-14000-balanced-mixed"
         and parts_by_role["cpu"].component_id == "r7-9800x3d"

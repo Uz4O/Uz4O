@@ -9,6 +9,7 @@ base-cooler-6-heatpipe
 base-cooler-dual-tower-6-heatpipe
 base-ddr4-16gb-3200
 base-ddr5-16gb-6000-c30
+base-psu-1200w-gold
 base-psu-650w-gold
 base-psu-850w-gold
 base-ssd-512gb-tlc

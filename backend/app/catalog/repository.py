@@ -119,6 +119,10 @@ def seed_gpu_whitelist_prices(
     return count
 
 
+def list_gpu_whitelist_prices(session: Session) -> List[GPUWhitelistPrice]:
+    return list(session.scalars(select(GPUWhitelistPrice)))
+
+
 def seed_motherboard_whitelist_prices(
     session: Session,
     prices: Iterable[MotherboardWhitelistPriceRow],

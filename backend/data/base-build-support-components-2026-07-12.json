@@ -296,5 +296,21 @@
     "used_source": "用户2026-07-19提供的850W金牌电源二手参考价",
     "new_source": "用户2026-07-19提供的850W金牌电源全新参考价",
     "price_date": "2026-07-19"
+  },
+  {
+    "id": "base-psu-1200w-gold",
+    "category": "psu",
+    "name": "九州风神 PQ1200G 金牌全模组电源",
+    "brand": "九州风神",
+    "detail_raw": "1200W · 80+ Gold · 全模组",
+    "specs": {
+      "watt": 1200,
+      "rating": "80+ Gold"
+    },
+    "used_price": null,
+    "new_price": 650,
+    "used_source": "",
+    "new_source": "diyxx.com 公开商品目录（2026-07-30）",
+    "price_date": "2026-07-30"
   }
 ]

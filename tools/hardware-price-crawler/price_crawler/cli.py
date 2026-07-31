@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .catalog import extract_hardware_targets
+from .diyxx import fetch_diyxx_gpu_products, write_diyxx_gpu_snapshot
 from .pricing import HardwareTarget, assess_product, build_reference_price
 from .scraper import scrape_targets
 from .storage import (
@@ -25,6 +26,7 @@ DEFAULT_APPROVED = TOOL_ROOT / "data/approved-reference-prices.csv"
 DEFAULT_PROFILE = TOOL_ROOT / "data/browser-profile"
 DEFAULT_PLATFORM = "taobao"
 DEFAULT_DELAY_SECONDS = 8
+DEFAULT_GPU_WHITELIST = REPO_ROOT / "backend/data/gpu-whitelist-prices-2026-07-07.csv"
 
 
 def main() -> None:
@@ -60,6 +62,14 @@ def _build_parser() -> argparse.ArgumentParser:
     build_parser.add_argument("--previous", type=Path, default=DEFAULT_APPROVED)
     build_parser.add_argument("--output-dir", type=Path)
     build_parser.set_defaults(handler=_build_prices)
+
+    diyxx_parser = subparsers.add_parser(
+        "crawl-diyxx-gpus",
+        help="从 diyxx 公开接口采集显卡，并按白名单汇总最低价",
+    )
+    diyxx_parser.add_argument("--whitelist", type=Path, default=DEFAULT_GPU_WHITELIST)
+    diyxx_parser.add_argument("--output-dir", type=Path)
+    diyxx_parser.set_defaults(handler=_crawl_diyxx_gpus)
     return parser
 
 
@@ -118,6 +128,20 @@ def _build_prices(args) -> None:
     write_review_required(output_dir / "review-required.csv", references, rejected)
     print("参考价已写入 {}".format(output_dir / "reference-prices.csv"))
     print("人工复核清单已写入 {}".format(output_dir / "review-required.csv"))
+
+
+def _crawl_diyxx_gpus(args) -> None:
+    output_dir = args.output_dir or _new_run_dir()
+    products = fetch_diyxx_gpu_products()
+    summary = write_diyxx_gpu_snapshot(output_dir, args.whitelist, products)
+    print("已采集 {} 条显卡商品。".format(summary["product_count"]))
+    print(
+        "匹配白名单 {} 款、商品 {} 条。".format(
+            summary["matched_whitelist_count"],
+            summary["matched_product_count"],
+        )
+    )
+    print("最低价白名单已写入 {}".format(summary["whitelist_csv"]))
 
 
 def _new_run_dir() -> Path:
