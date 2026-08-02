@@ -125,8 +125,133 @@ struct AestheticBuildStyle: Equatable, Identifiable {
                 ? "StyleJonsboBO400CGBlack"
                 : "StyleJonsboBO400CGWhite"
         }
+        if id == "visionMin" {
+            return color == .black
+                ? "StyleLianLiVisionMinBlack"
+                : "StyleLianLiVisionMinWhite"
+        }
+        if id == "hangjiaS960" {
+            return color == .black
+                ? "StyleHangjiaS960Black"
+                : "StyleHangjiaS960White"
+        }
+        if id == "lianliV150INF" {
+            return color == .black
+                ? "StyleLianLiV150INFBlack"
+                : "StyleLianLiV150INFWhite"
+        }
+        if id == "jonsboTK1" {
+            return color == .black
+                ? "StyleJonsboTK1Black"
+                : "StyleJonsboTK1White"
+        }
+        if id == "jonsboD33Wood" {
+            return color == .black
+                ? "StyleJonsboD33WoodBlack"
+                : "StyleJonsboD33WoodWhite"
+        }
+        if id == "jonsboD34" {
+            return color == .black
+                ? "StyleJonsboD34Black"
+                : "StyleJonsboD34White"
+        }
+        if id == "aigoXuanYingG20" {
+            return color == .black
+                ? "StyleAigoXuanYingG20Black"
+                : "StyleAigoXuanYingG20White"
+        }
+        if id == "valkyrieVK3" {
+            return color == .black
+                ? "StyleValkyrieVK3Black"
+                : "StyleValkyrieVK3White"
+        }
+        if id == "lianliO11EVORGB" {
+            return color == .black
+                ? "StyleLianLiO11EVORGBBlack"
+                : "StyleLianLiO11EVORGBWhite"
+        }
+        if id == "phanteksEvolvS2" {
+            return color == .black
+                ? "StylePhanteksEvolvS2Black"
+                : "StylePhanteksEvolvS2White"
+        }
+        if id == "phanteksEvolvX2Matrix" {
+            return color == .black
+                ? "StylePhanteksEvolvX2MatrixBlack"
+                : "StylePhanteksEvolvX2MatrixWhite"
+        }
+        if id == "jonsboTK4" {
+            return color == .black
+                ? "StyleJonsboTK4Black"
+                : "StyleJonsboTK4White"
+        }
+        if id == "xingcanChenAir" {
+            return color == .black
+                ? "StyleAigoXingcanChenAirBlack"
+                : "StyleAigoXingcanChenAirWhite"
+        }
+        if id == "phanteksNV7" {
+            return color == .black
+                ? "StylePhanteksNV7Black"
+                : "StylePhanteksNV7White"
+        }
+        if id == "lianliO11DMiniV2" {
+            return color == .black
+                ? "StyleLianLiO11DMiniV2Black"
+                : "StyleLianLiO11DMiniV2White"
+        }
+        if id == "asusTUF502Ammo" {
+            return color == .black
+                ? "StyleASUSTUF502AmmoBlack"
+                : "StyleASUSTUF502AmmoWhite"
+        }
+        if id == "rogGR801" {
+            return color == .black
+                ? "StyleROGGR801Black"
+                : "StyleROGGR801White"
+        }
+        if id == "msiVIXTA300R" {
+            return color == .black
+                ? "StyleMSIVIXTA300RBlack"
+                : "StyleMSIVIXTA300RWhite"
+        }
+        if id == "hangjiaS960V2" {
+            return color == .black
+                ? "StyleHangjiaS960V2Black"
+                : "StyleHangjiaS960V2White"
+        }
+        if id == "hangjiaGX750C" {
+            return color == .black
+                ? "StyleHangjiaGX750CBlack"
+                : "StyleHangjiaGX750CWhite"
+        }
+        if id == "coolermasterMF400Mesh" {
+            return color == .black
+                ? "StyleCoolerMasterMF400MeshBlack"
+                : "StyleCoolerMasterMF400MeshWhite"
+        }
+        if id == "sugonCiyuanCangPX" {
+            return color == .black
+                ? "StyleSugonCiyuanCangPXBlack"
+                : "StyleSugonCiyuanCangPXWhite"
+        }
+        if id == "titanStarship" {
+            return color == .black
+                ? "StyleTitanStarshipBlack"
+                : "StyleTitanStarshipWhite"
+        }
+        if id == "fangtangC34Pro" {
+            return color == .black
+                ? "StyleFangtangC34ProBlack"
+                : "StyleFangtangC34ProWhite"
+        }
+        if id == "cougarV235" {
+            return color == .black
+                ? "StyleCougarV235Black"
+                : "StyleCougarV235White"
+        }
 
-        return image
+        return AestheticGeneratedCatalog.image(for: id, color: color) ?? image
     }
 
     func heroScale(for color: AestheticStyleColor) -> Double {
@@ -158,7 +283,7 @@ struct AestheticBuildStyle: Equatable, Identifiable {
         return overviewParts.reduce(0) { $0 + $1.originalPrice(for: color) }
     }
 
-    static let all = AestheticDemoCatalog.styles
+    static let all = AestheticDemoCatalog.styles + AestheticGeneratedCatalog.styles
     static let featured = Array(all.prefix(3))
 }
 
@@ -442,6 +567,81 @@ private enum AestheticOverviewCatalog {
         if styleID == "bo400cg" {
             return bo400CGParts
         }
+        if styleID == "visionMin" {
+            return visionMinParts
+        }
+        if styleID == "hangjiaS960" {
+            return hangjiaS960Parts
+        }
+        if styleID == "lianliV150INF" {
+            return lianliV150INFParts
+        }
+        if styleID == "jonsboTK1" {
+            return jonsboTK1Parts
+        }
+        if styleID == "jonsboD33Wood" {
+            return jonsboD33WoodParts
+        }
+        if styleID == "jonsboD34" {
+            return jonsboD34Parts
+        }
+        if styleID == "aigoXuanYingG20" {
+            return aigoXuanYingG20Parts
+        }
+        if styleID == "valkyrieVK3" {
+            return valkyrieVK3Parts
+        }
+        if styleID == "lianliO11EVORGB" {
+            return lianliO11EVORGBParts
+        }
+        if styleID == "phanteksEvolvS2" {
+            return phanteksEvolvS2Parts
+        }
+        if styleID == "phanteksEvolvX2Matrix" {
+            return phanteksEvolvX2MatrixParts
+        }
+        if styleID == "jonsboTK4" {
+            return jonsboTK4Parts
+        }
+        if styleID == "xingcanChenAir" {
+            return xingcanChenAirParts
+        }
+        if styleID == "phanteksNV7" {
+            return phanteksNV7Parts
+        }
+        if styleID == "lianliO11DMiniV2" {
+            return lianliO11DMiniV2Parts
+        }
+        if styleID == "asusTUF502Ammo" {
+            return asusTUF502AmmoParts
+        }
+        if styleID == "rogGR801" {
+            return rogGR801Parts
+        }
+        if styleID == "msiVIXTA300R" {
+            return msiVIXTA300RParts
+        }
+        if styleID == "hangjiaS960V2" {
+            return hangjiaS960V2Parts
+        }
+        if styleID == "hangjiaGX750C" {
+            return hangjiaGX750CParts
+        }
+        if styleID == "coolermasterMF400Mesh" {
+            return coolermasterMF400MeshParts
+        }
+        if styleID == "sugonCiyuanCangPX" {
+            return sugonCiyuanCangPXParts
+        }
+        if styleID == "titanStarship" {
+            return titanStarshipParts
+        }
+        if styleID == "fangtangC34Pro" {
+            return fangtangC34ProParts
+        }
+        if let generatedParts = AestheticGeneratedCatalog.parts(for: styleID) {
+            return generatedParts
+        }
 
         let prefix: String
         let caseName: String
@@ -620,6 +820,155 @@ private enum AestheticOverviewCatalog {
         ], whitePrice: 2699)
     ]
 
+    private static let visionMinParts = [
+        part("vision-min", "机箱", "联力 VISION MIN", 549, []),
+        part("vision-min", "一体式水冷", "联立隐流 1 代", 499, [
+            alternative("利民 LV360", 900, "沿用 VISION COMPACT 水冷平替"),
+            alternative("瓦尔基里 N360", 950, "沿用 VISION COMPACT 水冷平替"),
+            alternative("展域 SE360（二手）", 1000, "沿用 VISION COMPACT 水冷平替"),
+            alternative("展域 SE360（全新供货）", 1499, "沿用 VISION COMPACT 水冷平替"),
+            alternative("展域 SE360（全新）", 1799, "沿用现有水冷价格")
+        ]),
+        part("vision-min", "副屏", "图灵智显 8.8 寸副屏", 340, [
+            alternative("图灵智显 8.8 寸副屏（二手）", 200, "沿用 VISION COMPACT 副屏平替")
+        ]),
+        part("vision-min", "风扇套装", "联立 LCD 积木风扇 4 把 + LED 积木风扇 3 把", 3000, [
+            alternative("丛林豹星际积木 V4 套装", 886, "带屏 4 把 × 199 元 + 无屏 3 把 × 30 元")
+        ])
+    ]
+
+    private static let hangjiaS960Parts = [
+        part("hangjia-s960", "机箱", "航嘉 S960", 159, [], whitePrice: 169),
+        part("hangjia-s960", "散热器", "任意风冷或水冷（按选择计价）", 499, []),
+        part("hangjia-s960", "风扇套装", "棱镜 8 Pro × 9", 89, [])
+    ]
+
+    private static let lianliV150INFParts = [
+        part("lianli-v150-inf", "机箱", "联力 V150INF", 549, []),
+        part("lianli-v150-inf", "一体式水冷", "联立隐流 1 代", 499, []),
+        part("lianli-v150-inf", "风扇套装", "棱镜 8 Pro × 6", 59, [])
+    ]
+
+    private static let jonsboTK1Parts = [
+        part("jonsbo-tk1", "机箱", "乔思伯 TK-1", 579, []),
+        part("jonsbo-tk1", "一体式水冷", "任意水冷（按选择计价）", 499, []),
+        part("jonsbo-tk1", "风扇套装", "棱镜 8 Pro × 4", 40, [])
+    ]
+
+    private static let jonsboD33WoodParts = [
+        part("jonsbo-d33-wood", "机箱", "乔思伯 D33 WOOD", 499, []),
+        part("jonsbo-d33-wood", "风扇套装", "乔思伯 ZA360 × 2 + ZA240 × 1 + ZA120 × 1", 499, []),
+        part("jonsbo-d33-wood", "一体式水冷", "乔思伯 TX-360", 699, [])
+    ]
+
+    private static let jonsboD34Parts = [
+        part("jonsbo-d34", "机箱", "乔思伯 D34", 399, [], whitePrice: 459),
+        part("jonsbo-d34", "一体式水冷", "钛坦 LG600 240 水冷", 599, []),
+        part("jonsbo-d34", "风扇套装", "乔思伯 ZA240 × 2 + ZA120 × 1", 253, [])
+    ]
+
+    private static let aigoXuanYingG20Parts = [
+        part("aigo-xuan-ying-g20", "机箱", "爱国者 炫影 G20", 189, []),
+        part("aigo-xuan-ying-g20", "风扇套装", "棱镜 8 Pro × 8", 79, [])
+    ]
+
+    private static let valkyrieVK3Parts = [
+        part("valkyrie-vk3", "机箱", "瓦尔基里 VK3", 399, [])
+    ]
+
+    private static let lianliO11EVORGBParts = [
+        part("lianli-o11-evo-rgb", "机箱", "联力 O11 EVO RGB", 1299, []),
+        part("lianli-o11-evo-rgb", "一体式水冷", "展域 SE360", 1799, []),
+        part("lianli-o11-evo-rgb", "风扇套装", "联力积木一代风扇 10 把 × 169 元", 1690, [])
+    ]
+
+    private static let phanteksEvolvS2Parts = [
+        part("phanteks-evolv-s2", "机箱", "追风者 EVOLV S2", 549, []),
+        part("phanteks-evolv-s2", "风扇套装", "联力积木四代风扇 7 把（按 200 元/把估算）", 1400, [])
+    ]
+
+    private static let phanteksEvolvX2MatrixParts = [
+        part("phanteks-evolv-x2-matrix", "机箱", "追风者 EVOLV X2 MATRIX", 549, []),
+        part("phanteks-evolv-x2-matrix", "风扇套装", "联力积木四代风扇 7 把（按 200 元/把估算）", 1400, [])
+    ]
+
+    private static let jonsboTK4Parts = [
+        part("jonsbo-tk4", "机箱", "乔思伯 TK4", 849, []),
+        part("jonsbo-tk4", "一体式水冷", "乔思伯 TX-360", 699, []),
+        part("jonsbo-tk4", "风扇套装", "乔思伯 ZA360 × 3 + ZA240 × 1", 686, [])
+    ]
+
+    private static let xingcanChenAirParts = [
+        part("xingcan-chen-air", "机箱", "爱国者 星璨辰 Air", 399, []),
+        part("xingcan-chen-air", "风扇套装", "魔方 U360 × 3 + 魔方 U120 × 1", 566, [])
+    ]
+
+    private static let phanteksNV7Parts = [
+        part("phanteks-nv7", "机箱", "追风者 NV7", 1299, []),
+        part("phanteks-nv7", "副屏", "图灵智显 8.8 寸副屏", 340, []),
+        part("phanteks-nv7", "风扇套装", "棱镜 8 Pro × 12", 119, []),
+        part("phanteks-nv7", "一体式水冷", "钛坦 LG600", 699, [])
+    ]
+
+    private static let lianliO11DMiniV2Parts = [
+        part("lianli-o11d-mini-v2", "机箱", "联力 O11D MINI V2", 549, [], whitePrice: 599),
+        part("lianli-o11d-mini-v2", "风扇套装", "棱镜 8 Pro × 9", 89, []),
+        part("lianli-o11d-mini-v2", "一体式水冷", "联力隐流 1 代", 499, [])
+    ]
+
+    private static let asusTUF502AmmoParts = [
+        part("asus-tuf-502-ammo", "机箱", "华硕 TUF 502 弹药库", 899, []),
+        part("asus-tuf-502-ammo", "风扇套装", "联力积木一代风扇 10 把 × 169 元", 1690, []),
+        part("asus-tuf-502-ammo", "一体式水冷", "钛坦 LG600", 699, [])
+    ]
+
+    private static let rogGR801Parts = [
+        part("rog-gr801", "机箱", "ROG GR801 幻世神", 1699, []),
+        part("rog-gr801", "一体式水冷", "ROG 龙王 4 代水冷", 2599, [], whitePrice: 2699),
+        part("rog-gr801", "LCD 风扇", "联力 4 代积木 LCD 风扇 × 5", 1832, []),
+        part("rog-gr801", "LED 风扇", "联力 4 代积木 LED 风扇 × 7", 1400, [])
+    ]
+
+    private static let msiVIXTA300RParts = [
+        part("msi-vixta-300r", "机箱", "微星 MPG VIXTA 300R", 569, [], whitePrice: 659),
+        part("msi-vixta-300r", "风扇套装", "棱镜 8 Pro × 9", 89, []),
+        part("msi-vixta-300r", "一体式水冷", "超频三 巨浪 360 ARGB", 399, [])
+    ]
+
+    private static let hangjiaS960V2Parts = [
+        part("hangjia-s960-v2", "机箱", "航嘉 S960 V2", 169, [], whitePrice: 159),
+        part("hangjia-s960-v2", "风扇套装", "棱镜 8 Pro × 9", 89, [])
+    ]
+
+    private static let hangjiaGX750CParts = [
+        part("hangjia-gx750c", "机箱", "航嘉 GX750C 挑战者", 259, []),
+        part("hangjia-gx750c", "风扇套装", "棱镜 8 Pro × 10", 99, [])
+    ]
+
+    private static let coolermasterMF400MeshParts = [
+        part("coolermaster-mf400-mesh", "机箱", "酷冷至尊 MF400 Mesh", 699, []),
+        part("coolermaster-mf400-mesh", "散热器", "酷冷至尊挑战者 V4", 169, []),
+        part("coolermaster-mf400-mesh", "风扇套装", "棱镜 8 Pro × 4", 40, [])
+    ]
+
+    private static let sugonCiyuanCangPXParts = [
+        part("sugon-ciyuan-cang-px", "机箱", "鑫谷次元仓 PX", 299, []),
+        part("sugon-ciyuan-cang-px", "一体式水冷", "鑫谷冰智 360", 399, []),
+        part("sugon-ciyuan-cang-px", "风扇套装", "魔方 U360 × 3 + 魔方 U120 × 1", 566, [])
+    ]
+
+    private static let titanStarshipParts = [
+        part("titan-starship", "机箱", "钛坦星舟", 658, []),
+        part("titan-starship", "一体式水冷", "钛坦幻世 360", 1599, []),
+        part("titan-starship", "风扇套装", "棱镜 8 Pro × 9", 89, [])
+    ]
+
+    private static let fangtangC34ProParts = [
+        part("fangtang-c34pro", "机箱", "酷方 C34PRO", 899, []),
+        part("fangtang-c34pro", "风扇套装", "棱镜 8 Pro × 7", 69, []),
+        part("fangtang-c34pro", "一体式水冷", "钛坦 LG600", 699, [])
+    ]
+
     private static func part(
         _ prefix: String,
         _ name: String,
@@ -761,6 +1110,306 @@ private enum AestheticDemoCatalog {
             completeDetail: "完整保留 BO400CG、龙王水冷和四风扇布局",
             costs: [AestheticPriceRange(low: 2663, high: 3000), AestheticPriceRange(low: 3800, high: 4200), AestheticPriceRange(low: 4697, high: 4797)],
             premiums: [AestheticPriceRange(low: 400, high: 550), AestheticPriceRange(low: 1000, high: 1400), AestheticPriceRange(low: 1900, high: 2400)]
+        ),
+        style(
+            id: "visionMin",
+            title: "联立 Vison Min",
+            summary: "紧凑双面玻璃机箱与屏显风扇组成的小型展示方案",
+            image: "StyleLianLiVisionMinBlack",
+            tags: ["紧凑海景房", "LCD 风扇"],
+            signature: "保留 Vison Min 机箱和核心展示结构",
+            highDetail: "保留副屏、隐流水冷和七把灯效风扇",
+            completeDetail: "完整保留 Vison Min、四把 LCD 风扇、三把 LED 风扇与副屏",
+            costs: [AestheticPriceRange(low: 2134, high: 2500), AestheticPriceRange(low: 3200, high: 3600), AestheticPriceRange(low: 4388, high: 4388)],
+            premiums: [AestheticPriceRange(low: 300, high: 450), AestheticPriceRange(low: 900, high: 1300), AestheticPriceRange(low: 1800, high: 2400)]
+        ),
+        style(
+            id: "hangjiaS960",
+            title: "航嘉 S960",
+            summary: "高性价比双面玻璃机箱与九把灯效风扇组合",
+            image: "StyleHangjiaS960Black",
+            tags: ["高性价比", "九把风扇"],
+            signature: "保留 S960 机箱和基础风扇布局",
+            highDetail: "保留九把棱镜风扇和可选散热器",
+            completeDetail: "完整保留 S960、九把棱镜风扇与自选散热器",
+            costs: [AestheticPriceRange(low: 747, high: 757), AestheticPriceRange(low: 747, high: 757), AestheticPriceRange(low: 747, high: 757)],
+            premiums: [AestheticPriceRange(low: 120, high: 180), AestheticPriceRange(low: 220, high: 320), AestheticPriceRange(low: 350, high: 500)]
+        ),
+        style(
+            id: "lianliV150INF",
+            title: "联力 V150INF",
+            summary: "前置双风扇与紧凑海景房结构组成的垂直展示方案",
+            image: "StyleLianLiV150INFBlack",
+            tags: ["紧凑机箱", "双前置风扇"],
+            signature: "保留 V150INF 机箱和基础灯效",
+            highDetail: "保留隐流水冷与六把棱镜风扇",
+            completeDetail: "完整保留 V150INF、隐流水冷和六把风扇",
+            costs: [AestheticPriceRange(low: 1107, high: 1107), AestheticPriceRange(low: 1107, high: 1107), AestheticPriceRange(low: 1107, high: 1107)],
+            premiums: [AestheticPriceRange(low: 180, high: 260), AestheticPriceRange(low: 360, high: 480), AestheticPriceRange(low: 520, high: 700)]
+        ),
+        style(
+            id: "jonsboTK1",
+            title: "乔思伯 TK-1",
+            summary: "紧凑竖置结构与底部灯效风扇组成的小型展示方案",
+            image: "StyleJonsboTK1Black",
+            tags: ["紧凑机箱", "底部风扇"],
+            signature: "保留 TK-1 机箱和底部风扇布局",
+            highDetail: "保留四把棱镜风扇与自选水冷",
+            completeDetail: "完整保留 TK-1、四把棱镜风扇和水冷",
+            costs: [AestheticPriceRange(low: 1118, high: 1118), AestheticPriceRange(low: 1118, high: 1118), AestheticPriceRange(low: 1118, high: 1118)],
+            premiums: [AestheticPriceRange(low: 160, high: 240), AestheticPriceRange(low: 300, high: 420), AestheticPriceRange(low: 500, high: 700)]
+        ),
+        style(
+            id: "jonsboD33Wood",
+            title: "乔思伯 D33 WOOD",
+            summary: "木纹前面板与横向展示结构结合的温润海景房方案",
+            image: "StyleJonsboD33WoodBlack",
+            tags: ["木纹面板", "横向展示"],
+            signature: "保留 D33 WOOD 机箱和木纹前面板",
+            highDetail: "保留 ZA 风扇组合与 TX-360 水冷",
+            completeDetail: "完整保留 D33 WOOD、四把 ZA 风扇和 TX-360",
+            costs: [AestheticPriceRange(low: 1697, high: 1697), AestheticPriceRange(low: 1697, high: 1697), AestheticPriceRange(low: 1697, high: 1697)],
+            premiums: [AestheticPriceRange(low: 220, high: 320), AestheticPriceRange(low: 420, high: 600), AestheticPriceRange(low: 700, high: 950)]
+        ),
+        style(
+            id: "jonsboD34",
+            title: "乔思伯 D34",
+            summary: "双面玻璃机箱与侧面屏显、灯效风扇组合的展示方案",
+            image: "StyleJonsboD34Black",
+            tags: ["乔思伯", "屏显机箱"],
+            signature: "保留 D34 机箱和基础灯效布局",
+            highDetail: "保留钛坦 LG600 240 水冷与 ZA 风扇组合",
+            completeDetail: "完整保留 D34、LG600 240 水冷和两把 ZA240、一把 ZA120",
+            costs: [AestheticPriceRange(low: 1251, high: 1311), AestheticPriceRange(low: 1251, high: 1311), AestheticPriceRange(low: 1251, high: 1311)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "aigoXuanYingG20",
+            title: "爱国者 炫影 G20",
+            summary: "双面玻璃与八把灯效风扇组成的高性价比海景房方案",
+            image: "StyleAigoXuanYingG20Black",
+            tags: ["海景房", "八把风扇"],
+            signature: "保留炫影 G20 机箱和基础风扇布局",
+            highDetail: "保留八把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留炫影 G20 与八把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 268, high: 268), AestheticPriceRange(low: 268, high: 268), AestheticPriceRange(low: 268, high: 268)],
+            premiums: [AestheticPriceRange(low: 80, high: 120), AestheticPriceRange(low: 160, high: 240), AestheticPriceRange(low: 260, high: 380)]
+        ),
+        style(
+            id: "valkyrieVK3",
+            title: "瓦尔基里 VK3",
+            summary: "大体积海景房机箱与底部屏幕组成的旗舰展示方案",
+            image: "StyleValkyrieVK3Black",
+            tags: ["海景房", "底部屏幕"],
+            signature: "保留 VK3 机箱和整体展示结构",
+            highDetail: "保留 VK3 的底部屏幕与通透玻璃结构",
+            completeDetail: "完整保留 VK3 机箱及其展示结构",
+            costs: [AestheticPriceRange(low: 399, high: 399), AestheticPriceRange(low: 399, high: 399), AestheticPriceRange(low: 399, high: 399)],
+            premiums: [AestheticPriceRange(low: 100, high: 160), AestheticPriceRange(low: 220, high: 320), AestheticPriceRange(low: 360, high: 520)]
+        ),
+        style(
+            id: "lianliO11EVORGB",
+            title: "联力 O11 EVO RGB",
+            summary: "双面玻璃海景房与十把积木风扇组成的高亮展示方案",
+            image: "StyleLianLiO11EVORGBBlack",
+            tags: ["海景房", "十把风扇"],
+            signature: "保留 O11 EVO RGB 机箱和基础灯效布局",
+            highDetail: "保留展域 SE360 水冷与十把积木风扇",
+            completeDetail: "完整保留 O11 EVO RGB、展域 SE360 和十把联力积木一代风扇",
+            costs: [AestheticPriceRange(low: 4788, high: 4788), AestheticPriceRange(low: 4788, high: 4788), AestheticPriceRange(low: 4788, high: 4788)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "phanteksEvolvS2",
+            title: "追风者 EVOLV S2",
+            summary: "顶部与底部风扇布局结合双面玻璃的简洁海景房方案",
+            image: "StylePhanteksEvolvS2Black",
+            tags: ["海景房", "七把风扇"],
+            signature: "保留 EVOLV S2 机箱和基础风扇布局",
+            highDetail: "保留七把联力积木四代风扇",
+            completeDetail: "完整保留 EVOLV S2 和七把联力积木四代风扇",
+            costs: [AestheticPriceRange(low: 1949, high: 1949), AestheticPriceRange(low: 1949, high: 1949), AestheticPriceRange(low: 1949, high: 1949)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "phanteksEvolvX2Matrix",
+            title: "追风者 EVOLV X2 MATRIX",
+            summary: "矩阵屏显与双面玻璃结合的高辨识度海景房方案",
+            image: "StylePhanteksEvolvX2MatrixBlack",
+            tags: ["海景房", "矩阵屏显"],
+            signature: "保留 EVOLV X2 MATRIX 机箱和矩阵屏显结构",
+            highDetail: "保留七把联力积木四代风扇",
+            completeDetail: "完整保留 EVOLV X2 MATRIX 和七把联力积木四代风扇",
+            costs: [AestheticPriceRange(low: 1949, high: 1949), AestheticPriceRange(low: 1949, high: 1949), AestheticPriceRange(low: 1949, high: 1949)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "jonsboTK4",
+            title: "乔思伯 TK4",
+            summary: "双面玻璃机箱与侧面风扇墙组成的高亮展示方案",
+            image: "StyleJonsboTK4Black",
+            tags: ["海景房", "侧面风扇墙"],
+            signature: "保留 TK4 机箱和基础风扇布局",
+            highDetail: "保留 TX-360 水冷与 ZA 风扇组合",
+            completeDetail: "完整保留 TK4、TX-360 和四把 ZA 风扇",
+            costs: [AestheticPriceRange(low: 2234, high: 2234), AestheticPriceRange(low: 2234, high: 2234), AestheticPriceRange(low: 2234, high: 2234)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "xingcanChenAir",
+            title: "爱国者 星璨辰 Air",
+            summary: "紧凑海景房机箱与魔方风扇组合的轻量展示方案",
+            image: "StyleAigoXingcanChenAirBlack",
+            tags: ["海景房", "魔方风扇"],
+            signature: "保留星璨辰 Air 机箱和基础风扇布局",
+            highDetail: "保留三把 U360 与一把 U120 风扇",
+            completeDetail: "完整保留星璨辰 Air 和四把魔方风扇",
+            costs: [AestheticPriceRange(low: 965, high: 965), AestheticPriceRange(low: 965, high: 965), AestheticPriceRange(low: 965, high: 965)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "phanteksNV7",
+            title: "追风者 NV7",
+            summary: "大体积海景房与副屏、十二把风扇组成的旗舰展示方案",
+            image: "StylePhanteksNV7Black",
+            tags: ["旗舰海景房", "副屏展示"],
+            signature: "保留 NV7 机箱和基础风扇布局",
+            highDetail: "保留 8.8 寸副屏、LG600 水冷和十二把风扇",
+            completeDetail: "完整保留 NV7、图灵副屏、LG600 与十二把棱镜风扇",
+            costs: [AestheticPriceRange(low: 2457, high: 2457), AestheticPriceRange(low: 2457, high: 2457), AestheticPriceRange(low: 2457, high: 2457)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "lianliO11DMiniV2",
+            title: "联力 O11D MINI V2",
+            summary: "紧凑双面玻璃机箱与九把灯效风扇组成的高亮展示方案",
+            image: "StyleLianLiO11DMiniV2Black",
+            tags: ["紧凑海景房", "九把风扇"],
+            signature: "保留 O11D MINI V2 机箱和基础风扇布局",
+            highDetail: "保留隐流一代水冷与九把棱镜风扇",
+            completeDetail: "完整保留 O11D MINI V2、隐流一代和九把棱镜 8 Pro",
+            costs: [AestheticPriceRange(low: 1137, high: 1187), AestheticPriceRange(low: 1137, high: 1187), AestheticPriceRange(low: 1137, high: 1187)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "asusTUF502Ammo",
+            title: "华硕 TUF 502 弹药库",
+            summary: "模块化机箱与十把积木风扇组成的高辨识度展示方案",
+            image: "StyleASUSTUF502AmmoBlack",
+            tags: ["模块化机箱", "十把风扇"],
+            signature: "保留 TUF 502 弹药库机箱和基础风扇布局",
+            highDetail: "保留十把联力积木一代风扇和 LG600 水冷",
+            completeDetail: "完整保留 TUF 502 弹药库、十把风扇和 LG600",
+            costs: [AestheticPriceRange(low: 3288, high: 3288), AestheticPriceRange(low: 3288, high: 3288), AestheticPriceRange(low: 3288, high: 3288)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "rogGR801",
+            title: "ROG GR801 幻世神",
+            summary: "旗舰级 ROG 机箱与 LCD、LED 积木风扇组成的展示方案",
+            image: "StyleROGGR801Black",
+            tags: ["ROG", "旗舰海景房"],
+            signature: "保留 GR801 幻世神机箱和基础灯效布局",
+            highDetail: "保留龙王四代水冷与 LCD 风扇展示效果",
+            completeDetail: "完整保留 GR801、龙王四代水冷、五把 LCD 和七把 LED 风扇",
+            costs: [AestheticPriceRange(low: 7530, high: 7630), AestheticPriceRange(low: 7530, high: 7630), AestheticPriceRange(low: 7530, high: 7630)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "msiVIXTA300R",
+            title: "微星 MPG VIXTA 300R",
+            summary: "微星海景房机箱与九把灯效风扇组成的高性价比展示方案",
+            image: "StyleMSIVIXTA300RBlack",
+            tags: ["微星", "九把风扇"],
+            signature: "保留 VIXTA 300R 机箱和基础风扇布局",
+            highDetail: "保留九把棱镜 8 Pro 风扇与巨浪 360 水冷",
+            completeDetail: "完整保留 VIXTA 300R、九把棱镜 8 Pro 风扇和巨浪 360 ARGB",
+            costs: [AestheticPriceRange(low: 1057, high: 1147), AestheticPriceRange(low: 1057, high: 1147), AestheticPriceRange(low: 1057, high: 1147)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "hangjiaS960V2",
+            title: "航嘉 S960 V2",
+            summary: "航嘉海景房机箱与九把灯效风扇组成的紧凑展示方案",
+            image: "StyleHangjiaS960V2Black",
+            tags: ["航嘉", "九把风扇"],
+            signature: "保留 S960 V2 机箱和基础风扇布局",
+            highDetail: "保留九把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留 S960 V2 与九把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 248, high: 258), AestheticPriceRange(low: 248, high: 258), AestheticPriceRange(low: 248, high: 258)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "hangjiaGX750C",
+            title: "航嘉 GX750C 挑战者",
+            summary: "前置网孔机箱与十把灯效风扇组成的高性价比方案",
+            image: "StyleHangjiaGX750CBlack",
+            tags: ["航嘉", "十把风扇"],
+            signature: "保留 GX750C 挑战者机箱和基础风扇布局",
+            highDetail: "保留十把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留 GX750C 挑战者与十把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 358, high: 358), AestheticPriceRange(low: 358, high: 358), AestheticPriceRange(low: 358, high: 358)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "coolermasterMF400Mesh",
+            title: "酷冷至尊 MF400 Mesh",
+            summary: "紧凑网孔机箱与挑战者 V4 散热器组成的桌面展示方案",
+            image: "StyleCoolerMasterMF400MeshBlack",
+            tags: ["酷冷至尊", "紧凑机箱"],
+            signature: "保留 MF400 Mesh 机箱和基础风扇布局",
+            highDetail: "保留挑战者 V4 散热器与四把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留 MF400 Mesh、挑战者 V4 和四把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 908, high: 908), AestheticPriceRange(low: 908, high: 908), AestheticPriceRange(low: 908, high: 908)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "sugonCiyuanCangPX",
+            title: "鑫谷次元仓 PX",
+            summary: "带前置屏幕的次元仓机箱与魔方风扇组成的展示方案",
+            image: "StyleSugonCiyuanCangPXBlack",
+            tags: ["鑫谷", "前置屏幕"],
+            signature: "保留次元仓 PX 机箱和基础灯效布局",
+            highDetail: "保留冰智 360 水冷与魔方风扇组合",
+            completeDetail: "完整保留次元仓 PX、冰智 360、三把 U360 和一把 U120",
+            costs: [AestheticPriceRange(low: 1264, high: 1264), AestheticPriceRange(low: 1264, high: 1264), AestheticPriceRange(low: 1264, high: 1264)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "titanStarship",
+            title: "钛坦星舟",
+            summary: "双面玻璃机箱与幻世水冷、九把灯效风扇组成的展示方案",
+            image: "StyleTitanStarshipBlack",
+            tags: ["钛坦", "九把风扇"],
+            signature: "保留星舟机箱和基础风扇布局",
+            highDetail: "保留幻世 360 水冷与九把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留星舟、幻世 360 和九把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 2346, high: 2346), AestheticPriceRange(low: 2346, high: 2346), AestheticPriceRange(low: 2346, high: 2346)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "fangtangC34Pro",
+            title: "方糖机械大师 酷方 C34PRO",
+            summary: "机械风格机箱与七把灯效风扇组成的高辨识度展示方案",
+            image: "StyleFangtangC34ProBlack",
+            tags: ["方糖机械大师", "七把风扇"],
+            signature: "保留酷方 C34PRO 机箱和基础风扇布局",
+            highDetail: "保留钛坦 LG600 水冷与七把棱镜 8 Pro 风扇",
+            completeDetail: "完整保留酷方 C34PRO、LG600 和七把棱镜 8 Pro 风扇",
+            costs: [AestheticPriceRange(low: 1667, high: 1667), AestheticPriceRange(low: 1667, high: 1667), AestheticPriceRange(low: 1667, high: 1667)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
+        ),
+        style(
+            id: "cougarV235",
+            title: "骨伽凌空V235",
+            summary: "双面玻璃机箱与九把灯效风扇、360 水冷组成的海景房方案",
+            image: "StyleCougarV235Black",
+            tags: ["海景房", "九把风扇"],
+            signature: "保留骨伽凌空 V235 机箱和基础风扇布局",
+            highDetail: "保留九把棱镜 8 Pro 风扇与 PV360 水冷",
+            completeDetail: "完整保留凌空 V235、九把棱镜 8 Pro 风扇和 PV360 水冷",
+            costs: [AestheticPriceRange(low: 1037, high: 1037), AestheticPriceRange(low: 1037, high: 1037), AestheticPriceRange(low: 1037, high: 1037)],
+            premiums: [AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0), AestheticPriceRange(low: 0, high: 0)]
         )
     ]
 

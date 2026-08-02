@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "coolermaster-mf400-mesh-white.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

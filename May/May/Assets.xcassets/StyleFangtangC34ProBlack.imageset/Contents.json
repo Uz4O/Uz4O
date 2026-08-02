@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "fangtang-c34pro-black.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

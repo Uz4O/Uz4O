@@ -10,6 +10,7 @@ struct MyBuildsView: View {
     var onBack: (() -> Void)? = nil
 
     @Binding var selectedSection: ConfigHubSection
+    @State private var diyBuilds = DIYBuildStore.load()
 
     var body: some View {
         GeometryReader { proxy in
@@ -47,7 +48,7 @@ struct MyBuildsView: View {
                         switch selectedSection {
                         case .aiBuilds:
                             AIBuildsSection(
-                                plans: AppMockData.savedPlans,
+                                plans: AppMockData.savedPlans + diyBuilds.map(\.asBuildPlan),
                                 onOpenPlan: onOpenPlan,
                                 onCreate: onCreate
                             )
@@ -71,6 +72,7 @@ struct MyBuildsView: View {
             }
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
+            .onAppear { diyBuilds = DIYBuildStore.load() }
         }
     }
 }
@@ -113,7 +115,7 @@ private struct ConfigPlanList: View {
     var body: some View {
         VStack(spacing: 0) {
             ConfigSectionHeader(
-                title: "AI 配置单",
+                title: "我的配置单",
                 subtitle: nil,
                 trailing: "\(plans.count) 个"
             )
@@ -367,6 +369,46 @@ private struct ConfigDivider: View {
             .fill(AppTheme.border.opacity(0.8))
             .frame(height: 1)
             .padding(.leading, leftPadding)
+    }
+}
+
+private extension DIYStoredBuild {
+    var asBuildPlan: BuildPlan {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "zh_CN")
+        dateFormatter.dateFormat = "M月d日 HH:mm"
+
+        return BuildPlan(
+            name: "DIY 自定义配置",
+            budget: "自定义",
+            totalPrice: totalPrice > 0 ? "¥\(totalPrice)" : "待选择",
+            useCase: estimatedPower.map { "预计功耗 \($0)W" } ?? "自定义装机",
+            createdAt: dateFormatter.string(from: createdAt),
+            parts: parts.map { part in
+                PCPart(
+                    category: part.category,
+                    model: "\(part.brand) \(part.name)",
+                    price: part.price.map { "¥\($0)" } ?? "待定",
+                    condition: "DIY",
+                    icon: icon(for: part.category),
+                    accent: AppTheme.primaryText
+                )
+            }
+        )
+    }
+
+    private func icon(for category: String) -> String {
+        switch category {
+        case "CPU": return "cpu"
+        case "显卡": return "display"
+        case "主板": return "memorychip"
+        case "内存": return "rectangle.stack"
+        case "固态硬盘": return "externaldrive"
+        case "电源": return "bolt"
+        case "散热器": return "fan"
+        case "机箱": return "shippingbox"
+        default: return "desktopcomputer"
+        }
     }
 }
 

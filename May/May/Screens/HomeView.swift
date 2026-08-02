@@ -14,7 +14,7 @@ struct HomeView: View {
             HomeDashboardFeature(
                 id: "aiBuild",
                 title: "AI 一键装机",
-                subtitle: "智能推荐适合你的装机方案",
+                subtitle: "智能推荐装机方案",
                 buttonTitle: "开始装机",
                 heroImage: "HomeStyleBlackKnight",
                 icon: "wrench.and.screwdriver",
@@ -66,8 +66,6 @@ struct HomeView: View {
 
                     HomeHeroCard(
                         feature: selectedFeature,
-                        activeIndex: selectedFeatureIndex,
-                        totalCount: features.count,
                         onSwipeFeature: selectFeature
                     )
                     .padding(.top, 18)
@@ -81,7 +79,7 @@ struct HomeView: View {
                             }
                         }
                     )
-                    .padding(.top, 44)
+                    .padding(.top, 24)
 
                     HomeBuildStyleSection(
                         styles: AestheticBuildStyle.featured,
@@ -117,18 +115,9 @@ struct HomeView: View {
     }
 
     private var homeHeader: some View {
-        HStack(alignment: .center) {
-            Text("UzBox")
-                .font(.system(size: 28, weight: .heavy))
-                .foregroundStyle(.black)
-
-            Spacer()
-
-            Image(systemName: "bell")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(.black)
-                .frame(width: 38, height: 38)
-        }
+        Text("UzBox")
+            .font(.system(size: 28, weight: .heavy))
+            .foregroundStyle(.black)
     }
 }
 
@@ -145,7 +134,7 @@ private struct HomeDashboardFeature: Identifiable {
     static let aiBuild = HomeDashboardFeature(
         id: "aiBuild",
         title: "AI 一键装机",
-        subtitle: "智能推荐适合你的装机方案",
+        subtitle: "智能推荐装机方案",
         buttonTitle: "开始装机",
         heroImage: "HomeGPUHeroCard",
         icon: "wrench.and.screwdriver",
@@ -156,30 +145,23 @@ private struct HomeDashboardFeature: Identifiable {
 
 private struct HomeHeroCard: View {
     let feature: HomeDashboardFeature
-    let activeIndex: Int
-    let totalCount: Int
     let onSwipeFeature: (Int) -> Void
 
     var body: some View {
-        VStack(spacing: 10) {
-            GeometryReader { proxy in
-                let cardWidth = proxy.size.width
-                let cardHeight: CGFloat = 316
+        GeometryReader { proxy in
+            let cardWidth = proxy.size.width
+            let cardHeight: CGFloat = 316
 
-                ZStack(alignment: .topLeading) {
-                    heroSlide(cardWidth: cardWidth, cardHeight: cardHeight)
-                        .id(feature.id)
-                        .transition(heroTransition)
-                }
-                .frame(height: cardHeight)
-                .animation(.easeOut(duration: 0.26), value: feature.id)
-                .clipped()
+            ZStack(alignment: .topLeading) {
+                heroSlide(cardWidth: cardWidth, cardHeight: cardHeight)
+                    .id(feature.id)
+                    .transition(heroTransition)
             }
             .frame(height: 316)
-
-            heroPageDots
+            .animation(.easeOut(duration: 0.26), value: feature.id)
+            .clipped()
         }
-        .frame(height: 338)
+        .frame(height: 316)
         .contentShape(Rectangle())
         .simultaneousGesture(heroSwipeGesture)
     }
@@ -292,16 +274,6 @@ private struct HomeHeroCard: View {
             }
     }
 
-    private var heroPageDots: some View {
-        HStack(spacing: 6) {
-            ForEach(0..<totalCount, id: \.self) { index in
-                Circle()
-                    .fill(index == activeIndex ? Color.black : Color.black.opacity(0.12))
-                    .frame(width: 6, height: 6)
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
 }
 
 private struct HomeDepthFocusTransitionModifier: ViewModifier {
@@ -332,41 +304,41 @@ private struct HomeFeatureSelector: View {
     let onSelect: (HomeDashboardFeature) -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
+        HStack(spacing: 0) {
             ForEach(features) { feature in
                 Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     onSelect(feature)
                 } label: {
-                    VStack(spacing: 8) {
-                        Image(systemName: feature.icon)
-                            .font(.system(size: 22, weight: .regular))
-                            .foregroundStyle(selectedID == feature.id ? .white : .black)
-                            .frame(width: 50, height: 50)
-                            .background(
-                                selectedID == feature.id ? Color.black : Color.white.opacity(0.62),
-                                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            )
-                            .shadow(color: Color.black.opacity(selectedID == feature.id ? 0.14 : 0.035), radius: 12, x: 0, y: 8)
-
-                        Text(selectorTitle(for: feature))
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.black)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.72)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
+                    Image(systemName: feature.icon)
+                        .font(.system(size: 22, weight: .regular))
+                        .foregroundStyle(selectedID == feature.id ? .white : .black)
+                        .frame(width: 50, height: 50)
+                        .background(
+                            selectedID == feature.id ? Color.black : Color.white.opacity(0.62),
+                            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        )
+                        .shadow(
+                            color: Color.black.opacity(selectedID == feature.id ? 0.14 : 0.035),
+                            radius: 12,
+                            x: 0,
+                            y: 8
+                        )
+                        .frame(maxWidth: .infinity)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(selectorTitle(for: feature))
+                .accessibilityAddTraits(selectedID == feature.id ? .isSelected : [])
             }
         }
-        .frame(height: 78)
+        .frame(height: 50)
     }
 
     private func selectorTitle(for feature: HomeDashboardFeature) -> String {
         switch feature.id {
         case "aiBuild":
-            return "AI 装机"
+            return "AI 一键装机"
         case "performance":
             return "性能测试"
         case "configReview":
@@ -375,6 +347,7 @@ private struct HomeFeatureSelector: View {
             return feature.title
         }
     }
+
 }
 
 private struct HomeBuildStyleSection: View {

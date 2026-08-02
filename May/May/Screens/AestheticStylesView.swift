@@ -28,15 +28,21 @@ struct AestheticStylesView: View {
                         Button {
                             showsExplorer = true
                         } label: {
-                            Image(systemName: "cube.transparent")
-                                .font(.system(size: 17, weight: .semibold))
-                                .foregroundStyle(AppTheme.primaryText)
-                                .frame(width: 42, height: 42)
-                                .background(.ultraThinMaterial, in: Circle())
-                                .overlay {
-                                    Circle()
-                                        .stroke(Color.white.opacity(0.7), lineWidth: 1)
-                                }
+                            HStack(spacing: 7) {
+                                Image(systemName: "cube.transparent")
+                                    .font(.system(size: 16, weight: .semibold))
+
+                                Text("沉浸全景")
+                                    .font(.system(size: 13, weight: .bold))
+                            }
+                            .foregroundStyle(AppTheme.primaryText)
+                            .padding(.horizontal, 14)
+                            .frame(height: 42)
+                            .background {
+                                Capsule()
+                                    .fill(Color.white)
+                            }
+                            .shadow(color: AppTheme.primaryText.opacity(0.14), radius: 12, y: 6)
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel("进入沉浸风格浏览")
@@ -197,6 +203,31 @@ private struct AestheticStyleShowcaseRow: View {
         case "hyteY70": 166
         case "aocShockingBow": 166
         case "bo400cg": 150
+        case "visionMin": 150
+        case "hangjiaS960": 150
+        case "lianliV150INF": 150
+        case "jonsboTK1": 150
+        case "jonsboD33Wood": 150
+        case "jonsboD34": 150
+        case "aigoXuanYingG20": 150
+        case "valkyrieVK3": 150
+        case "lianliO11EVORGB": 150
+        case "phanteksEvolvS2": 150
+        case "phanteksEvolvX2Matrix": 150
+        case "jonsboTK4": 150
+        case "xingcanChenAir": 150
+        case "phanteksNV7": 166
+        case "lianliO11DMiniV2": 150
+        case "asusTUF502Ammo": 150
+        case "rogGR801": 172
+        case "msiVIXTA300R": 150
+        case "hangjiaS960V2": 150
+        case "hangjiaGX750C": 150
+        case "coolermasterMF400Mesh": 150
+        case "sugonCiyuanCangPX": 166
+        case "titanStarship": 166
+        case "fangtangC34Pro": 166
+        case "cougarV235": 166
         default: 140
         }
     }
@@ -211,6 +242,31 @@ private struct AestheticStyleShowcaseRow: View {
         case "hyteY70": 0.91
         case "aocShockingBow": 0.82
         case "bo400cg": 0.94
+        case "visionMin": 1.00
+        case "hangjiaS960": 0.92
+        case "lianliV150INF": 1.08
+        case "jonsboTK1": 1.00
+        case "jonsboD33Wood": 1.00
+        case "jonsboD34": 0.94
+        case "aigoXuanYingG20": 0.96
+        case "valkyrieVK3": 0.96
+        case "lianliO11EVORGB": 0.94
+        case "phanteksEvolvS2": 0.88
+        case "phanteksEvolvX2Matrix": 0.88
+        case "jonsboTK4": 0.94
+        case "xingcanChenAir": 0.94
+        case "phanteksNV7": 0.84
+        case "lianliO11DMiniV2": 0.96
+        case "asusTUF502Ammo": 0.88
+        case "rogGR801": 1.00
+        case "msiVIXTA300R": 0.92
+        case "hangjiaS960V2": 0.92
+        case "hangjiaGX750C": 0.92
+        case "coolermasterMF400Mesh": 0.92
+        case "sugonCiyuanCangPX": 0.78
+        case "titanStarship": 0.90
+        case "fangtangC34Pro": 0.88
+        case "cougarV235": 0.88
         default: 0.78
         }
     }
@@ -225,6 +281,31 @@ private struct AestheticStyleShowcaseRow: View {
         case "hyteY70": -5
         case "aocShockingBow": -4
         case "bo400cg": -4
+        case "visionMin": -4
+        case "hangjiaS960": -4
+        case "lianliV150INF": -4
+        case "jonsboTK1": -4
+        case "jonsboD33Wood": -4
+        case "jonsboD34": -4
+        case "aigoXuanYingG20": -4
+        case "valkyrieVK3": -4
+        case "lianliO11EVORGB": -4
+        case "phanteksEvolvS2": -4
+        case "phanteksEvolvX2Matrix": -4
+        case "jonsboTK4": -4
+        case "xingcanChenAir": -4
+        case "phanteksNV7": -5
+        case "lianliO11DMiniV2": -4
+        case "asusTUF502Ammo": -4
+        case "rogGR801": -6
+        case "msiVIXTA300R": -4
+        case "hangjiaS960V2": -4
+        case "hangjiaGX750C": -4
+        case "coolermasterMF400Mesh": -4
+        case "sugonCiyuanCangPX": -4
+        case "titanStarship": -4
+        case "fangtangC34Pro": -4
+        case "cougarV235": -4
         default: -2
         }
     }

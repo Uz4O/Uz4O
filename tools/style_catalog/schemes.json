@@ -1,0 +1,268 @@
+{
+  "schemes": [
+    {
+      "id": "unknownPlayerP80Mesh",
+      "title": "未知玩家P80 MESH",
+      "summary": "网孔机箱与双塔风冷、六把灯效风扇组成的黑白展示方案",
+      "tags": [
+        "网孔机箱",
+        "六把风扇"
+      ],
+      "signature": "保留未知玩家 P80 MESH 机箱和基础风扇布局",
+      "highDetail": "保留超频三 RZ620M X 风冷与六把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留 P80 MESH、RZ620M X 风冷和六把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleUnknownPlayerP80MeshBlack.imageset/unknownplayerp80mesh-black.png",
+        "white": "May/May/Assets.xcassets/StyleUnknownPlayerP80MeshWhite.imageset/unknownplayerp80mesh-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "未知玩家 P80 MESH",
+          "price": 299
+        },
+        {
+          "name": "散热器",
+          "detail": "超频三 RZ620M X 风冷",
+          "price": 219
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 6",
+          "price": 59
+        }
+      ]
+    },
+    {
+      "id": "colorfulC25A",
+      "title": "七彩虹 C25A",
+      "summary": "紧凑海景房机箱与360水冷、四把灯效风扇组成的展示方案",
+      "tags": [
+        "紧凑海景房",
+        "四把风扇"
+      ],
+      "signature": "保留七彩虹 C25A 机箱和基础风扇布局",
+      "highDetail": "保留利民 PV360 水冷与四把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留 C25A、PV360 水冷和四把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleColorfulC25ABlack.imageset/colorfulc25a-black.png",
+        "white": "May/May/Assets.xcassets/StyleColorfulC25AWhite.imageset/colorfulc25a-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "七彩虹 C25A",
+          "price": 599
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "利民 PV360",
+          "price": 499
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 4",
+          "price": 40
+        }
+      ]
+    },
+    {
+      "id": "xingcanChenScreen",
+      "title": "爱国者星璨辰 屏显版",
+      "summary": "屏显机箱与魔方风扇、360水冷组成的高辨识度海景房方案",
+      "tags": [
+        "屏显海景房",
+        "魔方风扇"
+      ],
+      "signature": "保留爱国者星璨辰屏显版机箱和基础风扇布局",
+      "highDetail": "保留利民 MV360 水冷与魔方风扇组合",
+      "completeDetail": "完整保留星璨辰屏显版、MV360 水冷和三把 U360、一把 U120 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleXingcanChenScreenBlack.imageset/xingcanchenscreen-black.png",
+        "white": "May/May/Assets.xcassets/StyleXingcanChenScreenWhite.imageset/xingcanchenscreen-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "爱国者星璨辰 屏显版",
+          "price": 699
+        },
+        {
+          "name": "风扇套装",
+          "detail": "魔方 U360 × 3 + 魔方 U120 × 1",
+          "price": 566
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "利民 MV360",
+          "price": 599
+        }
+      ]
+    },
+    {
+      "id": "wanjiaWenjieMin",
+      "title": "玩嘉问界MIN",
+      "summary": "开放式海景房机箱与双塔风冷、五把灯效风扇组成的展示方案",
+      "tags": [
+        "开放式海景房",
+        "五把风扇"
+      ],
+      "signature": "保留玩嘉问界 MIN 机箱和基础风扇布局",
+      "highDetail": "保留瓦尔基里 DQ125 双塔风冷与五把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留问界 MIN、DQ125 双塔风冷和五把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleWanjiaWenjieMinBlack.imageset/wanjiawenjiemin-black.png",
+        "white": "May/May/Assets.xcassets/StyleWanjiaWenjieMinWhite.imageset/wanjiawenjiemin-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "玩嘉问界 MIN",
+          "price": 209
+        },
+        {
+          "name": "风冷散热器",
+          "detail": "瓦尔基里 DQ125 双塔 6 热管风冷",
+          "price": 139
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 5",
+          "price": 50
+        }
+      ]
+    },
+    {
+      "id": "wanjiaDreamerScreen",
+      "title": "玩嘉 梦想家副屏版",
+      "summary": "副屏机箱与360水冷、六把灯效风扇组成的高辨识度展示方案",
+      "tags": [
+        "副屏海景房",
+        "六把风扇"
+      ],
+      "signature": "保留玩嘉梦想家副屏版机箱和基础风扇布局",
+      "highDetail": "保留九州风神冰元素 360 ARGB 水冷与六把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留梦想家副屏版、冰元素 360 ARGB 水冷和六把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleWanjiaDreamerScreenBlack.imageset/wanjiadreamerscreen-black.png",
+        "white": "May/May/Assets.xcassets/StyleWanjiaDreamerScreenWhite.imageset/wanjiadreamerscreen-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "玩嘉 梦想家副屏版",
+          "price": 339
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "九州风神 冰元素 360 ARGB 水冷",
+          "price": 299
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 6",
+          "price": 59
+        }
+      ]
+    },
+    {
+      "id": "phanteksXTV3Breeze",
+      "title": "追风者 XT V3 小清风",
+      "summary": "紧凑网孔机箱与360水冷、四把灯效风扇组成的清爽展示方案",
+      "tags": [
+        "紧凑机箱",
+        "四把风扇"
+      ],
+      "signature": "保留追风者 XT V3 小清风机箱和基础风扇布局",
+      "highDetail": "保留利民 AE360 水冷与四把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留 XT V3 小清风、AE360 水冷和四把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StylePhanteksXTV3BreezeBlack.imageset/phanteksxtv3breeze-black.png",
+        "white": "May/May/Assets.xcassets/StylePhanteksXTV3BreezeWhite.imageset/phanteksxtv3breeze-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "追风者 XT V3 小清风",
+          "price": 249
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 4",
+          "price": 40
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "利民 AE360",
+          "price": 299
+        }
+      ]
+    },
+    {
+      "id": "hangjiaG63Waraxe",
+      "title": "航嘉 G63 战戟",
+      "summary": "前置网孔机箱与360水冷、九把灯效风扇组成的高性价比展示方案",
+      "tags": [
+        "前置网孔",
+        "九把风扇"
+      ],
+      "signature": "保留航嘉 G63 战戟机箱和基础风扇布局",
+      "highDetail": "保留利民 AE360 水冷与九把棱镜 4 Pro 风扇",
+      "completeDetail": "完整保留 G63 战戟、AE360 水冷和九把棱镜 4 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleHangjiaG63WaraxeBlack.imageset/hangjiag63waraxe-black.png",
+        "white": "May/May/Assets.xcassets/StyleHangjiaG63WaraxeWhite.imageset/hangjiag63waraxe-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "航嘉 G63 战戟",
+          "price": 169
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 4 Pro × 9",
+          "price": 89
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "利民 AE360",
+          "price": 299
+        }
+      ]
+    },
+    {
+      "id": "valkyrieVK03M",
+      "title": "瓦尔基里 VK03-M",
+      "summary": "瓦尔基里 VK03-M 机箱与 B360-GT 水冷、九把灯效风扇组成的黑白展示方案",
+      "tags": [
+        "海景房机箱",
+        "九把风扇"
+      ],
+      "signature": "保留瓦尔基里 VK03-M 机箱和基础风扇布局",
+      "highDetail": "保留瓦尔基里 B360-GT 水冷与九把棱镜 8 Pro 风扇",
+      "completeDetail": "完整保留 VK03-M、B360-GT 水冷和九把棱镜 8 Pro 风扇",
+      "images": {
+        "black": "May/May/Assets.xcassets/StyleValkyrieVK03MBlack.imageset/valkyrievk03m-black.png",
+        "white": "May/May/Assets.xcassets/StyleValkyrieVK03MWhite.imageset/valkyrievk03m-white.png"
+      },
+      "parts": [
+        {
+          "name": "机箱",
+          "detail": "瓦尔基里 VK03-M",
+          "price": 329
+        },
+        {
+          "name": "一体式水冷",
+          "detail": "瓦尔基里 B360-GT",
+          "price": 499
+        },
+        {
+          "name": "风扇套装",
+          "detail": "棱镜 8 Pro × 9",
+          "price": 89
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@ private struct StyleExplorerTuning: Equatable {
     var overviewZoom = 34.0
     var focusZoom = 12.0
     var fieldOfView = 45.0
-    var curvatureStrength = 0.09
+    var curvatureStrength = 0.14
     var dragSpeed = 2.2
     var positionDamping = 0.2
     var zoomDamping = 0.25
@@ -39,8 +39,10 @@ struct AestheticStyleExplorerView: View {
 
     private var items: [StyleExplorerItem] {
         guard !styles.isEmpty else { return [] }
+        let orderedStyles = balancedStyleOrder
         return (0..<42).map { index in
-            let style = styles[index % styles.count]
+            let styleIndex = index % orderedStyles.count
+            let style = orderedStyles[styleIndex]
             return StyleExplorerItem(
                 id: index,
                 style: style,
@@ -49,9 +51,39 @@ struct AestheticStyleExplorerView: View {
         }
     }
 
+    private var balancedStyleOrder: [AestheticBuildStyle] {
+        let sorted = styles.sorted {
+            let left = styleImageGeometry(
+                imageName: $0.heroImage(for: .black),
+                tileSize: tuning.tileSize
+            )
+            let right = styleImageGeometry(
+                imageName: $1.heroImage(for: .black),
+                tileSize: tuning.tileSize
+            )
+            return left.visibleSize.width * left.visibleSize.height
+                < right.visibleSize.width * right.visibleSize.height
+        }
+        var result: [AestheticBuildStyle] = []
+        var low = 0
+        var high = sorted.count - 1
+        while low <= high {
+            result.append(sorted[high])
+            high -= 1
+            if low <= high {
+                result.append(sorted[low])
+                low += 1
+            }
+        }
+        return result
+    }
+
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea()
+
+            TopologyCanvasBackground(isZoomedIn: isZoomedIn)
+            .ignoresSafeArea()
 
             StyleExplorerSceneView(
                 items: items,
@@ -121,7 +153,9 @@ struct AestheticStyleExplorerView: View {
                 VStack {
                     HStack {
                         Spacer()
-                        StyleExplorerTuningPanel(tuning: $tuning) {
+                        StyleExplorerTuningPanel(
+                            tuning: $tuning
+                        ) {
                             tuning = .defaults
                         }
                     }
@@ -129,7 +163,10 @@ struct AestheticStyleExplorerView: View {
                 }
                 .padding(.top, 62)
                 .padding(.trailing, 16)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .transition(
+                    .scale(scale: 0.94, anchor: .topTrailing)
+                        .combined(with: .opacity)
+                )
             }
         }
         .animation(.spring(response: 0.42, dampingFraction: 0.86), value: selectedStyle?.id)
@@ -229,7 +266,8 @@ struct AestheticStyleExplorerView: View {
         }
         .shadow(color: .black.opacity(0.1), radius: 20, y: 8)
         .animation(.spring(response: 0.42, dampingFraction: 0.82), value: isZoomedIn)
-        .padding(.bottom, 22)
+        .scaleEffect(0.9)
+        .padding(.bottom, 38)
     }
 
     private func colorButton(_ color: AestheticStyleColor) -> some View {
@@ -239,7 +277,7 @@ struct AestheticStyleExplorerView: View {
                 selectedColor = color
             }
         } label: {
-            Text("\(color.title)机箱")
+            Text(color.title)
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(
                     selectedColor == color ? AppTheme.primaryText : AppTheme.secondaryText
@@ -266,6 +304,11 @@ struct AestheticStyleExplorerView: View {
         GeometryReader { proxy in
             let layout = focusedImageLayout(for: style, in: proxy.size)
             let center = CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2)
+            let visibleFrame = layout.visibleFrame.offsetBy(dx: center.x, dy: center.y)
+            let closeButtonSize: CGFloat = 34
+            let closeButtonHitSize: CGFloat = 44
+            let closeButtonHorizontalOffset: CGFloat = 32
+            let closeButtonVerticalOffset: CGFloat = 32
 
             Button {
                 selectedStyle = nil
@@ -273,23 +316,30 @@ struct AestheticStyleExplorerView: View {
                 Image(systemName: "xmark")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(AppTheme.primaryText)
-                    .frame(width: 42, height: 42)
+                    .frame(width: closeButtonSize, height: closeButtonSize)
                     .background(.ultraThinMaterial, in: Rectangle())
                     .overlay {
                         Rectangle()
                             .stroke(AppTheme.primaryText.opacity(0.55), lineWidth: 1)
                     }
             }
+            .frame(width: closeButtonHitSize, height: closeButtonHitSize)
             .buttonStyle(.plain)
             .accessibilityLabel("关闭当前风格")
             .position(
                 x: min(
-                    proxy.size.width - 28,
-                    center.x - layout.size.width / 2 + layout.visibleBounds.maxX
+                    proxy.size.width - closeButtonHitSize / 2,
+                    max(
+                        closeButtonHitSize / 2,
+                        visibleFrame.maxX - closeButtonSize / 2 + closeButtonHorizontalOffset
+                    )
                 ),
-                y: max(
-                    28,
-                    center.y - layout.size.height / 2 + layout.visibleBounds.minY
+                y: min(
+                    proxy.size.height - closeButtonHitSize / 2,
+                    max(
+                        closeButtonHitSize / 2,
+                        visibleFrame.minY - closeButtonSize / 2 - closeButtonVerticalOffset
+                    )
                 )
             )
 
@@ -307,7 +357,7 @@ struct AestheticStyleExplorerView: View {
             .frame(width: min(proxy.size.width - 48, 360))
             .position(
                 x: center.x,
-                y: min(proxy.size.height - 150, center.y + layout.size.height / 2 + 52)
+                y: min(proxy.size.height - 150, visibleFrame.maxY + 52)
             )
             .allowsHitTesting(false)
         }
@@ -315,34 +365,250 @@ struct AestheticStyleExplorerView: View {
 
     private func focusedImageLayout(for style: AestheticBuildStyle, in viewSize: CGSize) -> FocusedImageLayout {
         let imageName = style.heroImage(for: selectedColor)
-        let image = UIImage(named: imageName)
-        let aspect = image.map { $0.size.width / $0.size.height } ?? 1
+        let geometry = styleImageGeometry(imageName: imageName, tileSize: tuning.tileSize)
         let distance = max(tuning.focusZoom - 2, 1)
         let visibleHeight = 2 * tan(tuning.fieldOfView * .pi / 360) * distance
         let pointsPerWorldUnit = viewSize.height / visibleHeight
-        let maximumDimension = tuning.tileSize * tuning.focusScale * pointsPerWorldUnit
-        let size = aspect > 1
-            ? CGSize(width: maximumDimension, height: maximumDimension / aspect)
-            : CGSize(width: maximumDimension * aspect, height: maximumDimension)
-        let normalizedBounds = image.map {
-            StyleImageVisibleBoundsCache.bounds(for: $0, named: imageName)
-        } ?? CGRect(x: 0, y: 0, width: 1, height: 1)
+        let scale = tuning.focusScale * pointsPerWorldUnit
+        let size = CGSize(
+            width: geometry.visibleSize.width * scale,
+            height: geometry.visibleSize.height * scale
+        )
+        let baseline = geometry.baseline * scale
 
         return FocusedImageLayout(
-            size: size,
-            visibleBounds: CGRect(
-                x: normalizedBounds.minX * size.width,
-                y: normalizedBounds.minY * size.height,
-                width: normalizedBounds.width * size.width,
-                height: normalizedBounds.height * size.height
+            visibleFrame: CGRect(
+                x: -size.width / 2,
+                y: baseline - size.height,
+                width: size.width,
+                height: size.height
             )
         )
     }
 }
 
 private struct FocusedImageLayout {
-    let size: CGSize
-    let visibleBounds: CGRect
+    let visibleFrame: CGRect
+}
+
+private struct StyleImageGeometry {
+    let planeSize: CGSize
+    let visibleSize: CGSize
+    let pivot: CGPoint
+    let baseline: CGFloat
+}
+
+private struct TopologyCanvasBackground: View {
+    let isZoomedIn: Bool
+
+    private static let columns = 40
+    private static let rows = 86
+    private static let tileSize = CGSize(width: 440, height: 820)
+    private static let levels: [CGFloat] = [-0.62, -0.34, -0.06, 0.22, 0.50]
+    private static let contourPaths = makeContourPaths()
+    private static let texture = makeTexture()
+    private static let animationDuration = 42.0
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
+            Canvas { context, size in
+                drawFixedContours(
+                    in: &context,
+                    size: size,
+                    time: timeline.date.timeIntervalSinceReferenceDate
+                )
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private func drawFixedContours(
+        in context: inout GraphicsContext,
+        size: CGSize,
+        time: TimeInterval
+    ) {
+        let tileSize = Self.tileSize
+        let phase = CGFloat(
+            time.truncatingRemainder(dividingBy: Self.animationDuration)
+                / Self.animationDuration
+        )
+        let originX = -phase * tileSize.width
+        let originY = phase * tileSize.height
+        let minColumn = Int(floor(-originX / tileSize.width))
+        let maxColumn = Int(ceil((size.width - originX) / tileSize.width)) - 1
+        let minRow = Int(floor(-originY / tileSize.height))
+        let maxRow = Int(ceil((size.height - originY) / tileSize.height)) - 1
+        let image = context.resolve(Image(uiImage: Self.texture))
+
+        context.opacity = isZoomedIn ? 0.55 : 1
+        for row in minRow...maxRow {
+            for column in minColumn...maxColumn {
+                context.draw(
+                    image,
+                    in: CGRect(
+                        x: originX + CGFloat(column) * tileSize.width,
+                        y: originY + CGFloat(row) * tileSize.height,
+                        width: tileSize.width,
+                        height: tileSize.height
+                    )
+                )
+            }
+        }
+    }
+
+    private static func makeTexture() -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 2
+        format.opaque = false
+        return UIGraphicsImageRenderer(size: tileSize, format: format).image { rendererContext in
+            let context = rendererContext.cgContext
+            context.setStrokeColor(UIColor(white: 0.58, alpha: 0.10).cgColor)
+            context.setLineWidth(1.25 * format.scale)
+            context.setLineCap(.round)
+            context.setLineJoin(.round)
+            for path in contourPaths {
+                context.addPath(path.cgPath)
+                context.strokePath()
+            }
+        }
+    }
+
+    private static func makeContourPaths() -> [Path] {
+        let cellWidth = tileSize.width / CGFloat(columns)
+        let cellHeight = tileSize.height / CGFloat(rows)
+        var values = Array(repeating: CGFloat.zero, count: (columns + 1) * (rows + 1))
+        for row in 0...rows {
+            for column in 0...columns {
+                values[row * (columns + 1) + column] = field(
+                    x: CGFloat(column) / CGFloat(columns),
+                    y: CGFloat(row) / CGFloat(rows)
+                )
+            }
+        }
+
+        return levels.map { level in
+            var path = Path()
+            for row in 0..<rows {
+                for column in 0..<columns {
+                    let index = row * (columns + 1) + column
+                    let points = contourPoints(
+                        level: level,
+                        topLeft: values[index],
+                        topRight: values[index + 1],
+                        bottomRight: values[index + columns + 2],
+                        bottomLeft: values[index + columns + 1],
+                        origin: CGPoint(
+                            x: CGFloat(column) * cellWidth,
+                            y: CGFloat(row) * cellHeight
+                        ),
+                        cellSize: CGSize(width: cellWidth, height: cellHeight)
+                    )
+
+                    if points.count == 2 {
+                        path.move(to: points[0])
+                        path.addLine(to: points[1])
+                    } else if points.count == 4 {
+                        path.move(to: points[0])
+                        path.addLine(to: points[1])
+                        path.move(to: points[2])
+                        path.addLine(to: points[3])
+                    }
+                }
+            }
+            return path
+        }
+    }
+
+    private static func field(x: CGFloat, y: CGFloat) -> CGFloat {
+        let turn = CGFloat.pi * 2
+        let broad = sin(turn * (2 * x + sin(turn * y) * 0.28))
+        let detail = cos(turn * (3 * y - sin(turn * x) * 0.18))
+        let diagonal = sin(turn * (x + y))
+        return broad * 0.58 + detail * 0.27 + diagonal * 0.15
+    }
+
+    private static func contourPoints(
+        level: CGFloat,
+        topLeft: CGFloat,
+        topRight: CGFloat,
+        bottomRight: CGFloat,
+        bottomLeft: CGFloat,
+        origin: CGPoint,
+        cellSize: CGSize
+    ) -> [CGPoint] {
+        let topLeftPoint = origin
+        let topRightPoint = CGPoint(x: origin.x + cellSize.width, y: origin.y)
+        let bottomRightPoint = CGPoint(x: origin.x + cellSize.width, y: origin.y + cellSize.height)
+        let bottomLeftPoint = CGPoint(x: origin.x, y: origin.y + cellSize.height)
+        var points: [CGPoint] = []
+        if let point = crossing(topLeftPoint, topLeft, topRightPoint, topRight, level) { points.append(point) }
+        if let point = crossing(topRightPoint, topRight, bottomRightPoint, bottomRight, level) { points.append(point) }
+        if let point = crossing(bottomRightPoint, bottomRight, bottomLeftPoint, bottomLeft, level) { points.append(point) }
+        if let point = crossing(bottomLeftPoint, bottomLeft, topLeftPoint, topLeft, level) { points.append(point) }
+        return points
+    }
+
+    private static func crossing(
+        _ start: CGPoint,
+        _ startValue: CGFloat,
+        _ end: CGPoint,
+        _ endValue: CGFloat,
+        _ level: CGFloat
+    ) -> CGPoint? {
+        let startDelta = startValue - level
+        let endDelta = endValue - level
+        guard (startDelta < 0 && endDelta >= 0) || (startDelta >= 0 && endDelta < 0) else {
+            return nil
+        }
+        let denominator = startDelta - endDelta
+        guard abs(denominator) > .ulpOfOne else { return start }
+        let progress = startDelta / denominator
+        return CGPoint(
+            x: start.x + (end.x - start.x) * progress,
+            y: start.y + (end.y - start.y) * progress
+        )
+    }
+}
+
+@MainActor
+private func styleImageGeometry(imageName: String, tileSize: Double) -> StyleImageGeometry {
+    guard let image = UIImage(named: imageName) else {
+        let size = CGFloat(tileSize) * 0.88
+        return StyleImageGeometry(
+            planeSize: CGSize(width: size, height: size),
+            visibleSize: CGSize(width: size, height: size),
+            pivot: .zero,
+            baseline: size * 0.44
+        )
+    }
+
+    let bounds = StyleImageVisibleBoundsCache.bounds(for: image, named: imageName)
+    let canvasAspect = image.size.width / image.size.height
+    let targetVisibleSize = CGFloat(tileSize) * 0.88
+    let baseWidth = canvasAspect
+    let baseHeight: CGFloat = 1
+    let scale = targetVisibleSize / max(
+        baseWidth * bounds.width,
+        baseHeight * bounds.height
+    )
+    let planeSize = CGSize(width: baseWidth * scale, height: baseHeight * scale)
+    let visibleSize = CGSize(
+        width: planeSize.width * bounds.width,
+        height: planeSize.height * bounds.height
+    )
+    let baseline = targetVisibleSize * 0.44
+    let visibleBottom = (0.5 - bounds.maxY) * planeSize.height
+
+    return StyleImageGeometry(
+        planeSize: planeSize,
+        visibleSize: visibleSize,
+        pivot: CGPoint(
+            x: (bounds.midX - 0.5) * planeSize.width,
+            y: visibleBottom + baseline
+        ),
+        baseline: baseline
+    )
 }
 
 @MainActor
@@ -444,19 +710,10 @@ private struct StyleExplorerTuningPanel: View {
                     tuningSlider("倾斜强度", value: $tuning.tiltStrength, range: 0...0.2, step: 0.01)
                     tuningSlider("越界阻力", value: $tuning.dragResistance, range: 0.05...0.8, step: 0.05)
                 }
-
-                Divider().overlay(Color.white.opacity(0.12))
-
-                tuningSection("聚焦") {
-                    tuningSlider("聚焦距离", value: $tuning.focusZoom, range: 8...18, step: 0.5)
-                    tuningSlider("方案放大", value: $tuning.focusScale, range: 1...2.2, step: 0.05)
-                    tuningSlider("其他缩放", value: $tuning.dimScale, range: 0.2...1, step: 0.05)
-                    tuningSlider("其他透明度", value: $tuning.dimOpacity, range: 0...0.6, step: 0.02)
-                }
             }
         }
-        .frame(width: 330)
-        .frame(maxHeight: 640)
+        .frame(width: 300)
+        .frame(maxHeight: 480)
         .foregroundStyle(.white)
         .background(Color(red: 0.07, green: 0.09, blue: 0.11).opacity(0.96))
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
@@ -555,7 +812,6 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
         private let scene = SCNScene()
         private let contentNode = SCNNode()
         private let cameraNode = SCNNode()
-        private let backgroundNode = SCNNode()
         private var nodes: [Int: SCNNode] = [:]
         private var basePositions: [Int: SCNVector3] = [:]
         private var gridHalfWidth: Float = 0
@@ -569,6 +825,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
         private var zoomInRequestID: Int
         private var preparedImages: [String: UIImage] = [:]
         private var outgoingNodes: [Int: SCNNode] = [:]
+        private var incomingNodes: [Int: SCNNode] = [:]
 
         weak var sceneView: SCNView?
         var selectedStyle: Binding<AestheticBuildStyle?>
@@ -606,9 +863,13 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             sceneView = view
             view.scene = scene
             view.backgroundColor = .clear
+            view.isOpaque = false
+            view.layer.isOpaque = false
+            view.layer.backgroundColor = UIColor.clear.cgColor
+            scene.background.contents = UIColor.clear
             view.allowsCameraControl = false
             view.autoenablesDefaultLighting = false
-            view.antialiasingMode = .multisampling4X
+            view.antialiasingMode = .multisampling2X
             view.preferredFramesPerSecond = 60
             view.rendersContinuously = true
 
@@ -620,12 +881,16 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             cameraNode.position = SCNVector3(0, 0, maximumZoom)
             contentNode.position = targetPosition
             scene.rootNode.addChildNode(cameraNode)
-            addTopologyBackground()
             scene.rootNode.addChildNode(contentNode)
             view.pointOfView = cameraNode
 
             addItems()
-            warmAlternateImages()
+            warmImages(named: Set(items.flatMap { item in
+                [
+                    item.style.heroImage(for: .black),
+                    item.style.heroImage(for: .white)
+                ]
+            }))
             addGestures(to: view)
 
             let displayLink = CADisplayLink(target: self, selector: #selector(updateScene))
@@ -661,47 +926,72 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
         func update(_ newItems: [StyleExplorerItem]) {
             guard newItems != items else { return }
             items = newItems
+            warmImages(named: Set(newItems.map(\.imageName)))
 
             for item in items {
                 guard let node = nodes[item.id] else { continue }
-                let delay = Double(item.id % columns) * 0.014
-                    + Double(item.id / columns) * 0.008
+                let enterDelay = Double.random(in: 0...0.4)
+                let exitDelay = Double.random(in: 0...0.3)
+                let normalizedY = gridHalfHeight > 0
+                    ? node.position.y / gridHalfHeight
+                    : 0
+
                 outgoingNodes[item.id]?.removeFromParentNode()
+                incomingNodes[item.id]?.removeFromParentNode()
+                node.opacity = 1
 
                 let outgoing = node.clone()
                 outgoing.name = "style-\(item.id)-outgoing"
-                outgoing.opacity = node.opacity
-                outgoing.renderingOrder = node.renderingOrder - 1
+                outgoing.renderingOrder = node.renderingOrder + 1
                 node.parent?.addChildNode(outgoing)
                 outgoingNodes[item.id] = outgoing
 
                 node.geometry?.firstMaterial?.diffuse.contents = image(for: item.imageName)
                 resizePlane(of: node, for: item)
-                let originalScale = node.scale
-                node.scale = SCNVector3(
-                    originalScale.x * 0.86,
-                    originalScale.y * 0.86,
-                    originalScale.z * 0.86
-                )
                 node.opacity = 0
-                node.removeAction(forKey: "color-change")
-                node.runAction(
+
+                let incoming = node.clone()
+                incoming.name = "style-\(item.id)-incoming"
+                incoming.position.y += normalizedY
+                incoming.position.z -= 18
+                incoming.opacity = 0
+                incoming.renderingOrder = node.renderingOrder
+                node.parent?.addChildNode(incoming)
+                incomingNodes[item.id] = incoming
+
+                let enterMove = SCNAction.move(to: node.position, duration: 0.68)
+                enterMove.timingMode = .easeOut
+                incoming.runAction(
                     .sequence([
-                        .wait(duration: delay),
+                        .wait(duration: enterDelay),
                         .group([
-                            .fadeIn(duration: 0.34),
-                            .scale(to: 1, duration: 0.42)
-                        ])
+                            .fadeIn(duration: 0.58),
+                            enterMove
+                        ]),
+                        .removeFromParentNode(),
+                        .run { [weak self, weak node, weak incoming] _ in
+                            guard let self, let node, let incoming,
+                                  self.incomingNodes[item.id] === incoming else { return }
+                            node.opacity = 1
+                            self.incomingNodes[item.id] = nil
+                        }
                     ]),
-                    forKey: "color-change"
+                    forKey: "color-enter"
                 )
 
+                let exitTarget = SCNVector3(
+                    outgoing.position.x,
+                    outgoing.position.y + normalizedY * 0.5,
+                    outgoing.position.z + 12
+                )
+                let exitMove = SCNAction.move(to: exitTarget, duration: 0.5)
+                exitMove.timingMode = .easeIn
                 outgoing.runAction(
                     .sequence([
-                        .wait(duration: delay),
+                        .wait(duration: exitDelay),
                         .group([
                             .fadeOut(duration: 0.28),
-                            .scale(to: 1.06, duration: 0.34)
+                            exitMove
                         ]),
                         .removeFromParentNode(),
                         .run { [weak self, weak outgoing] _ in
@@ -719,16 +1009,12 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             preparedImages[name] ?? UIImage(named: name)
         }
 
-        private func warmAlternateImages() {
-            let names = Set(items.flatMap { item in
-                [
-                    item.style.heroImage(for: .black),
-                    item.style.heroImage(for: .white)
-                ]
-            })
+        private func warmImages(named names: Set<String>) {
+            let pendingNames = names.filter { preparedImages[$0] == nil }
+            guard !pendingNames.isEmpty else { return }
 
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                let images = names.reduce(into: [String: UIImage]()) { result, name in
+                let images = pendingNames.reduce(into: [String: UIImage]()) { result, name in
                     guard let image = UIImage(named: name) else { return }
                     result[name] = Self.downsample(image)
                 }
@@ -779,24 +1065,6 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                 clampTarget(in: sceneView)
             }
             isZoomedIn.wrappedValue = true
-        }
-
-        private func addTopologyBackground() {
-            let plane = SCNPlane(width: 90, height: 40)
-            let material = SCNMaterial()
-            material.lightingModel = .constant
-            material.diffuse.contents = UIColor.clear
-            material.isDoubleSided = true
-            material.transparencyMode = .aOne
-            material.blendMode = .alpha
-            material.writesToDepthBuffer = false
-            material.readsFromDepthBuffer = false
-            material.shaderModifiers = [.fragment: Self.topologyFragmentShader]
-            plane.materials = [material]
-            backgroundNode.geometry = plane
-            backgroundNode.position = SCNVector3(0, 0, -15)
-            backgroundNode.renderingOrder = -100
-            scene.rootNode.addChildNode(backgroundNode)
         }
 
         private func updateLayout() {
@@ -902,16 +1170,17 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
 
         private func resizePlane(of node: SCNNode, for item: StyleExplorerItem) {
             guard let plane = node.geometry as? SCNPlane else { return }
-            let image = UIImage(named: item.imageName)
-            let aspect = image.map { $0.size.width / $0.size.height } ?? 1
-            let maximumDimension = CGFloat(tuning.tileSize)
-            if aspect > 1 {
-                plane.width = maximumDimension
-                plane.height = maximumDimension / aspect
-            } else {
-                plane.width = maximumDimension * aspect
-                plane.height = maximumDimension
-            }
+            let geometry = styleImageGeometry(
+                imageName: item.imageName,
+                tileSize: tuning.tileSize
+            )
+            plane.width = geometry.planeSize.width
+            plane.height = geometry.planeSize.height
+            node.pivot = SCNMatrix4MakeTranslation(
+                Float(geometry.pivot.x),
+                Float(geometry.pivot.y),
+                0
+            )
         }
 
         private func addGestures(to view: SCNView) {
@@ -1059,9 +1328,6 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             contentNode.position.x += (targetPosition.x - contentNode.position.x) * positionBlend
             contentNode.position.y += (targetPosition.y - contentNode.position.y) * positionBlend
             cameraNode.position.z += (targetZoom - cameraNode.position.z) * zoomBlend
-            let backgroundOpacity: CGFloat = targetZoom <= minimumZoom + 2 ? 0.25 : 1
-            backgroundNode.opacity += (backgroundOpacity - backgroundNode.opacity) * CGFloat(positionBlend)
-
             let zoomProgress = max(0, min(1, (cameraNode.position.z - minimumZoom) / (maximumZoom - minimumZoom)))
             let curveBlend = zoomProgress * zoomProgress * (3 - 2 * zoomProgress)
             for (id, node) in nodes {
@@ -1085,6 +1351,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             let tiltY = -movementX * Float(tuning.tiltStrength) * tiltScale
             cameraNode.eulerAngles.x += (tiltX - cameraNode.eulerAngles.x) * positionBlend
             cameraNode.eulerAngles.y += (tiltY - cameraNode.eulerAngles.y) * positionBlend
+
         }
 
         private func visibleHeight(in view: SCNView, zoom: Float) -> Float {
@@ -1126,66 +1393,6 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             }
         }
 
-        private static let topologyFragmentShader = """
-        vec3 topologyPermute(vec3 x) {
-            vec3 value = ((x * 34.0) + 1.0) * x;
-            return value - floor(value / 289.0) * 289.0;
-        }
-
-        float topologyNoise(vec2 value) {
-            const vec4 C = vec4(
-                0.211324865405187,
-                0.366025403784439,
-                -0.577350269189626,
-                0.024390243902439
-            );
-            vec2 i = floor(value + dot(value, C.yy));
-            vec2 x0 = value - i + dot(i, C.xx);
-            vec2 i1 = x0.x > x0.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-            vec4 x12 = x0.xyxy + C.xxzz;
-            x12.xy -= i1;
-            i = i - floor(i / 289.0) * 289.0;
-            vec3 p = topologyPermute(
-                topologyPermute(i.y + vec3(0.0, i1.y, 1.0))
-                + i.x + vec3(0.0, i1.x, 1.0)
-            );
-            vec3 m = max(
-                0.5 - vec3(
-                    dot(x0, x0),
-                    dot(x12.xy, x12.xy),
-                    dot(x12.zw, x12.zw)
-                ),
-                0.0
-            );
-            m = m * m;
-            m = m * m;
-            vec3 x = 2.0 * fract(p * C.www) - 1.0;
-            vec3 h = abs(x) - 0.5;
-            vec3 ox = floor(x + 0.5);
-            vec3 a0 = x - ox;
-            m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
-            vec3 g;
-            g.x = a0.x * x0.x + h.x * x0.y;
-            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-            return 130.0 * dot(m, g);
-        }
-
-        #pragma body
-        vec2 uv = _surface.diffuseTexcoord;
-        float aspect = 2.25;
-        vec2 noiseUv = uv;
-        noiseUv.x *= aspect;
-        vec2 centeredUv = uv - 0.5;
-        centeredUv.x *= aspect;
-        float distanceFromCenter = length(centeredUv);
-        float mask = 1.0 - smoothstep(0.59, 0.61, distanceFromCenter);
-        float noiseValue = topologyNoise(noiseUv * 3.0 + u_time * 0.05);
-        float lines = fract(noiseValue * 5.0);
-        float pattern = smoothstep(0.47, 0.5, lines) - smoothstep(0.5, 0.53, lines);
-        float grain = (fract(sin(dot(uv, vec2(25.9796, 156.466))) * 43758.5453) - 0.5) * 0.15;
-        vec3 color = vec3(0.8784) + grain;
-        _output.color = vec4(color, pattern * 0.4 * mask);
-        """
     }
 }
 

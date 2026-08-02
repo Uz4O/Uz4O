@@ -1,4 +1,6 @@
 import SwiftUI
+import Photos
+import UIKit
 
 struct DIYView: View {
     private let components = DIYComponent.all
@@ -12,6 +14,8 @@ struct DIYView: View {
     @State private var loadError: String?
     @State private var loadedCategories: Set<String> = []
     @State private var loadingCategories: Set<String> = []
+    @State private var feedbackMessage = ""
+    @State private var showsFeedback = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -64,6 +68,9 @@ struct DIYView: View {
                             }
                         }
 
+                        actionBar
+                            .padding(.top, 22)
+
                     }
                     .frame(width: max(proxy.size.width - 52, 0), alignment: .leading)
                     .padding(.bottom, 110)
@@ -100,6 +107,11 @@ struct DIYView: View {
             .animation(.easeOut(duration: 0.18), value: activeSlotID)
         }
         .task { await loadCatalog() }
+        .alert("DIY", isPresented: $showsFeedback) {
+            Button("好的", role: .cancel) {}
+        } message: {
+            Text(feedbackMessage)
+        }
     }
 
     private var header: some View {
@@ -120,6 +132,8 @@ struct DIYView: View {
             DIYSummaryMetric(title: "预计总价", value: totalPrice > 0 ? "¥ \(totalPrice)" : "待选择", icon: "info.circle", iconColor: DIYTheme.secondary)
             Divider().frame(height: 62)
             DIYSummaryMetric(title: "已选择", value: "\(selectedComponents.count)", progress: Double(selectedComponents.count) / Double(components.count))
+            Divider().frame(height: 62)
+            DIYSummaryMetric(title: "预计功耗", value: estimatedPower.map { "\($0)W" } ?? "待选择", icon: "bolt.fill", iconColor: DIYTheme.secondary)
         }
         .frame(height: 94)
         .background(DIYTheme.surface, in: RoundedRectangle(cornerRadius: 22))
@@ -130,6 +144,170 @@ struct DIYView: View {
         selectedComponents.values.reduce(0) { total, component in
             total + (catalogPrices[component.id]?.referencePrice ?? 0)
         }
+    }
+
+    private var estimatedPower: Int? {
+        let cpuPower = selectedComponents["cpu"].flatMap { power(for: $0) }
+        let gpuPower = selectedComponents["gpu"].flatMap { power(for: $0) }
+        guard cpuPower != nil || gpuPower != nil else { return nil }
+        return (cpuPower ?? 0) + (gpuPower ?? 0) + 100
+    }
+
+    private var actionBar: some View {
+        HStack(spacing: 12) {
+            Button(action: saveConfigurationImage) {
+                Label("保存图片", systemImage: "photo")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(DIYTheme.primary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 46)
+                    .background(DIYTheme.surface, in: RoundedRectangle(cornerRadius: 15))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(DIYTheme.border, lineWidth: 1)
+                    }
+            }
+            .buttonStyle(.plain)
+
+            Button(action: saveToMyBuilds) {
+                Label("保存到我的配置单", systemImage: "bookmark")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 46)
+                    .background(DIYTheme.primary, in: RoundedRectangle(cornerRadius: 15))
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func power(for component: CatalogComponentDTO) -> Int? {
+        if let exact = integerValue(component.specs["tdp"]) {
+            return exact
+        }
+        if let source = integerValue(component.specs["source_tdp"]) {
+            return source
+        }
+        if case let .object(sourceSpecs)? = component.specs["source_specs"],
+           let source = integerValue(sourceSpecs["tdp"]) {
+            return source
+        }
+
+        let text = "\(component.brand) \(component.name)"
+            .uppercased()
+            .filter { $0.isLetter || $0.isNumber }
+
+        let known: [(String, Int)]
+        if component.category == "cpu" {
+            known = [
+                ("285K", 250), ("265K", 250), ("245K", 159),
+                ("14900", 253), ("14700", 253), ("13900", 253),
+                ("13700", 253), ("12900", 241), ("12700", 190),
+                ("14600", 181), ("13600", 181), ("12600", 150), ("12400", 117),
+                ("9850X3D", 120), ("9800X3D", 120), ("7800X3D", 120),
+                ("9700X", 120), ("9600X", 105), ("7500F", 88),
+                ("5600X", 65), ("5600", 65)
+            ]
+        } else if component.category == "gpu" {
+            known = [
+                ("5090", 575), ("5080", 360), ("5070TI", 300), ("5070", 250),
+                ("5060TI", 180), ("5060", 145), ("4090", 450), ("4080", 320),
+                ("4070TI", 285), ("4070SUPER", 220), ("4070", 200),
+                ("4060TI", 160), ("4060", 115), ("3090", 350), ("3080TI", 350),
+                ("3080", 320), ("3070TI", 290), ("3070", 220), ("3060TI", 200),
+                ("3060", 170), ("9070XT", 304), ("9070", 220), ("9060XT", 200),
+                ("7900XTX", 355), ("7900XT", 315), ("7800XT", 263),
+                ("7700XT", 245), ("7600XT", 190), ("7600", 165), ("6750", 250),
+                ("6700", 230), ("6600", 132), ("A770", 225), ("A580", 185)
+            ]
+        } else {
+            return nil
+        }
+
+        return known.first { text.contains($0.0) }?.1
+    }
+
+    private func integerValue(_ value: CatalogJSONValue?) -> Int? {
+        switch value {
+        case .number(let value):
+            return Int(value)
+        case .string(let value):
+            return Int(value.filter { $0.isNumber })
+        default:
+            return nil
+        }
+    }
+
+    private func saveToMyBuilds() {
+        let parts = components.compactMap { slot -> DIYStoredPart? in
+            guard let selected = selectedComponents[slot.id] else { return nil }
+            return DIYStoredPart(
+                category: slot.title,
+                name: selected.name,
+                brand: selected.brand,
+                price: catalogPrices[selected.id]?.referencePrice
+            )
+        }
+        guard !parts.isEmpty else {
+            presentFeedback("请先选择至少一个配件")
+            return
+        }
+
+        DIYBuildStore.save(
+            DIYStoredBuild(
+                id: UUID(),
+                createdAt: Date(),
+                totalPrice: totalPrice,
+                estimatedPower: estimatedPower,
+                parts: parts
+            )
+        )
+        presentFeedback("已保存到“我的配置单”")
+    }
+
+    @MainActor
+    private func saveConfigurationImage() {
+        guard !selectedComponents.isEmpty else {
+            presentFeedback("请先选择至少一个配件")
+            return
+        }
+
+        let parts = components.compactMap { slot -> DIYStoredPart? in
+            guard let selected = selectedComponents[slot.id] else { return nil }
+            return DIYStoredPart(
+                category: slot.title,
+                name: selected.name,
+                brand: selected.brand,
+                price: catalogPrices[selected.id]?.referencePrice
+            )
+        }
+        var renderer = ImageRenderer(
+            content: DIYShareCard(
+                parts: parts,
+                totalPrice: totalPrice,
+                estimatedPower: estimatedPower
+            )
+            .frame(width: 900)
+        )
+        renderer.scale = 2
+        guard let image = renderer.uiImage else {
+            presentFeedback("图片生成失败，请重试")
+            return
+        }
+
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else {
+                Task { @MainActor in presentFeedback("没有相册保存权限") }
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            Task { @MainActor in presentFeedback("配置图片已保存到相册") }
+        }
+    }
+
+    private func presentFeedback(_ message: String) {
+        feedbackMessage = message
+        showsFeedback = true
     }
 
     private func compatibleComponents(for slot: DIYComponent) -> [CatalogComponentDTO] {
@@ -729,6 +907,77 @@ private struct DIYComponentPicker: View {
         .padding(18)
         .background(DIYTheme.surface, in: RoundedRectangle(cornerRadius: 24))
         .shadow(color: .black.opacity(0.2), radius: 28, y: 12)
+    }
+}
+
+private struct DIYShareCard: View {
+    let parts: [DIYStoredPart]
+    let totalPrice: Int
+    let estimatedPower: Int?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("UzBox DIY 配置单")
+                .font(.system(size: 36, weight: .heavy))
+                .foregroundStyle(.black)
+
+            Text("自定义电脑硬件方案")
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(.gray)
+                .padding(.top, 8)
+
+            HStack(spacing: 0) {
+                summary(title: "预计总价", value: totalPrice > 0 ? "¥\(totalPrice)" : "待选择")
+                Divider().frame(height: 68)
+                summary(title: "预计功耗", value: estimatedPower.map { "\($0)W" } ?? "待选择")
+            }
+            .padding(.vertical, 28)
+
+            Divider()
+
+            ForEach(Array(parts.enumerated()), id: \.offset) { _, part in
+                HStack(spacing: 18) {
+                    Text(part.category)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.black)
+                        .frame(width: 120, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(part.name)
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundStyle(.black)
+                            .lineLimit(2)
+                        Text(part.brand)
+                            .font(.system(size: 16))
+                            .foregroundStyle(.gray)
+                    }
+
+                    Spacer()
+
+                    if let price = part.price {
+                        Text("¥\(price)")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(.black)
+                    }
+                }
+                .padding(.vertical, 18)
+                Divider()
+            }
+        }
+        .padding(42)
+        .background(Color.white)
+    }
+
+    private func summary(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.system(size: 17, weight: .medium))
+                .foregroundStyle(.gray)
+            Text(value)
+                .font(.system(size: 30, weight: .bold))
+                .foregroundStyle(.black)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

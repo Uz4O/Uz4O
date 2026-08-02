@@ -206,7 +206,8 @@ private struct MainTabView: View {
                 }
             }
             .tabItem {
-                Label(AppTab.home.rawValue, systemImage: "house")
+                Image(systemName: "house")
+                    .accessibilityLabel(AppTab.home.rawValue)
             }
             .tag(AppTab.home)
 
@@ -217,7 +218,8 @@ private struct MainTabView: View {
                 .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label(AppTab.styles.rawValue, systemImage: "paintpalette")
+                Image(systemName: "paintpalette")
+                    .accessibilityLabel(AppTab.styles.rawValue)
             }
             .tag(AppTab.styles)
 
@@ -226,7 +228,8 @@ private struct MainTabView: View {
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Label(AppTab.diy.rawValue, systemImage: AppTab.diy.icon(isSelected: false))
+                Image(systemName: AppTab.diy.icon(isSelected: false))
+                    .accessibilityLabel(AppTab.diy.rawValue)
             }
             .tag(AppTab.diy)
 
@@ -245,7 +248,8 @@ private struct MainTabView: View {
                 }
             }
             .tabItem {
-                Label(AppTab.profile.rawValue, systemImage: "person")
+                Image(systemName: "person")
+                    .accessibilityLabel(AppTab.profile.rawValue)
             }
             .tag(AppTab.profile)
         }
