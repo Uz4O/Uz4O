@@ -3,6 +3,7 @@ asus-b850m-awy
 asus-prime-b650m-k
 asus-x870e-chuixue
 asus-x870e-extreme
+asus-x870e-glacial
 asus-x870e-hero
 asus-x870e-neo
 base-case-mid-tower
@@ -16,7 +17,9 @@ base-ddr5-32gb-6000-c28
 base-ddr5-32gb-6000-c30
 base-ddr5-32gb-6000-c32
 base-psu-1200w-gold
+base-psu-1200w-platinum
 base-psu-650w-gold
+base-psu-750w-gold
 base-psu-850w-gold
 base-ssd-512gb-tlc
 msi-b850m-power
@@ -30,13 +33,12 @@ r7-7800x3d
 r7-9700x
 r7-9800x3d
 r7-9850x3d
+rtx-4070
 rtx-4070-super
-rtx-5060
 rtx-5060-ti
 rtx-5070
 rtx-5070-ti
 rtx-5080
-rtx-5090-d
 rtx-5090-d-v2
 rx-7800-xt
 rx-7900-xt

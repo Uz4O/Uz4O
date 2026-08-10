@@ -74,6 +74,21 @@ struct AIBuildFlowRulesTests {
         )
         assertContains(
             buildViewSource,
+            "if budgetValue < 6500",
+            "Budgets below 6500 yuan should keep memory fixed at 16GB instead of exposing the memory picker."
+        )
+        assertContains(
+            buildViewSource,
+            "return budgetValue >= 6500 && budgetValue < 8000",
+            "Budgets from 6500 through 7999 yuan should use the constrained capacity choice."
+        )
+        assertContains(
+            buildViewSource,
+            "midBudgetCapacityOptions = [\"32GB 内存\", \"1TB 固态\"]",
+            "The constrained capacity picker should make 32GB memory and 1TB storage mutually exclusive."
+        )
+        assertContains(
+            buildViewSource,
             ".sheet(item: $directionRecommendation)",
             "The direction sheet should be driven by the current recommendation instead of capturing stale state."
         )

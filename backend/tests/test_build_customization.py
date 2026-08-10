@@ -14,10 +14,10 @@ from app.catalog.models import ComponentPrice, HardwareComponent
 
 def test_customization_applies_storage_and_wifi_without_exceeding_low_budget_limit() -> None:
     components, prices = catalog()
-    components["base-ssd-1tb-tlc"].is_recommended = False
+    components["base-ssd-fanxiang-s790e-1tb"].is_recommended = False
     option = customize_template(
         BuildRequest(
-            budget=6500,
+            budget=6700,
             use_case="游戏",
             direction="balanced",
             storage_size="1TB",
@@ -31,8 +31,8 @@ def test_customization_applies_storage_and_wifi_without_exceeding_low_budget_lim
     )
 
     parts = {part.role: part for part in option.details.parts}
-    assert option.estimated_total == 7000
-    assert parts["storage"].component_id == "base-ssd-1tb-tlc"
+    assert option.estimated_total == 7168
+    assert parts["storage"].component_id == "base-ssd-fanxiang-s790e-1tb"
     assert parts["motherboard"].name.endswith(" WIFI")
     assert parts["motherboard"].reference_price == 750
 
@@ -41,7 +41,7 @@ def test_customization_adds_separate_adapter_for_a520m_k() -> None:
     components, prices = catalog(motherboard_id="asus-a520m-k")
     option = customize_template(
         BuildRequest(
-            budget=6500,
+            budget=4000,
             use_case="游戏",
             direction="balanced",
             needs_wireless_network=True,
@@ -51,12 +51,32 @@ def test_customization_adds_separate_adapter_for_a520m_k() -> None:
         components,
         prices,
         source="template",
+        validate_budget=False,
     )
 
     motherboard = next(part for part in option.details.parts if part.role == "motherboard")
     assert motherboard.reference_price == 700
     assert option.details.extras[0].id == "wifi-bluetooth-adapter"
     assert option.details.extras[0].reference_price == 50
+
+
+def test_customization_rejects_a520_at_4500_and_above() -> None:
+    components, prices = catalog(motherboard_id="asus-a520m-k")
+
+    with pytest.raises(CustomizationError, match="4500元及以上"):
+        customize_template(
+            BuildRequest(
+                budget=4500,
+                use_case="游戏",
+                direction="balanced",
+            ),
+            base_template(motherboard_id="asus-a520m-k"),
+            {},
+            components,
+            prices,
+            source="template",
+            validate_budget=False,
+        )
 
 
 def test_customization_does_not_charge_again_for_integrated_wifi() -> None:
@@ -101,6 +121,25 @@ def test_customization_rejects_requirement_over_budget_ceiling() -> None:
             components,
             prices,
             source="template",
+        )
+
+
+def test_customization_rejects_high_cpu_low_gpu_pairing() -> None:
+    components, prices = catalog()
+
+    with pytest.raises(CustomizationError, match="高U低显或低U高显"):
+        customize_template(
+            BuildRequest(
+                budget=10_000,
+                use_case="游戏",
+                direction="balanced",
+            ),
+            base_template(),
+            {"cpu": "r7-9800x3d", "gpu": "rtx-5060-ti"},
+            components,
+            prices,
+            source="ai",
+            validate_budget=False,
         )
 
 
@@ -229,6 +268,8 @@ def catalog(
             {"socket": "AM5", "mem_type": "DDR5", "chipset": "B650"},
         ),
         component("rtx-5060", "gpu", "RTX 5060", {"vendor": "NVIDIA", "perf_index": 50, "tdp": 145}),
+        component("r7-9800x3d", "cpu", "R7 9800X3D", {"socket": "AM5", "perf_index": 100, "tdp": 120}),
+        component("rtx-5060-ti", "gpu", "RTX 5060 Ti", {"vendor": "NVIDIA", "perf_index": 60, "tdp": 180}),
         component(
             "base-ddr5-16gb-6000-c32",
             "ram",
@@ -244,6 +285,18 @@ def catalog(
         component("base-ssd-512gb-tlc", "storage", "512GB TLC SSD", {"capacity_gb": 512}),
         component("base-ssd-1tb-tlc", "storage", "1TB TLC SSD", {"capacity_gb": 1024}),
         component("base-ssd-2tb-tlc", "storage", "2TB TLC SSD", {"capacity_gb": 2048}),
+        component(
+            "base-ssd-fanxiang-s500-pro-512gb",
+            "storage",
+            "梵想 S500 Pro 512GB",
+            {"capacity_gb": 512},
+        ),
+        component(
+            "base-ssd-fanxiang-s790e-1tb",
+            "storage",
+            "梵想 S790E 1TB",
+            {"capacity_gb": 1024},
+        ),
         component("base-psu-650w-gold", "psu", "650W Gold", {"watt": 650}),
         component("base-cooler-6-heatpipe", "cooler", "6 Heatpipe Cooler", {}),
         component("base-case-mid-tower", "case", "Mid Tower Case", {}),
@@ -252,11 +305,15 @@ def catalog(
         "r5-9600x": 1050,
         motherboard_id: 700,
         "rtx-5060": 2300,
+        "r7-9800x3d": 2500,
+        "rtx-5060-ti": 3000,
         "base-ddr5-16gb-6000-c32": 1700,
         "base-ddr5-32gb-6000-c32": 3400,
         "base-ssd-512gb-tlc": 500,
         "base-ssd-1tb-tlc": 800,
         "base-ssd-2tb-tlc": 1600,
+        "base-ssd-fanxiang-s500-pro-512gb": 509,
+        "base-ssd-fanxiang-s790e-1tb": 968,
         "base-psu-650w-gold": 200,
         "base-cooler-6-heatpipe": 100,
         "base-case-mid-tower": 100,

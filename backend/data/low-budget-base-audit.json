@@ -1,6 +1,6 @@
 {
-  "price_date": "2026-07-30",
-  "attempted_combination_count": 111,
+  "price_date": "2026-08-08",
+  "attempted_combination_count": 89,
   "completed_tiers": [
     3000,
     3500,
@@ -13,7 +13,7 @@
     7000
   ],
   "completed_tier_direction_count": 27,
-  "completed_template_count": 99,
+  "completed_template_count": 83,
   "skipped_combinations": [
     {
       "target_budget": 3000,
@@ -23,32 +23,14 @@
     },
     {
       "target_budget": 3000,
-      "direction": "fps",
-      "purchase_mode": "mixed",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "over_budget"
     },
     {
       "target_budget": 3000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3000,
       "direction": "balanced",
       "purchase_mode": "new",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
       "reason": "over_budget"
     },
     {
@@ -59,32 +41,14 @@
     },
     {
       "target_budget": 3500,
-      "direction": "fps",
-      "purchase_mode": "mixed",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3500,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "over_budget"
     },
     {
       "target_budget": 3500,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3500,
       "direction": "balanced",
       "purchase_mode": "new",
-      "reason": "over_budget"
-    },
-    {
-      "target_budget": 3500,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
       "reason": "over_budget"
     }
   ],

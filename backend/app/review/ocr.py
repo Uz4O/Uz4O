@@ -47,9 +47,18 @@ def _paddleocr_engine() -> Any:
 
     try:
         try:
-            return PaddleOCR(lang="ch", use_angle_cls=True)
+            return PaddleOCR(
+                lang="ch",
+                use_doc_orientation_classify=False,
+                use_doc_unwarping=False,
+                use_textline_orientation=False,
+                enable_mkldnn=False,
+            )
         except TypeError:
-            return PaddleOCR(lang="ch")
+            try:
+                return PaddleOCR(lang="ch", use_angle_cls=True)
+            except TypeError:
+                return PaddleOCR(lang="ch")
     except Exception as exc:  # pragma: no cover - exact OCR runtime depends on host
         raise OCRUnavailableError("PaddleOCR 初始化失败，请确认 paddlepaddle 已安装后再使用图片排雷") from exc
 

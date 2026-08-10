@@ -39,12 +39,30 @@ struct AestheticStylesView: View {
                             .padding(.horizontal, 14)
                             .frame(height: 42)
                             .background {
-                                Capsule()
-                                    .fill(Color.white)
+                                ZStack {
+                                    Capsule()
+                                        .fill(AppTheme.border.opacity(0.68))
+                                        .offset(y: 3)
+
+                                    Capsule()
+                                        .fill(Color.white)
+                                }
                             }
-                            .shadow(color: AppTheme.primaryText.opacity(0.14), radius: 12, y: 6)
+                            .overlay {
+                                Capsule()
+                                    .stroke(AppTheme.border.opacity(0.70), lineWidth: 1)
+                            }
+                            .overlay(alignment: .top) {
+                                Capsule()
+                                    .fill(Color.white.opacity(0.96))
+                                    .frame(height: 1)
+                                    .padding(.horizontal, 13)
+                                    .padding(.top, 1)
+                            }
+                            .shadow(color: AppTheme.primaryText.opacity(0.10), radius: 9, y: 5)
+                            .shadow(color: Color.white.opacity(0.90), radius: 2, y: -2)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(AestheticMicro3DPressButtonStyle())
                         .accessibilityLabel("进入沉浸风格浏览")
                     }
                     .padding(.top, 12)
@@ -97,6 +115,16 @@ struct AestheticStylesView: View {
         guard let styleID = pendingStyleID else { return }
         pendingStyleID = nil
         onOpenStyle(styleID)
+    }
+}
+
+private struct AestheticMicro3DPressButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .offset(y: configuration.isPressed ? 1.5 : 0)
+            .opacity(configuration.isPressed ? 0.88 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
@@ -318,10 +346,14 @@ struct AestheticStyleRow: View {
     var body: some View {
         Button(action: action) {
             HStack(alignment: .center, spacing: 10) {
-                VStack(alignment: .leading, spacing: 9) {
+                VStack(alignment: .leading, spacing: 7) {
                     Text(style.title)
                         .font(.system(size: 18, weight: .bold))
                         .foregroundStyle(.black)
+
+                    Text(style.startingCostLabel)
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.black.opacity(0.72))
 
                     Text("按这个风格装机  →")
                         .font(.system(size: 12, weight: .medium))

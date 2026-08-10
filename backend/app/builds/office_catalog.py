@@ -1,7 +1,6 @@
 import argparse
 import csv
 import json
-import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Sequence, Tuple
@@ -12,6 +11,7 @@ from app.builds.service import (
     BuildTemplatePart,
 )
 from app.builds.gpu_rules import gpu_brand_allowed_for_budget
+from app.catalog.rule_specs import minimum_psu_watt_for_specs
 from app.builds.templates import read_build_template_inputs
 from app.catalog.seed import extract_catalog_components, read_catalog_components
 
@@ -20,7 +20,7 @@ Profile = Literal["general", "media", "cuda"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 
-PRICE_DATE = "2026-07-30"
+PRICE_DATE = "2026-08-08"
 BUDGET_TIERS = tuple(range(6_000, 30_001, 1_000))
 LOW_BUDGET_TIERS = (3_000, 4_000, 5_000)
 PART_ROLES = (
@@ -78,6 +78,10 @@ OFFICE_RAM_IDS = (
     "office-ddr5-16gb-7200-c36",
     "base-ddr5-16gb-6000-c30",
 )
+VALUE_STORAGE_IDS = (
+    "base-ssd-fanxiang-s500-pro-512gb",
+    "base-ssd-fanxiang-s790e-1tb",
+)
 
 CPU_SCORE = {
     "u5-245k": 70,
@@ -114,13 +118,14 @@ PROFILE_APPS = {
 }
 PURCHASE_LABELS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
 GPU_VENDOR_LABELS = {"nvidia": "NVIDIA", "amd": "AMD", "intel": "Intel"}
+MINIMUM_650W_GPU_TDP = 140
 CONDITIONS_BY_MODE: Dict[PurchaseMode, Dict[str, Condition]] = {
     "new": {role: "new" for role in PART_ROLES},
     "used": {role: "used" for role in PART_ROLES},
     "mixed": {
         "cpu": "used",
         "motherboard": "new",
-        "gpu": "new",
+        "gpu": "used",
         "ram": "used",
         "storage": "new",
         "psu": "new",
@@ -172,7 +177,11 @@ class ArtifactPaths:
 
 def generate_office_templates() -> List[BuildTemplateInput]:
     catalog = _load_catalog()
-    templates = [_clone_low_budget_template(budget) for budget in LOW_BUDGET_TIERS]
+    templates = [
+        template
+        for budget in LOW_BUDGET_TIERS
+        if (template := _clone_low_budget_template(budget)) is not None
+    ]
     last_by_profile_mode: Dict[Tuple[Profile, PurchaseMode], BuildTemplateInput] = {}
 
     for budget in BUDGET_TIERS:
@@ -340,8 +349,10 @@ def _smallest_psu(
     condition: Condition,
     catalog: Dict[str, PricedPart],
 ) -> Optional[PricedPart]:
-    required = math.ceil(
-        (int(cpu.specs["tdp"]) + int(gpu.specs["tdp"])) * 1.5 + 100
+    required = minimum_psu_watt_for_specs(
+        int(cpu.specs["tdp"]),
+        gpu.component_id,
+        int(gpu.specs["tdp"]),
     )
     psus = sorted(
         (
@@ -394,12 +405,14 @@ def _build_template(
     )
 
 
-def _clone_low_budget_template(budget: int) -> BuildTemplateInput:
+def _clone_low_budget_template(budget: int) -> Optional[BuildTemplateInput]:
     candidates = [
         template
         for template in read_build_template_inputs(LOW_TEMPLATE_PATH)
         if template.details and template.details.target_budget == budget
     ]
+    if not candidates:
+        return None
     source = max(candidates, key=_existing_overall_score).model_copy(deep=True)
     details = source.details
     assert details is not None
@@ -526,6 +539,8 @@ def _write_reference_prices(
     referenced_ids.update(OFFICE_MOTHERBOARD_IDS)
     referenced_ids.update(OFFICE_GPU_IDS)
     referenced_ids.update(OFFICE_RAM_IDS)
+    referenced_ids.update(VALUE_STORAGE_IDS)
+    referenced_ids.update({"base-ssd-1tb-tlc", "base-ssd-2tb-tlc"})
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(
@@ -574,6 +589,7 @@ def _write_recommendations(
     component_ids.update(OFFICE_MOTHERBOARD_IDS)
     component_ids.update(OFFICE_GPU_IDS)
     component_ids.update(OFFICE_RAM_IDS)
+    component_ids.update(VALUE_STORAGE_IDS)
     path.write_text("\n".join(sorted(component_ids)) + "\n", encoding="utf-8")
 
 

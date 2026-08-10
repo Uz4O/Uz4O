@@ -261,7 +261,7 @@ enum AppMockData {
         let stylePart = PCPart(
             category: "外观与散热",
             model: "\(flow.style.title) · \(flow.restoration.tier.title)",
-            price: flow.quote.styleModule.midpointLabel,
+            price: "¥\(flow.appearanceCost.formatted())",
             condition: "全新",
             icon: "fan",
             accent: AppTheme.primaryText
@@ -271,7 +271,7 @@ enum AppMockData {
             name: "\(flow.style.title)颜值游戏配置",
             budget: flow.quote.total.label,
             totalPrice: flow.quote.total.midpointLabel,
-            useCase: "\(flow.resolvedResolution.title) · \(flow.selectedExperience.title) · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
+            useCase: "\(flow.selectedUseCase) · \(flow.resolvedResolution.title) · \(flow.selectedExperience.title) · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
             createdAt: "演示方案",
             parts: Array(parts.prefix(6)) + [stylePart]
         )

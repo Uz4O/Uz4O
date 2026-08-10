@@ -20,7 +20,7 @@ from app.main import create_app
 
 
 OPTION_COMPONENTS = {
-    "cpu": "i5-14600k",
+    "cpu": "i5-12600kf",
     "motherboard": "b760m",
     "gpu": "rtx-4060",
     "ram": "ram-6000-cl30",
@@ -31,7 +31,7 @@ OPTION_COMPONENTS = {
 }
 MIXED_USED_ROLES = {"cpu", "ram", "cooler", "case"}
 OPTION_SPECS = {
-    "i5-14600k": {"socket": "LGA1700", "tdp": 125, "perf_index": 78},
+    "i5-12600kf": {"socket": "LGA1700", "tdp": 150, "perf_index": 68},
     "b760m": {"socket": "LGA1700", "mem_type": "DDR5", "chipset": "B760"},
     "am5-board": {"socket": "AM5", "mem_type": "DDR5", "chipset": "B650"},
     "rtx-4060": {"vendor": "NVIDIA", "tdp": 115, "perf_index": 72},
@@ -135,12 +135,12 @@ def make_client(
             session,
             [
                 CatalogComponent(
-                    id="i5-14600k",
+                    id="i5-12600kf",
                     category="cpu",
-                    name="i5-14600K",
+                    name="i5-12600KF",
                     brand="Intel",
-                    detail_raw="14代 Raptor Lake Refresh · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 125, "perf_index": 78},
+                    detail_raw="12代 Alder Lake · LGA1700",
+                    specs={"socket": "LGA1700", "tdp": 150, "perf_index": 68},
                 ),
                 CatalogComponent(
                     id="rtx-4060",
@@ -226,7 +226,7 @@ def make_client(
                     use_cases=["gaming"],
                     tags=["2k", "quiet"],
                     components={
-                        "cpu": "i5-14600k",
+                        "cpu": "i5-12600kf",
                         "motherboard": "b760m",
                         "ram": "ram-6000-cl30",
                         "psu": "psu-750w",
@@ -306,7 +306,7 @@ def make_client(
             session.commit()
         if with_recommended_prices:
             for component_id, price in [
-                ("i5-14600k", 1700),
+                ("i5-12600kf", 1700),
                 ("rtx-4060", 2200),
                 ("b760m", 800),
                 ("ram-6000-cl30", 550),
@@ -359,7 +359,7 @@ def test_generate_build_returns_matching_template_plan() -> None:
     assert body["status"] == "ready"
     assert body["source"] == "template"
     assert body["template_id"] == "gaming-7000-2k"
-    assert body["components"]["cpu"] == "i5-14600k"
+    assert body["components"]["cpu"] == "i5-12600kf"
     assert body["compatibility"]["compatible"] is True
 
 
@@ -1010,7 +1010,7 @@ def test_build_options_can_apply_controlled_base_patch(monkeypatch) -> None:
     def successful_provider(*args, **kwargs):
         return AIProviderResult(
             base_template_id="base-7500-fps-used",
-            patches={"cpu": "i5-14600k"},
+            patches={"cpu": "i5-12600kf"},
             reasons=["保留 FPS 的 CPU 性能并增加无线网络。"],
             actual_cost_cents=12,
         )
@@ -1032,7 +1032,7 @@ def test_build_options_can_apply_controlled_base_patch(monkeypatch) -> None:
     assert len(body["options"]) == 1
     option = body["options"][0]
     assert option["source"] == "ai_provider"
-    assert option["components"]["cpu"] == "i5-14600k"
+    assert option["components"]["cpu"] == "i5-12600kf"
     assert option["estimated_total"] == 8000
     assert option["details"]["parts"][1]["name"].endswith(" WIFI")
 
@@ -1142,7 +1142,7 @@ def test_selected_option_cache_invalidates_after_catalog_change(monkeypatch) -> 
 
     session_override = client.app.dependency_overrides[get_session]()
     session = next(session_override)
-    component = session.get(HardwareComponent, "i5-14600k")
+    component = session.get(HardwareComponent, "i5-12600kf")
     component.updated_at = datetime.now(timezone.utc) + timedelta(seconds=1)
     session.commit()
     with pytest.raises(StopIteration):

@@ -10,12 +10,12 @@ from app.catalog.rule_specs import GPU_PERFORMANCE, OFFICE_ONLY_GPU_RULE_SPECS
 from app.catalog.seed import extract_catalog_components, read_catalog_components
 
 
-def test_current_swift_catalog_extracts_731_components() -> None:
+def test_current_swift_catalog_extracts_732_components() -> None:
     catalog_path = Path("../May/May/Models/HardwareCatalog.swift")
 
     components = extract_catalog_components(catalog_path)
 
-    assert len(components) == 731
+    assert len(components) == 732
     assert {component.category for component in components} == {
         "cpu",
         "gpu",
@@ -24,7 +24,7 @@ def test_current_swift_catalog_extracts_731_components() -> None:
         "storage",
         "psu",
     }
-    assert len({component.id for component in components}) == 731
+    assert len({component.id for component in components}) == 732
 
     cpus = [component for component in components if component.category == "cpu"]
     gpus = [component for component in components if component.category == "gpu"]
@@ -119,6 +119,30 @@ def test_current_gpu_whitelist_contains_priced_office_only_intel_arc_models() ->
     } == expected_prices
     assert office_only_ids == set(OFFICE_ONLY_GPU_RULE_SPECS)
     assert office_only_ids.isdisjoint(GPU_PERFORMANCE)
+
+
+def test_current_gpu_whitelist_contains_updated_rtx_50_series_prices() -> None:
+    rows = read_gpu_whitelist_price_rows(
+        Path("data/gpu-whitelist-prices-2026-07-07.csv"),
+        approved_at="2026-08-08",
+    )
+    prices = {row.component_id: row for row in rows}
+    expected_prices = {
+        "rtx-5070": (5200, 6699),
+        "rtx-5070-ti": (6999, 8699),
+        "rtx-5080": (9500, 14999),
+        "rtx-5090-d-v2": (19000, 22999),
+        "rtx-5090": (None, 32999),
+    }
+
+    assert {
+        component_id: (
+            prices[component_id].used_price,
+            prices[component_id].new_price,
+        )
+        for component_id in expected_prices
+    } == expected_prices
+    assert "rtx-5090-d" not in prices
 
 
 def test_current_motherboard_whitelist_contains_15th_gen_productivity_boards() -> None:

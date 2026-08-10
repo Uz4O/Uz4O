@@ -1,10 +1,10 @@
 # 7500-30000元装机基底配置
 
-价格日期：2026-07-30
+价格日期：2026-08-08
 
-说明：10000元以下每500元一个档位，10000元以上每1000元一个档位；FPS每种采购方式一套，3A和均衡每种采购方式包含NVIDIA与AMD两套。
+说明：10000元以下每500元一个档位，10000元以上每1000元一个档位；3A和均衡仅在达到对应预算门槛后拆分 NVIDIA 与 AMD 方案。
 二手方案中的电源、SSD和显卡仍按二手采购规则生成，购买前必须复核健康度、成色和保修。
-生成状态：2/26个价位完成，226/390套配置生成，不可用配置164套，失败配置0套。
+生成状态：6/26个价位完成，292/388套配置生成，不可用配置96套，失败配置0套。
 
 ## 7500元档
 
@@ -12,33 +12,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5060幻影师 2X | 全新 | ¥2800 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥7550**
+**总价：¥7748**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
-### FPS / 二手 / AMD
+### FPS / 二手 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 二手 | ¥2700 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥7730**
+**总价：¥7880**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -47,274 +47,17 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5060幻影师 2X | 全新 | ¥2800 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 | 二手 | ¥3000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥7530**
+**总价：¥7828**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### 3A / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7650**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 3A / 全新 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7400**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 3A / 二手 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7650**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 3A / 混合采购 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5060幻影师 2X | 全新 | ¥2800 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7530**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 3A / 混合采购 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7500**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 均衡 / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7400**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-### 均衡 / 全新 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7450**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-### 均衡 / 二手 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7500**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-### 均衡 / 二手 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XT | 二手 | ¥3200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7580**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-### 均衡 / 混合采购 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5060幻影师 2X | 全新 | ¥2800 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7530**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-### 均衡 / 混合采购 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7500**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-## 8000元档
-
-### FPS / 全新 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥8250**
-
-**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### FPS / 二手 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 二手 | ¥2700 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥8230**
-
-**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### FPS / 混合采购 / AMD
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥8030**
-
-**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### 3A / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5060幻影师 2X | 全新 | ¥2800 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥7950**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
 ### 3A / 全新 / AMD
 
@@ -322,14 +65,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8050**
+**总价：¥7948**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -338,11 +81,11 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
@@ -354,16 +97,256 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8150**
+**总价：¥7949**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7898**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XT | 二手 | ¥3200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7558**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 均衡 / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7748**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7500**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7949**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7698**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XT | 二手 | ¥3200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥7558**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+## 8000元档
+
+### FPS / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8348**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8430**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8428**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### 3A / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8348**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8348**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8430**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8329**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -372,15 +355,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8030**
+**总价：¥8428**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -388,16 +371,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8030**
+**总价：¥8358**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -405,16 +388,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8050**
+**总价：¥8098**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -424,14 +407,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8050**
+**总价：¥8348**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -439,16 +422,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8230**
+**总价：¥8200**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -457,15 +440,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XT | 二手 | ¥3200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8080**
+**总价：¥8329**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -473,16 +456,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8030**
+**总价：¥8048**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -490,35 +473,35 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XT | 二手 | ¥3200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8030**
+**总价：¥8008**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
 ## 8500元档
 
-### FPS / 全新 / AMD
+### FPS / 全新 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8650**
+**总价：¥8948**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -528,14 +511,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8630**
+**总价：¥8830**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -543,16 +526,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8780**
+**总价：¥8428**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -561,15 +544,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8450**
+**总价：¥8748**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -577,16 +560,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8650**
+**总价：¥8548**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -596,14 +579,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8630**
+**总价：¥8830**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥8879**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -611,16 +611,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 二手 | ¥550 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8800**
+**总价：¥8628**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -628,16 +628,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 二手 | ¥550 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8550**
+**总价：¥8888**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -645,16 +645,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8650**
+**总价：¥8548**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -662,16 +662,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8650**
+**总价：¥8548**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -679,16 +679,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8630**
+**总价：¥8750**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -697,15 +697,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8730**
+**总价：¥8529**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -713,16 +713,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 二手 | ¥550 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8800**
+**总价：¥8428**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -732,33 +732,33 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7800 XT | 全新 | ¥3700 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8430**
+**总价：¥8888**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
 ## 9000元档
 
-### FPS / 全新 / AMD
+### FPS / 全新 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9150**
+**总价：¥9148**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -768,31 +768,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9130**
+**总价：¥9330**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
-### FPS / 混合采购 / AMD
+### FPS / 混合采购 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8980**
+**总价：¥9378**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -800,16 +800,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9300**
+**总价：¥9147**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -817,16 +817,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9050**
+**总价：¥9458**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥9330**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -836,14 +853,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9130**
+**总价：¥9279**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -851,16 +868,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9200**
+**总价：¥9378**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -868,16 +885,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8950**
+**总价：¥9487**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -885,16 +902,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 7500F | 全新 | ¥600 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9300**
+**总价：¥8947**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -902,16 +919,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9050**
+**总价：¥8947**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -919,16 +936,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9200**
+**总价：¥9149**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -937,15 +954,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9230**
+**总价：¥9239**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -955,14 +972,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9200**
+**总价：¥9298**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -970,16 +987,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥8950**
+**总价：¥9088**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -991,14 +1008,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| 显卡 | RX 7800 XT | 全新 | ¥3700 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9750**
+**总价：¥9708**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1008,31 +1025,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 二手 | ¥150 | 用户历史配置中的650W二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 二手 | ¥200 | 用户2026-08-05提供的安耐美 GN650 V3 二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9480**
+**总价：¥9680**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
-### FPS / 混合采购 / AMD
+### FPS / 混合采购 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RTX 4070 SUPER | 二手 | ¥3600 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9480**
+**总价：¥9878**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1040,16 +1057,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9750**
+**总价：¥9848**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1057,16 +1074,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9500**
+**总价：¥9908**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1076,14 +1093,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9680**
+**总价：¥9729**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1092,15 +1109,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9630**
+**总价：¥9779**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1108,16 +1125,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9400**
+**总价：¥9908**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1125,16 +1142,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9680**
+**总价：¥9838**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1142,16 +1159,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 技嘉 RTX5060TI WF2MAX OC8G风魔MAX | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9750**
+**总价：¥9848**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1159,16 +1176,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C36 | 全新 | ¥1300 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9550**
+**总价：¥9708**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1176,16 +1193,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9680**
+**总价：¥9849**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1193,16 +1210,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9630**
+**总价：¥9439**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1210,16 +1227,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9400**
+**总价：¥9708**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1229,14 +1246,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9680**
+**总价：¥9688**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1248,14 +1265,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 9070 GRE | 全新 | ¥3500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| 显卡 | RX 7800 XT | 全新 | ¥3700 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10250**
+**总价：¥10608**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1265,14 +1282,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10430**
+**总价：¥10479**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1282,48 +1299,65 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10630**
+**总价：¥10638**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### 3A / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥10750**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
 ### 3A / 全新 / AMD
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10300**
+**总价：¥10658**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥10798**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥10129**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1333,14 +1367,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10330**
+**总价：¥10288**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1349,34 +1383,17 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10630**
+**总价：¥10338**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 均衡 / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥9950**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
 ### 均衡 / 全新 / AMD
 
@@ -1384,14 +1401,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10500**
+**总价：¥10658**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1399,16 +1416,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10180**
+**总价：¥10199**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1416,16 +1433,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10130**
+**总价：¥9939**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1433,16 +1450,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R5 9600X | 二手 | ¥950 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 650W金牌电源 | 全新 | ¥200 | 用户2026-07-19提供的6000元全新配置参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥9900**
+**总价：¥9908**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1452,14 +1469,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10380**
+**总价：¥10388**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1469,16 +1486,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11700**
+**总价：¥11358**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1488,14 +1505,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10930**
+**总价：¥10979**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1505,14 +1522,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11080**
+**总价：¥11038**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1520,16 +1537,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10950**
+**总价：¥11547**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1539,14 +1556,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11599**
+**总价：¥11757**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1556,14 +1573,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11580**
+**总价：¥11528**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥11039**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1572,15 +1606,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11450**
+**总价：¥11707**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥11138**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1588,16 +1639,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN650 V3 650W | 全新 | ¥299 | 用户2026-08-05提供的安耐美 GN650 V3 当前参考价 | 2026-08-05 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥10950**
+**总价：¥11547**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1607,14 +1658,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11200**
+**总价：¥11358**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1623,15 +1674,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11580**
+**总价：¥11328**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥11039**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1641,14 +1709,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11450**
+**总价：¥11507**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1658,33 +1726,33 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11130**
+**总价：¥11138**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
 ## 12000元档
 
-### FPS / 全新 / NVIDIA
+### FPS / 全新 / AMD
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥5400 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12650**
+**总价：¥12558**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1694,14 +1762,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12330**
+**总价：¥12278**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1710,15 +1778,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 二手 | ¥5200 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12780**
+**总价：¥12038**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1727,15 +1795,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12450**
+**总价：¥12407**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1744,15 +1812,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12330**
+**总价：¥12778**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1760,16 +1828,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12780**
+**总价：¥12587**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1777,16 +1845,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12650**
+**总价：¥12057**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1796,14 +1864,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥11900**
+**总价：¥12058**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1813,14 +1881,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12080**
+**总价：¥12028**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1830,14 +1898,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥12030**
+**总价：¥12087**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1848,15 +1916,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13749**
+**总价：¥13607**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1866,14 +1934,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥7200 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13180**
+**总价：¥13128**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1883,14 +1951,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13280**
+**总价：¥13337**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -1898,16 +1966,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R5 9600X | 全新 | ¥1050 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥13607**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13749**
+**总价：¥13758**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1915,16 +2000,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13680**
+**总价：¥13428**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥13229**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1932,16 +2034,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13700**
+**总价：¥13337**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥13638**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -1949,16 +2068,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13350**
+**总价：¥13257**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1966,16 +2085,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13680**
+**总价：¥13128**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -1985,14 +2104,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥13030**
+**总价：¥13087**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2004,14 +2123,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070白魔龙 3X | 全新 | ¥6699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14550**
+**总价：¥14307**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2019,16 +2138,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14430**
+**总价：¥13828**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2038,14 +2157,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥7100 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 二手 | ¥6999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14080**
+**总价：¥14137**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2054,15 +2173,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14700**
+**总价：¥14407**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥14658**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2070,16 +2206,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B850M AYW OC | 二手 | ¥1000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14430**
+**总价：¥14789**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥14139**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2089,14 +2242,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14080**
+**总价：¥14688**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥13638**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2106,14 +2276,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14700**
+**总价：¥14407**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2121,16 +2291,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 二手 | ¥450 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14430**
+**总价：¥14239**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2140,14 +2310,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14080**
+**总价：¥14688**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2158,15 +2328,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15800**
+**总价：¥15607**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2175,15 +2345,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14930**
+**总价：¥15189**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2193,14 +2363,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15030**
+**总价：¥15638**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2209,15 +2379,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15600**
+**总价：¥15607**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥15158**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2227,14 +2414,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14930**
+**总价：¥15689**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥14929**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2244,14 +2448,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15030**
+**总价：¥15638**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥14438**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2259,16 +2480,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15800**
+**总价：¥15107**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2277,15 +2498,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥14930**
+**总价：¥15189**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2295,14 +2516,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15030**
+**总价：¥15638**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2314,14 +2535,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16800**
+**总价：¥16307**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2329,16 +2550,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15980**
+**总价：¥16039**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2347,15 +2568,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16030**
+**总价：¥16138**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2364,15 +2585,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B850M AYW OC | 全新 | ¥1299 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15999**
+**总价：¥16407**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥15158**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2382,14 +2620,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15580**
+**总价：¥16339**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥15839**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2399,14 +2654,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16030**
+**总价：¥16638**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥15938**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2414,16 +2686,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16800**
+**总价：¥15907**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2432,15 +2704,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 战斧导弹 | 二手 | ¥1500 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥15580**
+**总价：¥16039**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2449,15 +2721,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16030**
+**总价：¥16138**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2467,16 +2739,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17100**
+**总价：¥16907**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2485,15 +2757,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17180**
+**总价：¥16739**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2502,15 +2774,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16730**
+**总价：¥17038**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2519,15 +2791,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16900**
+**总价：¥17607**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C32 | 全新 | ¥1700 | 用户2026-07-17提供的DDR5 6000 C32 16GB参考价 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥17458**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2537,14 +2826,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16780**
+**总价：¥17539**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E GLACIAL 冰川 | 二手 | ¥9000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥17629**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2553,15 +2859,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17430**
+**总价：¥16938**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥17538**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2569,16 +2892,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C28 | 全新 | ¥1900 | 用户2026-07-17提供的DDR5 6000 C28 16GB参考价 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17100**
+**总价：¥17007**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2588,14 +2911,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥16780**
+**总价：¥17539**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2604,15 +2927,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 16GB 6000 C30 | 二手 | ¥1300 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17430**
+**总价：¥16938**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2623,15 +2946,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18300**
+**总价：¥18307**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2640,15 +2963,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 二手 | ¥1700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18480**
+**总价：¥17939**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2657,15 +2980,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18030**
+**总价：¥18338**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2673,16 +2996,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥17900**
+**总价：¥18107**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥16858**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2690,16 +3030,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18480**
+**总价：¥17639**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥17139**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2707,16 +3064,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18030**
+**总价：¥18238**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥18038**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2725,15 +3099,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18300**
+**总价：¥18107**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2741,16 +3115,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 二手 | ¥1700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18080**
+**总价：¥17939**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2758,16 +3132,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18030**
+**总价：¥17938**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2778,15 +3152,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19300**
+**总价：¥19107**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2795,15 +3169,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E ACE MAX | 二手 | ¥3800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19280**
+**总价：¥19239**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2812,15 +3186,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19130**
+**总价：¥18638**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2828,16 +3202,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18900**
+**总价：¥19307**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥19158**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2845,16 +3236,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 MEG X870E ACE MAX | 二手 | ¥3800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19280**
+**总价：¥19639**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E GLACIAL 冰川 | 二手 | ¥9000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 二手 | ¥249 | 用户2026-08-06提供的安耐美 GN750W V3 二手参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥18929**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2862,16 +3270,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19130**
+**总价：¥19438**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 二手 | ¥4000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥18838**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -2879,16 +3304,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18900**
+**总价：¥18607**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2897,15 +3322,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E DARK HERO | 二手 | ¥4000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19080**
+**总价：¥18839**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2914,15 +3339,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥18830**
+**总价：¥19338**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -2933,15 +3358,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19600**
+**总价：¥20207**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2950,15 +3375,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E ACE MAX | 二手 | ¥3800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20080**
+**总价：¥20039**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2967,15 +3392,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20030**
+**总价：¥19838**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -2983,16 +3408,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20300**
+**总价：¥20607**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥20758**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3000,16 +3442,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20080**
+**总价：¥20439**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E GLACIAL 冰川 | 二手 | ¥9000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥19839**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3017,16 +3476,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20030**
+**总价：¥20738**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥19638**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3034,16 +3510,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19800**
+**总价：¥19907**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3052,15 +3528,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E DARK HERO | 二手 | ¥4000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥19680**
+**总价：¥19839**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3069,15 +3545,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20130**
+**总价：¥20238**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3088,15 +3564,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20800**
+**总价：¥21107**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3105,15 +3581,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21780**
+**总价：¥20839**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3123,14 +3599,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20530**
+**总价：¥21138**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3138,16 +3614,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21200**
+**总价：¥20607**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥20758**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3155,16 +3648,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21780**
+**总价：¥20439**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E GLACIAL 冰川 | 二手 | ¥9000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥19839**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3172,16 +3682,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20530**
+**总价：¥20738**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | RX 7900 XTX | 二手 | ¥4500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥19638**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3191,14 +3718,14 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 显卡 | 微星 RTX5070TI万图师 3X | 全新 | ¥8699 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21100**
+**总价：¥21007**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3206,16 +3733,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21380**
+**总价：¥20839**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3223,16 +3750,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥20530**
+**总价：¥20738**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3242,16 +3769,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥22100**
+**总价：¥22507**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3261,14 +3788,31 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21780**
+**总价：¥22539**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥22288**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3276,16 +3820,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21700**
+**总价：¥22707**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 全新 / AMD
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 蓝宝石 9070XT 16G 脉动 | 全新 | ¥4950 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 GN750W V3 750W | 全新 | ¥359 | 用户2026-08-06提供的安耐美 GN750W V3 当前参考价 | 2026-08-06 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥20758**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3293,16 +3854,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21780**
+**总价：¥22139**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥20738**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3310,16 +3888,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21700**
+**总价：¥22507**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3327,16 +3905,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 二手 | ¥350 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 二手 | ¥250 | 用户2026-07-19提供的850W金牌电源二手参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥21780**
+**总价：¥22139**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3344,16 +3922,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥22430**
+**总价：¥22288**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3364,15 +3942,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥23800**
+**总价：¥23407**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥22539**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3382,31 +3977,99 @@
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥22830**
+**总价：¥23438**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### 3A / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥23407**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥22139**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥23038**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
 ### 均衡 / 全新 / NVIDIA
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥23400**
+**总价：¥23407**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥22539**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3414,16 +4077,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥22830**
+**总价：¥23038**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3434,87 +4097,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥24400**
-
-**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
-
-### 均衡 / 全新 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥9350 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 850W金牌ATX 3.1电源 | 全新 | ¥400 | 用户2026-07-19提供的850W金牌电源全新参考价 | 2026-07-19 |
-| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥24000**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-## 26000元档
-
-### 3A / 混合采购 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥26500**
-
-**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
-
-### 均衡 / 混合采购 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9700X | 二手 | ¥1300 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
-| 散热器 | 6热管风冷 | 二手 | ¥70 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-
-**总价：¥26500**
-
-**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
-
-## 27000元档
-
-### FPS / 混合采购 / NVIDIA
-
-| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
-| --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
-| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥27080**
+**总价：¥24407**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3522,16 +4113,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥27550**
+**总价：¥24707**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 二手 | ¥6300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥22139**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3539,16 +4147,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥27080**
+**总价：¥24638**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3556,16 +4164,224 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9700X | 全新 | ¥1500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
-| 散热器 | 6热管风冷 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥27550**
+**总价：¥24407**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+## 25000元档
+
+### FPS / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥24907**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### 3A / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥24707**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E GLACIAL 冰川 | 二手 | ¥9000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 二手 | ¥659 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥24839**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E EXTREME | 全新 | ¥8600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 二手 | ¥9500 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥24638**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 均衡 / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥25107**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+## 26000元档
+
+### FPS / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26407**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26529**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### 3A / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26707**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26629**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26429**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 均衡 / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26207**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 B650M PLUS 重炮手 | 二手 | ¥650 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26529**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3573,16 +4389,171 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
 | 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥27080**
+**总价：¥26429**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+## 27000元档
+
+### FPS / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26907**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27029**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27329**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### 3A / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27207**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27279**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27729**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 均衡 / 全新 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 全新 | ¥3400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥26907**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 二手 | ¥1150 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27029**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 混合采购 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27329**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3592,16 +4563,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28300**
+**总价：¥27807**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27679**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3610,15 +4598,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28230**
+**总价：¥28129**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3627,15 +4615,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28800**
+**总价：¥27207**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E NEO | 二手 | ¥3000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥28479**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3643,16 +4648,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28230**
+**总价：¥27729**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3661,15 +4666,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28800**
+**总价：¥27607**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 二手 | ¥1800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥27679**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3678,15 +4700,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 X870E 刀锋钛 | 全新 | ¥2200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥28230**
+**总价：¥28129**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3696,16 +4718,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29800**
+**总价：¥29507**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E ACE MAX | 二手 | ¥3800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥29679**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3714,15 +4753,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29230**
+**总价：¥29229**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3730,16 +4769,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29400**
+**总价：¥29507**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 二手 | ¥4000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥29479**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3747,16 +4803,16 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 二手 | ¥1650 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 七彩虹 5090D ADOC 24G V2 | 全新 | ¥23300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29580**
+**总价：¥29729**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3764,16 +4820,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29400**
+**总价：¥29507**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E ACE MAX | 二手 | ¥3800 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥29679**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3782,15 +4855,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 X870E 战斧导弹 | 全新 | ¥1900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29230**
+**总价：¥29229**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3801,15 +4874,32 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥30300**
+**总价：¥30107**
+
+**适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
+
+### FPS / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥30479**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3818,15 +4908,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥30630**
+**总价：¥30129**
 
 **适用用户：** 主要玩CS2、无畏契约、PUBG、三角洲行动等高帧率游戏的用户
 
@@ -3834,16 +4924,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 7800X3D | 全新 | ¥1800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 PRIME B650M-K | 全新 | ¥700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 七彩虹 5090D ADOC 24G V2 | 全新 | ¥23300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥30600**
+**总价：¥29507**
+
+**适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
+
+### 3A / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 二手 | ¥4600 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥30079**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3852,15 +4959,15 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9800X3D | 二手 | ¥2400 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 B650M PLUS 重炮手 | 全新 | ¥900 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 七彩虹 5090D ADOC 24G V2 | 全新 | ¥23300 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 华硕 ROG X870E DARK HERO | 全新 | ¥4700 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥30530**
+**总价：¥30229**
 
 **适用用户：** 主要玩高画质3A单机、重视分辨率和画质的用户
 
@@ -3868,16 +4975,33 @@
 
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
-| CPU | R7 9850X3D | 全新 | ¥3100 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 微星 B850M POWER | 全新 | ¥1400 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
-| 内存 | DDR5 32GB 6000 C32 | 全新 | ¥3400 | 由用户提供的DDR5 6000 C32 16GB参考价按两根计算 | 2026-07-17 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
-| 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
+| CPU | R7 9800X3D | 全新 | ¥2500 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 微星 MEG X870E GODLIKE MAX | 全新 | ¥7000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 微星 RTX5080万图师 3X | 全新 | ¥14999 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C28 | 全新 | ¥3800 | 由用户提供的DDR5 6000 C28 16GB参考价按两根计算 | 2026-07-17 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
+| 电源 | 安耐美 PX850DF 850W | 全新 | ¥659 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 散热器 | 双塔6热管风冷 | 全新 | ¥150 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 全新 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥29900**
+**总价：¥29907**
+
+**适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
+
+### 均衡 / 二手 / NVIDIA
+
+| 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
+| --- | --- | --- | ---: | --- | --- |
+| CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 主板 | 华硕 ROG X870E DARK HERO | 二手 | ¥4000 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
+| 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 二手 | ¥500 | 用户2026-08-05提供的二手参考价 | 2026-08-05 |
+| 电源 | 追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组） | 二手 | ¥799 | 用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品 | 2026-08-08 |
+| 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+
+**总价：¥29879**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户
 
@@ -3886,14 +5010,14 @@
 | 配件 | 型号 | 状态 | 参考价 | 价格来源 | 来源日期 |
 | --- | --- | --- | ---: | --- | --- |
 | CPU | R7 9850X3D | 二手 | ¥2800 | cpu-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 主板 | 华硕 ROG X870E-A 吹雪 | 全新 | ¥3300 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
-| 显卡 | 技嘉 RTX5090D GAMING OC24G魔鹰 | 全新 | ¥20600 | gpu-whitelist-prices-2026-07-07.csv | 2026-07-30 |
+| 主板 | 微星 MEG X870E ACE MAX | 全新 | ¥4200 | motherboard-whitelist-prices-2026-07-07.csv | 2026-07-07 |
+| 显卡 | 七彩虹 5090D ADOC 24G V2 | 二手 | ¥19000 | gpu-whitelist-prices-2026-07-07.csv | 2026-08-08 |
 | 内存 | DDR5 32GB 6000 C30 | 二手 | ¥2600 | 由用户提供的DDR5 16GB历史参考价按两根计算 | 2026-07-07 |
-| SSD | 512GB TLC SSD | 全新 | ¥500 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
+| SSD | 宏碁掠夺者 GM7 512GB | 全新 | ¥699 | 用户2026-08-05提供的当前参考价 | 2026-08-05 |
 | 电源 | 九州风神 PQ1200G 金牌全模组电源 | 全新 | ¥650 | diyxx.com 公开商品目录（2026-07-30） | 2026-07-30 |
 | 散热器 | 双塔6热管风冷 | 二手 | ¥100 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 | 机箱 | 普通中塔机箱 | 二手 | ¥80 | china-pc-build-advisor REFERENCE.md 用户历史参考价 | 2026-07-07 |
 
-**总价：¥30630**
+**总价：¥30129**
 
 **适用用户：** 游戏类型比较杂，希望一套配置长期兼顾FPS和3A的用户

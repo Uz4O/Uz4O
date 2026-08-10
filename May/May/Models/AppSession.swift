@@ -92,6 +92,23 @@ final class AppSession: ObservableObject {
 
     func login(phone: String, code: String) async throws {
         let response = try await api.login(phone: phone, code: code)
+        try persistLogin(response)
+    }
+
+    func loginWithApple(
+        identityToken: String,
+        authorizationCode: String?,
+        nonce: String
+    ) async throws {
+        let response = try await api.loginWithApple(
+            identityToken: identityToken,
+            authorizationCode: authorizationCode,
+            nonce: nonce
+        )
+        try persistLogin(response)
+    }
+
+    private func persistLogin(_ response: LoginResponse) throws {
         try tokenStore.save(response.accessToken)
         accessToken = response.accessToken
         accountID = response.account.id

@@ -7,6 +7,9 @@ struct HomeView: View {
     let onOpenConfigReview: () -> Void
     let onOpenUpgrade: () -> Void
     let onOpenAestheticStyle: (String) -> Void
+    let isWordmarkVisible: Bool
+    let isContentVisible: Bool
+    let onWordmarkFrameChange: (CGRect) -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
     private var features: [HomeDashboardFeature] {
@@ -69,6 +72,7 @@ struct HomeView: View {
                         onSwipeFeature: selectFeature
                     )
                     .padding(.top, 18)
+                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.10))
 
                     HomeFeatureSelector(
                         features: features,
@@ -80,6 +84,7 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 24)
+                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.24))
 
                     HomeBuildStyleSection(
                         styles: AestheticBuildStyle.featured,
@@ -88,12 +93,17 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 34)
+                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.38))
                 }
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.bottom, 112)
                 .frame(maxWidth: .infinity)
             }
             .background(HomeBackgroundColor.ignoresSafeArea())
+        }
+        .onPreferenceChange(HomeWordmarkFramePreferenceKey.self) { frame in
+            guard frame != .zero else { return }
+            onWordmarkFrameChange(frame)
         }
     }
 
@@ -118,6 +128,48 @@ struct HomeView: View {
         Text("UzBox")
             .font(.system(size: 28, weight: .heavy))
             .foregroundStyle(.black)
+            .opacity(isWordmarkVisible ? 1 : 0)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: HomeWordmarkFramePreferenceKey.self,
+                        value: proxy.frame(in: .global)
+                    )
+                }
+            }
+    }
+}
+
+private struct HomeWordmarkFramePreferenceKey: PreferenceKey {
+    static var defaultValue: CGRect = .zero
+
+    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
+        let next = nextValue()
+        if next != .zero { value = next }
+    }
+}
+
+private struct HomeDropReveal: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    let isVisible: Bool
+    let delay: Double
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isVisible ? 1 : 0)
+            .blur(radius: isVisible || reduceMotion ? 0 : 5)
+            .offset(y: isVisible || reduceMotion ? 0 : -30)
+            .scaleEffect(isVisible || reduceMotion ? 1 : 0.985, anchor: .top)
+            .animation(revealAnimation, value: isVisible)
+    }
+
+    private var revealAnimation: Animation {
+        if reduceMotion {
+            return .easeOut(duration: 0.16).delay(delay)
+        }
+        return .spring(response: 0.62, dampingFraction: 0.76, blendDuration: 0.12)
+            .delay(delay)
     }
 }
 
@@ -238,9 +290,27 @@ private struct HomeHeroCard: View {
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(width: 136, height: 44)
-                    .background(Color.black, in: Capsule())
+                    .background {
+                        ZStack {
+                            Capsule()
+                                .fill(Color.black.opacity(0.58))
+                                .offset(y: 3)
+
+                            Capsule()
+                                .fill(Color.black)
+                        }
+                    }
+                    .overlay(alignment: .top) {
+                        Capsule()
+                            .fill(Color.white.opacity(0.18))
+                            .frame(height: 1)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 1)
+                    }
+                    .shadow(color: Color.black.opacity(0.18), radius: 8, x: 0, y: 5)
+                    .shadow(color: Color.white.opacity(0.72), radius: 2, x: 0, y: -2)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(HomeMicro3DPressButtonStyle())
             }
             .padding(.top, 31)
             .padding(.bottom, 20)
@@ -350,6 +420,16 @@ private struct HomeFeatureSelector: View {
 
 }
 
+private struct HomeMicro3DPressButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .offset(y: configuration.isPressed ? 1.5 : 0)
+            .opacity(configuration.isPressed ? 0.88 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
 private struct HomeBuildStyleSection: View {
     let styles: [AestheticBuildStyle]
     let onOpen: (AestheticBuildStyle) -> Void
@@ -393,6 +473,9 @@ private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
         onOpenPerformanceTest: {},
         onOpenConfigReview: {},
         onOpenUpgrade: {},
-        onOpenAestheticStyle: { _ in }
+        onOpenAestheticStyle: { _ in },
+        isWordmarkVisible: true,
+        isContentVisible: true,
+        onWordmarkFrameChange: { _ in }
     )
 }

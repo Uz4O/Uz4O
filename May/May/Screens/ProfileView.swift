@@ -65,10 +65,9 @@ struct ProfileView: View {
                             }
                             .padding(.horizontal, 20)
                             .padding(.vertical, 18)
-                            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 22))
-                            .modifier(AppTheme.cardShadow)
+                            .micro3DSurface(cornerRadius: 22)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(Micro3DPressButtonStyle())
 
                         ProfileSection(title: "我的方案", items: accountItems, action: action)
                         ProfileSection(title: "设置与帮助", items: helpItems, action: action)
@@ -181,7 +180,7 @@ private struct ProfileSection: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(Micro3DPressButtonStyle())
                     .disabled(!item.isAvailable)
 
                     if index != items.count - 1 {
@@ -191,8 +190,7 @@ private struct ProfileSection: View {
                     }
                 }
             }
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 24))
-            .modifier(AppTheme.cardShadow)
+            .micro3DSurface(cornerRadius: 24)
         }
     }
 }

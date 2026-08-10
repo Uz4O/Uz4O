@@ -20,6 +20,7 @@ from app.perf.models import (
 )
 from app.perf.profiles import APPROVED_GAME_PROFILES
 from app.perf.readiness import required_model_keys
+from app.perf.time_spy import effective_performance_score, has_time_spy_scores
 
 
 @dataclass(frozen=True)
@@ -155,12 +156,25 @@ def calibrate_available_models(
             skipped_models.append(key)
             continue
 
-        cpu_points = _limit_points(cpu_anchors, profiles, "cpu")
-        gpu_points = _limit_points(gpu_anchors, profiles, "gpu")
+        gpu_axis_ids = {
+            row.gpu_id
+            for row in gpu_anchors + validation_anchors
+        }
+        use_time_spy = has_time_spy_scores(gpu_axis_ids)
+        cpu_points = _limit_points(cpu_anchors, profiles, "cpu", False)
+        gpu_points = _limit_points(
+            gpu_anchors,
+            profiles,
+            "gpu",
+            use_time_spy,
+        )
         validation_samples = [
             ValidationSample(
                 cpu_score=profiles[row.cpu_id].performance_score,
-                gpu_score=profiles[row.gpu_id].performance_score,
+                gpu_score=effective_performance_score(
+                    profiles[row.gpu_id],
+                    use_time_spy=use_time_spy,
+                ),
                 actual_average_fps=row.average_fps,
                 is_common=(
                     profiles[row.cpu_id].is_common
@@ -212,11 +226,20 @@ def _limit_points(
     anchors: Sequence[GamePerformanceAnchor],
     profiles: Dict[str, HardwarePerformanceProfile],
     axis: str,
+    use_time_spy: bool,
 ) -> List[LimitPoint]:
     fps_by_score: Dict[int, List[int]] = {}
     for row in anchors:
         component_id = row.cpu_id if axis == "cpu" else row.gpu_id
-        score = profiles[component_id].performance_score
+        profile = profiles[component_id]
+        score = (
+            profile.performance_score
+            if axis == "cpu"
+            else effective_performance_score(
+                profile,
+                use_time_spy=use_time_spy,
+            )
+        )
         fps_by_score.setdefault(score, []).append(row.average_fps)
     return [
         LimitPoint(score, round(mean(fps_values)))

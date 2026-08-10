@@ -214,6 +214,7 @@ enum HardwareCatalog {
     ]
 
     static let motherboards: [HardwareCatalogItem] = [
+        HardwareCatalogItem(id: "msi-b760m-a", name: "B760M-A", brand: "微星", detail: "Intel · LGA1700 · B760"),
         HardwareCatalogItem(id: "gigabyte-b860-ds3h", name: "B860 DS3H", brand: "技嘉", detail: "Intel · LGA1851 · B860"),
         HardwareCatalogItem(id: "gigabyte-b860-ds3h-wifi6e", name: "B860 DS3H WIFI6E", brand: "技嘉", detail: "Intel · LGA1851 · B860"),
         HardwareCatalogItem(id: "gigabyte-b860-eagle-wifi6e", name: "B860 EAGLE WIFI6E", brand: "技嘉", detail: "Intel · LGA1851 · B860"),

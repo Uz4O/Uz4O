@@ -3,7 +3,7 @@ import SwiftUI
 struct AestheticStyleOverviewView: View {
     let styleID: String
     let onClose: () -> Void
-    let onStartBuild: () -> Void
+    let onStartBuild: (Int) -> Void
 
     @State private var selectedColor: AestheticStyleColor = .black
     @State private var selectedAlternatives: [String: String] = [:]
@@ -46,6 +46,7 @@ struct AestheticStyleOverviewView: View {
 
                         AestheticAlternativeModal(
                             part: part,
+                            caseImageName: style.heroImage(for: selectedColor),
                             originalPrice: part.originalPrice(for: selectedColor),
                             selectedAlternativeID: selectedAlternatives[part.id],
                             onClose: dismissAlternatives,
@@ -55,8 +56,8 @@ struct AestheticStyleOverviewView: View {
                                 } else {
                                     selectedAlternatives.removeValue(forKey: part.id)
                                 }
-                                dismissAlternatives()
-                            }
+                            },
+                            onConfirm: dismissAlternatives
                         )
                         .frame(
                             width: min(proxy.size.width - 32, 400),
@@ -106,8 +107,28 @@ struct AestheticStyleOverviewView: View {
             .frame(maxWidth: .infinity)
             .frame(height: 244)
             .padding(.top, 4)
-            .scaleEffect(CGFloat(style.heroScale(for: selectedColor)))
+            .scaleEffect(heroImageScale)
             .contentTransition(.opacity)
+    }
+
+    private var heroImageScale: CGFloat {
+        let selectedImageName = style.heroImage(for: selectedColor)
+        let selectedVisibleHeight = visibleHeight(for: selectedImageName)
+        let targetVisibleHeight = AestheticStyleColor.allCases
+            .map { visibleHeight(for: style.heroImage(for: $0)) }
+            .max() ?? selectedVisibleHeight
+
+        guard selectedVisibleHeight > 0 else {
+            return CGFloat(style.heroScale(for: selectedColor))
+        }
+
+        return CGFloat(style.heroScale(for: selectedColor))
+            * targetVisibleHeight
+            / selectedVisibleHeight
+    }
+
+    private func visibleHeight(for imageName: String) -> CGFloat {
+        AestheticExplorerAssetCatalog.visibleBounds(for: imageName)?.height ?? 1
     }
 
     private var titleSection: some View {
@@ -200,7 +221,7 @@ struct AestheticStyleOverviewView: View {
     private var totalBar: some View {
         HStack(alignment: .bottom, spacing: 18) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("当前方案预算")
+                Text("外观配件费用")
                     .font(.system(size: 10, weight: .regular))
                     .foregroundStyle(AppTheme.secondaryText)
 
@@ -211,7 +232,7 @@ struct AestheticStyleOverviewView: View {
 
             Spacer(minLength: 8)
 
-            Button(action: onStartBuild) {
+            Button { onStartBuild(totalPrice) } label: {
                 HStack(spacing: 14) {
                     Text("按这个方案装机")
                     Image(systemName: "arrow.right")
@@ -287,7 +308,7 @@ private struct AestheticStylePartRow: View {
                     .foregroundStyle(AppTheme.primaryText)
 
                 Button(action: action) {
-                    Text("平替")
+                    Text("替换")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(width: 54, height: 28)
@@ -301,23 +322,18 @@ private struct AestheticStylePartRow: View {
     }
 
     private var iconName: String {
-        switch part.name {
-        case "机箱": return "rectangle.inset.filled"
-        case "一体式水冷": return "drop"
-        case "风扇套装", "风扇与控制器", "LCD 风扇", "LED 风扇": return "fanblades"
-        case "副屏": return "display"
-        case "定制线材", "霓虹线": return "cable.connector"
-        default: return "square.stack.3d.up"
-        }
+        aestheticPartIconName(for: part.name)
     }
 }
 
 private struct AestheticAlternativeModal: View {
     let part: AestheticStylePart
+    let caseImageName: String
     let originalPrice: Int
     let selectedAlternativeID: String?
     let onClose: () -> Void
     let onSelect: (AestheticStyleAlternative?) -> Void
+    let onConfirm: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -349,32 +365,54 @@ private struct AestheticAlternativeModal: View {
                             .font(.system(size: 21, weight: .heavy))
                             .foregroundStyle(AppTheme.primaryText)
 
-                        Text("请选择一个替代配件，价格会实时同步到方案预算。")
+                        Text("请选择一个替代配件，价格会实时同步到外观配件费用。")
                             .font(.appBody)
                             .foregroundStyle(AppTheme.secondaryText)
                     }
 
-                    replacementRow(
-                        title: "当前方案配件",
-                        detail: part.detail,
-                        price: originalPrice,
-                        isSelected: selectedAlternativeID == nil
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.flexible(), spacing: 12),
+                            GridItem(.flexible(), spacing: 12)
+                        ],
+                        spacing: 12
                     ) {
-                        onSelect(nil)
-                    }
+                        replacementCard(
+                            title: "当前方案配件",
+                            detail: part.detail,
+                            price: originalPrice,
+                            isSelected: selectedAlternativeID == nil,
+                            action: { onSelect(nil) }
+                        )
 
-                    ForEach(part.alternatives) { alternative in
-                        replacementRow(
-                            title: alternative.name,
-                            detail: alternative.detail,
-                            price: alternative.price,
-                            isSelected: selectedAlternativeID == alternative.id
-                        ) {
-                            onSelect(alternative)
+                        ForEach(part.alternatives) { alternative in
+                            replacementCard(
+                                title: alternative.name,
+                                detail: alternative.detail,
+                                price: alternative.price,
+                                isSelected: selectedAlternativeID == alternative.id,
+                                action: { onSelect(alternative) }
+                            )
                         }
                     }
                 }
                 .padding(20)
+            }
+
+            HStack {
+                Spacer()
+
+                Button("确定", action: onConfirm)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 92, height: 40)
+                    .background(Color.black, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 10)
+            .padding(.bottom, 16)
+            .overlay(alignment: .top) {
+                Divider()
             }
         }
         .background(Color.white, in: RoundedRectangle(cornerRadius: 26))
@@ -382,53 +420,91 @@ private struct AestheticAlternativeModal: View {
         .shadow(color: .black.opacity(0.2), radius: 30, y: 16)
     }
 
-    private func replacementRow(
+    private func replacementCard(
         title: String,
         detail: String,
         price: Int,
         isSelected: Bool,
         action: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                Image(systemName: "shippingbox")
-                    .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
-                    .frame(width: 64, height: 64)
-                    .background(
-                        isSelected ? Color.white.opacity(0.12) : Color(white: 0.96),
-                        in: RoundedRectangle(cornerRadius: 14)
-                    )
+        let imageKey = title == "当前方案配件" ? detail : title
+        let imageName = part.name == "机箱"
+            ? caseImageName
+            : AestheticAccessoryImageCatalog.imageName(for: imageKey)
 
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(title)
-                        .font(.appSubheadline)
-                        .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
-                    Text(detail)
-                        .font(.appCaption)
-                        .foregroundStyle(isSelected ? .white.opacity(0.7) : AppTheme.secondaryText)
+        return Button(action: action) {
+            VStack(alignment: .leading, spacing: 0) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(isSelected ? Color.white.opacity(0.14) : Color.black.opacity(0.04))
+
+                    if let imageName {
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .padding(12)
+                    } else {
+                        Image(systemName: aestheticPartIconName(for: part.name))
+                            .font(.system(size: 48, weight: .medium))
+                            .foregroundStyle(isSelected ? .white : .black)
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 156)
 
-                Spacer()
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(isSelected ? .white : .black)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.78)
 
-                Text("¥\(price.formatted())")
-                    .font(.appSubheadline)
-                    .foregroundStyle(isSelected ? .white : AppTheme.primaryText)
+                    Text(detail)
+                        .font(.system(size: 10, weight: .regular))
+                        .foregroundStyle(isSelected ? .white.opacity(0.7) : Color.black.opacity(0.45))
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.76)
 
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(isSelected ? .white : AppTheme.border)
+                    HStack(spacing: 4) {
+                        Text("¥\(price.formatted())")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(isSelected ? .white : .black)
+
+                        Spacer(minLength: 4)
+
+                        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundStyle(isSelected ? .white : Color.black.opacity(0.14))
+                    }
+                }
+                .padding(12)
             }
-            .padding(14)
-            .background(isSelected ? AppTheme.primaryText : AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .frame(minHeight: 252, alignment: .top)
+            .background(
+                isSelected ? Color.black : Color.white,
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+            )
             .overlay {
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: 1)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(isSelected ? Color.black : Color.black.opacity(0.12), lineWidth: 1)
             }
         }
         .buttonStyle(.plain)
     }
 }
 
+private func aestheticPartIconName(for partName: String) -> String {
+    switch partName {
+    case "机箱": return "rectangle.inset.filled"
+    case "一体式水冷": return "drop"
+    case "风扇套装", "风扇与控制器", "LCD 风扇", "LED 风扇": return "fanblades"
+    case "副屏": return "display"
+    case "定制线材", "霓虹线": return "cable.connector"
+    default: return "square.stack.3d.up"
+    }
+}
+
 #Preview {
-    AestheticStyleOverviewView(styleID: "blackKnight", onClose: {}, onStartBuild: {})
+    AestheticStyleOverviewView(styleID: "blackKnight", onClose: {}, onStartBuild: { _ in })
 }

@@ -1,5 +1,4 @@
 import re
-from math import ceil
 from typing import Dict, Iterable, List, Optional
 
 from app.builds.models import BuildTemplate
@@ -18,7 +17,12 @@ from app.builds.service import (
     classify_office_workload,
 )
 from app.catalog.models import ComponentPrice, HardwareComponent
-from app.catalog.rule_specs import GPU_MIN_CPU_PERFORMANCE
+from app.catalog.rule_specs import (
+    GPU_MIN_CPU_PERFORMANCE,
+    is_cpu_gpu_pairing_allowed,
+    minimum_psu_watt_for_specs,
+    psu_supports_gpu_power_connector,
+)
 from app.compat.engine import BuildSelection, evaluate_compatibility
 
 
@@ -38,7 +42,13 @@ STORAGE_IDS = {
     "1TB": "base-ssd-1tb-tlc",
     "2TB": "base-ssd-2tb-tlc",
 }
+VALUE_STORAGE_MAX_BUDGET = 7_000
+VALUE_STORAGE_IDS = {
+    "512GB": "base-ssd-fanxiang-s500-pro-512gb",
+    "1TB": "base-ssd-fanxiang-s790e-1tb",
+}
 A520_WIFI_EXCEPTION_ID = "asus-a520m-k"
+A520_MAX_BUILD_BUDGET = 4_000
 WIRELESS_ADAPTER_PRICE = 50
 
 
@@ -141,9 +151,17 @@ def customize_template(
             price_by_component_id,
         )
     if request.storage_size:
+        storage_ids = (
+            VALUE_STORAGE_IDS
+            if request.budget <= VALUE_STORAGE_MAX_BUDGET
+            else STORAGE_IDS
+        )
         parts["storage"] = _priced_part(
             "storage",
-            STORAGE_IDS[request.storage_size],
+            storage_ids.get(
+                request.storage_size,
+                STORAGE_IDS[request.storage_size],
+            ),
             parts["storage"].condition,
             components_by_id,
             price_by_component_id,
@@ -188,6 +206,8 @@ def customize_template(
     _validate_direction_floor(request, details.direction, base_performance, parts)
     _validate_gpu_vendor(request, parts["gpu"])
     _validate_gpu_cpu_floor(parts)
+    _validate_cpu_gpu_pairing(request, parts)
+    _validate_motherboard_policy(request, parts)
     _validate_psu(parts)
 
     components = {role: part.component_id for role, part in parts.items()}
@@ -432,15 +452,48 @@ def _validate_gpu_cpu_floor(parts: Dict[str, BuildTemplatePart]) -> None:
         raise CustomizationError("显卡所需的 CPU 性能下限未满足")
 
 
+def _validate_cpu_gpu_pairing(
+    request: BuildRequest,
+    parts: Dict[str, BuildTemplatePart],
+) -> None:
+    if request.use_case == "办公":
+        return
+    if not is_cpu_gpu_pairing_allowed(
+        parts["cpu"].component_id,
+        parts["gpu"].component_id,
+    ):
+        raise CustomizationError("CPU 与显卡搭配达到高U低显或低U高显级别")
+
+
+def _validate_motherboard_policy(
+    request: BuildRequest,
+    parts: Dict[str, BuildTemplatePart],
+) -> None:
+    if (
+        request.budget > A520_MAX_BUILD_BUDGET
+        and parts["motherboard"].component_id == A520_WIFI_EXCEPTION_ID
+    ):
+        raise CustomizationError("4500元及以上配置不能使用 A520 主板")
+
+
 def _validate_psu(parts: Dict[str, BuildTemplatePart]) -> None:
     cpu_tdp = parts["cpu"].specs.get("tdp")
     gpu_tdp = parts["gpu"].specs.get("tdp")
     psu_watt = parts["psu"].specs.get("watt")
     if not all(type(value) is int for value in (cpu_tdp, gpu_tdp, psu_watt)):
         raise CustomizationError("缺少电源功耗校验数据")
-    required = ceil((cpu_tdp + gpu_tdp) * 1.5 + 100)
+    required = minimum_psu_watt_for_specs(
+        cpu_tdp,
+        parts["gpu"].component_id,
+        gpu_tdp,
+    )
     if psu_watt < required:
         raise CustomizationError(f"电源至少需要 {required}W")
+    if not psu_supports_gpu_power_connector(
+        parts["gpu"].component_id,
+        parts["psu"].specs,
+    ):
+        raise CustomizationError("电源缺少完整的原生600W 12V-2x6供电路径")
 
 
 def _direction_performance(

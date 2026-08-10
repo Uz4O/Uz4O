@@ -3,9 +3,58 @@ import Photos
 import UIKit
 
 struct DIYView: View {
+    @Binding var importedBuild: BuildOptionDTO?
+    @State private var showsBuilder: Bool
+
+    init(importedBuild: Binding<BuildOptionDTO?>) {
+        _importedBuild = importedBuild
+        _showsBuilder = State(initialValue: importedBuild.wrappedValue != nil)
+    }
+
+    var body: some View {
+        ZStack {
+            if showsBuilder {
+                DIYBuilderView(
+                    importedBuild: $importedBuild,
+                    onBack: {
+                        withAnimation(.easeInOut(duration: 0.34)) {
+                            showsBuilder = false
+                        }
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal: .move(edge: .leading).combined(with: .opacity)
+                ))
+            } else {
+                DIYEntryView(onStartDIY: {
+                    withAnimation(.easeInOut(duration: 0.34)) {
+                        showsBuilder = true
+                    }
+                })
+                .transition(.asymmetric(
+                    insertion: .move(edge: .leading).combined(with: .opacity),
+                    removal: .move(edge: .trailing).combined(with: .opacity)
+                ))
+            }
+        }
+        .animation(.easeInOut(duration: 0.34), value: showsBuilder)
+        .onChange(of: importedBuild?.id) { _, id in
+            if id != nil {
+                withAnimation(.easeInOut(duration: 0.34)) {
+                    showsBuilder = true
+                }
+            }
+        }
+    }
+}
+
+private struct DIYBuilderView: View {
     private let components = DIYComponent.all
     private let apiClient = AppAPIClient()
 
+    @Binding var importedBuild: BuildOptionDTO?
+    let onBack: () -> Void
     @State private var selectedComponents: [String: CatalogComponentDTO] = [:]
     @State private var catalogComponents: [CatalogComponentDTO] = []
     @State private var catalogPrices: [String: CatalogPriceDTO] = [:]
@@ -49,15 +98,9 @@ struct DIYView: View {
                         .padding(.leading, 4)
                         .padding(.bottom, 14)
 
-                        LazyVGrid(
-                            columns: [
-                                GridItem(.flexible(), spacing: 12),
-                                GridItem(.flexible(), spacing: 12)
-                            ],
-                            spacing: 12
-                        ) {
+                        VStack(spacing: 0) {
                             ForEach(components) { component in
-                                DIYComponentCard(
+                                DIYPartRow(
                                     component: component,
                                     selected: selectedComponents[component.id],
                                     price: selectedComponents[component.id].flatMap { catalogPrices[$0.id]?.referencePrice },
@@ -65,11 +108,18 @@ struct DIYView: View {
                                         openPicker(for: component)
                                     }
                                 )
+
+                                if component.id != components.last?.id {
+                                    Divider()
+                                        .padding(.leading, 50)
+                                }
                             }
                         }
+                        .padding(.horizontal, 12)
+                        .micro3DSurface(cornerRadius: 22, surfaceColor: DIYTheme.surface)
 
                         actionBar
-                            .padding(.top, 22)
+                            .padding(.top, 16)
 
                     }
                     .frame(width: max(proxy.size.width - 52, 0), alignment: .leading)
@@ -106,7 +156,13 @@ struct DIYView: View {
             }
             .animation(.easeOut(duration: 0.18), value: activeSlotID)
         }
-        .task { await loadCatalog() }
+        .toolbar(.hidden, for: .tabBar)
+        .task(id: importedBuild?.id) {
+            await loadCatalog()
+            if let importedBuild {
+                importBuild(importedBuild)
+            }
+        }
         .alert("DIY", isPresented: $showsFeedback) {
             Button("好的", role: .cancel) {}
         } message: {
@@ -116,13 +172,19 @@ struct DIYView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
+            Button(action: onBack) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 17, weight: .semibold))
+                    .frame(width: 32, height: 32)
+                    .background(DIYTheme.surface, in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("返回 DIY 首页")
+
             Text("UzBox")
                 .font(.system(size: 25, weight: .heavy))
                 .foregroundStyle(.black)
             Spacer()
-            Image(systemName: "bell")
-                .font(.system(size: 19, weight: .medium))
-                .foregroundStyle(.black)
         }
         .padding(.horizontal, 4)
     }
@@ -136,8 +198,7 @@ struct DIYView: View {
             DIYSummaryMetric(title: "预计功耗", value: estimatedPower.map { "\($0)W" } ?? "待选择", icon: "bolt.fill", iconColor: DIYTheme.secondary)
         }
         .frame(height: 94)
-        .background(DIYTheme.surface, in: RoundedRectangle(cornerRadius: 22))
-        .shadow(color: .black.opacity(0.04), radius: 14, y: 5)
+        .micro3DSurface(cornerRadius: 22, surfaceColor: DIYTheme.surface)
     }
 
     private var totalPrice: Int {
@@ -310,6 +371,48 @@ struct DIYView: View {
         showsFeedback = true
     }
 
+    private func importBuild(_ build: BuildOptionDTO) {
+        var importedComponents: [String: CatalogComponentDTO] = [:]
+
+        for part in build.details.parts {
+            let slot = diySlot(for: part.role)
+            importedComponents[slot.id] = CatalogComponentDTO(
+                id: part.componentId,
+                category: slot.category,
+                name: part.name,
+                brand: "",
+                detailRaw: "AI 生成配置",
+                specs: [:],
+                isRecommended: true,
+                status: "active"
+            )
+            catalogPrices[part.componentId] = CatalogPriceDTO(
+                componentId: part.componentId,
+                referencePrice: part.referencePrice,
+                priceRangeLow: nil,
+                priceRangeHigh: nil,
+                source: "AI 生成配置"
+            )
+        }
+
+        selectedComponents = importedComponents
+        importedBuild = nil
+        presentFeedback("已导入 AI 配置，可继续编辑")
+    }
+
+    private func diySlot(for role: BuildPartRoleDTO) -> (id: String, category: String) {
+        switch role {
+        case .cpu: ("cpu", "cpu")
+        case .motherboard: ("motherboard", "motherboard")
+        case .gpu: ("gpu", "gpu")
+        case .ram: ("memory", "ram")
+        case .storage: ("storage", "storage")
+        case .psu: ("power", "psu")
+        case .cooler: ("cooler", "cooler")
+        case .case: ("case", "case")
+        }
+    }
+
     private func compatibleComponents(for slot: DIYComponent) -> [CatalogComponentDTO] {
         guard slot.id == "cpu" || slot.id == "motherboard" else {
             return catalogComponents.filter { $0.category == slot.backendCategory }
@@ -450,6 +553,188 @@ struct DIYView: View {
     }
 }
 
+private struct DIYEntryView: View {
+    let onStartDIY: () -> Void
+
+    private let capabilities: [(title: String, subtitle: String, icon: String)] = [
+        ("总价实时统计", "所选配件总价实时更新", "yensign.circle"),
+        ("功耗估算", "整机功耗预估", "bolt"),
+        ("兼容性检测", "自动检测硬件兼容性问题", "checkmark.shield"),
+        ("瓶颈分析", "分析整机性能短板与平衡性", "chart.bar")
+    ]
+
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 0) {
+                    entryHeader
+
+                    heroSection(width: proxy.size.width)
+
+                    Text("DIY 能做什么")
+                        .font(.system(size: 21.5, weight: .black))
+                        .foregroundStyle(.black)
+                        .padding(.top, 52)
+
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.flexible(), spacing: 12),
+                            GridItem(.flexible(), spacing: 12)
+                        ],
+                        spacing: 12
+                    ) {
+                        ForEach(capabilities, id: \.title) { capability in
+                            DIYCapabilityCard(
+                                title: capability.title,
+                                subtitle: capability.subtitle,
+                                icon: capability.icon
+                            )
+                        }
+                    }
+                    .padding(.top, 12)
+                }
+                .padding(.horizontal, 22)
+                .padding(.top, 12)
+                .padding(.bottom, 110)
+            }
+            .background(Color.white.ignoresSafeArea())
+        }
+    }
+
+    private var entryHeader: some View {
+        HStack {
+            Text("UzBox")
+                .font(.system(size: 28, weight: .black))
+                .tracking(-0.8)
+                .foregroundStyle(.black)
+            Spacer()
+        }
+        .frame(height: 44)
+    }
+
+    private func heroSection(width: CGFloat) -> some View {
+        ZStack(alignment: .bottomTrailing) {
+            VStack(alignment: .leading, spacing: 0) {
+                Spacer().frame(height: 54)
+
+                Text("当前功能")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.black.opacity(0.5))
+
+                Text("DIY 自由选配")
+                    .font(.system(size: 41, weight: .black))
+                    .tracking(-1.3)
+                    .foregroundStyle(.black)
+                    .padding(.top, 20)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+
+                Text("自己选硬件，App 帮你实时检查\n兼容性和预算")
+                    .font(.system(size: 14.5, weight: .semibold))
+                    .foregroundStyle(Color.black.opacity(0.62))
+                    .lineSpacing(4)
+                    .padding(.top, 12)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    DIYHeroCheck(text: "智能统计总价")
+                    DIYHeroCheck(text: "自动检测兼容性")
+                    DIYHeroCheck(text: "AI 给出优化建议")
+                }
+                .padding(.top, 28)
+
+                Button(action: onStartDIY) {
+                    HStack(spacing: 18) {
+                        Text("开始 DIY")
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 20, weight: .bold))
+                    }
+                    .font(.system(size: 15.5, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 144, height: 48)
+                    .background(.black, in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 24)
+            }
+            .frame(width: min(width * 0.63, 255), alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .zIndex(1)
+
+            DIYEntryHardwareArt()
+                .frame(width: min(width * 0.62, 250), height: 270)
+                .offset(x: 20, y: -10)
+                .allowsHitTesting(false)
+        }
+        .frame(height: 389, alignment: .top)
+    }
+
+}
+
+private struct DIYEntryHardwareArt: View {
+    var body: some View {
+        Image("DiyEntryHero")
+            .resizable()
+            .scaledToFit()
+            .blendMode(.multiply)
+    }
+}
+
+private struct DIYHeroCheck: View {
+    let text: String
+
+    var body: some View {
+        Label {
+            Text(text)
+                .font(.system(size: 12, weight: .medium))
+        } icon: {
+            Image(systemName: "checkmark.circle")
+                .font(.system(size: 13, weight: .semibold))
+        }
+        .foregroundStyle(Color.black.opacity(0.49))
+    }
+}
+
+private struct DIYCapabilityCard: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 23, weight: .medium))
+                .foregroundStyle(.black)
+                .frame(width: 44, height: 44)
+                .background(Color.white, in: RoundedRectangle(cornerRadius: 15, style: .continuous))
+                .shadow(color: .black.opacity(0.04), radius: 9, y: 5)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.system(size: 11.5, weight: .bold))
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+
+                Text(subtitle)
+                    .font(.system(size: 8.5, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.48))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.65)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+        .padding(10)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(Color.black.opacity(0.035), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.05), radius: 13, y: 7)
+    }
+}
+
 private struct DIYSummaryMetric: View {
     let title: String
     let value: String
@@ -511,13 +796,12 @@ private struct DIYComponentCard: View {
                     DIYHardwareIcon(component: component)
                         .scaleEffect(0.82)
                         .frame(width: 44, height: 44)
-                        .background(AppTheme.softSurface, in: Circle())
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text(component.title)
                             .font(.system(size: 15, weight: .bold))
                             .foregroundStyle(DIYTheme.primary)
-                        Text(selected.map { "\($0.brand) \($0.name)" } ?? "点击选择配件")
+                        Text(selected.map { [$0.brand, $0.name].filter { !$0.isEmpty }.joined(separator: " ") } ?? "点击选择配件")
                             .font(.system(size: 12, weight: .regular))
                             .foregroundStyle(DIYTheme.secondary)
                             .lineLimit(1)
@@ -556,42 +840,38 @@ private struct DIYPartRow: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 18) {
+            HStack(spacing: 14) {
                 DIYHardwareIcon(component: component)
-                    .frame(width: 34, height: 34)
+                    .frame(width: 36, height: 36)
 
-                Text(component.title)
-                    .font(.system(size: 18, weight: .regular))
-                    .foregroundStyle(DIYTheme.primary)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(component.title)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(DIYTheme.primary)
+
+                    Text(selected.map { [$0.brand, $0.name].filter { !$0.isEmpty }.joined(separator: " ") } ?? "点击选择配件")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(DIYTheme.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.72)
+                }
 
                 Spacer(minLength: 8)
 
-                if let selected {
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("\(selected.brand) \(selected.name)")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(DIYTheme.primary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.72)
-                        if let price {
-                            Text("¥\(price)")
-                                .font(.system(size: 11, weight: .medium))
-                                .foregroundStyle(DIYTheme.secondary)
-                        }
-                    }
-                } else {
-                    Text("选择型号")
-                        .font(.system(size: 16, weight: .regular))
+                if let price {
+                    Text("¥\(price)")
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(DIYTheme.secondary)
+                        .lineLimit(1)
                 }
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(DIYTheme.secondary)
+                Image(systemName: selected == nil ? "plus.circle" : "checkmark.circle.fill")
+                    .font(.system(size: 22, weight: .medium))
+                    .foregroundStyle(selected == nil ? DIYTheme.primary : .black)
             }
-            .frame(height: 58)
+            .frame(height: 70)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(Micro3DPressButtonStyle())
         .accessibilityLabel("\(component.title)，\(selected?.name ?? "未选择")")
     }
 }
@@ -984,43 +1264,12 @@ private struct DIYShareCard: View {
 private struct DIYHardwareIcon: View {
     let component: DIYComponent
 
-    @ViewBuilder
     var body: some View {
-        switch component.id {
-        case "gpu":
-            ZStack {
-                RoundedRectangle(cornerRadius: 3).fill(.black).frame(width: 44, height: 27)
-                HStack(spacing: 4) {
-                    Circle().fill(.white).frame(width: 10, height: 10)
-                    Circle().fill(.white).frame(width: 10, height: 10)
-                }
-                Rectangle().fill(.black).frame(width: 4, height: 18).offset(x: -24)
-            }
-        case "motherboard":
-            ZStack {
-                RoundedRectangle(cornerRadius: 2).fill(.black).frame(width: 33, height: 43)
-                VStack(spacing: 4) {
-                    Rectangle().fill(.white).frame(width: 18, height: 4)
-                    Rectangle().fill(.white).frame(width: 10, height: 9)
-                    Rectangle().fill(.white).frame(width: 19, height: 4)
-                }
-            }
-        case "cooler", "power":
-            ZStack {
-                RoundedRectangle(cornerRadius: 3).fill(.black).frame(width: 39, height: 39)
-                Image(systemName: "fanblades").font(.system(size: 23, weight: .medium)).foregroundStyle(.white)
-            }
-        case "case":
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 2).stroke(.black, lineWidth: 3).frame(width: 27, height: 43)
-                Rectangle().stroke(.black, lineWidth: 3).frame(width: 13, height: 35).offset(x: 15)
-                Rectangle().fill(.black).frame(width: 10, height: 3).offset(x: 5, y: -13)
-            }
-        default:
-            Image(systemName: component.icon)
-                .font(.system(size: 25, weight: .medium))
-                .foregroundStyle(.black)
-        }
+        Image(systemName: component.icon)
+            .font(.system(size: 19, weight: .medium))
+            .symbolRenderingMode(.monochrome)
+            .foregroundStyle(.black)
+            .frame(width: 22, height: 22)
     }
 }
 
@@ -1045,11 +1294,11 @@ private struct DIYComponent: Identifiable {
         DIYComponent(id: "cooler", title: "散热器", backendCategory: "cooler", icon: "fanblades"),
         DIYComponent(id: "memory", title: "内存", backendCategory: "ram", icon: "memorychip"),
         DIYComponent(id: "storage", title: "固态硬盘", backendCategory: "storage", icon: "externaldrive"),
-        DIYComponent(id: "power", title: "电源", backendCategory: "psu", icon: "bolt.fill"),
-        DIYComponent(id: "case", title: "机箱", backendCategory: "case", icon: "shippingbox")
+        DIYComponent(id: "power", title: "电源", backendCategory: "psu", icon: "power"),
+        DIYComponent(id: "case", title: "机箱", backendCategory: "case", icon: "rectangle.portrait")
     ]
 }
 
 #Preview {
-    DIYView()
+    DIYView(importedBuild: .constant(nil))
 }

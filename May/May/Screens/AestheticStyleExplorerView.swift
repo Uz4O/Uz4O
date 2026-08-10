@@ -46,7 +46,9 @@ struct AestheticStyleExplorerView: View {
             return StyleExplorerItem(
                 id: index,
                 style: style,
-                imageName: style.heroImage(for: selectedColor)
+                imageName: AestheticExplorerAssetCatalog.imageName(
+                    for: style.heroImage(for: selectedColor)
+                )
             )
         }
     }
@@ -54,11 +56,15 @@ struct AestheticStyleExplorerView: View {
     private var balancedStyleOrder: [AestheticBuildStyle] {
         let sorted = styles.sorted {
             let left = styleImageGeometry(
-                imageName: $0.heroImage(for: .black),
+                imageName: AestheticExplorerAssetCatalog.imageName(
+                    for: $0.heroImage(for: .black)
+                ),
                 tileSize: tuning.tileSize
             )
             let right = styleImageGeometry(
-                imageName: $1.heroImage(for: .black),
+                imageName: AestheticExplorerAssetCatalog.imageName(
+                    for: $1.heroImage(for: .black)
+                ),
                 tileSize: tuning.tileSize
             )
             return left.visibleSize.width * left.visibleSize.height
@@ -82,7 +88,7 @@ struct AestheticStyleExplorerView: View {
         ZStack {
             Color.white.ignoresSafeArea()
 
-            TopologyCanvasBackground(isZoomedIn: isZoomedIn)
+            TopologyLayerBackground(isZoomedIn: isZoomedIn)
             .ignoresSafeArea()
 
             StyleExplorerSceneView(
@@ -398,176 +404,99 @@ private struct StyleImageGeometry {
     let baseline: CGFloat
 }
 
-private struct TopologyCanvasBackground: View {
+private struct TopologyLayerBackground: UIViewRepresentable {
     let isZoomedIn: Bool
 
-    private static let columns = 40
-    private static let rows = 86
+    func makeUIView(context: Context) -> TopologyBackgroundUIView {
+        let view = TopologyBackgroundUIView()
+        view.setZoomedIn(isZoomedIn, animated: false)
+        return view
+    }
+
+    func updateUIView(_ view: TopologyBackgroundUIView, context: Context) {
+        view.setZoomedIn(isZoomedIn, animated: true)
+    }
+}
+
+private final class TopologyBackgroundUIView: UIView {
     private static let tileSize = CGSize(width: 440, height: 820)
-    private static let levels: [CGFloat] = [-0.62, -0.34, -0.06, 0.22, 0.50]
-    private static let contourPaths = makeContourPaths()
-    private static let texture = makeTexture()
-    private static let animationDuration = 42.0
+    private static let animationDuration: CFTimeInterval = 42
+    private let tilesLayer = CALayer()
+    private var laidOutSize = CGSize.zero
 
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
-            Canvas { context, size in
-                drawFixedContours(
-                    in: &context,
-                    size: size,
-                    time: timeline.date.timeIntervalSinceReferenceDate
-                )
-            }
-        }
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+        layer.masksToBounds = true
+        layer.addSublayer(tilesLayer)
     }
 
-    private func drawFixedContours(
-        in context: inout GraphicsContext,
-        size: CGSize,
-        time: TimeInterval
-    ) {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.size != laidOutSize else { return }
+        laidOutSize = bounds.size
+        rebuildTiles()
+    }
+
+    func setZoomedIn(_ isZoomedIn: Bool, animated: Bool) {
+        let targetOpacity: Float = isZoomedIn ? 0.55 : 1
+        guard tilesLayer.opacity != targetOpacity else { return }
+        let currentOpacity = tilesLayer.presentation()?.opacity ?? tilesLayer.opacity
+        tilesLayer.opacity = targetOpacity
+        guard animated else { return }
+
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = currentOpacity
+        animation.toValue = targetOpacity
+        animation.duration = 0.3
+        tilesLayer.add(animation, forKey: "opacity")
+    }
+
+    private func rebuildTiles() {
         let tileSize = Self.tileSize
-        let phase = CGFloat(
-            time.truncatingRemainder(dividingBy: Self.animationDuration)
-                / Self.animationDuration
+        let columns = max(3, Int(ceil(bounds.width / tileSize.width)) + 2)
+        let rows = max(3, Int(ceil(bounds.height / tileSize.height)) + 2)
+        let image = UIImage(named: "TopologyContourTexture")
+
+        tilesLayer.removeAllAnimations()
+        tilesLayer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        tilesLayer.frame = CGRect(
+            origin: .zero,
+            size: CGSize(
+                width: CGFloat(columns) * tileSize.width,
+                height: CGFloat(rows) * tileSize.height
+            )
         )
-        let originX = -phase * tileSize.width
-        let originY = phase * tileSize.height
-        let minColumn = Int(floor(-originX / tileSize.width))
-        let maxColumn = Int(ceil((size.width - originX) / tileSize.width)) - 1
-        let minRow = Int(floor(-originY / tileSize.height))
-        let maxRow = Int(ceil((size.height - originY) / tileSize.height)) - 1
-        let image = context.resolve(Image(uiImage: Self.texture))
 
-        context.opacity = isZoomedIn ? 0.55 : 1
-        for row in minRow...maxRow {
-            for column in minColumn...maxColumn {
-                context.draw(
-                    image,
-                    in: CGRect(
-                        x: originX + CGFloat(column) * tileSize.width,
-                        y: originY + CGFloat(row) * tileSize.height,
-                        width: tileSize.width,
-                        height: tileSize.height
-                    )
+        for row in 0..<rows {
+            for column in 0..<columns {
+                let tile = CALayer()
+                tile.frame = CGRect(
+                    x: CGFloat(column) * tileSize.width,
+                    y: CGFloat(row) * tileSize.height,
+                    width: tileSize.width,
+                    height: tileSize.height
                 )
-            }
-        }
-    }
-
-    private static func makeTexture() -> UIImage {
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 2
-        format.opaque = false
-        return UIGraphicsImageRenderer(size: tileSize, format: format).image { rendererContext in
-            let context = rendererContext.cgContext
-            context.setStrokeColor(UIColor(white: 0.58, alpha: 0.10).cgColor)
-            context.setLineWidth(1.25 * format.scale)
-            context.setLineCap(.round)
-            context.setLineJoin(.round)
-            for path in contourPaths {
-                context.addPath(path.cgPath)
-                context.strokePath()
-            }
-        }
-    }
-
-    private static func makeContourPaths() -> [Path] {
-        let cellWidth = tileSize.width / CGFloat(columns)
-        let cellHeight = tileSize.height / CGFloat(rows)
-        var values = Array(repeating: CGFloat.zero, count: (columns + 1) * (rows + 1))
-        for row in 0...rows {
-            for column in 0...columns {
-                values[row * (columns + 1) + column] = field(
-                    x: CGFloat(column) / CGFloat(columns),
-                    y: CGFloat(row) / CGFloat(rows)
-                )
+                tile.contents = image?.cgImage
+                tile.contentsScale = image?.scale ?? 2
+                tile.contentsGravity = .resize
+                tilesLayer.addSublayer(tile)
             }
         }
 
-        return levels.map { level in
-            var path = Path()
-            for row in 0..<rows {
-                for column in 0..<columns {
-                    let index = row * (columns + 1) + column
-                    let points = contourPoints(
-                        level: level,
-                        topLeft: values[index],
-                        topRight: values[index + 1],
-                        bottomRight: values[index + columns + 2],
-                        bottomLeft: values[index + columns + 1],
-                        origin: CGPoint(
-                            x: CGFloat(column) * cellWidth,
-                            y: CGFloat(row) * cellHeight
-                        ),
-                        cellSize: CGSize(width: cellWidth, height: cellHeight)
-                    )
-
-                    if points.count == 2 {
-                        path.move(to: points[0])
-                        path.addLine(to: points[1])
-                    } else if points.count == 4 {
-                        path.move(to: points[0])
-                        path.addLine(to: points[1])
-                        path.move(to: points[2])
-                        path.addLine(to: points[3])
-                    }
-                }
-            }
-            return path
-        }
-    }
-
-    private static func field(x: CGFloat, y: CGFloat) -> CGFloat {
-        let turn = CGFloat.pi * 2
-        let broad = sin(turn * (2 * x + sin(turn * y) * 0.28))
-        let detail = cos(turn * (3 * y - sin(turn * x) * 0.18))
-        let diagonal = sin(turn * (x + y))
-        return broad * 0.58 + detail * 0.27 + diagonal * 0.15
-    }
-
-    private static func contourPoints(
-        level: CGFloat,
-        topLeft: CGFloat,
-        topRight: CGFloat,
-        bottomRight: CGFloat,
-        bottomLeft: CGFloat,
-        origin: CGPoint,
-        cellSize: CGSize
-    ) -> [CGPoint] {
-        let topLeftPoint = origin
-        let topRightPoint = CGPoint(x: origin.x + cellSize.width, y: origin.y)
-        let bottomRightPoint = CGPoint(x: origin.x + cellSize.width, y: origin.y + cellSize.height)
-        let bottomLeftPoint = CGPoint(x: origin.x, y: origin.y + cellSize.height)
-        var points: [CGPoint] = []
-        if let point = crossing(topLeftPoint, topLeft, topRightPoint, topRight, level) { points.append(point) }
-        if let point = crossing(topRightPoint, topRight, bottomRightPoint, bottomRight, level) { points.append(point) }
-        if let point = crossing(bottomRightPoint, bottomRight, bottomLeftPoint, bottomLeft, level) { points.append(point) }
-        if let point = crossing(bottomLeftPoint, bottomLeft, topLeftPoint, topLeft, level) { points.append(point) }
-        return points
-    }
-
-    private static func crossing(
-        _ start: CGPoint,
-        _ startValue: CGFloat,
-        _ end: CGPoint,
-        _ endValue: CGFloat,
-        _ level: CGFloat
-    ) -> CGPoint? {
-        let startDelta = startValue - level
-        let endDelta = endValue - level
-        guard (startDelta < 0 && endDelta >= 0) || (startDelta >= 0 && endDelta < 0) else {
-            return nil
-        }
-        let denominator = startDelta - endDelta
-        guard abs(denominator) > .ulpOfOne else { return start }
-        let progress = startDelta / denominator
-        return CGPoint(
-            x: start.x + (end.x - start.x) * progress,
-            y: start.y + (end.y - start.y) * progress
-        )
+        let animation = CABasicAnimation(keyPath: "transform")
+        animation.fromValue = CATransform3DMakeTranslation(0, -tileSize.height, 0)
+        animation.toValue = CATransform3DMakeTranslation(-tileSize.width, 0, 0)
+        animation.duration = Self.animationDuration
+        animation.repeatCount = .infinity
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.isRemovedOnCompletion = false
+        tilesLayer.add(animation, forKey: "topology-drift")
     }
 }
 
@@ -616,6 +545,9 @@ private enum StyleImageVisibleBoundsCache {
     private static var cachedBounds: [String: CGRect] = [:]
 
     static func bounds(for image: UIImage, named name: String) -> CGRect {
+        if let bounds = AestheticExplorerAssetCatalog.visibleBounds(for: name) {
+            return bounds
+        }
         if let cached = cachedBounds[name] {
             return cached
         }
@@ -821,6 +753,9 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
         private var panStart = SCNVector3Zero
         private var pinchStartZoom: Float
         private var displayLink: CADisplayLink?
+        private var alternateWarmupWorkItem: DispatchWorkItem?
+        private var pendingItemIDs: [Int] = []
+        private var renderUntil: CFTimeInterval = 0
         private var panoramaRequestID: Int
         private var zoomInRequestID: Int
         private var preparedImages: [String: UIImage] = [:]
@@ -871,7 +806,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             view.autoenablesDefaultLighting = false
             view.antialiasingMode = .multisampling2X
             view.preferredFramesPerSecond = 60
-            view.rendersContinuously = true
+            view.rendersContinuously = false
 
             let camera = SCNCamera()
             camera.fieldOfView = tuning.fieldOfView
@@ -885,20 +820,39 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             view.pointOfView = cameraNode
 
             addItems()
-            warmImages(named: Set(items.flatMap { item in
+            let currentNames = Set(items.map(\.imageName))
+            let alternateNames = Set(items.flatMap { item in
                 [
-                    item.style.heroImage(for: .black),
-                    item.style.heroImage(for: .white)
+                    AestheticExplorerAssetCatalog.imageName(
+                        for: item.style.heroImage(for: .black)
+                    ),
+                    AestheticExplorerAssetCatalog.imageName(
+                        for: item.style.heroImage(for: .white)
+                    )
                 ]
-            }))
+            }).subtracting(currentNames)
+            let warmupWorkItem = DispatchWorkItem { [weak self] in
+                self?.warmImages(named: alternateNames)
+            }
+            alternateWarmupWorkItem = warmupWorkItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: warmupWorkItem)
             addGestures(to: view)
 
             let displayLink = CADisplayLink(target: self, selector: #selector(updateScene))
+            displayLink.preferredFrameRateRange = CAFrameRateRange(
+                minimum: 30,
+                maximum: 60,
+                preferred: 60
+            )
             displayLink.add(to: .main, forMode: .common)
             self.displayLink = displayLink
+            requestRendering(for: 1.2)
         }
 
         func stop() {
+            alternateWarmupWorkItem?.cancel()
+            alternateWarmupWorkItem = nil
+            pendingItemIDs.removeAll()
             displayLink?.invalidate()
             displayLink = nil
         }
@@ -921,6 +875,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             updateLayout()
             updateSelectionAppearance()
             SCNTransaction.commit()
+            requestRendering(for: 0.6)
         }
 
         func update(_ newItems: [StyleExplorerItem]) {
@@ -1003,6 +958,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                     forKey: "color-outgoing"
                 )
             }
+            requestRendering(for: 1.2)
         }
 
         private func image(for name: String) -> UIImage? {
@@ -1016,7 +972,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             DispatchQueue.global(qos: .utility).async { [weak self] in
                 let images = pendingNames.reduce(into: [String: UIImage]()) { result, name in
                     guard let image = UIImage(named: name) else { return }
-                    result[name] = Self.downsample(image)
+                    result[name] = Self.preparedImage(image)
                 }
 
                 DispatchQueue.main.async {
@@ -1028,21 +984,17 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                         node.geometry?.firstMaterial?.diffuse.contents = image
                         self.resizePlane(of: node, for: item)
                     }
+                    self.requestRendering(for: 0.2)
                 }
             }
         }
 
-        private static func downsample(_ image: UIImage) -> UIImage {
-            let maxDimension: CGFloat = 1024
-            let scale = min(1, maxDimension / max(image.size.width, image.size.height))
-            let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-            guard size != image.size else { return image }
-
+        private static func preparedImage(_ image: UIImage) -> UIImage {
             let format = UIGraphicsImageRendererFormat()
             format.scale = 1
             format.opaque = false
-            return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-                image.draw(in: CGRect(origin: .zero, size: size))
+            return UIGraphicsImageRenderer(size: image.size, format: format).image { _ in
+                image.draw(in: CGRect(origin: .zero, size: image.size))
             }
         }
 
@@ -1054,6 +1006,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             targetZoom = maximumZoom
             pinchStartZoom = maximumZoom
             isZoomedIn.wrappedValue = false
+            requestRendering(for: 0.8)
         }
 
         func applyZoomInRequest(_ requestID: Int) {
@@ -1065,6 +1018,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                 clampTarget(in: sceneView)
             }
             isZoomedIn.wrappedValue = true
+            requestRendering(for: 0.8)
         }
 
         private func updateLayout() {
@@ -1122,8 +1076,22 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             let totalHeight = Float(max(rows - 1, 0)) * spacingY
             gridHalfWidth = totalWidth / 2 + spacingX / 2
             gridHalfHeight = totalHeight / 2 + spacingY / 2
+            pendingItemIDs = items.map(\.id)
+        }
 
-            for item in items {
+        @discardableResult
+        private func mountNextItems(limit: Int = 5) -> Bool {
+            let count = min(limit, pendingItemIDs.count)
+            guard count > 0 else { return false }
+            let ids = pendingItemIDs.prefix(count)
+            pendingItemIDs.removeFirst(count)
+            let rows = Int(ceil(Double(items.count) / Double(columns)))
+            let totalWidth = Float(columns - 1) * spacingX
+            let totalHeight = Float(max(rows - 1, 0)) * spacingY
+
+            for (batchIndex, id) in ids.enumerated() {
+                guard nodes[id] == nil,
+                      let item = items.first(where: { $0.id == id }) else { continue }
                 let column = item.id % columns
                 let row = item.id / columns
                 let x = Float(column) * spacingX - totalWidth / 2
@@ -1138,7 +1106,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                 nodes[item.id] = node
                 basePositions[item.id] = basePosition
 
-                let delay = min(Double(item.id) * 0.014, 0.56)
+                let delay = Double(batchIndex) * 0.014
                 let move = SCNAction.move(to: basePosition, duration: 0.58)
                 move.timingMode = .easeOut
                 let scale = SCNAction.scale(to: 1, duration: 0.5)
@@ -1149,6 +1117,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                     .group([move, scale, fade])
                 ]))
             }
+            return true
         }
 
         private func makeNode(for item: StyleExplorerItem) -> SCNNode {
@@ -1157,8 +1126,8 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             let material = SCNMaterial()
             material.diffuse.contents = image
             material.lightingModel = .constant
-            material.isDoubleSided = true
-            material.transparencyMode = .dualLayer
+            material.isDoubleSided = false
+            material.transparencyMode = .singleLayer
             material.writesToDepthBuffer = true
             plane.materials = [material]
 
@@ -1205,6 +1174,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
 
         @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
             guard let view = sceneView else { return }
+            requestRendering(for: 0.5)
 
             switch gesture.state {
             case .began:
@@ -1232,6 +1202,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
 
         @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
             guard let view = sceneView else { return }
+            requestRendering(for: 0.5)
 
             switch gesture.state {
             case .began:
@@ -1295,6 +1266,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             }
             SCNTransaction.commit()
             selectedStyle.wrappedValue = style
+            requestRendering(for: 0.7)
         }
 
         func clearSelection(notify: Bool) {
@@ -1313,13 +1285,22 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                 node.renderingOrder = 0
             }
             SCNTransaction.commit()
+            requestRendering(for: 0.6)
 
             if notify {
                 selectedStyle.wrappedValue = nil
             }
         }
 
+        private func requestRendering(for duration: CFTimeInterval) {
+            renderUntil = max(renderUntil, CACurrentMediaTime() + duration)
+            displayLink?.isPaused = false
+            sceneView?.setNeedsDisplay()
+        }
+
         @objc private func updateScene(_ displayLink: CADisplayLink) {
+            guard let view = sceneView else { return }
+            let mountedItems = mountNextItems()
             let delta = min(max(displayLink.targetTimestamp - displayLink.timestamp, 1.0 / 120.0), 1.0 / 30.0)
             let positionBlend = Float(1 - exp(-delta / tuning.positionDamping))
             let zoomBlend = Float(1 - exp(-delta / tuning.zoomDamping))
@@ -1330,6 +1311,7 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             cameraNode.position.z += (targetZoom - cameraNode.position.z) * zoomBlend
             let zoomProgress = max(0, min(1, (cameraNode.position.z - minimumZoom) / (maximumZoom - minimumZoom)))
             let curveBlend = zoomProgress * zoomProgress * (3 - 2 * zoomProgress)
+            var maximumDepthError: Float = 0
             for (id, node) in nodes {
                 guard let original = basePositions[id] else { continue }
                 let visibleX = original.x + contentNode.position.x
@@ -1341,7 +1323,10 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
                 } else {
                     focusOffset = 0
                 }
-                node.position.z += (curvedZ + focusOffset - node.position.z) * positionBlend
+                let targetDepth = curvedZ + focusOffset
+                let depthError = targetDepth - node.position.z
+                maximumDepthError = max(maximumDepthError, abs(depthError))
+                node.position.z += depthError * positionBlend
             }
 
             let movementX = contentNode.position.x - oldPosition.x
@@ -1352,6 +1337,24 @@ private struct StyleExplorerSceneView: UIViewRepresentable {
             cameraNode.eulerAngles.x += (tiltX - cameraNode.eulerAngles.x) * positionBlend
             cameraNode.eulerAngles.y += (tiltY - cameraNode.eulerAngles.y) * positionBlend
 
+            view.setNeedsDisplay()
+
+            let positionError = max(
+                abs(targetPosition.x - contentNode.position.x),
+                abs(targetPosition.y - contentNode.position.y)
+            )
+            let zoomError = abs(targetZoom - cameraNode.position.z)
+            let tiltError = max(abs(cameraNode.eulerAngles.x), abs(cameraNode.eulerAngles.y))
+            let isSettled = positionError < 0.001
+                && zoomError < 0.001
+                && tiltError < 0.001
+                && maximumDepthError < 0.001
+            if !mountedItems,
+               pendingItemIDs.isEmpty,
+               isSettled,
+               CACurrentMediaTime() >= renderUntil {
+                displayLink.isPaused = true
+            }
         }
 
         private func visibleHeight(in view: SCNView, zoom: Float) -> Float {

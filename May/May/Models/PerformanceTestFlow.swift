@@ -1,20 +1,18 @@
 import Foundation
 
 enum PerformanceTestStep: Int, CaseIterable {
-    case hardware
-    case conditions
+    case setup
     case result
 
     var title: String {
         switch self {
-        case .hardware: "电脑配置"
-        case .conditions: "测试条件"
+        case .setup: "测试内容"
         case .result: "性能结果"
         }
     }
 }
 
-enum PerformanceResolution: String, CaseIterable, Identifiable {
+enum PerformanceResolution: String, CaseIterable, Identifiable, Hashable {
     case fullHD
     case twoK
     case fourK
@@ -92,6 +90,7 @@ struct GamePerformanceResult: Equatable {
 struct PerformanceEstimatePayload: Equatable {
     let status: PerformanceEstimateStatus
     let averageFPS: Int?
+    let gpuTimeSpyScore: Int?
     let missingGames: [String]
     let gameResults: [GamePerformanceResult]
 }
@@ -106,7 +105,74 @@ struct PerformanceEstimateInput: Equatable {
 struct PerformanceRequestContext: Equatable {
     let token: Int
     let input: PerformanceEstimateInput
+    let resolution: PerformanceResolution
     let resolutionTitle: String
+}
+
+enum PerformanceHardwarePercentile {
+    private static let strongestGPUTimeSpyScore = 47_539
+
+    static func overall(cpuID: String, gpuTimeSpyScore: Int) -> Int? {
+        guard
+            let cpuScore = cpuPerformanceScore(cpuID),
+            let strongestCPUScore = HardwareCatalog.cpus
+                .compactMap({ cpuPerformanceScore($0.id) })
+                .max()
+        else { return nil }
+
+        let cpuRatio = min(max(Double(cpuScore) / Double(strongestCPUScore), 0), 1)
+        let gpuRatio = min(
+            max(Double(gpuTimeSpyScore) / Double(strongestGPUTimeSpyScore), 0),
+            1
+        )
+        return Int((((cpuRatio + gpuRatio) / 2) * 100).rounded())
+    }
+
+    private static func cpuPerformanceScore(_ cpuID: String) -> Int? {
+        let components = cpuID.lowercased().split(separator: "-").map(String.init)
+        guard components.count >= 2 else { return nil }
+
+        let family = components[0]
+        let modelText = components[1]
+        guard let model = leadingNumber(in: modelText) else { return nil }
+
+        if family.hasPrefix("u"), let tier = Int(family.dropFirst()) {
+            let base = [5: 82, 7: 92, 9: 100][tier]
+            guard let base else { return nil }
+            let suffixBonus = modelText.hasSuffix("k") ? 4 : 0
+            return base + suffixBonus + max((model - 235) / 10, 0)
+        }
+
+        if family.hasPrefix("i"), let tier = Int(family.dropFirst()) {
+            let base = [3: 36, 5: 64, 7: 76, 9: 90][tier]
+            guard let base else { return nil }
+            let generation = model / 1_000
+            let generationBonus = max(generation - 10, 0) * 4
+            let suffixBonus = modelText.hasSuffix("k")
+                || modelText.hasSuffix("kf")
+                || modelText.hasSuffix("ks")
+                ? 4
+                : 0
+            let fPenalty = modelText.hasSuffix("f") ? -1 : 0
+            return base + generationBonus + suffixBonus + fPenalty
+        }
+
+        if family.hasPrefix("r"), let tier = Int(family.dropFirst()) {
+            let base = [5: 56, 7: 74, 9: 88][tier]
+            guard let base else { return nil }
+            let series = model / 1_000
+            let seriesBonus = max(series - 5, 0) * 5
+            let xBonus = modelText.contains("x") ? 4 : 0
+            let x3DBonus = modelText.contains("x3d") ? 7 : 0
+            return base + seriesBonus + xBonus + x3DBonus
+        }
+
+        return nil
+    }
+
+    private static func leadingNumber(in value: String) -> Int? {
+        Int(value.prefix(while: { $0.isNumber }))
+    }
 }
 
 enum PerformanceLoadState: Equatable {
@@ -121,26 +187,34 @@ enum PerformanceLoadState: Equatable {
 struct PerformanceTestResult: Equatable {
     let resolution: String
     let averageFPS: String
+    let gpuTimeSpyScore: Int?
     let missingGameNames: [String]
     let gameResults: [GamePerformanceResult]
 }
 
+private struct CachedPerformanceState: Equatable {
+    var input: PerformanceEstimateInput?
+    var loadState: PerformanceLoadState = .idle
+    var result: PerformanceTestResult?
+}
+
 struct PerformanceTestFlow: Equatable {
-    var currentStep: PerformanceTestStep = .hardware
-    var hardwareProfile: HardwareProfile = HardwareProfile(
-        cpu: "i5-14600K",
-        gpu: "RTX 4070",
-        motherboard: "B760M AORUS ELITE GEN5",
-        memory: "16GB",
-        storage: "Western Digital WD Black SN850X · 1TB · PCIe 4.0",
-        powerSupply: "Corsair RM750e · 750W · 80+ Gold"
-    )
+    var currentStep: PerformanceTestStep = .setup
+    var hardwareProfile: HardwareProfile = .skipped
     var selectedResolution: PerformanceResolution = .twoK
-    var selectedGames: [PerformanceGame] = [.cyberpunk]
-    private(set) var loadState: PerformanceLoadState = .idle
-    private(set) var result: PerformanceTestResult?
+    var selectedGames: [PerformanceGame] = []
+    private var cachedStates: [PerformanceResolution: CachedPerformanceState] = [:]
     private var requestGeneration = 0
     private var activeRequestToken: Int?
+    private var activeRequestResolution: PerformanceResolution?
+
+    var loadState: PerformanceLoadState {
+        cachedStates[selectedResolution]?.loadState ?? .idle
+    }
+
+    var result: PerformanceTestResult? {
+        cachedStates[selectedResolution]?.result
+    }
 
     var requestInput: PerformanceEstimateInput? {
         guard
@@ -157,7 +231,20 @@ struct PerformanceTestFlow: Equatable {
     }
 
     var selectedGamesDisplay: String {
-        selectedGames == [.allGames] ? "全部 \(PerformanceGame.samples.count) 款" : "\(selectedGames.count) 款"
+        areAllGamesSelected ? "全部 \(PerformanceGame.samples.count) 款" : "\(selectedGames.count) 款"
+    }
+
+    var selectedGameCount: Int {
+        areAllGamesSelected ? PerformanceGame.samples.count : selectedGames.count
+    }
+
+    var areAllGamesSelected: Bool {
+        selectedGames == [.allGames]
+            || PerformanceGame.samples.allSatisfy { selectedGames.contains($0) }
+    }
+
+    var canSubmit: Bool {
+        !selectedGames.isEmpty && requestInput != nil
     }
 
     mutating func goNext() {
@@ -174,35 +261,72 @@ struct PerformanceTestFlow: Equatable {
         hardwareProfile = profile
     }
 
+    mutating func applySavedHardwareIfNeeded(_ profile: HardwareProfile) {
+        guard
+            hardwareProfile.cpu == "不知道",
+            hardwareProfile.gpu == "不知道",
+            profile.cpu != "不知道",
+            profile.gpu != "不知道"
+        else { return }
+        hardwareProfile.cpu = profile.cpu
+        hardwareProfile.gpu = profile.gpu
+    }
+
+    func isGameSelected(_ game: PerformanceGame) -> Bool {
+        areAllGamesSelected || selectedGames.contains(game)
+    }
+
     mutating func toggleGame(_ game: PerformanceGame) {
-        if game == .allGames {
-            selectedGames = selectedGames == [.allGames] ? [.cyberpunk] : [.allGames]
+        if areAllGamesSelected {
+            selectedGames = PerformanceGame.samples.filter { $0 != game }
         } else if selectedGames.contains(game) {
-            if selectedGames.count > 1 {
-                selectedGames.removeAll { $0 == game }
-            }
+            selectedGames.removeAll { $0 == game }
         } else {
-            selectedGames.removeAll { $0 == .allGames }
             selectedGames.append(game)
         }
     }
 
-    mutating func beginRequest() -> PerformanceRequestContext? {
-        guard loadState != .loading else { return nil }
-        currentStep = .result
-        result = nil
+    mutating func toggleAllGames() {
+        selectedGames = areAllGamesSelected ? [] : [.allGames]
+    }
+
+    mutating func selectResolution(_ resolution: PerformanceResolution) {
+        selectedResolution = resolution
+    }
+
+    mutating func beginRequest(advanceToResult: Bool = true) -> PerformanceRequestContext? {
+        if advanceToResult {
+            currentStep = .result
+        }
         guard let input = requestInput else {
             activeRequestToken = nil
-            loadState = .empty
+            activeRequestResolution = nil
+            cachedStates[selectedResolution] = CachedPerformanceState(loadState: .empty)
             return nil
+        }
+
+        let existingState = cachedStates[selectedResolution]
+        if existingState?.input == input {
+            switch existingState?.loadState {
+            case .loading, .loaded, .partial, .empty:
+                return nil
+            case .idle, .failed, .none:
+                break
+            }
         }
 
         requestGeneration += 1
         activeRequestToken = requestGeneration
-        loadState = .loading
+        activeRequestResolution = selectedResolution
+        cachedStates[selectedResolution] = CachedPerformanceState(
+            input: input,
+            loadState: .loading,
+            result: nil
+        )
         return PerformanceRequestContext(
             token: requestGeneration,
             input: input,
+            resolution: selectedResolution,
             resolutionTitle: selectedResolution.title
         )
     }
@@ -210,44 +334,59 @@ struct PerformanceTestFlow: Equatable {
     mutating func apply(_ payload: PerformanceEstimatePayload, for request: PerformanceRequestContext) {
         guard activeRequestToken == request.token else { return }
         activeRequestToken = nil
+        activeRequestResolution = nil
         guard
             payload.status != .needsMoreData,
             let averageFPS = payload.averageFPS
         else {
-            loadState = .empty
-            result = nil
+            cachedStates[request.resolution] = CachedPerformanceState(
+                input: request.input,
+                loadState: .empty,
+                result: nil
+            )
             return
         }
 
-        result = PerformanceTestResult(
-            resolution: request.resolutionTitle,
-            averageFPS: "\(averageFPS) FPS",
-            missingGameNames: payload.missingGames.map { PerformanceGame.name(for: $0) },
-            gameResults: payload.gameResults
+        cachedStates[request.resolution] = CachedPerformanceState(
+            input: request.input,
+            loadState: payload.status == .partial ? .partial : .loaded,
+            result: PerformanceTestResult(
+                resolution: request.resolutionTitle,
+                averageFPS: "\(averageFPS) FPS",
+                gpuTimeSpyScore: payload.gpuTimeSpyScore,
+                missingGameNames: payload.missingGames.map { PerformanceGame.name(for: $0) },
+                gameResults: payload.gameResults
+            )
         )
-        loadState = payload.status == .partial ? .partial : .loaded
     }
 
     mutating func failRequest(_ message: String, for request: PerformanceRequestContext) {
         guard activeRequestToken == request.token else { return }
         activeRequestToken = nil
-        loadState = .failed(message)
-        result = nil
+        activeRequestResolution = nil
+        cachedStates[request.resolution] = CachedPerformanceState(
+            input: request.input,
+            loadState: .failed(message),
+            result: nil
+        )
     }
 
     mutating func cancelRequest() {
-        activeRequestToken = nil
-        if loadState == .loading {
-            loadState = .idle
-            result = nil
+        if
+            let resolution = activeRequestResolution,
+            cachedStates[resolution]?.loadState == .loading
+        {
+            cachedStates[resolution]?.loadState = .idle
+            cachedStates[resolution]?.result = nil
         }
+        activeRequestToken = nil
+        activeRequestResolution = nil
     }
 
     mutating func reset() {
         cancelRequest()
-        currentStep = .hardware
-        loadState = .idle
-        result = nil
+        currentStep = .setup
+        cachedStates = [:]
     }
 
 }

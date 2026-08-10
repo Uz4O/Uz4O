@@ -33,14 +33,20 @@ APPROVED_GAME_IDS = list(APPROVED_GAME_PROFILES)
 NOW = datetime(2026, 7, 15, tzinfo=timezone.utc)
 
 
-def catalog_component(component_id: str, category: str) -> CatalogComponent:
+def catalog_component(
+    component_id: str,
+    category: str,
+    *,
+    name: str = "",
+    specs=None,
+) -> CatalogComponent:
     return CatalogComponent(
         id=component_id,
         category=category,
-        name=component_id,
+        name=name or component_id,
         brand="Test",
         detail_raw="",
-        specs={},
+        specs=specs or {},
     )
 
 
@@ -75,13 +81,14 @@ def model_anchor(
     average_fps: int,
     *,
     role: str = "fit",
+    resolution: str = "2k",
 ) -> GamePerformanceAnchor:
     return GamePerformanceAnchor(
         game_id=game_id,
         axis=axis,
         cpu_id=cpu_id,
         gpu_id=gpu_id,
-        resolution="2k",
+        resolution=resolution,
         render_mode=render_mode,
         average_fps=average_fps,
         sample_role=role,
@@ -102,6 +109,7 @@ def seed_active_model(
     cpu_fps=(120, 220),
     gpu_fps=(90, 180),
     correction_factor=0.95,
+    resolution="2k",
 ) -> None:
     mode = render_mode or render_mode_for(
         APPROVED_GAME_PROFILES[game_id],
@@ -110,10 +118,10 @@ def seed_active_model(
     upsert_game_performance_anchors(
         session,
         [
-            model_anchor(game_id, mode, "cpu", "cpu-low", "gpu-high", cpu_fps[0]),
-            model_anchor(game_id, mode, "cpu", "cpu-high", "gpu-high", cpu_fps[1]),
-            model_anchor(game_id, mode, "gpu", "cpu-high", "gpu-low", gpu_fps[0]),
-            model_anchor(game_id, mode, "gpu", "cpu-high", "gpu-high", gpu_fps[1]),
+            model_anchor(game_id, mode, "cpu", "cpu-low", "gpu-high", cpu_fps[0], resolution=resolution),
+            model_anchor(game_id, mode, "cpu", "cpu-high", "gpu-high", cpu_fps[1], resolution=resolution),
+            model_anchor(game_id, mode, "gpu", "cpu-high", "gpu-low", gpu_fps[0], resolution=resolution),
+            model_anchor(game_id, mode, "gpu", "cpu-high", "gpu-high", gpu_fps[1], resolution=resolution),
             model_anchor(
                 game_id,
                 mode,
@@ -122,6 +130,7 @@ def seed_active_model(
                 "gpu-low",
                 min(cpu_fps[0], gpu_fps[0]),
                 role="validation",
+                resolution=resolution,
             ),
         ],
     )
@@ -129,7 +138,7 @@ def seed_active_model(
         session,
         GamePerformanceCalibration(
             game_id=game_id,
-            resolution="2k",
+            resolution=resolution,
             render_mode=mode,
             model_version="model-v1",
             correction_factor=correction_factor,
@@ -223,6 +232,7 @@ def test_ready_response_contains_average_fps_only() -> None:
     assert response.json() == {
         "status": "ready",
         "average_fps": 128,
+        "gpu_time_spy_score": None,
         "advice": "高画质，支持时开启质量档超分和标准帧生成。",
         "missing_data": [],
         "missing_games": [],
@@ -230,6 +240,278 @@ def test_ready_response_contains_average_fps_only() -> None:
             {"game": "cyberpunk-2077", "average_fps": 128}
         ],
     }
+
+
+def test_5090_d_v2_response_contains_estimated_time_spy_score() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("rtx-5090-d-v2", "gpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("rtx-5090-d-v2", "gpu", 120)],
+        )
+
+    body = post_estimate(
+        make_client(["cyberpunk-2077"], setup=setup),
+        ["cyberpunk-2077"],
+        gpu="rtx-5090-d-v2",
+    ).json()
+
+    assert body["gpu_time_spy_score"] == 47000
+
+
+def test_time_spy_score_drives_the_gpu_axis_when_all_models_are_mapped() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component("rtx-4060", "gpu"),
+                catalog_component("rtx-4070", "gpu"),
+                catalog_component("rtx-5080", "gpu"),
+            ],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [
+                hardware_profile("rtx-4060", "gpu", 10),
+                hardware_profile("rtx-4070", "gpu", 20),
+                hardware_profile("rtx-5080", "gpu", 30),
+            ],
+        )
+        mode = render_mode_for(
+            APPROVED_GAME_PROFILES["cyberpunk-2077"],
+            GPUCapabilities(True, True, True),
+        ).value
+        upsert_game_performance_anchors(
+            session,
+            [
+                model_anchor(
+                    "cyberpunk-2077", mode, "cpu", "cpu-low", "rtx-5080", 200
+                ),
+                model_anchor(
+                    "cyberpunk-2077", mode, "cpu", "cpu-high", "rtx-5080", 300
+                ),
+                model_anchor(
+                    "cyberpunk-2077", mode, "gpu", "cpu-high", "rtx-4060", 60
+                ),
+                model_anchor(
+                    "cyberpunk-2077", mode, "gpu", "cpu-high", "rtx-5080", 180
+                ),
+            ],
+        )
+        replace_active_calibration(
+            session,
+            GamePerformanceCalibration(
+                game_id="cyberpunk-2077",
+                resolution="2k",
+                render_mode=mode,
+                model_version="model-v1",
+                correction_factor=1.0,
+                validation_mape=5.0,
+                validation_count=1,
+                common_validation_mape=5.0,
+                common_validation_count=1,
+                is_active=False,
+                calibrated_at=NOW,
+            ),
+        )
+
+    body = post_estimate(
+        make_client(setup=setup),
+        ["cyberpunk-2077"],
+        gpu="rtx-4070",
+    ).json()
+
+    assert body["gpu_time_spy_score"] == 17867
+    assert body["average_fps"] == 99
+
+
+def test_delta_force_uses_the_user_provided_2k_reference_before_db_fallback() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component("r7-9850x3d", "cpu"),
+                catalog_component("rtx-5080", "gpu"),
+            ],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [
+                hardware_profile("r7-9850x3d", "cpu", 120),
+                hardware_profile("rtx-5080", "gpu", 120),
+            ],
+        )
+
+    body = post_estimate(
+        make_client(setup=setup),
+        ["delta-force"],
+        cpu="r7-9850x3d",
+        gpu="rtx-5080",
+    ).json()
+
+    assert body["status"] == "ready"
+    assert body["average_fps"] == 351
+    assert body["gpu_time_spy_score"] == 33018
+
+
+def test_valorant_cpu_reference_is_used_only_above_the_gpu_bottleneck() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "valorant",
+            cpu_fps=(100, 200),
+            gpu_fps=(800, 1000),
+            correction_factor=1.0,
+        )
+
+    no_gpu_bottleneck = post_estimate(
+        make_client(setup=setup),
+        ["valorant"],
+        cpu="r7-9800x3d",
+    ).json()
+
+    def bottlenecked_setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "valorant",
+            cpu_fps=(100, 200),
+            gpu_fps=(90, 180),
+            correction_factor=1.0,
+        )
+
+    gpu_bottlenecked = post_estimate(
+        make_client(setup=bottlenecked_setup),
+        ["valorant"],
+        cpu="r7-9800x3d",
+    ).json()
+
+    assert no_gpu_bottleneck["average_fps"] == 708
+    assert gpu_bottlenecked["average_fps"] == 135
+
+
+def test_cs2_combines_the_cpu_ranking_with_the_selected_gpu_ceiling() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "cs2",
+            cpu_fps=(100, 200),
+            gpu_fps=(800, 1000),
+            correction_factor=1.0,
+            resolution="1080p",
+        )
+
+    no_gpu_bottleneck = post_estimate(
+        make_client(setup=setup),
+        ["cs2"],
+        cpu="r7-9800x3d",
+        resolution="1080p",
+    ).json()
+
+    def bottlenecked_setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "cs2",
+            cpu_fps=(100, 200),
+            gpu_fps=(90, 180),
+            correction_factor=1.0,
+            resolution="1080p",
+        )
+
+    gpu_bottlenecked = post_estimate(
+        make_client(setup=bottlenecked_setup),
+        ["cs2"],
+        cpu="r7-9800x3d",
+        resolution="1080p",
+    ).json()
+
+    assert no_gpu_bottleneck["average_fps"] == 470
+    assert gpu_bottlenecked["average_fps"] == 135
+
+
+def test_pubg_uses_the_cpu_ranking_without_ignoring_the_gpu_ceiling() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "pubg",
+            cpu_fps=(100, 200),
+            gpu_fps=(800, 1000),
+            correction_factor=1.0,
+        )
+
+    no_gpu_bottleneck = post_estimate(
+        make_client(setup=setup),
+        ["pubg"],
+        cpu="r7-9800x3d",
+    ).json()
+
+    def bottlenecked_setup(session):
+        seed_hardware_components(
+            session,
+            [catalog_component("r7-9800x3d", "cpu")],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [hardware_profile("r7-9800x3d", "cpu", 75)],
+        )
+        seed_active_model(
+            session,
+            "pubg",
+            cpu_fps=(100, 200),
+            gpu_fps=(90, 180),
+            correction_factor=1.0,
+        )
+
+    gpu_bottlenecked = post_estimate(
+        make_client(setup=bottlenecked_setup),
+        ["pubg"],
+        cpu="r7-9800x3d",
+    ).json()
+
+    assert no_gpu_bottleneck["average_fps"] == 597
+    assert gpu_bottlenecked["average_fps"] == 135
 
 
 def test_partial_and_multi_game_average_keep_requested_order() -> None:
@@ -322,7 +604,7 @@ def test_missing_profile_or_inactive_model_needs_more_data() -> None:
     assert inactive_model["missing_games"] == ["cs2"]
 
 
-def test_historical_exact_rows_are_not_a_numeric_fallback() -> None:
+def test_historical_exact_rows_remain_available_for_uncalibrated_games() -> None:
     def setup(session):
         session.add(
             GamePerformanceEstimate(
@@ -347,8 +629,39 @@ def test_historical_exact_rows_are_not_a_numeric_fallback() -> None:
         ["cyberpunk-2077"],
     ).json()
 
-    assert body["status"] == "needs_more_data"
-    assert body["average_fps"] is None
+    assert body["status"] == "ready"
+    assert body["average_fps"] == 999
+
+
+def test_production_style_generated_fallback_uses_new_references_and_time_spy() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component(
+                    "i9-14900ks",
+                    "cpu",
+                    name="i9-14900KS",
+                    specs={"perf_index": 100},
+                ),
+                catalog_component(
+                    "rtx-4080",
+                    "gpu",
+                    name="RTX 4080",
+                ),
+            ],
+        )
+
+    body = post_estimate(
+        make_client(setup=setup),
+        ["valorant"],
+        cpu="i9-14900ks",
+        gpu="rtx-4080",
+        resolution="1080p",
+    ).json()
+
+    assert body["average_fps"] == 461
+    assert body["gpu_time_spy_score"] == 28194
 
 
 def test_request_limits_and_sse_result_use_the_average_only_shape() -> None:
@@ -375,6 +688,7 @@ def test_request_limits_and_sse_result_use_the_average_only_shape() -> None:
     assert set(events[-1]["data"]) == {
         "status",
         "average_fps",
+        "gpu_time_spy_score",
         "advice",
         "missing_data",
         "missing_games",

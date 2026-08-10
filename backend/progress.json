@@ -1,8 +1,8 @@
 {
   "project": "AI 装机助手后端",
-  "updated_at": "2026-07-20",
+  "updated_at": "2026-08-09",
   "estimated_completion": "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间",
-  "current_phase": "游戏与办公生产力基底配置均已接入受控匹配；颜值价格规则与自有游戏平均 FPS 数据等待补充",
+  "current_phase": "Apple 登录代码链路已接通并等待生产配置与真机验收；颜值价格规则与自有游戏平均 FPS 数据等待补充",
   "phases": [
     {
       "name": "Phase 0 · 地基",
@@ -100,7 +100,7 @@
         },
         {
           "title": "Sign in with Apple 登录配置",
-          "description": "App Store 上架需要支持 Apple 登录；需要提供 Apple 开发者配置、客户端 identity token 校验参数，并在后端补充 Apple 登录校验流程。",
+          "description": "代码已接通 iOS 原生授权、后端 identity token 与 nonce 校验及 Keychain 会话；仍需在 Apple Developer 为 top.uzbox.app 启用 capability、刷新签名配置，并在生产环境设置 APP_APPLE_LOGIN_CLIENT_ID 后完成一次真机授权验收。",
           "status": "not_started",
           "owner": "user"
         },
@@ -112,7 +112,7 @@
         },
         {
           "title": "Sign in with Apple identity token 校验流程",
-          "description": "Apple 登录入口接入 identity token 签名、issuer、audience 和过期时间校验；校验通过后按 apple_sub 创建或复用账号并签发后端 token，未配置 Apple client id 时仍拒绝登录。",
+          "description": "Apple 登录入口接入 identity token 签名、issuer、audience、过期时间和一次性 nonce 校验；校验通过后按 apple_sub 创建或复用账号并签发后端 token，未配置 Apple client id 时仍拒绝登录。",
           "status": "completed",
           "completed_at": "2026-06-16"
         }

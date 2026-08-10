@@ -1,9 +1,10 @@
 category,target_id,name,brand,reference_price,normal_price_min,normal_price_max,accepted_count,rejected_count,review_reasons
 motherboard,asus-b650m-tuf,华硕 B650M PLUS 重炮手,华硕,900,650,900,1,0,high_budget_base_catalog
 motherboard,asus-b850m-awy,华硕 B850M AYW OC,华硕,1299,1000,1299,1,0,high_budget_base_catalog
-motherboard,asus-prime-b650m-k,华硕 PRIME B650M-K,华硕,700,,700,1,0,high_budget_base_catalog
+motherboard,asus-prime-b650m-k,华硕 PRIME B650M-K,华硕,700,450,700,1,0,high_budget_base_catalog
 motherboard,asus-x870e-chuixue,华硕 ROG X870E-A 吹雪,华硕,3300,1800,3300,1,0,high_budget_base_catalog
 motherboard,asus-x870e-extreme,华硕 ROG X870E EXTREME,华硕,8600,6300,8600,1,0,high_budget_base_catalog
+motherboard,asus-x870e-glacial,华硕 ROG X870E GLACIAL 冰川,华硕,11500,9000,11500,1,0,high_budget_base_catalog
 motherboard,asus-x870e-hero,华硕 ROG X870E DARK HERO,华硕,4700,4000,4700,1,0,high_budget_base_catalog
 motherboard,asus-x870e-neo,华硕 ROG X870E NEO,华硕,3400,3000,3400,1,0,high_budget_base_catalog
 case,base-case-mid-tower,普通中塔机箱,通用规格,100,80,100,1,0,high_budget_base_catalog
@@ -17,9 +18,11 @@ ram,base-ddr5-32gb-6000-c28,DDR5 32GB 6000 C28,通用规格,3800,,3800,1,0,high_
 ram,base-ddr5-32gb-6000-c30,DDR5 32GB 6000 C30,通用规格,2600,2600,,1,0,high_budget_base_catalog
 ram,base-ddr5-32gb-6000-c32,DDR5 32GB 6000 C32,通用规格,3400,,3400,1,0,high_budget_base_catalog
 psu,base-psu-1200w-gold,九州风神 PQ1200G 金牌全模组电源,九州风神,650,,650,1,0,high_budget_base_catalog
-psu,base-psu-650w-gold,650W金牌电源,通用规格,200,150,200,1,0,high_budget_base_catalog
-psu,base-psu-850w-gold,850W金牌ATX 3.1电源,通用规格,400,250,400,1,0,high_budget_base_catalog
-storage,base-ssd-512gb-tlc,512GB TLC SSD,通用规格,500,350,500,1,0,high_budget_base_catalog
+psu,base-psu-1200w-platinum,追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组）,追风者,799,799,,1,0,high_budget_base_catalog
+psu,base-psu-650w-gold,安耐美 GN650 V3 650W,安耐美,299,200,299,1,0,high_budget_base_catalog
+psu,base-psu-750w-gold,安耐美 GN750W V3 750W,安耐美,359,249,359,1,0,high_budget_base_catalog
+psu,base-psu-850w-gold,安耐美 PX850DF 850W,安耐美,659,659,659,1,0,high_budget_base_catalog
+storage,base-ssd-512gb-tlc,宏碁掠夺者 GM7 512GB,宏碁掠夺者,699,500,699,1,0,high_budget_base_catalog
 motherboard,msi-b850m-power,微星 B850M POWER,微星,1400,1150,1400,1,0,high_budget_base_catalog
 motherboard,msi-x870e-ace-max,微星 MEG X870E ACE MAX,微星,4200,3800,4200,1,0,high_budget_base_catalog
 motherboard,msi-x870e-edge-ti,微星 X870E 刀锋钛,微星,2200,1700,2200,1,0,high_budget_base_catalog
@@ -31,16 +34,15 @@ cpu,r7-7800x3d,R7 7800X3D,AMD,1800,1650,1800,1,0,high_budget_base_catalog
 cpu,r7-9700x,R7 9700X,AMD,1500,1300,1500,1,0,high_budget_base_catalog
 cpu,r7-9800x3d,R7 9800X3D,AMD,2500,2400,2500,1,0,high_budget_base_catalog
 cpu,r7-9850x3d,R7 9850X3D,AMD,3100,2800,3100,1,0,high_budget_base_catalog
+gpu,rtx-4070,RTX 4070,NVIDIA,3000,3000,,1,0,high_budget_base_catalog
 gpu,rtx-4070-super,RTX 4070 SUPER,NVIDIA,3600,3600,,1,0,high_budget_base_catalog
-gpu,rtx-5060,微星 RTX5060幻影师 2X,NVIDIA,2800,2600,2800,1,0,high_budget_base_catalog
-gpu,rtx-5060-ti,技嘉 RTX5060TI WF2MAX OC8G风魔MAX,NVIDIA,3300,3000,3300,1,0,high_budget_base_catalog
-gpu,rtx-5070,微星 RTX5070白魔龙 3X,NVIDIA,5400,5300,5400,1,0,high_budget_base_catalog
-gpu,rtx-5070-ti,微星 RTX5070TI万图师 3X,NVIDIA,7100,7200,7100,1,0,high_budget_base_catalog
-gpu,rtx-5080,微星 RTX5080万图师 3X,NVIDIA,9350,9300,9350,1,0,high_budget_base_catalog
-gpu,rtx-5090-d,技嘉 RTX5090D GAMING OC24G魔鹰,NVIDIA,20600,23000,20600,1,0,high_budget_base_catalog
-gpu,rtx-5090-d-v2,七彩虹 5090D ADOC 24G V2,NVIDIA,23300,17500,23300,1,0,high_budget_base_catalog
-gpu,rx-7800-xt,RX 7800 XT,AMD,3700,2300,3700,1,0,high_budget_base_catalog
+gpu,rtx-5060-ti,技嘉 RTX5060TI WF2MAX OC8G风魔MAX,NVIDIA,3500,3200,3500,1,0,high_budget_base_catalog
+gpu,rtx-5070,微星 RTX5070白魔龙 3X,NVIDIA,6699,5200,6699,1,0,high_budget_base_catalog
+gpu,rtx-5070-ti,微星 RTX5070TI万图师 3X,NVIDIA,8699,6999,8699,1,0,high_budget_base_catalog
+gpu,rtx-5080,微星 RTX5080万图师 3X,NVIDIA,14999,9500,14999,1,0,high_budget_base_catalog
+gpu,rtx-5090-d-v2,七彩虹 5090D ADOC 24G V2,NVIDIA,22999,19000,22999,1,0,high_budget_base_catalog
+gpu,rx-7800-xt,RX 7800 XT,AMD,3700,2700,3700,1,0,high_budget_base_catalog
 gpu,rx-7900-xt,RX 7900 XT,AMD,3200,3200,,1,0,high_budget_base_catalog
 gpu,rx-7900-xtx,RX 7900 XTX,AMD,4500,4500,,1,0,high_budget_base_catalog
-gpu,rx-9070-gre,RX 9070 GRE,AMD,3500,2700,3500,1,0,high_budget_base_catalog
+gpu,rx-9070-gre,RX 9070 GRE,AMD,3500,3500,3500,1,0,high_budget_base_catalog
 gpu,rx-9070-xt,蓝宝石 9070XT 16G 脉动,AMD,4950,4000,4950,1,0,high_budget_base_catalog

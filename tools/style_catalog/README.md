@@ -36,3 +36,9 @@ JSON 最小格式：
 ```
 
 `summary`、`tags`、`signature`、`highDetail`、`completeDetail` 可选；不写时脚本会生成默认文案。多套方案直接放进 `schemes` 数组，脚本会并行处理图片；下次只提交新增方案，脚本不会覆盖之前的方案。
+
+新增方案后刷新沉浸模式缩略图、透明边界数据和等高线纹理：
+
+```bash
+python3 tools/style_catalog/generate_explorer_assets.py
+```

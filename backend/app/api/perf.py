@@ -51,7 +51,7 @@ def _cached_or_estimate(
     session: Session,
     payload: PerfEstimateRequest,
 ) -> Tuple[PerfEstimateResponse, str]:
-    cache_key = response_cache_key("perf.estimate", payload)
+    cache_key = response_cache_key("perf.estimate.v2", payload)
     if http_request.app.state.settings.response_cache_enabled:
         cached = http_request.app.state.response_cache.get(cache_key)
         if cached is not None:

@@ -15,7 +15,7 @@ enum AppTab: String, CaseIterable {
         case .styles:
             return isSelected ? "paintpalette.fill" : "paintpalette"
         case .diy:
-            return isSelected ? "wrench.and.screwdriver.fill" : "wrench.and.screwdriver"
+            return "wrench.and.screwdriver.fill"
         case .profile:
             return isSelected ? "person.fill" : "person"
         }

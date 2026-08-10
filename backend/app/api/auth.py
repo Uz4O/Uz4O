@@ -38,6 +38,7 @@ class LoginRequest(BaseModel):
 class AppleLoginRequest(BaseModel):
     identity_token: str = Field(min_length=16, max_length=4096)
     authorization_code: Optional[str] = Field(default=None, max_length=4096)
+    nonce: str = Field(min_length=32, max_length=128)
 
 
 class AccountResponse(BaseModel):
@@ -114,6 +115,7 @@ def apple_login(
     identity = verify_apple_identity_token(
         request.identity_token,
         settings.apple_login_client_id,
+        request.nonce,
     )
     if identity is None:
         raise HTTPException(status_code=401, detail="Invalid Apple identity token")

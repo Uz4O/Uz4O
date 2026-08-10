@@ -22,6 +22,7 @@ from app.perf.profiles import (
     RenderMode,
     render_mode_for,
 )
+from app.perf.time_spy import effective_performance_score, has_time_spy_scores
 
 
 RESOLUTIONS = ("1080p", "2k", "4k")
@@ -213,8 +214,17 @@ def _build_model_readiness(
         for row in cpu_anchors
         if row.cpu_id in profiles
     }
+    gpu_axis_ids = {
+        row.gpu_id
+        for row in gpu_anchors
+        if row.gpu_id in profiles
+    }
+    use_time_spy = has_time_spy_scores(gpu_axis_ids)
     gpu_scores = {
-        profiles[row.gpu_id].performance_score
+        effective_performance_score(
+            profiles[row.gpu_id],
+            use_time_spy=use_time_spy,
+        )
         for row in gpu_anchors
         if row.gpu_id in profiles
     }
@@ -236,7 +246,12 @@ def _build_model_readiness(
         reasons.append("cpu_fit_monotonicity")
     if len(gpu_scores) < 2:
         reasons.append("gpu_fit_scores")
-    elif not _axis_is_monotonic(gpu_anchors, profiles, "gpu"):
+    elif not _axis_is_monotonic(
+        gpu_anchors,
+        profiles,
+        "gpu",
+        use_time_spy,
+    ):
         reasons.append("gpu_fit_monotonicity")
     if validation_share < 0.2:
         reasons.append("validation_holdout")
@@ -266,13 +281,22 @@ def _axis_is_monotonic(
     anchors: List[GamePerformanceAnchor],
     profiles: Dict[str, HardwarePerformanceProfile],
     axis: str,
+    use_time_spy: bool = False,
 ) -> bool:
     fps_by_score: Dict[int, List[int]] = {}
     for row in anchors:
         component_id = row.cpu_id if axis == "cpu" else row.gpu_id
         if component_id not in profiles:
             return False
-        score = profiles[component_id].performance_score
+        profile = profiles[component_id]
+        score = (
+            profile.performance_score
+            if axis == "cpu"
+            else effective_performance_score(
+                profile,
+                use_time_spy=use_time_spy,
+            )
+        )
         fps_by_score.setdefault(score, []).append(row.average_fps)
     ordered_fps = [
         mean(values)

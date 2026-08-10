@@ -165,55 +165,87 @@
     "price_date": "2026-07-07"
   },
   {
+    "id": "base-ssd-fanxiang-s500-pro-512gb",
+    "category": "storage",
+    "name": "梵想 S500 Pro 512GB",
+    "brand": "梵想",
+    "detail_raw": "S500 Pro · 512GB · NVMe",
+    "specs": {
+      "capacity_gb": 512,
+      "type": "NVMe"
+    },
+    "used_price": 400,
+    "new_price": 509,
+    "used_source": "用户2026-08-07提供的二手参考价",
+    "new_source": "用户2026-08-07提供的当前参考价",
+    "price_date": "2026-08-07"
+  },
+  {
+    "id": "base-ssd-fanxiang-s790e-1tb",
+    "category": "storage",
+    "name": "梵想 S790E 1TB",
+    "brand": "梵想",
+    "detail_raw": "S790E · 1TB · NVMe",
+    "specs": {
+      "capacity_gb": 1024,
+      "type": "NVMe"
+    },
+    "used_price": 750,
+    "new_price": 968,
+    "used_source": "用户2026-08-07提供的二手参考价",
+    "new_source": "用户2026-08-07提供的当前参考价",
+    "price_date": "2026-08-07"
+  },
+  {
     "id": "base-ssd-512gb-tlc",
     "category": "storage",
-    "name": "512GB TLC SSD",
-    "brand": "通用规格",
-    "detail_raw": "512GB · NVMe · TLC",
+    "name": "宏碁掠夺者 GM7 512GB",
+    "brand": "宏碁掠夺者",
+    "detail_raw": "GM7 · 512GB · NVMe · TLC",
     "specs": {
       "capacity_gb": 512,
       "type": "NVMe",
       "flash_type": "TLC"
     },
-    "used_price": 350,
-    "new_price": 500,
-    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "price_date": "2026-07-07"
+    "used_price": 500,
+    "new_price": 699,
+    "used_source": "用户2026-08-05提供的二手参考价",
+    "new_source": "用户2026-08-05提供的当前参考价",
+    "price_date": "2026-08-05"
   },
   {
     "id": "base-ssd-1tb-tlc",
     "category": "storage",
-    "name": "1TB TLC SSD",
-    "brand": "通用规格",
-    "detail_raw": "1TB · NVMe · TLC",
+    "name": "宏碁掠夺者 GM7 1TB",
+    "brand": "宏碁掠夺者",
+    "detail_raw": "GM7 · 1TB · NVMe · TLC",
     "specs": {
       "capacity_gb": 1024,
       "type": "NVMe",
       "flash_type": "TLC"
     },
-    "used_price": 600,
-    "new_price": 800,
-    "used_source": "用户6500元历史配置参考价",
-    "new_source": "用户6500元历史配置参考价",
-    "price_date": "2026-07-07"
+    "used_price": 900,
+    "new_price": 1199,
+    "used_source": "用户2026-08-05提供的二手参考价",
+    "new_source": "用户2026-08-05提供的当前参考价",
+    "price_date": "2026-08-05"
   },
   {
     "id": "base-ssd-2tb-tlc",
     "category": "storage",
-    "name": "2TB TLC SSD",
-    "brand": "通用规格",
-    "detail_raw": "2TB · NVMe · TLC",
+    "name": "宏碁掠夺者 GM7 1TB x2",
+    "brand": "宏碁掠夺者",
+    "detail_raw": "GM7 · 1TB x2 · NVMe · TLC",
     "specs": {
       "capacity_gb": 2048,
       "type": "NVMe",
       "flash_type": "TLC"
     },
-    "used_price": 1200,
-    "new_price": 1600,
-    "used_source": "由用户提供的1TB历史参考价按容量比例计算",
-    "new_source": "由用户提供的1TB历史参考价按容量比例计算",
-    "price_date": "2026-07-07"
+    "used_price": 1800,
+    "new_price": 2398,
+    "used_source": "由用户2026-08-05提供的GM7 1TB二手参考价按两块计算",
+    "new_source": "由用户2026-08-05提供的GM7 1TB当前参考价按两块计算",
+    "price_date": "2026-08-05"
   },
   {
     "id": "base-cooler-6-heatpipe",
@@ -265,37 +297,79 @@
     "price_date": "2026-07-07"
   },
   {
+    "id": "base-psu-550w",
+    "category": "psu",
+    "name": "玄武 550 V4 550W",
+    "brand": "玄武",
+    "detail_raw": "550 V4 · 550W",
+    "specs": {
+      "watt": 550
+    },
+    "used_price": 199,
+    "new_price": 199,
+    "used_source": "用户2026-08-05提供的当前参考价",
+    "new_source": "用户2026-08-05提供的当前参考价",
+    "price_date": "2026-08-05"
+  },
+  {
     "id": "base-psu-650w-gold",
     "category": "psu",
-    "name": "650W金牌电源",
-    "brand": "通用规格",
-    "detail_raw": "650W · 80+ Gold",
+    "name": "安耐美 GN650 V3 650W",
+    "brand": "安耐美",
+    "detail_raw": "GN650 V3 · 650W",
     "specs": {
-      "watt": 650,
-      "rating": "80+ Gold"
+      "watt": 650
     },
-    "used_price": 150,
-    "new_price": 200,
-    "used_source": "用户历史配置中的650W二手参考价",
-    "new_source": "用户2026-07-19提供的6000元全新配置参考价",
-    "price_date": "2026-07-19"
+    "used_price": 200,
+    "new_price": 299,
+    "used_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
+    "new_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
+    "price_date": "2026-08-05"
+  },
+  {
+    "id": "base-psu-750w-gold",
+    "category": "psu",
+    "name": "安耐美 GN750W V3 750W",
+    "brand": "安耐美",
+    "detail_raw": "GN750W V3 · 750W",
+    "specs": {
+      "watt": 750
+    },
+    "used_price": 249,
+    "new_price": 359,
+    "used_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+    "new_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+    "price_date": "2026-08-06"
   },
   {
     "id": "base-psu-850w-gold",
     "category": "psu",
-    "name": "850W金牌ATX 3.1电源",
-    "brand": "通用规格",
-    "detail_raw": "850W · 80+ Gold · ATX 3.1",
+    "name": "安耐美 PX850DF 850W",
+    "brand": "安耐美",
+    "detail_raw": "PX850DF · 850W",
     "specs": {
-      "watt": 850,
-      "rating": "80+ Gold",
-      "standard": "ATX 3.1"
+      "watt": 850
     },
-    "used_price": 250,
-    "new_price": 400,
-    "used_source": "用户2026-07-19提供的850W金牌电源二手参考价",
-    "new_source": "用户2026-07-19提供的850W金牌电源全新参考价",
-    "price_date": "2026-07-19"
+    "used_price": 659,
+    "new_price": 659,
+    "used_source": "用户2026-08-05提供的二手参考价",
+    "new_source": "用户2026-08-05提供的当前参考价",
+    "price_date": "2026-08-05"
+  },
+  {
+    "id": "base-psu-1000w-gold",
+    "category": "psu",
+    "name": "安耐美 PX1000DF 1000W",
+    "brand": "安耐美",
+    "detail_raw": "PX1000DF · 1000W",
+    "specs": {
+      "watt": 1000
+    },
+    "used_price": 859,
+    "new_price": 859,
+    "used_source": "用户2026-08-05提供的当前参考价",
+    "new_source": "用户2026-08-05提供的当前参考价",
+    "price_date": "2026-08-05"
   },
   {
     "id": "base-psu-1200w-gold",
@@ -305,12 +379,45 @@
     "detail_raw": "1200W · 80+ Gold · 全模组",
     "specs": {
       "watt": 1200,
-      "rating": "80+ Gold"
+      "rating": "80+ Gold",
+      "atx_version": 3.1,
+      "pcie_version": 5.1,
+      "gpu_connector": "12V-2x6",
+      "gpu_connector_max_watt": 600,
+      "cables_sold_separately": false,
+      "spec_source": "https://www.deepcool.com/download/pdf/PQ_G.pdf"
     },
     "used_price": null,
     "new_price": 650,
     "used_source": "",
     "new_source": "diyxx.com 公开商品目录（2026-07-30）",
     "price_date": "2026-07-30"
+  },
+  {
+    "id": "base-psu-1200w-platinum",
+    "category": "psu",
+    "name": "追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组）",
+    "brand": "追风者",
+    "detail_raw": "REVOLT · 1200W · 80+ Platinum",
+    "specs": {
+      "watt": 1200,
+      "rating": "80+ Platinum",
+      "model_number": "PH-P1200PR_BK01C",
+      "atx_version": 3.0,
+      "pcie_version": 5.1,
+      "gpu_connector": "12V-2x6",
+      "gpu_connector_max_watt": 600,
+      "length_mm": 160,
+      "width_mm": 150,
+      "height_mm": 86,
+      "cables_sold_separately": true,
+      "price_includes_compatible_cable_kit": true,
+      "spec_source": "https://phanteks.com/product/revolt-1200-black/"
+    },
+    "used_price": 799,
+    "new_price": null,
+    "used_source": "用户2026-08-08提供的二手参考价；仅适用于 PH-P1200PR_BK01C 且包含兼容完整线组和600W 12V-2x6线材的商品",
+    "new_source": "",
+    "price_date": "2026-08-08"
   }
 ]

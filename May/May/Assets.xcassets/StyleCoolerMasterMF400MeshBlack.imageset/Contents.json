@@ -4,6 +4,14 @@
       "filename" : "coolermaster-mf400-mesh-black.png",
       "idiom" : "universal",
       "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

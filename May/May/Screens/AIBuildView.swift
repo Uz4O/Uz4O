@@ -33,6 +33,7 @@ struct AIBuildView: View {
     @State private var selectedOfficeApps: Set<String> = []
     @State private var usesNoGpuBuild = false
     @State private var ownedGPUModel = ""
+    @State private var isOwnedGPUPickerPresented = false
     @State private var needsWirelessNetwork = false
     @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
@@ -73,23 +74,22 @@ struct AIBuildView: View {
         "COD", "赛博朋克2077", "荒野大镖客2", "GTA5", "黑神话悟空", "地平线6",
         "艾尔登法环", "城市天际线", "我的世界"
     ]
-    private let gameIcons = [
-        "什么都玩": "gamecontroller",
-        "瓦罗兰特": "scope",
-        "CS2": "target",
-        "PUBG": "figure.run",
-        "三角洲行动": "map",
-        "云顶之弈": "checkerboard.shield",
-        "LOL": "shield",
-        "COD": "crosshair",
-        "赛博朋克2077": "sparkles",
-        "荒野大镖客2": "mountain.2",
-        "GTA5": "car",
-        "黑神话悟空": "flame",
-        "地平线6": "steeringwheel",
-        "艾尔登法环": "circle.hexagongrid",
-        "城市天际线": "building.2",
-        "我的世界": "cube"
+    private let gameArtworkNames = [
+        "瓦罗兰特": "GameArtworkValorant",
+        "CS2": "GameArtworkCS2",
+        "PUBG": "GameArtworkPUBG",
+        "三角洲行动": "GameArtworkDeltaForce",
+        "云顶之弈": "GameArtworkTeamfightTactics",
+        "LOL": "GameArtworkLeagueOfLegends",
+        "COD": "GameArtworkCallOfDuty",
+        "赛博朋克2077": "GameArtworkCyberpunk2077",
+        "荒野大镖客2": "GameArtworkRedDeadRedemption2",
+        "GTA5": "GameArtworkGTAV",
+        "黑神话悟空": "GameArtworkBlackMythWukong",
+        "地平线6": "GameArtworkForzaHorizon6",
+        "艾尔登法环": "GameArtworkEldenRing",
+        "城市天际线": "GameArtworkCitiesSkylines",
+        "我的世界": "GameArtworkMinecraft"
     ]
     private let officeAppOptions = ["Office", "WPS", "Photoshop", "Premiere", "AutoCAD", "Blender"]
     private let officeAppIcons = [
@@ -102,10 +102,33 @@ struct AIBuildView: View {
     ]
     private let memorySizeOptions = ["16GB", "32GB"]
     private let storageSizeOptions = ["512GB", "1TB", "2TB"]
+    private let midBudgetCapacityOptions = ["32GB 内存", "1TB 固态"]
+
+    private var usesMidBudgetCapacityChoice: Bool {
+        let budgetValue = Int(budget)
+        return budgetValue >= 6500 && budgetValue < 8000
+    }
+
+    private var midBudgetCapacitySelection: Binding<String> {
+        Binding(
+            get: {
+                selectedMemorySize == "32GB" ? "32GB 内存" : "1TB 固态"
+            },
+            set: { selection in
+                if selection == "32GB 内存" {
+                    selectedMemorySize = "32GB"
+                    selectedStorageSize = "512GB"
+                } else {
+                    selectedMemorySize = "16GB"
+                    selectedStorageSize = "1TB"
+                }
+            }
+        )
+    }
 
     private var availableMemorySizeOptions: [String] {
         let budgetValue = Int(budget)
-        if budgetValue < 5000 {
+        if budgetValue < 6500 {
             return ["16GB"]
         }
         if budgetValue < 15000 {
@@ -170,15 +193,19 @@ struct AIBuildView: View {
 
                     StepProgressHeader(currentStep: currentStep, steps: visibleSteps)
 
-                    SoftCard(radius: 22) {
-                        VStack(alignment: .leading, spacing: 18) {
-                            if currentStep != .scenario {
-                                StepTitle(step: currentStep)
-                            }
-
+                    Group {
+                        if currentStep == .scenario {
                             stepContent
+                                .padding(.top, 4)
+                        } else {
+                            SoftCard(radius: 22) {
+                                VStack(alignment: .leading, spacing: 18) {
+                                    StepTitle(step: currentStep)
+                                    stepContent
+                                }
+                                .padding(22)
+                            }
                         }
-                        .padding(22)
                     }
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
                 }
@@ -209,6 +236,11 @@ struct AIBuildView: View {
         .onChange(of: budget) { _, _ in
             clampCapacitySelections()
         }
+        .onChange(of: usesNoGpuBuild) { _, isOwned in
+            if !isOwned {
+                ownedGPUModel = ""
+            }
+        }
         .onDisappear(perform: cancelGeneration)
         .alert("生成失败", isPresented: showsSubmissionError) {
             Button("重试") {
@@ -234,6 +266,15 @@ struct AIBuildView: View {
             .presentationCornerRadius(28)
             .presentationBackground(Color.white)
         }
+        .sheet(isPresented: $isOwnedGPUPickerPresented) {
+            HardwarePickerSheet(
+                title: "显卡",
+                icon: "display",
+                filters: HardwareCatalog.filters(for: "显卡"),
+                selectedValue: $ownedGPUModel
+            )
+            .presentationDetents([.large])
+        }
     }
 
     @ViewBuilder
@@ -254,18 +295,49 @@ struct AIBuildView: View {
             }
             .tint(AppTheme.primaryText)
             if usesNoGpuBuild {
-                TextField("例如 RTX 5070", text: $ownedGPUModel)
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
-                    .textFieldStyle(.roundedBorder)
-                    .accessibilityLabel("自备显卡型号")
+                Button {
+                    isOwnedGPUPickerPresented = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "display")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(AppTheme.primaryText)
+                            .frame(width: 34, height: 34)
+                            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("显卡型号")
+                                .font(.appSubheadline)
+                                .foregroundStyle(AppTheme.primaryText)
+                            Text(ownedGPUModel.isEmpty ? "请选择自备显卡型号" : ownedGPUModel)
+                                .font(.appBody)
+                                .foregroundStyle(ownedGPUModel.isEmpty ? AppTheme.secondaryText : AppTheme.primaryText)
+                                .lineLimit(1)
+                        }
+
+                        Spacer(minLength: 8)
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(AppTheme.secondaryText)
+                    }
+                    .padding(.horizontal, 12)
+                    .frame(minHeight: 58)
+                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(AppTheme.border.opacity(0.8), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("选择自备显卡型号")
             }
 
         case .scenario:
             ScenarioSelectionSection(
                 useCase: selectedUseCase,
                 gameOptions: gameOptions,
-                gameIcons: gameIcons,
+                gameArtworkNames: gameArtworkNames,
                 officeAppOptions: officeAppOptions,
                 officeAppIcons: officeAppIcons,
                 selectedGames: $selectedGames,
@@ -311,11 +383,19 @@ struct AIBuildView: View {
             } else {
                 UpgradePreferenceSection(selected: $upgradePreference)
             }
-            if availableMemorySizeOptions.count > 1 {
-                PreferenceSegmentGroup(title: "内存大小", options: availableMemorySizeOptions, selected: $selectedMemorySize)
-            }
-            if availableStorageSizeOptions.count > 1 {
-                PreferenceSegmentGroup(title: "存储大小", options: availableStorageSizeOptions, selected: $selectedStorageSize)
+            if usesMidBudgetCapacityChoice {
+                PreferenceSegmentGroup(
+                    title: "容量优先（二选一）",
+                    options: midBudgetCapacityOptions,
+                    selected: midBudgetCapacitySelection
+                )
+            } else {
+                if availableMemorySizeOptions.count > 1 {
+                    PreferenceSegmentGroup(title: "内存大小", options: availableMemorySizeOptions, selected: $selectedMemorySize)
+                }
+                if availableStorageSizeOptions.count > 1 {
+                    PreferenceSegmentGroup(title: "存储大小", options: availableStorageSizeOptions, selected: $selectedStorageSize)
+                }
             }
         }
     }
@@ -378,7 +458,7 @@ struct AIBuildView: View {
     private func submitBuildOptions() {
         guard !isSubmitting else { return }
         if usesNoGpuBuild && ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            submissionError = "请填写自备显卡型号"
+            submissionError = "请选择自备显卡型号"
             return
         }
 
@@ -452,6 +532,15 @@ struct AIBuildView: View {
         if !availableStorageSizeOptions.contains(selectedStorageSize),
            let fallback = availableStorageSizeOptions.last {
             selectedStorageSize = fallback
+        }
+
+        if usesMidBudgetCapacityChoice {
+            if selectedMemorySize == "32GB" {
+                selectedStorageSize = "512GB"
+            } else {
+                selectedMemorySize = "16GB"
+                selectedStorageSize = "1TB"
+            }
         }
     }
 }
@@ -987,9 +1076,9 @@ private struct WizardBottomBar: View {
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(canGoBack ? AppTheme.primaryText : AppTheme.mutedText)
                     .frame(width: 48, height: 48)
-                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                    .micro3DSurface(cornerRadius: AppTheme.controlRadius)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(Micro3DPressButtonStyle())
             .disabled(!canGoBack || isLoading)
             .accessibilityLabel("上一步")
 
@@ -1006,7 +1095,36 @@ private struct WizardBottomBar: View {
                 .background(AppTheme.primaryButton, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
                 .accessibilityLabel("正在生成配置方案")
             } else {
-                PrimaryButton(title: primaryTitle, icon: primaryIcon, action: onPrimary)
+                Button(action: onPrimary) {
+                    HStack(spacing: 8) {
+                        Text(primaryTitle)
+                        Image(systemName: primaryIcon)
+                    }
+                    .font(.appSubheadline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                                .fill(Color.black.opacity(0.52))
+                                .offset(y: 3)
+
+                            RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                                .fill(AppTheme.primaryButton)
+                        }
+                    }
+                    .overlay(alignment: .top) {
+                        Capsule()
+                            .fill(Color.white.opacity(0.28))
+                            .frame(height: 1)
+                            .padding(.horizontal, 18)
+                            .padding(.top, 1)
+                    }
+                    .shadow(color: Color.black.opacity(0.16), radius: 10, x: 0, y: 6)
+                    .shadow(color: Color.white.opacity(0.72), radius: 2, x: 0, y: -2)
+                }
+                .buttonStyle(Micro3DPressButtonStyle())
             }
         }
         .padding(.vertical, 4)
@@ -1088,7 +1206,7 @@ private struct BudgetStepButton: View {
 private struct ScenarioSelectionSection: View {
     let useCase: String
     let gameOptions: [String]
-    let gameIcons: [String: String]
+    let gameArtworkNames: [String: String]
     let officeAppOptions: [String]
     let officeAppIcons: [String: String]
     @Binding var selectedGames: Set<String>
@@ -1108,26 +1226,28 @@ private struct ScenarioSelectionSection: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 5) {
                 Text(pageTitle)
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(AppTheme.primaryText)
-                Text("可多选，AI 会自动调整配置")
+                Text("可多选，AI 会按游戏需求调整配置")
                     .font(.appBody)
                     .foregroundStyle(AppTheme.secondaryText)
             }
 
             if showsGames {
-                MultiChoiceChipSection(
-                    title: "热门游戏",
-                    subtitle: selectedGames.isEmpty ? "选择你玩过或准备玩的" : "已选 \(selectedGames.count) 个",
-                    options: gameOptions,
-                    selected: $selectedGames,
-                    icons: gameIcons,
-                    minimumChipWidth: 76,
-                    usesSquareTiles: true
-                )
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("全部游戏")
+                        .font(.appSubheadline)
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    GameArtworkSelectionGrid(
+                        options: gameOptions,
+                        selected: $selectedGames,
+                        artworkNames: gameArtworkNames
+                    )
+                }
             }
 
             if showsOfficeApps {
@@ -1140,6 +1260,130 @@ private struct ScenarioSelectionSection: View {
                     minimumChipWidth: 76,
                     usesSquareTiles: true
                 )
+            }
+        }
+    }
+}
+
+private struct GameArtworkSelectionGrid: View {
+    let options: [String]
+    @Binding var selected: Set<String>
+    let artworkNames: [String: String]
+
+    private let columns = Array(
+        repeating: GridItem(.flexible(), spacing: 8, alignment: .top),
+        count: 4
+    )
+
+    var body: some View {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: 14) {
+            ForEach(options, id: \.self) { option in
+                let isSelected = selected.contains(option)
+                GameArtworkTile(
+                    title: option,
+                    artworkName: artworkNames[option],
+                    isSelected: isSelected
+                ) {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.88)) {
+                        if isSelected {
+                            selected.remove(option)
+                        } else {
+                            selected.insert(option)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct GameArtworkTile: View {
+    let title: String
+    let artworkName: String?
+    let isSelected: Bool
+    let action: () -> Void
+
+    private let cornerRadius: CGFloat = 13
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                artwork
+                    .aspectRatio(1, contentMode: .fit)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                    .micro3DSurface(
+                        cornerRadius: cornerRadius,
+                        rimColor: isSelected
+                            ? AppTheme.primaryText.opacity(0.46)
+                            : AppTheme.border.opacity(0.78),
+                        borderColor: isSelected
+                            ? AppTheme.primaryText
+                            : Color.white.opacity(0.92),
+                        shadowColor: Color.black.opacity(isSelected ? 0.07 : 0.11),
+                        showsTopHighlight: false
+                    )
+                    .overlay {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .stroke(isSelected ? AppTheme.primaryText : Color.clear, lineWidth: 2.5)
+                    }
+                    .overlay(alignment: .topTrailing) {
+                        if isSelected {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 10, weight: .black))
+                                .foregroundStyle(.white)
+                                .frame(width: 22, height: 22)
+                                .background(Color.black, in: Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                .offset(x: 5, y: -5)
+                        }
+                    }
+                    .offset(y: isSelected ? 2 : 0)
+
+                Text(title)
+                    .font(.system(size: 10.5, weight: .semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.68)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 4)
+            }
+        }
+        .buttonStyle(Micro3DPressButtonStyle())
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    @ViewBuilder
+    private var artwork: some View {
+        if title == "什么都玩" {
+            GameArtworkCollage()
+        } else if let artworkName {
+            Image(artworkName)
+                .resizable()
+                .scaledToFill()
+        }
+    }
+}
+
+private struct GameArtworkCollage: View {
+    private let rows = [
+        ["GameArtworkPUBG", "GameArtworkValorant"],
+        ["GameArtworkBlackMythWukong", "GameArtworkCyberpunk2077"]
+    ]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(rows, id: \.self) { row in
+                HStack(spacing: 0) {
+                    ForEach(row, id: \.self) { artworkName in
+                        Image(artworkName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .clipped()
+                    }
+                }
             }
         }
     }

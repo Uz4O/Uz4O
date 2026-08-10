@@ -1,4 +1,3 @@
-import math
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -24,6 +23,7 @@ from app.catalog.repository import (
     update_recommended_components,
 )
 from app.catalog.seed import extract_catalog_components, read_catalog_components
+from app.catalog.rule_specs import minimum_psu_watt_for_specs
 from app.core.config import Settings
 from app.db import Base, get_session
 from app.main import create_app
@@ -38,7 +38,11 @@ def test_office_templates_follow_platform_capacity_and_workload_rules() -> None:
     templates = generate_office_templates()
 
     assert templates
-    assert [template.budget_min for template in templates[:3]] == [3000, 4000, 5000]
+    assert {template.budget_min for template in templates if "strongest" in template.id} == {
+        3000,
+        4000,
+        5000,
+    }
     assert all(template.use_cases == ["办公"] for template in templates)
 
     for template in templates:
@@ -48,12 +52,25 @@ def test_office_templates_follow_platform_capacity_and_workload_rules() -> None:
         assert len(parts) == 8
         assert parts["ram"].specs["capacity_gb"] == 16
         assert parts["storage"].specs["capacity_gb"] == 512
+        if template.budget_min <= 5_000:
+            assert (
+                parts["storage"].component_id
+                == "base-ssd-fanxiang-s500-pro-512gb"
+            )
+        else:
+            assert parts["storage"].component_id == "base-ssd-512gb-tlc"
 
-        required_psu = math.ceil(
-            (parts["cpu"].specs["tdp"] + parts["gpu"].specs["tdp"]) * 1.5
-            + 100
+        required_psu = minimum_psu_watt_for_specs(
+            parts["cpu"].specs["tdp"],
+            parts["gpu"].component_id,
+            parts["gpu"].specs["tdp"],
         )
         assert parts["psu"].specs["watt"] >= required_psu
+        if (
+            parts["gpu"].specs["tdp"] >= 140
+            and parts["gpu"].component_id != "rx-7650-gre"
+        ):
+            assert parts["psu"].specs["watt"] >= 650
 
         if template.budget_min <= 5000:
             assert "strongest" in template.id
@@ -84,7 +101,11 @@ def test_office_template_ranges_cover_every_supported_request_budget() -> None:
                     and template.details
                     and template.details.purchase_mode == purchase_mode
                 ]
-                if budget == 6000 and profile == "cuda" and purchase_mode == "new":
+                if (
+                    budget in {6000, 7000}
+                    and profile == "cuda"
+                    and purchase_mode == "new"
+                ):
                     assert matching == []
                 else:
                     assert len(matching) == 1
@@ -122,13 +143,13 @@ def test_office_workload_tags_select_the_correct_base() -> None:
             budget=7000,
             use_case="办公",
             office_apps=["Blender"],
-            preferences=["均衡", "全新"],
+            preferences=["均衡", "二手"],
         ),
         rows,
     )
 
     assert premiere[0].id == "office-7000-media-new"
-    assert blender[0].id == "office-7000-cuda-new"
+    assert blender[0].id == "office-7000-cuda-used"
 
 
 def test_office_default_capacity_request_does_not_call_ai_customization() -> None:
@@ -143,6 +164,19 @@ def test_office_default_capacity_request_does_not_call_ai_customization() -> Non
 
     assert request.requires_customization is False
     assert mixed_use.requires_customization is True
+
+
+def test_office_price_artifact_includes_expansion_storage() -> None:
+    prices = {
+        row.component_id: row.reference_price
+        for row in read_approved_price_rows(PRICE_PATH, approved_at="2026-08-05")
+    }
+
+    assert prices["base-ssd-512gb-tlc"] == 699
+    assert prices["base-ssd-1tb-tlc"] == 1_199
+    assert prices["base-ssd-2tb-tlc"] == 2_398
+    assert prices["base-ssd-fanxiang-s500-pro-512gb"] == 509
+    assert prices["base-ssd-fanxiang-s790e-1tb"] == 968
 
 
 def test_office_artifacts_import_and_public_option_flow() -> None:
@@ -195,7 +229,7 @@ def test_office_artifacts_import_and_public_option_flow() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body["options"]) == 3
+    assert len(body["options"]) == 2
     assert all(option["template_id"].startswith("office-") for option in body["options"])
     assert all(option["details"]["gpu_vendor"] == "nvidia" for option in body["options"])
     assert all(option["source"] == "template" for option in body["options"])

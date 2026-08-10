@@ -1,67 +1,29 @@
 {
-  "price_date": "2026-07-30",
+  "price_date": "2026-08-08",
   "completed_tiers": [
+    7500,
     8000,
-    9500
+    8500,
+    9000,
+    9500,
+    11000
   ],
-  "completed_template_count": 226,
+  "completed_template_count": 292,
   "pending_review": [],
   "missing_data": [
     {
-      "target_budget": 7500,
+      "target_budget": 10000,
       "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 8500,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 9000,
-      "direction": "aaa",
-      "purchase_mode": "used",
+      "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 10000,
-      "direction": "aaa",
-      "purchase_mode": "used",
+      "direction": "balanced",
+      "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 10000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 11000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 11000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 11000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
     },
     {
       "target_budget": 12000,
@@ -100,27 +62,6 @@
     },
     {
       "target_budget": 13000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 13000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 13000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 13000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -142,27 +83,6 @@
     },
     {
       "target_budget": 14000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 14000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 14000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 14000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -184,27 +104,6 @@
     },
     {
       "target_budget": 15000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 15000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 15000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 15000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -226,27 +125,6 @@
     },
     {
       "target_budget": 16000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 16000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 16000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -268,27 +146,6 @@
     },
     {
       "target_budget": 17000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 17000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 17000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 17000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -310,27 +167,6 @@
     },
     {
       "target_budget": 18000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 18000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 18000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 18000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -352,27 +188,6 @@
     },
     {
       "target_budget": 19000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 19000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 19000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 19000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -394,27 +209,6 @@
     },
     {
       "target_budget": 20000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 20000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 20000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 20000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -436,27 +230,6 @@
     },
     {
       "target_budget": 21000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 21000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 21000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 21000,
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -478,30 +251,10 @@
     },
     {
       "target_budget": 22000,
-      "direction": "fps",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 22000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 22000,
       "direction": "aaa",
       "purchase_mode": "used",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 22000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 22000,
@@ -533,19 +286,6 @@
     },
     {
       "target_budget": 23000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 23000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 23000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
@@ -556,21 +296,7 @@
       "direction": "aaa",
       "purchase_mode": "used",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 23000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 23000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 23000,
@@ -585,13 +311,6 @@
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 23000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 23000,
@@ -624,13 +343,6 @@
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 24000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
     },
     {
@@ -638,21 +350,7 @@
       "direction": "aaa",
       "purchase_mode": "used",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 24000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 24000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 24000,
@@ -699,12 +397,6 @@
     {
       "target_budget": 25000,
       "direction": "fps",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 25000,
-      "direction": "fps",
       "purchase_mode": "used",
       "reason": "no_feasible_candidate"
     },
@@ -719,21 +411,7 @@
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 25000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 25000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 25000,
@@ -747,21 +425,7 @@
       "direction": "aaa",
       "purchase_mode": "mixed",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 25000,
-      "direction": "aaa",
-      "purchase_mode": "mixed",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 25000,
-      "direction": "balanced",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 25000,
@@ -801,18 +465,6 @@
     {
       "target_budget": 26000,
       "direction": "fps",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "fps",
       "purchase_mode": "mixed",
       "reason": "no_feasible_candidate"
     },
@@ -821,21 +473,7 @@
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "aaa",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 26000,
@@ -856,21 +494,7 @@
       "direction": "balanced",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "balanced",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 26000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 26000,
@@ -888,29 +512,10 @@
     },
     {
       "target_budget": 27000,
-      "direction": "fps",
-      "purchase_mode": "new",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 27000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 27000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 27000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 27000,
@@ -932,13 +537,6 @@
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 27000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 27000,
@@ -956,23 +554,10 @@
     },
     {
       "target_budget": 28000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 28000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 28000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 28000,
@@ -994,13 +579,6 @@
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 28000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 28000,
@@ -1018,23 +596,10 @@
     },
     {
       "target_budget": 29000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 29000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 29000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 29000,
@@ -1056,13 +621,6 @@
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 29000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 29000,
@@ -1080,23 +638,10 @@
     },
     {
       "target_budget": 30000,
-      "direction": "fps",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate"
-    },
-    {
-      "target_budget": 30000,
       "direction": "aaa",
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 30000,
-      "direction": "aaa",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 30000,
@@ -1118,13 +663,6 @@
       "purchase_mode": "new",
       "reason": "no_feasible_candidate",
       "gpu_vendor": "amd"
-    },
-    {
-      "target_budget": 30000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "reason": "no_feasible_candidate",
-      "gpu_vendor": "nvidia"
     },
     {
       "target_budget": 30000,
@@ -1142,5 +680,90 @@
     }
   ],
   "failed_templates": [],
-  "underutilized_templates": []
+  "underutilized_templates": [
+    {
+      "template_id": "base-15000-aaa-mixed-amd",
+      "target_budget": 15000,
+      "estimated_total": 14438,
+      "remaining_budget": 562,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-16000-aaa-new-amd",
+      "target_budget": 16000,
+      "estimated_total": 15158,
+      "remaining_budget": 842,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-aaa-new-amd",
+      "target_budget": 18000,
+      "estimated_total": 16858,
+      "remaining_budget": 1142,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-18000-aaa-used-amd",
+      "target_budget": 18000,
+      "estimated_total": 17139,
+      "remaining_budget": 861,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-21000-aaa-used",
+      "target_budget": 21000,
+      "estimated_total": 20439,
+      "remaining_budget": 561,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-21000-aaa-used-amd",
+      "target_budget": 21000,
+      "estimated_total": 19839,
+      "remaining_budget": 1161,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-21000-aaa-mixed-amd",
+      "target_budget": 21000,
+      "estimated_total": 19638,
+      "remaining_budget": 1362,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-22000-aaa-new-amd",
+      "target_budget": 22000,
+      "estimated_total": 20758,
+      "remaining_budget": 1242,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-22000-aaa-mixed",
+      "target_budget": 22000,
+      "estimated_total": 20738,
+      "remaining_budget": 1262,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-23000-aaa-used",
+      "target_budget": 23000,
+      "estimated_total": 22139,
+      "remaining_budget": 861,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-24000-aaa-used",
+      "target_budget": 24000,
+      "estimated_total": 22139,
+      "remaining_budget": 1861,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    },
+    {
+      "template_id": "base-28000-aaa-new",
+      "target_budget": 28000,
+      "estimated_total": 27207,
+      "remaining_budget": 793,
+      "reason": "下一档有效性能升级超过预算上限，不使用主板或机箱凑预算"
+    }
+  ]
 }

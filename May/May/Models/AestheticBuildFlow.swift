@@ -379,15 +379,15 @@ enum AestheticResolutionChoice: String, CaseIterable, Identifiable {
 }
 
 enum AestheticBuildStep: Int, CaseIterable {
-    case restoration
+    case performanceBudget
     case games
     case experience
     case quote
 
     var title: String {
         switch self {
-        case .restoration:
-            return "外观取舍"
+        case .performanceBudget:
+            return "预算和用途"
         case .games:
             return "常玩游戏"
         case .experience:
@@ -406,18 +406,27 @@ struct AestheticBuildQuote: Equatable {
 }
 
 struct AestheticBuildFlow: Equatable {
-    var step: AestheticBuildStep = .restoration
+    static let minimumPerformanceBudget = 4000
+    static let maximumPerformanceBudget = 30000
+
+    var step: AestheticBuildStep = .performanceBudget
     let styleID: String
+    private let lockedAppearanceCost: Int?
     var selectedTier: AestheticRestorationTier = .core
+    var performanceBudget: Int = 8000
+    var selectedUseCase = "游戏"
+    var hasOwnedGPU = false
+    var ownedGPUModel = ""
     var selectedGames: [PerformanceGame] = [.cyberpunk]
     var selectedExperience: AestheticExperience = .smooth
     var selectedResolution: AestheticResolutionChoice = .unknown
     private(set) var isQuoteConfirmed = false
 
-    init(styleID: String = AestheticBuildStyle.featured[0].id) {
+    init(styleID: String = AestheticBuildStyle.featured[0].id, appearanceCost: Int? = nil) {
         self.styleID = AestheticBuildStyle.all.contains { $0.id == styleID }
             ? styleID
             : AestheticBuildStyle.all[0].id
+        self.lockedAppearanceCost = appearanceCost
     }
 
     var style: AestheticBuildStyle {
@@ -428,20 +437,55 @@ struct AestheticBuildFlow: Equatable {
         style.options.first { $0.tier == selectedTier } ?? style.options[0]
     }
 
+    var appearanceCost: Int {
+        lockedAppearanceCost ?? style.overviewTotal(for: .black)
+    }
+
     var resolvedResolution: PerformanceResolution {
         selectedResolution.resolved
     }
 
     var quote: AestheticBuildQuote {
-        let performanceCore = basePerformanceCost + gameAdjustment
-        let styleModule = restoration.styleCost
+        let performanceCore = lockedAppearanceCost == nil
+            ? basePerformanceCost + gameAdjustment
+            : AestheticPriceRange(performanceBudget, performanceBudget)
+        let styleModule = lockedAppearanceCost.map { AestheticPriceRange($0, $0) } ?? restoration.styleCost
 
         return AestheticBuildQuote(
             performanceCore: performanceCore,
             styleModule: styleModule,
-            aestheticPremium: restoration.premium,
+            aestheticPremium: lockedAppearanceCost == nil
+                ? restoration.premium
+                : AestheticPriceRange(0, 0),
             total: performanceCore + styleModule
         )
+    }
+
+    mutating func setPerformanceBudget(_ budget: Int) {
+        performanceBudget = min(
+            max(budget, Self.minimumPerformanceBudget),
+            Self.maximumPerformanceBudget
+        )
+        isQuoteConfirmed = false
+    }
+
+    mutating func selectUseCase(_ useCase: String) {
+        guard AppMockData.useCases.contains(useCase) else { return }
+        selectedUseCase = useCase
+        isQuoteConfirmed = false
+    }
+
+    mutating func setHasOwnedGPU(_ hasOwnedGPU: Bool) {
+        self.hasOwnedGPU = hasOwnedGPU
+        if !hasOwnedGPU {
+            ownedGPUModel = ""
+        }
+        isQuoteConfirmed = false
+    }
+
+    mutating func setOwnedGPUModel(_ model: String) {
+        ownedGPUModel = model
+        isQuoteConfirmed = false
     }
 
     mutating func selectTier(_ tier: AestheticRestorationTier) {
@@ -483,10 +527,6 @@ struct AestheticBuildFlow: Equatable {
     mutating func goPrevious() {
         guard let previous = AestheticBuildStep(rawValue: step.rawValue - 1) else { return }
         step = previous
-    }
-
-    mutating func showRestoration() {
-        step = .restoration
     }
 
     mutating func showExperience() {

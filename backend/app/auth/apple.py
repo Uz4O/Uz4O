@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Optional
@@ -17,7 +19,11 @@ class AppleIdentity:
     email: Optional[str] = None
 
 
-def verify_apple_identity_token(identity_token: str, client_id: str) -> Optional[AppleIdentity]:
+def verify_apple_identity_token(
+    identity_token: str,
+    client_id: str,
+    nonce: str,
+) -> Optional[AppleIdentity]:
     try:
         signing_key = _apple_jwk_client().get_signing_key_from_jwt(identity_token).key
         payload = jwt.decode(
@@ -32,6 +38,13 @@ def verify_apple_identity_token(identity_token: str, client_id: str) -> Optional
 
     sub = payload.get("sub")
     if not isinstance(sub, str) or not sub:
+        return None
+    token_nonce = payload.get("nonce")
+    expected_nonce = hashlib.sha256(nonce.encode("utf-8")).hexdigest()
+    if not isinstance(token_nonce, str) or not hmac.compare_digest(
+        token_nonce,
+        expected_nonce,
+    ):
         return None
     email = payload.get("email")
     return AppleIdentity(sub=sub, email=email if isinstance(email, str) else None)

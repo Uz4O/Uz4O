@@ -6,29 +6,38 @@ struct AestheticBuildView: View {
     let onGenerate: () -> Void
 
     var body: some View {
-        VStack(spacing: 14) {
+        ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
                     ScreenHeader(title: "颜值装机", trailingIcon: nil, onBack: goBack)
                         .padding(.top, 8)
 
-                    FlowStepIndicator(
-                        currentStep: flow.step.rawValue + 1,
-                        totalSteps: AestheticBuildStep.allCases.count,
-                        currentTitle: flow.step.title
-                    )
+                    AestheticStepProgressHeader(currentStep: flow.step)
 
                     stepContent
                 }
                 .padding(.horizontal, AppTheme.screenPadding)
-                .padding(.bottom, 10)
+                .padding(.bottom, 92)
             }
 
-            PrimaryButton(
-                title: flow.step == .quote ? "生成配置方案" : "下一步",
-                icon: flow.step == .quote ? "sparkles" : "arrow.right",
-                action: handlePrimaryAction
-            )
+            HStack(spacing: 12) {
+                Button(action: goPreviousStep) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(flow.step == .performanceBudget ? AppTheme.mutedText : AppTheme.primaryText)
+                        .frame(width: 48, height: 48)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                }
+                .buttonStyle(.plain)
+                .disabled(flow.step == .performanceBudget)
+                .accessibilityLabel("上一步")
+
+                PrimaryButton(
+                    title: flow.step == .quote ? "生成配置方案" : "下一步",
+                    icon: flow.step == .quote ? "sparkles" : "arrow.right",
+                    action: handlePrimaryAction
+                )
+            }
             .padding(.horizontal, AppTheme.screenPadding)
             .padding(.bottom, 18)
         }
@@ -38,8 +47,8 @@ struct AestheticBuildView: View {
     @ViewBuilder
     private var stepContent: some View {
         switch flow.step {
-        case .restoration:
-            RestorationStep(flow: $flow)
+        case .performanceBudget:
+            PerformanceBudgetStep(flow: $flow)
         case .games:
             GamesStep(flow: $flow)
         case .experience:
@@ -50,7 +59,7 @@ struct AestheticBuildView: View {
     }
 
     private func goBack() {
-        if flow.step == .restoration {
+        if flow.step == .performanceBudget {
             onClose()
         } else {
             flow.goPrevious()
@@ -65,84 +74,213 @@ struct AestheticBuildView: View {
             flow.goNext()
         }
     }
-}
 
-private struct RestorationStep: View {
-    @Binding var flow: AestheticBuildFlow
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            SoftCard(radius: 22) {
-                HStack(spacing: 14) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(flow.style.title)
-                            .font(.system(size: 24, weight: .heavy))
-                            .foregroundStyle(AppTheme.primaryText)
-
-                        Text(flow.style.summary)
-                            .font(.appBody)
-                            .foregroundStyle(AppTheme.secondaryText)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    Spacer(minLength: 8)
-
-                    Image(flow.style.image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 128, height: 96)
-                }
-                .padding(18)
-            }
-
-            ForEach(flow.style.options) { option in
-                RestorationOptionCard(
-                    option: option,
-                    isSelected: flow.restoration.id == option.id
-                ) {
-                    flow.selectTier(option.tier)
-                }
-            }
-        }
+    private func goPreviousStep() {
+        guard flow.step != .performanceBudget else { return }
+        flow.goPrevious()
     }
 }
 
-private struct RestorationOptionCard: View {
-    let option: AestheticRestorationOption
-    let isSelected: Bool
+private struct PerformanceBudgetStep: View {
+    @Binding var flow: AestheticBuildFlow
+
+    var body: some View {
+        SoftCard(radius: 22) {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 7) {
+                    Text("性能预算和用途")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    Text("外观方案费用已单独计算，AI 会按性能预算选择其他核心配件。")
+                        .font(.appBody)
+                        .foregroundStyle(AppTheme.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Text("性能预算")
+                            .font(.appSubheadline)
+                        Spacer()
+                        Text("¥ \(flow.performanceBudget)")
+                            .font(.system(size: 22, weight: .heavy))
+                            .monospacedDigit()
+                    }
+
+                    HStack {
+                        Text("¥ 4000")
+                        Spacer()
+                        Text("¥ 30000")
+                    }
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondaryText)
+
+                    HStack(spacing: 12) {
+                        AestheticBudgetStepButton(
+                            systemName: "minus",
+                            isEnabled: flow.performanceBudget > AestheticBuildFlow.minimumPerformanceBudget
+                        ) {
+                            flow.setPerformanceBudget(flow.performanceBudget - 100)
+                        }
+
+                        Slider(
+                            value: Binding(
+                                get: { Double(flow.performanceBudget) },
+                                set: { flow.setPerformanceBudget(Int($0.rounded())) }
+                            ),
+                            in: Double(AestheticBuildFlow.minimumPerformanceBudget)...Double(AestheticBuildFlow.maximumPerformanceBudget),
+                            step: 100
+                        )
+                        .tint(AppTheme.primaryText)
+
+                        AestheticBudgetStepButton(
+                            systemName: "plus",
+                            isEnabled: flow.performanceBudget < AestheticBuildFlow.maximumPerformanceBudget
+                        ) {
+                            flow.setPerformanceBudget(flow.performanceBudget + 100)
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("主要用途")
+                        .font(.appSubheadline)
+                        .foregroundStyle(AppTheme.primaryText)
+
+                    LiquidGlassSegmentedPicker(
+                        options: AppMockData.useCases,
+                        selection: Binding(
+                            get: { flow.selectedUseCase },
+                            set: { flow.selectUseCase($0) }
+                        ),
+                        title: { $0 }
+                    )
+                }
+
+                Toggle(
+                    isOn: Binding(
+                        get: { flow.hasOwnedGPU },
+                        set: { flow.setHasOwnedGPU($0) }
+                    )
+                ) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("自备显卡")
+                            .font(.appSubheadline)
+                            .foregroundStyle(AppTheme.primaryText)
+                        Text(flow.hasOwnedGPU ? "性能预算不包含显卡" : "由 AI 在性能预算内搭配显卡")
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                    }
+                }
+                .tint(AppTheme.primaryText)
+
+                if flow.hasOwnedGPU {
+                    TextField(
+                        "例如 RTX 5070",
+                        text: Binding(
+                            get: { flow.ownedGPUModel },
+                            set: { flow.setOwnedGPUModel($0) }
+                        )
+                    )
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityLabel("自备显卡型号")
+                }
+
+                Divider()
+
+                HStack {
+                    Text("外观配件费用（另计）")
+                        .foregroundStyle(AppTheme.secondaryText)
+                    Spacer()
+                    Text("¥\(flow.appearanceCost.formatted())")
+                        .fontWeight(.semibold)
+                }
+                .font(.appSubheadline)
+            }
+            .padding(22)
+        }
+        .animation(.easeOut(duration: 0.2), value: flow.hasOwnedGPU)
+    }
+}
+
+private struct AestheticBudgetStepButton: View {
+    let systemName: String
+    let isEnabled: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            SoftCard(radius: 18) {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(option.tier.title)
-                            .font(.appHeadline)
-                            .foregroundStyle(AppTheme.primaryText)
-
-                        Spacer()
-
-                        Text("约 \(option.fidelity)%")
-                            .font(.system(size: 18, weight: .heavy))
-                            .foregroundStyle(AppTheme.primaryText)
-                    }
-
-                    Text(option.styleCost.label)
-                        .font(.appSubheadline)
-                        .foregroundStyle(AppTheme.secondaryText)
-
-                    DetailLine(title: "保留：", value: option.keeps)
-                    DetailLine(title: "取舍：", value: option.tradeoff)
-                }
-                .padding(16)
-            }
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 2 : 1)
-            )
+            Image(systemName: systemName)
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(isEnabled ? AppTheme.primaryText : AppTheme.mutedText)
+                .frame(width: 34, height: 34)
+                .background(AppTheme.surface, in: Circle())
+                .overlay(Circle().stroke(AppTheme.border, lineWidth: 1))
         }
         .buttonStyle(.plain)
+        .disabled(!isEnabled)
+    }
+}
+
+private struct AestheticStepProgressHeader: View {
+    let currentStep: AestheticBuildStep
+
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack {
+                ForEach(Array(AestheticBuildStep.allCases.enumerated()), id: \.offset) { index, step in
+                    VStack(spacing: 6) {
+                        ZStack {
+                            Circle()
+                                .fill(index <= currentStep.rawValue ? AppTheme.primaryText : AppTheme.surface)
+                                .frame(width: 22, height: 22)
+                                .overlay(
+                                    Circle()
+                                        .stroke(index <= currentStep.rawValue ? Color.clear : AppTheme.border, lineWidth: 1)
+                                )
+
+                            if index < currentStep.rawValue {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundStyle(.white)
+                            } else {
+                                Text("\(index + 1)")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundStyle(index == currentStep.rawValue ? .white : AppTheme.secondaryText)
+                            }
+                        }
+
+                        Text(step.title)
+                            .font(.system(size: 9, weight: index == currentStep.rawValue ? .bold : .semibold))
+                            .foregroundStyle(index == currentStep.rawValue ? AppTheme.primaryText : AppTheme.secondaryText)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+                    }
+                    .frame(width: 66)
+
+                    if index < AestheticBuildStep.allCases.count - 1 {
+                        Rectangle()
+                            .fill(index < currentStep.rawValue ? AppTheme.primaryText : AppTheme.border)
+                            .frame(height: 2)
+                    }
+                }
+            }
+
+            HStack {
+                Text("第 \(currentStep.rawValue + 1)/\(AestheticBuildStep.allCases.count) 步")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(AppTheme.primaryText)
+                    .padding(.horizontal, 10)
+                    .frame(height: 26)
+                    .background(AppTheme.surface, in: Capsule())
+                    .modifier(AppTheme.cardShadow)
+
+                Spacer()
+            }
+        }
     }
 }
 
@@ -290,9 +428,8 @@ private struct QuoteStep: View {
 
             SoftCard(radius: 22) {
                 VStack(spacing: 14) {
-                    QuoteRow(title: "性能核心", value: flow.quote.performanceCore.label)
-                    QuoteRow(title: "外观与散热", value: flow.quote.styleModule.label)
-                    QuoteRow(title: "其中颜值溢价", value: flow.quote.aestheticPremium.label)
+                    QuoteRow(title: "性能配件预算", value: flow.quote.performanceCore.label)
+                    QuoteRow(title: "外观配件费用", value: flow.quote.styleModule.label)
                     QuoteRow(title: "整机预计", value: flow.quote.total.label)
 
                     if flow.selectedResolution == .unknown {
@@ -309,14 +446,8 @@ private struct QuoteStep: View {
                 .font(.appCaption)
                 .foregroundStyle(AppTheme.warning)
 
-            HStack(spacing: 10) {
-                SecondaryActionButton(title: "少为外观花一点") {
-                    flow.showRestoration()
-                }
-
-                SecondaryActionButton(title: "游戏性能低一点") {
-                    flow.showExperience()
-                }
+            SecondaryActionButton(title: "游戏性能低一点") {
+                flow.showExperience()
             }
         }
     }

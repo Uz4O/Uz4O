@@ -306,7 +306,7 @@ def test_10000_plus_template_rejects_more_than_800_over_budget() -> None:
             upsert_build_templates(session, [template])
 
 
-def test_detailed_template_rejects_weak_cpu_for_5070ti() -> None:
+def test_detailed_template_rejects_low_cpu_high_gpu_pairing() -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     Base.metadata.create_all(engine)
     template = next(
@@ -315,15 +315,15 @@ def test_detailed_template_rejects_weak_cpu_for_5070ti() -> None:
         if item.components["gpu"] == "rtx-5070-ti"
     ).model_copy(deep=True)
     cpu_part = next(part for part in template.details.parts if part.role == "cpu")
-    cpu_part.component_id = "r5-9600x"
-    cpu_part.name = "R5 9600X"
-    cpu_part.specs = {"socket": "AM5", "perf_index": 72, "tdp": 105}
-    template.components["cpu"] = "r5-9600x"
+    cpu_part.component_id = "r5-7500f"
+    cpu_part.name = "R5 7500F"
+    cpu_part.specs = {"socket": "AM5", "perf_index": 60, "tdp": 88}
+    template.components["cpu"] = "r5-7500f"
 
     with Session(engine) as session:
         with pytest.raises(
             ValueError,
-            match="requires R7 9700X-class or faster CPU",
+            match="low-CPU/high-GPU imbalance",
         ):
             upsert_build_templates(session, [template])
 

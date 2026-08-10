@@ -6,6 +6,30 @@ struct UpgradePlanConfigurationRulesTests {
         var configuration = UpgradePlanConfiguration.sample
 
         assertEqual(
+            UpgradePlanStep.allCases.map(\.title),
+            ["当前电脑", "升级目标", "升级方案"],
+            "Upgrade advice should use the optimized three-step flow."
+        )
+        assertEqual(
+            UpgradeGoal.selectableCases.map(\.title),
+            ["帮我判断短板", "游戏帧率和画质"],
+            "Only diagnosis and gaming should remain as selectable upgrade goals."
+        )
+        assertEqual(configuration.step, .computer, "Upgrade advice should begin with the current computer.")
+        assertEqual(configuration.goal, .gaming, "The preview should begin with the selected gaming direction.")
+        assertEqual(configuration.selectedGamesDisplay, "CS2  /  PUBG  /  无畏契约", "Selected games should keep the approved display order.")
+
+        configuration.goNext()
+        assertEqual(configuration.step, .goal, "The second step should collect the upgrade goal and conditions.")
+        configuration.goNext()
+        assertEqual(configuration.step, .result, "The third step should show the upgrade plan.")
+        configuration.goBack()
+        assertEqual(configuration.step, .goal, "Back should return to the goal step.")
+
+        configuration.toggleGame("CS2")
+        assertEqual(configuration.selectedGames.contains("CS2"), false, "Games should be removable from the multi-select.")
+
+        assertEqual(
             UpgradePlanConfiguration.categories.map(\.title),
             ["CPU", "显卡", "主板", "内存", "硬盘", "电源"],
             "Upgrade plan should use the same selectable hardware categories as performance testing."

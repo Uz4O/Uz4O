@@ -159,10 +159,9 @@ private struct BuildOptionCard: View {
             .padding(.top, 25)
             .padding(.bottom, 24)
             .frame(maxWidth: .infinity, minHeight: 176, alignment: .leading)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: 22))
-            .shadow(color: Color.black.opacity(0.07), radius: 16, x: 0, y: 8)
+            .micro3DSurface(cornerRadius: 22)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(Micro3DPressButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityHint("查看方案详情")
     }

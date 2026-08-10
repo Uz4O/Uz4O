@@ -10,6 +10,16 @@ struct AestheticBuildFlowRulesTests {
         assertEqual(panorama.options.map(\.tier), [.core, .high, .complete], "Restoration choices should be ordered.")
 
         var flow = AestheticBuildFlow(styleID: panorama.id)
+        assertEqual(flow.step, .performanceBudget, "Performance budget should be the first aesthetic build step.")
+        assertEqual(AestheticBuildStep.allCases.count, 4, "The aesthetic build flow should have four steps.")
+        flow.setPerformanceBudget(3500)
+        assertEqual(flow.performanceBudget, 4000, "Performance budget should not go below ¥4,000.")
+        flow.selectUseCase("办公")
+        assertEqual(flow.selectedUseCase, "办公", "The selected use case should be retained.")
+        flow.setHasOwnedGPU(true)
+        flow.setOwnedGPUModel("RTX 5070")
+        assertTrue(flow.hasOwnedGPU, "An owned GPU should be retained in the flow.")
+        assertEqual(flow.ownedGPUModel, "RTX 5070", "The owned GPU model should be retained.")
         assertEqual(flow.resolvedResolution, .twoK, "Unknown display should use 2K for the demo quote.")
         assertEqual(flow.quote.total, flow.quote.performanceCore + flow.quote.styleModule, "Total should not double-count style parts.")
 

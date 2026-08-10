@@ -112,7 +112,11 @@ def test_apple_login_reports_missing_server_configuration_without_leaking_token(
 
     response = client.post(
         "/v1/auth/apple/login",
-        json={"identity_token": identity_token, "authorization_code": "apple-code"},
+        json={
+            "identity_token": identity_token,
+            "authorization_code": "apple-code",
+            "nonce": "test-nonce-with-at-least-32-characters",
+        },
     )
 
     assert response.status_code == 503
@@ -126,9 +130,10 @@ def test_apple_login_uses_verified_identity_to_create_account(monkeypatch) -> No
         apple_login_client_id="com.example.app",
     )
 
-    def fake_verify(identity_token: str, client_id: str):
+    def fake_verify(identity_token: str, client_id: str, nonce: str):
         assert identity_token == "valid.apple.identity.token"
         assert client_id == "com.example.app"
+        assert nonce == "test-nonce-with-at-least-32-characters"
         from app.auth.apple import AppleIdentity
 
         return AppleIdentity(sub="apple-user-1", email="user@example.com")
@@ -137,7 +142,10 @@ def test_apple_login_uses_verified_identity_to_create_account(monkeypatch) -> No
 
     login_response = client.post(
         "/v1/auth/apple/login",
-        json={"identity_token": "valid.apple.identity.token"},
+        json={
+            "identity_token": "valid.apple.identity.token",
+            "nonce": "test-nonce-with-at-least-32-characters",
+        },
     )
 
     assert login_response.status_code == 200
@@ -157,16 +165,33 @@ def test_apple_login_rejects_invalid_identity_without_leaking_token(monkeypatch)
     client = make_client(apple_login_client_id="com.example.app")
     identity_token = "invalid.apple.identity.token"
 
-    monkeypatch.setattr("app.api.auth.verify_apple_identity_token", lambda token, client_id: None)
+    monkeypatch.setattr(
+        "app.api.auth.verify_apple_identity_token",
+        lambda token, client_id, nonce: None,
+    )
 
     response = client.post(
         "/v1/auth/apple/login",
-        json={"identity_token": identity_token},
+        json={
+            "identity_token": identity_token,
+            "nonce": "test-nonce-with-at-least-32-characters",
+        },
     )
 
     assert response.status_code == 401
     assert response.json() == {"detail": "Invalid Apple identity token"}
     assert identity_token not in response.text
+
+
+def test_apple_login_requires_nonce() -> None:
+    client = make_client(apple_login_client_id="com.example.app")
+
+    response = client.post(
+        "/v1/auth/apple/login",
+        json={"identity_token": "valid.apple.identity.token"},
+    )
+
+    assert response.status_code == 422
 
 
 def test_login_token_uses_app_configured_secret() -> None:

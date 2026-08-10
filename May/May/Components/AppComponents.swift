@@ -56,6 +56,76 @@ struct PrimaryButton: View {
     }
 }
 
+struct Micro3DPressButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .offset(y: configuration.isPressed ? 1.5 : 0)
+            .opacity(configuration.isPressed ? 0.88 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+private struct Micro3DSurfaceModifier: ViewModifier {
+    let cornerRadius: CGFloat
+    let surfaceColor: Color
+    let rimColor: Color
+    let borderColor: Color
+    let shadowColor: Color
+    let showsTopHighlight: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .background {
+                ZStack {
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(rimColor)
+                        .offset(y: 3)
+
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(surfaceColor)
+                }
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(borderColor, lineWidth: 1)
+            }
+            .overlay(alignment: .top) {
+                if showsTopHighlight {
+                    Capsule()
+                        .fill(Color.white.opacity(0.92))
+                        .frame(height: 1)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 1)
+                }
+            }
+            .shadow(color: shadowColor, radius: 9, x: 0, y: 5)
+            .shadow(color: Color.white.opacity(0.86), radius: 2, x: 0, y: -2)
+    }
+}
+
+extension View {
+    func micro3DSurface(
+        cornerRadius: CGFloat,
+        surfaceColor: Color = AppTheme.surface,
+        rimColor: Color = AppTheme.border.opacity(0.62),
+        borderColor: Color = AppTheme.border.opacity(0.72),
+        shadowColor: Color = Color.black.opacity(0.075),
+        showsTopHighlight: Bool = true
+    ) -> some View {
+        modifier(
+            Micro3DSurfaceModifier(
+                cornerRadius: cornerRadius,
+                surfaceColor: surfaceColor,
+                rimColor: rimColor,
+                borderColor: borderColor,
+                shadowColor: shadowColor,
+                showsTopHighlight: showsTopHighlight
+            )
+        )
+    }
+}
+
 struct PostComposerButton: View {
     var size: CGFloat = 40
     var iconSize: CGFloat = 19

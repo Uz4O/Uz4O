@@ -1,11 +1,26 @@
 import SwiftUI
+import Photos
+import UIKit
 
 struct BuildResultView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var hasRevealed = false
+    @State private var feedbackMessage = ""
+    @State private var showsFeedback = false
 
     let plan: BuildPlan
     let onBack: () -> Void
+    let onEditInDIY: (() -> Void)?
+
+    init(
+        plan: BuildPlan,
+        onBack: @escaping () -> Void,
+        onEditInDIY: (() -> Void)? = nil
+    ) {
+        self.plan = plan
+        self.onBack = onBack
+        self.onEditInDIY = onEditInDIY
+    }
 
     private var isVisible: Bool {
         hasRevealed || reduceMotion
@@ -21,11 +36,27 @@ struct BuildResultView: View {
                 PartsListCard(plan: plan, isVisible: isVisible, hasRevealed: hasRevealed)
                 TotalPriceSection(totalPrice: plan.totalPrice)
 
-                PrimaryButton(title: "保存配置单", icon: nil, action: {}, backgroundColor: .black)
-                    .frame(maxWidth: 420)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 2)
-                    .padding(.bottom, 22)
+                HStack(spacing: 12) {
+                    ResultActionButton(
+                        title: "保存为图片",
+                        systemName: "photo",
+                        isPrimary: false,
+                        action: saveConfigurationImage
+                    )
+
+                    if let onEditInDIY {
+                        ResultActionButton(
+                            title: "进入DIY界面编辑",
+                            systemName: "wrench.and.screwdriver",
+                            isPrimary: true,
+                            action: onEditInDIY
+                        )
+                    }
+                }
+                .frame(maxWidth: 420)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, 2)
+                .padding(.bottom, 22)
             }
             .padding(.horizontal, 16)
             .padding(.top, 14)
@@ -37,6 +68,11 @@ struct BuildResultView: View {
         .onAppear {
             guard !reduceMotion else { return }
             hasRevealed = true
+        }
+        .alert("配置方案", isPresented: $showsFeedback) {
+            Button("好的", role: .cancel) {}
+        } message: {
+            Text(feedbackMessage)
         }
     }
 
@@ -64,6 +100,81 @@ struct BuildResultView: View {
 
             Spacer()
         }
+    }
+
+    @MainActor
+    private func saveConfigurationImage() {
+        let renderer = ImageRenderer(
+            content: BuildResultShareCard(plan: plan)
+                .frame(width: 430)
+        )
+        renderer.scale = 3
+
+        guard let image = renderer.uiImage else {
+            presentFeedback("图片生成失败，请重试")
+            return
+        }
+
+        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+            guard status == .authorized || status == .limited else {
+                Task { @MainActor in presentFeedback("没有相册保存权限") }
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            Task { @MainActor in presentFeedback("配置图片已保存到相册") }
+        }
+    }
+
+    private func presentFeedback(_ message: String) {
+        feedbackMessage = message
+        showsFeedback = true
+    }
+}
+
+private struct ResultActionButton: View {
+    let title: String
+    let systemName: String
+    let isPrimary: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(title, systemImage: systemName)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(isPrimary ? Color.white : Color.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(isPrimary ? Color.black : Color.white, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppTheme.controlRadius)
+                        .stroke(ResultColors.divider, lineWidth: isPrimary ? 0 : 1)
+                }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct BuildResultShareCard: View {
+    let plan: BuildPlan
+
+    var body: some View {
+        VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 5) {
+                Text("配置方案详情")
+                    .font(.system(size: 24, weight: .bold))
+                Text(plan.useCase)
+                    .font(.system(size: 13))
+                    .foregroundStyle(ResultColors.secondaryText)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            PerformanceCard()
+            PartsListCard(plan: plan, isVisible: true, hasRevealed: true)
+            TotalPriceSection(totalPrice: plan.totalPrice)
+        }
+        .padding(16)
+        .foregroundStyle(.black)
+        .background(Color(red: 0.985, green: 0.985, blue: 0.985))
     }
 }
 

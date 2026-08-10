@@ -11,6 +11,14 @@ struct BuildResultContentRulesTests {
             contentsOfFile: "May/May/Screens/BuildResultView.swift",
             encoding: .utf8
         )
+        let contentViewSource = try! String(
+            contentsOfFile: "May/May/ContentView.swift",
+            encoding: .utf8
+        )
+        let diyViewSource = try! String(
+            contentsOfFile: "May/May/Screens/DIYView.swift",
+            encoding: .utf8
+        )
 
         assertContains(
             modelSource,
@@ -39,14 +47,31 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, "Text(\"游戏性能表现\")", "The performance card title should match the reference.")
         assertContains(viewSource, "\"1080P 电竞\"", "The esports performance metric should remain visible.")
         assertContains(viewSource, "\"4K 高画质\"", "The high-quality performance metric should remain visible.")
-        assertContains(viewSource, "PrimaryButton(title: \"保存配置单\"", "Saving the build should remain available.")
-        assertContains(viewSource, "backgroundColor: .black", "The save button should be black.")
-        assertContains(viewSource, ".frame(maxWidth: 420)", "The save button should fill phones without growing too wide on larger screens.")
+        assertNotContains(viewSource, "保存配置单", "The removed save-build action should not return.")
+        assertContains(viewSource, "title: \"保存为图片\"", "The result should support saving a complete image.")
+        assertContains(viewSource, "title: \"进入DIY界面编辑\"", "AI builds should be editable in DIY.")
+        assertContains(viewSource, "ImageRenderer(", "The saved image should render the complete result card.")
+        assertContains(viewSource, ".frame(maxWidth: 420)", "The result actions should fill phones without growing too wide on larger screens.")
+        assertContains(
+            contentViewSource,
+            "onEditInDIY: { onEditInDIY(selectedOption) }",
+            "The selected AI option should be handed to DIY."
+        )
+        assertContains(
+            contentViewSource,
+            "DIYView(importedBuild: $diyBuildOption)",
+            "The DIY tab should receive the pending AI option."
+        )
+        assertContains(
+            diyViewSource,
+            "selectedComponents = importedComponents",
+            "DIY should replace its current selection with the imported AI build."
+        )
         assertOrdered(
             viewSource,
             "TotalPriceSection(totalPrice: plan.totalPrice)",
-            "PrimaryButton(title: \"保存配置单\"",
-            "The total row must appear above the save button."
+            "title: \"保存为图片\"",
+            "The total row must appear above the result actions."
         )
         assertContains(
             viewSource,

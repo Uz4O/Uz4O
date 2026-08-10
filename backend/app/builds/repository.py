@@ -7,7 +7,12 @@ from app.builds.models import BuildTemplate, SavedBuild
 from app.builds.service import BuildTemplateInput
 from app.catalog.models import ComponentPrice, HardwareComponent
 from app.compat.engine import BuildSelection, evaluate_compatibility
-from app.catalog.rule_specs import GPU_MIN_CPU_PERFORMANCE
+from app.catalog.rule_specs import (
+    GPU_MIN_CPU_PERFORMANCE,
+    is_cpu_gpu_pairing_allowed,
+    minimum_psu_watt_for_specs,
+    psu_supports_gpu_power_connector,
+)
 
 
 REQUIRED_TEMPLATE_ROLES = {"cpu", "motherboard", "ram", "psu"}
@@ -27,7 +32,7 @@ DETAILED_CONDITIONS = {
     "mixed": {
         "cpu": "used",
         "motherboard": "new",
-        "gpu": "new",
+        "gpu": "used",
         "ram": "used",
         "storage": "new",
         "psu": "new",
@@ -232,6 +237,10 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     max_shortfall = (
         550
         if is_office_template
+        else 2_000
+        if details.direction == "aaa" and details.target_budget >= 13_000
+        else 1_000
+        if template.id in {"base-5000-aaa-used-amd", "base-5000-aaa-mixed"}
         else 150
         if template.id == "base-8000-aaa-used"
         and parts_by_role["cpu"].component_id == "r7-7800x3d"
@@ -253,15 +262,12 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
             f"{template.id}: estimated_total is more than {max_shortfall} below target budget"
         )
     max_overage = (
-        500
-        if is_office_template and details.target_budget < 10_000
+        600
+        if details.target_budget == 3_000
+        else 500
+        if details.target_budget < 10_000
         else
         800
-        if details.target_budget >= 10_000
-        else 330
-        if template.id == "base-6500-fps-mixed"
-        and parts_by_role["gpu"].component_id == "rtx-5060"
-        else MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE
     )
     if detailed_total > details.target_budget + max_overage:
         errors.append(f"{template.id}: estimated_total exceeds allowed budget overage")
@@ -292,6 +298,15 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     )
     if details.gpu_vendor != expected_gpu_vendor:
         errors.append(f"{template.id}: gpu_vendor does not match gpu component")
+    cpu_id = parts_by_role["cpu"].component_id
+    if (
+        not is_office_template
+        and not is_cpu_gpu_pairing_allowed(cpu_id, gpu_id)
+    ):
+        errors.append(
+            f"{template.id}: {cpu_id} and {gpu_id} reach a high-CPU/low-GPU "
+            "or low-CPU/high-GPU imbalance"
+        )
     minimum_gpu_cpu_performance = GPU_MIN_CPU_PERFORMANCE.get(gpu_id)
     cpu_performance = parts_by_role["cpu"].specs.get("perf_index")
     if (
@@ -302,7 +317,23 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
         )
     ):
         errors.append(
-            f"{template.id}: {gpu_id} requires R7 9700X-class or faster CPU"
+            f"{template.id}: {gpu_id} does not meet its minimum CPU performance floor"
+        )
+    cpu_tdp = parts_by_role["cpu"].specs.get("tdp")
+    gpu_tdp = parts_by_role["gpu"].specs.get("tdp")
+    psu_watt = parts_by_role["psu"].specs.get("watt")
+    if all(type(value) is int for value in (cpu_tdp, gpu_tdp, psu_watt)):
+        required_psu = minimum_psu_watt_for_specs(cpu_tdp, gpu_id, gpu_tdp)
+        if psu_watt < required_psu:
+            errors.append(
+                f"{template.id}: PSU requires at least {required_psu}W"
+            )
+    if not psu_supports_gpu_power_connector(
+        gpu_id,
+        parts_by_role["psu"].specs,
+    ):
+        errors.append(
+            f"{template.id}: PSU lacks a complete native 600W 12V-2x6 power path"
         )
 
 

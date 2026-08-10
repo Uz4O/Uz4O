@@ -13,15 +13,27 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("hasCompletedLaunchIntro") private var hasCompletedLaunchIntro = false
     @StateObject private var session: AppSession
-    @State private var appPhase: AppPhase = .login
+    @State private var appPhase: AppPhase
     @State private var selectedTab: AppTab = .home
     @State private var onboardingProfile: OnboardingProfile
     @State private var selectedConfigSection = ConfigHubSection.defaultSelection
     @State private var presentedFullScreen: FullScreenRoute?
+    @State private var diyBuildOption: BuildOptionDTO?
     @State private var showsSplash = true
+    @State private var splashConnectsToHome: Bool
+    @State private var homeWordmarkFrame: CGRect?
+    @State private var isHomeWordmarkVisible: Bool
+    @State private var isHomeContentVisible: Bool
+    @State private var isMainTabBarVisible: Bool
 
     init() {
-        _session = StateObject(wrappedValue: AppSession())
+        let session = AppSession()
+        _session = StateObject(wrappedValue: session)
+        _appPhase = State(initialValue: session.isAuthenticated ? .main : .login)
+        _splashConnectsToHome = State(initialValue: session.isAuthenticated)
+        _isHomeWordmarkVisible = State(initialValue: !session.isAuthenticated)
+        _isHomeContentVisible = State(initialValue: !session.isAuthenticated)
+        _isMainTabBarVisible = State(initialValue: !session.isAuthenticated)
         let savedHardwareProfile = HardwareProfileStore().load()
         _onboardingProfile = State(
             initialValue: OnboardingProfile(
@@ -42,7 +54,7 @@ struct ContentView: View {
             } else {
                 switch appPhase {
                 case .login:
-                    LoginView(onLogin: enterMainApp)
+                    LoginView(session: session, onLogin: enterMainApp)
                         .transition(
                             .asymmetric(
                                 insertion: .opacity,
@@ -56,6 +68,11 @@ struct ContentView: View {
                         onboardingProfile: $onboardingProfile,
                         selectedTab: $selectedTab,
                         selectedConfigSection: $selectedConfigSection,
+                        diyBuildOption: $diyBuildOption,
+                        isHomeWordmarkVisible: isHomeWordmarkVisible,
+                        isHomeContentVisible: isHomeContentVisible,
+                        isTabBarVisible: isMainTabBarVisible,
+                        onHomeWordmarkFrameChange: { homeWordmarkFrame = $0 },
                         onPresentFullScreen: { presentedFullScreen = $0 },
                         onAccountDeleted: resetAfterAccountDeletion
                     )
@@ -69,9 +86,11 @@ struct ContentView: View {
             }
 
             if showsSplash {
-                AppSplashView {
-                    showsSplash = false
-                }
+                AppSplashView(
+                    targetWordmarkFrame: splashConnectsToHome ? homeWordmarkFrame : nil,
+                    connectsToHome: splashConnectsToHome,
+                    onFinish: finishSplash
+                )
                 .zIndex(10)
             }
         }
@@ -82,7 +101,7 @@ struct ContentView: View {
             fullScreenDestination(for: route)
         }
         .onAppear {
-            if DevelopmentLoginMode.restoresBackendSession, session.isAuthenticated, appPhase == .login {
+            if session.isAuthenticated, appPhase == .login {
                 appPhase = .main
             }
         }
@@ -100,13 +119,40 @@ struct ContentView: View {
         }
     }
 
+    private func finishSplash() {
+        if reduceMotion || !splashConnectsToHome {
+            showsSplash = false
+            isHomeWordmarkVisible = true
+            isHomeContentVisible = true
+            isMainTabBarVisible = true
+            return
+        }
+
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            showsSplash = false
+            isHomeWordmarkVisible = true
+        }
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.08))
+            isHomeContentVisible = true
+            try? await Task.sleep(for: .seconds(0.82))
+            withAnimation(.easeOut(duration: 0.28)) {
+                isMainTabBarVisible = true
+            }
+        }
+    }
+
     @ViewBuilder
     private func fullScreenDestination(for route: FullScreenRoute) -> some View {
         switch route {
         case .aiBuild(let returnTarget):
             AIBuildFlowView(
                 returnTarget: returnTarget,
-                onClose: { closeFullScreen(returningTo: returnTarget) }
+                onClose: { closeFullScreen(returningTo: returnTarget) },
+                onEditInDIY: editInDIY
             )
         case .aestheticBuild(let styleID):
             AestheticBuildFlowView(styleID: styleID, onClose: { presentedFullScreen = nil })
@@ -130,6 +176,12 @@ struct ContentView: View {
         case .fromConfigTab, .fromConfigAIBuild:
             selectedTab = .profile
         }
+        presentedFullScreen = nil
+    }
+
+    private func editInDIY(_ option: BuildOptionDTO) {
+        diyBuildOption = option
+        selectedTab = .diy
         presentedFullScreen = nil
     }
 
@@ -182,7 +234,12 @@ private struct MainTabView: View {
     @Binding var onboardingProfile: OnboardingProfile
     @Binding var selectedTab: AppTab
     @Binding var selectedConfigSection: ConfigHubSection
+    @Binding var diyBuildOption: BuildOptionDTO?
 
+    let isHomeWordmarkVisible: Bool
+    let isHomeContentVisible: Bool
+    let isTabBarVisible: Bool
+    let onHomeWordmarkFrameChange: (CGRect) -> Void
     let onPresentFullScreen: (FullScreenRoute) -> Void
     let onAccountDeleted: () -> Void
 
@@ -198,7 +255,10 @@ private struct MainTabView: View {
                     onOpenUpgrade: { homePath.append(.upgrade) },
                     onOpenAestheticStyle: { styleID in
                         onPresentFullScreen(.aestheticOverview(styleID: styleID))
-                    }
+                    },
+                    isWordmarkVisible: isHomeWordmarkVisible,
+                    isContentVisible: isHomeContentVisible,
+                    onWordmarkFrameChange: onHomeWordmarkFrameChange
                 )
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: MainRoute.self) { route in
@@ -206,7 +266,7 @@ private struct MainTabView: View {
                 }
             }
             .tabItem {
-                Image(systemName: "house")
+                Image(systemName: AppTab.home.icon(isSelected: selectedTab == .home))
                     .accessibilityLabel(AppTab.home.rawValue)
             }
             .tag(AppTab.home)
@@ -218,17 +278,17 @@ private struct MainTabView: View {
                 .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Image(systemName: "paintpalette")
+                Image(systemName: AppTab.styles.icon(isSelected: selectedTab == .styles))
                     .accessibilityLabel(AppTab.styles.rawValue)
             }
             .tag(AppTab.styles)
 
             NavigationStack {
-                DIYView()
+                DIYView(importedBuild: $diyBuildOption)
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
-                Image(systemName: AppTab.diy.icon(isSelected: false))
+                Image(systemName: AppTab.diy.icon(isSelected: selectedTab == .diy))
                     .accessibilityLabel(AppTab.diy.rawValue)
             }
             .tag(AppTab.diy)
@@ -248,12 +308,13 @@ private struct MainTabView: View {
                 }
             }
             .tabItem {
-                Image(systemName: "person")
+                Image(systemName: AppTab.profile.icon(isSelected: selectedTab == .profile))
                     .accessibilityLabel(AppTab.profile.rawValue)
             }
             .tag(AppTab.profile)
         }
-        .tint(AppTheme.primaryText)
+        .tint(.black)
+        .toolbar(isTabBarVisible ? .visible : .hidden, for: .tabBar)
         .preferredColorScheme(.light)
         .background(NativeTabBarTuner(verticalOffset: -14))
     }
@@ -333,6 +394,7 @@ private struct AIBuildFlowView: View {
 
     let returnTarget: BuildResultReturnTarget
     let onClose: () -> Void
+    let onEditInDIY: (BuildOptionDTO) -> Void
 
     @State private var response: BuildOptionsResponseDTO?
     @State private var selectedOption: BuildOptionDTO?
@@ -389,7 +451,8 @@ private struct AIBuildFlowView: View {
                                 }
                             }
                         }
-                    }
+                    },
+                    onEditInDIY: { onEditInDIY(selectedOption) }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(AppTheme.background.ignoresSafeArea())
@@ -432,15 +495,21 @@ private struct AestheticStyleRouteView: View {
     let onClose: () -> Void
 
     @State private var showsBuildFlow = false
+    @State private var appearanceCost = 0
 
     var body: some View {
         if showsBuildFlow {
-            AestheticBuildFlowView(styleID: styleID, onClose: onClose)
+            AestheticBuildFlowView(
+                styleID: styleID,
+                appearanceCost: appearanceCost,
+                onClose: onClose
+            )
         } else {
             AestheticStyleOverviewView(
                 styleID: styleID,
                 onClose: onClose,
-                onStartBuild: {
+                onStartBuild: { cost in
+                    appearanceCost = cost
                     withAnimation(.easeOut(duration: 0.25)) {
                         showsBuildFlow = true
                     }
@@ -455,9 +524,9 @@ private struct AestheticBuildFlowView: View {
     @State private var flow: AestheticBuildFlow
     @State private var showsResult = false
 
-    init(styleID: String, onClose: @escaping () -> Void) {
+    init(styleID: String, appearanceCost: Int? = nil, onClose: @escaping () -> Void) {
         self.onClose = onClose
-        _flow = State(initialValue: AestheticBuildFlow(styleID: styleID))
+        _flow = State(initialValue: AestheticBuildFlow(styleID: styleID, appearanceCost: appearanceCost))
     }
 
     var body: some View {
@@ -516,6 +585,7 @@ private final class TabBarTuningViewController: UIViewController {
 
         tabBarController.tabBar.transform = CGAffineTransform(translationX: 0, y: verticalOffset)
         tabBarController.tabBar.tintColor = UIColor(red: 0.067, green: 0.094, blue: 0.153, alpha: 1)
+        tabBarController.tabBar.unselectedItemTintColor = .black
     }
 }
 

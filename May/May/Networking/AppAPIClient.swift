@@ -153,6 +153,7 @@ struct GamePerformanceResultDTO: Decodable {
 struct PerformanceEstimateResponseDTO: Decodable {
     let status: String
     let averageFps: Int?
+    let gpuTimeSpyScore: Int?
     let missingGames: [String]
     let gameResults: [GamePerformanceResultDTO]
 
@@ -160,6 +161,7 @@ struct PerformanceEstimateResponseDTO: Decodable {
         PerformanceEstimatePayload(
             status: PerformanceEstimateStatus(rawValue: status) ?? .needsMoreData,
             averageFPS: averageFps,
+            gpuTimeSpyScore: gpuTimeSpyScore,
             missingGames: missingGames,
             gameResults: gameResults.map(\.model)
         )
@@ -196,6 +198,22 @@ struct AppAPIClient {
             path: "/v1/auth/login",
             method: "POST",
             body: ["phone": phone, "code": code]
+        )
+    }
+
+    func loginWithApple(
+        identityToken: String,
+        authorizationCode: String?,
+        nonce: String
+    ) async throws -> LoginResponse {
+        try await request(
+            path: "/v1/auth/apple/login",
+            method: "POST",
+            body: AppleLoginRequestDTO(
+                identityToken: identityToken,
+                authorizationCode: authorizationCode,
+                nonce: nonce
+            )
         )
     }
 
@@ -529,6 +547,18 @@ private extension Data {
 }
 
 private struct EmptyBody: Encodable {}
+
+private struct AppleLoginRequestDTO: Encodable {
+    let identityToken: String
+    let authorizationCode: String?
+    let nonce: String
+
+    enum CodingKeys: String, CodingKey {
+        case identityToken = "identity_token"
+        case authorizationCode = "authorization_code"
+        case nonce
+    }
+}
 
 private struct BuildOptionsRequestDTO: Encodable {
     let budget: Int

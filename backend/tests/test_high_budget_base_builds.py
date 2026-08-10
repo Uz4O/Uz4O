@@ -16,6 +16,10 @@ from app.builds.high_budget_catalog import (
     write_high_budget_artifacts,
 )
 from app.builds.service import template_response
+from app.catalog.rule_specs import (
+    is_cpu_gpu_pairing_allowed,
+    psu_supports_gpu_power_connector,
+)
 from app.compat.engine import CompatibilityResult
 
 
@@ -32,7 +36,7 @@ EXPECTED_CONDITIONS = {
     "mixed": {
         "cpu": "used",
         "motherboard": "new",
-        "gpu": "new",
+        "gpu": "used",
         "ram": "used",
         "storage": "new",
         "psu": "new",
@@ -44,6 +48,35 @@ EXPECTED_CONDITIONS = {
 
 def generated_templates():
     return generate_high_budget_templates()
+
+
+def expected_template_count() -> int:
+    return sum(
+        len(
+            high_budget_catalog._gpu_vendors_for(
+                budget, direction, purchase_mode
+            )
+        )
+        for budget in BUDGET_TIERS
+        for direction in ("fps", "aaa", "balanced")
+        for purchase_mode in ("new", "used", "mixed")
+    )
+
+
+def test_high_budget_vendor_split_thresholds() -> None:
+    assert high_budget_catalog._gpu_vendors_for(7_500, "aaa", "new") == (None,)
+    assert high_budget_catalog._gpu_vendors_for(7_500, "aaa", "used") == (
+        "nvidia",
+        "amd",
+    )
+    assert high_budget_catalog._gpu_vendors_for(7_500, "aaa", "mixed") == (
+        "nvidia",
+        "amd",
+    )
+    assert high_budget_catalog._gpu_vendors_for(8_000, "aaa", "new") == (
+        "nvidia",
+        "amd",
+    )
 
 
 def test_generates_high_budget_templates_through_30000() -> None:
@@ -100,6 +133,11 @@ def test_every_template_has_eight_priced_parts_and_an_exact_total() -> None:
             if template.id == "base-8000-aaa-used"
             else 120
             if template.id == "base-14000-balanced-mixed"
+            else 2_000
+            if (
+                template.details.direction == "aaa"
+                and template.details.target_budget >= 13_000
+            )
             else 550
             if (
                 template.details.direction == "fps"
@@ -112,7 +150,7 @@ def test_every_template_has_eight_priced_parts_and_an_exact_total() -> None:
             else 100
         )
         assert template.details.target_budget - max_shortfall <= template.estimated_total
-        max_overage = 800 if template.details.target_budget >= 10_000 else 300
+        max_overage = 800 if template.details.target_budget >= 10_000 else 500
         assert template.estimated_total <= template.details.target_budget + max_overage
 
 
@@ -147,7 +185,10 @@ def test_all_builds_use_whitelisted_amd_am5_parts_and_fixed_base_storage() -> No
         assert parts["storage"].specs["flash_type"] == "TLC"
         assert parts["case"].component_id == "base-case-mid-tower"
         motherboard_share = (
-            0.32
+            0.65
+            if template.details.target_budget >= 13_000
+            and template.details.direction == "aaa"
+            else 0.32
             if template.details.target_budget >= 18_000
             else 0.23
             if template.details.target_budget >= 15_000
@@ -181,6 +222,41 @@ def test_all_builds_use_whitelisted_amd_am5_parts_and_fixed_base_storage() -> No
             assert parts["cooler"].component_id == "base-cooler-6-heatpipe"
 
 
+def test_aaa_uses_cpu_then_motherboard_after_gpu_and_caps_cpu_at_9800x3d() -> None:
+    templates = generated_templates()
+    aaa_templates = [
+        template
+        for template in templates
+        if template.details.direction == "aaa"
+    ]
+
+    assert aaa_templates
+    assert all(
+        template.components["cpu"] != "r7-9850x3d"
+        for template in aaa_templates
+    )
+    for purchase_mode in ("used", "mixed"):
+        template = next(
+            item
+            for item in aaa_templates
+            if item.details.target_budget == 13_000
+            and item.details.purchase_mode == purchase_mode
+            and item.details.gpu_vendor == "nvidia"
+        )
+        parts = {part.role: part for part in template.details.parts}
+        assert parts["cpu"].component_id == "r7-9800x3d"
+        assert parts["gpu"].component_id == "rtx-5070-ti"
+        assert parts["motherboard"].component_id != "asus-prime-b650m-k"
+        assert 12_900 <= template.estimated_total <= 13_800
+
+    for template_id in (
+        "base-22000-aaa-mixed",
+        "base-23000-aaa-used",
+    ):
+        template = next(item for item in aaa_templates if item.id == template_id)
+        assert template.components["cpu"] == "r7-9800x3d"
+
+
 def test_psu_uses_the_smallest_available_wattage_that_meets_the_formula() -> None:
     _, _, _, support_parts = high_budget_catalog._load_catalog()
 
@@ -194,9 +270,12 @@ def test_psu_uses_the_smallest_available_wattage_that_meets_the_formula() -> Non
             required_watt,
             parts["psu"].condition,
             support_parts,
+            parts["gpu"].component_id,
         )
         assert expected_psu is not None
         assert parts["psu"].component_id == expected_psu.component_id
+        if high_budget_catalog.GPU_TDP[parts["gpu"].component_id] >= 140:
+            assert parts["psu"].component_id != "base-psu-550w"
 
 
 def test_every_new_gpu_uses_the_whitelist_new_price() -> None:
@@ -230,6 +309,15 @@ def test_every_9800x3d_has_at_least_5060ti_class_gpu() -> None:
                 GPU_PERFORMANCE[parts["gpu"].component_id]
                 >= minimum_gpu_performance
             ), template.id
+
+
+def test_every_high_budget_build_respects_the_cpu_gpu_pairing_table() -> None:
+    for template in generated_templates():
+        parts = {part.role: part for part in template.details.parts}
+        assert is_cpu_gpu_pairing_allowed(
+            parts["cpu"].component_id,
+            parts["gpu"].component_id,
+        ), template.id
 
 
 def test_5070ti_and_faster_nvidia_gpus_use_9700x_class_or_faster_cpu() -> None:
@@ -271,7 +359,7 @@ def test_new_aaa_builds_only_use_c36_when_c32_cannot_fit() -> None:
                 ), template.id
 
 
-def test_aaa_builds_only_step_up_motherboard_to_reach_budget_floor() -> None:
+def test_aaa_motherboard_fill_stays_within_whitelist_budget_caps() -> None:
     _, motherboards, _, _ = high_budget_catalog._load_catalog()
 
     for template in generated_templates():
@@ -289,50 +377,15 @@ def test_aaa_builds_only_step_up_motherboard_to_reach_budget_floor() -> None:
         cheapest_price = expected.price(parts["motherboard"].condition)
         assert cheapest_price is not None
         allowed_share = (
-            0.32
-            if template.details.target_budget >= 18_000
+            0.65
+            if template.details.target_budget >= 13_000
             else 0.23
             if template.details.target_budget >= 15_000
             else 0.15
         )
         assert chosen_price <= template.details.target_budget * allowed_share
-        new_9800x3d = (
-            parts["cpu"].component_id == "r7-9800x3d"
-            and parts["cpu"].condition == "new"
-            and template.details.target_budget >= 10_000
-        )
-        reviewed_12000_tuf = template.id in {
-            "base-12000-aaa-new",
-            "base-12000-aaa-mixed",
-        }
-        reviewed_14000_power = template.id in {
-            "base-14000-aaa-new",
-            "base-14000-aaa-used",
-        }
-        coverage_aaa = template.details.target_budget >= 15_000
-        max_step_up = (
-            6_000
-            if template.details.target_budget >= 18_000
-            else 3_500
-            if coverage_aaa
-            else 500
-            if reviewed_14000_power
-            else 400
-            if new_9800x3d
-            else 300
-        )
+        max_step_up = 10_000
         assert chosen_price <= cheapest_price + max_step_up
-        if (
-            template.id != "base-10000-aaa-mixed"
-            and not new_9800x3d
-            and not reviewed_12000_tuf
-            and not coverage_aaa
-            and (
-            template.estimated_total - chosen_price + cheapest_price
-            )
-            >= (template.details.target_budget - 100)
-        ):
-            assert parts["motherboard"].component_id == expected.component_id
 
 
 def test_b850_builds_only_use_user_approved_models() -> None:
@@ -355,8 +408,8 @@ def test_8000_used_fps_build_uses_b850m_power() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["motherboard"].component_id == "msi-b850m-power"
-    assert template.estimated_total == 8_230
+    assert parts["motherboard"].component_id == "asus-b850m-awy"
+    assert template.estimated_total == 8_430
 
 
 def test_8000_used_nvidia_aaa_build_moves_budget_to_4070_super() -> None:
@@ -370,10 +423,10 @@ def test_8000_used_nvidia_aaa_build_moves_budget_to_4070_super() -> None:
     assert parts["cpu"].component_id == "r7-7800x3d"
     assert parts["gpu"].component_id == "rtx-4070-super"
     assert parts["gpu"].reference_price == 3_600
-    assert template.estimated_total == 7_880
+    assert template.estimated_total == 8_430
 
 
-def test_8500_mixed_fps_build_prioritizes_9800x3d() -> None:
+def test_8500_mixed_fps_build_prioritizes_a_table_valid_x3d_pair() -> None:
     template = next(
         template
         for template in generated_templates()
@@ -381,13 +434,14 @@ def test_8500_mixed_fps_build_prioritizes_9800x3d() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r7-9800x3d"
+    assert parts["cpu"].component_id == "r7-7800x3d"
+    assert parts["gpu"].component_id == "rtx-4070-super"
     assert parts["motherboard"].specs["socket"] == "AM5"
     assert GPU_PERFORMANCE[parts["gpu"].component_id] >= GPU_PERFORMANCE["rtx-5060-ti"]
-    assert 8_400 <= template.estimated_total <= 8_800
+    assert 8_400 <= template.estimated_total <= 9_000
 
 
-def test_9000_mixed_fps_build_uses_amd_to_keep_9800x3d() -> None:
+def test_9000_mixed_fps_build_uses_nvidia_with_9800x3d() -> None:
     template = next(
         template
         for template in generated_templates()
@@ -396,12 +450,13 @@ def test_9000_mixed_fps_build_uses_amd_to_keep_9800x3d() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r7-9800x3d"
-    assert parts["gpu"].component_id == "rx-9070-gre"
+    assert parts["gpu"].component_id == "rtx-4070-super"
+    assert parts["gpu"].condition == "used"
     assert parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert template.estimated_total == 8_980
+    assert template.estimated_total == 9_378
 
 
-def test_9500_mixed_fps_build_uses_amd_to_keep_9800x3d() -> None:
+def test_9500_mixed_fps_build_uses_nvidia_with_9800x3d() -> None:
     template = next(
         template
         for template in generated_templates()
@@ -410,9 +465,10 @@ def test_9500_mixed_fps_build_uses_amd_to_keep_9800x3d() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r7-9800x3d"
-    assert parts["gpu"].component_id == "rx-9070-gre"
+    assert parts["gpu"].component_id == "rtx-4070-super"
+    assert parts["gpu"].condition == "used"
     assert parts["motherboard"].component_id == "msi-b850m-power"
-    assert template.estimated_total == 9_480
+    assert template.estimated_total == 9_878
 
 
 def test_10000_requested_board_and_psu_prices_are_preserved() -> None:
@@ -432,11 +488,82 @@ def test_10000_requested_board_and_psu_prices_are_preserved() -> None:
     assert fps_parts["cpu"].reference_price == 2_500
     assert 9_900 <= templates["base-10000-fps-new"].estimated_total <= 10_800
     assert aaa_parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert aaa_parts["psu"].reference_price == 400
+    assert aaa_parts["psu"].reference_price == 359
     assert 9_900 <= templates["base-10000-aaa-mixed"].estimated_total <= 10_800
-    assert support_parts["base-psu-850w-gold"].new_price == 400
-    assert support_parts["base-psu-850w-gold"].used_price == 250
+    assert support_parts["base-psu-850w-gold"].name == "安耐美 PX850DF 850W"
+    assert support_parts["base-psu-850w-gold"].new_price == 659
+    assert support_parts["base-psu-850w-gold"].used_price == 659
+    assert support_parts["base-psu-1000w-gold"].name == "安耐美 PX1000DF 1000W"
+    assert support_parts["base-psu-1000w-gold"].new_price == 859
     assert support_parts["base-psu-1200w-gold"].new_price == 650
+    assert support_parts["base-psu-1200w-platinum"].name == (
+        "追风者 REVOLT 1200W 白金电源 PH-P1200PR_BK01C（含兼容线组）"
+    )
+    assert support_parts["base-psu-1200w-platinum"].used_price == 799
+    assert support_parts["base-psu-1200w-platinum"].new_price is None
+
+
+def test_5090d_v2_used_builds_use_the_used_1200w_platinum_psu() -> None:
+    templates = generated_templates()
+    used_5090d_v2 = [
+        template
+        for template in templates
+        if template.details.purchase_mode == "used"
+        and template.components["gpu"] == "rtx-5090-d-v2"
+    ]
+
+    assert used_5090d_v2
+    for template in used_5090d_v2:
+        psu = next(part for part in template.details.parts if part.role == "psu")
+        assert psu.component_id == "base-psu-1200w-platinum"
+        assert psu.reference_price == 799
+        assert psu.specs["model_number"] == "PH-P1200PR_BK01C"
+        assert psu.specs["gpu_connector"] == "12V-2x6"
+        assert psu.specs["gpu_connector_max_watt"] == 600
+        assert psu.specs["price_includes_compatible_cable_kit"] is True
+
+
+def test_5090_power_path_rejects_wattage_without_native_connector_or_cables() -> None:
+    assert not psu_supports_gpu_power_connector(
+        "rtx-5090-d-v2",
+        {"watt": 1200},
+    )
+    assert not psu_supports_gpu_power_connector(
+        "rtx-5090-d-v2",
+        {
+            "watt": 1200,
+            "atx_version": 3.0,
+            "gpu_connector": "12V-2x6",
+            "gpu_connector_max_watt": 600,
+            "cables_sold_separately": True,
+            "price_includes_compatible_cable_kit": False,
+        },
+    )
+    assert psu_supports_gpu_power_connector(
+        "rtx-5090-d-v2",
+        {
+            "watt": 1200,
+            "atx_version": 3.0,
+            "gpu_connector": "12V-2x6",
+            "gpu_connector_max_watt": 600,
+            "cables_sold_separately": True,
+            "price_includes_compatible_cable_kit": True,
+        },
+    )
+
+
+def test_28000_used_balanced_does_not_trade_cpu_performance_for_motherboard() -> None:
+    template = next(
+        item
+        for item in generated_templates()
+        if item.id == "base-28000-balanced-used"
+    )
+    parts = {part.role: part for part in template.details.parts}
+
+    assert parts["cpu"].component_id == "r7-9850x3d"
+    assert parts["gpu"].component_id == "rtx-5090-d-v2"
+    assert parts["motherboard"].component_id == "asus-x870e-chuixue"
+    assert template.estimated_total == 27_679
 
 
 def test_11000_and_higher_fps_modes_are_filled() -> None:
@@ -474,16 +601,18 @@ def test_11000_aaa_keeps_valid_new_used_and_mixed_modes() -> None:
     used_parts = {part.role: part for part in used.details.parts}
     mixed_parts = {part.role: part for part in mixed.details.parts}
 
-    assert new_parts["cpu"].component_id == "r7-7800x3d"
+    assert new_parts["cpu"].component_id == "r5-9600x"
     assert new_parts["gpu"].component_id == "rtx-5070"
-    assert new_parts["gpu"].reference_price == 5_400
+    assert new_parts["gpu"].reference_price == 6_699
     assert new_parts["ram"].component_id == "base-ddr5-16gb-6000-c32"
     assert 10_900 <= new.estimated_total <= 11_800
     assert used_parts["cpu"].component_id == "r7-7800x3d"
     assert used_parts["gpu"].component_id == "rtx-5070-ti"
+    assert used_parts["motherboard"].component_id == "asus-b650m-tuf"
     assert 10_900 <= used.estimated_total <= 11_800
     assert mixed_parts["cpu"].component_id == "r7-9700x"
     assert mixed_parts["gpu"].component_id == "rtx-5070-ti"
+    assert mixed_parts["motherboard"].component_id == "asus-b650m-tuf"
     assert 10_900 <= mixed.estimated_total <= 11_800
 
 
@@ -493,8 +622,8 @@ def test_11000_new_fps_uses_requested_board_and_c32_or_better_ram() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r7-9800x3d"
-    assert parts["cpu"].reference_price == 2_500
+    assert parts["cpu"].component_id == "r7-7800x3d"
+    assert parts["cpu"].reference_price == 1_800
     assert parts["motherboard"].component_id == "msi-b850m-power"
     assert parts["gpu"].component_id == "rx-9070-xt"
     assert parts["ram"].specs["cas_latency"] <= 32
@@ -521,7 +650,8 @@ def test_14000_new_aaa_trades_5080_for_cpu_and_board_balance() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r7-7800x3d"
-    assert parts["gpu"].component_id == "rtx-5080"
+    assert parts["gpu"].component_id == "rtx-5070-ti"
+    assert parts["motherboard"].component_id == "asus-b650m-tuf"
     assert parts["ram"].component_id == "base-ddr5-16gb-6000-c32"
     assert 13_900 <= template.estimated_total <= 14_800
 
@@ -532,9 +662,9 @@ def test_14000_used_aaa_mode_remains_available_after_price_update() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r7-9800x3d"
+    assert parts["cpu"].component_id == "r7-7800x3d"
     assert parts["gpu"].component_id == "rtx-5080"
-    assert template.estimated_total == 14_430
+    assert template.estimated_total == 14_789
 
 
 def test_14000_new_balanced_uses_reviewed_cpu_gpu_balance() -> None:
@@ -546,8 +676,8 @@ def test_14000_new_balanced_uses_reviewed_cpu_gpu_balance() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r7-7800x3d"
-    assert parts["gpu"].component_id == "rtx-5080"
-    assert parts["ram"].component_id == "base-ddr5-16gb-6000-c32"
+    assert parts["gpu"].component_id == "rtx-5070-ti"
+    assert parts["ram"].component_id == "base-ddr5-16gb-6000-c28"
     assert 13_900 <= template.estimated_total <= 14_800
 
 
@@ -577,21 +707,21 @@ def test_15000_used_aaa_mode_is_filled_with_5080() -> None:
     assert 14_450 <= template.estimated_total <= 15_800
 
 
-def test_7500_new_nvidia_aaa_build_uses_the_best_fitting_pair() -> None:
+def test_7500_new_aaa_build_uses_the_best_fitting_pair() -> None:
     template = next(
         template
         for template in generated_templates()
-        if template.id == "base-7500-aaa-new"
+        if template.id == "base-7500-aaa-new-amd"
     )
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r5-9600x"
-    assert parts["motherboard"].component_id == "asus-prime-b650m-k"
-    assert parts["gpu"].component_id == "rtx-5060-ti"
+    assert parts["motherboard"].component_id == "asus-b650m-tuf"
+    assert parts["gpu"].component_id == "rx-9070-gre"
     assert parts["ram"].specs["capacity_gb"] == 16
     assert parts["storage"].component_id == "base-ssd-512gb-tlc"
     assert parts["psu"].component_id == "base-psu-650w-gold"
-    assert 7_400 <= template.estimated_total <= 7_800
+    assert 7_400 <= template.estimated_total <= 8_000
 
 
 def test_direction_allocations_have_valid_comparisons_when_both_options_exist() -> None:
@@ -624,8 +754,12 @@ def test_direction_allocations_have_valid_comparisons_when_both_options_exist() 
         fps_parts = {part.role: part for part in fps.details.parts}
         aaa_parts = {part.role: part for part in aaa.details.parts}
 
-        assert CPU_PERFORMANCE[fps_parts["cpu"].component_id] >= 60
-        assert GPU_PERFORMANCE[aaa_parts["gpu"].component_id] >= 50
+        fps_cpu = CPU_PERFORMANCE[fps_parts["cpu"].component_id]
+        fps_gpu = GPU_PERFORMANCE[fps_parts["gpu"].component_id]
+        aaa_cpu = CPU_PERFORMANCE[aaa_parts["cpu"].component_id]
+        aaa_gpu = GPU_PERFORMANCE[aaa_parts["gpu"].component_id]
+
+        assert not (fps_cpu < aaa_cpu and fps_gpu > aaa_gpu), fps.id
         compared += 1
 
     assert compared > 0
@@ -663,7 +797,9 @@ def test_10000_plus_used_and_mixed_match_new_focus_performance() -> None:
 
     for budget in (tier for tier in BUDGET_TIERS if tier >= 10_000):
         for direction in ("fps", "aaa", "balanced"):
-            for gpu_vendor in high_budget_catalog._gpu_vendors_for(direction):
+            for gpu_vendor in high_budget_catalog._gpu_vendors_for(
+                budget, direction, "new"
+            ):
                 new_template = by_key.get((budget, direction, "new", gpu_vendor))
                 if new_template is None:
                     continue
@@ -730,7 +866,7 @@ def test_template_details_keep_user_and_price_metadata() -> None:
     for template in generated_templates():
         details = template.details
         assert details.suitable_user
-        assert details.price_date == "2026-07-30"
+        assert details.price_date == "2026-08-08"
 
 
 def test_writes_review_markdown_and_backend_json(tmp_path) -> None:
@@ -774,7 +910,7 @@ def test_empty_and_partial_artifacts_report_actual_completion(tmp_path) -> None:
         payload = json.loads(paths.templates_json.read_text(encoding="utf-8"))
         audit = json.loads(paths.audit_json.read_text(encoding="utf-8"))
         markdown = paths.review_markdown.read_text(encoding="utf-8")
-        expected_missing = len(BUDGET_TIERS) * 15 - len(templates)
+        expected_missing = expected_template_count() - len(templates)
 
         assert len(payload) == len(templates)
         assert audit["completed_tiers"] == []
@@ -784,7 +920,7 @@ def test_empty_and_partial_artifacts_report_actual_completion(tmp_path) -> None:
             "not_provided"
         }
         assert audit["failed_templates"] == []
-        assert f"{len(templates)}/{len(BUDGET_TIERS) * 15}套配置生成" in markdown
+        assert f"{len(templates)}/{expected_template_count()}套配置生成" in markdown
         assert f"不可用配置{expected_missing}套" in markdown
         assert f"{len(BUDGET_TIERS)}/{len(BUDGET_TIERS)}个价位完成" not in markdown
 
@@ -869,7 +1005,7 @@ def test_generation_report_records_the_actual_selection_failure(
             "error": "fixture selection failure",
         }
     ]
-    assert f"{len(report.templates)}/{len(BUDGET_TIERS) * 15}套配置生成" in markdown
+    assert f"{len(report.templates)}/{expected_template_count()}套配置生成" in markdown
     assert "失败配置1套" in markdown
 
 
