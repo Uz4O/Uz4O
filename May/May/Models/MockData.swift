@@ -1,13 +1,31 @@
 import SwiftUI
 
 struct PCPart: Identifiable {
-    let id = UUID()
+    let id: UUID
     let category: String
     let model: String
     let price: String
     let condition: String
     let icon: String
     let accent: Color
+
+    init(
+        id: UUID = UUID(),
+        category: String,
+        model: String,
+        price: String,
+        condition: String,
+        icon: String,
+        accent: Color
+    ) {
+        self.id = id
+        self.category = category
+        self.model = model
+        self.price = price
+        self.condition = condition
+        self.icon = icon
+        self.accent = accent
+    }
 }
 
 struct BuildStep: Identifiable {
@@ -15,6 +33,26 @@ struct BuildStep: Identifiable {
     let number: String
     let title: String
     let subtitle: String
+}
+
+struct UsedGPUAlternativeRecommendation {
+    let componentID: String
+    let model: String
+    let referencePrice: Int
+    let priceDifference: Int
+    let performanceComparison: String
+    let gamingPerformanceGainPercent: Int?
+}
+
+struct BuildPerformanceContext: Sendable {
+    let cpuID: String
+    let gpuID: String
+    let gameIDs: [String]
+    let unavailableGameNames: [String]
+
+    var requestKey: String {
+        ([cpuID, gpuID] + gameIDs + unavailableGameNames).joined(separator: "|")
+    }
 }
 
 struct BuildPlan: Identifiable {
@@ -25,6 +63,28 @@ struct BuildPlan: Identifiable {
     let useCase: String
     let createdAt: String
     let parts: [PCPart]
+    let usedGPUAlternative: UsedGPUAlternativeRecommendation?
+    let performanceContext: BuildPerformanceContext?
+
+    init(
+        name: String,
+        budget: String,
+        totalPrice: String,
+        useCase: String,
+        createdAt: String,
+        parts: [PCPart],
+        usedGPUAlternative: UsedGPUAlternativeRecommendation? = nil,
+        performanceContext: BuildPerformanceContext? = nil
+    ) {
+        self.name = name
+        self.budget = budget
+        self.totalPrice = totalPrice
+        self.useCase = useCase
+        self.createdAt = createdAt
+        self.parts = parts
+        self.usedGPUAlternative = usedGPUAlternative
+        self.performanceContext = performanceContext
+    }
 }
 
 struct BuildRisk: Identifiable {
@@ -79,6 +139,22 @@ extension BuildOptionDTO {
     }
 
     var buildPlan: BuildPlan {
+        makeBuildPlan(performanceGameNames: [])
+    }
+
+    func makeBuildPlan(performanceGameNames: [String]) -> BuildPlan {
+        let performanceSelection = AIBuildFlowRules.performanceSelection(
+            for: performanceGameNames
+        )
+        let performanceContext = performanceGameNames.isEmpty
+            ? nil
+            : BuildPerformanceContext(
+                cpuID: part(for: .cpu).componentId,
+                gpuID: part(for: .gpu).componentId,
+                gameIDs: performanceSelection.gameIDs,
+                unavailableGameNames: performanceSelection.unavailableGameNames
+            )
+
         return BuildPlan(
             name: details.direction.resultTitle,
             budget: formattedBuildPrice(details.targetBudget),
@@ -86,7 +162,9 @@ extension BuildOptionDTO {
             useCase: details.direction.resultSubtitle,
             createdAt: "参考价日期 \(details.priceDate)",
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
-                + (details.extras ?? []).map(\.model)
+                + (details.extras ?? []).map(\.model),
+            usedGPUAlternative: details.usedGpuAlternative?.model,
+            performanceContext: performanceContext
         )
     }
 }
@@ -161,6 +239,19 @@ private extension BuildOptionExtraDTO {
             condition: condition.displayName,
             icon: "wifi",
             accent: AppTheme.primaryText
+        )
+    }
+}
+
+private extension UsedGPUAlternativeDTO {
+    var model: UsedGPUAlternativeRecommendation {
+        UsedGPUAlternativeRecommendation(
+            componentID: componentId,
+            model: name,
+            referencePrice: referencePrice,
+            priceDifference: priceDifference,
+            performanceComparison: performanceComparison,
+            gamingPerformanceGainPercent: gamingPerformanceGainPercent
         )
     }
 }

@@ -63,6 +63,7 @@ private struct DIYBuilderView: View {
     @State private var loadError: String?
     @State private var loadedCategories: Set<String> = []
     @State private var loadingCategories: Set<String> = []
+    @State private var recommendedPSUWatt: Int?
     @State private var feedbackMessage = ""
     @State private var showsFeedback = false
 
@@ -163,6 +164,9 @@ private struct DIYBuilderView: View {
                 importBuild(importedBuild)
             }
         }
+        .task(id: powerSelectionKey) {
+            await refreshRecommendedPSUWatt()
+        }
         .alert("DIY", isPresented: $showsFeedback) {
             Button("好的", role: .cancel) {}
         } message: {
@@ -195,7 +199,7 @@ private struct DIYBuilderView: View {
             Divider().frame(height: 62)
             DIYSummaryMetric(title: "已选择", value: "\(selectedComponents.count)", progress: Double(selectedComponents.count) / Double(components.count))
             Divider().frame(height: 62)
-            DIYSummaryMetric(title: "预计功耗", value: estimatedPower.map { "\($0)W" } ?? "待选择", icon: "bolt.fill", iconColor: DIYTheme.secondary)
+            DIYSummaryMetric(title: "推荐电源瓦数", value: recommendedPSUWatt.map { "\($0)W" } ?? "待选择", icon: "bolt.fill", iconColor: DIYTheme.secondary)
         }
         .frame(height: 94)
         .micro3DSurface(cornerRadius: 22, surfaceColor: DIYTheme.surface)
@@ -207,11 +211,10 @@ private struct DIYBuilderView: View {
         }
     }
 
-    private var estimatedPower: Int? {
-        let cpuPower = selectedComponents["cpu"].flatMap { power(for: $0) }
-        let gpuPower = selectedComponents["gpu"].flatMap { power(for: $0) }
-        guard cpuPower != nil || gpuPower != nil else { return nil }
-        return (cpuPower ?? 0) + (gpuPower ?? 0) + 100
+    private var powerSelectionKey: String? {
+        guard let cpuID = selectedComponents["cpu"]?.id,
+              let gpuID = selectedComponents["gpu"]?.id else { return nil }
+        return "\(cpuID)|\(gpuID)"
     }
 
     private var actionBar: some View {
@@ -242,60 +245,22 @@ private struct DIYBuilderView: View {
         }
     }
 
-    private func power(for component: CatalogComponentDTO) -> Int? {
-        if let exact = integerValue(component.specs["tdp"]) {
-            return exact
+    @MainActor
+    private func refreshRecommendedPSUWatt() async {
+        guard let cpuID = selectedComponents["cpu"]?.id,
+              let gpuID = selectedComponents["gpu"]?.id else {
+            recommendedPSUWatt = nil
+            return
         }
-        if let source = integerValue(component.specs["source_tdp"]) {
-            return source
-        }
-        if case let .object(sourceSpecs)? = component.specs["source_specs"],
-           let source = integerValue(sourceSpecs["tdp"]) {
-            return source
-        }
+        recommendedPSUWatt = nil
 
-        let text = "\(component.brand) \(component.name)"
-            .uppercased()
-            .filter { $0.isLetter || $0.isNumber }
-
-        let known: [(String, Int)]
-        if component.category == "cpu" {
-            known = [
-                ("285K", 250), ("265K", 250), ("245K", 159),
-                ("14900", 253), ("14700", 253), ("13900", 253),
-                ("13700", 253), ("12900", 241), ("12700", 190),
-                ("14600", 181), ("13600", 181), ("12600", 150), ("12400", 117),
-                ("9850X3D", 120), ("9800X3D", 120), ("7800X3D", 120),
-                ("9700X", 120), ("9600X", 105), ("7500F", 88),
-                ("5600X", 65), ("5600", 65)
-            ]
-        } else if component.category == "gpu" {
-            known = [
-                ("5090", 575), ("5080", 360), ("5070TI", 300), ("5070", 250),
-                ("5060TI", 180), ("5060", 145), ("4090", 450), ("4080", 320),
-                ("4070TI", 285), ("4070SUPER", 220), ("4070", 200),
-                ("4060TI", 160), ("4060", 115), ("3090", 350), ("3080TI", 350),
-                ("3080", 320), ("3070TI", 290), ("3070", 220), ("3060TI", 200),
-                ("3060", 170), ("9070XT", 304), ("9070", 220), ("9060XT", 200),
-                ("7900XTX", 355), ("7900XT", 315), ("7800XT", 263),
-                ("7700XT", 245), ("7600XT", 190), ("7600", 165), ("6750", 250),
-                ("6700", 230), ("6600", 132), ("A770", 225), ("A580", 185)
-            ]
-        } else {
-            return nil
-        }
-
-        return known.first { text.contains($0.0) }?.1
-    }
-
-    private func integerValue(_ value: CatalogJSONValue?) -> Int? {
-        switch value {
-        case .number(let value):
-            return Int(value)
-        case .string(let value):
-            return Int(value.filter { $0.isNumber })
-        default:
-            return nil
+        do {
+            let watt = try await apiClient.diyRecommendedPSUWatt(cpuID: cpuID, gpuID: gpuID)
+            guard selectedComponents["cpu"]?.id == cpuID,
+                  selectedComponents["gpu"]?.id == gpuID else { return }
+            recommendedPSUWatt = watt
+        } catch {
+            recommendedPSUWatt = nil
         }
     }
 
@@ -319,7 +284,7 @@ private struct DIYBuilderView: View {
                 id: UUID(),
                 createdAt: Date(),
                 totalPrice: totalPrice,
-                estimatedPower: estimatedPower,
+                recommendedPsuWatt: recommendedPSUWatt,
                 parts: parts
             )
         )
@@ -346,7 +311,7 @@ private struct DIYBuilderView: View {
             content: DIYShareCard(
                 parts: parts,
                 totalPrice: totalPrice,
-                estimatedPower: estimatedPower
+                recommendedPsuWatt: recommendedPSUWatt
             )
             .frame(width: 900)
         )
@@ -1193,7 +1158,7 @@ private struct DIYComponentPicker: View {
 private struct DIYShareCard: View {
     let parts: [DIYStoredPart]
     let totalPrice: Int
-    let estimatedPower: Int?
+    let recommendedPsuWatt: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -1209,7 +1174,7 @@ private struct DIYShareCard: View {
             HStack(spacing: 0) {
                 summary(title: "预计总价", value: totalPrice > 0 ? "¥\(totalPrice)" : "待选择")
                 Divider().frame(height: 68)
-                summary(title: "预计功耗", value: estimatedPower.map { "\($0)W" } ?? "待选择")
+                summary(title: "推荐电源瓦数", value: recommendedPsuWatt.map { "\($0)W" } ?? "待选择")
             }
             .padding(.vertical, 28)
 

@@ -218,9 +218,9 @@ def test_office_artifacts_import_and_public_option_flow() -> None:
     response = client.post(
         "/v1/build/options",
         json={
-            "budget": 7000,
+            "budget": 6000,
             "useCase": "办公",
-            "officeApps": ["Blender"],
+            "officeApps": ["Office"],
             "direction": "balanced",
             "memorySize": "16GB",
             "storageSize": "512GB",
@@ -229,7 +229,20 @@ def test_office_artifacts_import_and_public_option_flow() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body["options"]) == 2
+    assert len(body["options"]) == 3
     assert all(option["template_id"].startswith("office-") for option in body["options"])
-    assert all(option["details"]["gpu_vendor"] == "nvidia" for option in body["options"])
     assert all(option["source"] == "template" for option in body["options"])
+
+    incomplete = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7000,
+            "useCase": "办公",
+            "officeApps": ["Blender"],
+            "direction": "balanced",
+        },
+    )
+    assert incomplete.status_code == 503
+    assert "必须同时提供全新、二手和混合采购三套方案" in incomplete.json()[
+        "detail"
+    ]

@@ -27,8 +27,9 @@
 | SSS | RTX 5090 | 极限旗舰，预算极高时才考虑 |
 | SS+ | RTX 5090 D / RTX 5090 D V2 | 旗舰级，按国内可买型号处理 |
 | SS | RTX 5080 | 高端旗舰，明显强于 5070 Ti / 7900 XTX 档 |
+| SS- | RTX 4080 SUPER / RTX 4080 | 二手高端替代档，仅用于全新 N 卡方案的性价比提示 |
 | S+ | RTX 5070 Ti / RX 7900 XTX / RX 9070 XT | 高端 3A 档，适合高预算高画质 |
-| S | RTX 5070 / RTX 4070 SUPER / RX 7900 XT / RX 9070 GRE | 中高端性能档；RTX 4070 SUPER 仅按二手方案处理 |
+| S | RTX 4070 Ti SUPER / RTX 5070 / RTX 4070 SUPER / RX 7900 XT / RX 9070 GRE | 中高端性能档；40 系型号仅按二手方案处理 |
 | A+ | RTX 3080 Ti / RX 7800 XT | 老旗舰或高性价比 2K 3A 档，二手风险要提示 |
 | A | RTX 4070 / RTX 3080 / RTX 5060 Ti | 2K 游戏主力档；RTX 4070 / RTX 3080 仅按二手方案处理 |
 | B+ | RX 7700 XT / RTX 3070 Ti / RX 9060 XT 12G | 4000-6000 元重 3A 常用档 |
@@ -41,14 +42,15 @@
 1. RTX 5090
 2. RTX 5090 D / RTX 5090 D V2
 3. RTX 5080
-4. RTX 5070 Ti / RX 7900 XTX / RX 9070 XT
-5. RTX 5070 / RTX 4070 SUPER / RX 7900 XT / RX 9070 GRE
-6. RTX 3080 Ti / RX 7800 XT
-7. RTX 4070 / RTX 3080 / RTX 5060 Ti
-8. RX 7700 XT / RTX 3070 Ti / RX 9060 XT 12G
-9. RX 9060 XT 8G / RTX 4060 Ti / RTX 5060 / RTX 3060 Ti
-10. RX 7650 GRE / RX 6750 GRE
-11. RTX 4060
+4. RTX 4080 SUPER / RTX 4080
+5. RTX 5070 Ti / RX 7900 XTX / RX 9070 XT
+6. RTX 4070 Ti SUPER / RTX 5070 / RTX 4070 SUPER / RX 7900 XT / RX 9070 GRE
+7. RTX 3080 Ti / RX 7800 XT
+8. RTX 4070 / RTX 3080 / RTX 5060 Ti
+9. RX 7700 XT / RTX 3070 Ti / RX 9060 XT 12G
+10. RX 9060 XT 8G / RTX 4060 Ti / RTX 5060 / RTX 3060 Ti
+11. RX 7650 GRE / RX 6750 GRE
+12. RTX 4060
 
 ## AI 选卡规则
 
@@ -58,6 +60,8 @@
 - 5000元以上二手方案：优先 RTX 40 系及以上或 RX 7000 系及以上；RTX 30 / RX 6000 仅在没有现代显卡能合理进入预算区间时兜底。
 - 二手老旗舰：RTX 3080 / RTX 3080 Ti / RTX 3070 Ti 以及 RX 6000 系必须提示功耗、矿卡、成色、保修风险。
 - 全新省心：优先 RTX 5060 / RTX 5060 Ti 或有全新价的 A 卡；RTX 4060 是 40 系中允许全新采购的例外。
-- RTX 4060 Ti：全新市场参考价虽约 ¥2300，但与 RTX 5060 接近，因此全新白名单留空，只保留 ¥1900 二手方案。
+- RTX 4060 Ti：全新白名单留空，只保留 ¥2300 二手方案。
+- 全新 N 卡方案可提示同预算二手 40 系替代；当前二手 RTX 4070 为 ¥3299、RTX 4070 SUPER 为 ¥3700、RTX 4070 Ti SUPER 为 ¥4799、RTX 4080 为 ¥6900、RTX 4080 SUPER 为 ¥7300。替代卡综合性能不得低于方案中的全新显卡，且不自动计入全新配置总价。
+- RTX 4070 Ti 的 ¥4200 二手价仅用于记录和比较，该型号继续禁止进入生成配置；RTX 4070 Ti SUPER 是独立且允许使用的型号。
 - 全新配置硬规则：显卡价格表里 `new_price` 为空的型号不能用于全新配置，不能把 `used_price` 当全新价。
 - A 卡性价比：RX 6750 GRE / RX 7700 XT / RX 7800 XT / RX 9070 GRE / RX 9070 XT 优先用于重 3A 性能方案。

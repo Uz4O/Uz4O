@@ -382,7 +382,7 @@ private extension DIYStoredBuild {
             name: "DIY 自定义配置",
             budget: "自定义",
             totalPrice: totalPrice > 0 ? "¥\(totalPrice)" : "待选择",
-            useCase: estimatedPower.map { "预计功耗 \($0)W" } ?? "自定义装机",
+            useCase: recommendedPsuWatt.map { "推荐电源瓦数 \($0)W" } ?? "自定义装机",
             createdAt: dateFormatter.string(from: createdAt),
             parts: parts.map { part in
                 PCPart(

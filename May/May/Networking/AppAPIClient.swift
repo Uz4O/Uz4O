@@ -107,6 +107,14 @@ struct DIYCatalogSnapshot: Codable {
     let prices: [String: CatalogPriceDTO]
 }
 
+struct DIYPowerRecommendationResponseDTO: Decodable {
+    let recommendedPsuWatt: Int?
+}
+
+private struct DIYCompatibilityRequestDTO: Encodable {
+    let components: [String: String]
+}
+
 enum DIYCatalogCache {
     private static let fileName = "diy-catalog-v1.json"
 
@@ -226,6 +234,7 @@ struct AppAPIClient {
         needsWirelessNetwork: Bool,
         memorySize: String,
         storageSize: String,
+        allowsFlexibleBudget: Bool,
         noGPUBuild: Bool,
         ownedGPUModel: String?
     ) async throws -> BuildOptionsResponseDTO {
@@ -241,6 +250,7 @@ struct AppAPIClient {
                 needsWirelessNetwork: needsWirelessNetwork,
                 memorySize: memorySize,
                 storageSize: storageSize,
+                allowsFlexibleBudget: allowsFlexibleBudget,
                 noGPUBuild: noGPUBuild,
                 ownedGPUModel: ownedGPUModel
             )
@@ -370,20 +380,36 @@ struct AppAPIClient {
         )
     }
 
-    func analyzeConfigReviewText(_ text: String) async throws -> ConfigReviewResponseDTO {
+    func analyzeConfigReviewText(
+        _ text: String,
+        direction: String,
+        resolution: String
+    ) async throws -> ConfigReviewResponseDTO {
         try await request(
             path: "/v1/review/analyze",
             method: "POST",
-            body: ["text": text]
+            body: ConfigReviewRequestDTO(
+                text: text,
+                direction: direction,
+                resolution: resolution
+            )
         )
     }
 
-    func analyzeConfigReviewImage(imageData: Data) async throws -> ConfigReviewResponseDTO {
+    func analyzeConfigReviewImage(
+        imageData: Data,
+        direction: String,
+        resolution: String
+    ) async throws -> ConfigReviewResponseDTO {
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = makeRequest(path: "/v1/review/analyze/image", method: "POST", token: nil)
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         var body = Data()
+        body.appendUTF8("--\(boundary)\r\n")
+        body.appendUTF8("Content-Disposition: form-data; name=\"direction\"\r\n\r\n\(direction)\r\n")
+        body.appendUTF8("--\(boundary)\r\n")
+        body.appendUTF8("Content-Disposition: form-data; name=\"resolution\"\r\n\r\n\(resolution)\r\n")
         body.appendUTF8("--\(boundary)\r\n")
         body.appendUTF8("Content-Disposition: form-data; name=\"image\"; filename=\"config.jpg\"\r\n")
         body.appendUTF8("Content-Type: image/jpeg\r\n\r\n")
@@ -411,11 +437,30 @@ struct AppAPIClient {
         )
     }
 
+    func upgradePlan(_ body: UpgradePlanRequestDTO) async throws -> UpgradePlanResponseDTO {
+        try await request(
+            path: "/v1/upgrade/plan",
+            method: "POST",
+            body: body
+        )
+    }
+
     func diyCatalog() async throws -> DIYCatalogSnapshot {
         DIYCatalogSnapshot(
             components: try await diyComponents(),
             prices: try await diyPrices()
         )
+    }
+
+    func diyRecommendedPSUWatt(cpuID: String, gpuID: String) async throws -> Int? {
+        let response: DIYPowerRecommendationResponseDTO = try await request(
+            path: "/v1/compat/check",
+            method: "POST",
+            body: DIYCompatibilityRequestDTO(
+                components: ["cpu": cpuID, "gpu": gpuID]
+            )
+        )
+        return response.recommendedPsuWatt
     }
 
     func diyComponents(category: String? = nil) async throws -> [CatalogComponentDTO] {
@@ -508,7 +553,11 @@ struct AppAPIClient {
 
     private func perform<Response: Decodable>(request: URLRequest) async throws -> Response {
         let data = try await responseData(for: request)
-        return try decoder.decode(Response.self, from: data)
+        do {
+            return try decoder.decode(Response.self, from: data)
+        } catch is DecodingError {
+            throw APIError.invalidResponse
+        }
     }
 
     private func performNoContent(request: URLRequest) async throws {
@@ -540,6 +589,12 @@ struct AppAPIClient {
     }
 }
 
+private struct ConfigReviewRequestDTO: Encodable {
+    let text: String
+    let direction: String
+    let resolution: String
+}
+
 private extension Data {
     mutating func appendUTF8(_ string: String) {
         append(contentsOf: string.utf8)
@@ -569,6 +624,7 @@ private struct BuildOptionsRequestDTO: Encodable {
     let needsWirelessNetwork: Bool
     let memorySize: String
     let storageSize: String
+    let allowsFlexibleBudget: Bool
     let noGPUBuild: Bool
     let ownedGPUModel: String?
 
@@ -581,6 +637,7 @@ private struct BuildOptionsRequestDTO: Encodable {
         case needsWirelessNetwork = "needs_wireless_network"
         case memorySize = "memory_size"
         case storageSize = "storage_size"
+        case allowsFlexibleBudget = "allows_flexible_budget"
         case noGPUBuild = "no_gpu_build"
         case ownedGPUModel = "owned_gpu_model"
     }
@@ -729,6 +786,7 @@ struct BuildOptionsResponseDTO: Decodable {
     let direction: BuildDirectionDTO
     let options: [BuildOptionDTO]
     let unavailableModes: [BuildPurchaseModeDTO]
+    let unavailableModeReasons: [String: String]?
 }
 
 struct BuildOptionDTO: Decodable, Identifiable {
@@ -757,8 +815,18 @@ struct BuildOptionDetailsDTO: Decodable {
     let purchaseMode: BuildPurchaseModeDTO
     let parts: [BuildOptionPartDTO]
     let extras: [BuildOptionExtraDTO]?
+    let usedGpuAlternative: UsedGPUAlternativeDTO?
     let suitableUser: String
     let priceDate: String
+}
+
+struct UsedGPUAlternativeDTO: Decodable {
+    let componentId: String
+    let name: String
+    let referencePrice: Int
+    let priceDifference: Int
+    let performanceComparison: String
+    let gamingPerformanceGainPercent: Int?
 }
 
 struct BuildOptionExtraDTO: Decodable {
@@ -792,11 +860,30 @@ struct ConfigReviewResponseDTO: Decodable {
     let riskLevel: String
     let summary: String
     let sourceText: String
-    let sellerPrice: Int?
-    let referenceTotal: Int?
+    let direction: String
+    let resolution: String
+    let pairingRating: ConfigReviewRatingDTO
+    let performanceRating: ConfigReviewRatingDTO
     let findings: [ConfigReviewFindingDTO]
     let questionsForSeller: [String]
     let replyText: String
+    let webSearchStatus: String
+    let webSources: [ConfigReviewSourceDTO]
+}
+
+struct ConfigReviewRatingDTO: Decodable {
+    let score: Int?
+    let grade: String?
+    let detail: String
+    let confidence: String
+}
+
+struct ConfigReviewSourceDTO: Decodable, Identifiable {
+    var id: String { url }
+    let role: String
+    let componentName: String
+    let title: String
+    let url: String
 }
 
 struct ConfigReviewFindingDTO: Decodable, Identifiable {

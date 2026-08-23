@@ -119,7 +119,7 @@ def test_checks_ram_type_when_motherboard_mem_type_is_known() -> None:
     assert memory_finding.detail == "B760M DDR4 需要 DDR4 内存，但你选的是 DDR5。"
 
 
-def test_warns_when_psu_headroom_is_low() -> None:
+def test_recommends_standard_psu_tier_and_rejects_lower_wattage() -> None:
     result = evaluate_compatibility(
         BuildSelection(
             components={
@@ -140,10 +140,11 @@ def test_warns_when_psu_headroom_is_low() -> None:
     )
 
     psu_finding = next(finding for finding in result.findings if finding.code == "psu_headroom")
-    assert result.compatible is True
-    assert psu_finding.level == "warning"
-    assert psu_finding.detail == "预计功耗约 425W，500W 电源余量偏紧，建议换更高瓦数。"
-    assert result.finding_counts["warning"] == 1
+    assert result.compatible is False
+    assert result.recommended_psu_watt == 750
+    assert psu_finding.level == "error"
+    assert psu_finding.detail == "这套配置推荐至少使用 750W 电源，当前 500W 不足。"
+    assert result.finding_counts["error"] == 1
 
 
 def test_psu_headroom_ignores_unselected_catalog_components() -> None:
@@ -171,7 +172,8 @@ def test_psu_headroom_ignores_unselected_catalog_components() -> None:
     psu_finding = next(finding for finding in result.findings if finding.code == "psu_headroom")
     assert result.compatible is True
     assert psu_finding.level == "pass"
-    assert "预计功耗约 300W" in psu_finding.detail
+    assert result.recommended_psu_watt == 650
+    assert "推荐至少使用 650W 电源" in psu_finding.detail
 
 
 def test_psu_headroom_counts_each_selected_component_id_once() -> None:
@@ -181,7 +183,7 @@ def test_psu_headroom_counts_each_selected_component_id_once() -> None:
         "storage": "selected-gpu",
         "motherboard": "b650m",
         "ram": "ram-ddr5",
-        "psu": "psu-500w",
+        "psu": "psu-650w",
     }
     components = {
         "selected-cpu": component(
@@ -190,7 +192,7 @@ def test_psu_headroom_counts_each_selected_component_id_once() -> None:
         "selected-gpu": component("selected-gpu", "gpu", "Selected GPU", {"tdp": 200}),
         "b650m": component("b650m", "motherboard", "B650M", {"socket": "AM5"}),
         "ram-ddr5": component("ram-ddr5", "ram", "DDR5 16GB", {"type": "DDR5"}),
-        "psu-500w": component("psu-500w", "psu", "500W Gold", {"watt": 500}),
+        "psu-650w": component("psu-650w", "psu", "650W Gold", {"watt": 650}),
     }
 
     result = evaluate_compatibility(BuildSelection(components=selected), components)
@@ -199,7 +201,7 @@ def test_psu_headroom_counts_each_selected_component_id_once() -> None:
         finding for finding in result.findings if finding.code == "psu_headroom"
     )
     assert psu_finding.level == "pass"
-    assert "预计功耗约 300W" in psu_finding.detail
+    assert "推荐至少使用 650W 电源" in psu_finding.detail
 
 
 def test_warns_for_high_cpu_low_gpu_imbalance() -> None:

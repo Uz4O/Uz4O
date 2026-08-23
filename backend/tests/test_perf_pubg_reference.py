@@ -7,6 +7,10 @@ def test_uses_exact_1080p_chart_rows() -> None:
     assert pubg_cpu_average_fps("i9-14900k") == 470
 
 
+def test_9850x3d_scales_above_the_9800x3d_anchor() -> None:
+    assert pubg_cpu_average_fps("r7-9850x3d") == 615
+
+
 def test_scales_ranked_cpus_within_each_vendor() -> None:
     assert pubg_cpu_average_fps("r5-9600x") == 508
     assert pubg_cpu_average_fps("i7-14700k") == 462

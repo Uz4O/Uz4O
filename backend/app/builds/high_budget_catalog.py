@@ -29,7 +29,7 @@ PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 GpuVendor = Literal["nvidia", "amd"]
 
-PRICE_DATE = "2026-08-08"
+PRICE_DATE = "2026-08-23"
 BUDGET_TIERS = [
     *range(7_500, 10_001, 500),
     *range(11_000, 30_001, 1_000),
@@ -92,9 +92,9 @@ MOTHERBOARD_MODEL_RANK = {"msi-b850m-power": 2, "asus-b850m-awy": 1}
 MAX_MOTHERBOARD_BUDGET_SHARE = 0.15
 MAX_FPS_MOTHERBOARD_BUDGET_SHARE = 0.16
 MAX_3A_MOTHERBOARD_STEP_UP = 10_000
-MAX_BUDGET_SHORTFALL = 100
-AAA_CPU_PRIORITY_MAX_BUDGET_SHORTFALL = 2_000
-FPS_COVERAGE_MAX_BUDGET_SHORTFALL = 550
+MAX_BUDGET_SHORTFALL = 200
+AAA_CPU_PRIORITY_MAX_BUDGET_SHORTFALL = 200
+FPS_COVERAGE_MAX_BUDGET_SHORTFALL = 200
 FPS_COVERAGE_MAX_MOTHERBOARD_BUDGET_SHARE = 0.23
 EXTREME_COVERAGE_MIN_BUDGET = 18_000
 EXTREME_COVERAGE_MAX_MOTHERBOARD_BUDGET_SHARE = 0.32
@@ -323,14 +323,40 @@ def generate_high_budget_report() -> GenerationReport:
                                 "prefer_budget_fit": True,
                             }
                         )
+                    candidate = None
                     last_error = None
                     for attempt in attempts:
-                        try:
-                            candidate = _select_candidate(**selection_args, **attempt)
+                        storage_candidates = []
+                        for storage_id in (
+                            "base-ssd-512gb-tlc",
+                            "base-ssd-1tb-tlc",
+                            "base-ssd-2tb-tlc",
+                        ):
+                            try:
+                                storage_candidates.append(
+                                    _select_candidate(
+                                        **selection_args,
+                                        **attempt,
+                                        storage_id=storage_id,
+                                    )
+                                )
+                            except ValueError as exc:
+                                last_error = exc
+                        if storage_candidates:
+                            candidate = max(
+                                storage_candidates,
+                                key=lambda item: _score_candidate(
+                                    item,
+                                    direction,
+                                    prefer_modern_gpu=(
+                                        CONDITIONS_BY_MODE[purchase_mode]["gpu"]
+                                        == "used"
+                                    ),
+                                    prefer_new_9800_motherboard=budget >= 10_000,
+                                ),
+                            )
                             break
-                        except ValueError as exc:
-                            last_error = exc
-                    else:
+                    if candidate is None:
                         failures.append(
                             GenerationFailure(
                                 target_budget=budget,
@@ -376,6 +402,8 @@ def _gpu_vendors_for(
     direction: Direction,
     purchase_mode: PurchaseMode,
 ) -> Tuple[Optional[GpuVendor], ...]:
+    if direction == "fps" and budget >= 10_000:
+        return ("nvidia", "amd")
     if (
         direction != "fps"
         and budget >= GPU_VENDOR_SPLIT_MIN_BUDGET[purchase_mode]
@@ -442,6 +470,43 @@ def _completion_metadata(
     return completed_tiers, missing_data
 
 
+def _public_completed_tiers(
+    templates: Sequence[BuildTemplateInput],
+) -> List[int]:
+    mode_keys = {
+        (
+            template.details.target_budget,
+            template.details.direction,
+            template.details.purchase_mode,
+        )
+        for template in templates
+        if template.details is not None
+    }
+    nvidia_keys = {
+        (
+            template.details.target_budget,
+            template.details.direction,
+            template.details.purchase_mode,
+        )
+        for template in templates
+        if template.details is not None
+        and template.details.gpu_vendor == "nvidia"
+    }
+    return [
+        budget
+        for budget in BUDGET_TIERS
+        if all(
+            (budget, direction, purchase_mode) in mode_keys
+            and (
+                budget < 10_000
+                or (budget, direction, purchase_mode) in nvidia_keys
+            )
+            for direction in DIRECTIONS
+            for purchase_mode in PURCHASE_MODES
+        )
+    ]
+
+
 def _missing_combination_payload(
     budget: int,
     direction: Direction,
@@ -468,6 +533,7 @@ def render_high_budget_markdown(
     failures: Sequence[GenerationFailure] = (),
 ) -> str:
     completed_tiers, missing_data = _completion_metadata(templates, failures)
+    public_completed_tiers = _public_completed_tiers(templates)
     expected_template_count = sum(
         len(_gpu_vendors_for(budget, direction, purchase_mode))
         for budget in BUDGET_TIERS
@@ -485,7 +551,8 @@ def render_high_budget_markdown(
         "说明：10000元以下每500元一个档位，10000元以上每1000元一个档位；3A和均衡仅在达到对应预算门槛后拆分 NVIDIA 与 AMD 方案。",
         "二手方案中的电源、SSD和显卡仍按二手采购规则生成，购买前必须复核健康度、成色和保修。",
         (
-            f"生成状态：{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位完成，"
+            f"生成状态：公共三采购模式覆盖{len(public_completed_tiers)}/{len(BUDGET_TIERS)}个价位；"
+            f"全部厂商变体{len(completed_tiers)}/{len(BUDGET_TIERS)}个价位完成，"
             f"{len(templates)}/{expected_template_count}套配置生成，"
             f"不可用配置{len(missing_data)}套，失败配置{generation_failure_count}套。"
         ),
@@ -601,6 +668,7 @@ def _select_candidate(
     max_motherboard_budget_share: Optional[float] = None,
     max_aaa_motherboard_step_up: int = MAX_3A_MOTHERBOARD_STEP_UP,
     prefer_budget_fit: bool = False,
+    storage_id: str = "base-ssd-512gb-tlc",
 ) -> Candidate:
     if direction == "fps" and gpu_vendor is None:
         candidates = {}
@@ -621,6 +689,7 @@ def _select_candidate(
                     max_motherboard_budget_share=max_motherboard_budget_share,
                     max_aaa_motherboard_step_up=max_aaa_motherboard_step_up,
                     prefer_budget_fit=prefer_budget_fit,
+                    storage_id=storage_id,
                 )
             except ValueError:
                 pass
@@ -751,7 +820,7 @@ def _select_candidate(
             )
             if psu is None:
                 continue
-            storage = support_parts["base-ssd-512gb-tlc"]
+            storage = support_parts[storage_id]
 
             for motherboard in motherboards:
                 motherboard_price = motherboard.price(conditions["motherboard"])
@@ -817,27 +886,7 @@ def _select_candidate(
                     )
                     if ram.specs.get("capacity_gb") != required_ram_capacity:
                         continue
-                    if EXTREME_COVERAGE_MIN_BUDGET <= budget <= 20_000:
-                        required_ram_latency = (
-                            28
-                            if purchase_mode == "new" and direction == "fps"
-                            else 32
-                            if purchase_mode == "new"
-                            else 30
-                        )
-                        if ram.specs.get("cas_latency") != required_ram_latency:
-                            continue
-                    if (
-                        direction == "aaa"
-                        and purchase_mode == "new"
-                        and budget >= 10_000
-                        and ram.specs.get("cas_latency") != 32
-                    ):
-                        continue
-                    if (
-                        budget >= 10_000
-                        and int(ram.specs.get("cas_latency", 99)) > 32
-                    ):
+                    if ram.specs.get("cas_latency") != 28:
                         continue
                     fixed_parts = {
                         "cpu": cpu,
@@ -1019,7 +1068,11 @@ def _build_template(
     purchase_label = PURCHASE_LABELS[purchase_mode]
     gpu_vendor = _candidate_gpu_vendor(candidate)
     vendor_label = GPU_VENDOR_LABELS[gpu_vendor]
-    vendor_suffix = "-amd" if direction != "fps" and gpu_vendor == "amd" else ""
+    vendor_suffix = (
+        "-amd"
+        if gpu_vendor == "amd" and (direction != "fps" or budget >= 10_000)
+        else ""
+    )
     details = _details_for_candidate(budget, direction, purchase_mode, candidate)
     return BuildTemplateInput(
         id=f"base-{budget}-{direction}-{purchase_mode}{vendor_suffix}",
@@ -1418,6 +1471,7 @@ def _write_audit(
     payload = {
         "price_date": PRICE_DATE,
         "completed_tiers": completed_tiers,
+        "public_completed_tiers": _public_completed_tiers(templates),
         "completed_template_count": len(templates),
         "pending_review": [],
         "missing_data": missing_data,

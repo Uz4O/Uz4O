@@ -40,8 +40,38 @@ struct BuildResultContentRulesTests {
             "useCase: details.direction.resultSubtitle",
             "The hero should use a short beginner-friendly direction summary."
         )
-        assertContains(viewSource, "PerformanceCard()", "The result should show the reference performance card.")
+        assertContains(viewSource, "PerformanceCard(", "The result should show the performance card.")
+        assertContains(
+            viewSource,
+            "AppAPIClient().estimatePerformance(",
+            "The result should reuse the existing game-performance API."
+        )
+        for resolution in [".fullHD", ".twoK", ".fourK"] {
+            assertContains(
+                viewSource,
+                "resolution: \(resolution)",
+                "The result should request every displayed resolution."
+            )
+        }
+        for fixedFPS in ["Text(\"168\")", "value: \"240\"", "value: \"96\""] {
+            assertNotContains(
+                viewSource,
+                fixedFPS,
+                "Hard-coded FPS must not return to generated build details."
+            )
+        }
         assertContains(viewSource, "PartsListCard(plan: plan", "The parts should use the reference list card.")
+        assertContains(
+            viewSource,
+            "if let alternative = plan.usedGPUAlternative",
+            "All-new NVIDIA results should show a maintained used 40-series alternative when available."
+        )
+        assertContains(viewSource, "Text(\"显卡替代建议\")", "The alternative should be clearly separated from the configured parts.")
+        assertContains(
+            viewSource,
+            "此建议不改变上方全新配置，也不计入总价",
+            "The used-card suggestion must not be mistaken for part of the all-new total."
+        )
         assertContains(viewSource, "TotalPriceSection(totalPrice: plan.totalPrice)", "The total should have its own full-width row.")
         assertContains(viewSource, "Text(plan.useCase)", "The header should keep the short plan subtitle.")
         assertContains(viewSource, "Text(\"游戏性能表现\")", "The performance card title should match the reference.")
@@ -66,6 +96,16 @@ struct BuildResultContentRulesTests {
             diyViewSource,
             "selectedComponents = importedComponents",
             "DIY should replace its current selection with the imported AI build."
+        )
+        assertContains(
+            diyViewSource,
+            "DIYSummaryMetric(title: \"推荐电源瓦数\"",
+            "DIY should show the backend-recommended PSU wattage as its main metric."
+        )
+        assertNotContains(
+            diyViewSource,
+            "title: \"预计功耗\"",
+            "DIY should not present estimated load as PSU purchase guidance."
         )
         assertOrdered(
             viewSource,

@@ -53,6 +53,7 @@ CPU_AVERAGE_FPS: Dict[str, Dict[str, float]] = {
 GPU_AVERAGE_FPS: Dict[str, Dict[str, float]] = {
     "1080p": {
         "rtx-5090-d": 391.5,
+        "rtx-5090-d-v2": 387.0,
         "arc-a580-8gb": 128.2,
         "rx-6500-xt": 100.6,
     },

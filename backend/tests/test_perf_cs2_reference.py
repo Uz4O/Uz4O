@@ -6,6 +6,7 @@ def test_uses_the_users_9700x_measurement_as_the_1080p_anchor() -> None:
 
 
 def test_scales_ranked_cpus_from_the_9700x_anchor() -> None:
+    assert cs2_cpu_average_fps("r7-9850x3d", "1080p") == 484
     assert cs2_cpu_average_fps("r7-9800x3d", "1080p") == 470
     assert cs2_cpu_average_fps("r7-7800x3d", "1080p") == 413
     assert cs2_cpu_average_fps("i9-14900ks", "1080p") == 309

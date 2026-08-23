@@ -241,18 +241,18 @@ def test_detailed_template_rejects_purchase_mode_condition_mismatch() -> None:
     assert "conditions do not match purchase mode" in error
 
 
-def test_detailed_template_rejects_total_more_than_100_below_target_budget() -> None:
+def test_detailed_template_rejects_total_more_than_200_below_target_budget() -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     Base.metadata.create_all(engine)
     template = generate_high_budget_templates()[0].model_copy(deep=True)
-    difference = template.estimated_total - template.details.target_budget + 101
+    difference = template.estimated_total - template.details.target_budget + 201
     template.details.parts[-1].reference_price -= difference
-    template.estimated_total = template.details.target_budget - 101
+    template.estimated_total = template.details.target_budget - 201
 
     with Session(engine) as session:
         with pytest.raises(
             ValueError,
-            match="estimated_total is more than 100 below target budget",
+            match="estimated_total is more than 200 below target budget",
         ):
             upsert_build_templates(session, [template])
 

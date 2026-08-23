@@ -68,7 +68,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -78,7 +78,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -143,7 +143,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -215,7 +215,7 @@
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -225,7 +225,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -290,7 +290,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -362,7 +362,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -372,7 +372,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -437,7 +437,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -509,7 +509,7 @@
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -519,7 +519,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -584,7 +584,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -656,7 +656,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -666,7 +666,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -731,7 +731,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -803,7 +803,7 @@
           "condition": "used",
           "reference_price": 1200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -813,7 +813,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -878,7 +878,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -950,7 +950,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -960,7 +960,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1025,7 +1025,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1097,7 +1097,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1107,7 +1107,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1172,7 +1172,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1244,7 +1244,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1254,7 +1254,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1319,7 +1319,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1391,7 +1391,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1401,7 +1401,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1466,7 +1466,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1538,7 +1538,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1548,7 +1548,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1613,7 +1613,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1685,7 +1685,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1695,7 +1695,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1760,7 +1760,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1832,7 +1832,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1842,7 +1842,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -1907,7 +1907,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1979,7 +1979,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -1989,7 +1989,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2054,7 +2054,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2083,7 +2083,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4208,
+    "estimated_total": 4307,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -2124,9 +2124,9 @@
           "component_id": "rtx-4060",
           "name": "RTX 4060",
           "condition": "used",
-          "reference_price": 1900,
+          "reference_price": 1999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 40,
@@ -2136,7 +2136,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2201,7 +2201,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2273,7 +2273,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -2283,7 +2283,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2348,7 +2348,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2420,7 +2420,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -2430,7 +2430,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2495,7 +2495,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2524,7 +2524,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4208,
+    "estimated_total": 4307,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -2565,9 +2565,9 @@
           "component_id": "rtx-4060",
           "name": "RTX 4060",
           "condition": "used",
-          "reference_price": 1900,
+          "reference_price": 1999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 40,
@@ -2577,7 +2577,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2642,7 +2642,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2714,7 +2714,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -2724,7 +2724,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2789,7 +2789,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2861,7 +2861,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -2871,7 +2871,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -2936,7 +2936,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2965,7 +2965,7 @@
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4208,
+    "estimated_total": 4307,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 4000,
@@ -3006,9 +3006,9 @@
           "component_id": "rtx-4060",
           "name": "RTX 4060",
           "condition": "used",
-          "reference_price": 1900,
+          "reference_price": 1999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 40,
@@ -3018,7 +3018,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3083,7 +3083,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3155,7 +3155,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -3165,7 +3165,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3230,7 +3230,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3302,7 +3302,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -3312,7 +3312,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3377,7 +3377,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3449,7 +3449,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -3459,7 +3459,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3524,7 +3524,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3596,7 +3596,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -3606,7 +3606,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3671,7 +3671,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3743,7 +3743,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -3753,7 +3753,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3818,7 +3818,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3890,7 +3890,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -3900,7 +3900,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -3965,7 +3965,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4037,7 +4037,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -4047,7 +4047,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4112,7 +4112,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4184,7 +4184,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -4194,7 +4194,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4259,7 +4259,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4331,7 +4331,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -4341,7 +4341,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4406,7 +4406,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4478,7 +4478,7 @@
           "condition": "new",
           "reference_price": 1900,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -4488,7 +4488,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4553,7 +4553,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4575,14 +4575,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-7700-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rx-9060-xt-8gb",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-750w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5499,
+    "estimated_total": 5500,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -4620,31 +4620,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-7700-xt",
-          "name": "RX 7700 XT",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 55,
-            "tdp": 245
+            "perf_index": 50,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -4662,14 +4662,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
+          "component_id": "base-psu-650w-gold",
+          "name": "安耐美 GN650 V3 650W",
           "condition": "used",
-          "reference_price": 249,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
-          "price_date": "2026-08-06",
+          "reference_price": 200,
+          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
+          "price_date": "2026-08-05",
           "specs": {
-            "watt": 750
+            "watt": 650
           }
         },
         {
@@ -4700,7 +4700,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4772,7 +4772,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 50,
@@ -4782,7 +4782,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4847,7 +4847,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4919,7 +4919,7 @@
           "condition": "new",
           "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 50,
@@ -4929,7 +4929,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -4994,7 +4994,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5016,14 +5016,14 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-b550m-plus",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5320,
+    "estimated_total": 5419,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -5061,22 +5061,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -5141,7 +5141,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5213,7 +5213,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5223,7 +5223,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -5288,7 +5288,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5360,7 +5360,7 @@
           "condition": "new",
           "reference_price": 2400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 50,
@@ -5370,7 +5370,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -5435,7 +5435,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5455,16 +5455,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7700-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5499,
+    "estimated_total": 5149,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5000,
@@ -5474,16 +5474,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -5507,7 +5507,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5516,17 +5516,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -5582,7 +5582,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5654,7 +5654,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5664,7 +5664,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -5729,7 +5729,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5801,7 +5801,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -5811,7 +5811,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -5876,7 +5876,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5899,13 +5899,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-4060-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5750,
+    "estimated_total": 5800,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -5948,7 +5948,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -5957,17 +5957,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -6023,7 +6023,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6045,14 +6045,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-7700-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rx-9060-xt-8gb",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-750w-gold",
+      "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5968,
+    "estimated_total": 5958,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6090,31 +6090,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-7700-xt",
-          "name": "RX 7700 XT",
+          "component_id": "rx-9060-xt-8gb",
+          "name": "蓝宝石 9060XT 8G脉动",
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 55,
-            "tdp": 245
+            "perf_index": 50,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -6132,14 +6132,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
+          "component_id": "base-psu-650w-gold",
+          "name": "安耐美 GN650 V3 650W",
           "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
+          "reference_price": 299,
+          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
+          "price_date": "2026-08-05",
           "specs": {
-            "watt": 750
+            "watt": 650
           }
         },
         {
@@ -6170,7 +6170,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6242,7 +6242,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -6252,7 +6252,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -6317,7 +6317,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6339,14 +6339,14 @@
     "components": {
       "cpu": "i5-12600kf",
       "motherboard": "msi-b760m-a",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5630,
+    "estimated_total": 5729,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6384,22 +6384,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -6464,7 +6464,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6486,14 +6486,14 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-b550m-plus",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5828,
+    "estimated_total": 5927,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6531,22 +6531,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -6611,7 +6611,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6683,7 +6683,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -6693,7 +6693,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -6758,7 +6758,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6780,14 +6780,14 @@
     "components": {
       "cpu": "i5-12600kf",
       "motherboard": "msi-b760m-a",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5630,
+    "estimated_total": 5729,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6825,22 +6825,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -6905,7 +6905,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6925,16 +6925,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7700-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5968,
+    "estimated_total": 5618,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 5500,
@@ -6944,16 +6944,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r5-7500f",
+          "name": "R5 7500F",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 550,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 60,
+            "tdp": 88
           }
         },
         {
@@ -6977,7 +6977,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -6986,17 +6986,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -7052,7 +7052,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7072,16 +7072,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-9060-xt-8gb",
-      "ram": "base-ddr5-16gb-6000-c36",
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
+      "gpu": "rx-7700-xt",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6458,
+    "estimated_total": 5968,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -7091,59 +7091,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 900,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 850,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rx-9060-xt-8gb",
-          "name": "蓝宝石 9060XT 8G脉动",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "new",
-          "reference_price": 2400,
+          "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 50,
-            "tdp": 180
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c36",
-          "name": "DDR5 16GB 6000 C36",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
-          "reference_price": 1300,
-          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
-          "price_date": "2026-07-19",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 36
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -7161,28 +7161,28 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "new",
-          "reference_price": 299,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 650
+            "watt": 750
           }
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "new",
-          "reference_price": 100,
+          "reference_price": 150,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -7199,12 +7199,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "base-6000-fps-used",
-    "title": "6000元 FPS 二手 NVIDIA基底配置",
+    "title": "6000元 FPS 二手 AMD基底配置",
     "budget_min": 6000,
     "budget_max": 6499,
     "use_cases": [
@@ -7213,41 +7213,41 @@
     "tags": [
       "FPS",
       "二手",
-      "NVIDIA",
+      "AMD",
       "fps",
       "used",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rx-7700-xt",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6450,
+    "estimated_total": 6279,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
       "direction": "fps",
       "purchase_mode": "used",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r7-7800x3d",
+          "name": "R7 7800X3D",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 1650,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 90,
+            "tdp": 120
           }
         },
         {
@@ -7266,31 +7266,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 200
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -7308,28 +7308,28 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 249,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 650
+            "watt": 750
           }
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -7346,7 +7346,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7369,13 +7369,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-4060-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6208,
+    "estimated_total": 6258,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -7418,7 +7418,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -7427,17 +7427,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -7493,7 +7493,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7565,7 +7565,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -7575,7 +7575,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -7640,7 +7640,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7660,16 +7660,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
       "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6450,
+    "estimated_total": 5929,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -7679,30 +7679,30 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 900,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
           "condition": "used",
-          "reference_price": 450,
+          "reference_price": 550,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
           }
         },
         {
@@ -7710,9 +7710,9 @@
           "component_id": "rtx-4070",
           "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -7721,17 +7721,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -7761,16 +7761,16 @@
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -7787,7 +7787,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7859,7 +7859,7 @@
           "condition": "used",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -7869,7 +7869,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -7934,7 +7934,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -7956,14 +7956,14 @@
     "components": {
       "cpu": "i5-12600kf",
       "motherboard": "msi-b760m-a",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6138,
+    "estimated_total": 6237,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -8001,22 +8001,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -8081,7 +8081,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8153,7 +8153,7 @@
           "condition": "new",
           "reference_price": 2600,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -8163,7 +8163,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -8228,7 +8228,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8248,16 +8248,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
       "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6450,
+    "estimated_total": 5929,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -8267,30 +8267,30 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 900,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
           "condition": "used",
-          "reference_price": 450,
+          "reference_price": 550,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
           }
         },
         {
@@ -8298,9 +8298,9 @@
           "component_id": "rtx-4070",
           "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -8309,17 +8309,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -8349,16 +8349,16 @@
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -8375,7 +8375,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8447,7 +8447,7 @@
           "condition": "used",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -8457,7 +8457,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -8522,7 +8522,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8544,14 +8544,14 @@
     "components": {
       "cpu": "i5-12600kf",
       "motherboard": "msi-b760m-a",
-      "gpu": "rtx-4070",
+      "gpu": "rtx-5060-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6138,
+    "estimated_total": 6237,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6000,
@@ -8589,22 +8589,22 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -8669,7 +8669,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8698,7 +8698,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6808,
+    "estimated_total": 6907,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -8739,9 +8739,9 @@
           "component_id": "rtx-5060-ti",
           "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3500,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -8751,7 +8751,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -8816,7 +8816,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -8839,13 +8839,13 @@
       "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7800-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6929,
+    "estimated_total": 6979,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -8888,7 +8888,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -8897,17 +8897,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -8963,12 +8963,12 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "base-6500-fps-mixed",
-    "title": "6500元 FPS 混合采购 NVIDIA基底配置",
+    "title": "6500元 FPS 混合采购 AMD基底配置",
     "budget_min": 6500,
     "budget_max": 6999,
     "use_cases": [
@@ -8977,41 +8977,41 @@
     "tags": [
       "FPS",
       "混合采购",
-      "NVIDIA",
+      "AMD",
       "fps",
       "mixed",
-      "nvidia"
+      "amd"
     ],
     "components": {
-      "cpu": "r5-9600x",
+      "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rx-7700-xt",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6908,
+    "estimated_total": 6748,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
       "direction": "fps",
       "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "r7-7800x3d",
+          "name": "R7 7800X3D",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 1650,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "perf_index": 90,
+            "tdp": 120
           }
         },
         {
@@ -9030,31 +9030,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 200
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -9072,28 +9072,28 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "new",
-          "reference_price": 299,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 650
+            "watt": 750
           }
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -9110,7 +9110,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9182,7 +9182,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -9192,7 +9192,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -9257,7 +9257,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9279,14 +9279,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6450,
+    "estimated_total": 6599,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -9324,31 +9324,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -9404,7 +9404,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9427,13 +9427,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7900-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6699,
+    "estimated_total": 6749,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -9476,7 +9476,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -9485,17 +9485,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -9551,7 +9551,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9623,7 +9623,7 @@
           "condition": "used",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -9633,7 +9633,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -9698,7 +9698,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9770,7 +9770,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -9780,7 +9780,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
           "reference_price": 500,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -9845,7 +9845,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -9867,14 +9867,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6450,
+    "estimated_total": 6599,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -9912,31 +9912,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -9992,7 +9992,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10015,13 +10015,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7900-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6699,
+    "estimated_total": 6749,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 6500,
@@ -10064,7 +10064,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -10073,17 +10073,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -10139,7 +10139,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10211,7 +10211,7 @@
           "condition": "used",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -10221,7 +10221,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -10286,7 +10286,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10306,16 +10306,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-5060",
-      "ram": "base-ddr5-16gb-6000-c32",
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7458,
+    "estimated_total": 6907,
     "explanation": "以FPS游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -10325,59 +10325,59 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 900,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
           "condition": "new",
-          "reference_price": 700,
+          "reference_price": 850,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
           }
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "微星 RTX5060幻影师 2X",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3000,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 50,
-            "tdp": 145
+            "perf_index": 60,
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c32",
-          "name": "DDR5 16GB 6000 C32",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "new",
-          "reference_price": 1700,
-          "price_source": "用户2026-07-17提供的DDR5 6000 C32 16GB参考价",
-          "price_date": "2026-07-17",
+          "reference_price": 500,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 32
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
@@ -10407,16 +10407,16 @@
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "new",
-          "reference_price": 100,
+          "reference_price": 150,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -10433,7 +10433,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10455,14 +10455,14 @@
     "components": {
       "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7180,
+    "estimated_total": 7329,
     "explanation": "以FPS游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -10500,31 +10500,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -10580,7 +10580,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10603,13 +10603,13 @@
       "cpu": "r7-7800x3d",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7800-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7398,
+    "estimated_total": 7448,
     "explanation": "以FPS游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -10652,7 +10652,7 @@
           "condition": "used",
           "reference_price": 2700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 65,
@@ -10661,17 +10661,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -10727,7 +10727,7 @@
         }
       ],
       "suitable_user": "主要玩CS2、无畏契约、PUBG等高帧率游戏的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10750,13 +10750,13 @@
       "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-9070-gre",
-      "ram": "base-ddr5-16gb-6000-c36",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7108,
+    "estimated_total": 7458,
     "explanation": "以3A游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -10799,7 +10799,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -10808,17 +10808,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c36",
-          "name": "DDR5 16GB 6000 C36",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "new",
-          "reference_price": 1300,
-          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
-          "price_date": "2026-07-19",
+          "reference_price": 1650,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB全新参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 36
+            "cas_latency": 28
           }
         },
         {
@@ -10874,7 +10874,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -10894,16 +10894,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r7-9700x",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-4070-super",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7400,
+    "estimated_total": 7200,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -10913,16 +10913,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r7-9700x",
-          "name": "R7 9700X",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 950,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 80,
-            "tdp": 120
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -10944,9 +10944,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -10955,17 +10955,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11021,7 +11021,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11042,15 +11042,15 @@
     ],
     "components": {
       "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
-      "gpu": "rx-9070-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "motherboard": "asus-b650m-tuf",
+      "gpu": "rx-7900-xt",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7499,
+    "estimated_total": 6949,
     "explanation": "以3A游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11074,10 +11074,10 @@
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-b650m-tuf",
+          "name": "华硕 B650M PLUS 重炮手",
           "condition": "used",
-          "reference_price": 450,
+          "reference_price": 650,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
@@ -11088,31 +11088,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-9070-xt",
-          "name": "蓝宝石 9070XT 16G 脉动",
+          "component_id": "rx-7900-xt",
+          "name": "RX 7900 XT",
           "condition": "used",
-          "reference_price": 4000,
+          "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
-            "perf_index": 85,
-            "tdp": 304
+            "perf_index": 75,
+            "tdp": 315
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11168,7 +11168,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11190,14 +11190,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6908,
+    "estimated_total": 7057,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11235,31 +11235,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11315,7 +11315,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11338,13 +11338,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7900-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7168,
+    "estimated_total": 7218,
     "explanation": "以3A游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11387,7 +11387,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -11396,17 +11396,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11462,7 +11462,7 @@
         }
       ],
       "suitable_user": "主要玩高画质3A单机、重视分辨率和画质的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11485,13 +11485,13 @@
       "cpu": "r5-7500f",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-9070-gre",
-      "ram": "base-ddr5-16gb-6000-c36",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7108,
+    "estimated_total": 7458,
     "explanation": "以均衡游戏方向优化，按全新规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11534,7 +11534,7 @@
           "condition": "new",
           "reference_price": 3500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -11543,17 +11543,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c36",
-          "name": "DDR5 16GB 6000 C36",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "new",
-          "reference_price": 1300,
-          "price_source": "用户2026-07-19提供的6000元全新配置参考价",
-          "price_date": "2026-07-19",
+          "reference_price": 1650,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB全新参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 36
+            "cas_latency": 28
           }
         },
         {
@@ -11609,7 +11609,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11629,16 +11629,16 @@
       "nvidia"
     ],
     "components": {
-      "cpu": "r7-9700x",
+      "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rtx-4070-super",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7400,
+    "estimated_total": 7200,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11648,16 +11648,16 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r7-9700x",
-          "name": "R7 9700X",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 950,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 80,
-            "tdp": 120
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
@@ -11679,9 +11679,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -11690,17 +11690,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11756,7 +11756,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11776,16 +11776,16 @@
       "amd"
     ],
     "components": {
-      "cpu": "r7-9700x",
-      "motherboard": "asus-prime-b650m-k",
+      "cpu": "r5-9600x",
+      "motherboard": "asus-b650m-tuf",
       "gpu": "rx-7900-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-850w-gold",
+      "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7459,
+    "estimated_total": 6949,
     "explanation": "以均衡游戏方向优化，按二手规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11795,24 +11795,24 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r7-9700x",
-          "name": "R7 9700X",
+          "component_id": "r5-9600x",
+          "name": "R5 9600X",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 950,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
             "socket": "AM5",
-            "perf_index": 80,
-            "tdp": 120
+            "perf_index": 72,
+            "tdp": 105
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
+          "component_id": "asus-b650m-tuf",
+          "name": "华硕 B650M PLUS 重炮手",
           "condition": "used",
-          "reference_price": 450,
+          "reference_price": 650,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
@@ -11828,7 +11828,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -11837,17 +11837,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -11865,14 +11865,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-850w-gold",
-          "name": "安耐美 PX850DF 850W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "used",
-          "reference_price": 659,
-          "price_source": "用户2026-08-05提供的二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 249,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 850
+            "watt": 750
           }
         },
         {
@@ -11903,7 +11903,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -11925,14 +11925,14 @@
     "components": {
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
-      "gpu": "rtx-4070",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "gpu": "rtx-5060-ti",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6908,
+    "estimated_total": 7057,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -11970,31 +11970,31 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-4070",
-          "name": "RTX 4070",
+          "component_id": "rtx-5060-ti",
+          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "used",
-          "reference_price": 3000,
+          "reference_price": 3099,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 200
+            "tdp": 180
           }
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -12050,7 +12050,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -12073,13 +12073,13 @@
       "cpu": "r5-9600x",
       "motherboard": "asus-prime-b650m-k",
       "gpu": "rx-7900-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr5-16gb-6000-c28",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7168,
+    "estimated_total": 7218,
     "explanation": "以均衡游戏方向优化，按混合采购规则从维护中的白名单和参考价格中选出。",
     "details": {
       "target_budget": 7000,
@@ -12122,7 +12122,7 @@
           "condition": "used",
           "reference_price": 3200,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 75,
@@ -12131,17 +12131,17 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr5-16gb-6000-c28",
+          "name": "DDR5 16GB 6000 C28",
           "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 1350,
+          "price_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+          "price_date": "2026-08-22",
           "specs": {
             "type": "DDR5",
             "capacity_gb": 16,
             "speed_mhz": 6000,
-            "cas_latency": 30
+            "cas_latency": 28
           }
         },
         {
@@ -12197,7 +12197,7 @@
         }
       ],
       "suitable_user": "游戏类型比较杂，希望兼顾FPS和3A的用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   }
 ]

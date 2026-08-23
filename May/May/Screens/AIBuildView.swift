@@ -9,14 +9,16 @@ struct AIBuildOptionsInput {
     let needsWirelessNetwork: Bool
     let memorySize: String
     let storageSize: String
+    let allowsFlexibleBudget: Bool
     let noGPUBuild: Bool
     let ownedGPUModel: String?
 }
 
 struct AIBuildView: View {
     typealias LoadOptions = (AIBuildOptionsInput) async throws -> BuildOptionsResponseDTO
+    typealias PrepareResults = @MainActor (BuildOptionsResponseDTO, [String]) async -> Void
 
-    private let minimumGenerationDuration: TimeInterval = 14.5
+    private let minimumGenerationDuration: TimeInterval = 2.5
     private let completionAnimationDuration: TimeInterval = 0.8
 
     @State private var currentStep: AIBuildStep = .budget
@@ -40,15 +42,18 @@ struct AIBuildView: View {
     @State private var upgradePreference = "当前体验优先"
     @State private var selectedMemorySize = "16GB"
     @State private var selectedStorageSize = "1TB"
+    @State private var allowsFlexibleBudget = false
     @State private var selectedAestheticStyleID = AestheticBuildStyle.featured[0].id
 
     let onBack: () -> Void
-    let onComplete: (BuildOptionsResponseDTO) -> Void
+    let onComplete: (BuildOptionsResponseDTO, [String]) -> Void
     let loadOptions: LoadOptions
+    let prepareResults: PrepareResults
 
     init(
         onBack: @escaping () -> Void,
-        onComplete: @escaping (BuildOptionsResponseDTO) -> Void,
+        onComplete: @escaping (BuildOptionsResponseDTO, [String]) -> Void,
+        prepareResults: @escaping PrepareResults = { _, _ in },
         loadOptions: @escaping LoadOptions = { input in
             try await AppAPIClient().buildOptions(
                 budget: input.budget,
@@ -59,6 +64,7 @@ struct AIBuildView: View {
                 needsWirelessNetwork: input.needsWirelessNetwork,
                 memorySize: input.memorySize,
                 storageSize: input.storageSize,
+                allowsFlexibleBudget: input.allowsFlexibleBudget,
                 noGPUBuild: input.noGPUBuild,
                 ownedGPUModel: input.ownedGPUModel
             )
@@ -66,19 +72,24 @@ struct AIBuildView: View {
     ) {
         self.onBack = onBack
         self.onComplete = onComplete
+        self.prepareResults = prepareResults
         self.loadOptions = loadOptions
     }
 
     private let gameOptions = [
-        "什么都玩", "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "云顶之弈", "LOL",
-        "COD", "赛博朋克2077", "荒野大镖客2", "GTA5", "黑神话悟空", "地平线6",
-        "艾尔登法环", "城市天际线", "我的世界"
+        "什么都玩", "瓦罗兰特", "CS2", "PUBG", "三角洲行动", "永劫无间", "暗区突围",
+        "穿越火线", "云顶之弈", "LOL", "COD", "NBA2K", "赛博朋克2077", "荒野大镖客2",
+        "GTA5", "黑神话悟空", "地平线6", "艾尔登法环", "城市天际线", "我的世界"
     ]
     private let gameArtworkNames = [
         "瓦罗兰特": "GameArtworkValorant",
         "CS2": "GameArtworkCS2",
         "PUBG": "GameArtworkPUBG",
         "三角洲行动": "GameArtworkDeltaForce",
+        "永劫无间": "GameArtworkNarakaBladepoint",
+        "暗区突围": "GameArtworkArenaBreakout",
+        "NBA2K": "GameArtworkNBA2K",
+        "穿越火线": "GameArtworkCrossFire",
         "云顶之弈": "GameArtworkTeamfightTactics",
         "LOL": "GameArtworkLeagueOfLegends",
         "COD": "GameArtworkCallOfDuty",
@@ -102,55 +113,6 @@ struct AIBuildView: View {
     ]
     private let memorySizeOptions = ["16GB", "32GB"]
     private let storageSizeOptions = ["512GB", "1TB", "2TB"]
-    private let midBudgetCapacityOptions = ["32GB 内存", "1TB 固态"]
-
-    private var usesMidBudgetCapacityChoice: Bool {
-        let budgetValue = Int(budget)
-        return budgetValue >= 6500 && budgetValue < 8000
-    }
-
-    private var midBudgetCapacitySelection: Binding<String> {
-        Binding(
-            get: {
-                selectedMemorySize == "32GB" ? "32GB 内存" : "1TB 固态"
-            },
-            set: { selection in
-                if selection == "32GB 内存" {
-                    selectedMemorySize = "32GB"
-                    selectedStorageSize = "512GB"
-                } else {
-                    selectedMemorySize = "16GB"
-                    selectedStorageSize = "1TB"
-                }
-            }
-        )
-    }
-
-    private var availableMemorySizeOptions: [String] {
-        let budgetValue = Int(budget)
-        if budgetValue < 6500 {
-            return ["16GB"]
-        }
-        if budgetValue < 15000 {
-            return ["16GB", "32GB"]
-        }
-        return memorySizeOptions
-    }
-
-    private var availableStorageSizeOptions: [String] {
-        let budgetValue = Int(budget)
-        if budgetValue < 4000 {
-            return ["512GB"]
-        }
-        if budgetValue < 8000 {
-            return ["512GB", "1TB"]
-        }
-        if budgetValue < 15000 {
-            return ["512GB", "1TB", "2TB"]
-        }
-        return storageSizeOptions
-    }
-
     private var visibleSteps: [AIBuildStep] {
         AIBuildFlowRules.visibleSteps(
             budget: Int(budget),
@@ -232,17 +194,13 @@ struct AIBuildView: View {
         }
         .animation(.easeInOut(duration: 0.18), value: currentStep)
         .animation(.easeOut(duration: 0.28), value: isSubmitting)
-        .onAppear(perform: clampCapacitySelections)
-        .onChange(of: budget) { _, _ in
-            clampCapacitySelections()
-        }
         .onChange(of: usesNoGpuBuild) { _, isOwned in
             if !isOwned {
                 ownedGPUModel = ""
             }
         }
         .onDisappear(perform: cancelGeneration)
-        .alert("生成失败", isPresented: showsSubmissionError) {
+        .alert("暂时无法生成合适方案", isPresented: showsSubmissionError) {
             Button("重试") {
                 submissionError = nil
                 submitBuildOptions()
@@ -364,6 +322,7 @@ struct AIBuildView: View {
                 LiquidGlassSegmentedPicker(
                     options: BuildPreference.aiBuildOptions,
                     selection: $selectedBuildPreference,
+                    usesNativeGlassTransition: true,
                     title: \.title
                 )
             }
@@ -383,19 +342,20 @@ struct AIBuildView: View {
             } else {
                 UpgradePreferenceSection(selected: $upgradePreference)
             }
-            if usesMidBudgetCapacityChoice {
-                PreferenceSegmentGroup(
-                    title: "容量优先（二选一）",
-                    options: midBudgetCapacityOptions,
-                    selected: midBudgetCapacitySelection
-                )
-            } else {
-                if availableMemorySizeOptions.count > 1 {
-                    PreferenceSegmentGroup(title: "内存大小", options: availableMemorySizeOptions, selected: $selectedMemorySize)
+            PreferenceSegmentGroup(title: "内存大小", options: memorySizeOptions, selected: $selectedMemorySize)
+            PreferenceSegmentGroup(title: "存储大小", options: storageSizeOptions, selected: $selectedStorageSize)
+            if Int(budget) < 10_000 {
+                Toggle(isOn: $allowsFlexibleBudget) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("预算可小幅浮动")
+                            .font(.appSubheadline)
+                            .foregroundStyle(AppTheme.primaryText)
+                        Text("生成时允许最多比预算高 500 元；默认最多高 300 元")
+                            .font(.appCaption)
+                            .foregroundStyle(AppTheme.secondaryText)
+                    }
                 }
-                if availableStorageSizeOptions.count > 1 {
-                    PreferenceSegmentGroup(title: "存储大小", options: availableStorageSizeOptions, selected: $selectedStorageSize)
-                }
+                .tint(AppTheme.primaryText)
             }
         }
     }
@@ -471,6 +431,7 @@ struct AIBuildView: View {
             needsWirelessNetwork: needsWirelessNetwork,
             memorySize: selectedMemorySize,
             storageSize: selectedStorageSize,
+            allowsFlexibleBudget: allowsFlexibleBudget,
             noGPUBuild: usesNoGpuBuild,
             ownedGPUModel: usesNoGpuBuild
                 ? ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -484,6 +445,8 @@ struct AIBuildView: View {
         generationTask = Task {
             do {
                 let response = try await loadOptions(input)
+                await prepareResults(response, input.games)
+                guard !Task.isCancelled else { return }
                 let remainingBeforeCompletion = completionStart.timeIntervalSinceNow
                 if remainingBeforeCompletion > 0 {
                     try await Task.sleep(nanoseconds: UInt64(remainingBeforeCompletion * 1_000_000_000))
@@ -495,7 +458,7 @@ struct AIBuildView: View {
                 try await Task.sleep(nanoseconds: UInt64(completionAnimationDuration * 1_000_000_000))
                 guard !Task.isCancelled else { return }
                 generationTask = nil
-                onComplete(response)
+                onComplete(response, input.games)
                 isSubmitting = false
             } catch {
                 guard !Task.isCancelled else { return }
@@ -523,26 +486,6 @@ struct AIBuildView: View {
         chassisColorPreference = defaults.colorPreference
     }
 
-    private func clampCapacitySelections() {
-        if !availableMemorySizeOptions.contains(selectedMemorySize),
-           let fallback = availableMemorySizeOptions.last {
-            selectedMemorySize = fallback
-        }
-
-        if !availableStorageSizeOptions.contains(selectedStorageSize),
-           let fallback = availableStorageSizeOptions.last {
-            selectedStorageSize = fallback
-        }
-
-        if usesMidBudgetCapacityChoice {
-            if selectedMemorySize == "32GB" {
-                selectedStorageSize = "512GB"
-            } else {
-                selectedMemorySize = "16GB"
-                selectedStorageSize = "1TB"
-            }
-        }
-    }
 }
 
 private struct AIBuildGeneratingView: View {
@@ -1601,6 +1544,7 @@ private struct PreferenceSegmentGroup: View {
                 options: options,
                 selection: $selected,
                 showsSelectionDot: showsSelectionDot,
+                usesNativeGlassTransition: true,
                 title: { $0 }
             )
         }
@@ -1608,5 +1552,5 @@ private struct PreferenceSegmentGroup: View {
 }
 
 #Preview {
-    AIBuildView(onBack: {}, onComplete: { _ in })
+    AIBuildView(onBack: {}, onComplete: { _, _ in })
 }

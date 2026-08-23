@@ -11,8 +11,30 @@ struct DIYStoredBuild: Codable, Identifiable {
     let id: UUID
     let createdAt: Date
     let totalPrice: Int
-    let estimatedPower: Int?
+    let recommendedPsuWatt: Int?
     let parts: [DIYStoredPart]
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case totalPrice
+        case recommendedPsuWatt
+        case parts
+    }
+
+    init(
+        id: UUID,
+        createdAt: Date,
+        totalPrice: Int,
+        recommendedPsuWatt: Int?,
+        parts: [DIYStoredPart]
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.totalPrice = totalPrice
+        self.recommendedPsuWatt = recommendedPsuWatt
+        self.parts = parts
+    }
 }
 
 enum DIYBuildStore {

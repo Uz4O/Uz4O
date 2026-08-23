@@ -11,9 +11,10 @@ from pydantic import (
 )
 
 from app.builds.models import BuildTemplate
-from app.catalog.models import ComponentPrice, HardwareComponent
+from app.catalog.models import ComponentPrice, GPUWhitelistPrice, HardwareComponent
 from app.compat.engine import BuildSelection, evaluate_compatibility
 from app.compat.engine import CompatibilityResult
+from app.perf.time_spy import GPU_TIME_SPY_SCORES
 
 
 BuildStatus = Literal["ready", "needs_ai_generation"]
@@ -22,9 +23,21 @@ FALLBACK_REQUIRED_ROLES = ["cpu", "motherboard", "ram", "psu"]
 FALLBACK_OPTIONAL_ROLES = ["gpu", "storage"]
 FALLBACK_MAX_CANDIDATES_PER_ROLE = 4
 FALLBACK_MAX_COMBINATIONS_TO_EVALUATE = 5000
-CPU_HEAVY_GAMES = frozenset({"瓦罗兰特", "CS2", "PUBG"})
+USED_40_SERIES_PRICE_PREMIUM = 300
+BLOCKED_USED_GPU_ALTERNATIVES = frozenset({"rtx-4070-ti"})
+CPU_HEAVY_GAMES = frozenset({"瓦罗兰特", "CS2", "PUBG", "永劫无间"})
 BALANCED_GAMES = frozenset(
-    {"什么都玩", "云顶之弈", "LOL", "COD", "城市天际线", "我的世界"}
+    {
+        "什么都玩",
+        "云顶之弈",
+        "LOL",
+        "COD",
+        "城市天际线",
+        "我的世界",
+        "暗区突围",
+        "NBA2K",
+        "穿越火线",
+    }
 )
 GPU_HEAVY_GAMES = frozenset(
     {
@@ -105,6 +118,13 @@ class BuildRequest(BaseModel):
     storage_size: Optional[Literal["512GB", "1TB", "2TB"]] = Field(
         default=None,
         validation_alias=AliasChoices("storageSize", "storage_size"),
+    )
+    allows_flexible_budget: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "allowsFlexibleBudget",
+            "allows_flexible_budget",
+        ),
     )
     no_gpu_build: bool = Field(
         default=False,
@@ -211,8 +231,8 @@ class BuildRequest(BaseModel):
         return any(
             (
                 self.needs_wireless_network,
-                self.memory_size not in {None, "16GB"},
-                self.storage_size not in {None, "512GB"},
+                self.use_case != "办公" and self.memory_size is not None,
+                self.use_case != "办公" and self.storage_size is not None,
                 self.no_gpu_build,
                 bool(self.office_apps) and self.use_case != "办公",
                 bool(self.notes),
@@ -263,6 +283,15 @@ class BuildTemplateExtra(BaseModel):
     reference_price: int = Field(gt=0)
 
 
+class UsedGPUAlternative(BaseModel):
+    component_id: str
+    name: str
+    reference_price: int = Field(gt=0)
+    price_difference: int
+    performance_comparison: Literal["higher", "similar"]
+    gaming_performance_gain_percent: int = Field(default=0, ge=0)
+
+
 class BuildTemplateDetails(BaseModel):
     target_budget: int = Field(ge=0)
     direction: Literal["fps", "aaa", "balanced"]
@@ -272,6 +301,10 @@ class BuildTemplateDetails(BaseModel):
     extras: List[BuildTemplateExtra] = Field(
         default_factory=list,
         exclude_if=lambda value: not value,
+    )
+    used_gpu_alternative: Optional[UsedGPUAlternative] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
     )
     suitable_user: str
     price_date: str
@@ -304,6 +337,62 @@ class BuildTemplateDetails(BaseModel):
                 else "amd"
             )
         return {**value, "gpu_vendor": vendor}
+
+
+def recommend_used_40_series_gpu(
+    details: BuildTemplateDetails,
+    gpu_prices: Iterable[GPUWhitelistPrice],
+) -> Optional[UsedGPUAlternative]:
+    if details.purchase_mode != "new" or details.gpu_vendor != "nvidia":
+        return None
+
+    current_gpu = next(
+        (part for part in details.parts if part.role == "gpu"),
+        None,
+    )
+    if current_gpu is None or current_gpu.condition != "new":
+        return None
+
+    current_score = GPU_TIME_SPY_SCORES.get(current_gpu.component_id)
+    if current_score is None:
+        return None
+
+    candidates = []
+    for price in gpu_prices:
+        candidate_id = price.component_id
+        candidate_price = price.used_price
+        candidate_score = GPU_TIME_SPY_SCORES.get(candidate_id)
+        if (
+            not candidate_id.startswith("rtx-4")
+            or candidate_id == current_gpu.component_id
+            or candidate_id in BLOCKED_USED_GPU_ALTERNATIVES
+            or candidate_price is None
+            or candidate_score is None
+            or candidate_price > current_gpu.reference_price + USED_40_SERIES_PRICE_PREMIUM
+            or candidate_score < current_score
+        ):
+            continue
+        candidates.append((candidate_score, -candidate_price, price))
+
+    if not candidates:
+        return None
+
+    candidate_score, _, candidate = max(candidates, key=lambda item: item[:2])
+    candidate_price = candidate.used_price
+    if candidate_price is None:
+        return None
+    return UsedGPUAlternative(
+        component_id=candidate.component_id,
+        name=candidate.name,
+        reference_price=candidate_price,
+        price_difference=candidate_price - current_gpu.reference_price,
+        performance_comparison=(
+            "higher" if candidate_score > current_score else "similar"
+        ),
+        gaming_performance_gain_percent=round(
+            (candidate_score - current_score) * 100 / current_score
+        ),
+    )
 
 
 class BuildTemplateInput(BaseModel):
@@ -356,6 +445,9 @@ class BuildOptionsResponse(BaseModel):
     direction: Literal["fps", "aaa", "balanced"]
     options: List[BuildOptionResponse]
     unavailable_modes: List[Literal["new", "used", "mixed"]]
+    unavailable_mode_reasons: Dict[Literal["new", "used", "mixed"], str] = Field(
+        default_factory=dict
+    )
 
 
 class BuildSelectionConfirmationResponse(BaseModel):

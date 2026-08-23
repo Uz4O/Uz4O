@@ -7,3 +7,5 @@ Before starting work in this repository:
 3. Run `git status --short --branch` and preserve unrelated user or agent changes.
 
 Keep changes small and scoped. Do not use `backend/scripts/deploy.sh` for production until it is updated; current production deployment details are in `docs/agents/backend-server-context.md`.
+
+For iOS builds, runs, and simulator verification, use the `iPhone 17 Pro Max` simulator.

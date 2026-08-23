@@ -1,7 +1,7 @@
 import json
 from typing import Generator, Tuple
 
-from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -12,6 +12,8 @@ from app.review.ocr import OCRTextNotFoundError, OCRUnavailableError, extract_te
 from app.review.service import (
     ConfigReviewRequest,
     ConfigReviewResponse,
+    ReviewDirection,
+    ReviewResolution,
     analyze_configuration_text,
 )
 
@@ -43,6 +45,8 @@ async def analyze_review_image(
     http_request: Request,
     response: Response,
     image: UploadFile = File(...),
+    direction: ReviewDirection = Form("balanced"),
+    resolution: ReviewResolution = Form("1440p"),
     session: Session = Depends(get_session),
 ) -> ConfigReviewResponse:
     if image.content_type not in SUPPORTED_REVIEW_IMAGE_TYPES:
@@ -59,7 +63,8 @@ async def analyze_review_image(
     except OCRTextNotFoundError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
-    result, cache_status = _cached_or_analyze(http_request, session, ConfigReviewRequest(text=text))
+    payload = ConfigReviewRequest(text=text, direction=direction, resolution=resolution)
+    result, cache_status = _cached_or_analyze(http_request, session, payload)
     response.headers["X-Cache"] = cache_status
     return result
 
@@ -95,7 +100,13 @@ def _cached_or_analyze(
             )
             return ConfigReviewResponse.model_validate(cached), "HIT"
 
-    result = analyze_configuration_text(session, payload.text)
+    result = analyze_configuration_text(
+        session,
+        payload.text,
+        payload.direction,
+        payload.resolution,
+        http_request.app.state.settings,
+    )
     if http_request.app.state.settings.response_cache_enabled:
         http_request.app.state.response_cache.set(cache_key, result.model_dump(mode="json"))
     http_request.app.state.high_cost_usage_metrics.record_cache_status(

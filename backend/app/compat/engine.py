@@ -3,10 +3,14 @@ from typing import Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 from app.catalog.models import HardwareComponent
+from app.catalog.rule_specs import (
+    psu_supports_gpu_power_connector,
+    recommended_psu_watt_for_specs,
+)
 
 
 FindingLevel = Literal["pass", "warning", "error"]
-COMPATIBILITY_RULE_VERSION = "2026-06-16"
+COMPATIBILITY_RULE_VERSION = "2026-08-20"
 REQUIRED_ROLES = {
     "cpu": "CPU",
     "motherboard": "主板",
@@ -49,9 +53,9 @@ COMPATIBILITY_RULES = [
     ),
     CompatibilityRule(
         code="psu_headroom",
-        title="电源余量",
-        description="电源瓦数需要覆盖 CPU/GPU 等配件的估算功耗并留有余量。",
-        level_when_failed="warning",
+        title="推荐电源瓦数",
+        description="按 CPU/GPU 满载功耗、平台基线、瞬时余量和显卡最低档位检查电源。",
+        level_when_failed="error",
     ),
     CompatibilityRule(
         code="cpu_gpu_balance",
@@ -94,6 +98,7 @@ class CompatibilityResult(BaseModel):
     findings: List[CompatibilityFinding]
     finding_counts: Dict[FindingLevel, int]
     checked_rule_codes: List[str]
+    recommended_psu_watt: Optional[int] = None
 
 
 class CompatibilityRulesResponse(BaseModel):
@@ -105,6 +110,7 @@ def evaluate_compatibility(
     selection: BuildSelection,
     components_by_id: Dict[str, HardwareComponent],
 ) -> CompatibilityResult:
+    recommended_psu_watt = _recommended_psu_watt(selection, components_by_id)
     findings: List[CompatibilityFinding] = []
     findings.extend(_unknown_component_findings(selection, components_by_id))
     findings.extend(_missing_required_findings(selection))
@@ -126,6 +132,7 @@ def evaluate_compatibility(
         findings=findings,
         finding_counts=_finding_counts(findings),
         checked_rule_codes=_checked_rule_codes(findings),
+        recommended_psu_watt=recommended_psu_watt,
     )
 
 
@@ -244,37 +251,34 @@ def _psu_headroom_findings(
     selection: BuildSelection,
     components_by_id: Dict[str, HardwareComponent],
 ) -> List[CompatibilityFinding]:
+    cpu = _component_for_role(selection, components_by_id, "cpu")
+    gpu = _component_for_role(selection, components_by_id, "gpu")
     psu = _component_for_role(selection, components_by_id, "psu")
-    if psu is None:
+    if cpu is None or gpu is None or psu is None:
         return []
 
+    recommended_watt = _recommended_psu_watt(selection, components_by_id)
     psu_watt = _int_spec(psu, "watt")
-    total_tdp = sum(
-        _int_spec(components_by_id[component_id], "tdp") or 0
-        for component_id in set(selection.selected_ids())
-        if component_id in components_by_id
-        and components_by_id[component_id].category != "psu"
-    )
-    if not psu_watt or total_tdp <= 0:
+    if not psu_watt or recommended_watt is None:
         return []
 
-    if psu_watt < total_tdp:
+    if psu_watt < recommended_watt:
         return [
             CompatibilityFinding(
                 level="error",
                 code="psu_headroom",
                 title="电源瓦数不够",
-                detail=f"预计功耗约 {total_tdp}W，{psu_watt}W 电源可能带不动这套配置。",
+                detail=f"这套配置推荐至少使用 {recommended_watt}W 电源，当前 {psu_watt}W 不足。",
                 component_ids=[psu.id],
             )
         ]
-    if psu_watt < total_tdp * 1.3:
+    if not psu_supports_gpu_power_connector(gpu.id, psu.specs):
         return [
             CompatibilityFinding(
-                level="warning",
+                level="error",
                 code="psu_headroom",
-                title="电源余量偏紧",
-                detail=f"预计功耗约 {total_tdp}W，{psu_watt}W 电源余量偏紧，建议换更高瓦数。",
+                title="显卡供电接口不满足要求",
+                detail="当前电源缺少显卡需要的原生 600W 12V-2x6 供电路径。",
                 component_ids=[psu.id],
             )
         ]
@@ -283,11 +287,27 @@ def _psu_headroom_findings(
         CompatibilityFinding(
             level="pass",
             code="psu_headroom",
-            title="电源余量正常",
-            detail=f"预计功耗约 {total_tdp}W，{psu_watt}W 电源有基础余量。",
+            title="电源瓦数满足推荐",
+            detail=f"这套配置推荐至少使用 {recommended_watt}W 电源，当前 {psu_watt}W 满足要求。",
             component_ids=[psu.id],
         )
     ]
+
+
+def _recommended_psu_watt(
+    selection: BuildSelection,
+    components_by_id: Dict[str, HardwareComponent],
+) -> Optional[int]:
+    cpu = _component_for_role(selection, components_by_id, "cpu")
+    gpu = _component_for_role(selection, components_by_id, "gpu")
+    if cpu is None or gpu is None:
+        return None
+
+    cpu_tdp = _int_spec(cpu, "tdp")
+    gpu_tdp = _int_spec(gpu, "tdp")
+    if cpu_tdp <= 0 or gpu_tdp <= 0:
+        return None
+    return recommended_psu_watt_for_specs(cpu_tdp, gpu.id, gpu_tdp)
 
 
 def _balance_findings(

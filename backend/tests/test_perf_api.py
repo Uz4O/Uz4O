@@ -357,6 +357,55 @@ def test_delta_force_uses_the_user_provided_2k_reference_before_db_fallback() ->
     assert body["gpu_time_spy_score"] == 33018
 
 
+def test_9850x3d_and_5090_d_v2_use_the_corrected_1080p_game_references() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component(
+                    "r7-9850x3d",
+                    "cpu",
+                    specs={"perf_index": 103},
+                ),
+                catalog_component("rtx-5090-d-v2", "gpu"),
+            ],
+        )
+        upsert_hardware_performance_profiles(
+            session,
+            [
+                hardware_profile("r7-9850x3d", "cpu", 103),
+                hardware_profile("rtx-5090-d-v2", "gpu", 120),
+            ],
+        )
+        for game_id in ("valorant", "cs2", "pubg"):
+            seed_active_model(
+                session,
+                game_id,
+                cpu_fps=(100, 200),
+                gpu_fps=(90, 180),
+                correction_factor=1.0,
+                resolution="1080p",
+            )
+
+    body = post_estimate(
+        make_client(setup=setup),
+        ["valorant", "cs2", "pubg", "delta-force"],
+        cpu="r7-9850x3d",
+        gpu="rtx-5090-d-v2",
+        resolution="1080p",
+    ).json()
+
+    assert {
+        row["game"]: row["average_fps"]
+        for row in body["game_results"]
+    } == {
+        "valorant": 733,
+        "cs2": 484,
+        "pubg": 615,
+        "delta-force": 387,
+    }
+
+
 def test_valorant_cpu_reference_is_used_only_above_the_gpu_bottleneck() -> None:
     def setup(session):
         seed_hardware_components(

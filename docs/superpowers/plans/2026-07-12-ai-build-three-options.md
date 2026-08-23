@@ -125,7 +125,7 @@ Use the same purchase conditions as `backend/app/builds/repository.py`. Use the 
 
 - [ ] **Step 2: Add low-price support parts**
 
-Add only required reusable parts to `base-build-support-components-2026-07-12.json`, including DDR4 16GB 3200, 512GB SSD, 550W/650W power supplies, 6-heatpipe coolers and ordinary cases. Every entry must include socket/memory/wattage specs needed by compatibility checks and both used/new source metadata when both conditions are selectable.
+Add only required reusable parts to `base-build-support-components-2026-07-12.json`, including DDR4 8GB×2 3200, 512GB SSD, 550W/650W power supplies, 6-heatpipe coolers and ordinary cases. Every entry must include socket/memory/wattage specs needed by compatibility checks and both used/new source metadata when both conditions are selectable.
 
 - [ ] **Step 3: Implement artifact writers**
 

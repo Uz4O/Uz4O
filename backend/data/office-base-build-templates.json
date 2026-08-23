@@ -79,7 +79,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -89,7 +89,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -154,7 +154,7 @@
         }
       ],
       "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -237,7 +237,7 @@
           "condition": "used",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -247,7 +247,7 @@
         {
           "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 16GB 3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
           "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
@@ -312,11 +312,11 @@
         }
       ],
       "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-5000-strongest-used",
+    "id": "office-5000-strongest-mixed",
     "title": "5000元 综合性能优先办公配置",
     "budget_min": 5000,
     "budget_max": 5999,
@@ -325,7 +325,7 @@
     ],
     "tags": [
       "均衡",
-      "二手",
+      "混合采购",
       "AMD",
       "office-general",
       "office-media",
@@ -343,49 +343,49 @@
       "本地 AI"
     ],
     "components": {
-      "cpu": "r5-9600x",
-      "motherboard": "asus-prime-b650m-k",
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
       "gpu": "rx-7700-xt",
-      "ram": "base-ddr5-16gb-6000-c30",
+      "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-6-heatpipe",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 5499,
+    "estimated_total": 5198,
     "explanation": "5000元以下直接复用同档位现有综合性能最强的审核配置。",
     "details": {
       "target_budget": 5000,
       "direction": "balanced",
-      "purchase_mode": "used",
+      "purchase_mode": "mixed",
       "gpu_vendor": "amd",
       "parts": [
         {
           "role": "cpu",
-          "component_id": "r5-9600x",
-          "name": "R5 9600X",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
           "condition": "used",
-          "reference_price": 950,
+          "reference_price": 900,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "perf_index": 72,
-            "tdp": 105
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
           }
         },
         {
           "role": "motherboard",
-          "component_id": "asus-prime-b650m-k",
-          "name": "华硕 PRIME B650M-K",
-          "condition": "used",
-          "reference_price": 450,
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
+          "condition": "new",
+          "reference_price": 850,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
-            "socket": "AM5",
-            "mem_type": "DDR5",
-            "chipset": "B650"
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
           }
         },
         {
@@ -395,7 +395,7 @@
           "condition": "used",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "AMD",
             "perf_index": 55,
@@ -404,26 +404,26 @@
         },
         {
           "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
+          "component_id": "base-ddr4-16gb-3200",
+          "name": "DDR4 8GB×2 3200",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 400,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
-            "type": "DDR5",
+            "type": "DDR4",
             "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
+            "speed_mhz": 3200,
+            "modules": 2
           }
         },
         {
           "role": "storage",
           "component_id": "base-ssd-fanxiang-s500-pro-512gb",
           "name": "梵想 S500 Pro 512GB",
-          "condition": "used",
-          "reference_price": 400,
-          "price_source": "用户2026-08-07提供的二手参考价",
+          "condition": "new",
+          "reference_price": 509,
+          "price_source": "用户2026-08-07提供的当前参考价",
           "price_date": "2026-08-07",
           "specs": {
             "capacity_gb": 512,
@@ -434,9 +434,9 @@
           "role": "psu",
           "component_id": "base-psu-750w-gold",
           "name": "安耐美 GN750W V3 750W",
-          "condition": "used",
-          "reference_price": 249,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "condition": "new",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
           "price_date": "2026-08-06",
           "specs": {
             "watt": 750
@@ -444,16 +444,16 @@
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-6-heatpipe",
-          "name": "6热管风冷",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
           "condition": "used",
-          "reference_price": 70,
+          "reference_price": 100,
           "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
           "price_date": "2026-07-07",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 1
+            "towers": 2
           }
         },
         {
@@ -470,7 +470,7 @@
         }
       ],
       "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -548,7 +548,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -627,7 +627,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -705,7 +705,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -781,7 +781,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -859,7 +859,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -935,7 +935,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1012,7 +1012,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -1091,7 +1091,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1168,7 +1168,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -1244,7 +1244,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1321,7 +1321,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -1397,7 +1397,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1428,7 +1428,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6380,
+    "estimated_total": 6230,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1473,9 +1473,9 @@
           "component_id": "rtx-5060",
           "name": "微星 RTX5060幻影师 2X",
           "condition": "used",
-          "reference_price": 2800,
+          "reference_price": 2650,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -1551,7 +1551,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1629,7 +1629,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -1705,7 +1705,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1783,7 +1783,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -1862,7 +1862,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -1940,7 +1940,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -2016,7 +2016,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2094,7 +2094,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2170,7 +2170,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2247,7 +2247,7 @@
           "condition": "new",
           "reference_price": 2500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2326,7 +2326,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2403,7 +2403,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2479,7 +2479,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2556,7 +2556,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2632,7 +2632,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2663,7 +2663,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7229,
+    "estimated_total": 7329,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2708,9 +2708,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -2786,7 +2786,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -2810,14 +2810,14 @@
     "components": {
       "cpu": "u5-245k",
       "motherboard": "asus-b860m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-4070",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7228,
+    "estimated_total": 7387,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2859,16 +2859,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
+          "component_id": "rtx-4070",
+          "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 3200,
+          "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 180
+            "tdp": 200
           }
         },
         {
@@ -2902,14 +2902,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "new",
-          "reference_price": 299,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 650
+            "watt": 750
           }
         },
         {
@@ -2940,7 +2940,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3018,7 +3018,7 @@
           "condition": "new",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -3097,7 +3097,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3121,14 +3121,14 @@
     "components": {
       "cpu": "u7-270-plus",
       "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-4070",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8280,
+    "estimated_total": 8379,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3170,16 +3170,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
+          "component_id": "rtx-4070",
+          "name": "RTX 4070",
           "condition": "used",
-          "reference_price": 3200,
+          "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
-            "tdp": 180
+            "tdp": 200
           }
         },
         {
@@ -3251,7 +3251,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3282,7 +3282,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8478,
+    "estimated_total": 8328,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3327,9 +3327,9 @@
           "component_id": "rtx-5060",
           "name": "微星 RTX5060幻影师 2X",
           "condition": "used",
-          "reference_price": 2800,
+          "reference_price": 2650,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -3405,7 +3405,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3482,7 +3482,7 @@
           "condition": "new",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -3561,7 +3561,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3592,7 +3592,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8338,
+    "estimated_total": 8437,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3637,9 +3637,9 @@
           "component_id": "rtx-5060-ti",
           "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3500,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -3718,7 +3718,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3749,7 +3749,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8079,
+    "estimated_total": 8179,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3794,9 +3794,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -3872,7 +3872,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -3894,16 +3894,16 @@
       "本地 AI"
     ],
     "components": {
-      "cpu": "u5-250-plus",
-      "motherboard": "msi-pro-b860m-a",
+      "cpu": "u5-245k",
+      "motherboard": "asus-b860m-k",
       "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8428,
+    "estimated_total": 7788,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3913,26 +3913,26 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "u5-250-plus",
-          "name": "Ultra 5 250 Plus",
+          "component_id": "u5-245k",
+          "name": "Ultra 5 245K",
           "condition": "used",
-          "reference_price": 1300,
+          "reference_price": 850,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
+            "generation": "15代酷睿Ultra",
+            "platform": "Arrow Lake",
             "socket": "LGA1851",
-            "perf_index": 83,
-            "tdp": 125
+            "perf_index": 87,
+            "tdp": 181
           }
         },
         {
           "role": "motherboard",
-          "component_id": "msi-pro-b860m-a",
-          "name": "微星 PRO B860M-A WIFI",
+          "component_id": "asus-b860m-k",
+          "name": "华硕 PRIME B860M-K",
           "condition": "new",
-          "reference_price": 1050,
+          "reference_price": 700,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
@@ -3948,9 +3948,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -3988,14 +3988,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
           "condition": "new",
-          "reference_price": 299,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
           "specs": {
-            "watt": 650
+            "watt": 750
           }
         },
         {
@@ -4026,7 +4026,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4040,7 +4040,7 @@
     "tags": [
       "均衡",
       "全新",
-      "NVIDIA",
+      "Intel",
       "office-general",
       "Office",
       "WPS",
@@ -4050,20 +4050,20 @@
     "components": {
       "cpu": "u7-270-plus",
       "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5060",
+      "gpu": "arc-b580-12gb",
       "ram": "office-ddr5-16gb-7200-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9348,
+    "estimated_total": 8848,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
       "direction": "balanced",
       "purchase_mode": "new",
-      "gpu_vendor": "nvidia",
+      "gpu_vendor": "intel",
       "parts": [
         {
           "role": "cpu",
@@ -4099,16 +4099,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060",
-          "name": "微星 RTX5060幻影师 2X",
+          "component_id": "arc-b580-12gb",
+          "name": "Intel Arc B580 12GB",
           "condition": "new",
-          "reference_price": 3000,
+          "reference_price": 2500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
-            "vendor": "NVIDIA",
+            "vendor": "Intel Arc",
             "perf_index": 50,
-            "tdp": 145
+            "tdp": 190
           }
         },
         {
@@ -4183,14 +4183,14 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-9000-general-used",
     "title": "9000元 日常与平面办公 二手配置",
     "budget_min": 9000,
-    "budget_max": 9999,
+    "budget_max": 10999,
     "use_cases": [
       "办公"
     ],
@@ -4214,7 +4214,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8680,
+    "estimated_total": 8780,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4259,9 +4259,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4337,7 +4337,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4368,7 +4368,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9278,
+    "estimated_total": 9378,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4413,9 +4413,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4491,7 +4491,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4568,7 +4568,7 @@
           "condition": "new",
           "reference_price": 2500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -4647,14 +4647,14 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-9000-media-used",
     "title": "9000元 视频剪辑 二手配置",
     "budget_min": 9000,
-    "budget_max": 9999,
+    "budget_max": 10999,
     "use_cases": [
       "办公"
     ],
@@ -4677,7 +4677,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8680,
+    "estimated_total": 8780,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4722,9 +4722,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4800,7 +4800,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4830,7 +4830,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9278,
+    "estimated_total": 9378,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4875,9 +4875,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4953,7 +4953,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -4984,7 +4984,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9397,
+    "estimated_total": 9496,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -5029,9 +5029,9 @@
           "component_id": "rtx-5060-ti",
           "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3500,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -5110,14 +5110,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-9000-cuda-used",
     "title": "9000元 3D与CUDA 二手配置",
     "budget_min": 9000,
-    "budget_max": 9999,
+    "budget_max": 10999,
     "use_cases": [
       "办公"
     ],
@@ -5141,7 +5141,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8680,
+    "estimated_total": 8780,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -5186,9 +5186,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -5264,7 +5264,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5295,7 +5295,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9278,
+    "estimated_total": 9378,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -5340,9 +5340,9 @@
           "component_id": "rtx-4070-super",
           "name": "RTX 4070 SUPER",
           "condition": "used",
-          "reference_price": 3600,
+          "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -5418,7 +5418,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -5449,7 +5449,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9848,
+    "estimated_total": 9947,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 10000,
@@ -5494,9 +5494,9 @@
           "component_id": "rtx-5060-ti",
           "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3500,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -5575,321 +5575,14 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
-    }
-  },
-  {
-    "id": "office-10000-general-used",
-    "title": "10000元 日常与平面办公 二手配置",
-    "budget_min": 10000,
-    "budget_max": 11999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "二手",
-      "NVIDIA",
-      "office-general",
-      "Office",
-      "WPS",
-      "Photoshop",
-      "AutoCAD"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 10329,
-    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 10000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "used",
-          "reference_price": 900,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070",
-          "name": "微星 RTX5070白魔龙 3X",
-          "condition": "used",
-          "reference_price": 5200,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 75,
-            "tdp": 250
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "used",
-          "reference_price": 500,
-          "price_source": "用户2026-08-05提供的二手参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "used",
-          "reference_price": 249,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
-    }
-  },
-  {
-    "id": "office-10000-media-used",
-    "title": "10000元 视频剪辑 二手配置",
-    "budget_min": 10000,
-    "budget_max": 11999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "二手",
-      "NVIDIA",
-      "office-media",
-      "Premiere",
-      "DaVinci Resolve",
-      "剪映"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 10329,
-    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 10000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "used",
-          "reference_price": 900,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070",
-          "name": "微星 RTX5070白魔龙 3X",
-          "condition": "used",
-          "reference_price": 5200,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 75,
-            "tdp": 250
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "used",
-          "reference_price": 500,
-          "price_source": "用户2026-08-05提供的二手参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "used",
-          "reference_price": 249,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-10000-cuda-new",
     "title": "10000元 3D与CUDA 全新配置",
     "budget_min": 10000,
-    "budget_max": 10999,
+    "budget_max": 11999,
     "use_cases": [
       "办公"
     ],
@@ -5913,7 +5606,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9848,
+    "estimated_total": 9947,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 10000,
@@ -5958,9 +5651,9 @@
           "component_id": "rtx-5060-ti",
           "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
           "condition": "new",
-          "reference_price": 3500,
+          "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -6039,14 +5732,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-10000-cuda-used",
-    "title": "10000元 3D与CUDA 二手配置",
-    "budget_min": 10000,
-    "budget_max": 10999,
+    "id": "office-11000-general-used",
+    "title": "11000元 日常与平面办公 二手配置",
+    "budget_min": 11000,
+    "budget_max": 11999,
     "use_cases": [
       "办公"
     ],
@@ -6054,11 +5747,11 @@
       "均衡",
       "二手",
       "NVIDIA",
-      "office-cuda",
-      "Blender",
-      "After Effects",
-      "MATLAB",
-      "本地 AI"
+      "office-general",
+      "Office",
+      "WPS",
+      "Photoshop",
+      "AutoCAD"
     ],
     "components": {
       "cpu": "u7-270-plus",
@@ -6070,10 +5763,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 10329,
-    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "estimated_total": 11128,
+    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 10000,
+      "target_budget": 11000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -6115,9 +5808,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "used",
-          "reference_price": 5200,
+          "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6192,15 +5885,15 @@
           }
         }
       ],
-      "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "suitable_user": "主要使用日常与平面办公软件的个人用户",
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-11000-general-mixed",
     "title": "11000元 日常与平面办公 混合采购配置",
     "budget_min": 11000,
-    "budget_max": 11999,
+    "budget_max": 12999,
     "use_cases": [
       "办公"
     ],
@@ -6224,7 +5917,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 10938,
+    "estimated_total": 11737,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6269,9 +5962,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "used",
-          "reference_price": 5200,
+          "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6347,7 +6040,160 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-11000-media-used",
+    "title": "11000元 视频剪辑 二手配置",
+    "budget_min": 11000,
+    "budget_max": 11999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "二手",
+      "NVIDIA",
+      "office-media",
+      "Premiere",
+      "DaVinci Resolve",
+      "剪映"
+    ],
+    "components": {
+      "cpu": "u7-270-plus",
+      "motherboard": "msi-b860m-mortar",
+      "gpu": "rtx-5070",
+      "ram": "base-ddr5-16gb-6000-c30",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 11128,
+    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 11000,
+      "direction": "balanced",
+      "purchase_mode": "used",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u7-270-plus",
+          "name": "Ultra 7 270 Plus",
+          "condition": "used",
+          "reference_price": 2000,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 95,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b860m-mortar",
+          "name": "微星 MAG B860M MORTAR WIFI",
+          "condition": "used",
+          "reference_price": 900,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5070",
+          "name": "微星 RTX5070白魔龙 3X",
+          "condition": "used",
+          "reference_price": 5999,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 75,
+            "tdp": 250
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "used",
+          "reference_price": 500,
+          "price_source": "用户2026-08-05提供的二手参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "used",
+          "reference_price": 249,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "used",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用视频剪辑软件的个人用户",
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6377,7 +6223,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 10938,
+    "estimated_total": 11737,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6422,9 +6268,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "used",
-          "reference_price": 5200,
+          "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6500,164 +6346,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
-    }
-  },
-  {
-    "id": "office-11000-cuda-new",
-    "title": "11000元 3D与CUDA 全新配置",
-    "budget_min": 11000,
-    "budget_max": 11999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "全新",
-      "NVIDIA",
-      "office-cuda",
-      "Blender",
-      "After Effects",
-      "MATLAB",
-      "本地 AI"
-    ],
-    "components": {
-      "cpu": "u5-245k",
-      "motherboard": "asus-b860m-k",
-      "gpu": "rtx-5070",
-      "ram": "office-ddr5-16gb-7200-c36",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 11597,
-    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 11000,
-      "direction": "balanced",
-      "purchase_mode": "new",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u5-245k",
-          "name": "Ultra 5 245K",
-          "condition": "new",
-          "reference_price": 1090,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "15代酷睿Ultra",
-            "platform": "Arrow Lake",
-            "socket": "LGA1851",
-            "perf_index": 87,
-            "tdp": 181
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "asus-b860m-k",
-          "name": "华硕 PRIME B860M-K",
-          "condition": "new",
-          "reference_price": 700,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070",
-          "name": "微星 RTX5070白魔龙 3X",
-          "condition": "new",
-          "reference_price": 6699,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 75,
-            "tdp": 250
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "office-ddr5-16gb-7200-c36",
-          "name": "DDR5 16GB 7200 C36",
-          "condition": "new",
-          "reference_price": 1800,
-          "price_source": "用户2026-07-20提供的Intel DDR5办公配置参考价",
-          "price_date": "2026-07-20",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 7200,
-            "cas_latency": 36,
-            "modules": 1,
-            "cpu_vendor": "Intel",
-            "usage_scope": "productivity"
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "new",
-          "reference_price": 699,
-          "price_source": "用户2026-08-05提供的当前参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "new",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6688,7 +6377,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 11278,
+    "estimated_total": 11578,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6733,9 +6422,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "used",
-          "reference_price": 6999,
+          "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -6811,7 +6500,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
@@ -6842,7 +6531,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 10938,
+    "estimated_total": 11737,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6887,9 +6576,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "used",
-          "reference_price": 5200,
+          "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6965,14 +6654,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-12000-general-used",
     "title": "12000元 日常与平面办公 二手配置",
     "budget_min": 12000,
-    "budget_max": 14999,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -6996,7 +6685,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12128,
+    "estimated_total": 12428,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7041,9 +6730,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "used",
-          "reference_price": 6999,
+          "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7119,168 +6808,14 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
-    }
-  },
-  {
-    "id": "office-12000-general-mixed",
-    "title": "12000元 日常与平面办公 混合采购配置",
-    "budget_min": 12000,
-    "budget_max": 14999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "混合采购",
-      "NVIDIA",
-      "office-general",
-      "Office",
-      "WPS",
-      "Photoshop",
-      "AutoCAD"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 12737,
-    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 12000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "new",
-          "reference_price": 1200,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070-ti",
-          "name": "微星 RTX5070TI万图师 3X",
-          "condition": "used",
-          "reference_price": 6999,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 85,
-            "tdp": 300
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "new",
-          "reference_price": 699,
-          "price_source": "用户2026-08-05提供的当前参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-12000-media-used",
     "title": "12000元 视频剪辑 二手配置",
     "budget_min": 12000,
-    "budget_max": 13999,
+    "budget_max": 14999,
     "use_cases": [
       "办公"
     ],
@@ -7303,7 +6838,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12128,
+    "estimated_total": 12428,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7348,9 +6883,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "used",
-          "reference_price": 6999,
+          "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7426,165 +6961,12 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-12000-media-mixed",
     "title": "12000元 视频剪辑 混合采购配置",
-    "budget_min": 12000,
-    "budget_max": 14999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "混合采购",
-      "NVIDIA",
-      "office-media",
-      "Premiere",
-      "DaVinci Resolve",
-      "剪映"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 12737,
-    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 12000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "new",
-          "reference_price": 1200,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070-ti",
-          "name": "微星 RTX5070TI万图师 3X",
-          "condition": "used",
-          "reference_price": 6999,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 85,
-            "tdp": 300
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "new",
-          "reference_price": 699,
-          "price_source": "用户2026-08-05提供的当前参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
-    }
-  },
-  {
-    "id": "office-12000-cuda-new",
-    "title": "12000元 3D与CUDA 全新配置",
     "budget_min": 12000,
     "budget_max": 12999,
     "use_cases": [
@@ -7592,38 +6974,37 @@
     ],
     "tags": [
       "均衡",
-      "全新",
+      "混合采购",
       "NVIDIA",
-      "office-cuda",
-      "Blender",
-      "After Effects",
-      "MATLAB",
-      "本地 AI"
+      "office-media",
+      "Premiere",
+      "DaVinci Resolve",
+      "剪映"
     ],
     "components": {
       "cpu": "u7-265k",
       "motherboard": "msi-pro-b860m-a",
-      "gpu": "rtx-5070",
-      "ram": "office-ddr5-16gb-7200-c36",
+      "gpu": "rtx-5070-ti",
+      "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
+      "psu": "base-psu-850w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12656,
-    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "estimated_total": 12687,
+    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
       "direction": "balanced",
-      "purchase_mode": "new",
+      "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
       "parts": [
         {
           "role": "cpu",
           "component_id": "u7-265k",
           "name": "Ultra 7 265K",
-          "condition": "new",
-          "reference_price": 1799,
+          "condition": "used",
+          "reference_price": 1500,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
@@ -7652,12 +7033,166 @@
         },
         {
           "role": "gpu",
+          "component_id": "rtx-5070-ti",
+          "name": "微星 RTX5070TI万图师 3X",
+          "condition": "used",
+          "reference_price": 7299,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 85,
+            "tdp": 300
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "new",
+          "reference_price": 699,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-850w-gold",
+          "name": "安耐美 PX850DF 850W",
+          "condition": "new",
+          "reference_price": 659,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "watt": 850
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "used",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用视频剪辑软件的个人用户",
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-12000-cuda-new",
+    "title": "12000元 3D与CUDA 全新配置",
+    "budget_min": 12000,
+    "budget_max": 12999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "全新",
+      "NVIDIA",
+      "office-cuda",
+      "Blender",
+      "After Effects",
+      "MATLAB",
+      "本地 AI"
+    ],
+    "components": {
+      "cpu": "u5-250-plus",
+      "motherboard": "msi-pro-b860m-a",
+      "gpu": "rtx-5070",
+      "ram": "office-ddr5-16gb-7200-c36",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 12607,
+    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 12000,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u5-250-plus",
+          "name": "Ultra 5 250 Plus",
+          "condition": "new",
+          "reference_price": 1450,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 83,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-pro-b860m-a",
+          "name": "微星 PRO B860M-A WIFI",
+          "condition": "new",
+          "reference_price": 1050,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "new",
-          "reference_price": 6699,
+          "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -7736,14 +7271,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-12000-cuda-used",
     "title": "12000元 3D与CUDA 二手配置",
     "budget_min": 12000,
-    "budget_max": 13999,
+    "budget_max": 14999,
     "use_cases": [
       "办公"
     ],
@@ -7767,7 +7302,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12128,
+    "estimated_total": 12428,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7812,9 +7347,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "used",
-          "reference_price": 6999,
+          "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7890,14 +7425,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-12000-cuda-mixed",
     "title": "12000元 3D与CUDA 混合采购配置",
     "budget_min": 12000,
-    "budget_max": 13999,
+    "budget_max": 12999,
     "use_cases": [
       "办公"
     ],
@@ -7912,16 +7447,16 @@
       "本地 AI"
     ],
     "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
+      "cpu": "u7-265k",
+      "motherboard": "msi-pro-b860m-a",
       "gpu": "rtx-5070-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
+      "psu": "base-psu-850w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12737,
+    "estimated_total": 12687,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7931,26 +7466,26 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
+          "component_id": "u7-265k",
+          "name": "Ultra 7 265K",
           "condition": "used",
-          "reference_price": 2000,
+          "reference_price": 1500,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
+            "generation": "15代酷睿Ultra",
+            "platform": "Arrow Lake",
             "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
+            "perf_index": 99,
+            "tdp": 181
           }
         },
         {
           "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
+          "component_id": "msi-pro-b860m-a",
+          "name": "微星 PRO B860M-A WIFI",
           "condition": "new",
-          "reference_price": 1200,
+          "reference_price": 1050,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
@@ -7966,9 +7501,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "used",
-          "reference_price": 6999,
+          "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -8006,14 +7541,14 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
+          "component_id": "base-psu-850w-gold",
+          "name": "安耐美 PX850DF 850W",
           "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
+          "reference_price": 659,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
           "specs": {
-            "watt": 750
+            "watt": 850
           }
         },
         {
@@ -8044,14 +7579,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-13000-general-new",
     "title": "13000元 日常与平面办公 全新配置",
     "budget_min": 13000,
-    "budget_max": 14999,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -8075,7 +7610,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13107,
+    "estimated_total": 13407,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8120,9 +7655,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "new",
-          "reference_price": 6699,
+          "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -8201,14 +7736,168 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-13000-general-mixed",
+    "title": "13000元 日常与平面办公 混合采购配置",
+    "budget_min": 13000,
+    "budget_max": 15999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "混合采购",
+      "NVIDIA",
+      "office-general",
+      "Office",
+      "WPS",
+      "Photoshop",
+      "AutoCAD"
+    ],
+    "components": {
+      "cpu": "u7-270-plus",
+      "motherboard": "msi-b860m-mortar",
+      "gpu": "rtx-5070-ti",
+      "ram": "base-ddr5-16gb-6000-c30",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 13037,
+    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 13000,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u7-270-plus",
+          "name": "Ultra 7 270 Plus",
+          "condition": "used",
+          "reference_price": 2000,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 95,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b860m-mortar",
+          "name": "微星 MAG B860M MORTAR WIFI",
+          "condition": "new",
+          "reference_price": 1200,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5070-ti",
+          "name": "微星 RTX5070TI万图师 3X",
+          "condition": "used",
+          "reference_price": 7299,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 85,
+            "tdp": 300
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "new",
+          "reference_price": 699,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "new",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "used",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用日常与平面办公软件的个人用户",
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-13000-media-new",
     "title": "13000元 视频剪辑 全新配置",
     "budget_min": 13000,
-    "budget_max": 14999,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -8231,7 +7920,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13107,
+    "estimated_total": 13407,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8276,9 +7965,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "new",
-          "reference_price": 6699,
+          "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -8357,14 +8046,167 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-13000-media-mixed",
+    "title": "13000元 视频剪辑 混合采购配置",
+    "budget_min": 13000,
+    "budget_max": 15999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "混合采购",
+      "NVIDIA",
+      "office-media",
+      "Premiere",
+      "DaVinci Resolve",
+      "剪映"
+    ],
+    "components": {
+      "cpu": "u7-270-plus",
+      "motherboard": "msi-b860m-mortar",
+      "gpu": "rtx-5070-ti",
+      "ram": "base-ddr5-16gb-6000-c30",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 13037,
+    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 13000,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u7-270-plus",
+          "name": "Ultra 7 270 Plus",
+          "condition": "used",
+          "reference_price": 2000,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 95,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b860m-mortar",
+          "name": "微星 MAG B860M MORTAR WIFI",
+          "condition": "new",
+          "reference_price": 1200,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5070-ti",
+          "name": "微星 RTX5070TI万图师 3X",
+          "condition": "used",
+          "reference_price": 7299,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 85,
+            "tdp": 300
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "new",
+          "reference_price": 699,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "new",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "used",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用视频剪辑软件的个人用户",
+      "price_date": "2026-08-22"
     }
   },
   {
     "id": "office-13000-cuda-new",
     "title": "13000元 3D与CUDA 全新配置",
     "budget_min": 13000,
-    "budget_max": 13999,
+    "budget_max": 14999,
     "use_cases": [
       "办公"
     ],
@@ -8388,7 +8230,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13107,
+    "estimated_total": 13407,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8433,9 +8275,9 @@
           "component_id": "rtx-5070",
           "name": "微星 RTX5070白魔龙 3X",
           "condition": "new",
-          "reference_price": 6699,
+          "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -8514,14 +8356,168 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-14000-media-used",
-    "title": "14000元 视频剪辑 二手配置",
-    "budget_min": 14000,
+    "id": "office-13000-cuda-mixed",
+    "title": "13000元 3D与CUDA 混合采购配置",
+    "budget_min": 13000,
     "budget_max": 14999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "混合采购",
+      "NVIDIA",
+      "office-cuda",
+      "Blender",
+      "After Effects",
+      "MATLAB",
+      "本地 AI"
+    ],
+    "components": {
+      "cpu": "u7-270-plus",
+      "motherboard": "msi-b860m-mortar",
+      "gpu": "rtx-5070-ti",
+      "ram": "base-ddr5-16gb-6000-c30",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 13037,
+    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 13000,
+      "direction": "balanced",
+      "purchase_mode": "mixed",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u7-270-plus",
+          "name": "Ultra 7 270 Plus",
+          "condition": "used",
+          "reference_price": 2000,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 95,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b860m-mortar",
+          "name": "微星 MAG B860M MORTAR WIFI",
+          "condition": "new",
+          "reference_price": 1200,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5070-ti",
+          "name": "微星 RTX5070TI万图师 3X",
+          "condition": "used",
+          "reference_price": 7299,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 85,
+            "tdp": 300
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "new",
+          "reference_price": 699,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "new",
+          "reference_price": 359,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "used",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用3D与CUDA软件的个人用户",
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-15000-media-used",
+    "title": "15000元 视频剪辑 二手配置",
+    "budget_min": 15000,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -8544,10 +8540,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 14589,
+    "estimated_total": 15589,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 14000,
+      "target_budget": 15000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -8589,9 +8585,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -8667,14 +8663,14 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-14000-cuda-new",
-    "title": "14000元 3D与CUDA 全新配置",
-    "budget_min": 14000,
-    "budget_max": 14999,
+    "id": "office-15000-cuda-new",
+    "title": "15000元 3D与CUDA 全新配置",
+    "budget_min": 15000,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -8698,10 +8694,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 14307,
+    "estimated_total": 15407,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 14000,
+      "target_budget": 15000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -8743,9 +8739,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "new",
-          "reference_price": 8699,
+          "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -8824,14 +8820,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-14000-cuda-used",
-    "title": "14000元 3D与CUDA 二手配置",
-    "budget_min": 14000,
-    "budget_max": 14999,
+    "id": "office-15000-cuda-used",
+    "title": "15000元 3D与CUDA 二手配置",
+    "budget_min": 15000,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -8855,10 +8851,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 14589,
+    "estimated_total": 15589,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 14000,
+      "target_budget": 15000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -8900,9 +8896,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -8978,14 +8974,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-14000-cuda-mixed",
-    "title": "14000元 3D与CUDA 混合采购配置",
-    "budget_min": 14000,
-    "budget_max": 14999,
+    "id": "office-15000-cuda-mixed",
+    "title": "15000元 3D与CUDA 混合采购配置",
+    "budget_min": 15000,
+    "budget_max": 15999,
     "use_cases": [
       "办公"
     ],
@@ -9009,10 +9005,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 14688,
+    "estimated_total": 15688,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 14000,
+      "target_budget": 15000,
       "direction": "balanced",
       "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
@@ -9054,9 +9050,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9132,14 +9128,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-general-new",
-    "title": "15000元 日常与平面办公 全新配置",
-    "budget_min": 15000,
-    "budget_max": 20999,
+    "id": "office-16000-general-new",
+    "title": "16000元 日常与平面办公 全新配置",
+    "budget_min": 16000,
+    "budget_max": 19999,
     "use_cases": [
       "办公"
     ],
@@ -9163,10 +9159,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15107,
+    "estimated_total": 16207,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -9208,9 +9204,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "new",
-          "reference_price": 8699,
+          "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -9289,13 +9285,13 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-general-used",
-    "title": "15000元 日常与平面办公 二手配置",
-    "budget_min": 15000,
+    "id": "office-16000-general-used",
+    "title": "16000元 日常与平面办公 二手配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -9320,10 +9316,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15039,
+    "estimated_total": 16039,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -9365,9 +9361,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9443,13 +9439,13 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-general-mixed",
-    "title": "15000元 日常与平面办公 混合采购配置",
-    "budget_min": 15000,
+    "id": "office-16000-general-mixed",
+    "title": "16000元 日常与平面办公 混合采购配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -9474,10 +9470,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15538,
+    "estimated_total": 16538,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
@@ -9519,9 +9515,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9597,14 +9593,14 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-media-new",
-    "title": "15000元 视频剪辑 全新配置",
-    "budget_min": 15000,
-    "budget_max": 20999,
+    "id": "office-16000-media-new",
+    "title": "16000元 视频剪辑 全新配置",
+    "budget_min": 16000,
+    "budget_max": 19999,
     "use_cases": [
       "办公"
     ],
@@ -9627,10 +9623,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15107,
+    "estimated_total": 16207,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -9672,9 +9668,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "new",
-          "reference_price": 8699,
+          "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -9753,13 +9749,13 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-media-used",
-    "title": "15000元 视频剪辑 二手配置",
-    "budget_min": 15000,
+    "id": "office-16000-media-used",
+    "title": "16000元 视频剪辑 二手配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -9783,10 +9779,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15039,
+    "estimated_total": 16039,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -9828,9 +9824,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9906,13 +9902,13 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-media-mixed",
-    "title": "15000元 视频剪辑 混合采购配置",
-    "budget_min": 15000,
+    "id": "office-16000-media-mixed",
+    "title": "16000元 视频剪辑 混合采购配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -9936,10 +9932,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15538,
+    "estimated_total": 16538,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
@@ -9981,9 +9977,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10059,14 +10055,14 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-cuda-new",
-    "title": "15000元 3D与CUDA 全新配置",
-    "budget_min": 15000,
-    "budget_max": 20999,
+    "id": "office-16000-cuda-new",
+    "title": "16000元 3D与CUDA 全新配置",
+    "budget_min": 16000,
+    "budget_max": 18999,
     "use_cases": [
       "办公"
     ],
@@ -10090,10 +10086,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15107,
+    "estimated_total": 16207,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -10135,9 +10131,9 @@
           "component_id": "rtx-5070-ti",
           "name": "微星 RTX5070TI万图师 3X",
           "condition": "new",
-          "reference_price": 8699,
+          "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -10216,13 +10212,13 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-cuda-used",
-    "title": "15000元 3D与CUDA 二手配置",
-    "budget_min": 15000,
+    "id": "office-16000-cuda-used",
+    "title": "16000元 3D与CUDA 二手配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -10247,10 +10243,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15039,
+    "estimated_total": 16039,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "used",
       "gpu_vendor": "nvidia",
@@ -10292,9 +10288,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10370,13 +10366,13 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-15000-cuda-mixed",
-    "title": "15000元 3D与CUDA 混合采购配置",
-    "budget_min": 15000,
+    "id": "office-16000-cuda-mixed",
+    "title": "16000元 3D与CUDA 混合采购配置",
+    "budget_min": 16000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -10401,10 +10397,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15538,
+    "estimated_total": 16538,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 15000,
+      "target_budget": 16000,
       "direction": "balanced",
       "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
@@ -10446,9 +10442,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "used",
-          "reference_price": 9500,
+          "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10524,13 +10520,170 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-21000-general-new",
-    "title": "21000元 日常与平面办公 全新配置",
-    "budget_min": 21000,
+    "id": "office-19000-cuda-new",
+    "title": "19000元 3D与CUDA 全新配置",
+    "budget_min": 19000,
+    "budget_max": 19999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "全新",
+      "NVIDIA",
+      "office-cuda",
+      "Blender",
+      "After Effects",
+      "MATLAB",
+      "本地 AI"
+    ],
+    "components": {
+      "cpu": "u5-250-plus",
+      "motherboard": "msi-pro-b860m-a",
+      "gpu": "rtx-5080",
+      "ram": "office-ddr5-16gb-7200-c36",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-850w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 19407,
+    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 19000,
+      "direction": "balanced",
+      "purchase_mode": "new",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u5-250-plus",
+          "name": "Ultra 5 250 Plus",
+          "condition": "new",
+          "reference_price": 1450,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 83,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-pro-b860m-a",
+          "name": "微星 PRO B860M-A WIFI",
+          "condition": "new",
+          "reference_price": 1050,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5080",
+          "name": "微星 RTX5080万图师 3X",
+          "condition": "new",
+          "reference_price": 13499,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-22",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 95,
+            "tdp": 360
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "office-ddr5-16gb-7200-c36",
+          "name": "DDR5 16GB 7200 C36",
+          "condition": "new",
+          "reference_price": 1800,
+          "price_source": "用户2026-07-20提供的Intel DDR5办公配置参考价",
+          "price_date": "2026-07-20",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 7200,
+            "cas_latency": 36,
+            "modules": 1,
+            "cpu_vendor": "Intel",
+            "usage_scope": "productivity"
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "new",
+          "reference_price": 699,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-850w-gold",
+          "name": "安耐美 PX850DF 850W",
+          "condition": "new",
+          "reference_price": 659,
+          "price_source": "用户2026-08-05提供的当前参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "watt": 850
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "双塔6热管风冷",
+          "condition": "new",
+          "reference_price": 150,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "new",
+          "reference_price": 100,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用3D与CUDA软件的个人用户",
+      "price_date": "2026-08-22"
+    }
+  },
+  {
+    "id": "office-20000-general-new",
+    "title": "20000元 日常与平面办公 全新配置",
+    "budget_min": 20000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -10555,10 +10708,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 21707,
+    "estimated_total": 20207,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 21000,
+      "target_budget": 20000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -10600,9 +10753,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "new",
-          "reference_price": 14999,
+          "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10681,13 +10834,13 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-21000-media-new",
-    "title": "21000元 视频剪辑 全新配置",
-    "budget_min": 21000,
+    "id": "office-20000-media-new",
+    "title": "20000元 视频剪辑 全新配置",
+    "budget_min": 20000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -10711,10 +10864,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 21707,
+    "estimated_total": 20207,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 21000,
+      "target_budget": 20000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -10756,9 +10909,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "new",
-          "reference_price": 14999,
+          "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10837,13 +10990,13 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   },
   {
-    "id": "office-21000-cuda-new",
-    "title": "21000元 3D与CUDA 全新配置",
-    "budget_min": 21000,
+    "id": "office-20000-cuda-new",
+    "title": "20000元 3D与CUDA 全新配置",
+    "budget_min": 20000,
     "budget_max": 30000,
     "use_cases": [
       "办公"
@@ -10868,10 +11021,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 21707,
+    "estimated_total": 20207,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 21000,
+      "target_budget": 20000,
       "direction": "balanced",
       "purchase_mode": "new",
       "gpu_vendor": "nvidia",
@@ -10913,9 +11066,9 @@
           "component_id": "rtx-5080",
           "name": "微星 RTX5080万图师 3X",
           "condition": "new",
-          "reference_price": 14999,
+          "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-08",
+          "price_date": "2026-08-22",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10994,7 +11147,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-08"
+      "price_date": "2026-08-22"
     }
   }
 ]

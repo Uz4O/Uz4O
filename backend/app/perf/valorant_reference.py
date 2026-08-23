@@ -66,10 +66,26 @@ CPU_REFERENCE_ALIASES = {
     "i5-12400": "i5-12400f",
 }
 
+# R7 9850X3D is not present in the supplied Valorant charts. The maintained
+# hardware ranking places it 3% above the chart-leading R7 9800X3D, so its
+# game references are derived from that measured anchor rather than falling
+# back to the generic estimator.
+DERIVED_CPU_PERFORMANCE_PERCENT = {
+    "r7-9850x3d": 103.0,
+}
+
 
 def valorant_cpu_average_fps(cpu_id: str, resolution: str) -> Optional[int]:
     reference_id = CPU_REFERENCE_ALIASES.get(cpu_id, cpu_id)
-    return CPU_AVERAGE_FPS.get(resolution, {}).get(reference_id)
+    rows = CPU_AVERAGE_FPS.get(resolution, {})
+    exact = rows.get(reference_id)
+    if exact is not None:
+        return exact
+    derived_percent = DERIVED_CPU_PERFORMANCE_PERCENT.get(reference_id)
+    anchor = rows.get("r7-9800x3d")
+    if derived_percent is None or anchor is None:
+        return None
+    return round(anchor * derived_percent / 100)
 
 
 def valorant_cpu_performance_ranking() -> List[Tuple[str, float]]:
@@ -85,6 +101,7 @@ def valorant_cpu_performance_ranking() -> List[Tuple[str, float]]:
             for resolution in CPU_AVERAGE_FPS
         ]
         ranking.append((cpu_id, round(mean(relative_scores) * 100, 1)))
+    ranking.extend(DERIVED_CPU_PERFORMANCE_PERCENT.items())
     return sorted(ranking, key=lambda row: (-row[1], row[0]))
 
 

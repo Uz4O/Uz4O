@@ -82,6 +82,11 @@ struct AIBuildLowBudgetDefaults: Equatable {
     let colorPreference: String
 }
 
+struct AIBuildPerformanceSelection: Equatable {
+    let gameIDs: [String]
+    let unavailableGameNames: [String]
+}
+
 enum AIBuildDirection: String, CaseIterable, Identifiable {
     case fps
     case aaa
@@ -126,8 +131,27 @@ enum AIBuildDirection: String, CaseIterable, Identifiable {
 enum AIBuildFlowRules {
     static let lowBudgetThreshold = 4000
 
-    private static let fpsGames: Set<String> = ["瓦罗兰特", "CS2", "PUBG"]
+    private static let fpsGames: Set<String> = ["瓦罗兰特", "CS2", "PUBG", "永劫无间"]
+    private static let balancedGames: Set<String> = ["暗区突围", "NBA2K", "穿越火线"]
     private static let aaaGames: Set<String> = ["三角洲行动", "赛博朋克2077", "荒野大镖客2", "GTA5", "黑神话悟空", "地平线6", "艾尔登法环"]
+    private static let performanceGameIDs = [
+        "瓦罗兰特": "valorant",
+        "CS2": "cs2",
+        "PUBG": "pubg",
+        "三角洲行动": "delta-force",
+        "云顶之弈": "teamfight-tactics",
+        "LOL": "league-of-legends",
+        "COD": "call-of-duty-warzone",
+        "赛博朋克2077": "cyberpunk-2077",
+        "荒野大镖客2": "red-dead-redemption-2",
+        "GTA5": "gta-v",
+        "黑神话悟空": "black-myth-wukong",
+        "地平线6": "forza-horizon-6",
+        "艾尔登法环": "elden-ring",
+        "城市天际线": "cities-skylines",
+        "我的世界": "minecraft-java-edition"
+    ]
+    private static let gamesPendingPerformanceData = ["永劫无间", "暗区突围", "NBA2K", "穿越火线"]
 
     static func shouldSkipOptionSelection(optionCount: Int) -> Bool {
         optionCount == 1
@@ -143,7 +167,24 @@ enum AIBuildFlowRules {
         if games.isSubset(of: aaaGames) {
             return .aaa
         }
+        if games.isSubset(of: balancedGames) {
+            return .balanced
+        }
         return .balanced
+    }
+
+    static func performanceSelection(for games: [String]) -> AIBuildPerformanceSelection {
+        if games.contains("什么都玩") {
+            return AIBuildPerformanceSelection(
+                gameIDs: ["all-games"],
+                unavailableGameNames: gamesPendingPerformanceData
+            )
+        }
+
+        return AIBuildPerformanceSelection(
+            gameIDs: games.compactMap { performanceGameIDs[$0] },
+            unavailableGameNames: games.filter { performanceGameIDs[$0] == nil }
+        )
     }
 
     static func visibleSteps(budget: Int, ownedParts: Set<AIBuildOwnedPart>) -> [AIBuildStep] {

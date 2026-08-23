@@ -34,7 +34,7 @@ SkipReason = Literal[
     "generation_error",
 ]
 
-PRICE_DATE = "2026-08-08"
+PRICE_DATE = "2026-08-22"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
 DIRECTIONS: Tuple[Direction, ...] = ("fps", "aaa", "balanced")
 PURCHASE_MODES: Tuple[PurchaseMode, ...] = ("new", "used", "mixed")
@@ -109,6 +109,9 @@ MINIMUM_650W_GPU_TDP = 140
 LOW_BUDGET_STORAGE_IDS = {
     "base-ssd-fanxiang-s500-pro-512gb",
     "base-ssd-fanxiang-s790e-1tb",
+}
+CUSTOMIZATION_SUPPORT_IDS = LOW_BUDGET_STORAGE_IDS | {
+    "base-ddr4-32gb-3200",
 }
 AM4_VALUE_BOARD_ID = "asus-a520m-k"
 AM4_PCIE4_BOARD_ID = "asus-b550m-plus"
@@ -619,6 +622,11 @@ def _select_candidate(
                 ):
                     if ram.specs.get("capacity_gb") != 16:
                         continue
+                    if (
+                        cpu.specs["socket"] == "AM5"
+                        and ram.specs.get("cas_latency") != 28
+                    ):
+                        continue
                     fixed_parts = {
                         "cpu": cpu,
                         "motherboard": motherboard,
@@ -1086,7 +1094,7 @@ def _write_reference_prices(
         for part in template.details.parts
     ]
     referenced_ids = {part.component_id for part in generated_parts}
-    referenced_ids.update(LOW_BUDGET_STORAGE_IDS)
+    referenced_ids.update(CUSTOMIZATION_SUPPORT_IDS)
     snapshot: Dict[str, Dict[str, object]] = {}
     if source_parts is not None:
         source_by_id = {part.component_id: part for part in source_parts}
@@ -1185,7 +1193,7 @@ def _write_recommendation_ids(
             for template in templates
             for component_id in template.components.values()
         }
-        | LOW_BUDGET_STORAGE_IDS
+        | CUSTOMIZATION_SUPPORT_IDS
     )
     path.write_text("\n".join(component_ids) + "\n", encoding="utf-8")
 

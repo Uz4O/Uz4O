@@ -16,6 +16,7 @@ router = APIRouter(
     tags=["upgrade"],
     dependencies=[Depends(high_cost_rate_limit)],
 )
+UPGRADE_CACHE_NAMESPACE = "upgrade.plan.v2"
 
 
 @router.post("/plan", response_model=UpgradePlanResponse)
@@ -51,7 +52,7 @@ def _cached_or_plan(
     session: Session,
     payload: UpgradePlanRequest,
 ) -> Tuple[UpgradePlanResponse, str]:
-    cache_key = response_cache_key("upgrade.plan", payload)
+    cache_key = response_cache_key(UPGRADE_CACHE_NAMESPACE, payload)
     if http_request.app.state.settings.response_cache_enabled:
         cached = http_request.app.state.response_cache.get(cache_key)
         if cached is not None:

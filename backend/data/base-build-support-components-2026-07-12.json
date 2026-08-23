@@ -29,11 +29,11 @@
       "speed_mhz": 6000,
       "cas_latency": 28
     },
-    "used_price": null,
-    "new_price": 1900,
-    "used_source": "",
-    "new_source": "用户2026-07-17提供的DDR5 6000 C28 16GB参考价",
-    "price_date": "2026-07-17"
+    "used_price": 1350,
+    "new_price": 1650,
+    "used_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB二手参考价",
+    "new_source": "用户于2026-08-22确认的AM5 DDR5 6000 C28 16GB全新参考价",
+    "price_date": "2026-08-22"
   },
   {
     "id": "base-ddr5-16gb-6000-c32",
@@ -103,11 +103,11 @@
       "cas_latency": 28,
       "modules": 2
     },
-    "used_price": null,
-    "new_price": 3800,
-    "used_source": "",
-    "new_source": "由用户提供的DDR5 6000 C28 16GB参考价按两根计算",
-    "price_date": "2026-07-17"
+    "used_price": 2700,
+    "new_price": 3300,
+    "used_source": "由用户2026-08-22确认的DDR5 6000 C28 16GB二手价按两根计算",
+    "new_source": "由用户2026-08-22确认的DDR5 6000 C28 16GB全新价按两根计算",
+    "price_date": "2026-08-22"
   },
   {
     "id": "base-ddr5-32gb-6000-c32",
@@ -131,7 +131,7 @@
   {
     "id": "base-ddr4-16gb-3200",
     "category": "ram",
-    "name": "DDR4 16GB 3200",
+    "name": "DDR4 8GB×2 3200",
     "brand": "通用规格",
     "detail_raw": "DDR4 · 16GB（8GB x2）· 3200MHz",
     "specs": {
@@ -149,7 +149,7 @@
   {
     "id": "base-ddr4-32gb-3200",
     "category": "ram",
-    "name": "DDR4 32GB 3200",
+    "name": "DDR4 16GB×2 3200",
     "brand": "通用规格",
     "detail_raw": "DDR4 · 32GB（16GB x2）· 3200MHz",
     "specs": {
@@ -158,11 +158,11 @@
       "speed_mhz": 3200,
       "modules": 2
     },
-    "used_price": 800,
-    "new_price": 1000,
-    "used_source": "由用户提供的DDR4 16GB历史参考价按容量比例计算",
-    "new_source": "由用户提供的DDR4 16GB历史参考价按容量比例计算",
-    "price_date": "2026-07-07"
+    "used_price": 550,
+    "new_price": 750,
+    "used_source": "用户于2026-08-21确认的DDR4 16GB x2二手参考价",
+    "new_source": "用户于2026-08-21确认的DDR4 16GB x2全新参考价",
+    "price_date": "2026-08-21"
   },
   {
     "id": "base-ssd-fanxiang-s500-pro-512gb",

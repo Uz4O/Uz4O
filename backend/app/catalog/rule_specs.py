@@ -32,6 +32,9 @@ GPU_RULE_SPECS = {
     "rtx-4060-ti": {"perf_index": 50, "tdp": 160},
     "rtx-4070": {"perf_index": 60, "tdp": 200},
     "rtx-4070-super": {"perf_index": 75, "tdp": 220},
+    "rtx-4070-ti-super": {"perf_index": 80, "tdp": 285},
+    "rtx-4090": {"perf_index": 100, "tdp": 450},
+    "rtx-4090-d": {"perf_index": 98, "tdp": 425},
     "rx-7900-xt": {"perf_index": 75, "tdp": 315},
     "rx-7900-xtx": {"perf_index": 85, "tdp": 355},
     "rtx-5060": {"perf_index": 50, "tdp": 145},
@@ -70,6 +73,8 @@ GPU_TDP = {
 
 GPU_MINIMUM_PSU_WATT = {
     "rtx-3070-ti": 750,
+    "rtx-4090": 850,
+    "rtx-4090-d": 850,
     "rtx-5070-ti": 750,
     "rtx-5080": 850,
     "rtx-5090-d-v2": 1_000,
@@ -81,6 +86,8 @@ GPU_MINIMUM_PSU_WATT = {
     "rx-7900-xtx": 850,
     "rx-9070-xt": 750,
 }
+
+PSU_RECOMMENDATION_TIERS = (550, 650, 750, 850, 1_000, 1_200, 1_600)
 
 NATIVE_600W_GPU_CONNECTOR_IDS = {
     "rtx-5090-d-v2",
@@ -125,6 +132,18 @@ def minimum_psu_watt_for_specs(
     return max(required, GPU_MINIMUM_PSU_WATT.get(gpu_id, 0))
 
 
+def recommended_psu_watt_for_specs(
+    cpu_tdp: int,
+    gpu_id: str,
+    gpu_tdp: int,
+) -> int:
+    required = minimum_psu_watt_for_specs(cpu_tdp, gpu_id, gpu_tdp)
+    return next(
+        (tier for tier in PSU_RECOMMENDATION_TIERS if tier >= required),
+        math.ceil(required / 100) * 100,
+    )
+
+
 def minimum_psu_watt(cpu_id: str, gpu_id: str) -> int:
     return minimum_psu_watt_for_specs(
         CPU_TDP[cpu_id],
@@ -163,11 +182,14 @@ GPU_PAIRING_TIER = {
     "rx-9070-xt": 5,
     "rx-7800-xt": 6,
     "rtx-4070-super": 6,
+    "rtx-4070-ti-super": 6,
     "rtx-5070": 6,
     "rx-7900-xt": 7,
     "rtx-5070-ti": 7,
     "rx-7900-xtx": 8,
     "rtx-5080": 8,
+    "rtx-4090-d": 8,
+    "rtx-4090": 8,
     "rtx-5090-d-v2": 9,
     "rtx-5090-d": 9,
     "rtx-5090": 9,
@@ -205,6 +227,7 @@ GPU_MIN_CPU_PERFORMANCE = {
         "rx-9070-xt",
         "rx-7800-xt",
         "rtx-4070-super",
+        "rtx-4070-ti-super",
         "rtx-5070",
         "rx-7900-xt",
         "rtx-5070-ti",
@@ -216,6 +239,8 @@ GPU_MIN_CPU_PERFORMANCE.update(
         for component_id in (
             "rx-7900-xtx",
             "rtx-5080",
+            "rtx-4090-d",
+            "rtx-4090",
         )
     }
 )

@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 import json
 
 from fastapi.testclient import TestClient
@@ -6,7 +5,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.catalog.models import ComponentPrice
 from app.catalog.repository import seed_hardware_components
 from app.catalog.seed import CatalogComponent
 from app.core.config import Settings
@@ -32,7 +30,7 @@ def make_client() -> TestClient:
                     name="i7-14700F",
                     brand="Intel",
                     detail_raw="14代 Raptor Lake Refresh · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 219},
+                    specs={"socket": "LGA1700", "tdp": 219, "perf_index": 90},
                 ),
                 CatalogComponent(
                     id="rtx-4060",
@@ -40,7 +38,7 @@ def make_client() -> TestClient:
                     name="RTX 4060",
                     brand="NVIDIA",
                     detail_raw="8GB · Ada",
-                    specs={"tdp": 115},
+                    specs={"tdp": 115, "perf_index": 40},
                 ),
                 CatalogComponent(
                     id="h610m",
@@ -48,7 +46,7 @@ def make_client() -> TestClient:
                     name="H610M",
                     brand="华硕",
                     detail_raw="Intel · LGA1700 · H610",
-                    specs={"socket": "LGA1700"},
+                    specs={"socket": "LGA1700", "mem_type": "DDR4", "chipset": "H610"},
                 ),
                 CatalogComponent(
                     id="psu-500w",
@@ -64,7 +62,7 @@ def make_client() -> TestClient:
                     name="i5-12400F",
                     brand="Intel",
                     detail_raw="12代 Alder Lake · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 117},
+                    specs={"socket": "LGA1700", "tdp": 117, "perf_index": 60},
                 ),
                 CatalogComponent(
                     id="i3-12100f",
@@ -72,7 +70,7 @@ def make_client() -> TestClient:
                     name="i3-12100F",
                     brand="Intel",
                     detail_raw="12代 Alder Lake · LGA1700",
-                    specs={"socket": "LGA1700", "tdp": 89},
+                    specs={"socket": "LGA1700", "tdp": 89, "perf_index": 30},
                 ),
                 CatalogComponent(
                     id="e5-2680v4",
@@ -80,7 +78,7 @@ def make_client() -> TestClient:
                     name="E5-2680 v4",
                     brand="Intel",
                     detail_raw="Xeon E5 洋垃圾平台",
-                    specs={"socket": "LGA2011-3", "tdp": 120},
+                    specs={"socket": "LGA2011-3", "tdp": 120, "perf_index": 20},
                 ),
                 CatalogComponent(
                     id="rtx-4090",
@@ -88,7 +86,7 @@ def make_client() -> TestClient:
                     name="RTX 4090",
                     brand="NVIDIA",
                     detail_raw="24GB · Ada",
-                    specs={"tdp": 450},
+                    specs={"tdp": 450, "perf_index": 110},
                 ),
                 CatalogComponent(
                     id="gt-730",
@@ -96,7 +94,7 @@ def make_client() -> TestClient:
                     name="GT 730",
                     brand="NVIDIA",
                     detail_raw="亮机卡",
-                    specs={"tdp": 49},
+                    specs={"tdp": 49, "perf_index": 10},
                 ),
                 CatalogComponent(
                     id="b760m",
@@ -104,7 +102,7 @@ def make_client() -> TestClient:
                     name="B760M",
                     brand="微星",
                     detail_raw="Intel · LGA1700 · B760",
-                    specs={"socket": "LGA1700"},
+                    specs={"socket": "LGA1700", "mem_type": "DDR4", "chipset": "B760"},
                 ),
                 CatalogComponent(
                     id="psu-650w-gold",
@@ -114,132 +112,15 @@ def make_client() -> TestClient:
                     detail_raw="650W 80Plus Gold",
                     specs={"watt": 650},
                 ),
+                CatalogComponent(
+                    id="ddr4-16gb",
+                    category="ram",
+                    name="DDR4 16GB",
+                    brand="金士顿",
+                    detail_raw="DDR4 8GB×2 3200",
+                    specs={"type": "DDR4", "capacity_gb": 16},
+                ),
             ],
-        )
-        session.add_all(
-            [
-                ComponentPrice(
-                    component_id="i7-14700f",
-                    reference_price=2100,
-                    price_range_low=2000,
-                    price_range_high=2300,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="rtx-4060",
-                    reference_price=2200,
-                    price_range_low=2100,
-                    price_range_high=2400,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="h610m",
-                    reference_price=450,
-                    price_range_low=400,
-                    price_range_high=550,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="psu-500w",
-                    reference_price=180,
-                    price_range_low=160,
-                    price_range_high=220,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="i5-12400f",
-                    reference_price=1200,
-                    price_range_low=1100,
-                    price_range_high=1300,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="i3-12100f",
-                    reference_price=650,
-                    price_range_low=600,
-                    price_range_high=750,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="e5-2680v4",
-                    reference_price=260,
-                    price_range_low=220,
-                    price_range_high=320,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="rtx-4090",
-                    reference_price=12500,
-                    price_range_low=12000,
-                    price_range_high=13500,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="gt-730",
-                    reference_price=120,
-                    price_range_low=80,
-                    price_range_high=160,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="b760m",
-                    reference_price=800,
-                    price_range_low=750,
-                    price_range_high=900,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-                ComponentPrice(
-                    component_id="psu-650w-gold",
-                    reference_price=450,
-                    price_range_low=400,
-                    price_range_high=520,
-                    source="manual",
-                    accepted_count=3,
-                    rejected_count=0,
-                    review_reasons=[],
-                    approved_at=datetime.now(timezone.utc),
-                ),
-            ]
         )
         session.commit()
 
@@ -258,21 +139,29 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
 
     response = client.post(
         "/v1/review/analyze",
-        json={"text": "i7-14700F + RTX4060 + H610 主板 + 500W 电源，商家报价 6999"},
+        json={
+            "text": "i7-14700F + RTX4060 + H610 主板 + DDR4 16GB + 500W 电源",
+            "direction": "aaa",
+            "resolution": "1440p",
+        },
     )
 
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
-    assert body["seller_price"] == 6999
-    assert body["reference_total"] == 4930
+    assert "seller_price" not in body
+    assert "reference_total" not in body
+    assert body["direction"] == "aaa"
+    assert body["resolution"] == "1440p"
+    assert body["pairing_rating"]["score"] is not None
+    assert body["performance_rating"]["score"] is not None
     assert "不建议直接买" in body["summary"]
     assert body["detected_components"]["cpu"]["component_id"] == "i7-14700f"
     assert body["detected_components"]["gpu"]["component_id"] == "rtx-4060"
     assert body["detected_components"]["motherboard"]["component_id"] == "h610m"
     assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
     assert any(finding["code"] == "low_end_board_for_i7" for finding in body["findings"])
-    assert any(finding["code"] == "seller_price_high" for finding in body["findings"])
+    assert not any("price" in finding["code"] for finding in body["findings"])
     assert "具体品牌和型号" in body["questions_for_seller"][0]
     assert "重新配一套" not in body["reply_text"]
 
@@ -328,7 +217,7 @@ def test_review_analyze_errors_when_psu_wattage_cannot_cover_detected_parts() ->
     assert any(finding["code"] == "psu_wattage_insufficient" for finding in body["findings"])
 
 
-def test_review_analyze_warns_when_seller_price_is_above_ten_percent() -> None:
+def test_review_analyze_ignores_price_text() -> None:
     client = make_client()
 
     response = client.post(
@@ -338,10 +227,9 @@ def test_review_analyze_warns_when_seller_price_is_above_ten_percent() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert body["risk_level"] == "warning"
-    assert body["reference_total"] == 4650
-    assert any(finding["code"] == "seller_price_above_market" for finding in body["findings"])
-    assert not any(finding["code"] == "seller_price_high" for finding in body["findings"])
+    assert "seller_price" not in body
+    assert "reference_total" not in body
+    assert not any("price" in finding["code"] for finding in body["findings"])
 
 
 def test_review_analyze_flags_outdated_clearance_hardware() -> None:
@@ -369,12 +257,15 @@ def test_review_analyze_image_uses_ocr_text(monkeypatch) -> None:
 
     response = client.post(
         "/v1/review/analyze/image",
+        data={"direction": "fps", "resolution": "1080p"},
         files={"image": ("config.png", b"fake image", "image/png")},
     )
 
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
+    assert body["direction"] == "fps"
+    assert body["resolution"] == "1080p"
     assert body["source_text"].startswith("i7-14700F")
     assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
 
@@ -412,7 +303,7 @@ def test_review_analyze_stream_returns_progress_and_result_events() -> None:
     assert events[1]["data"]["stage"] == "analyzing"
     assert events[2]["data"] == {"status": "MISS"}
     assert events[3]["data"]["risk_level"] == "error"
-    assert events[3]["data"]["seller_price"] == 6999
+    assert "seller_price" not in events[3]["data"]
 
 
 def test_review_analyze_stream_reuses_cached_result() -> None:

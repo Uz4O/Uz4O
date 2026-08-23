@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     ai_provider_base_url: str = "https://api.deepseek.com"
     ai_model: str = "deepseek-v4-flash"
     ai_provider_timeout_seconds: float = 8.0
+    review_search_api_key: Optional[str] = None
     high_cost_rate_limit_enabled: bool = True
     high_cost_rate_limit_max_requests: int = 30
     high_cost_rate_limit_window_seconds: int = 60

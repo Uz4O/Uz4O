@@ -7,9 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.builds.models import BuildTemplate
+from app.builds.models import BuildSelectionCache, BuildTemplate
 from app.builds import service as build_service
-from app.builds.ai_provider import AIProviderError, AIProviderResult
 from app.catalog.models import ComponentPrice, HardwareComponent
 from app.catalog.repository import seed_hardware_components
 from app.catalog.seed import CatalogComponent
@@ -44,7 +43,7 @@ OPTION_SPECS = {
     },
     "ssd-1tb": {"capacity_gb": 1024},
     "psu-750w": {"watt": 750},
-    "cooler-air": {"cooling_type": "air"},
+    "cooler-air": {"cooling_type": "air", "heatpipes": 6, "towers": 2},
     "case-mid-tower": {"form_factor": "atx_mid_tower"},
 }
 
@@ -58,12 +57,15 @@ def build_option_template(
     structured: bool = True,
     compatible: bool = True,
     template_id: Optional[str] = None,
+    total: Optional[int] = None,
 ) -> BuildTemplate:
     components = dict(OPTION_COMPONENTS)
     if gpu_vendor == "amd":
         components["gpu"] = "rx-7800-xt"
     if not compatible:
         components["motherboard"] = "am5-board"
+    component_total = total if total is not None else budget
+    base_part_price, remainder = divmod(component_total, len(components))
     details = {}
     if structured:
         details = {
@@ -82,12 +84,12 @@ def build_option_template(
                         or purchase_mode == "mixed" and role in MIXED_USED_ROLES
                         else "new"
                     ),
-                    "reference_price": 900,
+                    "reference_price": base_part_price + (1 if index < remainder else 0),
                     "price_source": "test-seed",
                     "price_date": "2026-07-12",
                     "specs": OPTION_SPECS[component_id],
                 }
-                for role, component_id in components.items()
+                for index, (role, component_id) in enumerate(components.items())
             ],
             "suitable_user": "测试用户",
             "price_date": "2026-07-12",
@@ -105,7 +107,7 @@ def build_option_template(
             {"new": "全新", "used": "二手", "mixed": "混合采购"}[purchase_mode],
         ],
         components=components,
-        estimated_total=7200,
+        estimated_total=component_total,
         explanation="结构化测试模板。",
         details=details,
     )
@@ -122,6 +124,7 @@ def make_client(
     ranked_option_templates: tuple[tuple[str, str, str, bool], ...] = (),
     invalid_ranked_option_templates: tuple[tuple[str, str, str, str], ...] = (),
     option_budget: int = 7500,
+    option_total: Optional[int] = None,
 ) -> TestClient:
     engine = create_engine(
         "sqlite+pysqlite:///:memory:",
@@ -204,7 +207,7 @@ def make_client(
                     name="Air Cooler",
                     brand="Thermalright",
                     detail_raw="Air cooler",
-                    specs={},
+                    specs={"cooling_type": "air", "heatpipes": 6, "towers": 2},
                 ),
                 CatalogComponent(
                     id="case-mid-tower",
@@ -242,6 +245,7 @@ def make_client(
                     direction,
                     purchase_mode,
                     budget=option_budget,
+                    total=option_total,
                 )
             )
         for direction, purchase_mode, gpu_vendor in vendor_option_templates:
@@ -251,6 +255,7 @@ def make_client(
                     purchase_mode,
                     budget=option_budget,
                     gpu_vendor=gpu_vendor,
+                    total=option_total,
                 )
             )
         for direction, purchase_mode in detail_less_option_templates:
@@ -260,6 +265,7 @@ def make_client(
                     purchase_mode,
                     budget=option_budget,
                     structured=False,
+                    total=option_total,
                 )
             )
         for direction, purchase_mode in incompatible_option_templates:
@@ -269,6 +275,7 @@ def make_client(
                     purchase_mode,
                     budget=option_budget,
                     compatible=False,
+                    total=option_total,
                 )
             )
         for template_id, direction, purchase_mode, compatible in ranked_option_templates:
@@ -279,6 +286,7 @@ def make_client(
                     budget=option_budget,
                     compatible=compatible,
                     template_id=template_id,
+                    total=option_total,
                 )
             )
         for template_id, direction, purchase_mode, invalid_kind in invalid_ranked_option_templates:
@@ -287,6 +295,7 @@ def make_client(
                 purchase_mode,
                 budget=option_budget,
                 template_id=template_id,
+                total=option_total,
             )
             if invalid_kind == "incomplete":
                 template.details["parts"].pop()
@@ -420,7 +429,123 @@ def test_build_options_returns_full_high_budget_modes_in_approved_order() -> Non
         assert "compatibility" not in option
 
 
-def test_build_options_defaults_to_nvidia_for_aaa_when_ray_tracing_is_absent() -> None:
+def test_build_options_rejects_base_option_more_than_200_below_budget() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "new"),),
+        option_budget=7500,
+        option_total=7200,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+        },
+    )
+
+    assert response.status_code == 503
+    assert "所有采购方式均暂不可用" in response.json()["detail"]
+
+
+def test_build_options_rejects_exact_tier_base_above_budget_ceiling() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(
+            ("fps", "used"),
+            ("fps", "new"),
+            ("fps", "mixed"),
+        ),
+        option_budget=5000,
+        option_total=5500,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 5000,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+        },
+    )
+
+    assert response.status_code == 503
+    assert "最低审核配置约为 5500 元" in response.json()["detail"]
+    assert "预算上限 5300 元" in response.json()["detail"]
+
+
+def test_build_options_uses_adjacent_reviewed_tier_for_in_between_budget() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(
+            ("balanced", "used"),
+            ("balanced", "new"),
+            ("balanced", "mixed"),
+        ),
+        option_budget=10_000,
+        option_total=10_000,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 9999,
+            "use_case": "游戏",
+            "direction": "balanced",
+            "ray_tracing": True,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert {option["details"]["purchase_mode"] for option in body["options"]} == {
+        "new",
+        "used",
+        "mixed",
+    }
+    assert all(option["estimated_total"] == 10_000 for option in body["options"])
+
+
+def test_build_options_compares_current_and_adjacent_tiers_before_selecting() -> None:
+    client = make_client(
+        with_template=False,
+        ranked_option_templates=(
+            ("base-9500-fps-used", "fps", "used", True),
+            ("base-9500-fps-new", "fps", "new", True),
+            ("base-9500-fps-mixed", "fps", "mixed", True),
+        ),
+        option_budget=9500,
+        option_total=9800,
+    )
+    session_provider = client.app.dependency_overrides[get_session]
+    session_iterator = session_provider()
+    session = next(session_iterator)
+    try:
+        session.add(
+            build_option_template(
+                "fps",
+                "used",
+                budget=10_000,
+                template_id="base-10000-fps-used",
+                total=10_000,
+            )
+        )
+        session.commit()
+    finally:
+        session_iterator.close()
+
+    response = client.post(
+        "/v1/build/options",
+        json={"budget": 9999, "use_case": "游戏", "game_categories": ["CS2"]},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["options"][0]["template_id"] == "base-10000-fps-used"
+
+
+def test_build_options_uses_the_stronger_aaa_gpu_below_10000_when_ray_tracing_is_absent() -> None:
     templates = tuple(
         ("aaa", purchase_mode, gpu_vendor)
         for purchase_mode in ("used", "new", "mixed")
@@ -443,9 +568,9 @@ def test_build_options_defaults_to_nvidia_for_aaa_when_ray_tracing_is_absent() -
     assert response.status_code == 200
     body = response.json()
     assert [option["details"]["gpu_vendor"] for option in body["options"]] == [
-        "nvidia",
-        "nvidia",
-        "nvidia",
+        "amd",
+        "amd",
+        "amd",
     ]
 
 
@@ -519,23 +644,55 @@ def test_build_options_returns_nvidia_and_amd_when_ray_tracing_is_off() -> None:
     assert body["unavailable_modes"] == []
 
 
-def test_build_options_returns_only_nvidia_when_ray_tracing_is_on() -> None:
+def test_build_options_below_10000_can_fall_back_to_amd_when_ray_tracing_is_on() -> None:
+    client = make_client(
+        with_template=False,
+        vendor_option_templates=tuple(
+            ("balanced", purchase_mode, "amd")
+            for purchase_mode in ("used", "new", "mixed")
+        ),
+        option_budget=9500,
+        option_total=9900,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 9999,
+            "use_case": "游戏",
+            "game_categories": ["什么都玩"],
+            "ray_tracing": True,
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["options"]) == 3
+    assert all(option["details"]["gpu_vendor"] == "amd" for option in body["options"])
+
+
+@pytest.mark.parametrize("direction", ["fps", "balanced"])
+def test_build_options_returns_only_nvidia_from_10000_when_ray_tracing_is_on(
+    direction: str,
+) -> None:
     templates = tuple(
-        ("balanced", purchase_mode, gpu_vendor)
+        (direction, purchase_mode, gpu_vendor)
         for purchase_mode in ("used", "new", "mixed")
         for gpu_vendor in ("nvidia", "amd")
     )
     client = make_client(
         with_template=False,
         vendor_option_templates=templates,
+        option_budget=10_000,
     )
 
     response = client.post(
         "/v1/build/options",
         json={
-            "budget": 7500,
+            "budget": 10_000,
             "use_case": "游戏",
             "game_categories": ["什么都玩"],
+            "direction": direction,
             "ray_tracing": True,
         },
     )
@@ -556,12 +713,13 @@ def test_build_options_ignores_ray_tracing_branch_for_fps() -> None:
             ("fps", "used", "nvidia"),
             ("fps", "used", "amd"),
         ),
+        option_budget=4000,
     )
 
     response = client.post(
         "/v1/build/options",
         json={
-            "budget": 7500,
+            "budget": 4000,
             "use_case": "游戏",
             "game_categories": ["CS2"],
             "ray_tracing": False,
@@ -572,6 +730,28 @@ def test_build_options_ignores_ray_tracing_branch_for_fps() -> None:
     body = response.json()
     assert len(body["options"]) == 1
     assert body["options"][0]["details"]["gpu_vendor"] == "nvidia"
+
+
+def test_nvidia_optimized_games_force_nvidia_only_at_stable_three_mode_thresholds() -> None:
+    from app.api.builds import _option_gpu_vendors
+
+    pubg_below_threshold = build_service.BuildRequest(
+        budget=7800,
+        use_case="游戏",
+        game_categories=["PUBG"],
+    )
+    pubg_threshold = pubg_below_threshold.model_copy(update={"budget": 7900})
+    delta_below_threshold = build_service.BuildRequest(
+        budget=7400,
+        use_case="游戏",
+        game_categories=["三角洲行动"],
+    )
+    delta_threshold = delta_below_threshold.model_copy(update={"budget": 7500})
+
+    assert _option_gpu_vendors(pubg_below_threshold, "fps") == (None,)
+    assert _option_gpu_vendors(pubg_threshold, "fps") == ("nvidia",)
+    assert _option_gpu_vendors(delta_below_threshold, "aaa") == ("nvidia", "amd")
+    assert _option_gpu_vendors(delta_threshold, "aaa") == ("nvidia",)
 
 
 def test_game_plus_office_only_returns_nvidia_options() -> None:
@@ -636,7 +816,7 @@ def test_build_options_normalizes_frontend_use_cases_and_ignores_conflicting_tok
     assert all(option["details"]["direction"] == "fps" for option in body["options"])
 
 
-def test_build_options_returns_partial_low_budget_modes_and_marks_missing_details() -> None:
+def test_build_options_rejects_partial_modes_from_4500() -> None:
     client = make_client(
         with_template=False,
         option_templates=(("aaa", "new"), ("aaa", "used")),
@@ -649,17 +829,11 @@ def test_build_options_returns_partial_low_budget_modes_and_marks_missing_detail
         json={"budget": 7000, "use_case": "游戏", "game_categories": ["黑神话悟空"]},
     )
 
-    assert response.status_code == 200
-    body = response.json()
-    assert body["direction"] == "aaa"
-    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
-        "used",
-        "new",
-    ]
-    assert body["unavailable_modes"] == ["mixed"]
+    assert response.status_code == 503
+    assert "必须同时提供全新、二手和混合采购三套方案" in response.json()["detail"]
 
 
-def test_build_options_marks_one_incompatible_mode_unavailable() -> None:
+def test_build_options_rejects_one_incompatible_mode_from_4500() -> None:
     client = make_client(
         with_template=False,
         option_templates=(("fps", "used"), ("fps", "new")),
@@ -671,14 +845,8 @@ def test_build_options_marks_one_incompatible_mode_unavailable() -> None:
         json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
     )
 
-    assert response.status_code == 200
-    body = response.json()
-    assert [option["details"]["purchase_mode"] for option in body["options"]] == [
-        "used",
-        "new",
-    ]
-    assert all("compatibility" not in option for option in body["options"])
-    assert body["unavailable_modes"] == ["mixed"]
+    assert response.status_code == 503
+    assert "必须同时提供全新、二手和混合采购三套方案" in response.json()["detail"]
 
 
 def test_build_options_tries_next_ranked_template_when_first_is_incompatible() -> None:
@@ -688,11 +856,12 @@ def test_build_options_tries_next_ranked_template_when_first_is_incompatible() -
             ("a-bad", "fps", "used", False),
             ("z-good", "fps", "used", True),
         ),
+        option_budget=4000,
     )
 
     response = client.post(
         "/v1/build/options",
-        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+        json={"budget": 4000, "use_case": "游戏", "game_categories": ["CS2"]},
     )
 
     assert response.status_code == 200
@@ -709,11 +878,12 @@ def test_build_options_tries_next_ranked_template_when_details_are_invalid(
         with_template=False,
         ranked_option_templates=(("z-good", "fps", "used", True),),
         invalid_ranked_option_templates=(("a-bad", "fps", "used", invalid_kind),),
+        option_budget=4000,
     )
 
     response = client.post(
         "/v1/build/options",
-        json={"budget": 7500, "use_case": "游戏", "game_categories": ["CS2"]},
+        json={"budget": 4000, "use_case": "游戏", "game_categories": ["CS2"]},
     )
 
     assert response.status_code == 200
@@ -790,6 +960,8 @@ def test_build_options_respects_explicit_direction_override() -> None:
         option_templates=(
             ("fps", "used"),
             ("aaa", "used"),
+            ("aaa", "new"),
+            ("aaa", "mixed"),
             ("balanced", "used"),
         ),
     )
@@ -961,19 +1133,16 @@ def test_generate_build_never_asks_deepseek_to_create_a_build_from_catalog(monke
     assert usage["external_ai_failures"] == 0
 
 
-def test_build_options_retries_ai_once_then_uses_customized_base_fallback(monkeypatch) -> None:
+def test_build_options_does_not_call_deepseek_for_structured_customization(monkeypatch) -> None:
     client = make_client(
         with_template=False,
         ai_provider_api_key="deepseek-secret",
         option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
     )
-    calls = {"count": 0}
+    def forbidden_provider(*args, **kwargs):
+        raise AssertionError("DeepSeek must not decide whether structured generation succeeds")
 
-    def failing_provider(*args, **kwargs):
-        calls["count"] += 1
-        raise AIProviderError("invalid controlled output")
-
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", failing_provider, raising=False)
+    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", forbidden_provider, raising=False)
 
     response = client.post(
         "/v1/build/options",
@@ -987,7 +1156,6 @@ def test_build_options_retries_ai_once_then_uses_customized_base_fallback(monkey
 
     assert response.status_code == 200
     body = response.json()
-    assert calls["count"] == 6
     assert len(body["options"]) == 3
     assert all(option["source"] == "template" for option in body["options"])
     assert all(
@@ -996,67 +1164,58 @@ def test_build_options_retries_ai_once_then_uses_customized_base_fallback(monkey
     )
 
     usage = client.app.state.high_cost_usage_metrics.snapshot()
-    assert usage["external_ai_failures"] == 3
+    assert usage["external_ai_failures"] == 0
 
 
-def test_build_options_can_apply_controlled_base_patch(monkeypatch) -> None:
+def test_build_options_reports_minimum_feasible_total_when_requirement_is_over_budget() -> None:
     client = make_client(
         with_template=False,
-        with_recommended_prices=True,
-        ai_provider_api_key="deepseek-secret",
-        option_templates=(("fps", "used"),),
+        option_templates=(("fps", "new"),),
+        option_budget=6000,
+        option_total=7200,
     )
-
-    def successful_provider(*args, **kwargs):
-        return AIProviderResult(
-            base_template_id="base-7500-fps-used",
-            patches={"cpu": "i5-12600kf"},
-            reasons=["保留 FPS 的 CPU 性能并增加无线网络。"],
-            actual_cost_cents=12,
-        )
-
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", successful_provider, raising=False)
 
     response = client.post(
         "/v1/build/options",
         json={
-            "budget": 7500,
+            "budget": 6000,
             "use_case": "游戏",
             "game_categories": ["CS2"],
             "needs_wireless_network": True,
         },
     )
 
-    assert response.status_code == 200
-    body = response.json()
-    assert len(body["options"]) == 1
-    option = body["options"][0]
-    assert option["source"] == "ai_provider"
-    assert option["components"]["cpu"] == "i5-12600kf"
-    assert option["estimated_total"] == 8000
-    assert option["details"]["parts"][1]["name"].endswith(" WIFI")
-
-    usage = client.app.state.high_cost_usage_metrics.snapshot()
-    assert usage["actual_ai_cost_cents"] == 12
+    assert response.status_code == 503
+    assert "最低审核配置约为 7250 元" in response.json()["detail"]
+    assert "预算上限 6300 元" in response.json()["detail"]
 
 
-def test_unselected_build_options_are_not_reused(monkeypatch) -> None:
+def test_build_options_reports_missing_approved_capacity_price() -> None:
     client = make_client(
         with_template=False,
-        ai_provider_api_key="deepseek-secret",
+        option_templates=(("fps", "new"),),
+        option_budget=6000,
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 6000,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "memory_size": "32GB",
+        },
+    )
+
+    assert response.status_code == 503
+    assert "缺少对应的审核价格" in response.json()["detail"]
+
+
+def test_unselected_build_options_are_recalculated_without_selection_cache() -> None:
+    client = make_client(
+        with_template=False,
         option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
     )
-    calls = {"count": 0}
-
-    def provider(request, candidates, *args, **kwargs):
-        calls["count"] += 1
-        return AIProviderResult(
-            base_template_id=candidates[0].id,
-            patches={},
-            reasons=["使用审核基底满足无线需求。"],
-        )
-
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
     payload = {
         "budget": 7500,
         "use_case": "游戏",
@@ -1068,28 +1227,15 @@ def test_unselected_build_options_are_not_reused(monkeypatch) -> None:
     second = client.post("/v1/build/options", json=payload)
 
     assert first.status_code == second.status_code == 200
-    assert calls["count"] == 6
     assert all(option["selection_id"] for option in first.json()["options"])
-    assert all(option["source"] == "ai_provider" for option in second.json()["options"])
+    assert all(option["source"] == "template" for option in second.json()["options"])
 
 
-def test_selected_option_is_reused_without_ai_for_the_same_requirements(monkeypatch) -> None:
+def test_selected_option_is_reused_for_the_same_requirements() -> None:
     client = make_client(
         with_template=False,
-        ai_provider_api_key="deepseek-secret",
         option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
     )
-    calls = {"count": 0}
-
-    def provider(request, candidates, *args, **kwargs):
-        calls["count"] += 1
-        return AIProviderResult(
-            base_template_id=candidates[0].id,
-            patches={},
-            reasons=["使用审核基底满足无线需求。"],
-        )
-
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
     payload = {
         "budget": 7500,
         "use_case": "游戏",
@@ -1107,29 +1253,53 @@ def test_selected_option_is_reused_without_ai_for_the_same_requirements(monkeypa
 
     assert confirmation.status_code == 200
     assert confirmation.json()["selected_count"] == 1
-    assert calls["count"] == 5
     assert second.status_code == 200
     assert second.json()["options"][0]["source"] == "selection_cache"
     assert second.json()["options"][0]["components"] == selected["components"]
 
 
-def test_selected_option_cache_invalidates_after_catalog_change(monkeypatch) -> None:
+def test_selected_option_cache_rejects_total_below_budget_floor() -> None:
     client = make_client(
         with_template=False,
-        ai_provider_api_key="deepseek-secret",
         option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
     )
-    calls = {"count": 0}
+    payload = {
+        "budget": 7500,
+        "use_case": "游戏",
+        "game_categories": ["CS2"],
+        "needs_wireless_network": True,
+    }
+    first = client.post("/v1/build/options", json=payload)
+    selected = first.json()["options"][0]
+    confirmation = client.post(
+        f"/v1/build/options/{selected['selection_id']}/select"
+    )
+    assert confirmation.status_code == 200
 
-    def provider(request, candidates, *args, **kwargs):
-        calls["count"] += 1
-        return AIProviderResult(
-            base_template_id=candidates[0].id,
-            patches={},
-            reasons=["使用审核基底满足无线需求。"],
-        )
+    session_provider = client.app.dependency_overrides[get_session]
+    session_iterator = session_provider()
+    session = next(session_iterator)
+    try:
+        row = session.get(BuildSelectionCache, selected["selection_id"])
+        cached_payload = dict(row.response_payload)
+        cached_payload["estimated_total"] = 7299
+        row.response_payload = cached_payload
+        session.commit()
+    finally:
+        session_iterator.close()
 
-    monkeypatch.setattr("app.api.builds.select_build_with_deepseek", provider)
+    second = client.post("/v1/build/options", json=payload)
+
+    assert second.status_code == 200
+    assert second.json()["options"][0]["source"] == "template"
+    assert second.json()["options"][0]["estimated_total"] >= 7300
+
+
+def test_selected_option_cache_invalidates_after_catalog_change() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
     payload = {
         "budget": 7500,
         "use_case": "游戏",
@@ -1151,8 +1321,7 @@ def test_selected_option_cache_invalidates_after_catalog_change(monkeypatch) -> 
     second = client.post("/v1/build/options", json=payload)
 
     assert second.status_code == 200
-    assert calls["count"] == 6
-    assert all(option["source"] == "ai_provider" for option in second.json()["options"])
+    assert all(option["source"] == "template" for option in second.json()["options"])
 
 
 def test_select_build_option_rejects_unknown_selection_id() -> None:

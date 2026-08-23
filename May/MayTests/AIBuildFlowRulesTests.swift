@@ -48,6 +48,18 @@ struct AIBuildFlowRulesTests {
             "Valorant alone should recommend an FPS build."
         )
         assertEqual(
+            AIBuildFlowRules.recommendedDirection(for: ["永劫无间", "CS2"]),
+            .fps,
+            "Naraka and other FPS games should recommend an FPS build."
+        )
+        for game in ["暗区突围", "NBA2K", "穿越火线"] {
+            assertEqual(
+                AIBuildFlowRules.recommendedDirection(for: [game]),
+                .balanced,
+                "\(game) should recommend a balanced build."
+            )
+        }
+        assertEqual(
             AIBuildFlowRules.recommendedDirection(for: ["黑神话悟空"]),
             .aaa,
             "AAA games should recommend the graphics-first direction."
@@ -57,10 +69,31 @@ struct AIBuildFlowRulesTests {
             .balanced,
             "Mixed game categories should recommend the balanced direction."
         )
+        assertEqual(
+            AIBuildFlowRules.performanceSelection(for: ["CS2", "黑神话悟空"]),
+            AIBuildPerformanceSelection(
+                gameIDs: ["cs2", "black-myth-wukong"],
+                unavailableGameNames: []
+            ),
+            "AI build results should reuse the exact game-performance API IDs."
+        )
+        assertEqual(
+            AIBuildFlowRules.performanceSelection(for: ["永劫无间", "CS2"]),
+            AIBuildPerformanceSelection(
+                gameIDs: ["cs2"],
+                unavailableGameNames: ["永劫无间"]
+            ),
+            "Games missing from the performance tool must be disclosed instead of receiving invented FPS."
+        )
+        assertEqual(
+            AIBuildFlowRules.performanceSelection(for: ["什么都玩"]).gameIDs,
+            ["all-games"],
+            "The aggregate AI choice should reuse the performance tool's aggregate request."
+        )
         assertContains(
             buildViewSource,
-            "minimumGenerationDuration: TimeInterval = 14.5",
-            "Successful generation should remain visible for the slower loading experience."
+            "minimumGenerationDuration: TimeInterval = 2.5",
+            "Successful deterministic generation should use a short readable loading transition."
         )
         assertContains(
             buildViewSource,
@@ -72,20 +105,47 @@ struct AIBuildFlowRulesTests {
             "BuildDirectionRecommendationSheet(",
             "Game direction confirmation should use a prominent modal sheet."
         )
-        assertContains(
+        for mapping in [
+            "\"永劫无间\": \"GameArtworkNarakaBladepoint\"",
+            "\"暗区突围\": \"GameArtworkArenaBreakout\"",
+            "\"NBA2K\": \"GameArtworkNBA2K\"",
+            "\"穿越火线\": \"GameArtworkCrossFire\""
+        ] {
+            assertContains(
+                buildViewSource,
+                mapping,
+                "Every newly added game should use its supplied artwork."
+            )
+        }
+        assertNotContains(
             buildViewSource,
             "if budgetValue < 6500",
-            "Budgets below 6500 yuan should keep memory fixed at 16GB instead of exposing the memory picker."
+            "Capacity requirements should not be hidden based on the selected budget."
         )
-        assertContains(
+        assertNotContains(
             buildViewSource,
             "return budgetValue >= 6500 && budgetValue < 8000",
-            "Budgets from 6500 through 7999 yuan should use the constrained capacity choice."
+            "Mid-budget builds should not force memory and storage into a mutual exclusion."
+        )
+        assertNotContains(
+            buildViewSource,
+            "midBudgetCapacityOptions = [\"32GB 内存\", \"1TB 固态\"]",
+            "Memory and storage should be selected independently."
         )
         assertContains(
             buildViewSource,
-            "midBudgetCapacityOptions = [\"32GB 内存\", \"1TB 固态\"]",
-            "The constrained capacity picker should make 32GB memory and 1TB storage mutually exclusive."
+            "PreferenceSegmentGroup(title: \"内存大小\", options: memorySizeOptions",
+            "The hardware step should always expose the maintained memory choices."
+        )
+        assertContains(
+            buildViewSource,
+            "PreferenceSegmentGroup(title: \"存储大小\", options: storageSizeOptions",
+            "The hardware step should expose storage independently from memory."
+        )
+        assertContains(
+            buildViewSource,
+            "allowsFlexibleBudget: allowsFlexibleBudget",
+            "The optional flexible-budget choice should be forwarded to the backend."
         )
         assertContains(
             buildViewSource,

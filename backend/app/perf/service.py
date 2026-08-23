@@ -41,6 +41,7 @@ PerfStatus = Literal["ready", "partial", "needs_more_data"]
 Resolution = Literal["1080p", "2k", "4k"]
 ALL_GAME_IDS = list(APPROVED_GAME_PROFILES)
 CALIBRATED_GAME_IDS = {"valorant", "cs2", "pubg", "delta-force"}
+CPU_GAME_UNLIMITED_1080P_TIME_SPY = 28_000
 
 
 class PerfHardwareInput(BaseModel):
@@ -67,6 +68,30 @@ class PerfEstimateResponse(BaseModel):
     missing_data: List[str]
     missing_games: List[str]
     game_results: List[GamePerfEstimate]
+
+
+def estimate_generated_game_fps(
+    game_id: str,
+    resolution: Resolution,
+    cpu: HardwareComponent,
+    gpu: HardwareComponent,
+) -> Optional[int]:
+    """Return the maintained generated estimate for one catalog CPU/GPU pair."""
+    if game_id not in APPROVED_GAME_PROFILES:
+        return None
+    cpu_score = hardware_performance_score(cpu.id, cpu.category, cpu.name, cpu.specs)
+    gpu_fallback = hardware_performance_score(gpu.id, gpu.category, gpu.name, gpu.specs)
+    gpu_score = generated_gpu_performance_score(gpu.id, gpu_fallback)
+    if cpu_score is None or gpu_score is None:
+        return None
+    return _estimate_generated_game(
+        game_id,
+        resolution,
+        cpu.id,
+        gpu.id,
+        cpu_score,
+        gpu_score,
+    ).average_fps
 
 
 def estimate_performance(
@@ -218,7 +243,12 @@ def _estimate_generated_game(
         )
         return GamePerfEstimate(
             game=game_id,
-            average_fps=max(1, min(cpu_reference, gpu_ceiling)),
+            average_fps=_apply_gpu_limit_to_cpu_reference(
+                cpu_reference,
+                gpu_ceiling,
+                gpu_id,
+                resolution,
+            ),
         )
     return GamePerfEstimate(
         game=game_id,
@@ -365,7 +395,12 @@ def _estimate_game(
             gpu_ceiling = round(
                 prediction.gpu_limit * calibration.correction_factor
             )
-            average_fps = max(1, min(cpu_reference, gpu_ceiling))
+            average_fps = _apply_gpu_limit_to_cpu_reference(
+                cpu_reference,
+                gpu_ceiling,
+                gpu_profile.component_id,
+                resolution,
+            )
     elif game_id == "cs2":
         cpu_reference = cs2_cpu_average_fps(
             cpu_profile.component_id,
@@ -375,15 +410,41 @@ def _estimate_game(
             gpu_ceiling = round(
                 prediction.gpu_limit * calibration.correction_factor
             )
-            average_fps = max(1, min(cpu_reference, gpu_ceiling))
+            average_fps = _apply_gpu_limit_to_cpu_reference(
+                cpu_reference,
+                gpu_ceiling,
+                gpu_profile.component_id,
+                resolution,
+            )
     elif game_id == "pubg":
         cpu_reference = pubg_cpu_average_fps(cpu_profile.component_id)
         if cpu_reference is not None:
             gpu_ceiling = round(
                 prediction.gpu_limit * calibration.correction_factor
             )
-            average_fps = max(1, min(cpu_reference, gpu_ceiling))
+            average_fps = _apply_gpu_limit_to_cpu_reference(
+                cpu_reference,
+                gpu_ceiling,
+                gpu_profile.component_id,
+                resolution,
+            )
     return GamePerfEstimate(game=game_id, average_fps=average_fps)
+
+
+def _apply_gpu_limit_to_cpu_reference(
+    cpu_reference: int,
+    gpu_ceiling: int,
+    gpu_id: str,
+    resolution: str,
+) -> int:
+    time_spy_score = gpu_time_spy_score(gpu_id)
+    if (
+        resolution == "1080p"
+        and time_spy_score is not None
+        and time_spy_score >= CPU_GAME_UNLIMITED_1080P_TIME_SPY
+    ):
+        return max(1, cpu_reference)
+    return max(1, min(cpu_reference, gpu_ceiling))
 
 
 def _limit_points(

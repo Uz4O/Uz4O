@@ -17,6 +17,15 @@ struct AppAPIClientPerformanceRulesTests {
             fatalError("Performance response should decode backend average_fps fields.")
         }
 
+        let powerData = Data(#"{"recommended_psu_watt":750}"#.utf8)
+        let powerResponse = try decoder.decode(
+            DIYPowerRecommendationResponseDTO.self,
+            from: powerData
+        )
+        guard powerResponse.recommendedPsuWatt == 750 else {
+            fatalError("DIY should decode the backend-recommended PSU wattage.")
+        }
+
         print("AppAPIClientPerformanceRulesTests passed")
     }
 }

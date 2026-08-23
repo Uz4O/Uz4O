@@ -10,6 +10,35 @@ private enum ConfigReviewState {
     case error(String)
 }
 
+enum ConfigReviewDirection: String, CaseIterable, Identifiable {
+    case fps, aaa, balanced, office
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .fps: "FPS"
+        case .aaa: "3A"
+        case .balanced: "均衡"
+        case .office: "办公"
+        }
+    }
+}
+
+enum ConfigReviewResolution: String, CaseIterable, Identifiable {
+    case fullHD = "1080p"
+    case twoK = "1440p"
+    case fourK = "2160p"
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .fullHD: "1080P"
+        case .twoK: "2K"
+        case .fourK: "4K"
+        }
+    }
+}
+
 enum ConfigReviewPartCategory: String, CaseIterable, Identifiable {
     case cpu
     case motherboard
@@ -54,22 +83,17 @@ struct ConfigReviewDraft {
     private var models = Dictionary(
         uniqueKeysWithValues: ConfigReviewPartCategory.allCases.map { ($0, "") }
     )
-    private var prices = Dictionary(
-        uniqueKeysWithValues: ConfigReviewPartCategory.allCases.map { ($0, "") }
-    )
+    var direction: ConfigReviewDirection = .balanced
+    var resolution: ConfigReviewResolution = .twoK
 
     var completedPartCount: Int {
         ConfigReviewPartCategory.allCases.filter {
-            !model(for: $0).isEmpty && priceValue(for: $0) != nil
+            !model(for: $0).isEmpty
         }.count
     }
 
     var canSubmit: Bool {
         completedPartCount >= 2
-    }
-
-    var totalPrice: Int {
-        ConfigReviewPartCategory.allCases.compactMap(priceValue(for:)).reduce(0, +)
     }
 
     var sourceText: String {
@@ -79,15 +103,7 @@ struct ConfigReviewDraft {
             let model = model(for: category)
             guard !model.isEmpty else { continue }
 
-            if let price = priceValue(for: category) {
-                lines.append("\(category.title)：\(model)，价格 \(price) 元")
-            } else {
-                lines.append("\(category.title)：\(model)")
-            }
-        }
-
-        if totalPrice > 0 {
-            lines.append("商家报价：\(totalPrice) 元")
+            lines.append("\(category.title)：\(model)")
         }
 
         return lines.joined(separator: "\n")
@@ -97,22 +113,8 @@ struct ConfigReviewDraft {
         models[category, default: ""]
     }
 
-    func price(for category: ConfigReviewPartCategory) -> String {
-        prices[category, default: ""]
-    }
-
     mutating func setModel(_ value: String, for category: ConfigReviewPartCategory) {
         models[category] = value
-    }
-
-    mutating func setPrice(_ value: String, for category: ConfigReviewPartCategory) {
-        prices[category] = value.filter(\.isNumber)
-    }
-
-    private func priceValue(for category: ConfigReviewPartCategory) -> Int? {
-        let value = price(for: category)
-        guard !value.isEmpty, let price = Int(value), price > 0 else { return nil }
-        return price
     }
 }
 
@@ -171,7 +173,11 @@ struct ConfigReviewView: View {
 
         Task {
             do {
-                let result = try await AppAPIClient().analyzeConfigReviewText(text)
+                let result = try await AppAPIClient().analyzeConfigReviewText(
+                    text,
+                    direction: draft.direction.rawValue,
+                    resolution: draft.resolution.rawValue
+                )
                 guard requestID == activeRequestID else { return }
                 state = .result(result)
             } catch {
@@ -196,7 +202,11 @@ struct ConfigReviewView: View {
                     return
                 }
 
-                let result = try await AppAPIClient().analyzeConfigReviewImage(imageData: data)
+                let result = try await AppAPIClient().analyzeConfigReviewImage(
+                    imageData: data,
+                    direction: draft.direction.rawValue,
+                    resolution: draft.resolution.rawValue
+                )
                 guard requestID == activeRequestID else { return }
                 state = .result(result)
             } catch {
@@ -227,7 +237,7 @@ private struct ConfigReviewLandingView: View {
                         .font(.system(size: 42, weight: .black))
                         .foregroundStyle(.black)
 
-                    Text("商家配置先别急着买，帮你看懂型号、价格和搭配风险")
+                    Text("商家配置先别急着买，帮你看懂搭配风险和实际性能")
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(ConfigReviewPalette.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -244,7 +254,7 @@ private struct ConfigReviewLandingView: View {
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(ConfigReviewPalette.secondary)
 
-                        Text("配置截图  ·  报价单照片  ·  聊天记录")
+                        Text("配置截图  ·  配置单照片  ·  聊天记录")
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(ConfigReviewPalette.muted)
 
@@ -267,7 +277,7 @@ private struct ConfigReviewLandingView: View {
                             .font(.system(size: 28, weight: .black))
                             .foregroundStyle(.black)
 
-                        Text("逐项选择配件型号，并填写商家报价")
+                        Text("逐项选择配件型号，不需要填写价格")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(ConfigReviewPalette.secondary)
 
@@ -328,7 +338,7 @@ private struct ConfigReviewEntryPreview: View {
     private let rows = [
         ("cpu", "CPU / 主板", "选择型号"),
         ("display", "显卡 / 内存", "选择型号"),
-        ("bolt", "电源 / 商家总价", "填写价格")
+        ("bolt", "硬盘 / 电源", "选择型号")
     ]
 
     var body: some View {
@@ -426,17 +436,22 @@ private struct ConfigReviewManualEntryView: View {
                     .foregroundStyle(.black)
                     .padding(.top, 32)
 
-                Text("选择配件型号，再填写商家给出的单项价格")
+                Text("选择你已知道的配件，信息不全时会尝试联网补全")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.secondary)
                     .padding(.top, 8)
+
+                ConfigReviewContextSelector(
+                    direction: $draft.direction,
+                    resolution: $draft.resolution
+                )
+                .padding(.top, 24)
 
                 VStack(spacing: 0) {
                     ForEach(ConfigReviewPartCategory.allCases) { category in
                         ConfigReviewPartInputRow(
                             category: category,
                             model: draft.model(for: category),
-                            price: priceBinding(for: category),
                             onSelectModel: { selectedCategory = category }
                         )
 
@@ -447,7 +462,7 @@ private struct ConfigReviewManualEntryView: View {
                 }
                 .padding(.top, 28)
 
-                Text("至少完成 2 项配件的型号与价格，即可开始排雷")
+                Text("至少选择 2 项配件即可开始。信息越完整，评级越准确")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.muted)
                     .padding(.top, 18)
@@ -458,7 +473,6 @@ private struct ConfigReviewManualEntryView: View {
         .safeAreaInset(edge: .bottom) {
             ConfigReviewManualSubmitBar(
                 completedCount: draft.completedPartCount,
-                totalPrice: draft.totalPrice,
                 isEnabled: draft.canSubmit,
                 onSubmit: onSubmit
             )
@@ -481,18 +495,41 @@ private struct ConfigReviewManualEntryView: View {
         )
     }
 
-    private func priceBinding(for category: ConfigReviewPartCategory) -> Binding<String> {
-        Binding(
-            get: { draft.price(for: category) },
-            set: { draft.setPrice($0, for: category) }
-        )
+}
+
+private struct ConfigReviewContextSelector: View {
+    @Binding var direction: ConfigReviewDirection
+    @Binding var resolution: ConfigReviewResolution
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("主要用途")
+                .font(.system(size: 15, weight: .bold))
+            Picker("主要用途", selection: $direction) {
+                ForEach(ConfigReviewDirection.allCases) { item in
+                    Text(item.title).tag(item)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            if direction != .office {
+                Text("目标分辨率")
+                    .font(.system(size: 15, weight: .bold))
+                    .padding(.top, 4)
+                Picker("目标分辨率", selection: $resolution) {
+                    ForEach(ConfigReviewResolution.allCases) { item in
+                        Text(item.title).tag(item)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+        }
     }
 }
 
 private struct ConfigReviewPartInputRow: View {
     let category: ConfigReviewPartCategory
     let model: String
-    @Binding var price: String
     let onSelectModel: () -> Void
 
     var body: some View {
@@ -508,38 +545,22 @@ private struct ConfigReviewPartInputRow: View {
                 Spacer()
             }
 
-            HStack(spacing: 12) {
-                Button(action: onSelectModel) {
-                    HStack(spacing: 8) {
-                        Text(model.isEmpty ? "选择型号" : model)
-                            .font(.system(size: 14, weight: model.isEmpty ? .medium : .semibold))
-                            .foregroundStyle(model.isEmpty ? ConfigReviewPalette.muted : .black)
-                            .lineLimit(1)
-
-                        Spacer(minLength: 4)
-
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(ConfigReviewPalette.muted)
-                    }
-                    .padding(.horizontal, 12)
-                    .frame(height: 42)
-                    .background(ConfigReviewPalette.surface, in: RoundedRectangle(cornerRadius: 10))
+            Button(action: onSelectModel) {
+                HStack(spacing: 8) {
+                    Text(model.isEmpty ? "选择型号" : model)
+                        .font(.system(size: 14, weight: model.isEmpty ? .medium : .semibold))
+                        .foregroundStyle(model.isEmpty ? ConfigReviewPalette.muted : .black)
+                        .lineLimit(1)
+                    Spacer(minLength: 4)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(ConfigReviewPalette.muted)
                 }
-                .buttonStyle(.plain)
-
-                HStack(spacing: 4) {
-                    Text("¥")
-                        .foregroundStyle(ConfigReviewPalette.secondary)
-                    TextField("价格", text: $price)
-                        .keyboardType(.numberPad)
-                        .multilineTextAlignment(.trailing)
-                }
-                .font(.system(size: 14, weight: .semibold))
                 .padding(.horizontal, 12)
-                .frame(width: 112, height: 42)
+                .frame(height: 42)
                 .background(ConfigReviewPalette.surface, in: RoundedRectangle(cornerRadius: 10))
             }
+            .buttonStyle(.plain)
         }
         .foregroundStyle(.black)
         .padding(.vertical, 18)
@@ -548,7 +569,6 @@ private struct ConfigReviewPartInputRow: View {
 
 private struct ConfigReviewManualSubmitBar: View {
     let completedCount: Int
-    let totalPrice: Int
     let isEnabled: Bool
     let onSubmit: () -> Void
 
@@ -559,7 +579,7 @@ private struct ConfigReviewManualSubmitBar: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.secondary)
 
-                Text(totalPrice > 0 ? "¥\(totalPrice.formatted())" : "等待填写")
+                Text("准备检查")
                     .font(.system(size: 25, weight: .black))
                     .foregroundStyle(.black)
             }
@@ -720,7 +740,7 @@ private struct ConfigReviewLoadingView: View {
                                 .foregroundStyle(ConfigReviewPalette.number)
                         }
 
-                        Text("正在核对型号与价格")
+                        Text("正在核对型号与规格")
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(ConfigReviewPalette.secondary)
                     }
@@ -744,7 +764,7 @@ private struct ConfigReviewLoadingView: View {
                 VStack(spacing: 0) {
                     ConfigReviewProgressRow(number: "01", title: "读取配件型号", status: .completed)
                     ConfigReviewProgressRow(number: "02", title: "检查兼容性", status: progress > 0.36 ? .completed : .waiting)
-                    ConfigReviewProgressRow(number: "03", title: "分析性能与预算", status: progress > 0.58 ? .active : .waiting)
+                    ConfigReviewProgressRow(number: "03", title: "评估搭配与性能", status: progress > 0.58 ? .active : .waiting)
                     ConfigReviewProgressRow(number: "04", title: "整理购买建议", status: .waiting, showsDivider: false)
                 }
                 .padding(.top, 10)
@@ -860,11 +880,8 @@ private struct ConfigReviewResultView: View {
         }
     }
 
-    private var priceDifference: Int? {
-        guard let sellerPrice = result.sellerPrice,
-              let referenceTotal = result.referenceTotal
-        else { return nil }
-        return max(0, sellerPrice - referenceTotal)
+    private var riskFindings: [ConfigReviewFindingDTO] {
+        result.findings.filter { $0.level != "pass" }
     }
 
     var body: some View {
@@ -903,23 +920,29 @@ private struct ConfigReviewResultView: View {
                     .padding(.top, 12)
 
                 ConfigReviewResultMetrics(
-                    riskLevel: riskLevel,
-                    priceDifference: priceDifference,
-                    findingCount: result.findings.count
+                    pairingRating: result.pairingRating,
+                    performanceRating: result.performanceRating,
+                    findingCount: riskFindings.count
                 )
                 .padding(.top, 28)
 
-                Text(result.findings.isEmpty ? "检查结果" : "先处理这 \(result.findings.count) 个问题")
+                VStack(spacing: 12) {
+                    ConfigReviewRatingCard(title: "搭配合理度", rating: result.pairingRating)
+                    ConfigReviewRatingCard(title: "性能评级", rating: result.performanceRating)
+                }
+                .padding(.top, 24)
+
+                Text(riskFindings.isEmpty ? "检查结果" : "先处理这 \(riskFindings.count) 个问题")
                     .font(.system(size: 25, weight: .black))
                     .foregroundStyle(.black)
                     .padding(.top, 42)
 
                 VStack(spacing: 0) {
-                    ForEach(Array(result.findings.enumerated()), id: \.element.id) { index, finding in
+                    ForEach(Array(riskFindings.enumerated()), id: \.element.id) { index, finding in
                         ConfigReviewFindingRow(index: index + 1, finding: finding)
                     }
 
-                    if result.findings.isEmpty {
+                    if riskFindings.isEmpty {
                         HStack(spacing: 12) {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 13, weight: .bold))
@@ -934,6 +957,39 @@ private struct ConfigReviewResultView: View {
                 }
                 .padding(.top, 12)
 
+                if !result.webSources.isEmpty {
+                    Text("联网补全来源")
+                        .font(.system(size: 25, weight: .black))
+                        .foregroundStyle(.black)
+                        .padding(.top, 36)
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(result.webSources) { source in
+                            if let url = URL(string: source.url) {
+                                Link(destination: url) {
+                                    HStack(spacing: 12) {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(source.componentName)
+                                                .font(.system(size: 14, weight: .bold))
+                                                .foregroundStyle(.black)
+                                            Text(source.title)
+                                                .font(.system(size: 12, weight: .medium))
+                                                .foregroundStyle(ConfigReviewPalette.secondary)
+                                                .lineLimit(2)
+                                        }
+                                        Spacer()
+                                        Image(systemName: "arrow.up.right")
+                                            .foregroundStyle(.black)
+                                    }
+                                    .padding(14)
+                                    .background(ConfigReviewPalette.surface, in: RoundedRectangle(cornerRadius: 12))
+                                }
+                            }
+                        }
+                    }
+                    .padding(.top, 12)
+                }
+
                 HStack(spacing: 14) {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
@@ -941,7 +997,7 @@ private struct ConfigReviewResultView: View {
                         .frame(width: 28, height: 28)
                         .background(Color.black, in: Circle())
 
-                    Text("已完成兼容性、搭配与价格检查")
+                    Text("已完成兼容性、搭配与性能检查")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.black)
                 }
@@ -952,7 +1008,7 @@ private struct ConfigReviewResultView: View {
         }
         .safeAreaInset(edge: .bottom) {
             ConfigReviewResultActionBar(
-                findingCount: result.findings.count,
+                findingCount: riskFindings.count,
                 onCopy: copyReply
             )
         }
@@ -986,27 +1042,63 @@ private struct ConfigReviewResultView: View {
 }
 
 private struct ConfigReviewResultMetrics: View {
-    let riskLevel: RiskLevel
-    let priceDifference: Int?
+    let pairingRating: ConfigReviewRatingDTO
+    let performanceRating: ConfigReviewRatingDTO
     let findingCount: Int
 
-    private var compatibilityTitle: String {
-        riskLevel == .error ? "需调整" : "通过"
-    }
-
-    private var budgetTitle: String {
-        guard let priceDifference else { return "待确认" }
-        return priceDifference > 0 ? "偏高 ¥\(priceDifference)" : "正常"
+    private func value(_ rating: ConfigReviewRatingDTO) -> String {
+        guard let score = rating.score else { return "待补全" }
+        return "\(score) 分"
     }
 
     var body: some View {
         HStack(spacing: 0) {
-            ConfigReviewMetric(title: "兼容性", value: compatibilityTitle)
+            ConfigReviewMetric(title: "搭配", value: value(pairingRating))
             Divider().frame(height: 42).overlay(ConfigReviewPalette.divider)
-            ConfigReviewMetric(title: "预算", value: budgetTitle)
+            ConfigReviewMetric(title: "性能", value: performanceRating.grade ?? "待补全")
             Divider().frame(height: 42).overlay(ConfigReviewPalette.divider)
             ConfigReviewMetric(title: "风险项", value: "\(findingCount) 个")
         }
+    }
+}
+
+private struct ConfigReviewRatingCard: View {
+    let title: String
+    let rating: ConfigReviewRatingDTO
+
+    private var confidenceTitle: String {
+        switch rating.confidence {
+        case "high": "高置信度"
+        case "medium": "中置信度"
+        case "low": "低置信度"
+        default: "信息待补全"
+        }
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 18) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(ConfigReviewPalette.secondary)
+                Text(rating.score.map { "\($0) 分" } ?? "暂无评分")
+                    .font(.system(size: 28, weight: .black))
+                    .foregroundStyle(.black)
+                Text(confidenceTitle)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(ConfigReviewPalette.muted)
+            }
+            .frame(width: 102, alignment: .leading)
+
+            Text(rating.detail)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(ConfigReviewPalette.secondary)
+                .lineSpacing(4)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(16)
+        .background(ConfigReviewPalette.surface, in: RoundedRectangle(cornerRadius: 14))
     }
 }
 

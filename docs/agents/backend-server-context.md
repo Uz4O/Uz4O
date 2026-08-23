@@ -1,6 +1,61 @@
 # Backend and Server Context
 
-Last verified: 2026-07-20.
+Last verified: 2026-08-23.
+
+## Direction Allocation and DDR4 Dual-Channel Gate (Deployed 2026-08-23)
+
+- Deterministic customization now derives its minimum focus performance from reviewed candidates that fit the request ceiling: FPS protects CPU performance, 3A protects GPU performance, and balanced protects the weaker side. Only candidates inside the complete budget window may dominate another CPU/GPU pair, so a below-floor base can no longer eliminate the correct direction and force a price-filling reversal.
+- Every final path rejects R5 5600/5600X for gaming requests from `6000` yuan unless the user explicitly names that CPU. The check covers direct templates, deterministic search, and selected-result cache reuse.
+- DDR4 is hard-gated to dual-channel DDR4-3200. A 16GB result displays `DDR4 8GB×2 3200`; a 32GB result displays `DDR4 16GB×2 3200`. DDR5 remains outside this dual-channel gate.
+- Below `10000` yuan with no explicit GPU vendor or ray-tracing choice, 3A/balanced generation compares both NVIDIA and AMD candidates and selects by the requested direction instead of stopping at the first NVIDIA result.
+- The full `4500` through `30000` yuan, every-`100`-yuan capacity matrix checked `13824` options: `13103` passed (`94.78%`), and all `721` failures were honest `no_option` results. The realistic-capacity subset passed `12643/13059` (`96.81%`). There were zero accepted budget-window, R5 5600/5600X, DDR4 dual-channel, AM5 C28, cooling, or power violations.
+- A separate `6000` through `30000` direction-allocation audit checked `2169` budget/direction/purchase-mode results with 1TB, 16GB, and Wi-Fi: zero FPS-vs-3A/balanced allocation reversals were found. Forty-six individual combinations were unavailable rather than returning a direction-regressing build.
+- Production verification for the reported `7000` yuan, 16GB, 1TB, Wi-Fi request: all three modes returned; all-new FPS is i5-12600KF + RTX 5060 at `7116`, all-new 3A/balanced is R5 7500F + RX 7700 XT at `7127`, and no mode uses 5600/5600X. Health and catalog readiness pass with `487` active templates.
+- Deployment backup: `/opt/ai-builder-api/backups/direction-memory-policy-20260823-161342`.
+
+## RTX 4090 / 4090 D Used Price Record (2026-08-23)
+
+- User-confirmed used reference prices are RTX 4090 `21000` yuan and RTX 4090 D `15500` yuan.
+- The user-confirmed gaming-performance order is RTX 5090 D V2, RTX 4090, RTX 4090 D, then RTX 5080. RTX 4090 and RTX 4090 D participate in used and mixed high-budget generation with that strict order.
+
+## Continuous Budget Window Update (Deployed 2026-08-22)
+
+- Base templates, deterministic customization, and selected-option cache reuse all enforce the same request-budget window: below `10000`, totals must be from `budget - 200` through `budget + 300` by default or `budget + 500` when flexibility is enabled; from `10000`, the ceiling is `budget + 800`.
+- An explicitly selected `16GB`/`32GB` memory capacity and `512GB`/`1TB`/`2TB` storage capacity are exact locks. Search never changes either capacity to fill the budget; remaining money is spent only on reviewed CPU, GPU, motherboard, PSU, cooler, or case improvements.
+- Arbitrary budgets search all lower reviewed anchors plus the immediately higher reviewed tier, then run a deterministic whitelist-only combination search. DeepSeek is outside the synchronous feasibility and success path.
+- At `4500` yuan and above, the public API requires new, used, and mixed options together. If any mode has no honest combination satisfying capacity, compatibility, power, direction-performance, and budget rules, the whole request returns `503` instead of silently returning one or two modes.
+- The matrix gate checks `4500` through `30000` every `100` yuan across FPS/3A/balanced, `16GB`/`32GB`, `512GB`/`1TB`/`2TB`, and all three purchase modes: `12957/13824` options pass (`93.73%`). With realistic capacity floors (`32GB >= 6000`, `1TB >= 5000`, `2TB >= 7000`), `12586/13059` pass (`96.38%`). All `867` remaining failures are `no_option`; no accepted option violates the budget window, locked capacity, AM5 C28, hot-CPU cooling, or power rules.
+- A Pareto quality gate rejects a candidate when another reviewed candidate that fits the same hard requirements and budget ceiling is at least as fast in both CPU and GPU and strictly faster in one. This removed `806` previously counted “successes” that reached the price floor only by replacing a cheaper, faster core part or by lowering core performance to buy a pricier motherboard. CPU/GPU tradeoffs where each candidate wins on one side remain valid.
+- R7 9800X3D and R7 9850X3D cannot use the entry-level ASUS PRIME B650M-K; base-template and deterministic paths both enforce this before returning an option.
+- Mixed-mode search may buy the same reviewed cooler or case new when that is a meaningful reliability improvement needed to enter the strict budget window. It still cannot pad the total with larger storage, more memory, or an oversized PSU.
+- PUBG and 永劫无间 force NVIDIA from `7900`; 三角洲/三角洲行动 force NVIDIA from `7500`. Below those stable NVIDIA thresholds, value-first AMD/NVIDIA selection remains enabled. A lower-budget request can still return `503` when one purchase mode has no non-dominated option inside the strict budget window; it does not substitute a more expensive but weaker GPU merely to force three-mode coverage.
+- Selection-cache version `build-selection-v2` fingerprints customization, request classification, and API vendor/purchase rules, automatically invalidating results selected under older policies.
+- Production backups: `/opt/ai-builder-api/backups/continuous-budget-strict-20260822-174338` preserves the pre-continuous-search version; `/opt/ai-builder-api/backups/pareto-quality-20260822-181510` preserves the pre-Pareto version. Full backend tests, public HTTPS, health/readiness, critical budget/capacity requests, ray tracing, special-game thresholds, dominated-option rejection, and progress-page smoke tests passed after deployment.
+
+## Three Purchase Modes and Ray-Tracing Budget Gate (2026-08-22)
+
+- Public gaming requests from `4500` through `30000` yuan now return new, used, and mixed purchase modes for every reviewed FPS / 3A / balanced tier. The API refuses a silent one- or two-mode partial response at `4500` yuan and above.
+- Every returned option must total at least `budget - 200`. High-budget generation may move from the 512GB TLC baseline to 1TB/2TB only when the otherwise identical 512GB candidate would fall below that floor and no higher core-performance tier fits the ceiling.
+- Ray tracing forces NVIDIA only from `10000` yuan. Below `10000`, enabling ray tracing keeps the ordinary value-first vendor fallback; from `10000`, FPS, 3A, and balanced all have NVIDIA coverage in new, used, and mixed modes.
+- In-between requests may use the immediately higher reviewed tier only when its total still fits the original request's budget ceiling; production verification passed at `9999` yuan using the `10000` yuan tier.
+- The high-budget catalog contains `332` templates and reports public purchase-mode coverage for all `26/26` tiers. Production contains `487` active templates (`83` low-budget gaming + `332` high-budget gaming + `72` office), `6388` components, and `5745` approved prices; readiness is `ready: true`.
+- Full backend regression tests passed. Public HTTPS smoke tests passed at `4500`, `7000`, `9500`, `9999`, `10000`, and `30000` yuan. The deployment backup is `/opt/ai-builder-api/backups/purchase-mode-raytracing-20260822-145330`.
+
+## RTX 40/50 Series Price Update (2026-08-22)
+
+- User-confirmed all-new reference prices are RTX 5060 `3299`, RTX 5060 Ti `3599`, RTX 5070 `6999`, RTX 5070 Ti `9799`, and RTX 5080 `13499` yuan.
+- User-confirmed used reference prices are RTX 4060 `1999`, RTX 4060 Ti `2300`, RTX 4070 `3299`, RTX 4070 SUPER `3700`, RTX 4070 Ti `4200`, RTX 4070 Ti SUPER `4799`, RTX 5060 `2650`, RTX 5060 Ti `3099`, RTX 5070 `5999`, RTX 5070 Ti `7299`, and RTX 5080 `10500` yuan. The earlier RTX 4080 `6900` and RTX 4080 SUPER `7300` references remain unchanged.
+- RTX 4070 Ti is price-recorded only: it remains unrecommended and excluded from gaming generation. RTX 4070 Ti SUPER is approved with project performance index `80`, 285W TDP, and the existing Time Spy score; production has `19` active templates using it.
+- Low-budget, high-budget, and office artifacts were regenerated with price date `2026-08-22`. Production contains `449` active templates.
+- The all-new-to-used recommendation mapping remains RTX 5060 to used RTX 4070 `3299`, RTX 5060 Ti to used RTX 4070 SUPER `3700`, RTX 5070 to used RTX 4080 `6900`, and RTX 5070 Ti to used RTX 4080 SUPER `7300`. RTX 5080 has no non-regressing used RTX 40-series alternative under the maintained rules.
+- Production verification passed: `/v1/catalog/readiness` is ready with `6388` components, `5745` approved component prices, and `449` active templates. A public `9000` yuan 3A request returned RTX 4070 Ti SUPER at `4799` yuan in both used and mixed modes.
+
+## AM5 DDR5 6000 C28 Update (2026-08-22)
+
+- Every generated AM5 build now uses DDR5 6000 C28 in new, used, and mixed purchase modes; the same rule is enforced again during structured customization.
+- User-confirmed 16GB reference prices are `1350` yuan used and `1650` yuan new. The maintained 32GB (16GB x2) entries are `2700` yuan used and `3300` yuan new.
+- Low-budget, high-budget, and office artifacts were regenerated and imported. Production contains `447` active templates; all `321` active AM5 templates passed the C28 audit.
+- Production data readiness remains ready with `6388` hardware components and `5744` approved component prices.
 
 Read this before backend, API, deployment, ICP/domain, or production-readiness work. Treat this file as the current operational map; some older backend docs still mention the previous server and PM2 setup.
 
@@ -258,7 +313,7 @@ FPS/3A direction correction deployed on 2026-07-19:
 
 - The `6500` yuan mixed FPS option keeps R7 7800X3D and upgrades the GPU to RTX 5060 at `6830` yuan; this reviewed option is the only template allowed `30` yuan beyond the normal `budget + 300` ceiling.
 - The used RTX 4070 SUPER reference price is `3700` yuan. The `8000` yuan used NVIDIA 3A option uses R7 7800X3D + RTX 4070 SUPER at `7980` yuan instead of overspending on 9800X3D.
-- RTX 4070 Ti has no whitelist price, recommendation flag, or component price and is blocked by regression coverage.
+- RTX 4070 Ti was blocked by regression coverage and remains excluded; its later `4200` yuan used reference is recorded for comparison only. RTX 4070 Ti SUPER is a separate allowed model.
 - FPS motherboard share may reach 16% when the former 15% cap would eliminate the CPU-priority candidate; 3A and balanced builds retain the 15% cap.
 - The `8500` yuan mixed FPS option uses R7 9800X3D + RTX 5060 Ti at `8679` yuan.
 - The `9000` yuan mixed FPS option uses R7 9800X3D + RX 9070 GRE at `8980` yuan. AMD may override NVIDIA for FPS only when it unlocks a higher CPU tier without lowering GPU performance.

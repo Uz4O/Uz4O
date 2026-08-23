@@ -1,0 +1,223 @@
+{
+  "project_root": "/Users/may/Documents/AI装机",
+  "selection_required": true,
+  "model_selection_required": true,
+  "confirmation_required": true,
+  "user_confirmed": true,
+  "target_pages": 60,
+  "lines_per_page": 50,
+  "target_lines": 3000,
+  "estimated_selected_lines": 7850,
+  "estimated_selected_pages": 157,
+  "estimated_all_candidate_lines": 102041,
+  "estimated_all_candidate_pages": 2041,
+  "supplement_rule": "模型优先选择能体现软件核心功能和真实运行逻辑的源码；不足60页时再从其他相关源码中补充；候选源码仍不足时才生成全部代码材料。",
+  "confirmation_stage": "code-selection",
+  "next_action": "请由模型填写 草稿/代码文件选择.json 的抽取选择和选择理由，再让用户确认；确认后运行 confirm_stage.py --stage code-selection。",
+  "instructions": "The script only inventories source files. The model must choose selected/model_reason before user confirmation. Selected files are extracted in full with blank-only lines removed.",
+  "files": [
+    {
+      "path": "flutter_app/lib/main.dart",
+      "selected": true,
+      "line_count": 54,
+      "material_line_count": 49,
+      "priority": 0,
+      "selection_tier": "frontend",
+      "evidence": "入口文件证据",
+      "model_reason": "Android Flutter 客户端真实源码：入口、导航、页面、核心交互或共享组件，能直接体现用户可见功能。"
+    },
+    {
+      "path": "flutter_app/lib/startup_flow.dart",
+      "selected": true,
+      "line_count": 409,
+      "material_line_count": 383,
+      "priority": 5,
+      "selection_tier": "frontend",
+      "evidence": "Android 启动、协议确认和进入首页流程证据",
+      "model_reason": "Android Flutter 客户端真实启动流程，展示启动页、协议确认、本机号码入口和进入首页的页面状态。"
+    },
+    {
+      "path": "flutter_app/lib/screens/home_screen.dart",
+      "selected": true,
+      "line_count": 517,
+      "material_line_count": 492,
+      "priority": 20,
+      "selection_tier": "frontend",
+      "evidence": "页面文件证据",
+      "model_reason": "Android Flutter 客户端真实源码：入口、导航、页面、核心交互或共享组件，能直接体现用户可见功能。"
+    },
+    {
+      "path": "flutter_app/lib/api/uzbox_api.dart",
+      "selected": true,
+      "line_count": 227,
+      "material_line_count": 210,
+      "priority": 10,
+      "selection_tier": "frontend",
+      "evidence": "Android Flutter 共享服务客户端证据",
+      "model_reason": "Android Flutter 客户端真实网络封装，直接调用装机、目录、排雷、性能和升级等共享 FastAPI 服务接口。"
+    },
+    {
+      "path": "flutter_app/lib/screens/primary_flows.dart",
+      "selected": true,
+      "line_count": 5326,
+      "material_line_count": 5153,
+      "priority": 20,
+      "selection_tier": "frontend",
+      "evidence": "页面文件证据",
+      "model_reason": "Android Flutter 客户端真实源码：入口、导航、页面、核心交互或共享组件，能直接体现用户可见功能。"
+    },
+    {
+      "path": "backend/app/progress.py",
+      "selected": true,
+      "line_count": 73,
+      "material_line_count": 57,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "共享 FastAPI 服务端的真实进度状态模块，用于记录后台处理阶段并保持鉴别材料分页完整。"
+    },
+    {
+      "path": "backend/app/main.py",
+      "selected": true,
+      "line_count": 95,
+      "material_line_count": 89,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/core/config.py",
+      "selected": true,
+      "line_count": 145,
+      "material_line_count": 129,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/core/rate_limit.py",
+      "selected": true,
+      "line_count": 193,
+      "material_line_count": 157,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/core/response_cache.py",
+      "selected": true,
+      "line_count": 57,
+      "material_line_count": 46,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/compat/engine.py",
+      "selected": true,
+      "line_count": 395,
+      "material_line_count": 335,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/compat.py",
+      "selected": true,
+      "line_count": 29,
+      "material_line_count": 22,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/catalog.py",
+      "selected": true,
+      "line_count": 104,
+      "material_line_count": 82,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/perf/profiles.py",
+      "selected": true,
+      "line_count": 103,
+      "material_line_count": 91,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/builds.py",
+      "selected": true,
+      "line_count": 331,
+      "material_line_count": 310,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/review.py",
+      "selected": true,
+      "line_count": 114,
+      "material_line_count": 94,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/perf.py",
+      "selected": true,
+      "line_count": 80,
+      "material_line_count": 66,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    },
+    {
+      "path": "backend/app/api/upgrade.py",
+      "selected": true,
+      "line_count": 81,
+      "material_line_count": 67,
+      "priority": 20,
+      "selection_tier": "supplement",
+      "evidence": "页面文件证据",
+      "model_reason": "与客户端业务对应的 FastAPI 真实服务源码：入口、接口、规则或业务服务，体现共享后端运行逻辑。"
+    }
+  ],
+  "model_selected_paths": [
+    "flutter_app/lib/main.dart",
+    "flutter_app/lib/startup_flow.dart",
+    "flutter_app/lib/screens/home_screen.dart",
+    "flutter_app/lib/api/uzbox_api.dart",
+    "flutter_app/lib/screens/primary_flows.dart",
+    "backend/app/progress.py",
+    "backend/app/main.py",
+    "backend/app/core/config.py",
+    "backend/app/core/rate_limit.py",
+    "backend/app/core/response_cache.py",
+    "backend/app/compat/engine.py",
+    "backend/app/api/compat.py",
+    "backend/app/api/catalog.py",
+    "backend/app/perf/profiles.py",
+    "backend/app/api/builds.py",
+    "backend/app/api/review.py",
+    "backend/app/api/perf.py",
+    "backend/app/api/upgrade.py"
+  ],
+  "model_selection_note": "采用最小且可追溯的 Android Flutter 客户端与共享 FastAPI 服务端源码集合：前30页连续展示 Dart 启动、首页、网络封装和核心业务页面；后30页从 Python 服务端入口开始，连续展示配置、限流、缓存、兼容规则及装机、目录、排雷、性能和升级 API。所选材料共7850个非空源码/文件标记行，可严格按每页50行分页。",
+  "confirmation_note": "用户已授权采用最稳妥方案；确认18个真实完整源码文件，前30页为Flutter/Dart，后30页为FastAPI/Python，不含Swift客户端和生成型估算文件。",
+  "confirmed_at": "2026-08-10T14:16:06+00:00"
+}

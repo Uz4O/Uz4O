@@ -10,13 +10,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.builds import customization
-from app.builds.customization import customized_budget_limit
+from app.builds.customization import customized_budget_floor, customized_budget_limit
 from app.builds.models import BuildSelectionCache, BuildTemplate
 from app.builds.service import BuildOptionResponse, BuildRequest
 from app.catalog.models import ComponentPrice, HardwareComponent
 
 
-CACHE_SCHEMA_VERSION = "build-selection-v1"
+CACHE_SCHEMA_VERSION = "build-selection-v2"
 
 
 def request_identity(request: BuildRequest) -> Tuple[str, dict]:
@@ -30,6 +30,7 @@ def request_identity(request: BuildRequest) -> Tuple[str, dict]:
         "needs_wireless_network": request.needs_wireless_network,
         "memory_size": request.memory_size,
         "storage_size": request.storage_size,
+        "allows_flexible_budget": request.allows_flexible_budget,
         "no_gpu_build": request.no_gpu_build,
         "owned_gpu_model": (request.owned_gpu_model or "").lower() or None,
         "chassis_color": request.chassis_color,
@@ -52,7 +53,7 @@ def option_cache_key(purchase_mode: str, gpu_vendor: Optional[str]) -> str:
 
 
 def current_cache_version(session: Session) -> str:
-    parts = [CACHE_SCHEMA_VERSION, _customization_code_hash()]
+    parts = [CACHE_SCHEMA_VERSION, _build_rule_code_hash()]
     for model in (BuildTemplate, HardwareComponent, ComponentPrice):
         count, latest = session.execute(
             select(func.count(), func.max(model.updated_at))
@@ -91,7 +92,16 @@ def selected_option(
         return None
     if gpu_vendor and option.details.gpu_vendor != gpu_vendor:
         return None
-    if option.estimated_total is None or option.estimated_total > customized_budget_limit(request):
+    parts = {part.role: part for part in option.details.parts}
+    if not customization.budget_cpu_policy_allows(request, parts["cpu"]):
+        return None
+    if not customization.ddr4_memory_policy_allows(parts["ram"]):
+        return None
+    if (
+        option.estimated_total is None
+        or option.estimated_total < customized_budget_floor(request)
+        or option.estimated_total > customized_budget_limit(request)
+    ):
         return None
     return option.model_copy(
         update={
@@ -174,5 +184,14 @@ def mark_option_selected(
     return row
 
 
-def _customization_code_hash() -> str:
-    return hashlib.sha256(Path(customization.__file__).read_bytes()).hexdigest()
+def _build_rule_code_hash() -> str:
+    app_root = Path(customization.__file__).resolve().parents[1]
+    digest = hashlib.sha256()
+    for path in (
+        Path(customization.__file__),
+        app_root / "builds" / "service.py",
+        app_root / "api" / "builds.py",
+        Path(__file__),
+    ):
+        digest.update(path.read_bytes())
+    return digest.hexdigest()

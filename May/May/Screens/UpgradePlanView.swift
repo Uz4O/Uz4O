@@ -4,14 +4,29 @@ import UIKit
 private let upgradeFlowBackground = Color(red: 0.972, green: 0.978, blue: 0.978)
 private let upgradeFlowDivider = Color.black.opacity(0.10)
 
+private enum UpgradePlanLoadState: Equatable {
+    case idle
+    case loading
+    case loaded(UpgradePlanResponseDTO)
+    case failed(String)
+}
+
 struct UpgradePlanView: View {
-    let savedHardwareProfile: HardwareProfile
     let onBack: () -> Void
 
     @State private var configuration = UpgradePlanConfiguration.sample
     @State private var selectedHardwareCategory: HardwareOptionCategory?
     @State private var showsGamePicker = false
+    @State private var showsGameSelectionAlert = false
     @State private var isSaved = false
+    @State private var planLoadState: UpgradePlanLoadState = .idle
+
+    init(savedHardwareProfile: HardwareProfile, onBack: @escaping () -> Void) {
+        self.onBack = onBack
+        var initialConfiguration = UpgradePlanConfiguration.sample
+        initialConfiguration.apply(savedHardwareProfile)
+        _configuration = State(initialValue: initialConfiguration)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,18 +50,20 @@ struct UpgradePlanView: View {
                     UpgradeGoalStep(
                         configuration: $configuration,
                         onChooseGames: { showsGamePicker = true },
-                        onGenerate: advance
+                        onGenerate: generatePlan
                     )
                 case .result:
                     UpgradeResultStep(
                         configuration: configuration,
+                        loadState: planLoadState,
                         isSaved: isSaved,
                         onAdjust: {
                             withAnimation(.easeOut(duration: 0.24)) {
                                 configuration.step = .goal
                             }
                         },
-                        onSave: { isSaved = true }
+                        onSave: { isSaved = true },
+                        onRetry: generatePlan
                     )
                 }
             }
@@ -70,6 +87,20 @@ struct UpgradePlanView: View {
             UpgradeGamePickerSheet(selectedGames: $configuration.selectedGames)
                 .presentationDetents([.medium, .large])
         }
+        .alert("请选择一个游戏", isPresented: $showsGameSelectionAlert) {
+            Button("去选择") {
+                showsGamePicker = true
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text("至少选择一个优先参考的游戏后，才能生成游戏性能升级方案。")
+        }
+        .onChange(of: configuration.selectedGames) { _, _ in
+            configuration.clampFrameTarget()
+        }
+        .onChange(of: configuration.resolution) { _, _ in
+            configuration.clampFrameTarget()
+        }
     }
 
     private func handleBack() {
@@ -86,6 +117,25 @@ struct UpgradePlanView: View {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         withAnimation(.easeOut(duration: 0.24)) {
             configuration.goNext()
+        }
+    }
+
+    private func generatePlan() {
+        guard configuration.hasRequiredGameSelection else {
+            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+            showsGameSelectionAlert = true
+            return
+        }
+        let request = configuration.apiRequest
+        planLoadState = .loading
+        isSaved = false
+        advance()
+        Task { @MainActor in
+            do {
+                planLoadState = .loaded(try await AppAPIClient().upgradePlan(request))
+            } catch {
+                planLoadState = .failed(error.localizedDescription)
+            }
         }
     }
 
@@ -418,16 +468,6 @@ private struct UpgradeConditionsSection: View {
                 UpgradePerformanceTargets(configuration: $configuration)
                     .padding(.top, 28)
             }
-
-            Menu {
-                ForEach(UpgradePlanConfiguration.componentPreferences, id: \.self) { preference in
-                    Button(preference) { configuration.componentPreference = preference }
-                }
-            } label: {
-                UpgradeDisclosureRow(title: "保留配件与新旧偏好")
-            }
-            .accessibilityLabel("保留配件与新旧偏好，当前为 \(configuration.componentPreference)")
-            .padding(.top, configuration.goal == .gaming ? 10 : 24)
         }
     }
 }
@@ -515,11 +555,18 @@ private struct UpgradeGameCard: View {
     private var mark: String {
         switch game {
         case "无畏契约": return "V"
+        case "三角洲行动": return "三角洲"
+        case "云顶之弈": return "云顶"
         case "英雄联盟": return "LOL"
-        case "永劫无间": return "永"
-        case "原神": return "原"
-        case "APEX 英雄": return "APEX"
         case "使命召唤": return "COD"
+        case "赛博朋克2077": return "2077"
+        case "荒野大镖客2": return "RDR2"
+        case "GTA5": return "GTA"
+        case "黑神话悟空": return "悟空"
+        case "地平线6": return "FH6"
+        case "艾尔登法环": return "环"
+        case "城市天际线": return "城市"
+        case "我的世界": return "MC"
         default: return game
         }
     }
@@ -575,13 +622,18 @@ private struct UpgradePerformanceTargets: View {
                     .frame(width: 1, height: 70)
 
                 Menu {
-                    ForEach(UpgradeFrameTarget.allCases) { target in
-                        Button("\(target.rawValue) 帧") { configuration.frameTarget = target }
+                    ForEach(configuration.frameTargetOptions, id: \.self) { target in
+                        Button("\(target) 帧") { configuration.frameTarget = target }
                     }
                 } label: {
-                    UpgradePerformanceTarget(value: configuration.frameTarget.title, title: "帧目标")
+                    UpgradePerformanceTarget(
+                        value: configuration.frameLimit == nil ? "—" : "\(configuration.frameTarget)",
+                        title: configuration.frameLimit.map { "参考上限 \($0) 帧" } ?? "选择游戏后计算"
+                    )
                 }
+                .disabled(configuration.frameLimit == nil)
             }
+
         }
     }
 }
@@ -608,87 +660,17 @@ private struct UpgradePerformanceTarget: View {
     }
 }
 
-private struct UpgradeDisclosureRow: View {
-    let title: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Text(title)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.black)
-                .lineLimit(1)
-
-            Spacer(minLength: 8)
-
-            Image(systemName: "arrow.right")
-                .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(.black)
-        }
-        .frame(height: 58)
-        .contentShape(Rectangle())
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(upgradeFlowDivider)
-                .frame(height: 1)
-        }
-    }
-}
-
 private struct UpgradeResultStep: View {
     let configuration: UpgradePlanConfiguration
+    let loadState: UpgradePlanLoadState
     let isSaved: Bool
     let onAdjust: () -> Void
     let onSave: () -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 0) {
-                UpgradeEditorialTitle(
-                    title: configuration.goal.resultHeadline,
-                    subtitle: "先处理影响体验最大的短板，再决定后续投入"
-                )
-
-                VStack(alignment: .leading, spacing: 14) {
-                    Text("核心建议")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.white.opacity(0.56))
-
-                    HStack(alignment: .bottom) {
-                        Text(configuration.goal.priorityLabel)
-                            .font(.system(size: 28, weight: .heavy))
-                        Spacer()
-                        Text("预算 ¥\(configuration.budget)")
-                            .font(.system(size: 13, weight: .bold))
-                    }
-                    .foregroundStyle(.white)
-
-                    Text("目标：\(configuration.resolution.rawValue) · \(configuration.frameTarget.rawValue) 帧")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(Color.white.opacity(0.66))
-                }
-                .padding(20)
-                .background(.black, in: RoundedRectangle(cornerRadius: 20))
-                .padding(.top, 28)
-
-                Text("升级顺序")
-                    .font(.system(size: 21, weight: .heavy))
-                    .padding(.top, 30)
-                    .padding(.bottom, 8)
-
-                UpgradeResultRow(number: "01", title: "优先处理", detail: configuration.goal.priorityLabel)
-                UpgradeResultRow(number: "02", title: "确认兼容", detail: "电源、散热与机箱空间")
-                UpgradeResultRow(number: "03", title: "继续保留", detail: "没有明显短板的现有配件")
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("为什么这样排")
-                        .font(.system(size: 17, weight: .heavy))
-                    Text("你的目标是 \(configuration.goal.title)，系统会先解决收益最明显的部分，再检查是否需要同步更换平台或电源。")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(Color.black.opacity(0.52))
-                        .lineSpacing(4)
-                }
-                .padding(.top, 26)
-            }
+            resultContent
             .padding(.horizontal, 24)
             .padding(.bottom, 22)
             .frame(maxWidth: 520, alignment: .leading)
@@ -701,18 +683,156 @@ private struct UpgradeResultStep: View {
                     .foregroundStyle(.black)
                     .frame(height: 30)
 
-                UpgradePrimaryAction(
-                    title: isSaved ? "方案已保存" : "保存升级方案",
-                    icon: isSaved ? "checkmark" : "arrow.right",
-                    action: onSave
-                )
-                .disabled(isSaved)
+                if case .failed = loadState {
+                    UpgradePrimaryAction(title: "重新生成", action: onRetry)
+                } else {
+                    UpgradePrimaryAction(
+                        title: isSaved ? "方案已保存" : "保存升级方案",
+                        icon: isSaved ? "checkmark" : "arrow.right",
+                        action: onSave
+                    )
+                    .disabled(isSaved || !canSave)
+                }
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
             .padding(.bottom, 14)
             .background(upgradeFlowBackground)
         }
+    }
+
+    @ViewBuilder
+    private var resultContent: some View {
+        switch loadState {
+        case .idle, .loading:
+            VStack(spacing: 18) {
+                ProgressView()
+                    .tint(.black)
+                    .scaleEffect(1.2)
+                Text("正在计算目标帧率与配件兼容性…")
+                    .font(.system(size: 15, weight: .bold))
+                Text("会同时检查 CPU、显卡、主板、内存和电源")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.black.opacity(0.46))
+            }
+            .frame(maxWidth: .infinity, minHeight: 420)
+        case .failed(let message):
+            UpgradeEditorialTitle(
+                title: "这次没有生成成功。",
+                subtitle: message
+            )
+        case .loaded(let response):
+            loadedContent(response)
+        }
+    }
+
+    private func loadedContent(_ response: UpgradePlanResponseDTO) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            UpgradeEditorialTitle(
+                title: resultHeadline(response),
+                subtitle: response.summary
+            )
+
+            VStack(alignment: .leading, spacing: 14) {
+                Text(resultStatus(response))
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.white.opacity(0.56))
+
+                HStack(alignment: .bottom) {
+                    Text(response.steps.first.map { roleLabel($0.role) } ?? "暂无可执行方案")
+                        .font(.system(size: 28, weight: .heavy))
+                    Spacer()
+                    Text("¥\(response.totalEstimatedPrice)")
+                        .font(.system(size: 17, weight: .heavy, design: .rounded))
+                }
+                .foregroundStyle(.white)
+
+                if let target = response.targetFps {
+                    Text("目标：\(configuration.resolution.rawValue) · \(target) 帧")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.66))
+                }
+
+                if !response.missingFields.isEmpty {
+                    Text("需要补充：\(response.missingFields.joined(separator: "、"))")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.66))
+                }
+            }
+            .padding(20)
+            .background(.black, in: RoundedRectangle(cornerRadius: 20))
+            .padding(.top, 28)
+
+            if !response.steps.isEmpty {
+                Text("升级顺序")
+                    .font(.system(size: 21, weight: .heavy))
+                    .padding(.top, 30)
+                    .padding(.bottom, 8)
+
+                ForEach(response.steps) { step in
+                    UpgradeResultRow(
+                        number: String(format: "%02d", step.order),
+                        title: roleLabel(step.role),
+                        detail: "\(step.toName) · ¥\(step.estimatedPrice)"
+                    )
+                }
+            }
+
+            if !response.gameResults.isEmpty {
+                Text("预估游戏表现")
+                    .font(.system(size: 21, weight: .heavy))
+                    .padding(.top, 30)
+                    .padding(.bottom, 8)
+
+                ForEach(response.gameResults) { result in
+                    UpgradeResultRow(
+                        number: result.met ? "✓" : "—",
+                        title: gameName(result.game),
+                        detail: "\(result.beforeFps) → \(result.afterFps) 帧（目标 \(result.targetFps)）"
+                    )
+                }
+            }
+
+            if !response.notes.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("说明")
+                        .font(.system(size: 17, weight: .heavy))
+                    ForEach(response.notes, id: \.self) { note in
+                        Text("· \(note)")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(Color.black.opacity(0.52))
+                            .lineSpacing(4)
+                    }
+                }
+                .padding(.top, 26)
+            }
+        }
+    }
+
+    private var canSave: Bool {
+        guard case .loaded(let response) = loadState else { return false }
+        return response.status == "ready" && !response.steps.isEmpty
+    }
+
+    private func resultHeadline(_ response: UpgradePlanResponseDTO) -> String {
+        if response.status == "needs_more_info" { return "还需要，\n补齐几项配置。" }
+        if response.status == "no_plan" { return "这个预算内，\n暂无可执行方案。" }
+        if response.targetMet == false { return "预算内，\n先做到最接近。" }
+        return "这台电脑，\n按这个顺序升级。"
+    }
+
+    private func resultStatus(_ response: UpgradePlanResponseDTO) -> String {
+        if response.targetMet == true { return "预估可达成目标" }
+        if response.targetMet == false { return "预算内最接近方案" }
+        return "核心建议"
+    }
+
+    private func roleLabel(_ role: String) -> String {
+        ["cpu": "CPU", "gpu": "显卡", "motherboard": "主板", "ram": "内存", "psu": "电源"][role] ?? role
+    }
+
+    private func gameName(_ gameID: String) -> String {
+        UpgradePlanConfiguration.gameIDs.first { $0.value == gameID }?.key ?? gameID
     }
 }
 

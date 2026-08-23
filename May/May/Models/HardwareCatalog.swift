@@ -143,6 +143,7 @@ enum HardwareCatalog {
         HardwareCatalogItem(id: "rtx-5060-ti", name: "RTX 5060 Ti", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-5060", name: "RTX 5060", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-5050", name: "RTX 5050", brand: "NVIDIA", detail: "NVIDIA"),
+        HardwareCatalogItem(id: "rtx-4090", name: "RTX 4090", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-4090-d", name: "RTX 4090 D", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-4080-super", name: "RTX 4080 Super", brand: "NVIDIA", detail: "NVIDIA"),
         HardwareCatalogItem(id: "rtx-4080", name: "RTX 4080", brand: "NVIDIA", detail: "NVIDIA"),

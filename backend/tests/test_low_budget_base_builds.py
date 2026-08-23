@@ -3,8 +3,14 @@ import json
 from pathlib import Path
 
 import app.builds.low_budget_catalog as low_budget_catalog
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
+from app.builds.customization import (
+    customization_candidates,
+    deterministic_customization,
+)
 from app.builds.low_budget_catalog import (
     BUDGET_TIERS,
     CPU_PERFORMANCE,
@@ -23,17 +29,21 @@ from app.builds.low_budget_catalog import (
 )
 from app.builds.models import BuildTemplate
 from app.builds.repository import upsert_build_templates
-from app.builds.service import BuildTemplatePart
+from app.builds.service import BuildRequest, BuildTemplatePart
 from app.builds.templates import read_build_template_inputs
 from app.catalog.prices import read_approved_price_rows
 from app.catalog.rule_specs import is_cpu_gpu_pairing_allowed
 from app.catalog.repository import (
+    list_component_prices,
+    list_components,
     seed_component_prices,
     seed_hardware_components,
     update_recommended_components,
 )
 from app.catalog.seed import read_catalog_components
-from app.db import Base
+from app.core.config import Settings
+from app.db import Base, get_session
+from app.main import create_app
 
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +56,9 @@ AUDIT_PATH = DATA_DIR / "low-budget-base-audit.json"
 MARKDOWN_PATH = PROJECT_ROOT / "docs" / "3000-7000-yuan-base-builds.md"
 HIGH_TEMPLATE_PATH = DATA_DIR / "high-budget-base-build-templates.json"
 HIGH_PRICE_PATH = DATA_DIR / "high-budget-base-reference-prices.csv"
+HIGH_RECOMMENDATION_PATH = DATA_DIR / "high-budget-base-recommendation-ids.txt"
+OFFICE_PRICE_PATH = DATA_DIR / "office-base-reference-prices.csv"
+OFFICE_RECOMMENDATION_PATH = DATA_DIR / "office-base-recommendation-ids.txt"
 SWIFT_CATALOG_PATH = PROJECT_ROOT / "May" / "May" / "Models" / "HardwareCatalog.swift"
 
 EXPECTED_CONDITIONS = {
@@ -78,6 +91,82 @@ def generated_templates():
 
 def generated_report():
     return low_budget_catalog.generate_low_budget_report()
+
+
+def test_4500_plus_public_options_always_return_all_three_purchase_modes() -> None:
+    engine = create_engine(
+        "sqlite+pysqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(engine)
+    session_factory = sessionmaker(bind=engine)
+    templates = read_build_template_inputs(TEMPLATE_PATH)
+    recommendation_ids = [
+        component_id
+        for component_id in RECOMMENDATION_PATH.read_text(encoding="utf-8").splitlines()
+        if component_id
+    ]
+
+    with Session(engine) as session:
+        seed_hardware_components(
+            session,
+            [
+                *read_catalog_components(SWIFT_CATALOG_PATH),
+                *read_catalog_components(SUPPORT_PART_PATH),
+            ],
+        )
+        seed_component_prices(
+            session,
+            read_approved_price_rows(PRICE_PATH, approved_at="2026-08-22"),
+        )
+        update_recommended_components(session, recommendation_ids)
+        upsert_build_templates(session, templates)
+
+    app = create_app(Settings(_env_file=None, postgres_url=None, redis_url=None))
+
+    def override_session():
+        with session_factory() as session:
+            yield session
+
+    app.dependency_overrides[get_session] = override_session
+    response = TestClient(app).post(
+        "/v1/build/options",
+        json={
+            "budget": 4500,
+            "use_case": "游戏",
+            "game_categories": ["黑神话悟空"],
+            "direction": "aaa",
+            "ray_tracing": True,
+            "memory_size": "16GB",
+            "storage_size": "512GB",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert {option["details"]["purchase_mode"] for option in body["options"]} == {
+        "new",
+        "used",
+        "mixed",
+    }
+    assert body["unavailable_modes"] == []
+
+    low_budget_special_game = TestClient(app).post(
+        "/v1/build/options",
+        json={
+            "budget": 5100,
+            "use_case": "游戏",
+            "game_categories": ["PUBG"],
+            "memory_size": "16GB",
+            "storage_size": "512GB",
+        },
+    )
+    assert low_budget_special_game.status_code == 200
+    assert {
+        option["details"]["purchase_mode"]
+        for option in low_budget_special_game.json()["options"]
+    } == {"new", "used", "mixed"}
 
 
 def test_gpu_vendor_split_thresholds() -> None:
@@ -294,20 +383,6 @@ def test_5600x_is_not_paired_with_4070_super_or_7900_xt() -> None:
     )
 
 
-def test_new_aaa_builds_only_use_c36_when_c32_cannot_fit() -> None:
-    for template in generated_templates():
-        if template.details.direction != "aaa":
-            continue
-        ram = next(part for part in template.details.parts if part.role == "ram")
-        if ram.condition == "new" and ram.specs["type"] == "DDR5":
-            assert ram.specs["cas_latency"] in {32, 36}, template.id
-            if ram.specs["cas_latency"] == 36:
-                assert (
-                    template.estimated_total + 400
-                    > template.details.target_budget + 300
-                ), template.id
-
-
 def test_aaa_builds_only_step_up_motherboard_to_reach_budget_floor() -> None:
     _, motherboards, _, _ = low_budget_catalog._load_catalog()
 
@@ -512,7 +587,7 @@ def test_7000_mixed_nvidia_aaa_build_prioritizes_gpu() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r5-9600x"
-    assert parts["gpu"].component_id == "rtx-4070"
+    assert parts["gpu"].component_id == "rtx-5060-ti"
     assert parts["gpu"].condition == "used"
     assert parts["motherboard"].reference_price <= 7_000 * 0.15
     assert 6_900 <= template.estimated_total <= 7_500
@@ -530,7 +605,7 @@ def test_5500_mixed_nvidia_aaa_build_reaches_5060_class() -> None:
     assert 5_400 <= template.estimated_total <= 6_000
 
 
-def test_6000_new_fps_build_respects_updated_gpu_price() -> None:
+def test_6000_new_fps_uses_the_best_option_after_rtx_5060_price_update() -> None:
     template = next(
         template
         for template in generated_templates()
@@ -538,8 +613,9 @@ def test_6000_new_fps_build_respects_updated_gpu_price() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r5-9600x"
-    assert parts["gpu"].component_id == "rx-9060-xt-8gb"
+    assert parts["cpu"].component_id == "i5-12600kf"
+    assert parts["gpu"].component_id == "rx-7700-xt"
+    assert parts["ram"].specs["type"] == "DDR4"
     assert 5_900 <= template.estimated_total <= 6_500
 
 
@@ -591,15 +667,20 @@ def test_6500_mixed_fps_build_keeps_a_table_valid_cpu_priority() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r5-9600x"
-    assert parts["gpu"].component_id == "rtx-4070"
+    assert parts["cpu"].component_id == "r7-7800x3d"
+    assert parts["gpu"].component_id == "rx-7700-xt"
     assert not parts["gpu"].component_id.startswith(("rtx-30", "rx-6"))
     assert 6_400 <= template.estimated_total <= 7_000
 
 
-def test_4070_ti_is_not_in_the_price_whitelist() -> None:
+def test_4070_ti_remains_excluded_from_the_generated_gpu_pool() -> None:
     _, _, gpus, _ = low_budget_catalog._load_catalog()
     assert "rtx-4070-ti" not in {gpu.component_id for gpu in gpus}
+
+
+def test_4070_ti_super_is_available_to_the_generated_gpu_pool() -> None:
+    _, _, gpus, _ = low_budget_catalog._load_catalog()
+    assert "rtx-4070-ti-super" in {gpu.component_id for gpu in gpus}
 
 
 def test_support_components_use_current_user_models_and_prices() -> None:
@@ -610,6 +691,10 @@ def test_support_components_use_current_user_models_and_prices() -> None:
     assert boards["asus-prime-b650m-k"].used_price == 450
     assert boards["asus-b550m-plus"].used_price == 450
     assert boards["asus-b550m-plus"].new_price == 750
+    assert support_parts["base-ddr4-32gb-3200"].used_price == 550
+    assert support_parts["base-ddr4-32gb-3200"].new_price == 750
+    assert support_parts["base-ddr5-16gb-6000-c28"].used_price == 1350
+    assert support_parts["base-ddr5-16gb-6000-c28"].new_price == 1650
     assert support_parts["base-ssd-512gb-tlc"].name == "宏碁掠夺者 GM7 512GB"
     assert support_parts["base-ssd-512gb-tlc"].used_price == 500
     assert support_parts["base-ssd-512gb-tlc"].new_price == 699
@@ -633,6 +718,15 @@ def test_support_components_use_current_user_models_and_prices() -> None:
     assert support_parts["base-psu-650w-gold"].name == "安耐美 GN650 V3 650W"
     assert support_parts["base-psu-650w-gold"].used_price == 200
     assert support_parts["base-psu-650w-gold"].new_price == 299
+
+
+def test_every_low_budget_am5_build_uses_ddr5_6000_c28() -> None:
+    for template in generated_templates():
+        parts = {part.role: part for part in template.details.parts}
+        if parts["cpu"].specs["socket"] != "AM5":
+            continue
+        assert parts["ram"].specs["speed_mhz"] == 6_000, template.id
+        assert parts["ram"].specs["cas_latency"] == 28, template.id
 
 
 def test_cpu_whitelist_replaces_13600kf_with_12600kf() -> None:
@@ -663,10 +757,10 @@ def test_5000_used_aaa_uses_the_strongest_table_valid_option() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r5-5600x"
-    assert parts["gpu"].component_id == "rtx-4070"
-    assert parts["gpu"].reference_price == 3000
+    assert parts["gpu"].component_id == "rtx-5060-ti"
+    assert parts["gpu"].reference_price == 3099
     assert parts["motherboard"].component_id == "asus-b550m-plus"
-    assert template.estimated_total == 5320
+    assert template.estimated_total == 5419
 
 
 def test_5000_fps_new_uses_reviewed_rx_7650_gre_option() -> None:
@@ -809,7 +903,7 @@ def test_5000_aaa_reviewed_builds_remain_table_valid() -> None:
         part.role: part for part in templates["base-5000-aaa-mixed-amd"].details.parts
     }
 
-    assert used_parts["gpu"].component_id == "rtx-4070"
+    assert used_parts["gpu"].component_id == "rtx-5060-ti"
     assert used_parts["motherboard"].component_id == "asus-b550m-plus"
     assert mixed_parts["cpu"].component_id == "i5-12600kf"
     assert mixed_parts["gpu"].component_id == "rx-7700-xt"
@@ -821,7 +915,7 @@ def test_rtx_4060_and_4060_ti_are_used_only_after_discontinuation() -> None:
     _, _, gpus, _ = low_budget_catalog._load_catalog()
     by_id = {gpu.component_id: gpu for gpu in gpus}
 
-    assert by_id["rtx-4060"].used_price == 1_900
+    assert by_id["rtx-4060"].used_price == 1_999
     assert by_id["rtx-4060"].new_price is None
     assert not low_budget_catalog._condition_is_allowed(by_id["rtx-4060"], "new")
     assert by_id["rtx-4060-ti"].used_price == 2_300
@@ -871,7 +965,7 @@ def test_reference_export_preserves_source_condition_prices(tmp_path) -> None:
         for template in report.templates
         for part in template.details.parts
     }
-    referenced_ids.update(low_budget_catalog.LOW_BUDGET_STORAGE_IDS)
+    referenced_ids.update(low_budget_catalog.CUSTOMIZATION_SUPPORT_IDS)
     source_by_id = {
         part.component_id: part
         for part in report.source_parts
@@ -887,6 +981,12 @@ def test_reference_export_preserves_source_condition_prices(tmp_path) -> None:
         assert row["reference_price"] in {
             str(value) for value in (used_price, new_price) if value
         }
+
+    assert rows["base-ddr4-32gb-3200"]["normal_price_min"] == "550"
+    assert rows["base-ddr4-32gb-3200"]["normal_price_max"] == "750"
+    assert "base-ddr4-32gb-3200" in paths.recommendation_ids.read_text(
+        encoding="utf-8"
+    ).splitlines()
 
 
 def test_unreferenced_pending_psu_condition_is_excluded_from_low_budget_artifacts(
@@ -1075,6 +1175,125 @@ def test_high_then_low_price_import_keeps_generated_templates_valid() -> None:
     assert high_templates
     assert low_templates
     assert imported == stored == len(high_templates) + len(low_templates)
+
+
+def test_6000_yuan_32gb_1tb_request_uses_feasible_lower_reviewed_bases() -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    components = [
+        *read_catalog_components(SWIFT_CATALOG_PATH),
+        *read_catalog_components(SUPPORT_PART_PATH),
+    ]
+    prices = [
+        *read_approved_price_rows(HIGH_PRICE_PATH, approved_at="2026-08-21"),
+        *read_approved_price_rows(PRICE_PATH, approved_at="2026-08-21"),
+        *read_approved_price_rows(OFFICE_PRICE_PATH, approved_at="2026-08-21"),
+    ]
+    templates = [
+        *read_build_template_inputs(TEMPLATE_PATH),
+        *read_build_template_inputs(HIGH_TEMPLATE_PATH),
+    ]
+    recommendation_ids = sorted(
+        {
+            component_id
+            for path in (
+                RECOMMENDATION_PATH,
+                HIGH_RECOMMENDATION_PATH,
+                OFFICE_RECOMMENDATION_PATH,
+            )
+            for component_id in path.read_text(encoding="utf-8").splitlines()
+            if component_id
+        }
+    )
+
+    with Session(engine) as session:
+        seed_hardware_components(session, components)
+        seed_component_prices(session, prices)
+        update_recommended_components(session, recommendation_ids)
+        upsert_build_templates(session, templates)
+        stored_templates = list(session.scalars(select(BuildTemplate)))
+        components_by_id = {item.id: item for item in list_components(session)}
+        prices_by_id = {
+            item.component_id: item for item in list_component_prices(session)
+        }
+
+        expected_modes = (("used", "nvidia"), ("new", "amd"), ("mixed", "amd"))
+        for purchase_mode, gpu_vendor in expected_modes:
+            request = BuildRequest(
+                budget=6000,
+                use_case="游戏",
+                direction="balanced",
+                memory_size="32GB",
+                storage_size="1TB",
+                gpu_preference=gpu_vendor,
+            )
+            candidates = customization_candidates(
+                request,
+                stored_templates,
+                components_by_id,
+                prices_by_id,
+                purchase_mode=purchase_mode,
+                gpu_vendor=gpu_vendor,
+            )
+            option = deterministic_customization(
+                request,
+                candidates,
+                components_by_id,
+                prices_by_id,
+            )
+
+            assert option is not None
+            assert 5800 <= option.estimated_total <= 6300
+            parts = {part.role: part for part in option.details.parts}
+            assert parts["ram"].specs["capacity_gb"] == 32
+            if parts["motherboard"].specs["socket"] == "AM5":
+                assert parts["ram"].specs["speed_mhz"] == 6000
+                assert parts["ram"].specs["cas_latency"] == 28
+            assert parts["storage"].specs["capacity_gb"] == 1024
+            if purchase_mode == "mixed" and gpu_vendor == "amd":
+                assert parts["psu"].component_id == "base-psu-750w-gold"
+
+        direction_options = {}
+        for direction in ("fps", "aaa"):
+            request = BuildRequest(
+                budget=7000,
+                use_case="游戏",
+                direction=direction,
+                memory_size="16GB",
+                storage_size="1TB",
+                needs_wireless_network=True,
+                preferences=["FPS" if direction == "fps" else "3A", "全新"],
+            )
+            candidates = customization_candidates(
+                request,
+                stored_templates,
+                components_by_id,
+                prices_by_id,
+                purchase_mode="new",
+                gpu_vendor=None,
+            )
+            option = deterministic_customization(
+                request,
+                candidates,
+                components_by_id,
+                prices_by_id,
+            )
+
+            assert option is not None
+            direction_options[direction] = {
+                part.role: part for part in option.details.parts
+            }
+
+        assert direction_options["fps"]["cpu"].component_id == "i5-12600kf"
+        assert direction_options["fps"]["gpu"].component_id == "rtx-5060"
+        assert direction_options["aaa"]["cpu"].component_id not in {
+            "r5-5600",
+            "r5-5600x",
+        }
+        assert (
+            direction_options["aaa"]["gpu"].specs["perf_index"]
+            > direction_options["fps"]["gpu"].specs["perf_index"]
+        )
 
 
 def test_writes_deterministic_review_and_import_artifacts(tmp_path) -> None:

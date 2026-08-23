@@ -12,58 +12,40 @@ struct AestheticStylesView: View {
 
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    HStack(alignment: .top) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("装机风格")
-                                .font(.system(size: 29, weight: .heavy))
-                                .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("装机风格")
+                            .font(.system(size: 29, weight: .heavy))
+                            .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
 
-                            Text("多种高性能整机设计，找到属于你的风格")
-                                .font(.system(size: 11, weight: .regular))
-                                .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
-                        }
+                        Text("多种高性能整机设计，找到属于你的风格")
+                            .font(.system(size: 11, weight: .regular))
+                            .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
 
-                        Spacer()
-
-                        Button {
-                            showsExplorer = true
-                        } label: {
-                            HStack(spacing: 7) {
-                                Image(systemName: "cube.transparent")
-                                    .font(.system(size: 16, weight: .semibold))
-
-                                Text("沉浸全景")
-                                    .font(.system(size: 13, weight: .bold))
-                            }
-                            .foregroundStyle(AppTheme.primaryText)
-                            .padding(.horizontal, 14)
-                            .frame(height: 42)
-                            .background {
-                                ZStack {
-                                    Capsule()
-                                        .fill(AppTheme.border.opacity(0.68))
-                                        .offset(y: 3)
-
-                                    Capsule()
-                                        .fill(Color.white)
+                        HStack(spacing: 18) {
+                            Text("列表")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(AppTheme.primaryText)
+                                .frame(minWidth: 44, minHeight: 36, alignment: .leading)
+                                .overlay(alignment: .bottomLeading) {
+                                    Rectangle()
+                                        .fill(AppTheme.primaryText)
+                                        .frame(width: 24, height: 1.5)
                                 }
+                                .accessibilityLabel("列表浏览，已选择")
+                                .accessibilityAddTraits(.isSelected)
+
+                            Button {
+                                showsExplorer = true
+                            } label: {
+                                Text("全景")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
+                                    .frame(minWidth: 44, minHeight: 36, alignment: .leading)
                             }
-                            .overlay {
-                                Capsule()
-                                    .stroke(AppTheme.border.opacity(0.70), lineWidth: 1)
-                            }
-                            .overlay(alignment: .top) {
-                                Capsule()
-                                    .fill(Color.white.opacity(0.96))
-                                    .frame(height: 1)
-                                    .padding(.horizontal, 13)
-                                    .padding(.top, 1)
-                            }
-                            .shadow(color: AppTheme.primaryText.opacity(0.10), radius: 9, y: 5)
-                            .shadow(color: Color.white.opacity(0.90), radius: 2, y: -2)
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("切换到全景浏览")
                         }
-                        .buttonStyle(AestheticMicro3DPressButtonStyle())
-                        .accessibilityLabel("进入沉浸风格浏览")
+                        .padding(.top, 6)
                     }
                     .padding(.top, 12)
 
@@ -115,16 +97,6 @@ struct AestheticStylesView: View {
         guard let styleID = pendingStyleID else { return }
         pendingStyleID = nil
         onOpenStyle(styleID)
-    }
-}
-
-private struct AestheticMicro3DPressButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.985 : 1)
-            .offset(y: configuration.isPressed ? 1.5 : 0)
-            .opacity(configuration.isPressed ? 0.88 : 1)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 

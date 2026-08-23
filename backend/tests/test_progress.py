@@ -11,10 +11,13 @@ def test_progress_file_tracks_the_backend_roadmap() -> None:
     progress = load_progress(Path("progress.json"))
 
     assert progress.project == "AI 装机助手后端"
-    assert progress.estimated_completion == "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间"
+    assert progress.estimated_completion == (
+        "AI装机核心生成流程已完成并部署；剩余覆盖率和物理兼容精度依赖补充审核价格、"
+        "型号梯度与尺寸数据"
+    )
     assert len(progress.phases) == 6
-    assert progress.total_items == 97
-    assert progress.completed_items == 84
+    assert progress.total_items == 101
+    assert progress.completed_items == 88
     assert progress.completion_percentage == 87
     assert [item.title for item in progress.user_action_items] == [
         "硬件尺寸字段人工补充",
@@ -45,9 +48,11 @@ def test_progress_separates_local_catalog_coverage_from_production_data() -> Non
     production_catalog = items["生产推荐池与价格/模板数据发布"]
     build_options = items["AI装机三种采购方案接口与前端联调"]
     gpu_budget_optimization = items["显卡厂商与预算利用率优化"]
+    deterministic_customization = items["AI装机硬需求确定性下探"]
 
     assert local_catalog.status == "completed"
-    assert "320套" in local_catalog.description
+    assert "415套" in local_catalog.description
+    assert "487套" in local_catalog.description
     assert "每1000元" in local_catalog.description
     assert production_catalog.status == "completed"
     assert "275套" in production_catalog.description
@@ -55,7 +60,11 @@ def test_progress_separates_local_catalog_coverage_from_production_data() -> Non
     assert build_options.status == "completed"
     assert "/v1/build/options" in build_options.description
     assert gpu_budget_optimization.status == "completed"
-    assert "最多超800元" in gpu_budget_optimization.description
+    assert "上限为加800元" in gpu_budget_optimization.description
+    assert "低于预算200元以上的配置不返回" in gpu_budget_optimization.description
+    assert "缺一项则整单失败" in gpu_budget_optimization.description
+    assert deterministic_customization.status == "completed"
+    assert "默认最多超300元" in deterministic_customization.description
 
 
 def test_postgres_foundation_is_completed_before_seed_import_starts() -> None:
@@ -83,7 +92,7 @@ def test_progress_dashboard_renders_summary_and_phases() -> None:
     assert "AI 装机助手后端" in response.text
     assert "87%" in response.text
     assert "预计完成时间" in response.text
-    assert "后端精进项：约 1-2 天；不包含你提供数据、密钥和服务器策略的时间" in response.text
+    assert "AI装机核心生成流程已完成并部署" in response.text
     assert "需要你完成" in response.text
     assert "下面这些不是后端代码缺口" in response.text
     assert "硬件尺寸字段人工补充" in response.text

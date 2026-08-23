@@ -28,7 +28,15 @@ def make_client() -> TestClient:
                     name="i5-14600K",
                     brand="Intel",
                     detail_raw="14代 Raptor Lake Refresh · LGA1700",
-                    specs={"socket": "LGA1700"},
+                    specs={"socket": "LGA1700", "tdp": 120},
+                ),
+                CatalogComponent(
+                    id="rtx-5070",
+                    category="gpu",
+                    name="RTX 5070",
+                    brand="NVIDIA",
+                    detail_raw="250W",
+                    specs={"tdp": 250},
                 ),
                 CatalogComponent(
                     id="b760m",
@@ -134,6 +142,18 @@ def test_compat_check_rejects_oversized_selection() -> None:
     assert response.status_code == 422
 
 
+def test_compat_check_returns_recommended_psu_watt_for_partial_diy_selection() -> None:
+    client = make_client()
+
+    response = client.post(
+        "/v1/compat/check",
+        json={"components": {"cpu": "i5-14600k", "gpu": "rtx-5070"}},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["recommended_psu_watt"] == 750
+
+
 def test_compat_rules_returns_stable_rule_catalog() -> None:
     client = make_client()
 
@@ -146,4 +166,4 @@ def test_compat_rules_returns_stable_rule_catalog() -> None:
     assert "motherboard_ram_type" in codes
     assert "psu_headroom" in codes
     assert "cpu_gpu_balance" in codes
-    assert body["version"] == "2026-06-16"
+    assert body["version"] == "2026-08-20"

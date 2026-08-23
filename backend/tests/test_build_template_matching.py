@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import pytest
 from pydantic import ValidationError
 
@@ -12,14 +14,30 @@ from app.builds.service import BuildRequest, match_build_template
         (["瓦罗兰特"], "fps"),
         (["CS2"], "fps"),
         (["PUBG"], "fps"),
-        (["瓦罗兰特", "CS2", "PUBG"], "fps"),
+        (["永劫无间"], "fps"),
+        (["瓦罗兰特", "CS2", "PUBG", "永劫无间"], "fps"),
         (["什么都玩"], "balanced"),
         (["云顶之弈"], "balanced"),
         (["LOL"], "balanced"),
         (["COD"], "balanced"),
         (["城市天际线"], "balanced"),
         (["我的世界"], "balanced"),
-        (["云顶之弈", "LOL", "COD", "城市天际线", "我的世界"], "balanced"),
+        (["暗区突围"], "balanced"),
+        (["NBA2K"], "balanced"),
+        (["穿越火线"], "balanced"),
+        (
+            [
+                "云顶之弈",
+                "LOL",
+                "COD",
+                "城市天际线",
+                "我的世界",
+                "暗区突围",
+                "NBA2K",
+                "穿越火线",
+            ],
+            "balanced",
+        ),
         (["三角洲行动"], "aaa"),
         (["赛博朋克2077"], "aaa"),
         (["荒野大镖客2"], "aaa"),
@@ -103,6 +121,145 @@ def test_build_option_response_accepts_ready_template_payload() -> None:
         option.details.model_dump()
     )
     assert "compatibility" not in option.model_dump()
+
+
+def new_nvidia_details(gpu_id: str, gpu_name: str, gpu_price: int):
+    payload = ready_option_payload()["details"]
+    gpu = next(part for part in payload["parts"] if part["role"] == "gpu")
+    gpu.update(
+        {
+            "component_id": gpu_id,
+            "name": gpu_name,
+            "reference_price": gpu_price,
+        }
+    )
+    return build_service.BuildTemplateDetails.model_validate(payload)
+
+
+def maintained_used_40_series_prices():
+    return [
+        SimpleNamespace(
+            component_id="rtx-4070",
+            name="RTX 4070",
+            used_price=3299,
+        ),
+        SimpleNamespace(
+            component_id="rtx-4070-super",
+            name="RTX 4070 SUPER",
+            used_price=3700,
+        ),
+        SimpleNamespace(
+            component_id="rtx-4070-ti",
+            name="RTX 4070 Ti",
+            used_price=4200,
+        ),
+        SimpleNamespace(
+            component_id="rtx-4070-ti-super",
+            name="RTX 4070 Ti SUPER",
+            used_price=4799,
+        ),
+        SimpleNamespace(
+            component_id="rtx-4080",
+            name="RTX 4080",
+            used_price=6900,
+        ),
+        SimpleNamespace(
+            component_id="rtx-4080-super",
+            name="RTX 4080 SUPER",
+            used_price=7300,
+        ),
+    ]
+
+
+@pytest.mark.parametrize(
+    (
+        "gpu_id",
+        "gpu_name",
+        "gpu_price",
+        "expected_id",
+        "expected_price",
+        "expected_gain_percent",
+    ),
+    [
+        ("rtx-5060", "RTX 5060", 3299, "rtx-4070", 3299, 30),
+        ("rtx-5060-ti", "RTX 5060 Ti", 3599, "rtx-4070-super", 3700, 33),
+        ("rtx-5070", "RTX 5070", 6999, "rtx-4080", 6900, 25),
+        ("rtx-5070-ti", "RTX 5070 Ti", 9799, "rtx-4080-super", 7300, 3),
+    ],
+)
+def test_recommends_stronger_used_40_series_gpu_for_all_new_nvidia_build(
+    gpu_id: str,
+    gpu_name: str,
+    gpu_price: int,
+    expected_id: str,
+    expected_price: int,
+    expected_gain_percent: int,
+) -> None:
+    alternative = build_service.recommend_used_40_series_gpu(
+        new_nvidia_details(gpu_id, gpu_name, gpu_price),
+        maintained_used_40_series_prices(),
+    )
+
+    assert alternative is not None
+    assert alternative.component_id == expected_id
+    assert alternative.reference_price == expected_price
+    assert alternative.price_difference == expected_price - gpu_price
+    assert alternative.performance_comparison == "higher"
+    assert alternative.gaming_performance_gain_percent == expected_gain_percent
+
+
+def test_does_not_recommend_a_slower_used_40_series_gpu() -> None:
+    alternative = build_service.recommend_used_40_series_gpu(
+        new_nvidia_details("rtx-5080", "RTX 5080", 13499),
+        maintained_used_40_series_prices(),
+    )
+
+    assert alternative is None
+
+
+def test_does_not_recommend_blocked_rtx_4070_ti() -> None:
+    alternative = build_service.recommend_used_40_series_gpu(
+        new_nvidia_details("rtx-5070", "RTX 5070", 6999),
+        [
+            SimpleNamespace(
+                component_id="rtx-4070-ti",
+                name="RTX 4070 Ti",
+                used_price=4200,
+            )
+        ],
+    )
+
+    assert alternative is None
+
+
+def test_can_recommend_used_rtx_4070_ti_super() -> None:
+    alternative = build_service.recommend_used_40_series_gpu(
+        new_nvidia_details("rtx-5070", "RTX 5070", 6999),
+        [
+            SimpleNamespace(
+                component_id="rtx-4070-ti-super",
+                name="RTX 4070 Ti SUPER",
+                used_price=4799,
+            )
+        ],
+    )
+
+    assert alternative is not None
+    assert alternative.component_id == "rtx-4070-ti-super"
+    assert alternative.reference_price == 4799
+
+
+def test_used_40_series_alternative_only_applies_to_all_new_nvidia_builds() -> None:
+    details = new_nvidia_details("rtx-5060", "RTX 5060", 3000)
+
+    assert build_service.recommend_used_40_series_gpu(
+        details.model_copy(update={"purchase_mode": "used"}),
+        maintained_used_40_series_prices(),
+    ) is None
+    assert build_service.recommend_used_40_series_gpu(
+        details.model_copy(update={"gpu_vendor": "amd"}),
+        maintained_used_40_series_prices(),
+    ) is None
 
 
 def test_build_option_response_requires_eight_unique_part_roles() -> None:

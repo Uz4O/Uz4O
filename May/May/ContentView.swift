@@ -20,8 +20,7 @@ struct ContentView: View {
     @State private var presentedFullScreen: FullScreenRoute?
     @State private var diyBuildOption: BuildOptionDTO?
     @State private var showsSplash = true
-    @State private var splashConnectsToHome: Bool
-    @State private var homeWordmarkFrame: CGRect?
+    @State private var isSplashDestinationFocused = false
     @State private var isHomeWordmarkVisible: Bool
     @State private var isHomeContentVisible: Bool
     @State private var isMainTabBarVisible: Bool
@@ -30,7 +29,6 @@ struct ContentView: View {
         let session = AppSession()
         _session = StateObject(wrappedValue: session)
         _appPhase = State(initialValue: session.isAuthenticated ? .main : .login)
-        _splashConnectsToHome = State(initialValue: session.isAuthenticated)
         _isHomeWordmarkVisible = State(initialValue: !session.isAuthenticated)
         _isHomeContentVisible = State(initialValue: !session.isAuthenticated)
         _isMainTabBarVisible = State(initialValue: !session.isAuthenticated)
@@ -47,48 +45,51 @@ struct ContentView: View {
             AppTheme.background
                 .ignoresSafeArea()
 
-            if !hasCompletedLaunchIntro, appPhase == .login {
-                LaunchIntroView {
-                    hasCompletedLaunchIntro = true
-                }
-            } else {
-                switch appPhase {
-                case .login:
-                    LoginView(session: session, onLogin: enterMainApp)
+            Group {
+                if !hasCompletedLaunchIntro, appPhase == .login {
+                    LaunchIntroView {
+                        hasCompletedLaunchIntro = true
+                    }
+                } else {
+                    switch appPhase {
+                    case .login:
+                        LoginView(session: session, onLogin: enterMainApp)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .opacity,
+                                    removal: .scale(scale: 1.035).combined(with: .opacity)
+                                )
+                            )
+                            .zIndex(1)
+                    case .main:
+                        MainTabView(
+                            session: session,
+                            onboardingProfile: $onboardingProfile,
+                            selectedTab: $selectedTab,
+                            selectedConfigSection: $selectedConfigSection,
+                            diyBuildOption: $diyBuildOption,
+                            isHomeWordmarkVisible: isHomeWordmarkVisible,
+                            isHomeContentVisible: isHomeContentVisible,
+                            isTabBarVisible: isMainTabBarVisible,
+                            onPresentFullScreen: { presentedFullScreen = $0 },
+                            onAccountDeleted: resetAfterAccountDeletion
+                        )
                         .transition(
                             .asymmetric(
-                                insertion: .opacity,
-                                removal: .scale(scale: 1.035).combined(with: .opacity)
+                                insertion: .scale(scale: 0.975).combined(with: .opacity),
+                                removal: .opacity
                             )
                         )
-                        .zIndex(1)
-                case .main:
-                    MainTabView(
-                        session: session,
-                        onboardingProfile: $onboardingProfile,
-                        selectedTab: $selectedTab,
-                        selectedConfigSection: $selectedConfigSection,
-                        diyBuildOption: $diyBuildOption,
-                        isHomeWordmarkVisible: isHomeWordmarkVisible,
-                        isHomeContentVisible: isHomeContentVisible,
-                        isTabBarVisible: isMainTabBarVisible,
-                        onHomeWordmarkFrameChange: { homeWordmarkFrame = $0 },
-                        onPresentFullScreen: { presentedFullScreen = $0 },
-                        onAccountDeleted: resetAfterAccountDeletion
-                    )
-                    .transition(
-                        .asymmetric(
-                            insertion: .scale(scale: 0.975).combined(with: .opacity),
-                            removal: .opacity
-                        )
-                    )
+                    }
                 }
             }
+            .scaleEffect(isSplashDestinationFocused ? 1 : 0.985)
+            .blur(radius: isSplashDestinationFocused || reduceMotion ? 0 : 7)
+            .opacity(isSplashDestinationFocused ? 1 : 0)
 
             if showsSplash {
                 AppSplashView(
-                    targetWordmarkFrame: splashConnectsToHome ? homeWordmarkFrame : nil,
-                    connectsToHome: splashConnectsToHome,
+                    onReveal: prepareSplashDestination,
                     onFinish: finishSplash
                 )
                 .zIndex(10)
@@ -119,30 +120,26 @@ struct ContentView: View {
         }
     }
 
-    private func finishSplash() {
-        if reduceMotion || !splashConnectsToHome {
-            showsSplash = false
-            isHomeWordmarkVisible = true
-            isHomeContentVisible = true
-            isMainTabBarVisible = true
-            return
-        }
-
+    private func prepareSplashDestination() {
         var transaction = Transaction(animation: nil)
         transaction.disablesAnimations = true
         withTransaction(transaction) {
-            showsSplash = false
             isHomeWordmarkVisible = true
+            isHomeContentVisible = true
+            isMainTabBarVisible = true
         }
 
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.08))
-            isHomeContentVisible = true
-            try? await Task.sleep(for: .seconds(0.82))
-            withAnimation(.easeOut(duration: 0.28)) {
-                isMainTabBarVisible = true
+        if reduceMotion {
+            isSplashDestinationFocused = true
+        } else {
+            withAnimation(.timingCurve(0.22, 0.72, 0.18, 1, duration: 0.68)) {
+                isSplashDestinationFocused = true
             }
         }
+    }
+
+    private func finishSplash() {
+        showsSplash = false
     }
 
     @ViewBuilder
@@ -239,7 +236,6 @@ private struct MainTabView: View {
     let isHomeWordmarkVisible: Bool
     let isHomeContentVisible: Bool
     let isTabBarVisible: Bool
-    let onHomeWordmarkFrameChange: (CGRect) -> Void
     let onPresentFullScreen: (FullScreenRoute) -> Void
     let onAccountDeleted: () -> Void
 
@@ -257,8 +253,7 @@ private struct MainTabView: View {
                         onPresentFullScreen(.aestheticOverview(styleID: styleID))
                     },
                     isWordmarkVisible: isHomeWordmarkVisible,
-                    isContentVisible: isHomeContentVisible,
-                    onWordmarkFrameChange: onHomeWordmarkFrameChange
+                    isContentVisible: isHomeContentVisible
                 )
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: MainRoute.self) { route in
@@ -398,22 +393,31 @@ private struct AIBuildFlowView: View {
 
     @State private var response: BuildOptionsResponseDTO?
     @State private var selectedOption: BuildOptionDTO?
+    @State private var selectedPerformanceGames: [String] = []
+    @State private var prefetchedPerformanceStates: [String: BuildPerformanceLoadState] = [:]
 
     var body: some View {
         ZStack {
             AIBuildView(
                 onBack: onClose,
-                onComplete: { response in
+                onComplete: { response, games in
                     let automaticSelection = shouldSkipOptionSelection(for: response)
                         ? response.options.first
                         : nil
                     withAnimation(resultAnimation) {
                         self.response = response
+                        selectedPerformanceGames = games
                         selectedOption = automaticSelection
                     }
                     if let automaticSelection {
                         confirmSelection(automaticSelection)
                     }
+                },
+                prepareResults: { response, games in
+                    prefetchedPerformanceStates = await preloadPerformance(
+                        for: response,
+                        games: games
+                    )
                 }
             )
             .allowsHitTesting(response == nil)
@@ -441,7 +445,10 @@ private struct AIBuildFlowView: View {
 
             if let selectedOption {
                 BuildResultView(
-                    plan: selectedOption.buildPlan,
+                    plan: selectedOption.makeBuildPlan(
+                        performanceGameNames: selectedPerformanceGames
+                    ),
+                    initialPerformanceState: prefetchedPerformanceStates[selectedOption.id],
                     onBack: {
                         withAnimation(resultAnimation) {
                             self.selectedOption = nil
@@ -477,6 +484,35 @@ private struct AIBuildFlowView: View {
         guard let selectionID = option.selectionId else { return }
         Task {
             try? await AppAPIClient().selectBuildOption(selectionID: selectionID)
+        }
+    }
+
+    private func preloadPerformance(
+        for response: BuildOptionsResponseDTO,
+        games: [String]
+    ) async -> [String: BuildPerformanceLoadState] {
+        let requests = response.options.map { option in
+            (
+                option.id,
+                option.makeBuildPlan(performanceGameNames: games).performanceContext
+            )
+        }
+
+        return await withTaskGroup(
+            of: (String, BuildPerformanceLoadState).self,
+            returning: [String: BuildPerformanceLoadState].self
+        ) { group in
+            for (optionID, context) in requests {
+                group.addTask {
+                    (optionID, await loadBuildPerformance(context: context))
+                }
+            }
+
+            var states: [String: BuildPerformanceLoadState] = [:]
+            for await (optionID, state) in group {
+                states[optionID] = state
+            }
+            return states
         }
     }
 

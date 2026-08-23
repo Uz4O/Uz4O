@@ -9,7 +9,6 @@ struct HomeView: View {
     let onOpenAestheticStyle: (String) -> Void
     let isWordmarkVisible: Bool
     let isContentVisible: Bool
-    let onWordmarkFrameChange: (CGRect) -> Void
 
     @State private var selectedFeatureID = HomeDashboardFeature.aiBuild.id
     private var features: [HomeDashboardFeature] {
@@ -41,7 +40,7 @@ struct HomeView: View {
                 buttonTitle: "开始排雷",
                 heroImage: "HomeHeroConfigReviewBoard",
                 icon: "checkmark.shield",
-                bullets: ["识别搭配风险", "检查兼容问题", "提示预算浪费"],
+                bullets: ["识别搭配风险", "检查兼容问题", "评估性能等级"],
                 action: onOpenConfigReview
             ),
             HomeDashboardFeature(
@@ -72,7 +71,14 @@ struct HomeView: View {
                         onSwipeFeature: selectFeature
                     )
                     .padding(.top, 18)
-                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.10))
+                    .modifier(
+                        HomeDepthDropReveal(
+                            isVisible: isContentVisible,
+                            delay: 0.08,
+                            horizontalOffset: -10,
+                            roll: -1.6
+                        )
+                    )
 
                     HomeFeatureSelector(
                         features: features,
@@ -84,7 +90,14 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 24)
-                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.24))
+                    .modifier(
+                        HomeDepthDropReveal(
+                            isVisible: isContentVisible,
+                            delay: 0.26,
+                            horizontalOffset: 8,
+                            roll: 1.2
+                        )
+                    )
 
                     HomeBuildStyleSection(
                         styles: AestheticBuildStyle.featured,
@@ -93,17 +106,20 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 34)
-                    .modifier(HomeDropReveal(isVisible: isContentVisible, delay: 0.38))
+                    .modifier(
+                        HomeDepthDropReveal(
+                            isVisible: isContentVisible,
+                            delay: 0.44,
+                            horizontalOffset: -6,
+                            roll: -0.8
+                        )
+                    )
                 }
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.bottom, 112)
                 .frame(maxWidth: .infinity)
             }
             .background(HomeBackgroundColor.ignoresSafeArea())
-        }
-        .onPreferenceChange(HomeWordmarkFramePreferenceKey.self) { frame in
-            guard frame != .zero else { return }
-            onWordmarkFrameChange(frame)
         }
     }
 
@@ -129,38 +145,39 @@ struct HomeView: View {
             .font(.system(size: 28, weight: .heavy))
             .foregroundStyle(.black)
             .opacity(isWordmarkVisible ? 1 : 0)
-            .background {
-                GeometryReader { proxy in
-                    Color.clear.preference(
-                        key: HomeWordmarkFramePreferenceKey.self,
-                        value: proxy.frame(in: .global)
-                    )
-                }
-            }
     }
 }
 
-private struct HomeWordmarkFramePreferenceKey: PreferenceKey {
-    static var defaultValue: CGRect = .zero
-
-    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
-        let next = nextValue()
-        if next != .zero { value = next }
-    }
-}
-
-private struct HomeDropReveal: ViewModifier {
+private struct HomeDepthDropReveal: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let isVisible: Bool
     let delay: Double
+    let horizontalOffset: CGFloat
+    let roll: Double
 
     func body(content: Content) -> some View {
         content
             .opacity(isVisible ? 1 : 0)
-            .blur(radius: isVisible || reduceMotion ? 0 : 5)
-            .offset(y: isVisible || reduceMotion ? 0 : -30)
-            .scaleEffect(isVisible || reduceMotion ? 1 : 0.985, anchor: .top)
+            .blur(radius: isVisible || reduceMotion ? 0 : 8)
+            .scaleEffect(isVisible || reduceMotion ? 1 : 1.08, anchor: .top)
+            .rotation3DEffect(
+                isVisible || reduceMotion ? .zero : .degrees(-17),
+                axis: (x: 1, y: 0, z: 0),
+                anchor: .top,
+                perspective: 0.72
+            )
+            .rotationEffect(isVisible || reduceMotion ? .zero : .degrees(roll))
+            .offset(
+                x: isVisible || reduceMotion ? 0 : horizontalOffset,
+                y: isVisible || reduceMotion ? 0 : -54
+            )
+            .shadow(
+                color: Color.black.opacity(isVisible || reduceMotion ? 0 : 0.18),
+                radius: isVisible || reduceMotion ? 0 : 22,
+                x: 0,
+                y: isVisible || reduceMotion ? 0 : 18
+            )
             .animation(revealAnimation, value: isVisible)
     }
 
@@ -168,7 +185,7 @@ private struct HomeDropReveal: ViewModifier {
         if reduceMotion {
             return .easeOut(duration: 0.16).delay(delay)
         }
-        return .spring(response: 0.62, dampingFraction: 0.76, blendDuration: 0.12)
+        return .spring(response: 0.78, dampingFraction: 0.70, blendDuration: 0.10)
             .delay(delay)
     }
 }
@@ -475,7 +492,6 @@ private let HomeBackgroundColor = Color(red: 0.972, green: 0.978, blue: 0.978)
         onOpenUpgrade: {},
         onOpenAestheticStyle: { _ in },
         isWordmarkVisible: true,
-        isContentVisible: true,
-        onWordmarkFrameChange: { _ in }
+        isContentVisible: true
     )
 }

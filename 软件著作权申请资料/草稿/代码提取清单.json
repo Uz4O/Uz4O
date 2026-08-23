@@ -1,0 +1,204 @@
+{
+  "software_name": "UzBox ai装机助手",
+  "version": "V1.0",
+  "project_root": "/Users/may/Documents/AI装机",
+  "file_count": 18,
+  "material_line_count": 7850,
+  "source_line_count": 8333,
+  "selected_source_line_count": 7832,
+  "lines_per_page": 50,
+  "total_pages": 157,
+  "target_pages": 60,
+  "available_candidate_line_count": 7850,
+  "available_candidate_pages": 157,
+  "supplement_status": "候选源码可达到前30页/后30页要求",
+  "mode": "front30_back30",
+  "selection_file": "软件著作权申请资料/草稿/代码文件选择.json",
+  "outputs": [
+    "代码-前30页.md",
+    "代码-后30页.md"
+  ],
+  "files": [
+    {
+      "path": "flutter_app/lib/main.dart",
+      "source_line_count": 54,
+      "blank_line_count": 5,
+      "selected_line_start": 1,
+      "selected_line_end": 54,
+      "selected_line_count": 49,
+      "material_line_start": 1,
+      "material_line_end": 50
+    },
+    {
+      "path": "flutter_app/lib/startup_flow.dart",
+      "source_line_count": 409,
+      "blank_line_count": 26,
+      "selected_line_start": 1,
+      "selected_line_end": 409,
+      "selected_line_count": 383,
+      "material_line_start": 51,
+      "material_line_end": 434
+    },
+    {
+      "path": "flutter_app/lib/screens/home_screen.dart",
+      "source_line_count": 517,
+      "blank_line_count": 25,
+      "selected_line_start": 1,
+      "selected_line_end": 517,
+      "selected_line_count": 492,
+      "material_line_start": 435,
+      "material_line_end": 927
+    },
+    {
+      "path": "flutter_app/lib/api/uzbox_api.dart",
+      "source_line_count": 227,
+      "blank_line_count": 17,
+      "selected_line_start": 1,
+      "selected_line_end": 227,
+      "selected_line_count": 210,
+      "material_line_start": 928,
+      "material_line_end": 1138
+    },
+    {
+      "path": "flutter_app/lib/screens/primary_flows.dart",
+      "source_line_count": 5326,
+      "blank_line_count": 173,
+      "selected_line_start": 1,
+      "selected_line_end": 5326,
+      "selected_line_count": 5153,
+      "material_line_start": 1139,
+      "material_line_end": 6292
+    },
+    {
+      "path": "backend/app/progress.py",
+      "source_line_count": 73,
+      "blank_line_count": 16,
+      "selected_line_start": 1,
+      "selected_line_end": 73,
+      "selected_line_count": 57,
+      "material_line_start": 6293,
+      "material_line_end": 6350
+    },
+    {
+      "path": "backend/app/main.py",
+      "source_line_count": 95,
+      "blank_line_count": 6,
+      "selected_line_start": 1,
+      "selected_line_end": 95,
+      "selected_line_count": 89,
+      "material_line_start": 6351,
+      "material_line_end": 6440
+    },
+    {
+      "path": "backend/app/core/config.py",
+      "source_line_count": 145,
+      "blank_line_count": 16,
+      "selected_line_start": 1,
+      "selected_line_end": 145,
+      "selected_line_count": 129,
+      "material_line_start": 6441,
+      "material_line_end": 6570
+    },
+    {
+      "path": "backend/app/core/rate_limit.py",
+      "source_line_count": 193,
+      "blank_line_count": 36,
+      "selected_line_start": 1,
+      "selected_line_end": 193,
+      "selected_line_count": 157,
+      "material_line_start": 6571,
+      "material_line_end": 6728
+    },
+    {
+      "path": "backend/app/core/response_cache.py",
+      "source_line_count": 57,
+      "blank_line_count": 11,
+      "selected_line_start": 1,
+      "selected_line_end": 57,
+      "selected_line_count": 46,
+      "material_line_start": 6729,
+      "material_line_end": 6775
+    },
+    {
+      "path": "backend/app/compat/engine.py",
+      "source_line_count": 395,
+      "blank_line_count": 60,
+      "selected_line_start": 1,
+      "selected_line_end": 395,
+      "selected_line_count": 335,
+      "material_line_start": 6776,
+      "material_line_end": 7111
+    },
+    {
+      "path": "backend/app/api/compat.py",
+      "source_line_count": 29,
+      "blank_line_count": 7,
+      "selected_line_start": 1,
+      "selected_line_end": 29,
+      "selected_line_count": 22,
+      "material_line_start": 7112,
+      "material_line_end": 7134
+    },
+    {
+      "path": "backend/app/api/catalog.py",
+      "source_line_count": 104,
+      "blank_line_count": 22,
+      "selected_line_start": 1,
+      "selected_line_end": 104,
+      "selected_line_count": 82,
+      "material_line_start": 7135,
+      "material_line_end": 7217
+    },
+    {
+      "path": "backend/app/perf/profiles.py",
+      "source_line_count": 103,
+      "blank_line_count": 12,
+      "selected_line_start": 1,
+      "selected_line_end": 103,
+      "selected_line_count": 91,
+      "material_line_start": 7218,
+      "material_line_end": 7309
+    },
+    {
+      "path": "backend/app/api/builds.py",
+      "source_line_count": 331,
+      "blank_line_count": 21,
+      "selected_line_start": 1,
+      "selected_line_end": 331,
+      "selected_line_count": 310,
+      "material_line_start": 7310,
+      "material_line_end": 7620
+    },
+    {
+      "path": "backend/app/api/review.py",
+      "source_line_count": 114,
+      "blank_line_count": 20,
+      "selected_line_start": 1,
+      "selected_line_end": 114,
+      "selected_line_count": 94,
+      "material_line_start": 7621,
+      "material_line_end": 7715
+    },
+    {
+      "path": "backend/app/api/perf.py",
+      "source_line_count": 80,
+      "blank_line_count": 14,
+      "selected_line_start": 1,
+      "selected_line_end": 80,
+      "selected_line_count": 66,
+      "material_line_start": 7716,
+      "material_line_end": 7782
+    },
+    {
+      "path": "backend/app/api/upgrade.py",
+      "source_line_count": 81,
+      "blank_line_count": 14,
+      "selected_line_start": 1,
+      "selected_line_end": 81,
+      "selected_line_count": 67,
+      "material_line_start": 7783,
+      "material_line_end": 7850
+    }
+  ],
+  "safe_software_filename": "UzBox ai装机助手"
+}

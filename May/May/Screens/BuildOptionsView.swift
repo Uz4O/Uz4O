@@ -62,7 +62,10 @@ struct BuildOptionsView: View {
                                     .foregroundStyle(AppTheme.secondaryText)
                                     .frame(width: 18)
 
-                                Text("当前预算下没有可靠的\(mode.displayName)方案，建议提高预算")
+                                Text(
+                                    response.unavailableModeReasons?[mode.rawValue]
+                                        ?? "当前预算下没有可靠的\(mode.displayName)方案"
+                                )
                                     .font(.appCaption)
                                     .foregroundStyle(AppTheme.secondaryText)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -96,7 +99,18 @@ private struct BuildOptionCard: View {
     }
 
     private var gpuName: String {
-        option.part(for: .gpu).name
+        let gpu = option.part(for: .gpu)
+
+        switch gpu.componentId {
+        case "rx-9060-xt-8gb":
+            return "9060XT 8G"
+        case "rx-9060-xt-12gb":
+            return "9060XT 12G"
+        case "rx-9060-xt-16gb":
+            return "9060XT 16G"
+        default:
+            return HardwareCatalog.gpus.first { $0.id == gpu.componentId }?.name ?? gpu.name
+        }
     }
 
     private var mode: BuildPurchaseModeDTO {

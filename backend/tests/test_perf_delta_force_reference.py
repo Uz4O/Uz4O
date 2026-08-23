@@ -7,6 +7,7 @@ def test_2k_uses_the_lower_measured_cpu_or_gpu_limit() -> None:
 
 
 def test_1080p_uses_only_combinations_covered_by_both_charts() -> None:
+    assert delta_force_average_fps("r7-9850x3d", "rtx-5090-d-v2", "1080p") == 387
     assert delta_force_average_fps("r5-5600", "arc-a580-8gb", "1080p") == 128
     assert delta_force_average_fps("r5-5600", "rtx-5080", "1080p") is None
 

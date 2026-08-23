@@ -538,12 +538,36 @@ struct LiquidGlassSegmentedPicker<Option: Hashable>: View {
     var spacing: CGFloat = 4
     var padding: CGFloat = 5
     var showsSelectionDot = false
+    var usesNativeGlassTransition = false
     var title: (Option) -> String
 
+    @Namespace private var glassNamespace
     @State private var liquidStretch: CGFloat = 0
     @State private var liquidDirection: CGFloat = 1
 
     var body: some View {
+        pickerContent
+            .frame(height: height)
+            .padding(padding)
+            .background(.ultraThinMaterial, in: Capsule())
+            .background(AppTheme.softSurface.opacity(0.82), in: Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(AppTheme.border.opacity(0.82), lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.035), radius: 14, x: 0, y: 8)
+    }
+
+    @ViewBuilder
+    private var pickerContent: some View {
+        if #available(iOS 26.0, *), usesNativeGlassTransition {
+            nativeGlassPickerContent
+        } else {
+            legacyPickerContent
+        }
+    }
+
+    private var legacyPickerContent: some View {
         ZStack(alignment: .leading) {
             GeometryReader { geometry in
                 selectionLayer(in: geometry.size)
@@ -556,15 +580,45 @@ struct LiquidGlassSegmentedPicker<Option: Hashable>: View {
                 }
             }
         }
-        .frame(height: height)
-        .padding(padding)
-        .background(.ultraThinMaterial, in: Capsule())
-        .background(AppTheme.softSurface.opacity(0.82), in: Capsule())
-        .overlay(
-            Capsule()
-                .stroke(AppTheme.border.opacity(0.82), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.035), radius: 14, x: 0, y: 8)
+    }
+
+    @available(iOS 26.0, *)
+    private var nativeGlassPickerContent: some View {
+        GeometryReader { geometry in
+            ZStack {
+                GlassEffectContainer(spacing: geometry.size.width) {
+                    HStack(spacing: spacing) {
+                        ForEach(options, id: \.self) { option in
+                            Group {
+                                if selection == option {
+                                    Color.clear
+                                        .glassEffect(
+                                            .regular.tint(Color.white.opacity(0.58)),
+                                            in: Capsule()
+                                        )
+                                        .glassEffectID(
+                                            options.firstIndex(of: option) ?? 0,
+                                            in: glassNamespace
+                                        )
+                                        .glassEffectTransition(.matchedGeometry)
+                                } else {
+                                    Color.clear
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: height)
+                        }
+                    }
+                }
+                .allowsHitTesting(false)
+
+                HStack(spacing: spacing) {
+                    ForEach(options, id: \.self) { option in
+                        nativeOptionButton(option)
+                    }
+                }
+            }
+        }
     }
 
     private func selectionLayer(in size: CGSize) -> some View {
@@ -588,6 +642,41 @@ struct LiquidGlassSegmentedPicker<Option: Hashable>: View {
 
         return Button {
             select(option)
+        } label: {
+            HStack(spacing: 8) {
+                if showsSelectionDot {
+                    Circle()
+                        .fill(isSelected ? AppTheme.primaryText : Color.clear)
+                        .frame(width: 15, height: 15)
+                        .overlay(
+                            Circle()
+                                .stroke(isSelected ? Color.clear : AppTheme.secondaryText, lineWidth: 2)
+                        )
+                }
+
+                Text(title(option))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+            }
+            .font(.system(size: 13, weight: isSelected ? .bold : .semibold))
+            .foregroundStyle(isSelected ? AppTheme.primaryText : AppTheme.secondaryText)
+            .padding(.horizontal, 6)
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    @available(iOS 26.0, *)
+    private func nativeOptionButton(_ option: Option) -> some View {
+        let isSelected = selection == option
+
+        return Button {
+            guard option != selection else { return }
+            withAnimation {
+                selection = option
+            }
         } label: {
             HStack(spacing: 8) {
                 if showsSelectionDot {

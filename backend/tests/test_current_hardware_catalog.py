@@ -10,12 +10,12 @@ from app.catalog.rule_specs import GPU_PERFORMANCE, OFFICE_ONLY_GPU_RULE_SPECS
 from app.catalog.seed import extract_catalog_components, read_catalog_components
 
 
-def test_current_swift_catalog_extracts_732_components() -> None:
+def test_current_swift_catalog_extracts_733_components() -> None:
     catalog_path = Path("../May/May/Models/HardwareCatalog.swift")
 
     components = extract_catalog_components(catalog_path)
 
-    assert len(components) == 732
+    assert len(components) == 733
     assert {component.category for component in components} == {
         "cpu",
         "gpu",
@@ -24,7 +24,7 @@ def test_current_swift_catalog_extracts_732_components() -> None:
         "storage",
         "psu",
     }
-    assert len({component.id for component in components}) == 732
+    assert len({component.id for component in components}) == 733
 
     cpus = [component for component in components if component.category == "cpu"]
     gpus = [component for component in components if component.category == "gpu"]
@@ -121,16 +121,18 @@ def test_current_gpu_whitelist_contains_priced_office_only_intel_arc_models() ->
     assert office_only_ids.isdisjoint(GPU_PERFORMANCE)
 
 
-def test_current_gpu_whitelist_contains_updated_rtx_50_series_prices() -> None:
+def test_current_gpu_whitelist_contains_user_confirmed_rtx_50_series_prices() -> None:
     rows = read_gpu_whitelist_price_rows(
         Path("data/gpu-whitelist-prices-2026-07-07.csv"),
-        approved_at="2026-08-08",
+        approved_at="2026-08-22",
     )
     prices = {row.component_id: row for row in rows}
     expected_prices = {
-        "rtx-5070": (5200, 6699),
-        "rtx-5070-ti": (6999, 8699),
-        "rtx-5080": (9500, 14999),
+        "rtx-5060": (2650, 3299),
+        "rtx-5060-ti": (3099, 3599),
+        "rtx-5070": (5999, 6999),
+        "rtx-5070-ti": (7299, 9799),
+        "rtx-5080": (10500, 13499),
         "rtx-5090-d-v2": (19000, 22999),
         "rtx-5090": (None, 32999),
     }
@@ -143,6 +145,38 @@ def test_current_gpu_whitelist_contains_updated_rtx_50_series_prices() -> None:
         for component_id in expected_prices
     } == expected_prices
     assert "rtx-5090-d" not in prices
+
+
+def test_current_gpu_whitelist_contains_user_confirmed_used_rtx_40_series_prices() -> None:
+    rows = read_gpu_whitelist_price_rows(
+        Path("data/gpu-whitelist-prices-2026-07-07.csv"),
+        approved_at="2026-08-22",
+    )
+    prices = {row.component_id: row for row in rows}
+    expected_used_prices = {
+        "rtx-4060": 1999,
+        "rtx-4060-ti": 2300,
+        "rtx-4070": 3299,
+        "rtx-4070-super": 3700,
+        "rtx-4070-ti": 4200,
+        "rtx-4070-ti-super": 4799,
+        "rtx-4080": 6900,
+        "rtx-4080-super": 7300,
+        "rtx-4090": 21000,
+        "rtx-4090-d": 15500,
+    }
+
+    assert {
+        component_id: prices[component_id].used_price
+        for component_id in expected_used_prices
+    } == expected_used_prices
+    assert all(prices[component_id].new_price is None for component_id in expected_used_prices)
+    assert (
+        GPU_PERFORMANCE["rtx-5090-d-v2"]
+        > GPU_PERFORMANCE["rtx-4090"]
+        > GPU_PERFORMANCE["rtx-4090-d"]
+        > GPU_PERFORMANCE["rtx-5080"]
+    )
 
 
 def test_current_motherboard_whitelist_contains_15th_gen_productivity_boards() -> None:

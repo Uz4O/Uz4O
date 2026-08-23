@@ -12,7 +12,7 @@ enum PerformanceTestStep: Int, CaseIterable {
     }
 }
 
-enum PerformanceResolution: String, CaseIterable, Identifiable, Hashable {
+enum PerformanceResolution: String, CaseIterable, Identifiable, Hashable, Sendable {
     case fullHD
     case twoK
     case fourK

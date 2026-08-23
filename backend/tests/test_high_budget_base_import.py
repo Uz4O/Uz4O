@@ -142,8 +142,8 @@ def test_imports_all_generated_templates_with_the_current_hardware_catalog() -> 
     assert last.details["target_budget"] == 30_000
     assert matched_ids == expected_matched_ids
     assert reversed_matched_ids == expected_matched_ids
-    assert default_match == "base-10000-balanced-new-amd"
-    assert reversed_default_match == "base-10000-balanced-new-amd"
+    assert default_match == "base-10000-balanced-new"
+    assert reversed_default_match == "base-10000-balanced-new"
 
 
 def test_combined_catalog_artifacts_are_complete_and_conflict_free() -> None:
@@ -178,7 +178,7 @@ def test_combined_catalog_artifacts_are_complete_and_conflict_free() -> None:
     assert 25_000 in target_budgets
     assert max(
         Counter(template.details.target_budget for template in high_templates).values()
-    ) == 15
+    ) == 18
     assert referenced_ids <= recommendation_ids
     assert all(
         template.details is not None and len(template.details.parts) == 8

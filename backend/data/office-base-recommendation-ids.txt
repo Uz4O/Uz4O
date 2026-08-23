@@ -4,7 +4,6 @@ arc-b570-10gb
 arc-b580-12gb
 asus-a520m-k
 asus-b860m-k
-asus-prime-b650m-k
 base-case-mid-tower
 base-cooler-6-heatpipe
 base-cooler-dual-tower-6-heatpipe
@@ -24,7 +23,6 @@ msi-b860m-mortar
 msi-pro-b860m-a
 office-ddr5-16gb-7200-c36
 r5-5600x
-r5-9600x
 rtx-4060
 rtx-4060-ti
 rtx-4070

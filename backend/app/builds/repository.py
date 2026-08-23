@@ -43,8 +43,7 @@ DETAILED_CONDITIONS = {
 DETAILED_DIRECTION_TAGS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 DETAILED_PURCHASE_TAGS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
 DETAILED_GPU_VENDOR_TAGS = {"nvidia": "NVIDIA", "amd": "AMD", "intel": "Intel"}
-MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL = 100
-MAX_DETAILED_FPS_COVERAGE_SHORTFALL = 550
+MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL = 200
 MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE = 300
 
 
@@ -234,29 +233,7 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     if template.estimated_total != detailed_total:
         errors.append(f"{template.id}: estimated_total does not match detailed prices")
     is_office_template = "办公" in template.use_cases
-    max_shortfall = (
-        550
-        if is_office_template
-        else 2_000
-        if details.direction == "aaa" and details.target_budget >= 13_000
-        else 1_000
-        if template.id in {"base-5000-aaa-used-amd", "base-5000-aaa-mixed"}
-        else 150
-        if template.id == "base-8000-aaa-used"
-        and parts_by_role["cpu"].component_id == "r7-7800x3d"
-        and parts_by_role["gpu"].component_id == "rtx-4070-super"
-        else 120
-        if template.id == "base-14000-balanced-mixed"
-        and parts_by_role["cpu"].component_id == "r7-9800x3d"
-        and parts_by_role["gpu"].component_id == "rtx-5070-ti"
-        and parts_by_role["motherboard"].component_id == "msi-x870e-tomahawk"
-        else MAX_DETAILED_FPS_COVERAGE_SHORTFALL
-        if details.target_budget >= 15_000
-        and details.direction in {"aaa", "balanced"}
-        else MAX_DETAILED_FPS_COVERAGE_SHORTFALL
-        if details.direction == "fps" and details.target_budget >= 10_000
-        else MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL
-    )
+    max_shortfall = 550 if is_office_template else MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL
     if detailed_total < details.target_budget - max_shortfall:
         errors.append(
             f"{template.id}: estimated_total is more than {max_shortfall} below target budget"
