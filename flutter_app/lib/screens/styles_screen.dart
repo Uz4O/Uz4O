@@ -1248,7 +1248,7 @@ class _ImmersiveStyleExplorerState extends State<_ImmersiveStyleExplorer>
                 ),
                 const SizedBox(height: 7),
                 Text(
-                  '外观方案约 ¥${style.cost} 起',
+                  '为颜值花费约 ¥${style.cost} 起',
                   style: const TextStyle(
                     color: AppTheme.secondary,
                     fontSize: 13,
@@ -2238,7 +2238,7 @@ class _ShowcaseRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   const Text(
-                    '外观方案约',
+                    '为颜值花费约',
                     style: TextStyle(
                       color: Color(0xFF808791),
                       fontSize: 10,

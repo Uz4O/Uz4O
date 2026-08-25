@@ -20,12 +20,15 @@ from app.catalog.rule_specs import (
     minimum_psu_watt_for_specs,
     psu_supports_gpu_power_connector,
 )
+from app.builds.repository import list_build_templates
+from app.builds.service import BuildTemplateDetails, BuildTemplatePart
+from app.compat.engine import BuildSelection, evaluate_compatibility
 from app.perf.generated_estimator import hardware_performance_score
-from app.perf.profiles import APPROVED_GAME_PROFILES
+from app.perf.profiles import APPROVED_GAME_PROFILES, GameLoadType
 from app.perf.service import estimate_generated_game_fps
 
 
-UpgradeStatus = Literal["ready", "needs_more_info", "no_plan"]
+UpgradeStatus = Literal["ready", "already_sufficient", "needs_more_info", "no_plan"]
 Resolution = Literal["1080p", "2k", "4k"]
 
 ROLE_LABELS = {
@@ -34,6 +37,7 @@ ROLE_LABELS = {
     "motherboard": "主板",
     "ram": "内存",
     "psu": "电源",
+    "cooler": "散热器",
 }
 EXCLUDED_GAMING_GPU_IDS = {"rtx-4070-ti"}
 
@@ -67,6 +71,9 @@ class UpgradeStep(BaseModel):
     estimated_price: int
     expected_gain_percent: int
     reason: str
+    bundle_id: str
+    bundle_title: str
+    required_together: bool
 
 
 class UpgradeGameResult(BaseModel):
@@ -90,6 +97,9 @@ class UpgradePlanResponse(BaseModel):
     target_fps: Optional[int]
     target_met: Optional[bool]
     game_results: List[UpgradeGameResult]
+    direction: Optional[Literal["fps", "aaa", "balanced"]]
+    anchor_template_id: Optional[str]
+    price_date: Optional[str]
 
 
 @dataclass(frozen=True)
@@ -98,6 +108,9 @@ class CandidatePlan:
     prices: Dict[str, int]
     game_results: List[UpgradeGameResult]
     score: float
+    anchor_template_id: Optional[str] = None
+    price_date: Optional[str] = None
+    direction: Optional[str] = None
 
     @property
     def total(self) -> int:
@@ -154,15 +167,61 @@ def generate_upgrade_plan(session: Session, request: UpgradePlanRequest) -> Upgr
         for role, component_id in current_ids.items()
         if component_id and component_id in current_components
     }
+    direction = _direction_for_games(request.games) if request.games else None
+    current_results = _game_results(
+        request,
+        current_by_role["cpu"],
+        current_by_role["gpu"],
+    )
+    if (
+        request.target_fps is not None
+        and len(current_results) == len(request.games)
+        and all(result.met for result in current_results)
+    ):
+        return UpgradePlanResponse(
+            status="already_sufficient",
+            summary=(
+                f"当前配置已经能达到 {request.resolution} 下 {request.target_fps} 帧的目标，"
+                "不建议为了这次目标额外更换配件。"
+            ),
+            budget=request.budget,
+            total_estimated_price=0,
+            primary_bottleneck=None,
+            missing_fields=[],
+            steps=[],
+            notes=[
+                "当前方案按已维护的游戏性能数据判断。",
+                "如果之后提高分辨率、画质或目标帧率，可以重新生成升级建议。",
+            ],
+            resolution=request.resolution,
+            target_fps=request.target_fps,
+            target_met=True,
+            game_results=current_results,
+            direction=direction,
+            anchor_template_id=None,
+            price_date=None,
+        )
+
     prices = _new_price_map(session)
-    candidates = _candidate_plans(session, request, current_by_role, prices)
+    candidates = (
+        _reviewed_anchor_plans(
+            session,
+            request,
+            current_by_role,
+            current_results,
+            direction or "balanced",
+        )
+        if request.target_fps is not None
+        else _candidate_plans(session, request, current_by_role, prices)
+    )
     if not candidates:
         return _empty_response(
             request,
             status="no_plan",
-            summary="当前预算内没有找到性能更高、价格有依据且兼容的新件方案。",
+            summary="当前预算内没有找到来自人工审核基底、性能更高且兼容的新件方案。",
             primary_bottleneck=_primary_bottleneck(current_by_role),
-            notes=["可以提高预算，或先更新硬件库中的新件价格。"],
+            notes=["可以提高预算，或调整分辨率与目标帧率后重试。"],
+            direction=direction,
         )
 
     best = min(candidates, key=lambda candidate: _candidate_sort_key(candidate, request))
@@ -177,6 +236,13 @@ def generate_upgrade_plan(session: Session, request: UpgradePlanRequest) -> Upgr
         summary = f"预算内无法完全达到 {request.target_fps} 帧，已给出最接近的兼容方案。"
     else:
         summary = f"预算内建议按顺序升级 {len(steps)} 个配件，新件预估合计约 {best.total} 元。"
+    notes = [
+        "预算按新配件总价计算，不扣除旧件残值。",
+        "帧率为维护数据与性能模型估算，实际会受画质、版本、散热和内存影响。",
+        "未列出的配件默认继续保留。",
+    ]
+    if any(step.role == "gpu" for step in steps):
+        notes.append("购买显卡前请核对显卡长度与机箱显卡限位，当前输入不含机箱内部尺寸。")
 
     return UpgradePlanResponse(
         status="ready",
@@ -186,15 +252,180 @@ def generate_upgrade_plan(session: Session, request: UpgradePlanRequest) -> Upgr
         primary_bottleneck=steps[0].role if steps else _primary_bottleneck(current_by_role),
         missing_fields=[],
         steps=steps,
-        notes=[
-            "预算按新配件总价计算，不扣除旧件残值。",
-            "帧率为维护数据与性能模型估算，实际会受画质、版本、散热和内存影响。",
-            "未列出的配件默认继续保留。",
-        ],
+        notes=notes,
         resolution=request.resolution,
         target_fps=request.target_fps,
         target_met=target_met,
         game_results=best.game_results,
+        direction=best.direction or direction,
+        anchor_template_id=best.anchor_template_id,
+        price_date=best.price_date,
+    )
+
+
+def _reviewed_anchor_plans(
+    session: Session,
+    request: UpgradePlanRequest,
+    current: Dict[str, HardwareComponent],
+    current_results: Sequence[UpgradeGameResult],
+    direction: Literal["fps", "aaa", "balanced"],
+) -> List[CandidatePlan]:
+    anchors = []
+    anchor_component_ids = set()
+    for template in list_build_templates(session):
+        if not template.details or "游戏" not in template.use_cases:
+            continue
+        try:
+            details = BuildTemplateDetails.model_validate(template.details)
+        except ValueError:
+            continue
+        if details.purchase_mode != "new" or details.direction != direction:
+            continue
+        parts = {part.role: part for part in details.parts}
+        if not {"cpu", "motherboard", "gpu", "ram", "psu", "cooler"}.issubset(parts):
+            continue
+        anchors.append((template.id, details, parts))
+        anchor_component_ids.update(part.component_id for part in details.parts)
+
+    anchor_components = {
+        component.id: component
+        for component in get_components_by_ids(session, anchor_component_ids)
+    }
+    current_cpu = current["cpu"]
+    current_gpu = current["gpu"]
+    current_cpu_score = _performance_score(current_cpu)
+    current_gpu_score = _performance_score(current_gpu)
+    plans: List[CandidatePlan] = []
+
+    for template_id, details, parts in anchors:
+        anchor_cpu = anchor_components.get(parts["cpu"].component_id)
+        anchor_gpu = anchor_components.get(parts["gpu"].component_id)
+        if anchor_cpu is None or anchor_gpu is None:
+            continue
+        anchor_cpu_score = _performance_score(anchor_cpu)
+        anchor_gpu_score = _performance_score(anchor_gpu)
+        if anchor_cpu_score <= 0 or anchor_gpu_score <= 0:
+            continue
+
+        cpu_changed = anchor_cpu_score > current_cpu_score
+        gpu_changed = anchor_gpu_score > current_gpu_score
+        if not cpu_changed and not gpu_changed:
+            continue
+
+        planned = dict(current)
+        changed_prices: Dict[str, int] = {}
+
+        def attach_anchor_part(role: str) -> bool:
+            part = parts[role]
+            component = anchor_components.get(part.component_id)
+            if component is None or part.condition != "new":
+                return False
+            planned[role] = component
+            before = current.get(role)
+            if before is None or before.id != component.id:
+                changed_prices[role] = part.reference_price
+            return True
+
+        if cpu_changed:
+            if not all(
+                attach_anchor_part(role)
+                for role in ("cpu", "motherboard", "ram", "cooler")
+            ):
+                continue
+        else:
+            planned["cpu"] = current_cpu
+
+        if gpu_changed:
+            if not attach_anchor_part("gpu"):
+                continue
+        else:
+            planned["gpu"] = current_gpu
+
+        if not _psu_meets_plan(planned):
+            if not attach_anchor_part("psu") or not _psu_meets_plan(planned):
+                continue
+
+        total = sum(changed_prices.values())
+        if total <= 0 or total > request.budget:
+            continue
+        if _has_hard_compatibility_error(planned, allow_unknown_ram=not cpu_changed):
+            continue
+
+        game_results = _game_results(
+            request,
+            planned["cpu"],
+            planned["gpu"],
+            current_results,
+        )
+        if not _improves_target(current_results, game_results):
+            continue
+        score = _improvement_score(
+            current_cpu_score,
+            current_gpu_score,
+            _performance_score(planned["cpu"]),
+            _performance_score(planned["gpu"]),
+        )
+        plans.append(
+            CandidatePlan(
+                components=planned,
+                prices=changed_prices,
+                game_results=game_results,
+                score=score,
+                anchor_template_id=template_id,
+                price_date=details.price_date,
+                direction=details.direction,
+            )
+        )
+    return plans
+
+
+def _direction_for_games(
+    games: Sequence[str],
+) -> Literal["fps", "aaa", "balanced"]:
+    load_types = {
+        APPROVED_GAME_PROFILES[game].load_type
+        for game in games
+        if game in APPROVED_GAME_PROFILES
+    }
+    if load_types == {GameLoadType.CPU}:
+        return "fps"
+    if load_types == {GameLoadType.GPU}:
+        return "aaa"
+    return "balanced"
+
+
+def _psu_meets_plan(planned: Dict[str, HardwareComponent]) -> bool:
+    cpu = planned.get("cpu")
+    gpu = planned.get("gpu")
+    psu = planned.get("psu")
+    if cpu is None or gpu is None or psu is None:
+        return False
+    required_watt = minimum_psu_watt_for_specs(
+        _int_spec(cpu, "tdp"),
+        gpu.id,
+        _int_spec(gpu, "tdp"),
+    )
+    return (
+        _int_spec(psu, "watt") >= required_watt
+        and psu_supports_gpu_power_connector(gpu.id, psu.specs)
+    )
+
+
+def _has_hard_compatibility_error(
+    planned: Dict[str, HardwareComponent],
+    *,
+    allow_unknown_ram: bool,
+) -> bool:
+    result = evaluate_compatibility(
+        BuildSelection(
+            components={role: component.id for role, component in planned.items()}
+        ),
+        {component.id: component for component in planned.values()},
+    )
+    allowed_errors = {"missing_ram"} if allow_unknown_ram else set()
+    return any(
+        finding.level == "error" and finding.code not in allowed_errors
+        for finding in result.findings
     )
 
 
@@ -403,8 +634,16 @@ def _steps_for_candidate(
     current: Dict[str, HardwareComponent],
     candidate: CandidatePlan,
 ) -> List[UpgradeStep]:
-    role_order = ["cpu", "motherboard", "ram", "gpu", "psu"]
+    role_order = ["cpu", "motherboard", "ram", "cooler", "gpu", "psu"]
     changed_roles = [role for role in role_order if role in candidate.prices]
+    bundle_ids = {
+        role: _bundle_id(role, changed_roles)
+        for role in changed_roles
+    }
+    bundle_counts = {
+        bundle_id: list(bundle_ids.values()).count(bundle_id)
+        for bundle_id in set(bundle_ids.values())
+    }
     steps: List[UpgradeStep] = []
     for index, role in enumerate(changed_roles, start=1):
         before = current.get(role)
@@ -428,9 +667,24 @@ def _steps_for_candidate(
                 estimated_price=candidate.prices[role],
                 expected_gain_percent=gain,
                 reason=reason,
+                bundle_id=bundle_ids[role],
+                bundle_title=_bundle_title(bundle_ids[role]),
+                required_together=bundle_counts[bundle_ids[role]] > 1,
             )
         )
     return steps
+
+
+def _bundle_id(role: str, changed_roles: Sequence[str]) -> str:
+    if role in {"cpu", "motherboard", "ram", "cooler"}:
+        return "platform"
+    if role == "psu" and "gpu" not in changed_roles:
+        return "platform"
+    return "graphics"
+
+
+def _bundle_title(bundle_id: str) -> str:
+    return "平台升级套装" if bundle_id == "platform" else "显卡与供电套装"
 
 
 def _step_reason(
@@ -443,6 +697,8 @@ def _step_reason(
         return f"新 CPU 的插槽与现有主板不同，需要同步更换为 {after.name}。"
     if role == "ram":
         return f"新主板内存代际发生变化，需要同步更换为 {after.name}。"
+    if role == "cooler":
+        return f"新 CPU 需要经过审核的散热能力，建议同步使用 {after.name}。"
     if role == "psu":
         return f"新 CPU/显卡的供电需求超出现有电源能力，需要 {after.name}。"
     if candidate.game_results:
@@ -566,6 +822,7 @@ def _empty_response(
     missing_fields: Optional[List[str]] = None,
     primary_bottleneck: Optional[str] = None,
     notes: Optional[List[str]] = None,
+    direction: Optional[Literal["fps", "aaa", "balanced"]] = None,
 ) -> UpgradePlanResponse:
     return UpgradePlanResponse(
         status=status,
@@ -580,4 +837,7 @@ def _empty_response(
         target_fps=request.target_fps,
         target_met=None,
         game_results=[],
+        direction=direction,
+        anchor_template_id=None,
+        price_date=None,
     )

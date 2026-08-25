@@ -156,10 +156,16 @@ extension BuildOptionDTO {
             )
 
         return BuildPlan(
-            name: details.direction.resultTitle,
-            budget: formattedBuildPrice(details.targetBudget),
+            name: details.aestheticStyleName.map {
+                "\($0) · \(details.direction.resultTitle)"
+            } ?? details.direction.resultTitle,
+            budget: details.performanceTotal.map {
+                "基础配置 \(formattedBuildPrice($0))"
+            } ?? formattedBuildPrice(details.targetBudget),
             totalPrice: referenceTotalText,
-            useCase: details.direction.resultSubtitle,
+            useCase: details.aestheticStyleName.map {
+                "\($0) · \(details.aestheticColor == "white" ? "白色" : "黑色") · \(details.direction.resultSubtitle)"
+            } ?? details.direction.resultSubtitle,
             createdAt: "参考价日期 \(details.priceDate)",
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
                 + (details.extras ?? []).map(\.model),
@@ -233,13 +239,26 @@ private extension BuildOptionPartDTO {
 private extension BuildOptionExtraDTO {
     var model: PCPart {
         PCPart(
-            category: "其他",
+            category: category ?? "其他",
             model: name,
             price: formattedBuildPrice(referencePrice),
             condition: condition.displayName,
-            icon: "wifi",
+            icon: extraIcon,
             accent: AppTheme.primaryText
         )
+    }
+
+    var extraIcon: String {
+        switch category {
+        case let value? where value.contains("风扇"):
+            "fan"
+        case let value? where value.contains("屏"):
+            "display"
+        case let value? where value.contains("线"):
+            "cable.connector"
+        default:
+            "shippingbox"
+        }
     }
 }
 
@@ -362,7 +381,7 @@ enum AppMockData {
             name: "\(flow.style.title)颜值游戏配置",
             budget: flow.quote.total.label,
             totalPrice: flow.quote.total.midpointLabel,
-            useCase: "\(flow.selectedUseCase) · \(flow.resolvedResolution.title) · \(flow.selectedExperience.title) · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
+            useCase: "\(flow.selectedUseCase) · \(flow.selectedMemorySize) 内存 · \(flow.selectedStorageSize) 存储\(flow.needsWirelessNetwork ? " · 无线网络" : "") · \(flow.selectedGames.map(\.name).joined(separator: " / "))",
             createdAt: "演示方案",
             parts: Array(parts.prefix(6)) + [stylePart]
         )

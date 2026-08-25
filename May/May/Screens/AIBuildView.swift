@@ -39,7 +39,6 @@ struct AIBuildView: View {
     @State private var needsWirelessNetwork = false
     @State private var selectedBuildPreference = BuildPreference.defaultAISelection
     @State private var chassisColorPreference = "曜石黑"
-    @State private var upgradePreference = "当前体验优先"
     @State private var selectedMemorySize = "16GB"
     @State private var selectedStorageSize = "1TB"
     @State private var allowsFlexibleBudget = false
@@ -81,7 +80,7 @@ struct AIBuildView: View {
         "穿越火线", "云顶之弈", "LOL", "COD", "NBA2K", "赛博朋克2077", "荒野大镖客2",
         "GTA5", "黑神话悟空", "地平线6", "艾尔登法环", "城市天际线", "我的世界"
     ]
-    private let gameArtworkNames = [
+    static let gameArtworkNames = [
         "瓦罗兰特": "GameArtworkValorant",
         "CS2": "GameArtworkCS2",
         "PUBG": "GameArtworkPUBG",
@@ -257,45 +256,39 @@ struct AIBuildView: View {
                     isOwnedGPUPickerPresented = true
                 } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: "display")
-                            .font(.system(size: 15, weight: .semibold))
+                        Text("显卡型号")
+                            .font(.appSubheadline)
                             .foregroundStyle(AppTheme.primaryText)
-                            .frame(width: 34, height: 34)
-                            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("显卡型号")
-                                .font(.appSubheadline)
-                                .foregroundStyle(AppTheme.primaryText)
-                            Text(ownedGPUModel.isEmpty ? "请选择自备显卡型号" : ownedGPUModel)
-                                .font(.appBody)
-                                .foregroundStyle(ownedGPUModel.isEmpty ? AppTheme.secondaryText : AppTheme.primaryText)
-                                .lineLimit(1)
-                        }
+                        Spacer(minLength: 12)
 
-                        Spacer(minLength: 8)
+                        Text(ownedGPUModel.isEmpty ? "请选择" : ownedGPUModel)
+                            .font(.appBody)
+                            .foregroundStyle(ownedGPUModel.isEmpty ? AppTheme.secondaryText : AppTheme.primaryText)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
 
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 13, weight: .bold))
+                            .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(AppTheme.secondaryText)
                     }
-                    .padding(.horizontal, 12)
-                    .frame(minHeight: 58)
-                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 16))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(AppTheme.border.opacity(0.8), lineWidth: 1)
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 56)
+                    .background(
+                        AppTheme.softSurface.opacity(0.72),
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
                     )
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("选择自备显卡型号")
+                .accessibilityValue(ownedGPUModel.isEmpty ? "未选择" : ownedGPUModel)
             }
 
         case .scenario:
             ScenarioSelectionSection(
                 useCase: selectedUseCase,
                 gameOptions: gameOptions,
-                gameArtworkNames: gameArtworkNames,
+                gameArtworkNames: Self.gameArtworkNames,
                 officeAppOptions: officeAppOptions,
                 officeAppIcons: officeAppIcons,
                 selectedGames: $selectedGames,
@@ -322,7 +315,7 @@ struct AIBuildView: View {
                 LiquidGlassSegmentedPicker(
                     options: BuildPreference.aiBuildOptions,
                     selection: $selectedBuildPreference,
-                    usesNativeGlassTransition: true,
+                    usesNativeSegmentedStyle: true,
                     title: \.title
                 )
             }
@@ -339,8 +332,6 @@ struct AIBuildView: View {
                     styles: AestheticBuildStyle.featured,
                     selectedID: $selectedAestheticStyleID
                 )
-            } else {
-                UpgradePreferenceSection(selected: $upgradePreference)
             }
             PreferenceSegmentGroup(title: "内存大小", options: memorySizeOptions, selected: $selectedMemorySize)
             PreferenceSegmentGroup(title: "存储大小", options: storageSizeOptions, selected: $selectedStorageSize)
@@ -865,7 +856,7 @@ private struct StepProgressHeader: View {
     }
 }
 
-private struct StepIndicator: View {
+struct StepIndicator: View {
     let title: String
     let isActive: Bool
     let displayNumber: Int
@@ -917,16 +908,6 @@ private struct StepTitle: View {
                 .foregroundStyle(AppTheme.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
         }
-    }
-}
-
-private struct UpgradePreferenceSection: View {
-    @Binding var selected: String
-
-    private let options = ["当前体验优先", "保留升级空间"]
-
-    var body: some View {
-        PreferenceSegmentGroup(title: "后期升级计划", options: options, selected: $selected)
     }
 }
 
@@ -1004,7 +985,7 @@ private struct AestheticStyleChoiceCard: View {
     }
 }
 
-private struct WizardBottomBar: View {
+struct WizardBottomBar: View {
     let canGoBack: Bool
     let primaryTitle: String
     let primaryIcon: String
@@ -1240,7 +1221,7 @@ private struct GameArtworkSelectionGrid: View {
     }
 }
 
-private struct GameArtworkTile: View {
+struct GameArtworkTile: View {
     let title: String
     let artworkName: String?
     let isSelected: Bool
@@ -1528,7 +1509,7 @@ private struct MultiChoiceChip: View {
     }
 }
 
-private struct PreferenceSegmentGroup: View {
+struct PreferenceSegmentGroup: View {
     let title: String
     let options: [String]
     @Binding var selected: String
@@ -1544,7 +1525,7 @@ private struct PreferenceSegmentGroup: View {
                 options: options,
                 selection: $selected,
                 showsSelectionDot: showsSelectionDot,
-                usesNativeGlassTransition: true,
+                usesNativeSegmentedStyle: true,
                 title: { $0 }
             )
         }

@@ -84,6 +84,40 @@ def classify_office_workload(
     return "general"
 
 
+class AestheticBuildPart(BaseModel):
+    component_id: str = Field(min_length=1, max_length=256)
+    role: Literal["case", "cooler", "extra"]
+    category: str = Field(min_length=1, max_length=32)
+    name: str = Field(min_length=1, max_length=160)
+    condition: Literal["new", "used"] = "new"
+    reference_price: int = Field(gt=0, le=100_000)
+    supports_hot_cpu: bool = False
+
+
+class AestheticBuildSelection(BaseModel):
+    style_id: str = Field(min_length=1, max_length=128)
+    style_name: str = Field(min_length=1, max_length=128)
+    color: Literal["black", "white"]
+    price_date: str = Field(min_length=10, max_length=10)
+    parts: List[AestheticBuildPart] = Field(min_length=1, max_length=20)
+
+    @model_validator(mode="after")
+    def require_complete_unique_style_parts(self) -> "AestheticBuildSelection":
+        roles = [part.role for part in self.parts]
+        if roles.count("case") != 1:
+            raise ValueError("风格方案必须且只能锁定一个机箱")
+        if roles.count("cooler") > 1:
+            raise ValueError("风格方案最多锁定一个 CPU 散热器")
+        component_ids = [part.component_id for part in self.parts]
+        if len(component_ids) != len(set(component_ids)):
+            raise ValueError("风格方案不能包含重复配件")
+        return self
+
+    @property
+    def reference_total(self) -> int:
+        return sum(part.reference_price for part in self.parts)
+
+
 class BuildRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -175,6 +209,10 @@ class BuildRequest(BaseModel):
         max_length=128,
         validation_alias=AliasChoices("specifiedGPU", "specified_gpu"),
     )
+    aesthetic_style: Optional[AestheticBuildSelection] = Field(
+        default=None,
+        validation_alias=AliasChoices("aestheticStyle", "aesthetic_style"),
+    )
     notes: Optional[str] = Field(default=None, max_length=1000)
 
     @field_validator("use_case")
@@ -235,6 +273,7 @@ class BuildRequest(BaseModel):
                 self.use_case != "办公" and self.storage_size is not None,
                 self.no_gpu_build,
                 bool(self.office_apps) and self.use_case != "办公",
+                self.aesthetic_style is not None,
                 bool(self.notes),
             )
         )
@@ -281,6 +320,10 @@ class BuildTemplateExtra(BaseModel):
     name: str
     condition: Literal["new", "used"]
     reference_price: int = Field(gt=0)
+    category: Optional[str] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
 
 class UsedGPUAlternative(BaseModel):
@@ -304,6 +347,28 @@ class BuildTemplateDetails(BaseModel):
     )
     used_gpu_alternative: Optional[UsedGPUAlternative] = Field(
         default=None,
+        exclude_if=lambda value: value is None,
+    )
+    aesthetic_style_id: Optional[str] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    aesthetic_style_name: Optional[str] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    aesthetic_color: Optional[Literal["black", "white"]] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    performance_total: Optional[int] = Field(
+        default=None,
+        ge=0,
+        exclude_if=lambda value: value is None,
+    )
+    appearance_total: Optional[int] = Field(
+        default=None,
+        ge=0,
         exclude_if=lambda value: value is None,
     )
     suitable_user: str
@@ -439,6 +504,140 @@ class BuildOptionResponse(BaseModel):
         if self.components != parts_by_role:
             raise ValueError("components must match detailed parts")
         return self
+
+
+def resolve_aesthetic_style(
+    selection: AestheticBuildSelection,
+    components_by_id: Dict[str, HardwareComponent],
+    price_by_component_id: Dict[str, ComponentPrice],
+) -> AestheticBuildSelection:
+    expected_categories = {
+        "case": "case",
+        "cooler": "cooler",
+        "extra": "aesthetic_extra",
+    }
+    resolved_parts = []
+    style_names = set()
+    price_dates = []
+    for part in selection.parts:
+        component = components_by_id.get(part.component_id)
+        price = price_by_component_id.get(part.component_id)
+        if (
+            component is None
+            or price is None
+            or not component.id.startswith("aesthetic-")
+            or component.status != "active"
+            or component.category != expected_categories[part.role]
+        ):
+            raise ValueError(f"风格配件未录入正式硬件目录：{part.name}")
+        specs = component.specs
+        styles = specs.get("aesthetic_styles")
+        if not isinstance(styles, dict) or selection.style_id not in styles:
+            raise ValueError(f"风格配件不属于当前方案：{component.name}")
+        if specs.get("condition") != part.condition:
+            raise ValueError(f"风格配件成色与正式目录不一致：{component.name}")
+        if specs.get("color") != selection.color:
+            raise ValueError(f"风格配件颜色与当前方案不一致：{component.name}")
+        style_names.add(str(styles[selection.style_id]))
+        price_dates.append(price.approved_at.date().isoformat())
+        resolved_parts.append(
+            AestheticBuildPart(
+                component_id=component.id,
+                role=part.role,
+                category=str(specs.get("display_category") or part.category),
+                name=component.name,
+                condition=part.condition,
+                reference_price=price.reference_price,
+                supports_hot_cpu=bool(specs.get("supports_hot_cpu", False)),
+            )
+        )
+    if len(style_names) != 1:
+        raise ValueError("风格配件的方案名称不一致")
+    return selection.model_copy(
+        update={
+            "style_name": style_names.pop(),
+            "price_date": max(price_dates),
+            "parts": resolved_parts,
+        }
+    )
+
+
+def apply_aesthetic_style(
+    option: BuildOptionResponse,
+    selection: AestheticBuildSelection,
+) -> BuildOptionResponse:
+    details = option.details.model_copy(deep=True)
+    parts = {part.role: part for part in details.parts}
+    locked_parts = {part.role: part for part in selection.parts if part.role != "extra"}
+    style_cooler = locked_parts.get("cooler")
+    cpu = parts["cpu"]
+    hot_cpu = (
+        cpu.component_id in {"r7-7800x3d", "r7-9800x3d", "r7-9850x3d"}
+        or isinstance(cpu.specs.get("tdp"), int)
+        and cpu.specs["tdp"] >= 120
+    )
+    if style_cooler is not None and hot_cpu and not style_cooler.supports_hot_cpu:
+        raise ValueError("所选风格散热器无法安全支持当前高热 CPU")
+
+    replaced_price = 0
+    for role, style_part in locked_parts.items():
+        replaced_price += parts[role].reference_price
+        cooler_specs = (
+            {
+                "cooling_type": "style",
+                "heatpipes": 6,
+                "towers": 2 if style_part.supports_hot_cpu else 1,
+            }
+            if role == "cooler"
+            else {}
+        )
+        parts[role] = BuildTemplatePart(
+            role=role,
+            component_id=style_part.component_id,
+            name=style_part.name,
+            condition=style_part.condition,
+            reference_price=style_part.reference_price,
+            price_source="人工核实风格方案",
+            price_date=selection.price_date,
+            specs=cooler_specs,
+        )
+
+    style_extras = [
+        BuildTemplateExtra(
+            id=part.component_id,
+            name=part.name,
+            condition=part.condition,
+            reference_price=part.reference_price,
+            category=part.category,
+        )
+        for part in selection.parts
+        if part.role == "extra"
+    ]
+    performance_total = option.estimated_total or sum(
+        part.reference_price for part in option.details.parts
+    ) + sum(extra.reference_price for extra in option.details.extras)
+    details.parts = [parts[part.role] for part in details.parts]
+    details.extras = [*details.extras, *style_extras]
+    details.aesthetic_style_id = selection.style_id
+    details.aesthetic_style_name = selection.style_name
+    details.aesthetic_color = selection.color
+    details.performance_total = performance_total
+    details.appearance_total = selection.reference_total
+    details.price_date = max(details.price_date, selection.price_date)
+    components = {role: part.component_id for role, part in parts.items()}
+
+    return option.model_copy(
+        update={
+            "title": f"{selection.style_name} · {option.title}",
+            "components": components,
+            "estimated_total": performance_total - replaced_price + selection.reference_total,
+            "explanation": (
+                f"{option.explanation}；已锁定{selection.style_name}"
+                f"（{'黑色' if selection.color == 'black' else '白色'}）外观配件。"
+            )[:500],
+            "details": details,
+        }
+    )
 
 
 class BuildOptionsResponse(BaseModel):

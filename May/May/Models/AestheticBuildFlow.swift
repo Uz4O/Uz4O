@@ -65,11 +65,12 @@ struct AestheticBuildStyle: Equatable, Identifiable {
     let options: [AestheticRestorationOption]
 
     var startingCostLabel: String {
-        "外观方案约 ¥\(minimumOverviewCost.formatted()) 起"
+        "为颜值花费约 ¥\(minimumOverviewCost.formatted()) 起"
     }
 
     var minimumOverviewCost: Int {
         overviewParts.reduce(0) { total, part in
+            guard !part.usesAICooler else { return total }
             let lowestAlternative = part.alternatives.map(\.price).min() ?? part.price
             return total + min(part.price, lowestAlternative)
         }
@@ -264,23 +265,9 @@ struct AestheticBuildStyle: Equatable, Identifiable {
     }
 
     func overviewTotal(for color: AestheticStyleColor) -> Int {
-        if id == "blackKnight" {
-            return color == .black ? 6520 : 6580
+        overviewParts.reduce(0) { total, part in
+            total + (part.usesAICooler ? 0 : part.originalPrice(for: color))
         }
-        if id == "panorama" {
-            return color == .black ? 8496 : 8596
-        }
-        if id == "whiteMinimal" {
-            return 3637
-        }
-        if id == "bo400" {
-            return color == .black ? 4497 : 4597
-        }
-        if id == "xingcanChen" {
-            return 1884
-        }
-
-        return overviewParts.reduce(0) { $0 + $1.originalPrice(for: color) }
     }
 
     static let all = AestheticDemoCatalog.styles + AestheticGeneratedCatalog.styles
@@ -299,7 +286,26 @@ struct AestheticStyleAlternative: Equatable, Identifiable {
     let id: String
     let name: String
     let price: Int
+    let whitePrice: Int?
     let detail: String
+
+    init(
+        id: String,
+        name: String,
+        price: Int,
+        whitePrice: Int? = nil,
+        detail: String
+    ) {
+        self.id = id
+        self.name = name
+        self.price = price
+        self.whitePrice = whitePrice
+        self.detail = detail
+    }
+
+    func price(for color: AestheticStyleColor) -> Int {
+        color == .white ? whitePrice ?? price : price
+    }
 }
 
 struct AestheticStylePart: Equatable, Identifiable {
@@ -312,6 +318,139 @@ struct AestheticStylePart: Equatable, Identifiable {
 
     func originalPrice(for color: AestheticStyleColor) -> Int {
         color == .white ? whitePrice ?? price : price
+    }
+
+    var usesAICooler: Bool {
+        buildRole == .cooler
+            && (detail.contains("任意") || detail.contains("由 AI"))
+    }
+}
+
+enum AestheticBuildPartRole: String, Encodable {
+    case `case`
+    case cooler
+    case extra
+}
+
+enum AestheticBuildPartCondition: String, Encodable {
+    case new
+    case used
+}
+
+struct AestheticBuildPartSelection: Equatable, Encodable {
+    let componentID: String
+    let role: AestheticBuildPartRole
+    let category: String
+    let name: String
+    let condition: AestheticBuildPartCondition
+    let referencePrice: Int
+    let supportsHotCPU: Bool
+
+    private enum CodingKeys: String, CodingKey {
+        case componentID = "component_id"
+        case role, category, name, condition
+        case referencePrice = "reference_price"
+        case supportsHotCPU = "supports_hot_cpu"
+    }
+}
+
+struct AestheticBuildSelection: Equatable, Encodable {
+    let styleID: String
+    let styleName: String
+    let color: String
+    let priceDate: String
+    let parts: [AestheticBuildPartSelection]
+
+    var totalPrice: Int {
+        parts.reduce(0) { $0 + $1.referencePrice }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case styleID = "style_id"
+        case styleName = "style_name"
+        case color
+        case priceDate = "price_date"
+        case parts
+    }
+}
+
+extension AestheticBuildStyle {
+    func buildSelection(
+        color: AestheticStyleColor,
+        selectedAlternativeIDs: [String: String]
+    ) -> AestheticBuildSelection {
+        AestheticBuildSelection(
+            styleID: id,
+            styleName: title,
+            color: color.rawValue,
+            priceDate: "2026-08-24",
+            parts: overviewParts.compactMap { part in
+                guard !part.usesAICooler else { return nil }
+                let alternative = selectedAlternativeIDs[part.id].flatMap { alternativeID in
+                    part.alternatives.first { $0.id == alternativeID }
+                }
+                let selectedName = alternative?.name ?? part.detail
+                let selectedDetail = alternative?.detail ?? part.detail
+                let condition: AestheticBuildPartCondition = selectedName.contains("二手")
+                    ? .used
+                    : .new
+                return AestheticBuildPartSelection(
+                    componentID: canonicalAestheticComponentID(
+                        role: part.buildRole,
+                        name: selectedName,
+                        condition: condition,
+                        color: color
+                    ),
+                    role: part.buildRole,
+                    category: part.name,
+                    name: selectedName,
+                    condition: condition,
+                    referencePrice: alternative?.price(for: color) ?? part.originalPrice(for: color),
+                    supportsHotCPU: part.supportsHotCPU(
+                        selectedName: selectedName,
+                        selectedDetail: selectedDetail
+                    )
+                )
+            }
+        )
+    }
+}
+
+private func canonicalAestheticComponentID(
+    role: AestheticBuildPartRole,
+    name: String,
+    condition: AestheticBuildPartCondition,
+    color: AestheticStyleColor
+) -> String {
+    let key = "\(role.rawValue)|\(name)|\(condition.rawValue)|\(color.rawValue)"
+    let hash = key.utf8.reduce(UInt64(14_695_981_039_346_656_037)) { value, byte in
+        (value ^ UInt64(byte)) &* 1_099_511_628_211
+    }
+    return "aesthetic-\(role.rawValue)-\(String(hash, radix: 16))"
+}
+
+extension AestheticStylePart {
+    var buildRole: AestheticBuildPartRole {
+        if name == "机箱" {
+            return .case
+        }
+        if name.contains("水冷") || name.contains("散热器") {
+            return .cooler
+        }
+        return .extra
+    }
+
+    func supportsHotCPU(selectedName: String, selectedDetail: String) -> Bool {
+        guard buildRole == .cooler else { return false }
+        let description = "\(name) \(selectedName) \(selectedDetail)".lowercased()
+        if description.contains("任意") {
+            return false
+        }
+        return description.contains("水冷")
+            || description.contains("双塔")
+            || description.contains("6 热管")
+            || description.contains("六热管")
+            || description.contains("rz620")
     }
 }
 
@@ -381,19 +520,27 @@ enum AestheticResolutionChoice: String, CaseIterable, Identifiable {
 enum AestheticBuildStep: Int, CaseIterable {
     case performanceBudget
     case games
-    case experience
-    case quote
+    case hardware
 
     var title: String {
         switch self {
         case .performanceBudget:
             return "预算和用途"
         case .games:
-            return "常玩游戏"
-        case .experience:
-            return "体验目标"
-        case .quote:
-            return "预算预估"
+            return "场景选择"
+        case .hardware:
+            return "补充偏好"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .performanceBudget:
+            return "外观费用已确定，AI 会按性能预算搭配其余核心配件。"
+        case .games:
+            return "告诉 AI 你主要玩哪些游戏。"
+        case .hardware:
+            return "选择需要的内存和存储容量。"
         }
     }
 }
@@ -408,10 +555,11 @@ struct AestheticBuildQuote: Equatable {
 struct AestheticBuildFlow: Equatable {
     static let minimumPerformanceBudget = 4000
     static let maximumPerformanceBudget = 30000
+    private static let allowedUseCases = ["游戏", "办公", "游戏兼办公"]
 
     var step: AestheticBuildStep = .performanceBudget
     let styleID: String
-    private let lockedAppearanceCost: Int?
+    let appearanceSelection: AestheticBuildSelection?
     var selectedTier: AestheticRestorationTier = .core
     var performanceBudget: Int = 8000
     var selectedUseCase = "游戏"
@@ -420,13 +568,18 @@ struct AestheticBuildFlow: Equatable {
     var selectedGames: [PerformanceGame] = [.cyberpunk]
     var selectedExperience: AestheticExperience = .smooth
     var selectedResolution: AestheticResolutionChoice = .unknown
-    private(set) var isQuoteConfirmed = false
+    var needsWirelessNetwork = false
+    var selectedMemorySize = "16GB"
+    var selectedStorageSize = "1TB"
 
-    init(styleID: String = AestheticBuildStyle.featured[0].id, appearanceCost: Int? = nil) {
+    init(
+        styleID: String = AestheticBuildStyle.featured[0].id,
+        appearanceSelection: AestheticBuildSelection? = nil
+    ) {
         self.styleID = AestheticBuildStyle.all.contains { $0.id == styleID }
             ? styleID
             : AestheticBuildStyle.all[0].id
-        self.lockedAppearanceCost = appearanceCost
+        self.appearanceSelection = appearanceSelection
     }
 
     var style: AestheticBuildStyle {
@@ -438,7 +591,26 @@ struct AestheticBuildFlow: Equatable {
     }
 
     var appearanceCost: Int {
-        lockedAppearanceCost ?? style.overviewTotal(for: .black)
+        appearanceSelection?.totalPrice ?? style.overviewTotal(for: .black)
+    }
+
+    var resolvedAppearanceSelection: AestheticBuildSelection {
+        appearanceSelection ?? style.buildSelection(
+            color: .black,
+            selectedAlternativeIDs: [:]
+        )
+    }
+
+    var buildDirection: AIBuildDirection {
+        if selectedExperience == .competitive {
+            return .fps
+        }
+        if selectedResolution == .fourK {
+            return .aaa
+        }
+        return AIBuildFlowRules.recommendedDirection(
+            for: Set(selectedGames.map(\.name))
+        )
     }
 
     var resolvedResolution: PerformanceResolution {
@@ -446,15 +618,17 @@ struct AestheticBuildFlow: Equatable {
     }
 
     var quote: AestheticBuildQuote {
-        let performanceCore = lockedAppearanceCost == nil
+        let performanceCore = appearanceSelection == nil
             ? basePerformanceCost + gameAdjustment
             : AestheticPriceRange(performanceBudget, performanceBudget)
-        let styleModule = lockedAppearanceCost.map { AestheticPriceRange($0, $0) } ?? restoration.styleCost
+        let styleModule = appearanceSelection.map {
+            AestheticPriceRange($0.totalPrice, $0.totalPrice)
+        } ?? restoration.styleCost
 
         return AestheticBuildQuote(
             performanceCore: performanceCore,
             styleModule: styleModule,
-            aestheticPremium: lockedAppearanceCost == nil
+            aestheticPremium: appearanceSelection == nil
                 ? restoration.premium
                 : AestheticPriceRange(0, 0),
             total: performanceCore + styleModule
@@ -466,13 +640,11 @@ struct AestheticBuildFlow: Equatable {
             max(budget, Self.minimumPerformanceBudget),
             Self.maximumPerformanceBudget
         )
-        isQuoteConfirmed = false
     }
 
     mutating func selectUseCase(_ useCase: String) {
-        guard AppMockData.useCases.contains(useCase) else { return }
+        guard Self.allowedUseCases.contains(useCase) else { return }
         selectedUseCase = useCase
-        isQuoteConfirmed = false
     }
 
     mutating func setHasOwnedGPU(_ hasOwnedGPU: Bool) {
@@ -480,33 +652,27 @@ struct AestheticBuildFlow: Equatable {
         if !hasOwnedGPU {
             ownedGPUModel = ""
         }
-        isQuoteConfirmed = false
     }
 
     mutating func setOwnedGPUModel(_ model: String) {
         ownedGPUModel = model
-        isQuoteConfirmed = false
     }
 
     mutating func selectTier(_ tier: AestheticRestorationTier) {
         selectedTier = tier
-        isQuoteConfirmed = false
     }
 
     mutating func selectExperience(_ experience: AestheticExperience) {
         selectedExperience = experience
-        isQuoteConfirmed = false
     }
 
     mutating func selectResolution(_ resolution: AestheticResolutionChoice) {
         selectedResolution = resolution
-        isQuoteConfirmed = false
     }
 
     mutating func setGames(_ games: [PerformanceGame]) {
         guard !games.isEmpty else { return }
         selectedGames = games
-        isQuoteConfirmed = false
     }
 
     mutating func toggleGame(_ game: PerformanceGame) {
@@ -516,7 +682,6 @@ struct AestheticBuildFlow: Equatable {
         } else {
             selectedGames.append(game)
         }
-        isQuoteConfirmed = false
     }
 
     mutating func goNext() {
@@ -527,14 +692,6 @@ struct AestheticBuildFlow: Equatable {
     mutating func goPrevious() {
         guard let previous = AestheticBuildStep(rawValue: step.rawValue - 1) else { return }
         step = previous
-    }
-
-    mutating func showExperience() {
-        step = .experience
-    }
-
-    mutating func confirmQuote() {
-        isQuoteConfirmed = true
     }
 
     private var basePerformanceCost: AestheticPriceRange {
@@ -568,7 +725,7 @@ struct AestheticBuildFlow: Equatable {
 
     private func adjustment(for game: PerformanceGame) -> AestheticPriceRange {
         switch game.id {
-        case "cyberpunk", "elden-ring", "cod":
+        case "cyberpunk-2077", "elden-ring", "call-of-duty-warzone":
             return AestheticPriceRange(low: 800, high: 1200)
         case "pubg", "genshin", "apex":
             return AestheticPriceRange(low: 300, high: 600)
@@ -679,6 +836,9 @@ private enum AestheticOverviewCatalog {
         if styleID == "fangtangC34Pro" {
             return fangtangC34ProParts
         }
+        if styleID == "cougarV235" {
+            return cougarV235Parts
+        }
         if let generatedParts = AestheticGeneratedCatalog.parts(for: styleID) {
             return generatedParts
         }
@@ -722,7 +882,7 @@ private enum AestheticOverviewCatalog {
             alternative("联立 VISION COMPACT（二手）", 450, "原型号二手，成色以实际为准")
         ], whitePrice: 739),
         part("vision", "一体式水冷", "展域 SE360", 1799, [
-            alternative("利民 LV360", 900, "外观一致平替，暂未发现二手"),
+            alternative("利民 LV360", 899, "外观一致平替，暂未发现二手"),
             alternative("瓦尔基里 N360", 950, "外观一致平替，暂未发现二手"),
             alternative("展域 SE360（二手）", 1000, "原型号二手，参考价格"),
             alternative("展域 SE360（全新供货）", 1499, "闲鱼供货商全新价格")
@@ -731,7 +891,7 @@ private enum AestheticOverviewCatalog {
             alternative("图灵智显 8.8 寸副屏（二手）", 200, "当前仅提供二手平替")
         ]),
         part("vision", "风扇套装", "联立四代风扇 8 把 + 无线发射器", 3000, [
-            alternative("丛林豹星际积木 V4 套装", 1085, "带屏 5 把 × 199 元 + 无屏 3 把 × 30 元")
+            alternative("丛林豹星际积木 V4（带屏 5 把 + 无屏 3 把）", 1085, "带屏 5 把 × 199 元 + 无屏 3 把 × 30 元")
         ]),
         part("vision", "霓虹线", "联立 4 代霓虹线", 700, [
             alternative("外置霓虹线", 100, "外置安装平替")
@@ -800,7 +960,7 @@ private enum AestheticOverviewCatalog {
         part("asus-ap202", "一体式水冷", "联立隐流 1 代", 499, [
             alternative("联立隐流 2 代", 1599, "同系列现有型号平替"),
             alternative("展域 SE360", 1799, "现有 360 水冷平替"),
-            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有 360 水冷平替"),
+            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有 360 水冷平替", whitePrice: 2699),
             alternative("利民 LV360", 899, "现有 360 水冷平替"),
             alternative("瓦尔基里 N360", 950, "现有 360 水冷平替")
         ]),
@@ -843,7 +1003,7 @@ private enum AestheticOverviewCatalog {
             alternative("展域 SE360", 1799, "现有水冷型号平替"),
             alternative("联立隐流 1 代", 499, "现有水冷型号平替"),
             alternative("联立隐流 2 代", 1599, "现有水冷型号平替"),
-            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有水冷型号平替")
+            alternative("ROG 龙王 4 代水冷颜值版", 2599, "现有水冷型号平替", whitePrice: 2699)
         ])
     ]
 
@@ -863,7 +1023,7 @@ private enum AestheticOverviewCatalog {
     private static let visionMinParts = [
         part("vision-min", "机箱", "联力 VISION MIN", 549, []),
         part("vision-min", "一体式水冷", "联立隐流 1 代", 499, [
-            alternative("利民 LV360", 900, "沿用 VISION COMPACT 水冷平替"),
+            alternative("利民 LV360", 899, "沿用 VISION COMPACT 水冷平替"),
             alternative("瓦尔基里 N360", 950, "沿用 VISION COMPACT 水冷平替"),
             alternative("展域 SE360（二手）", 1000, "沿用 VISION COMPACT 水冷平替"),
             alternative("展域 SE360（全新供货）", 1499, "沿用 VISION COMPACT 水冷平替"),
@@ -873,13 +1033,13 @@ private enum AestheticOverviewCatalog {
             alternative("图灵智显 8.8 寸副屏（二手）", 200, "沿用 VISION COMPACT 副屏平替")
         ]),
         part("vision-min", "风扇套装", "联立 LCD 积木风扇 4 把 + LED 积木风扇 3 把", 3000, [
-            alternative("丛林豹星际积木 V4 套装", 886, "带屏 4 把 × 199 元 + 无屏 3 把 × 30 元")
+            alternative("丛林豹星际积木 V4（带屏 4 把 + 无屏 3 把）", 886, "带屏 4 把 × 199 元 + 无屏 3 把 × 30 元")
         ])
     ]
 
     private static let hangjiaS960Parts = [
         part("hangjia-s960", "机箱", "航嘉 S960", 159, [], whitePrice: 169),
-        part("hangjia-s960", "散热器", "任意风冷或水冷（按选择计价）", 499, []),
+        part("hangjia-s960", "散热器", "由 AI 按 CPU 自动匹配", 0, []),
         part("hangjia-s960", "风扇套装", "棱镜 8 Pro × 9", 89, [])
     ]
 
@@ -891,7 +1051,7 @@ private enum AestheticOverviewCatalog {
 
     private static let jonsboTK1Parts = [
         part("jonsbo-tk1", "机箱", "乔思伯 TK-1", 579, []),
-        part("jonsbo-tk1", "一体式水冷", "任意水冷（按选择计价）", 499, []),
+        part("jonsbo-tk1", "一体式水冷", "由 AI 按 CPU 自动匹配", 0, []),
         part("jonsbo-tk1", "风扇套装", "棱镜 8 Pro × 4", 40, [])
     ]
 
@@ -1009,6 +1169,12 @@ private enum AestheticOverviewCatalog {
         part("fangtang-c34pro", "一体式水冷", "钛坦 LG600", 699, [])
     ]
 
+    private static let cougarV235Parts = [
+        part("cougar-v235", "机箱", "骨伽凌空 V235", 449, []),
+        part("cougar-v235", "风扇套装", "棱镜 8 Pro × 9", 89, []),
+        part("cougar-v235", "一体式水冷", "利民 PV360", 499, [])
+    ]
+
     private static func part(
         _ prefix: String,
         _ name: String,
@@ -1030,12 +1196,14 @@ private enum AestheticOverviewCatalog {
     private static func alternative(
         _ name: String,
         _ price: Int,
-        _ detail: String
+        _ detail: String,
+        whitePrice: Int? = nil
     ) -> AestheticStyleAlternative {
         AestheticStyleAlternative(
             id: name,
             name: name,
             price: price,
+            whitePrice: whitePrice,
             detail: detail
         )
     }

@@ -136,6 +136,68 @@ def test_saved_builds_support_bounded_pagination() -> None:
     assert invalid_offset.status_code == 422
 
 
+def test_saved_builds_can_filter_upgrade_plans_by_use_case() -> None:
+    client = make_client()
+    headers = {"Authorization": f"Bearer {login(client, '13800138000')}"}
+    client.post("/v1/builds", headers=headers, json=build_payload())
+    upgrade = build_payload(title="CS2 2K 144 帧升级方案")
+    upgrade["use_case"] = "游戏升级"
+    created = client.post("/v1/builds", headers=headers, json=upgrade).json()
+
+    response = client.get(
+        "/v1/builds",
+        headers=headers,
+        params={"use_case": "游戏升级"},
+    )
+
+    assert response.status_code == 200
+    assert [item["id"] for item in response.json()] == [created["id"]]
+
+
+def test_saved_build_accepts_ios_typed_upgrade_plan_payload() -> None:
+    client = make_client()
+    headers = {"Authorization": f"Bearer {login(client, '13800138000')}"}
+    typed_plan = {
+        "status": "ready",
+        "summary": "预算内建议升级。",
+        "budget": 3000,
+        "totalEstimatedPrice": 2200,
+        "primaryBottleneck": "gpu",
+        "missingFields": [],
+        "steps": [],
+        "notes": ["购买显卡前请核对显卡长度与机箱限位。"],
+        "resolution": "1080p",
+        "targetFps": 500,
+        "targetMet": False,
+        "gameResults": [
+            {
+                "game": "cs2",
+                "beforeFps": 320,
+                "afterFps": 410,
+                "targetFps": 500,
+                "met": False,
+            }
+        ],
+    }
+
+    create_response = client.post(
+        "/v1/builds",
+        headers=headers,
+        json={
+            "title": "CS2 1080P 500 帧升级方案",
+            "plan": typed_plan,
+            "budget": 3000,
+            "total_price": 2200,
+            "use_case": "游戏升级",
+        },
+    )
+
+    assert create_response.status_code == 200
+    saved = create_response.json()
+    assert saved["plan"] == typed_plan
+    assert saved["plan"]["gameResults"][0]["afterFps"] == 410
+
+
 def test_saved_build_rejects_oversized_plan_payload() -> None:
     client = make_client()
     headers = {"Authorization": f"Bearer {login(client, '13800138000')}"}

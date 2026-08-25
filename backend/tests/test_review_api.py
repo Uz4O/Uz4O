@@ -113,12 +113,36 @@ def make_client() -> TestClient:
                     specs={"watt": 650},
                 ),
                 CatalogComponent(
+                    id="psu-1000w-gold",
+                    category="psu",
+                    name="1000W 金牌电源",
+                    brand="海韵",
+                    detail_raw="1000W 80Plus Gold",
+                    specs={"watt": 1000},
+                ),
+                CatalogComponent(
                     id="ddr4-16gb",
                     category="ram",
                     name="DDR4 16GB",
                     brand="金士顿",
                     detail_raw="DDR4 8GB×2 3200",
                     specs={"type": "DDR4", "capacity_gb": 16},
+                ),
+                CatalogComponent(
+                    id="ddr4-8gb",
+                    category="ram",
+                    name="DDR4 8GB",
+                    brand="金士顿",
+                    detail_raw="DDR4 8GB 3200",
+                    specs={"type": "DDR4", "capacity_gb": 8},
+                ),
+                CatalogComponent(
+                    id="ssd-256gb",
+                    category="storage",
+                    name="256GB SSD",
+                    brand="致态",
+                    detail_raw="NVMe TLC 256GB",
+                    specs={"capacity_gb": 256},
                 ),
             ],
         )
@@ -142,7 +166,7 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
         json={
             "text": "i7-14700F + RTX4060 + H610 主板 + DDR4 16GB + 500W 电源",
             "direction": "aaa",
-            "resolution": "1440p",
+            "resolution": "2160p",
         },
     )
 
@@ -151,10 +175,14 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
     assert body["risk_level"] == "error"
     assert "seller_price" not in body
     assert "reference_total" not in body
-    assert body["direction"] == "aaa"
+    assert body["direction"] == "balanced"
     assert body["resolution"] == "1440p"
-    assert body["pairing_rating"]["score"] is not None
+    assert body["pairing_rating"]["status"] == "failed"
+    assert body["pairing_rating"]["score"] is None
+    assert body["pairing_rating"]["grade"] is None
+    assert body["performance_rating"]["status"] == "graded"
     assert body["performance_rating"]["score"] is not None
+    assert body["performance_rating"]["grade"] in {"C", "B", "A", "S"}
     assert "不建议直接买" in body["summary"]
     assert body["detected_components"]["cpu"]["component_id"] == "i7-14700f"
     assert body["detected_components"]["gpu"]["component_id"] == "rtx-4060"
@@ -162,6 +190,14 @@ def test_review_analyze_flags_unbalanced_seller_configuration() -> None:
     assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
     assert any(finding["code"] == "low_end_board_for_i7" for finding in body["findings"])
     assert not any("price" in finding["code"] for finding in body["findings"])
+    assert body["recommendations"]
+    assert all(
+        recommendation["severity"] in {"required", "recommended", "optional"}
+        and recommendation["reason"]
+        and recommendation["action"]
+        and recommendation["expected_impact"]
+        for recommendation in body["recommendations"]
+    )
     assert "具体品牌和型号" in body["questions_for_seller"][0]
     assert "重新配一套" not in body["reply_text"]
 
@@ -195,12 +231,40 @@ def test_review_analyze_warns_for_low_cpu_high_gpu() -> None:
 
     response = client.post(
         "/v1/review/analyze",
-        json={"text": "i3-12100F + RTX4090 + B760M 主板 + 650W 金牌电源，报价 14900"},
+        json={"text": "i3-12100F + RTX4090 + B760M 主板 + DDR4 16GB + 1000W 金牌电源"},
     )
 
     assert response.status_code == 200
     body = response.json()
     assert any(finding["code"] == "gpu_cpu_imbalance" for finding in body["findings"])
+    assert body["pairing_rating"]["status"] == "graded"
+    assert body["pairing_rating"]["grade"] == "C"
+    recommendation = next(
+        item for item in body["recommendations"] if item["title"] == "缩小 CPU 与显卡的档次差距"
+    )
+    assert recommendation["severity"] == "recommended"
+    assert recommendation["component_ids"] == ["i3-12100f", "rtx-4090"]
+    assert "CPU 与显卡的性能档次更协调" in recommendation["expected_impact"]
+
+
+def test_review_analyze_flags_low_capacity_single_channel_memory_and_storage() -> None:
+    client = make_client()
+
+    response = client.post(
+        "/v1/review/analyze",
+        json={
+            "text": "i5-12400F + RTX4060 + B760M 主板 + DDR4 8GB 单条 + 256GB SSD + 650W 金牌电源"
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert {"ram_capacity_low", "ram_single_channel", "storage_capacity_low"}.issubset(
+        {finding["code"] for finding in body["findings"]}
+    )
+    assert {"把内存补到至少 16GB", "改为双通道内存", "确认硬盘容量是否够用"}.issubset(
+        {item["title"] for item in body["recommendations"]}
+    )
 
 
 def test_review_analyze_errors_when_psu_wattage_cannot_cover_detected_parts() -> None:
@@ -208,13 +272,49 @@ def test_review_analyze_errors_when_psu_wattage_cannot_cover_detected_parts() ->
 
     response = client.post(
         "/v1/review/analyze",
-        json={"text": "i3-12100F + RTX4090 + B760M 主板 + 500W 电源，报价 13999"},
+        json={"text": "i3-12100F + RTX4090 + B760M 主板 + DDR4 16GB + 500W 电源"},
     )
 
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
     assert any(finding["code"] == "psu_wattage_insufficient" for finding in body["findings"])
+    assert body["pairing_rating"]["status"] == "failed"
+    assert body["pairing_rating"]["grade"] is None
+    assert any(
+        item["severity"] == "required" and "电源" in item["action"]
+        for item in body["recommendations"]
+    )
+
+
+def test_review_analyze_marks_missing_core_information_incomplete() -> None:
+    client = make_client()
+
+    response = client.post(
+        "/v1/review/analyze",
+        json={"text": "CPU：i5-12400F\n显卡：RTX 4060\n其余配件型号待商家确认"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["pairing_rating"]["status"] == "incomplete"
+    assert body["pairing_rating"]["grade"] is None
+    assert body["pairing_rating"]["score"] is None
+    assert any(item["severity"] == "required" for item in body["recommendations"])
+
+
+def test_review_public_grades_are_limited_to_c_through_s() -> None:
+    client = make_client()
+
+    response = client.post(
+        "/v1/review/analyze",
+        json={"text": "i3-12100F + RTX4090 + B760M 主板 + DDR4 16GB + 1000W 金牌电源"},
+    )
+
+    assert response.status_code == 200
+    ratings = [response.json()["pairing_rating"], response.json()["performance_rating"]]
+    assert all(rating["grade"] in {"C", "B", "A", "S"} for rating in ratings)
+    assert all(rating["status"] == "graded" for rating in ratings)
 
 
 def test_review_analyze_ignores_price_text() -> None:
@@ -230,6 +330,40 @@ def test_review_analyze_ignores_price_text() -> None:
     assert "seller_price" not in body
     assert "reference_total" not in body
     assert not any("price" in finding["code"] for finding in body["findings"])
+    review_output = json.dumps(
+        {
+            "summary": body["summary"],
+            "findings": body["findings"],
+            "recommendations": body["recommendations"],
+            "reply_text": body["reply_text"],
+        },
+        ensure_ascii=False,
+    )
+    assert "价格" not in review_output
+    assert "性价比" not in review_output
+    assert "price" not in review_output.lower()
+
+
+def test_review_analyze_legacy_context_fields_do_not_change_result() -> None:
+    client = make_client()
+    text = "i5-12400F + RTX4060 + B760M 主板 + DDR4 16GB + 650W 金牌电源"
+
+    baseline = client.post("/v1/review/analyze", json={"text": text})
+    legacy_fps = client.post(
+        "/v1/review/analyze",
+        json={"text": text, "direction": "fps", "resolution": "1080p"},
+    )
+    legacy_office = client.post(
+        "/v1/review/analyze",
+        json={"text": text, "direction": "office", "resolution": "2160p"},
+    )
+
+    assert baseline.status_code == 200
+    assert legacy_fps.status_code == 200
+    assert legacy_office.status_code == 200
+    assert baseline.json() == legacy_fps.json() == legacy_office.json()
+    assert legacy_fps.headers["x-cache"] == "HIT"
+    assert legacy_office.headers["x-cache"] == "HIT"
 
 
 def test_review_analyze_flags_outdated_clearance_hardware() -> None:
@@ -264,8 +398,8 @@ def test_review_analyze_image_uses_ocr_text(monkeypatch) -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["risk_level"] == "error"
-    assert body["direction"] == "fps"
-    assert body["resolution"] == "1080p"
+    assert body["direction"] == "balanced"
+    assert body["resolution"] == "1440p"
     assert body["source_text"].startswith("i7-14700F")
     assert any(finding["code"] == "cpu_gpu_imbalance" for finding in body["findings"])
 

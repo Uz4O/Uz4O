@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../api/uzbox_api.dart';
@@ -1222,7 +1223,7 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
               ),
               const SizedBox(height: 24),
               const Text(
-                '配置排雷',
+                '配置搭配评估',
                 style: TextStyle(
                   fontSize: 38,
                   fontWeight: FontWeight.w900,
@@ -1231,14 +1232,14 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
               ),
               const SizedBox(height: 8),
               const Text(
-                '商家配置先别急着买，帮你看懂型号、价格和搭配风险',
+                '商家配置先别急着买，帮你看懂兼容性、搭配风险和实际性能',
                 style: TextStyle(
                   color: Color(0xFF777777),
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 36),
               const _ReviewSectionNumber('01'),
               const SizedBox(height: 24),
               const Text(
@@ -1256,7 +1257,7 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
               ),
               const SizedBox(height: 14),
               const Text(
-                '配置截图  ·  报价单照片  ·  聊天记录',
+                '配置截图  ·  配置单照片  ·  聊天记录',
                 style: TextStyle(color: Color(0xFF9A9A9A), fontSize: 13),
               ),
               const SizedBox(height: 20),
@@ -1275,7 +1276,7 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
               ),
               const SizedBox(height: 10),
               const Text(
-                '逐项选择配件型号，并填写商家报价',
+                '逐项选择配件型号，不需要填写价格',
                 style: TextStyle(
                   color: Color(0xFF777777),
                   fontSize: 15,
@@ -1295,8 +1296,8 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
               ),
               const _ReviewRow(
                 icon: Icons.bolt_rounded,
-                title: '电源 / 商家总价',
-                value: '填写价格',
+                title: '硬盘 / 电源',
+                value: '选择型号',
               ),
               const SizedBox(height: 24),
               SizedBox(
@@ -1322,17 +1323,26 @@ class _ConfigReviewScreenState extends State<ConfigReviewScreen> {
     try {
       final image = await ImagePicker().pickImage(
         source: ImageSource.gallery,
-        imageQuality: 92,
+        maxWidth: 2400,
+        maxHeight: 2400,
+        imageQuality: 82,
       );
       if (image == null) return;
       bytes = await image.readAsBytes();
+      if (bytes.length > 8 * 1024 * 1024) {
+        throw const UzBoxApiException('图片不能超过 8MB，请换一张清晰截图');
+      }
       final name = image.name.toLowerCase();
       if (name.endsWith('.png')) contentType = 'image/png';
       if (name.endsWith('.webp')) contentType = 'image/webp';
-    } catch (_) {
-      // Restricted devices and widget tests can still exercise the flow.
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error.toString())));
+      }
     }
-    if (!mounted) return;
+    if (!mounted || bytes == null) return;
     await Navigator.of(context).push(
       uzRoute(
         ConfigReviewLoadingScreen(
@@ -1442,39 +1452,9 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
   ];
 
   final selectedModels = List<String>.filled(fields.length, '');
-  late final List<TextEditingController> priceControllers;
 
-  int get completedCount => List.generate(fields.length, (index) => index)
-      .where(
-        (index) =>
-            selectedModels[index].isNotEmpty &&
-            (int.tryParse(priceControllers[index].text) ?? 0) > 0,
-      )
-      .length;
-
-  int get totalPrice => priceControllers.fold(
-    0,
-    (sum, controller) => sum + (int.tryParse(controller.text) ?? 0),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    priceControllers = List.generate(
-      fields.length,
-      (_) => TextEditingController()..addListener(_refresh),
-    );
-  }
-
-  void _refresh() => setState(() {});
-
-  @override
-  void dispose() {
-    for (final controller in priceControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
+  int get completedCount =>
+      selectedModels.where((model) => model.isNotEmpty).length;
 
   @override
   Widget build(BuildContext context) {
@@ -1502,7 +1482,7 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '选择配件型号，再填写商家给出的单项价格',
+                    '选择你已知道的配件，信息越完整，评级越准确',
                     style: TextStyle(
                       color: Color(0xFF777777),
                       fontSize: 15,
@@ -1515,13 +1495,12 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
                     (index) => _ConfigReviewInputRow(
                       field: fields[index],
                       model: selectedModels[index],
-                      priceController: priceControllers[index],
                       onSelectModel: () => _showModelPicker(index),
                     ),
                   ),
                   const SizedBox(height: 18),
                   const Text(
-                    '至少完成 2 项配件的型号与价格，即可开始排雷',
+                    '至少选择 2 项配件即可开始。信息越完整，评级越准确',
                     style: TextStyle(
                       color: Color(0xFFAAAAAA),
                       fontSize: 12,
@@ -1556,8 +1535,8 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            totalPrice > 0 ? '¥$totalPrice' : '等待填写',
+                          const Text(
+                            '准备检查',
                             style: const TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.w900,
@@ -1592,7 +1571,7 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '开始排雷',
+                                  '开始评估',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
@@ -1694,14 +1673,10 @@ class _ConfigReviewManualScreenState extends State<ConfigReviewManualScreen> {
     final lines = <String>[];
     for (var index = 0; index < fields.length; index++) {
       final model = selectedModels[index];
-      final price = int.tryParse(priceControllers[index].text);
       if (model.isNotEmpty) {
-        lines.add(
-          '${fields[index].title}：$model${price == null ? '' : '，¥$price'}',
-        );
+        lines.add('${fields[index].title}：$model');
       }
     }
-    lines.add('商家总价：¥$totalPrice');
     return lines.join('\n');
   }
 }
@@ -1710,13 +1685,11 @@ class _ConfigReviewInputRow extends StatelessWidget {
   const _ConfigReviewInputRow({
     required this.field,
     required this.model,
-    required this.priceController,
     required this.onSelectModel,
   });
 
   final ({String title, IconData icon, List<String> models}) field;
   final String model;
-  final TextEditingController priceController;
   final VoidCallback onSelectModel;
 
   @override
@@ -1743,86 +1716,40 @@ class _ConfigReviewInputRow extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: onSelectModel,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    height: 42,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            model.isEmpty ? '选择型号' : model,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: model.isEmpty
-                                  ? const Color(0xFFAAAAAA)
-                                  : Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Color(0xFF999999),
-                          size: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+          InkWell(
+            onTap: onSelectModel,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              height: 42,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F5F5),
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(width: 12),
-              Container(
-                width: 112,
-                height: 42,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      '¥',
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      model.isEmpty ? '选择型号' : model,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Color(0xFF777777),
+                        color: model.isEmpty
+                            ? const Color(0xFFAAAAAA)
+                            : Colors.black,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: TextField(
-                        controller: priceController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: '价格',
-                          hintStyle: TextStyle(color: Color(0xFFCCCCCC)),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Color(0xFF999999),
+                    size: 20,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -1868,7 +1795,7 @@ class ConfigReviewLoadingScreen extends StatefulWidget {
   const ConfigReviewLoadingScreen({
     super.key,
     this.sourceText =
-        'CPU：i9-14900KS，¥3999\n主板：华硕 ROG Z790-A，¥2599\n显卡：RTX 5070，¥4099\n电源：650W 金牌，¥399\n商家总价：¥11800',
+        'CPU：i7-14700KF\n主板：微星 B760M 迫击炮\n显卡：RTX 5070\n内存：DDR5 32GB\n电源：750W 金牌',
     this.imageBytes,
     this.imageContentType = 'image/jpeg',
   });
@@ -1886,6 +1813,7 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
   Timer? progressTimer;
   double progress = 0.18;
   final api = UzBoxApi();
+  String? errorMessage;
 
   @override
   void initState() {
@@ -1898,27 +1826,27 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
   }
 
   Future<void> _analyze() async {
-    Map<String, dynamic>? result;
-    final request =
-        (widget.imageBytes == null
-                ? api.reviewText(widget.sourceText)
-                : api.reviewImage(
-                    widget.imageBytes!,
-                    contentType: widget.imageContentType,
-                  ))
-            .then((value) {
-              result = value;
-            })
-            .catchError((Object _) {});
-    await Future.wait([
-      Future.delayed(const Duration(milliseconds: 1800)),
-      Future.any([request, Future.delayed(const Duration(milliseconds: 6200))]),
-    ]);
-    if (!mounted) return;
-    setState(() => progress = 1);
-    await Navigator.of(
-      context,
-    ).pushReplacement(uzRoute(ConfigReviewResultScreen(result: result)));
+    final minimumDelay = Future<void>.delayed(
+      const Duration(milliseconds: 1800),
+    );
+    try {
+      final result = widget.imageBytes == null
+          ? await api.reviewText(widget.sourceText)
+          : await api.reviewImage(
+              widget.imageBytes!,
+              contentType: widget.imageContentType,
+            );
+      await minimumDelay;
+      if (!mounted) return;
+      setState(() => progress = 1);
+      await Navigator.of(
+        context,
+      ).pushReplacement(uzRoute(ConfigReviewResultScreen(result: result)));
+    } catch (error) {
+      if (!mounted) return;
+      progressTimer?.cancel();
+      setState(() => errorMessage = error.toString());
+    }
   }
 
   @override
@@ -1929,6 +1857,40 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (errorMessage != null) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _ReviewCenteredHeader(title: '配置搭配评估'),
+                const SizedBox(height: 44),
+                const Text(
+                  '没有完成评估',
+                  style: TextStyle(fontSize: 38, fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  errorMessage!,
+                  style: const TextStyle(
+                    color: AppTheme.secondary,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                UzPrimaryButton(
+                  title: '返回重新选择',
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     final secondComplete = progress > 0.36;
     final thirdActive = progress > 0.58;
     return Scaffold(
@@ -1940,7 +1902,7 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _ReviewCenteredHeader(title: '配置排雷'),
+              const _ReviewCenteredHeader(title: '配置搭配评估'),
               const SizedBox(height: 32),
               const Text(
                 '正在检查这套配置',
@@ -1989,7 +1951,7 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
                         ),
                         const SizedBox(height: 12),
                         const Text(
-                          '正在核对型号与价格',
+                          '正在核对型号与规格',
                           style: TextStyle(
                             color: Color(0xFF777777),
                             fontSize: 13,
@@ -2052,14 +2014,14 @@ class _ConfigReviewLoadingScreenState extends State<ConfigReviewLoadingScreen> {
               ),
               _ReviewProgressRow(
                 number: '03',
-                title: '分析性能与预算',
+                title: '评估搭配与性能',
                 status: thirdActive
                     ? _ReviewProgressStatus.active
                     : _ReviewProgressStatus.waiting,
               ),
               const _ReviewProgressRow(
                 number: '04',
-                title: '整理购买建议',
+                title: '整理修改建议',
                 status: _ReviewProgressStatus.waiting,
                 showDivider: false,
               ),
@@ -2177,33 +2139,63 @@ class _ReviewProgressRow extends StatelessWidget {
 }
 
 class ConfigReviewResultScreen extends StatelessWidget {
-  const ConfigReviewResultScreen({super.key, this.result});
+  const ConfigReviewResultScreen({super.key, required this.result});
 
-  final Map<String, dynamic>? result;
+  final Map<String, dynamic> result;
 
   @override
   Widget build(BuildContext context) {
-    final findings = (result?['findings'] as List? ?? const <Object>[])
+    final findings = (result['findings'] as List? ?? const <Object>[])
         .whereType<Map<String, dynamic>>()
-        .where((finding) => finding['level'] != 'pass')
+        .where(
+          (finding) =>
+              finding['level'] != 'pass' &&
+              !finding['code'].toString().toLowerCase().contains('price'),
+        )
         .toList();
-    final riskLevel = result?['risk_level']?.toString();
-    final conclusion = switch (riskLevel) {
-      'pass' => '可以放心购买',
-      'error' => '不建议购买',
-      _ => '建议修改后再买',
+    final recommendations =
+        (result['recommendations'] as List? ?? const <Object>[])
+            .whereType<Map<String, dynamic>>()
+            .toList();
+    final actionItems = recommendations.isNotEmpty
+        ? recommendations
+        : findings
+              .map(
+                (finding) => <String, dynamic>{
+                  'severity': finding['level'] == 'error'
+                      ? 'required'
+                      : 'recommended',
+                  'title': finding['title'],
+                  'reason': finding['detail'],
+                  'action': '按问题说明确认或调整对应配件，再重新评估。',
+                  'expected_impact': '降低当前配置中已识别的搭配风险。',
+                },
+              )
+              .toList();
+    final pairingRating = result['pairing_rating'];
+    final performanceRating = result['performance_rating'];
+    final hasCurrentContract = pairingRating is Map && performanceRating is Map;
+    final pairingStatus = pairingRating is Map
+        ? pairingRating['status']?.toString()
+        : null;
+    final riskLevel = hasCurrentContract
+        ? result['risk_level']?.toString()
+        : 'warning';
+    final conclusion = switch (pairingStatus) {
+      'failed' => '存在硬性问题',
+      'incomplete' => '信息待补全',
+      _ => switch (riskLevel) {
+        'pass' => '这套配置可以买',
+        'error' => '建议先别买',
+        _ => '建议修改后再买',
+      },
     };
-    final summary =
-        result?['summary']?.toString() ?? '这套配置存在电源余量和价格偏高问题，建议确认修改后再下单。';
-    final visibleFindings = result == null
-        ? const [
-            {
-              'title': '电源余量偏紧',
-              'detail': '已识别配件估算功耗较高，当前电源余量偏紧，建议更换 750W 金牌电源。',
-            },
-            {'title': '商家报价偏高', 'detail': '商家报价已经高出同档配置的正常装机服务溢价，建议重新确认报价。'},
-          ]
-        : findings;
+    final summary = hasCurrentContract
+        ? result['summary']?.toString() ?? '评估已完成，请核对修改建议。'
+        : '已完成基础兼容性检查；搭配合理度和性能评级需等待服务更新后补全。';
+    final replyText = hasCurrentContract
+        ? result['reply_text']?.toString() ?? summary
+        : '请把每个配件的完整品牌和型号写清楚，确认兼容性后再决定。';
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -2217,7 +2209,7 @@ class ConfigReviewResultScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const _ReviewCenteredHeader(
-                    title: '排雷报告',
+                    title: '配置评估报告',
                     trailing: Icon(Icons.ios_share_rounded, size: 20),
                   ),
                   const SizedBox(height: 34),
@@ -2250,14 +2242,15 @@ class ConfigReviewResultScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
                   _ReviewMetrics(
-                    riskCount: visibleFindings.length,
-                    sellerPrice: (result?['seller_price'] as num?)?.round(),
-                    referenceTotal: (result?['reference_total'] as num?)
-                        ?.round(),
+                    pairingValue: _reviewRatingValue(pairingRating),
+                    performanceValue: _reviewRatingValue(performanceRating),
+                    recommendationCount: actionItems.length,
                   ),
                   const SizedBox(height: 42),
                   Text(
-                    '先处理这 ${visibleFindings.length} 个问题',
+                    actionItems.isEmpty
+                        ? '检查结果'
+                        : '修改建议清单 · ${actionItems.length} 项',
                     style: const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w900,
@@ -2265,13 +2258,18 @@ class ConfigReviewResultScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   ...List.generate(
-                    visibleFindings.length,
-                    (index) => _ReviewFinding(
+                    actionItems.length,
+                    (index) => _ReviewRecommendation(
                       index: index + 1,
-                      title:
-                          visibleFindings[index]['title']?.toString() ?? '配置提醒',
-                      detail:
-                          visibleFindings[index]['detail']?.toString() ?? '',
+                      title: actionItems[index]['title']?.toString() ?? '配置提醒',
+                      severity:
+                          actionItems[index]['severity']?.toString() ??
+                          'recommended',
+                      reason: actionItems[index]['reason']?.toString() ?? '',
+                      action: actionItems[index]['action']?.toString() ?? '',
+                      expectedImpact:
+                          actionItems[index]['expected_impact']?.toString() ??
+                          '',
                     ),
                   ),
                   const SizedBox(height: 22),
@@ -2280,7 +2278,7 @@ class ConfigReviewResultScreen extends StatelessWidget {
                       _ReviewCheckCircle(),
                       SizedBox(width: 14),
                       Text(
-                        '已完成兼容性、搭配与价格检查',
+                        '已完成兼容性、搭配与性能检查',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -2316,7 +2314,7 @@ class ConfigReviewResultScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            '${visibleFindings.length} 个修改建议',
+                            '${actionItems.length} 项修改建议',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
@@ -2329,10 +2327,15 @@ class ConfigReviewResultScreen extends StatelessWidget {
                         width: 174,
                         height: 54,
                         child: FilledButton(
-                          onPressed: () =>
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('已复制给商家的回复')),
-                              ),
+                          onPressed: () async {
+                            await Clipboard.setData(
+                              ClipboardData(text: replyText),
+                            );
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('已复制给商家的回复')),
+                            );
+                          },
                           style: FilledButton.styleFrom(
                             backgroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
@@ -2369,39 +2372,29 @@ class ConfigReviewResultScreen extends StatelessWidget {
 
 class _ReviewMetrics extends StatelessWidget {
   const _ReviewMetrics({
-    required this.riskCount,
-    this.sellerPrice,
-    this.referenceTotal,
+    required this.pairingValue,
+    required this.performanceValue,
+    required this.recommendationCount,
   });
 
-  final int riskCount;
-  final int? sellerPrice;
-  final int? referenceTotal;
+  final String pairingValue;
+  final String performanceValue;
+  final int recommendationCount;
 
   @override
   Widget build(BuildContext context) {
-    final difference = sellerPrice != null && referenceTotal != null
-        ? sellerPrice! - referenceTotal!
-        : null;
     return Row(
       children: [
-        const Expanded(
-          child: _ReviewMetric(title: '兼容性', value: '通过'),
+        Expanded(
+          child: _ReviewMetric(title: '搭配', value: pairingValue),
         ),
         const SizedBox(height: 42, child: VerticalDivider()),
         Expanded(
-          child: _ReviewMetric(
-            title: '预算',
-            value: difference == null
-                ? '等待核对'
-                : difference > 0
-                ? '偏高 ¥$difference'
-                : '合理',
-          ),
+          child: _ReviewMetric(title: '性能', value: performanceValue),
         ),
         const SizedBox(height: 42, child: VerticalDivider()),
         Expanded(
-          child: _ReviewMetric(title: '风险项', value: '$riskCount 个'),
+          child: _ReviewMetric(title: '建议', value: '$recommendationCount 项'),
         ),
       ],
     );
@@ -2453,15 +2446,33 @@ class _ReviewCheckCircle extends StatelessWidget {
   }
 }
 
-class _ReviewFinding extends StatelessWidget {
-  const _ReviewFinding({
+String _reviewRatingValue(Object? rawRating) {
+  if (rawRating is! Map) return '待补全';
+  return switch (rawRating['status']?.toString()) {
+    'failed' => '不通过',
+    'incomplete' => '待补全',
+    _ => switch (rawRating['grade']?.toString()) {
+      'C' || 'B' || 'A' || 'S' => rawRating['grade'].toString(),
+      _ => '待补全',
+    },
+  };
+}
+
+class _ReviewRecommendation extends StatelessWidget {
+  const _ReviewRecommendation({
     required this.index,
     required this.title,
-    required this.detail,
+    required this.severity,
+    required this.reason,
+    required this.action,
+    required this.expectedImpact,
   });
   final int index;
   final String title;
-  final String detail;
+  final String severity;
+  final String reason;
+  final String action;
+  final String expectedImpact;
 
   @override
   Widget build(BuildContext context) {
@@ -2490,6 +2501,19 @@ class _ReviewFinding extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  switch (severity) {
+                    'required' => '必须修改',
+                    'optional' => '购买前确认',
+                    _ => '建议修改',
+                  },
+                  style: const TextStyle(
+                    color: AppTheme.secondary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
                   title,
                   style: const TextStyle(
                     fontSize: 17,
@@ -2498,7 +2522,7 @@ class _ReviewFinding extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  detail,
+                  '原因：$reason',
                   style: const TextStyle(
                     color: AppTheme.secondary,
                     fontSize: 13,
@@ -2506,6 +2530,26 @@ class _ReviewFinding extends StatelessWidget {
                     height: 1.55,
                   ),
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  '怎么改：$action',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    height: 1.5,
+                  ),
+                ),
+                if (expectedImpact.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    '改后：$expectedImpact',
+                    style: const TextStyle(
+                      color: AppTheme.secondary,
+                      fontSize: 12,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

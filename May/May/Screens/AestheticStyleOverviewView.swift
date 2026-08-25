@@ -3,7 +3,7 @@ import SwiftUI
 struct AestheticStyleOverviewView: View {
     let styleID: String
     let onClose: () -> Void
-    let onStartBuild: (Int) -> Void
+    let onStartBuild: (AestheticBuildSelection) -> Void
 
     @State private var selectedColor: AestheticStyleColor = .black
     @State private var selectedAlternatives: [String: String] = [:]
@@ -48,6 +48,7 @@ struct AestheticStyleOverviewView: View {
                             part: part,
                             caseImageName: style.heroImage(for: selectedColor),
                             originalPrice: part.originalPrice(for: selectedColor),
+                            selectedColor: selectedColor,
                             selectedAlternativeID: selectedAlternatives[part.id],
                             onClose: dismissAlternatives,
                             onSelect: { alternative in
@@ -232,7 +233,14 @@ struct AestheticStyleOverviewView: View {
 
             Spacer(minLength: 8)
 
-            Button { onStartBuild(totalPrice) } label: {
+            Button {
+                onStartBuild(
+                    style.buildSelection(
+                        color: selectedColor,
+                        selectedAlternativeIDs: selectedAlternatives
+                    )
+                )
+            } label: {
                 HStack(spacing: 14) {
                     Text("按这个方案装机")
                     Image(systemName: "arrow.right")
@@ -254,13 +262,16 @@ struct AestheticStyleOverviewView: View {
     }
 
     private func currentPrice(for part: AestheticStylePart) -> Int {
+        if part.usesAICooler {
+            return 0
+        }
         guard let alternativeID = selectedAlternatives[part.id],
               let alternative = part.alternatives.first(where: { $0.id == alternativeID })
         else {
             return part.originalPrice(for: selectedColor)
         }
 
-        return alternative.price
+        return alternative.price(for: selectedColor)
     }
 
     private func dismissAlternatives() {
@@ -303,19 +314,21 @@ private struct AestheticStylePartRow: View {
             Spacer(minLength: 4)
 
             HStack(spacing: 18) {
-                Text("¥\(price.formatted())")
+                Text(part.usesAICooler ? "AI 匹配" : "¥\(price.formatted())")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
 
-                Button(action: action) {
-                    Text("替换")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(width: 54, height: 28)
-                        .background(Color.black, in: RoundedRectangle(cornerRadius: 8))
+                if !part.usesAICooler {
+                    Button(action: action) {
+                        Text("替换")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 54, height: 28)
+                            .background(Color.black, in: RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(hasReplacement ? "更换平替，已选择" : "选择平替")
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel(hasReplacement ? "更换平替，已选择" : "选择平替")
             }
         }
         .padding(.vertical, 12)
@@ -330,6 +343,7 @@ private struct AestheticAlternativeModal: View {
     let part: AestheticStylePart
     let caseImageName: String
     let originalPrice: Int
+    let selectedColor: AestheticStyleColor
     let selectedAlternativeID: String?
     let onClose: () -> Void
     let onSelect: (AestheticStyleAlternative?) -> Void
@@ -389,7 +403,7 @@ private struct AestheticAlternativeModal: View {
                             replacementCard(
                                 title: alternative.name,
                                 detail: alternative.detail,
-                                price: alternative.price,
+                                price: alternative.price(for: selectedColor),
                                 isSelected: selectedAlternativeID == alternative.id,
                                 action: { onSelect(alternative) }
                             )
@@ -436,7 +450,7 @@ private struct AestheticAlternativeModal: View {
             VStack(alignment: .leading, spacing: 0) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .fill(isSelected ? Color.white.opacity(0.14) : Color.black.opacity(0.04))
+                        .fill(Color(white: 0.96))
 
                     if let imageName {
                         Image(imageName)
@@ -446,7 +460,7 @@ private struct AestheticAlternativeModal: View {
                     } else {
                         Image(systemName: aestheticPartIconName(for: part.name))
                             .font(.system(size: 48, weight: .medium))
-                            .foregroundStyle(isSelected ? .white : .black)
+                            .foregroundStyle(.black)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -478,13 +492,17 @@ private struct AestheticAlternativeModal: View {
                     }
                 }
                 .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .frame(minHeight: 252, alignment: .top)
-            .background(
-                isSelected ? Color.black : Color.white,
-                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
-            )
+            .background {
+                VStack(spacing: 0) {
+                    Color.white.frame(height: 156 - 14)
+                    isSelected ? Color.black : Color.white
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            }
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .stroke(isSelected ? Color.black : Color.black.opacity(0.12), lineWidth: 1)

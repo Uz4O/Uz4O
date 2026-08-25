@@ -355,6 +355,65 @@ def make_client(
     return TestClient(app)
 
 
+def seed_aesthetic_parts(
+    client: TestClient,
+    parts: list[dict],
+    prices: dict[str, int],
+    *,
+    color: str,
+    style_id: str,
+    style_name: str,
+    supports_hot_cpu_by_id: Optional[dict[str, bool]] = None,
+) -> None:
+    override_session = client.app.dependency_overrides[get_session]
+    session_generator = override_session()
+    session = next(session_generator)
+    try:
+        for part in parts:
+            session.add(
+                HardwareComponent(
+                    id=part["component_id"],
+                    category={
+                        "case": "case",
+                        "cooler": "cooler",
+                        "extra": "aesthetic_extra",
+                    }[part["role"]],
+                    name=part["name"],
+                    brand="test",
+                    detail_raw=part["category"],
+                    specs={
+                        "condition": part.get("condition", "new"),
+                        "color": color,
+                        "display_category": part["category"],
+                        "supports_hot_cpu": (supports_hot_cpu_by_id or {}).get(
+                            part["component_id"],
+                            part.get("supports_hot_cpu", False),
+                        ),
+                        "aesthetic_role": part["role"],
+                        "aesthetic_styles": {style_id: style_name},
+                    },
+                )
+            )
+            canonical_price = prices[part["component_id"]]
+            session.add(
+                ComponentPrice(
+                    component_id=part["component_id"],
+                    reference_price=canonical_price,
+                    price_range_low=canonical_price,
+                    price_range_high=canonical_price,
+                    source="test-aesthetic-catalog",
+                    accepted_count=1,
+                    rejected_count=0,
+                    review_reasons=[],
+                    approved_at=datetime(2026, 8, 24, tzinfo=timezone.utc),
+                )
+            )
+        session.commit()
+    finally:
+        session.close()
+        session_generator.close()
+
+
 def test_generate_build_returns_matching_template_plan() -> None:
     client = make_client(with_template=True)
 
@@ -427,6 +486,179 @@ def test_build_options_returns_full_high_budget_modes_in_approved_order() -> Non
             "risks",
         }.isdisjoint(option["details"])
         assert "compatibility" not in option
+
+
+def test_build_options_locks_aesthetic_parts_without_double_counting() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    payload = {
+        "budget": 7500,
+        "use_case": "游戏",
+        "game_categories": ["CS2"],
+        "aesthetic_style": {
+            "style_id": "vision-compact",
+            "style_name": "伪造方案名",
+            "color": "black",
+            "price_date": "2099-01-01",
+            "parts": [
+                {
+                    "component_id": "aesthetic-case-vision-black",
+                    "role": "case",
+                    "category": "机箱",
+                    "name": "联立 VISION COMPACT 黑色",
+                    "condition": "new",
+                    "reference_price": 1,
+                },
+                {
+                    "component_id": "aesthetic-cooler-se360",
+                    "role": "cooler",
+                    "category": "一体式水冷",
+                    "name": "展域 SE360",
+                    "condition": "new",
+                    "reference_price": 1,
+                    "supports_hot_cpu": True,
+                },
+                {
+                    "component_id": "aesthetic-extra-fans-v4",
+                    "role": "extra",
+                    "category": "风扇套装",
+                    "name": "积木风扇套装",
+                    "condition": "new",
+                    "reference_price": 1,
+                },
+            ],
+        },
+    }
+    seed_aesthetic_parts(
+        client,
+        payload["aesthetic_style"]["parts"],
+        {
+            "aesthetic-case-vision-black": 600,
+            "aesthetic-cooler-se360": 500,
+            "aesthetic-extra-fans-v4": 100,
+        },
+        color="black",
+        style_id="vision-compact",
+        style_name="联立 VISION COMPACT",
+    )
+
+    first = client.post("/v1/build/options", json=payload)
+
+    assert first.status_code == 200
+    for option in first.json()["options"]:
+        details = option["details"]
+        parts = {part["role"]: part for part in details["parts"]}
+        assert option["components"]["case"] == "aesthetic-case-vision-black"
+        assert option["components"]["cooler"] == "aesthetic-cooler-se360"
+        assert parts["case"]["condition"] == "new"
+        assert parts["cooler"]["condition"] == "new"
+        assert parts["case"]["price_date"] == "2026-08-24"
+        assert details["performance_total"] == 7500
+        assert details["appearance_total"] == 1200
+        assert details["aesthetic_style_name"] == "联立 VISION COMPACT"
+        assert details["aesthetic_color"] == "black"
+        assert details["price_date"] == "2026-08-24"
+        assert option["estimated_total"] == 7500 - 937 - 937 + 1200
+        assert details["extras"][-1] == {
+            "id": "aesthetic-extra-fans-v4",
+            "name": "积木风扇套装",
+            "condition": "new",
+            "reference_price": 100,
+            "category": "风扇套装",
+        }
+
+    selected = first.json()["options"][0]
+    assert client.post(f"/v1/build/options/{selected['selection_id']}/select").status_code == 200
+    second = client.post("/v1/build/options", json=payload)
+    assert second.status_code == 200
+    assert second.json()["options"][0]["source"] == "selection_cache"
+    assert second.json()["options"][0]["estimated_total"] == selected["estimated_total"]
+
+
+def test_build_options_rejects_client_forged_hot_cpu_support() -> None:
+    client = make_client(
+        with_template=False,
+        option_templates=(("fps", "used"), ("fps", "new"), ("fps", "mixed")),
+    )
+    parts = [
+        {
+            "component_id": "aesthetic-case-mf400",
+            "role": "case",
+            "category": "机箱",
+            "name": "酷冷至尊 MF400 Mesh",
+            "condition": "new",
+            "reference_price": 299,
+        },
+        {
+            "component_id": "aesthetic-cooler-challenger-v4",
+            "role": "cooler",
+            "category": "CPU 散热器",
+            "name": "酷冷至尊挑战者 V4",
+            "condition": "new",
+            "reference_price": 169,
+            "supports_hot_cpu": True,
+        },
+    ]
+    seed_aesthetic_parts(
+        client,
+        parts,
+        {"aesthetic-case-mf400": 299, "aesthetic-cooler-challenger-v4": 169},
+        color="black",
+        style_id="coolermasterMF400Mesh",
+        style_name="酷冷至尊 MF400 Mesh",
+        supports_hot_cpu_by_id={"aesthetic-cooler-challenger-v4": False},
+    )
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "aesthetic_style": {
+                "style_id": "coolermasterMF400Mesh",
+                "style_name": "伪造方案名",
+                "color": "black",
+                "price_date": "2099-01-01",
+                "parts": parts,
+            },
+        },
+    )
+
+    assert response.status_code == 422
+    assert "无法安全支持当前高热 CPU" in response.text
+
+
+def test_build_options_rejects_aesthetic_style_without_exactly_one_case() -> None:
+    client = make_client(with_template=False)
+
+    response = client.post(
+        "/v1/build/options",
+        json={
+            "budget": 7500,
+            "use_case": "游戏",
+            "aesthetic_style": {
+                "style_id": "invalid",
+                "style_name": "无机箱方案",
+                "color": "black",
+                "price_date": "2026-08-24",
+                "parts": [
+                    {
+                        "component_id": "fan-only",
+                        "role": "extra",
+                        "category": "风扇套装",
+                        "name": "风扇",
+                        "reference_price": 100,
+                    }
+                ],
+            },
+        },
+    )
+
+    assert response.status_code == 422
+    assert "必须且只能锁定一个机箱" in response.text
 
 
 def test_build_options_rejects_base_option_more_than_200_below_budget() -> None:

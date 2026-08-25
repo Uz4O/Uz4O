@@ -42,3 +42,20 @@ JSON 最小格式：
 ```bash
 python3 tools/style_catalog/generate_explorer_assets.py
 ```
+
+## 导出后端正式目录
+
+风格配件或价格变动后，在项目根目录重新生成去重 SKU 和人工参考价：
+
+```bash
+swiftc May/May/Models/HardwareCatalog.swift May/May/Models/OnboardingProfile.swift May/May/Models/PerformanceTestFlow.swift May/May/Models/AIBuildFlow.swift May/May/Models/AestheticBuildFlow.swift May/May/Models/AestheticGeneratedCatalog.swift tools/style_catalog/export_backend_catalog.swift -o /tmp/export-aesthetic-catalog
+/tmp/export-aesthetic-catalog backend/data/aesthetic-style-components-2026-08-24.json backend/data/aesthetic-style-reference-prices-2026-08-24.csv
+```
+
+部署时先导入硬件，再导入价格：
+
+```bash
+cd backend
+.venv/bin/python -m app.cli seed-hardware data/aesthetic-style-components-2026-08-24.json
+.venv/bin/python -m app.cli ingest-prices data/aesthetic-style-reference-prices-2026-08-24.csv --approved-at 2026-08-24
+```

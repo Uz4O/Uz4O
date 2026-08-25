@@ -1,15 +1,14 @@
 import Foundation
 
-struct UpgradeCurrentHardwareDTO: Encodable, Equatable {
+struct UpgradeCurrentHardwareDTO: Encodable, Equatable, Hashable {
     let cpu: String?
     let gpu: String?
     let motherboard: String?
     let ram: String?
-    let storage: String?
     let psu: String?
 }
 
-struct UpgradePlanRequestDTO: Encodable, Equatable {
+struct UpgradePlanRequestDTO: Encodable, Equatable, Hashable {
     let budget: Int
     let current: UpgradeCurrentHardwareDTO
     let need: String
@@ -23,7 +22,7 @@ struct UpgradePlanRequestDTO: Encodable, Equatable {
     }
 }
 
-struct UpgradeStepDTO: Decodable, Equatable, Identifiable {
+struct UpgradeStepDTO: Codable, Equatable, Hashable, Identifiable {
     var id: Int { order }
 
     let order: Int
@@ -35,9 +34,12 @@ struct UpgradeStepDTO: Decodable, Equatable, Identifiable {
     let estimatedPrice: Int
     let expectedGainPercent: Int
     let reason: String
+    let bundleId: String
+    let bundleTitle: String
+    let requiredTogether: Bool
 }
 
-struct UpgradeGameResultDTO: Decodable, Equatable, Identifiable {
+struct UpgradeGameResultDTO: Codable, Equatable, Hashable, Identifiable {
     var id: String { game }
 
     let game: String
@@ -47,7 +49,7 @@ struct UpgradeGameResultDTO: Decodable, Equatable, Identifiable {
     let met: Bool
 }
 
-struct UpgradePlanResponseDTO: Decodable, Equatable {
+struct UpgradePlanResponseDTO: Codable, Equatable, Hashable {
     let status: String
     let summary: String
     let budget: Int
@@ -60,10 +62,14 @@ struct UpgradePlanResponseDTO: Decodable, Equatable {
     let targetFps: Int?
     let targetMet: Bool?
     let gameResults: [UpgradeGameResultDTO]
+    let direction: String?
+    let anchorTemplateId: String?
+    let priceDate: String?
 
     private enum CodingKeys: String, CodingKey {
         case status, summary, budget, totalEstimatedPrice, primaryBottleneck
         case missingFields, steps, notes, resolution, targetFps, targetMet, gameResults
+        case direction, anchorTemplateId, priceDate
     }
 
     init(from decoder: Decoder) throws {
@@ -83,7 +89,35 @@ struct UpgradePlanResponseDTO: Decodable, Equatable {
             [UpgradeGameResultDTO].self,
             forKey: .gameResults
         ) ?? []
+        direction = try container.decodeIfPresent(String.self, forKey: .direction)
+        anchorTemplateId = try container.decodeIfPresent(String.self, forKey: .anchorTemplateId)
+        priceDate = try container.decodeIfPresent(String.self, forKey: .priceDate)
     }
+}
+
+struct SaveUpgradePlanRequestDTO: Encodable {
+    let title: String
+    let plan: UpgradePlanResponseDTO
+    let budget: Int
+    let totalPrice: Int
+    let useCase: String
+
+    enum CodingKeys: String, CodingKey {
+        case title, plan, budget
+        case totalPrice = "total_price"
+        case useCase = "use_case"
+    }
+}
+
+struct SavedUpgradePlanDTO: Decodable, Hashable, Identifiable {
+    let id: String
+    let title: String
+    let plan: UpgradePlanResponseDTO
+    let budget: Int?
+    let totalPrice: Int?
+    let useCase: String?
+    let createdAt: String
+    let updatedAt: String
 }
 
 enum UpgradePlanStep: Int, CaseIterable {
@@ -101,69 +135,17 @@ enum UpgradePlanStep: Int, CaseIterable {
 
 }
 
-enum UpgradeGoal: Int, CaseIterable, Identifiable {
-    case diagnose = 1
+enum UpgradeGoal: Equatable {
     case gaming
-    case everyday
-    case productivity
 
-    var id: Int { rawValue }
-    var number: String { String(format: "%02d", rawValue) }
-
-    static let selectableCases: [UpgradeGoal] = [.diagnose, .gaming]
+    static let selectableCases: [UpgradeGoal] = [.gaming]
 
     var title: String {
-        switch self {
-        case .diagnose: return "帮我判断短板"
-        case .gaming: return "游戏帧率和画质"
-        case .everyday: return "日常卡顿和多任务"
-        case .productivity: return "剪辑和渲染效率"
-        }
-    }
-
-    var compactTitle: String {
-        switch self {
-        case .diagnose: return "帮我找短板"
-        case .gaming: return "游戏性能"
-        case .everyday: return "日常卡顿"
-        case .productivity: return "剪辑渲染"
-        }
-    }
-
-    var symbolName: String {
-        switch self {
-        case .diagnose: return "checkmark.shield"
-        case .gaming: return "gamecontroller"
-        case .everyday: return "exclamationmark.display"
-        case .productivity: return "movieclapper"
-        }
+        "游戏帧率和画质"
     }
 
     var conditionsTitle: String {
-        switch self {
-        case .diagnose: return "短板判断条件"
-        case .gaming: return "游戏性能目标"
-        case .everyday: return "日常体验目标"
-        case .productivity: return "生产力性能目标"
-        }
-    }
-
-    var resultHeadline: String {
-        switch self {
-        case .diagnose: return "这台电脑，\n先找准真正短板。"
-        case .gaming: return "这台电脑，\n先升级显卡。"
-        case .everyday: return "这台电脑，\n先补足内存。"
-        case .productivity: return "这台电脑，\n先强化处理器。"
-        }
-    }
-
-    var priorityLabel: String {
-        switch self {
-        case .diagnose: return "综合短板"
-        case .gaming: return "显卡优先"
-        case .everyday: return "内存优先"
-        case .productivity: return "CPU 优先"
-        }
+        "游戏性能目标"
     }
 }
 
@@ -193,7 +175,7 @@ struct UpgradePlanConfiguration: Equatable {
     var frameTarget: Int
     var componentPreference: String
 
-    static let categories = HardwareProfileOptions.categories
+    static let categories = HardwareProfileOptions.categories.filter { $0.title != "硬盘" }
     static let games = [
         "无畏契约", "CS2", "PUBG", "三角洲行动", "云顶之弈",
         "英雄联盟", "使命召唤", "赛博朋克2077", "荒野大镖客2", "GTA5",
@@ -267,7 +249,23 @@ struct UpgradePlanConfiguration: Equatable {
     }
 
     var hasRequiredGameSelection: Bool {
-        goal != .gaming || !selectedGames.isEmpty
+        !selectedGames.isEmpty
+    }
+
+    var missingRequiredHardwareTitles: [String] {
+        [
+            ("CPU", Self.catalogID(for: hardwareProfile.cpu, in: HardwareCatalog.cpus)),
+            ("显卡", Self.catalogID(for: hardwareProfile.gpu, in: HardwareCatalog.gpus)),
+            ("主板", Self.catalogID(for: hardwareProfile.motherboard, in: HardwareCatalog.motherboards)),
+            ("内存", Self.catalogID(for: hardwareProfile.memory, in: HardwareCatalog.rams)),
+            ("电源", Self.catalogID(for: hardwareProfile.powerSupply, in: HardwareCatalog.powerSupplies)),
+        ].compactMap { title, componentID in
+            componentID == nil ? title : nil
+        }
+    }
+
+    var hasRequiredHardwareSelection: Bool {
+        missingRequiredHardwareTitles.isEmpty
     }
 
     var apiRequest: UpgradePlanRequestDTO {
@@ -278,13 +276,12 @@ struct UpgradePlanConfiguration: Equatable {
                 gpu: Self.catalogID(for: hardwareProfile.gpu, in: HardwareCatalog.gpus),
                 motherboard: Self.catalogID(for: hardwareProfile.motherboard, in: HardwareCatalog.motherboards),
                 ram: Self.catalogID(for: hardwareProfile.memory, in: HardwareCatalog.rams),
-                storage: Self.catalogID(for: hardwareProfile.storage, in: HardwareCatalog.storages),
                 psu: Self.catalogID(for: hardwareProfile.powerSupply, in: HardwareCatalog.powerSupplies)
             ),
             need: goal.title,
             games: Self.games.filter(selectedGames.contains).compactMap { Self.gameIDs[$0] },
             resolution: resolution.apiValue,
-            targetFps: goal == .gaming ? frameTarget : nil
+            targetFps: frameTarget
         )
     }
 

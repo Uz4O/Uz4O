@@ -137,7 +137,7 @@ struct AestheticBuildStyle: Equatable, Identifiable {
     let tags: [String]
     let options: [AestheticRestorationOption]
 
-    var startingCostLabel: String { "外观方案约 ¥\(options[0].styleCost.low.formatted()) 起" }
+    var startingCostLabel: String { "为颜值花费约 ¥\(options[0].styleCost.low.formatted()) 起" }
     static let featured: [Self] = AestheticDemoCatalog.styles
 }
 

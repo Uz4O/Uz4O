@@ -20,7 +20,6 @@ struct ContentView: View {
     @State private var presentedFullScreen: FullScreenRoute?
     @State private var diyBuildOption: BuildOptionDTO?
     @State private var showsSplash = true
-    @State private var isSplashDestinationFocused = false
     @State private var isHomeWordmarkVisible: Bool
     @State private var isHomeContentVisible: Bool
     @State private var isMainTabBarVisible: Bool
@@ -45,47 +44,7 @@ struct ContentView: View {
             AppTheme.background
                 .ignoresSafeArea()
 
-            Group {
-                if !hasCompletedLaunchIntro, appPhase == .login {
-                    LaunchIntroView {
-                        hasCompletedLaunchIntro = true
-                    }
-                } else {
-                    switch appPhase {
-                    case .login:
-                        LoginView(session: session, onLogin: enterMainApp)
-                            .transition(
-                                .asymmetric(
-                                    insertion: .opacity,
-                                    removal: .scale(scale: 1.035).combined(with: .opacity)
-                                )
-                            )
-                            .zIndex(1)
-                    case .main:
-                        MainTabView(
-                            session: session,
-                            onboardingProfile: $onboardingProfile,
-                            selectedTab: $selectedTab,
-                            selectedConfigSection: $selectedConfigSection,
-                            diyBuildOption: $diyBuildOption,
-                            isHomeWordmarkVisible: isHomeWordmarkVisible,
-                            isHomeContentVisible: isHomeContentVisible,
-                            isTabBarVisible: isMainTabBarVisible,
-                            onPresentFullScreen: { presentedFullScreen = $0 },
-                            onAccountDeleted: resetAfterAccountDeletion
-                        )
-                        .transition(
-                            .asymmetric(
-                                insertion: .scale(scale: 0.975).combined(with: .opacity),
-                                removal: .opacity
-                            )
-                        )
-                    }
-                }
-            }
-            .scaleEffect(isSplashDestinationFocused ? 1 : 0.985)
-            .blur(radius: isSplashDestinationFocused || reduceMotion ? 0 : 7)
-            .opacity(isSplashDestinationFocused ? 1 : 0)
+            appDestination
 
             if showsSplash {
                 AppSplashView(
@@ -128,18 +87,50 @@ struct ContentView: View {
             isHomeContentVisible = true
             isMainTabBarVisible = true
         }
-
-        if reduceMotion {
-            isSplashDestinationFocused = true
-        } else {
-            withAnimation(.timingCurve(0.22, 0.72, 0.18, 1, duration: 0.68)) {
-                isSplashDestinationFocused = true
-            }
-        }
     }
 
     private func finishSplash() {
         showsSplash = false
+    }
+
+    @ViewBuilder
+    private var appDestination: some View {
+        if !hasCompletedLaunchIntro, appPhase == .login {
+            LaunchIntroView {
+                hasCompletedLaunchIntro = true
+            }
+        } else {
+            switch appPhase {
+            case .login:
+                LoginView(session: session, onLogin: enterMainApp)
+                    .transition(
+                        .asymmetric(
+                            insertion: .opacity,
+                            removal: .scale(scale: 1.035).combined(with: .opacity)
+                        )
+                    )
+                    .zIndex(1)
+            case .main:
+                MainTabView(
+                    session: session,
+                    onboardingProfile: $onboardingProfile,
+                    selectedTab: $selectedTab,
+                    selectedConfigSection: $selectedConfigSection,
+                    diyBuildOption: $diyBuildOption,
+                    isHomeWordmarkVisible: isHomeWordmarkVisible,
+                    isHomeContentVisible: isHomeContentVisible,
+                    isTabBarVisible: isMainTabBarVisible,
+                    onPresentFullScreen: { presentedFullScreen = $0 },
+                    onAccountDeleted: resetAfterAccountDeletion
+                )
+                .transition(
+                    .asymmetric(
+                        insertion: .scale(scale: 0.975).combined(with: .opacity),
+                        removal: .opacity
+                    )
+                )
+            }
+        }
     }
 
     @ViewBuilder
@@ -152,7 +143,14 @@ struct ContentView: View {
                 onEditInDIY: editInDIY
             )
         case .aestheticBuild(let styleID):
-            AestheticBuildFlowView(styleID: styleID, onClose: { presentedFullScreen = nil })
+            AestheticBuildFlowView(
+                styleID: styleID,
+                appearanceSelection: (
+                    AestheticBuildStyle.all.first { $0.id == styleID }
+                        ?? AestheticBuildStyle.all[0]
+                ).buildSelection(color: .black, selectedAlternativeIDs: [:]),
+                onClose: { presentedFullScreen = nil }
+            )
         case .aestheticOverview(let styleID):
             AestheticStyleRouteView(styleID: styleID, onClose: { presentedFullScreen = nil })
         case .performanceTest(let returnTab):
@@ -203,6 +201,7 @@ private enum MainRoute: Hashable {
     case compatibility
     case buildResult
     case builds
+    case savedUpgrade(SavedUpgradePlanDTO)
     case contactComplaint
 }
 
@@ -320,7 +319,9 @@ private struct MainTabView: View {
         case .builds:
             MyBuildsView(
                 hardwareProfile: onboardingProfile.hardwareProfile,
+                accessToken: session.accessToken,
                 onOpenPlan: { path.wrappedValue.append(.buildResult) },
+                onOpenSavedUpgrade: { path.wrappedValue.append(.savedUpgrade($0)) },
                 onCreate: {
                     selectedConfigSection = .currentComputer
                     onPresentFullScreen(.aiBuild(.fromConfigAIBuild))
@@ -347,6 +348,7 @@ private struct MainTabView: View {
         case .upgrade:
             UpgradePlanView(
                 savedHardwareProfile: onboardingProfile.hardwareProfile,
+                accessToken: session.accessToken,
                 onBack: { pop(path) }
             )
             .toolbar(.hidden, for: .navigationBar)
@@ -364,6 +366,15 @@ private struct MainTabView: View {
                 onBack: { pop(path) }
             )
             .toolbar(.hidden, for: .navigationBar)
+        case .savedUpgrade(let savedPlan):
+            UpgradePlanView(
+                savedHardwareProfile: onboardingProfile.hardwareProfile,
+                accessToken: session.accessToken,
+                initialResponse: savedPlan.plan,
+                onBack: { pop(path) }
+            )
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbar(.hidden, for: .tabBar)
         case .contactComplaint:
             ContactComplaintView(onBack: { pop(path) })
                 .toolbar(.hidden, for: .navigationBar)
@@ -531,21 +542,21 @@ private struct AestheticStyleRouteView: View {
     let onClose: () -> Void
 
     @State private var showsBuildFlow = false
-    @State private var appearanceCost = 0
+    @State private var appearanceSelection: AestheticBuildSelection?
 
     var body: some View {
-        if showsBuildFlow {
+        if showsBuildFlow, let appearanceSelection {
             AestheticBuildFlowView(
                 styleID: styleID,
-                appearanceCost: appearanceCost,
+                appearanceSelection: appearanceSelection,
                 onClose: onClose
             )
         } else {
             AestheticStyleOverviewView(
                 styleID: styleID,
                 onClose: onClose,
-                onStartBuild: { cost in
-                    appearanceCost = cost
+                onStartBuild: { selection in
+                    appearanceSelection = selection
                     withAnimation(.easeOut(duration: 0.25)) {
                         showsBuildFlow = true
                     }
@@ -558,20 +569,139 @@ private struct AestheticStyleRouteView: View {
 private struct AestheticBuildFlowView: View {
     let onClose: () -> Void
     @State private var flow: AestheticBuildFlow
-    @State private var showsResult = false
+    @State private var response: BuildOptionsResponseDTO?
+    @State private var selectedOption: BuildOptionDTO?
+    @State private var isGenerating = false
+    @State private var generationError: String?
 
-    init(styleID: String, appearanceCost: Int? = nil, onClose: @escaping () -> Void) {
+    init(
+        styleID: String,
+        appearanceSelection: AestheticBuildSelection,
+        onClose: @escaping () -> Void
+    ) {
         self.onClose = onClose
-        _flow = State(initialValue: AestheticBuildFlow(styleID: styleID, appearanceCost: appearanceCost))
+        _flow = State(
+            initialValue: AestheticBuildFlow(
+                styleID: styleID,
+                appearanceSelection: appearanceSelection
+            )
+        )
     }
 
     var body: some View {
-        if showsResult {
-            BuildResultView(plan: AppMockData.aestheticSamplePlan(for: flow), onBack: onClose)
-        } else {
+        ZStack {
             AestheticBuildView(flow: $flow, onClose: onClose) {
-                showsResult = true
+                generateOptions()
             }
+            .allowsHitTesting(response == nil && !isGenerating)
+
+            if let response, selectedOption == nil {
+                BuildOptionsView(
+                    response: response,
+                    onBack: { self.response = nil },
+                    onSelect: openOption
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(AppTheme.background.ignoresSafeArea())
+                .transition(.opacity)
+                .zIndex(1)
+            }
+
+            if let selectedOption {
+                BuildResultView(
+                    plan: selectedOption.makeBuildPlan(
+                        performanceGameNames: flow.selectedGames.map(\.name)
+                    ),
+                    onBack: {
+                        self.selectedOption = nil
+                        if response?.options.count == 1 {
+                            response = nil
+                        }
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(AppTheme.background.ignoresSafeArea())
+                .transition(.opacity)
+                .zIndex(2)
+            }
+
+            if isGenerating {
+                ZStack {
+                    Color.black.opacity(0.18)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: 14) {
+                        ProgressView()
+                            .tint(.black)
+                        Text("正在生成真实配置方案")
+                            .font(.appSubheadline)
+                            .foregroundStyle(AppTheme.primaryText)
+                    }
+                    .padding(.horizontal, 28)
+                    .frame(height: 112)
+                    .background(Color.white, in: RoundedRectangle(cornerRadius: 20))
+                }
+                .zIndex(3)
+            }
+        }
+        .animation(.easeOut(duration: 0.22), value: response != nil)
+        .animation(.easeOut(duration: 0.22), value: selectedOption != nil)
+        .alert(
+            "生成失败",
+            isPresented: Binding(
+                get: { generationError != nil },
+                set: { if !$0 { generationError = nil } }
+            )
+        ) {
+            Button("好的", role: .cancel) {}
+        } message: {
+            Text(generationError ?? "请稍后重试")
+        }
+    }
+
+    private func generateOptions() {
+        guard !isGenerating else { return }
+        isGenerating = true
+        generationError = nil
+        let games = flow.selectedGames.map(\.name)
+
+        Task {
+            do {
+                let result = try await AppAPIClient().buildOptions(
+                    budget: flow.performanceBudget,
+                    useCase: flow.selectedUseCase,
+                    gameCategories: games,
+                    direction: flow.buildDirection.rawValue,
+                    officeApps: [],
+                    needsWirelessNetwork: flow.needsWirelessNetwork,
+                    memorySize: flow.selectedMemorySize,
+                    storageSize: flow.selectedStorageSize,
+                    allowsFlexibleBudget: false,
+                    noGPUBuild: flow.hasOwnedGPU,
+                    ownedGPUModel: flow.hasOwnedGPU
+                        ? flow.ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines)
+                        : nil,
+                    aestheticStyle: flow.resolvedAppearanceSelection
+                )
+                guard !Task.isCancelled else { return }
+                response = result
+                if result.options.count == 1, let option = result.options.first {
+                    openOption(option)
+                }
+                isGenerating = false
+            } catch {
+                guard !Task.isCancelled else { return }
+                isGenerating = false
+                generationError = error.localizedDescription
+            }
+        }
+    }
+
+    private func openOption(_ option: BuildOptionDTO) {
+        selectedOption = option
+        guard let selectionID = option.selectionId else { return }
+        Task {
+            try? await AppAPIClient().selectBuildOption(selectionID: selectionID)
         }
     }
 }

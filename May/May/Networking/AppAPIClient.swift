@@ -236,7 +236,8 @@ struct AppAPIClient {
         storageSize: String,
         allowsFlexibleBudget: Bool,
         noGPUBuild: Bool,
-        ownedGPUModel: String?
+        ownedGPUModel: String?,
+        aestheticStyle: AestheticBuildSelection? = nil
     ) async throws -> BuildOptionsResponseDTO {
         let response: BuildOptionsResponseDTO = try await request(
             path: "/v1/build/options",
@@ -252,7 +253,8 @@ struct AppAPIClient {
                 storageSize: storageSize,
                 allowsFlexibleBudget: allowsFlexibleBudget,
                 noGPUBuild: noGPUBuild,
-                ownedGPUModel: ownedGPUModel
+                ownedGPUModel: ownedGPUModel,
+                aestheticStyle: aestheticStyle
             )
         )
         guard response.hasValidPartRoles else {
@@ -380,36 +382,20 @@ struct AppAPIClient {
         )
     }
 
-    func analyzeConfigReviewText(
-        _ text: String,
-        direction: String,
-        resolution: String
-    ) async throws -> ConfigReviewResponseDTO {
+    func analyzeConfigReviewText(_ text: String) async throws -> ConfigReviewResponseDTO {
         try await request(
             path: "/v1/review/analyze",
             method: "POST",
-            body: ConfigReviewRequestDTO(
-                text: text,
-                direction: direction,
-                resolution: resolution
-            )
+            body: ConfigReviewRequestDTO(text: text)
         )
     }
 
-    func analyzeConfigReviewImage(
-        imageData: Data,
-        direction: String,
-        resolution: String
-    ) async throws -> ConfigReviewResponseDTO {
+    func analyzeConfigReviewImage(imageData: Data) async throws -> ConfigReviewResponseDTO {
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = makeRequest(path: "/v1/review/analyze/image", method: "POST", token: nil)
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         var body = Data()
-        body.appendUTF8("--\(boundary)\r\n")
-        body.appendUTF8("Content-Disposition: form-data; name=\"direction\"\r\n\r\n\(direction)\r\n")
-        body.appendUTF8("--\(boundary)\r\n")
-        body.appendUTF8("Content-Disposition: form-data; name=\"resolution\"\r\n\r\n\(resolution)\r\n")
         body.appendUTF8("--\(boundary)\r\n")
         body.appendUTF8("Content-Disposition: form-data; name=\"image\"; filename=\"config.jpg\"\r\n")
         body.appendUTF8("Content-Type: image/jpeg\r\n\r\n")
@@ -442,6 +428,35 @@ struct AppAPIClient {
             path: "/v1/upgrade/plan",
             method: "POST",
             body: body
+        )
+    }
+
+    func saveUpgradePlan(
+        _ plan: UpgradePlanResponseDTO,
+        title: String,
+        token: String
+    ) async throws -> SavedUpgradePlanDTO {
+        try await request(
+            path: "/v1/builds",
+            method: "POST",
+            body: SaveUpgradePlanRequestDTO(
+                title: title,
+                plan: plan,
+                budget: plan.budget,
+                totalPrice: plan.totalEstimatedPrice,
+                useCase: "游戏升级"
+            ),
+            token: token
+        )
+    }
+
+    func savedUpgradePlans(token: String) async throws -> [SavedUpgradePlanDTO] {
+        let useCase = "游戏升级".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            ?? "游戏升级"
+        return try await request(
+            path: "/v1/builds?use_case=\(useCase)",
+            method: "GET",
+            token: token
         )
     }
 
@@ -591,8 +606,6 @@ struct AppAPIClient {
 
 private struct ConfigReviewRequestDTO: Encodable {
     let text: String
-    let direction: String
-    let resolution: String
 }
 
 private extension Data {
@@ -627,6 +640,7 @@ private struct BuildOptionsRequestDTO: Encodable {
     let allowsFlexibleBudget: Bool
     let noGPUBuild: Bool
     let ownedGPUModel: String?
+    let aestheticStyle: AestheticBuildSelection?
 
     enum CodingKeys: String, CodingKey {
         case budget
@@ -640,6 +654,7 @@ private struct BuildOptionsRequestDTO: Encodable {
         case allowsFlexibleBudget = "allows_flexible_budget"
         case noGPUBuild = "no_gpu_build"
         case ownedGPUModel = "owned_gpu_model"
+        case aestheticStyle = "aesthetic_style"
     }
 }
 
@@ -816,6 +831,11 @@ struct BuildOptionDetailsDTO: Decodable {
     let parts: [BuildOptionPartDTO]
     let extras: [BuildOptionExtraDTO]?
     let usedGpuAlternative: UsedGPUAlternativeDTO?
+    let aestheticStyleId: String?
+    let aestheticStyleName: String?
+    let aestheticColor: String?
+    let performanceTotal: Int?
+    let appearanceTotal: Int?
     let suitableUser: String
     let priceDate: String
 }
@@ -834,6 +854,7 @@ struct BuildOptionExtraDTO: Decodable {
     let name: String
     let condition: BuildPartConditionDTO
     let referencePrice: Int
+    let category: String?
 }
 
 struct BuildOptionPartDTO: Decodable {
@@ -864,18 +885,118 @@ struct ConfigReviewResponseDTO: Decodable {
     let resolution: String
     let pairingRating: ConfigReviewRatingDTO
     let performanceRating: ConfigReviewRatingDTO
+    let detectedComponents: [String: ConfigReviewDetectedComponentDTO]
     let findings: [ConfigReviewFindingDTO]
+    let recommendations: [ConfigReviewRecommendationDTO]
     let questionsForSeller: [String]
     let replyText: String
     let webSearchStatus: String
     let webSources: [ConfigReviewSourceDTO]
+
+    private enum CodingKeys: String, CodingKey {
+        case riskLevel, summary, sourceText, direction, resolution
+        case pairingRating, performanceRating, detectedComponents, findings, recommendations
+        case questionsForSeller, replyText, webSearchStatus, webSources
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let hasCurrentContract = container.contains(.pairingRating)
+            && container.contains(.performanceRating)
+        riskLevel = hasCurrentContract
+            ? try container.decodeIfPresent(String.self, forKey: .riskLevel) ?? "warning"
+            : "warning"
+        summary = hasCurrentContract
+            ? try container.decodeIfPresent(String.self, forKey: .summary) ?? "服务已返回结果，请核对配置详情。"
+            : "已完成基础兼容性检查；搭配合理度和性能评级需等待服务更新后补全。"
+        sourceText = try container.decodeIfPresent(String.self, forKey: .sourceText) ?? ""
+        direction = try container.decodeIfPresent(String.self, forKey: .direction) ?? "balanced"
+        resolution = try container.decodeIfPresent(String.self, forKey: .resolution) ?? "1440p"
+        pairingRating = try container.decodeIfPresent(ConfigReviewRatingDTO.self, forKey: .pairingRating) ?? .incomplete
+        performanceRating = try container.decodeIfPresent(ConfigReviewRatingDTO.self, forKey: .performanceRating) ?? .incomplete
+        let detected = try container.decodeIfPresent(
+            [String: ConfigReviewDetectedComponentDTO?].self,
+            forKey: .detectedComponents
+        ) ?? [:]
+        detectedComponents = detected.compactMapValues { $0 }
+        findings = try container.decodeIfPresent([ConfigReviewFindingDTO].self, forKey: .findings)?
+            .filter { !$0.code.localizedCaseInsensitiveContains("price") } ?? []
+        recommendations = try container.decodeIfPresent(
+            [ConfigReviewRecommendationDTO].self,
+            forKey: .recommendations
+        ) ?? []
+        questionsForSeller = try container.decodeIfPresent([String].self, forKey: .questionsForSeller) ?? []
+        replyText = hasCurrentContract
+            ? try container.decodeIfPresent(String.self, forKey: .replyText) ?? summary
+            : "请把每个配件的完整品牌和型号写清楚，确认兼容性后再决定。"
+        webSearchStatus = try container.decodeIfPresent(String.self, forKey: .webSearchStatus) ?? "unavailable"
+        webSources = try container.decodeIfPresent([ConfigReviewSourceDTO].self, forKey: .webSources) ?? []
+    }
 }
 
 struct ConfigReviewRatingDTO: Decodable {
+    let status: String
     let score: Int?
     let grade: String?
     let detail: String
     let confidence: String
+
+    static let incomplete = ConfigReviewRatingDTO(
+        status: "incomplete",
+        score: nil,
+        grade: nil,
+        detail: "当前服务未返回完整评级，请补全配置或稍后重试。",
+        confidence: "unavailable"
+    )
+
+    var displayValue: String {
+        switch status {
+        case "failed": "不通过"
+        case "incomplete": "待补全"
+        default: grade ?? "待补全"
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case status, score, grade, detail, confidence
+    }
+
+    init(status: String, score: Int?, grade: String?, detail: String, confidence: String) {
+        self.status = status
+        self.score = score
+        self.grade = grade
+        self.detail = detail
+        self.confidence = confidence
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        score = try container.decodeIfPresent(Int.self, forKey: .score)
+        grade = try container.decodeIfPresent(String.self, forKey: .grade)
+        status = try container.decodeIfPresent(String.self, forKey: .status)
+            ?? (grade == nil ? "incomplete" : "graded")
+        detail = try container.decodeIfPresent(String.self, forKey: .detail) ?? "评级信息待补全。"
+        confidence = try container.decodeIfPresent(String.self, forKey: .confidence) ?? "unavailable"
+    }
+}
+
+struct ConfigReviewDetectedComponentDTO: Decodable, Identifiable {
+    var id: String { role }
+    let role: String
+    let componentId: String
+    let name: String
+    let brand: String
+    let confidence: String
+}
+
+struct ConfigReviewRecommendationDTO: Decodable, Identifiable {
+    var id: String { "\(title)-\(componentIds.joined(separator: "-"))" }
+    let severity: String
+    let title: String
+    let reason: String
+    let action: String
+    let expectedImpact: String
+    let componentIds: [String]
 }
 
 struct ConfigReviewSourceDTO: Decodable, Identifiable {
@@ -897,6 +1018,6 @@ struct ConfigReviewFindingDTO: Decodable, Identifiable {
 
 enum AppConfiguration {
     static var apiBaseURL: URL {
-        return URL(string: "https://api.uzbox.top")!
+        URL(string: "https://api.uzbox.top")!
     }
 }

@@ -22,6 +22,8 @@ ReviewRiskLevel = Literal["pass", "warning", "error"]
 ReviewDirection = Literal["fps", "aaa", "balanced", "office"]
 ReviewResolution = Literal["1080p", "1440p", "2160p"]
 ReviewConfidence = Literal["high", "medium", "low", "unavailable"]
+ReviewRatingStatus = Literal["graded", "failed", "incomplete"]
+ReviewRecommendationSeverity = Literal["required", "recommended", "optional"]
 WebSearchStatus = Literal["not_needed", "completed", "partial", "unavailable"]
 
 ROLE_LABELS = {
@@ -34,6 +36,7 @@ ROLE_LABELS = {
 }
 
 REVIEW_ROLES = ["cpu", "gpu", "motherboard", "ram", "storage", "psu"]
+REQUIRED_PAIRING_ROLES = ["cpu", "gpu", "motherboard", "ram", "psu"]
 WEB_ENRICHMENT_ROLES = ["cpu", "gpu", "motherboard", "psu", "ram", "storage"]
 CRITICAL_SPEC_KEYS = {
     "cpu": {"socket", "tdp"},
@@ -47,8 +50,6 @@ CRITICAL_SPEC_KEYS = {
 
 class ConfigReviewRequest(BaseModel):
     text: str = Field(min_length=12, max_length=5000)
-    direction: ReviewDirection = "balanced"
-    resolution: ReviewResolution = "1440p"
 
 
 class DetectedReviewComponent(BaseModel):
@@ -69,10 +70,20 @@ class ReviewFinding(BaseModel):
 
 
 class ReviewRating(BaseModel):
+    status: ReviewRatingStatus
     score: Optional[int] = Field(default=None, ge=0, le=100)
-    grade: Optional[str] = None
+    grade: Optional[Literal["C", "B", "A", "S"]] = None
     detail: str
     confidence: ReviewConfidence
+
+
+class ReviewRecommendation(BaseModel):
+    severity: ReviewRecommendationSeverity
+    title: str
+    reason: str
+    action: str
+    expected_impact: str
+    component_ids: List[str] = Field(default_factory=list)
 
 
 class ReviewEvidenceSource(BaseModel):
@@ -92,6 +103,7 @@ class ConfigReviewResponse(BaseModel):
     performance_rating: ReviewRating
     detected_components: Dict[str, Optional[DetectedReviewComponent]]
     findings: List[ReviewFinding]
+    recommendations: List[ReviewRecommendation]
     questions_for_seller: List[str]
     reply_text: str
     web_search_status: WebSearchStatus
@@ -101,8 +113,6 @@ class ConfigReviewResponse(BaseModel):
 def analyze_configuration_text(
     session: Session,
     text: str,
-    direction: ReviewDirection = "balanced",
-    resolution: ReviewResolution = "1440p",
     settings: Optional[Settings] = None,
 ) -> ConfigReviewResponse:
     normalized_text = _normalize(text)
@@ -113,8 +123,9 @@ def analyze_configuration_text(
         text,
         settings,
     )
-    findings = _build_findings(detected, normalized_text, direction)
-    questions = _questions_for_seller(detected, findings, direction)
+    findings = _build_findings(detected, normalized_text)
+    recommendations = _build_recommendations(findings, detected)
+    questions = _questions_for_seller(detected, findings)
     risk_level = _overall_level(findings)
     summary = _summary_for_level(risk_level, findings)
     reply_text = _reply_text(summary, findings, questions)
@@ -122,12 +133,14 @@ def analyze_configuration_text(
         risk_level=risk_level,
         summary=summary,
         source_text=text,
-        direction=direction,
-        resolution=resolution,
-        pairing_rating=_pairing_rating(detected, findings, direction),
-        performance_rating=_performance_rating(detected, direction, resolution),
+        # Kept at neutral legacy values so already-released clients can still decode the response.
+        direction="balanced",
+        resolution="1440p",
+        pairing_rating=_pairing_rating(detected, findings),
+        performance_rating=_performance_rating(detected),
         detected_components=detected,
         findings=findings,
+        recommendations=recommendations,
         questions_for_seller=questions,
         reply_text=reply_text,
         web_search_status=web_search_status,
@@ -287,16 +300,17 @@ def _evidence_sources(
 def _build_findings(
     detected: Dict[str, Optional[DetectedReviewComponent]],
     normalized_text: str,
-    direction: ReviewDirection,
 ) -> List[ReviewFinding]:
     findings: List[ReviewFinding] = []
-    findings.extend(_missing_core_findings(detected, direction))
-    findings.extend(_insufficient_information_findings(detected, direction))
+    findings.extend(_missing_core_findings(detected))
+    findings.extend(_insufficient_information_findings(detected))
     findings.extend(_marketing_findings(detected, normalized_text))
     findings.extend(_outdated_clearance_findings(detected, normalized_text))
     findings.extend(_balance_findings(detected))
     findings.extend(_motherboard_findings(detected))
     findings.extend(_platform_findings(detected))
+    findings.extend(_ram_findings(detected, normalized_text))
+    findings.extend(_storage_findings(detected))
     findings.extend(_psu_findings(detected))
     if not findings:
         findings.append(
@@ -312,10 +326,9 @@ def _build_findings(
 
 def _insufficient_information_findings(
     detected: Dict[str, Optional[DetectedReviewComponent]],
-    direction: ReviewDirection,
 ) -> List[ReviewFinding]:
     missing_roles = [
-        role for role in _required_pairing_roles(direction) if detected.get(role) is None
+        role for role in REQUIRED_PAIRING_ROLES if detected.get(role) is None
     ]
     if len(missing_roles) < 2:
         return []
@@ -395,10 +408,9 @@ def _outdated_clearance_findings(
 
 def _missing_core_findings(
     detected: Dict[str, Optional[DetectedReviewComponent]],
-    direction: ReviewDirection,
 ) -> List[ReviewFinding]:
     findings: List[ReviewFinding] = []
-    for role in _required_pairing_roles(direction):
+    for role in REQUIRED_PAIRING_ROLES:
         if detected.get(role) is None:
             findings.append(
                 ReviewFinding(
@@ -430,7 +442,7 @@ def _balance_findings(
                     level="error",
                     code="cpu_gpu_imbalance",
                     title="CPU 与显卡档次不匹配",
-                    detail=f"{cpu.name} 搭配 {gpu.name} 达到高 U 低显级别，需要调整。",
+                    detail=_cpu_heavy_pairing_detail(cpu.name, gpu.name),
                     component_ids=[cpu.component_id, gpu.component_id],
                 )
             ]
@@ -439,7 +451,7 @@ def _balance_findings(
                 level="error",
                 code="gpu_cpu_imbalance",
                 title="CPU 与显卡档次不匹配",
-                detail=f"{gpu.name} 搭配 {cpu.name} 达到低 U 高显级别，需要调整。",
+                detail=_gpu_heavy_pairing_detail(cpu.name, gpu.name),
                 component_ids=[cpu.component_id, gpu.component_id],
             )
         ]
@@ -449,7 +461,7 @@ def _balance_findings(
                 level="error",
                 code="cpu_gpu_imbalance",
                 title="CPU 偏高，显卡偏弱",
-                detail=f"{cpu.name} 搭配 {gpu.name} 对游戏用户不均衡，预算更容易花在看不见的地方。",
+                detail=_cpu_heavy_pairing_detail(cpu.name, gpu.name),
                 component_ids=[cpu.component_id, gpu.component_id],
             )
         ]
@@ -459,11 +471,19 @@ def _balance_findings(
                 level="warning",
                 code="gpu_cpu_imbalance",
                 title="显卡很强，CPU 偏弱",
-                detail=f"{gpu.name} 的档次明显高于 {cpu.name}，高帧率游戏可能被 CPU 拖住。",
+                detail=_gpu_heavy_pairing_detail(cpu.name, gpu.name),
                 component_ids=[cpu.component_id, gpu.component_id],
             )
         ]
     return []
+
+
+def _cpu_heavy_pairing_detail(cpu_name: str, gpu_name: str) -> str:
+    return f"{cpu_name} 明显强于 {gpu_name}，显卡性能相对偏弱，当前搭配会让显卡成为主要短板。"
+
+
+def _gpu_heavy_pairing_detail(cpu_name: str, gpu_name: str) -> str:
+    return f"{gpu_name} 明显强于 {cpu_name}，CPU 性能相对偏弱，当前搭配可能无法充分发挥显卡。"
 
 
 def _motherboard_findings(
@@ -524,6 +544,58 @@ def _platform_findings(
     return findings
 
 
+def _ram_findings(
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+    normalized_text: str,
+) -> List[ReviewFinding]:
+    ram = detected.get("ram")
+    if ram is None:
+        return []
+    findings: List[ReviewFinding] = []
+    capacity_gb = _int_spec(ram, "capacity_gb")
+    if 0 < capacity_gb < 16:
+        findings.append(
+            ReviewFinding(
+                level="warning",
+                code="ram_capacity_low",
+                title="内存容量偏小",
+                detail=f"当前识别为 {capacity_gb}GB 内存，日常游戏和多任务容易较早触及容量上限。",
+                component_ids=[ram.component_id],
+            )
+        )
+    if any(marker in normalized_text for marker in ["单条", "1x8", "1x16", "1x32"]):
+        findings.append(
+            ReviewFinding(
+                level="warning",
+                code="ram_single_channel",
+                title="内存可能是单通道",
+                detail="配置单写的是单条内存，部分游戏和核显场景会损失带宽与帧率稳定性。",
+                component_ids=[ram.component_id],
+            )
+        )
+    return findings
+
+
+def _storage_findings(
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+) -> List[ReviewFinding]:
+    storage = detected.get("storage")
+    if storage is None:
+        return []
+    capacity_gb = _int_spec(storage, "capacity_gb")
+    if 0 < capacity_gb < 512:
+        return [
+            ReviewFinding(
+                level="warning",
+                code="storage_capacity_low",
+                title="硬盘容量偏小",
+                detail=f"当前识别为 {capacity_gb}GB，安装系统和常用软件后留给游戏或项目文件的空间会比较有限。",
+                component_ids=[storage.component_id],
+            )
+        ]
+    return []
+
+
 def _psu_findings(
     detected: Dict[str, Optional[DetectedReviewComponent]],
 ) -> List[ReviewFinding]:
@@ -575,17 +647,142 @@ def _psu_findings(
     return findings
 
 
+def _build_recommendations(
+    findings: List[ReviewFinding],
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+) -> List[ReviewRecommendation]:
+    recommendations: List[ReviewRecommendation] = []
+    has_insufficient_information = any(
+        finding.code == "insufficient_core_information" for finding in findings
+    )
+    for finding in findings:
+        if has_insufficient_information and finding.code.startswith("missing_"):
+            continue
+        severity: ReviewRecommendationSeverity = (
+            "required"
+            if finding.level == "error" or finding.code.startswith("missing_")
+            else "optional"
+            if finding.level == "pass"
+            else "recommended"
+        )
+        title, action, impact = _recommendation_copy(finding, detected)
+        recommendations.append(
+            ReviewRecommendation(
+                severity=severity,
+                title=title,
+                reason=finding.detail,
+                action=action,
+                expected_impact=impact,
+                component_ids=finding.component_ids,
+            )
+        )
+    return recommendations
+
+
+def _recommendation_copy(
+    finding: ReviewFinding,
+    detected: Dict[str, Optional[DetectedReviewComponent]],
+) -> tuple[str, str, str]:
+    code = finding.code
+    if code == "insufficient_core_information" or code.startswith("missing_"):
+        return (
+            "补全核心配件型号",
+            "先让商家补充缺失配件的完整品牌和型号，再重新评估。",
+            "补全后才能可靠检查插槽、内存代际、供电和性能搭配。",
+        )
+    if code == "marketing_terms_without_models":
+        return (
+            "把营销名称改成具体型号",
+            "要求商家逐项写明 CPU、显卡和主板的完整型号，不接受“i7 级”“电竞级”等替代写法。",
+            "避免用模糊话术掩盖低规格或老旧配件。",
+        )
+    if code == "outdated_clearance_hardware":
+        return (
+            "替换老旧硬件",
+            "保留其余已明确且兼容的配件，只替换清单中标出的老旧 CPU、显卡或平台后重新评估。",
+            "降低旧平台性能、功耗、保修和后续升级受限的风险。",
+        )
+    if code in {"cpu_gpu_imbalance", "gpu_cpu_imbalance"}:
+        if code == "cpu_gpu_imbalance":
+            action = "保留主板、内存等其余配件，优先把显卡提升到与 CPU 接近的档次；若不需要当前 CPU 性能，则只降低 CPU 一档。"
+        else:
+            action = "保留主板、内存等其余配件，优先把 CPU 提升到能带动当前显卡的档次；若目标性能不需要这张显卡，则只降低显卡一档。"
+        return (
+            "缩小 CPU 与显卡的档次差距",
+            action,
+            "让 CPU 与显卡的性能档次更协调，并减少明显短板。",
+        )
+    if code == "low_end_board_for_i7":
+        return (
+            "更换同平台的合适主板",
+            "CPU、内存和显卡保持不变，只把主板换成插槽和内存代际相同、供电与扩展更适合该 CPU 的型号。",
+            "改善高负载稳定性和扩展空间，不改变整个平台。",
+        )
+    if code == "cpu_motherboard_socket":
+        return (
+            "统一 CPU 与主板插槽",
+            "只更换 CPU 或主板其中一件，使两者插槽完全一致；更换后再次核对内存代际。",
+            "消除无法安装和开机的硬性兼容问题。",
+        )
+    if code == "motherboard_ram_type":
+        motherboard = detected.get("motherboard")
+        memory_type = _string_spec(motherboard, "mem_type") if motherboard is not None else "主板要求的代际"
+        return (
+            "统一主板与内存代际",
+            f"若保留当前主板，只把内存更换为 {memory_type}；不要混用 DDR4 与 DDR5。",
+            "消除内存无法安装和使用的硬性兼容问题。",
+        )
+    if code == "psu_wattage_insufficient":
+        return (
+            "更换满足功耗要求的电源",
+            "其余配件保持不变，只把电源换成达到建议瓦数、且显卡供电接口齐全的明确型号。",
+            "降低高负载关机、重启和供电不稳定风险。",
+        )
+    if code == "psu_connector_insufficient":
+        return (
+            "更换接口合规的电源",
+            "其余配件保持不变，只换成带原生 12V-2x6 600W 供电线、规格明确的 ATX 3.0 或更新电源。",
+            "避免转接线和接口能力不足带来的供电风险。",
+        )
+    if code == "psu_model_unclear":
+        return (
+            "确认或更换明确型号的电源",
+            "先让商家给出电源完整品牌、型号、额定功率和显卡接口；无法确认时只更换电源。",
+            "让供电能力和售后信息可核验。",
+        )
+    if code == "ram_capacity_low":
+        return (
+            "把内存补到至少 16GB",
+            "保留平台和其他配件，只增加同规格内存或换成容量不少于 16GB 的兼容套装。",
+            "减少多任务和游戏中的内存不足与卡顿。",
+        )
+    if code == "ram_single_channel":
+        return (
+            "改为双通道内存",
+            "保留总容量目标，改用两条匹配规格的内存组成双通道。",
+            "提高内存带宽和帧率稳定性。",
+        )
+    if code == "storage_capacity_low":
+        return (
+            "确认硬盘容量是否够用",
+            "其他配件保持不变，只在确有容量需求时把系统盘调整到至少 512GB。",
+            "减少系统、软件与游戏安装空间不足的问题。",
+        )
+    return (
+        "购买前复核完整型号",
+        "保留当前搭配，要求商家把每个配件的完整品牌、型号和保修方式写进配置单。",
+        "让最终交付配置与评估对象一致。",
+    )
+
+
 def _questions_for_seller(
     detected: Dict[str, Optional[DetectedReviewComponent]],
     findings: List[ReviewFinding],
-    direction: ReviewDirection,
 ) -> List[str]:
     questions: List[str] = []
     if detected.get("psu") is None or any(finding.code == "psu_model_unclear" for finding in findings):
         questions.append("请问电源的具体品牌和型号是什么？有没有 80Plus 认证？")
     for role in ["cpu", "gpu", "motherboard", "ram", "storage"]:
-        if direction == "office" and role == "gpu":
-            continue
         if detected.get(role) is None:
             questions.append(f"请问{ROLE_LABELS[role]}的完整品牌和型号是什么？")
     if not questions:
@@ -596,96 +793,77 @@ def _questions_for_seller(
 def _pairing_rating(
     detected: Dict[str, Optional[DetectedReviewComponent]],
     findings: List[ReviewFinding],
-    direction: ReviewDirection,
 ) -> ReviewRating:
-    missing_roles = [
-        role for role in _required_pairing_roles(direction) if detected.get(role) is None
-    ]
-    if missing_roles:
-        return ReviewRating(
-            detail=f"缺少{'、'.join(ROLE_LABELS[role] for role in missing_roles)}，暂时无法完整评分。",
-            confidence="unavailable",
-        )
-
-    rating_codes = {
-        "cpu_gpu_imbalance",
-        "gpu_cpu_imbalance",
-        "low_end_board_for_i7",
+    hard_failure_codes = {
         "cpu_motherboard_socket",
         "motherboard_ram_type",
         "psu_wattage_insufficient",
         "psu_connector_insufficient",
-        "psu_model_unclear",
     }
-    rating_findings = [finding for finding in findings if finding.code in rating_codes]
-    error_count = sum(finding.level == "error" for finding in rating_findings)
-    warning_count = sum(finding.level == "warning" for finding in rating_findings)
-    score = max(0, 100 - error_count * 30 - warning_count * 12)
-    if error_count:
-        score = min(score, 39)
-    confidence = _component_confidence(detected, _required_pairing_roles(direction))
+    hard_failures = [finding for finding in findings if finding.code in hard_failure_codes]
+    if hard_failures:
+        return ReviewRating(
+            status="failed",
+            detail="存在无法安装、无法正常使用或供电不足的硬性问题，必须修改后再考虑。",
+            confidence=_component_confidence(
+                detected,
+                [role for role in REQUIRED_PAIRING_ROLES if detected.get(role) is not None],
+            ),
+        )
+
+    missing_roles = [
+        role for role in REQUIRED_PAIRING_ROLES if detected.get(role) is None
+    ]
+    if missing_roles:
+        return ReviewRating(
+            status="incomplete",
+            detail=f"缺少{'、'.join(ROLE_LABELS[role] for role in missing_roles)}，暂时无法完整评分。",
+            confidence="unavailable",
+        )
+
+    rating_penalties = {
+        "cpu_gpu_imbalance": 45,
+        "gpu_cpu_imbalance": 45,
+        "low_end_board_for_i7": 20,
+        "psu_model_unclear": 15,
+        "ram_capacity_low": 10,
+        "ram_single_channel": 10,
+        "storage_capacity_low": 5,
+    }
+    score = max(0, 100 - sum(rating_penalties.get(finding.code, 0) for finding in findings))
+    confidence = _component_confidence(detected, REQUIRED_PAIRING_ROLES)
     return ReviewRating(
+        status="graded",
         score=score,
         grade=_rating_grade(score),
-        detail=(
-            "存在硬性兼容或供电问题，建议修改后再购买。"
-            if error_count
-            else "配件的兼容、供电和性能档次没有发现硬性问题。"
-        ),
+        detail="该等级综合兼容性、供电、CPU/显卡档次及已识别的内存和存储搭配。",
         confidence=confidence,
     )
 
 
 def _performance_rating(
     detected: Dict[str, Optional[DetectedReviewComponent]],
-    direction: ReviewDirection,
-    resolution: ReviewResolution,
 ) -> ReviewRating:
     cpu = detected.get("cpu")
     gpu = detected.get("gpu")
     cpu_perf = _int_spec(cpu, "perf_index") if cpu is not None else 0
     gpu_perf = _int_spec(gpu, "perf_index") if gpu is not None else 0
-    if direction == "office":
-        if cpu_perf <= 0:
-            return ReviewRating(
-                detail="CPU 型号或性能数据不足，暂时无法评级。",
-                confidence="unavailable",
-            )
-        score = min(100, cpu_perf)
-        return ReviewRating(
-            score=score,
-            grade=_rating_grade(score),
-            detail="该等级以 CPU 综合办公性能为主，具体软件仍需结合内存和显卡需求。",
-            confidence=_component_confidence(detected, ["cpu"]),
-        )
     if cpu_perf <= 0 or gpu_perf <= 0:
         return ReviewRating(
+            status="incomplete",
             detail="CPU 或显卡缺少可比较的性能数据，暂时无法评级。",
             confidence="unavailable",
         )
 
-    if direction == "fps":
-        score = round(cpu_perf * 0.65 + gpu_perf * 0.35)
-    elif direction == "aaa":
-        score = round(cpu_perf * 0.25 + gpu_perf * 0.75)
-    else:
-        score = round(min(cpu_perf, gpu_perf) * 0.6 + (cpu_perf + gpu_perf) * 0.2)
-    score += {"1080p": 5, "1440p": 0, "2160p": -10}[resolution]
+    score = round(min(cpu_perf, gpu_perf) * 0.6 + (cpu_perf + gpu_perf) * 0.2)
     score = max(0, min(100, score))
-    direction_label = {"fps": "FPS 高帧率", "aaa": "3A 画质", "balanced": "均衡游戏"}[direction]
-    resolution_label = {"1080p": "1080P", "1440p": "2K", "2160p": "4K"}[resolution]
     return ReviewRating(
+        status="graded",
         score=score,
         grade=_rating_grade(score),
-        detail=f"按 {direction_label} 方向评估，目标分辨率为 {resolution_label}。",
+        detail="该等级综合 CPU 与显卡性能，并对明显短板降低评价；不代表具体游戏帧数。",
         confidence=_component_confidence(detected, ["cpu", "gpu"]),
     )
-
-
-def _required_pairing_roles(direction: ReviewDirection) -> List[str]:
-    if direction == "office":
-        return ["cpu", "motherboard", "ram", "storage", "psu"]
-    return ["cpu", "gpu", "motherboard", "ram", "psu"]
 
 
 def _component_confidence(
@@ -710,13 +888,11 @@ def _component_confidence(
 def _rating_grade(score: int) -> str:
     if score >= 90:
         return "S"
-    if score >= 80:
+    if score >= 75:
         return "A"
-    if score >= 70:
-        return "B"
     if score >= 60:
-        return "C"
-    return "D"
+        return "B"
+    return "C"
 
 
 def _overall_level(findings: List[ReviewFinding]) -> ReviewRiskLevel:

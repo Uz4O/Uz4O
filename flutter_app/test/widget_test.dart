@@ -191,7 +191,8 @@ void main() {
       (
         title: '未知玩家 P80 MESH',
         total: '577',
-        image: 'assets/images/style_catalog_StyleUnknownPlayerP80MeshBlack.webp',
+        image:
+            'assets/images/style_catalog_StyleUnknownPlayerP80MeshBlack.webp',
       ),
       (
         title: '七彩虹 C25A',
@@ -287,19 +288,68 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(const MaterialApp(home: ConfigReviewScreen()));
+    expect(find.text('主要用途'), findsNothing);
+    expect(find.text('目标分辨率'), findsNothing);
+    await tester.scrollUntilVisible(find.text('填写配置').last, 300);
     await tester.tap(find.text('填写配置').last);
     await tester.pumpAndSettle();
     expect(find.text('填写配置'), findsWidgets);
+    expect(find.text('价格'), findsNothing);
+    expect(find.text('主要用途'), findsNothing);
+    expect(find.text('目标分辨率'), findsNothing);
 
-    await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
     await tester.pumpWidget(
-      const MaterialApp(home: ConfigReviewLoadingScreen()),
+      const MaterialApp(
+        key: ValueKey('review-result-test'),
+        home: ConfigReviewResultScreen(
+          result: {
+            'risk_level': 'warning',
+            'summary': '搭配存在一处明显短板，建议调整后再购买。',
+            'reply_text': '请把 CPU 调整到与显卡匹配的档次。',
+            'pairing_rating': {'status': 'graded', 'grade': 'C'},
+            'performance_rating': {'status': 'graded', 'grade': 'A'},
+            'recommendations': [
+              {
+                'severity': 'recommended',
+                'title': '缩小 CPU 与显卡的档次差距',
+                'reason': 'CPU 明显弱于显卡。',
+                'action': '只调整 CPU 或显卡其中一项。',
+                'expected_impact': '减少核心性能短板。',
+              },
+            ],
+          },
+        ),
+      ),
     );
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 6500));
     await tester.pumpAndSettle();
     expect(find.text('综合结论'), findsOneWidget);
+    expect(find.text('C'), findsOneWidget);
+    expect(find.text('A'), findsOneWidget);
+    expect(find.textContaining('怎么改：'), findsOneWidget);
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        key: ValueKey('legacy-review-result-test'),
+        home: ConfigReviewResultScreen(
+          result: {
+            'risk_level': 'error',
+            'summary': '旧服务认为商家报价偏高。',
+            'reply_text': '旧价格回复。',
+            'findings': [
+              {
+                'level': 'error',
+                'code': 'seller_price_gap',
+                'title': '商家报价偏高',
+                'detail': '旧价格结论',
+              },
+            ],
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('商家报价偏高'), findsNothing);
+    expect(find.text('待补全'), findsNWidgets(2));
 
     await tester.pumpWidget(
       const MaterialApp(

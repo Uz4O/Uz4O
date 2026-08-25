@@ -12,40 +12,41 @@ struct AestheticStylesView: View {
 
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("装机风格")
-                            .font(.system(size: 29, weight: .heavy))
-                            .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("装机风格")
+                                .font(.system(size: 29, weight: .heavy))
+                                .foregroundStyle(Color(red: 0.035, green: 0.051, blue: 0.067))
 
-                        Text("多种高性能整机设计，找到属于你的风格")
-                            .font(.system(size: 11, weight: .regular))
-                            .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
-
-                        HStack(spacing: 18) {
-                            Text("列表")
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundStyle(AppTheme.primaryText)
-                                .frame(minWidth: 44, minHeight: 36, alignment: .leading)
-                                .overlay(alignment: .bottomLeading) {
-                                    Rectangle()
-                                        .fill(AppTheme.primaryText)
-                                        .frame(width: 24, height: 1.5)
-                                }
-                                .accessibilityLabel("列表浏览，已选择")
-                                .accessibilityAddTraits(.isSelected)
-
-                            Button {
-                                showsExplorer = true
-                            } label: {
-                                Text("全景")
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
-                                    .frame(minWidth: 44, minHeight: 36, alignment: .leading)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("切换到全景浏览")
+                            Text("多种高性能整机设计，找到属于你的风格")
+                                .font(.system(size: 11, weight: .regular))
+                                .foregroundStyle(Color(red: 0.48, green: 0.51, blue: 0.56))
                         }
-                        .padding(.top, 6)
+
+                        Spacer()
+
+                        Button {
+                            showsExplorer = true
+                        } label: {
+                            HStack(spacing: 7) {
+                                Text("全景浏览")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .overlay(alignment: .bottom) {
+                                        Rectangle()
+                                            .fill(AppTheme.primaryText)
+                                            .frame(height: 0.8)
+                                            .offset(y: 3)
+                                    }
+
+                                Image(systemName: "arrow.up.right")
+                                    .font(.system(size: 11, weight: .semibold))
+                            }
+                            .foregroundStyle(AppTheme.primaryText)
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("进入沉浸风格全景")
                     }
                     .padding(.top, 12)
 
@@ -150,7 +151,7 @@ private struct AestheticStyleShowcaseRow: View {
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text("外观方案约")
+                    Text("为颜值花费约")
                         .font(.system(size: 10, weight: .medium))
                         .foregroundStyle(Color(red: 0.50, green: 0.53, blue: 0.58))
 

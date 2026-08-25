@@ -5,8 +5,11 @@ struct AppSplashView: View {
     let onFinish: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var isVisible = false
+    @State private var isMarkVisible = false
     @State private var phase: SplashPhase = .holding
+    @State private var uPathEnd: CGFloat = 1
+    @State private var zPathEnd: CGFloat = 1
+    @State private var strokeWidth: CGFloat = 30
     @State private var coverOpacity = 1.0
 
     init(
@@ -24,13 +27,12 @@ struct AppSplashView: View {
             ZStack {
                 Color.white
                     .opacity(coverOpacity)
+                    .ignoresSafeArea()
 
                 splashMark(compact: compact)
-                    .scaleEffect(x: markHorizontalScale, y: markVerticalScale)
-                    .scaleEffect(isVisible ? 1 : 0.90)
-                    .offset(y: markVerticalOffset + (isVisible ? 0 : 12))
-                    .opacity(isVisible ? markOpacity : 0)
-                    .blur(radius: markBlur)
+                    .opacity(isMarkVisible ? 1 : 0)
+                    .offset(y: isMarkVisible ? 0 : 10)
+                    .blur(radius: isMarkVisible ? 0 : 2)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -38,100 +40,163 @@ struct AppSplashView: View {
         .preferredColorScheme(.light)
         .task {
             if reduceMotion {
-                isVisible = true
-                phase = .settled
                 onReveal()
                 onFinish()
                 return
             }
 
-            withAnimation(.easeOut(duration: 0.30)) {
-                isVisible = true
+            withAnimation(.easeOut(duration: 0.24)) {
+                isMarkVisible = true
             }
 
-            // 保留完整展示和用户认可的轻微收缩蓄力。
-            try? await Task.sleep(for: .seconds(1.10))
-            withAnimation(.easeInOut(duration: 0.32)) {
+            // 完整展示后做很小的收缩，再让 z 向左下卡扣。
+            try? await Task.sleep(for: .seconds(0.98))
+            withAnimation(.easeInOut(duration: 0.30)) {
                 phase = .compressed
             }
 
-            try? await Task.sleep(for: .seconds(0.32))
-            withAnimation(.spring(response: 0.52, dampingFraction: 0.82, blendDuration: 0.08)) {
-                phase = .settled
+            try? await Task.sleep(for: .seconds(0.30))
+            withAnimation(.spring(response: 0.52, dampingFraction: 0.84, blendDuration: 0.06)) {
+                phase = .latched
             }
 
-            // 回弹稳定后，把视觉焦点从字母交给主页。
-            try? await Task.sleep(for: .seconds(0.62))
+            // 卡扣后停留，再把粗笔画收成品牌化细线。
+            try? await Task.sleep(for: .seconds(0.50))
+            withAnimation(.timingCurve(0.26, 0.70, 0.20, 1, duration: 0.42)) {
+                phase = .refining
+                strokeWidth = 3.2
+            }
+
+            try? await Task.sleep(for: .seconds(0.42))
             onReveal()
-            withAnimation(.timingCurve(0.22, 0.72, 0.18, 1, duration: 0.68)) {
-                phase = .exiting
+            phase = .retracting
+            withAnimation(.timingCurve(0.38, 0.02, 0.18, 1, duration: 0.54)) {
+                zPathEnd = 0.001
+                coverOpacity = 0.22
+            }
+
+            try? await Task.sleep(for: .seconds(0.05))
+            withAnimation(.timingCurve(0.38, 0.02, 0.18, 1, duration: 0.58)) {
+                uPathEnd = 0.001
                 coverOpacity = 0
             }
 
-            try? await Task.sleep(for: .seconds(0.68))
+            try? await Task.sleep(for: .seconds(0.58))
+            withAnimation(.easeOut(duration: 0.12)) {
+                isMarkVisible = false
+            }
+            try? await Task.sleep(for: .seconds(0.12))
             onFinish()
         }
     }
 
     private func splashMark(compact: Bool) -> some View {
-        HStack(spacing: compact ? -10 : -14) {
-            Text("U")
-                .modifier(SplashLetterCompression(direction: -1, phase: phase))
-            Text("z")
-                .modifier(SplashLetterCompression(direction: 1, phase: phase))
+        let scale = compact ? 0.82 : 1.0
+        let seamWidth: CGFloat = 2
+
+        return ZStack {
+            SplashUShape()
+                .trim(from: 0, to: uPathEnd)
+                .stroke(
+                    Color.black,
+                    style: StrokeStyle(
+                        lineWidth: strokeWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .frame(width: 92, height: 122)
+                .offset(x: -34)
+
+            // 白色底描边始终留出精确接缝，避免 U 与 z 真正接触。
+            SplashZShape()
+                .trim(from: 0, to: zPathEnd)
+                .stroke(
+                    Color.white,
+                    style: StrokeStyle(
+                        lineWidth: strokeWidth + seamWidth * 2,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .frame(width: 70, height: 70)
+                .offset(x: zOffset.width, y: zOffset.height)
+
+            SplashZShape()
+                .trim(from: 0, to: zPathEnd)
+                .stroke(
+                    Color.black,
+                    style: StrokeStyle(
+                        lineWidth: strokeWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .frame(width: 70, height: 70)
+                .offset(x: zOffset.width, y: zOffset.height)
         }
-        .font(.system(size: compact ? 116 : 154, weight: .black, design: .rounded))
-        .tracking(compact ? -12 : -16)
-        .foregroundStyle(.black)
+        .frame(width: 190, height: 170)
+        .scaleEffect(x: markHorizontalScale * scale, y: markVerticalScale * scale)
+        .rotationEffect(.degrees(zRotation))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Uz")
     }
 
-    private var markHorizontalScale: CGFloat {
+    private var zOffset: CGSize {
         switch phase {
         case .holding:
-            1
+            CGSize(width: 45, height: 18)
         case .compressed:
-            0.91
-        case .settled:
-            1
-        case .exiting:
-            0.97
+            CGSize(width: 39, height: 20)
+        case .latched, .refining, .retracting:
+            CGSize(width: 31, height: 30)
         }
     }
 
+    private var markHorizontalScale: CGFloat {
+        phase == .compressed ? 0.92 : 1
+    }
+
     private var markVerticalScale: CGFloat {
-        phase == .compressed ? 1.04 : 1
+        phase == .compressed ? 1.035 : 1
     }
 
-    private var markVerticalOffset: CGFloat {
-        phase == .exiting ? -3 : 0
-    }
-
-    private var markOpacity: Double {
-        phase == .exiting ? 0 : 1
-    }
-
-    private var markBlur: CGFloat {
-        phase == .exiting ? 5 : 0
+    private var zRotation: Double {
+        phase == .compressed ? -0.8 : 0
     }
 }
 
 private enum SplashPhase: Equatable {
     case holding
     case compressed
-    case settled
-    case exiting
+    case latched
+    case refining
+    case retracting
 }
 
-private struct SplashLetterCompression: ViewModifier {
-    let direction: CGFloat
-    let phase: SplashPhase
+private struct SplashUShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.width * 0.16, y: rect.height * 0.06))
+        path.addLine(to: CGPoint(x: rect.width * 0.16, y: rect.height * 0.62))
+        path.addCurve(
+            to: CGPoint(x: rect.width * 0.84, y: rect.height * 0.62),
+            control1: CGPoint(x: rect.width * 0.16, y: rect.height * 1.03),
+            control2: CGPoint(x: rect.width * 0.84, y: rect.height * 1.03)
+        )
+        path.addLine(to: CGPoint(x: rect.width * 0.84, y: rect.height * 0.06))
+        return path
+    }
+}
 
-    func body(content: Content) -> some View {
-        content
-            .offset(x: phase == .compressed ? direction * -6 : 0)
-            .rotationEffect(.degrees(phase == .compressed ? Double(direction * 1.5) : 0))
+private struct SplashZShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.width * 0.08, y: rect.height * 0.12))
+        path.addLine(to: CGPoint(x: rect.width * 0.92, y: rect.height * 0.12))
+        path.addLine(to: CGPoint(x: rect.width * 0.08, y: rect.height * 0.88))
+        path.addLine(to: CGPoint(x: rect.width * 0.92, y: rect.height * 0.88))
+        return path
     }
 }
 

@@ -7,9 +7,9 @@ struct AestheticStyleOverviewRulesTests {
         let casePart = style.overviewParts.first { $0.name == "机箱" }!
 
         precondition(style.title == "联立 VISION COMPACT")
-        precondition(style.overviewTotal(for: .black) == 6520)
-        precondition(style.overviewTotal(for: .white) == 6580)
-        precondition(style.minimumOverviewCost == 2735)
+        precondition(style.overviewTotal(for: .black) == 6518)
+        precondition(style.overviewTotal(for: .white) == 6578)
+        precondition(style.minimumOverviewCost == 2734)
         precondition(casePart.originalPrice(for: .black) == 679)
         precondition(casePart.originalPrice(for: .white) == 739)
         precondition(casePart.alternatives[0].price == 450)
@@ -73,8 +73,8 @@ struct AestheticStyleOverviewRulesTests {
 
         let aocStyle = AestheticBuildStyle.all[7]
         precondition(aocStyle.title == "AOC 震天弓")
-        precondition(aocStyle.overviewTotal(for: .black) == 1297)
-        precondition(aocStyle.overviewTotal(for: .white) == 1307)
+        precondition(aocStyle.overviewTotal(for: .black) == 897)
+        precondition(aocStyle.overviewTotal(for: .white) == 907)
         precondition(aocStyle.minimumOverviewCost == 748)
 
         let bo400CGStyle = AestheticBuildStyle.all[8]
@@ -82,6 +82,20 @@ struct AestheticStyleOverviewRulesTests {
         precondition(bo400CGStyle.overviewTotal(for: .black) == 4697)
         precondition(bo400CGStyle.overviewTotal(for: .white) == 4797)
         precondition(bo400CGStyle.minimumOverviewCost == 2663)
+
+        let hangjiaStyle = AestheticBuildStyle.all.first { $0.id == "hangjiaS960" }!
+        precondition(hangjiaStyle.overviewTotal(for: .black) == 248)
+        precondition(hangjiaStyle.overviewTotal(for: .white) == 258)
+        precondition(hangjiaStyle.overviewParts.first { $0.usesAICooler }?.price == 0)
+
+        let tk1Style = AestheticBuildStyle.all.first { $0.id == "jonsboTK1" }!
+        precondition(tk1Style.overviewTotal(for: .black) == 619)
+        precondition(tk1Style.overviewTotal(for: .white) == 619)
+        precondition(tk1Style.overviewParts.first { $0.usesAICooler }?.price == 0)
+
+        let cougarStyle = AestheticBuildStyle.all.first { $0.id == "cougarV235" }!
+        precondition(cougarStyle.overviewParts.map(\.detail) == ["骨伽凌空 V235", "棱镜 8 Pro × 9", "利民 PV360"])
+        precondition(cougarStyle.overviewTotal(for: .black) == 1037)
 
         print("AestheticStyleOverviewRulesTests passed")
     }

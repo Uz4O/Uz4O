@@ -216,6 +216,23 @@ struct PerformanceTestFlow: Equatable {
         cachedStates[selectedResolution]?.result
     }
 
+    var presentationResult: PerformanceTestResult? {
+        if let result {
+            return result
+        }
+        guard loadState == .loading, let currentInput = requestInput else {
+            return nil
+        }
+        return cachedStates.values.first { state in
+            guard let cachedInput = state.input, state.result != nil else {
+                return false
+            }
+            return cachedInput.cpuID == currentInput.cpuID
+                && cachedInput.gpuID == currentInput.gpuID
+                && cachedInput.gameIDs == currentInput.gameIDs
+        }?.result
+    }
+
     var requestInput: PerformanceEstimateInput? {
         guard
             let cpuID = HardwareCatalog.cpus.first(where: { $0.name == hardwareProfile.cpu })?.id,

@@ -561,7 +561,7 @@ private struct PerformanceResultStep: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 16) {
-                if let score = flow.result?.gpuTimeSpyScore {
+                if let score = flow.presentationResult?.gpuTimeSpyScore {
                     PerformanceTimeSpyResolutionCard(
                         score: score,
                         overallPercent: overallPerformancePercent,
@@ -593,7 +593,7 @@ private struct PerformanceResultStep: View {
 
     private var overallPerformancePercent: Int? {
         guard
-            let score = flow.result?.gpuTimeSpyScore,
+            let score = flow.presentationResult?.gpuTimeSpyScore,
             let cpuID = HardwareCatalog.cpus.first(where: {
                 $0.name == flow.hardwareProfile.cpu
             })?.id
@@ -608,12 +608,19 @@ private struct PerformanceResultStep: View {
     private var resultContent: some View {
         switch flow.loadState {
         case .idle, .loading:
-            PerformanceStateCard(
-                icon: "hourglass",
-                title: "正在查询 \(flow.selectedResolution.title) 性能",
-                detail: "正在根据当前 CPU、显卡和所选游戏计算预计平均帧率。",
-                showsProgress: true
-            )
+            if let result = flow.presentationResult {
+                PerformanceResultLoadingCard(
+                    result: result,
+                    resolution: flow.selectedResolution
+                )
+            } else {
+                PerformanceStateCard(
+                    icon: "hourglass",
+                    title: "正在查询 \(flow.selectedResolution.title) 性能",
+                    detail: "正在根据当前 CPU、显卡和所选游戏计算预计平均帧率。",
+                    showsProgress: true
+                )
+            }
         case .empty:
             PerformanceStateCard(
                 icon: "database",
@@ -899,9 +906,7 @@ private struct PerformanceResolutionControl: View {
             ForEach(PerformanceResolution.allCases) { resolution in
                 Button {
                     guard selectedResolution != resolution else { return }
-                    withAnimation(selectionTransition) {
-                        onSelect(resolution)
-                    }
+                    onSelect(resolution)
                 } label: {
                     Text(resolution.title)
                         .font(.appSubheadline)
@@ -926,6 +931,7 @@ private struct PerformanceResolutionControl: View {
                 .accessibilityAddTraits(selectedResolution == resolution ? .isSelected : [])
             }
         }
+        .animation(selectionTransition, value: selectedResolution)
     }
 
     private var selectionTransition: Animation {
@@ -988,6 +994,58 @@ private struct PerformanceResultRow: View {
         }
         .padding(.horizontal, 16)
         .frame(minHeight: 96)
+    }
+}
+
+private struct PerformanceResultLoadingCard: View {
+    let result: PerformanceTestResult
+    let resolution: PerformanceResolution
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                if !result.missingGameNames.isEmpty {
+                    Text("部分游戏暂无数据：\(result.missingGameNames.joined(separator: "、"))")
+                        .font(.appCaption)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+
+                    Divider()
+                }
+
+                ForEach(Array(result.gameResults.enumerated()), id: \.element.gameID) { index, game in
+                    PerformanceResultRow(game: game)
+
+                    if index < result.gameResults.count - 1 {
+                        Divider()
+                            .padding(.leading, 78)
+                    }
+                }
+            }
+            .redacted(reason: .placeholder)
+            .opacity(0.24)
+
+            HStack(spacing: 9) {
+                ProgressView()
+                    .tint(AppTheme.primaryText)
+
+                Text("正在查询 \(resolution.title) 性能")
+                    .font(.appCaption.weight(.semibold))
+                    .foregroundStyle(AppTheme.primaryText)
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 36)
+            .background(AppTheme.surface, in: Capsule())
+            .overlay {
+                Capsule()
+                    .stroke(AppTheme.border.opacity(0.72), lineWidth: 1)
+            }
+            .padding(.top, 16)
+        }
+        .micro3DSurface(cornerRadius: 18)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("正在查询 \(resolution.title) 性能")
     }
 }
 

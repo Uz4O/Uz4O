@@ -16,8 +16,8 @@ def test_progress_file_tracks_the_backend_roadmap() -> None:
         "型号梯度与尺寸数据"
     )
     assert len(progress.phases) == 6
-    assert progress.total_items == 101
-    assert progress.completed_items == 88
+    assert progress.total_items == 103
+    assert progress.completed_items == 90
     assert progress.completion_percentage == 87
     assert [item.title for item in progress.user_action_items] == [
         "硬件尺寸字段人工补充",

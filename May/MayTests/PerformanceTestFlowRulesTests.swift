@@ -89,6 +89,11 @@ struct PerformanceTestFlowRulesTests {
         flow.selectResolution(.fourK)
         assertEqual(flow.loadState, .idle, "An unseen resolution should begin without a result state.")
         let fourKRequest = require(flow.beginRequest(), "Selecting an unseen resolution should create a request.")
+        assertEqual(
+            flow.presentationResult?.resolution,
+            "2K",
+            "Loading an unseen resolution should retain a compatible result footprint for stable layout."
+        )
         flow.apply(response, for: fourKRequest)
         assertEqual(flow.result?.resolution, "4K", "The selected resolution should show its own result.")
         flow.selectResolution(.twoK)

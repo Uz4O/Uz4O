@@ -36,11 +36,13 @@ from app.builds.service import (
     BuildRequest,
     BuildTemplateDetails,
     BuildSelectionConfirmationResponse,
+    apply_aesthetic_style,
     ai_pending_response,
     classify_game_direction,
     match_build_template,
     rank_build_templates,
     recommend_used_40_series_gpu,
+    resolve_aesthetic_style,
     rules_fallback_response,
     template_response,
 )
@@ -87,6 +89,19 @@ def get_build_options(
     prices = list_component_prices(session) if catalog_loaded else []
     components_by_id = {component.id: component for component in components}
     price_by_component_id = {price.component_id: price for price in prices}
+    if request.aesthetic_style is not None:
+        try:
+            request = request.model_copy(
+                update={
+                    "aesthetic_style": resolve_aesthetic_style(
+                        request.aesthetic_style,
+                        components_by_id,
+                        price_by_component_id,
+                    )
+                }
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
     request_hash = request_payload = cache_version = None
     if request.requires_customization:
         request_hash, request_payload = request_identity(request)
@@ -248,6 +263,14 @@ def get_build_options(
                 "当前审核配置暂未覆盖全部采购方式。"
             ),
         )
+    if request.aesthetic_style is not None:
+        try:
+            options = [
+                apply_aesthetic_style(option, request.aesthetic_style)
+                for option in options
+            ]
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
     gpu_prices = list_gpu_whitelist_prices(session)
     for option in options:
         option.details.used_gpu_alternative = recommend_used_40_series_gpu(

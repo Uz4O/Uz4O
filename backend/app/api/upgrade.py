@@ -16,7 +16,7 @@ router = APIRouter(
     tags=["upgrade"],
     dependencies=[Depends(high_cost_rate_limit)],
 )
-UPGRADE_CACHE_NAMESPACE = "upgrade.plan.v2"
+UPGRADE_CACHE_NAMESPACE = "upgrade.plan.v3"
 
 
 @router.post("/plan", response_model=UpgradePlanResponse)

@@ -1,0 +1,4154 @@
+[
+  {
+    "brand" : "HYTE",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · white",
+    "id" : "aesthetic-case-151c371be2c4a19b",
+    "name" : "HYTE Y70 TOUCH（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-19b5104afc66fe77",
+    "name" : "乔思伯 X400",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-1d205899ec055ab6",
+    "name" : "航嘉 S960",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaS960" : "航嘉 S960"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "华硕",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-1d4c3b9d03e3ba17",
+    "name" : "华硕 TUF 502 弹药库",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-201935e5e732526a",
+    "name" : "乔思伯 TK-1",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboTK1" : "乔思伯 TK-1"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-227d45b3b31f4da3",
+    "name" : "ROG GR701 创世神",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-229e4127a731d007",
+    "name" : "联力 O11D MINI V2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliO11DMiniV2" : "联力 O11D MINI V2"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · black",
+    "id" : "aesthetic-case-2350da659b72578d",
+    "name" : "联立 VISION COMPACT（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者星璨辰",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-24aae829d381900d",
+    "name" : "爱国者星璨辰 屏显版",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-2d43df3815463494",
+    "name" : "航嘉 S960",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaS960" : "航嘉 S960"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "七彩虹",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-300844b1539dad8f",
+    "name" : "七彩虹 C25A",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "colorfulC25A" : "七彩虹 C25A"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "骨伽凌空",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-314d32fd4e93978c",
+    "name" : "骨伽凌空 V235",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "cougarV235" : "骨伽凌空V235"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-36ee048025ff8b3c",
+    "name" : "ROG GR701 创世神（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-37a2cff936dbf784",
+    "name" : "追风者 EVOLV S2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksEvolvS2" : "追风者 EVOLV S2"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "未知玩家",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-37c5ec1577d48479",
+    "name" : "未知玩家 P80 MESH",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-4193cc9bdf16305f",
+    "name" : "联力 O11 EVO RGB",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-435a7fd03bc4af4c",
+    "name" : "乔思伯 TK4",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-479bb14158b0a442",
+    "name" : "追风者 EVOLV S2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksEvolvS2" : "追风者 EVOLV S2"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-486b49af180cac86",
+    "name" : "乔思伯 D33 WOOD",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "微星",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-48c18c0a2d29e9b3",
+    "name" : "微星 MPG VIXTA 300R",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "酷冷至尊",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-4964dd12357c5274",
+    "name" : "酷冷至尊 MF400 Mesh",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-4a384289600d0098",
+    "name" : "追风者 EVOLV X2 MATRIX",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksEvolvX2Matrix" : "追风者 EVOLV X2 MATRIX"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-4c003a1f1db2878",
+    "name" : "航嘉 GX750C 挑战者",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaGX750C" : "航嘉 GX750C 挑战者"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-4d3dccb012fcf28f",
+    "name" : "瓦尔基里 VK3",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "valkyrieVK3" : "瓦尔基里 VK3"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "AOC",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · black",
+    "id" : "aesthetic-case-4e4ae5a1adb2f38f",
+    "name" : "AOC CG455B（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-50f837ff2ed3b526",
+    "name" : "爱国者 星璨辰 Air",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChenAir" : "爱国者 星璨辰 Air"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "HYTE",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-52278aac9d790b",
+    "name" : "HYTE Y70 TOUCH",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-52cc3572f63c7415",
+    "name" : "联力 VISION MIN",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "鑫谷次元仓",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-53b39def8fc16686",
+    "name" : "鑫谷次元仓 PX",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-5b407ad685a961dd",
+    "name" : "ROG GR801 幻世神",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-5d5e00ff2eee03ce",
+    "name" : "联力 V150INF",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliV150INF" : "联力 V150INF"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "玩嘉问界",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-5d75bfbf0eb0f862",
+    "name" : "玩嘉问界 MIN",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "酷方",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-5e14b65f5053cbbf",
+    "name" : "酷方 C34PRO",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-64276fa077bf121d",
+    "name" : "航嘉 G63 战戟",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · black",
+    "id" : "aesthetic-case-69109075bfe2f67",
+    "name" : "ROG GR701 创世神（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-6b4f456f54027ecd",
+    "name" : "追风者 XT V3 小清风",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "AOC",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-6f62df2c30bc1e85",
+    "name" : "AOC CG455B",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-7043e8c4ae41d44e",
+    "name" : "航嘉 S960 V2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaS960V2" : "航嘉 S960 V2"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-7251fe2930e30629",
+    "name" : "瓦尔基里 VK3",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "valkyrieVK3" : "瓦尔基里 VK3"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-72ee3f1e5a243a06",
+    "name" : "乔思伯 BO400",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "AOC",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · white",
+    "id" : "aesthetic-case-735f171acb990729",
+    "name" : "AOC CG455B（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · white",
+    "id" : "aesthetic-case-7648f4216eaa1361",
+    "name" : "ROG GR701 创世神（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-771d5d1733feca7f",
+    "name" : "联立 VISION COMPACT",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-78112ebc05d058f4",
+    "name" : "乔思伯 BO400CG",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400cg" : "乔思伯 BO400CG"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "华硕灵光岛",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-78dce6dc0caee2ae",
+    "name" : "华硕灵光岛 AP202",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-7d90b78d79977596",
+    "name" : "乔思伯 D34",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "钛坦星舟",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-83843f49206d92f2",
+    "name" : "钛坦星舟",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "titanStarship" : "钛坦星舟"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "微星",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-847c3db5bc1d42b1",
+    "name" : "微星 MPG VIXTA 300R",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-8ad2897559f3ada3",
+    "name" : "ROG GR801 幻世神",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-90bc7c6f8a5985aa",
+    "name" : "爱国者 炫影 G20",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aigoXuanYingG20" : "爱国者 炫影 G20"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-96a89e159220f008",
+    "name" : "乔思伯 BO400",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-9916339cccb3e688",
+    "name" : "乔思伯 TK-1",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboTK1" : "乔思伯 TK-1"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "HYTE",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · black",
+    "id" : "aesthetic-case-9a2f605a34552339",
+    "name" : "HYTE Y70 TOUCH（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-9af90d2b2b491960",
+    "name" : "追风者 NV7",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-9bec2549f7ad8cfe",
+    "name" : "ROG GR701 创世神（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-9c715419f6d43b05",
+    "name" : "联力 O11D MINI V2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliO11DMiniV2" : "联力 O11D MINI V2"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-9df9e0b866a47cf1",
+    "name" : "乔思伯 X400",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "华硕",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-9fa31460a6c0f291",
+    "name" : "华硕 TUF 502 弹药库",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "玩嘉问界",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-a253f71a98c7e340",
+    "name" : "玩嘉问界 MIN",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-a7e793895564ad0f",
+    "name" : "追风者 XT V3 小清风",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "玩嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-a9a3d7f5a052bd59",
+    "name" : "玩嘉 梦想家副屏版",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-aca0d5cab9353682",
+    "name" : "追风者 NV7",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "未知玩家",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-af8659ab5e15145f",
+    "name" : "未知玩家 P80 MESH",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "未知玩家",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-b7f3531285aac81f",
+    "name" : "未知玩家 幻翼",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "case",
+    "detail_raw" : "机箱 · used · white",
+    "id" : "aesthetic-case-b85d20247c37d3cf",
+    "name" : "联立 VISION COMPACT（二手）",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者星璨辰",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-b9b72de8b4470c4f",
+    "name" : "爱国者星璨辰 屏显版",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-be2c3a0982e0c8e",
+    "name" : "乔思伯 TK4",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "AOC",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-bf0b865ff85d436b",
+    "name" : "AOC CG455B",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-c13b078fa490816",
+    "name" : "乔思伯 BO400CG",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "bo400cg" : "乔思伯 BO400CG"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-c2606e3e880c3c9d",
+    "name" : "联力 O11 EVO RGB",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "HYTE",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-c4473a414f570be9",
+    "name" : "HYTE Y70 TOUCH",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-c46dfd2d4f0b67d7",
+    "name" : "联力 VISION MIN",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-c4efa6d27c258c64",
+    "name" : "乔思伯 D33 WOOD",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-c7e4a7404dcb93b0",
+    "name" : "联力 V150INF",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "lianliV150INF" : "联力 V150INF"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-cc9bb452895bfeaa",
+    "name" : "爱国者 星璨辰",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-cd7d952292ee4804",
+    "name" : "爱国者 星璨辰 Air",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChenAir" : "爱国者 星璨辰 Air"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "玩嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-ce0baebc36c0e6bb",
+    "name" : "玩嘉 梦想家副屏版",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-cf9a64f798e4825a",
+    "name" : "航嘉 GX750C 挑战者",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaGX750C" : "航嘉 GX750C 挑战者"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "鑫谷次元仓",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-d037fb12f3da4664",
+    "name" : "鑫谷次元仓 PX",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-d1afd52452ebb007",
+    "name" : "瓦尔基里 VK03-M",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-d2a511c4e449cf6c",
+    "name" : "爱国者 炫影 G20",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "aigoXuanYingG20" : "爱国者 炫影 G20"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-daca8f05cd1f6430",
+    "name" : "航嘉 S960 V2",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaS960V2" : "航嘉 S960 V2"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "酷冷至尊",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-dd675ecf29f50196",
+    "name" : "酷冷至尊 MF400 Mesh",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "钛坦星舟",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-df12748638b7b534",
+    "name" : "钛坦星舟",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "titanStarship" : "钛坦星舟"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "航嘉",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-e35acdfdcec905df",
+    "name" : "航嘉 G63 战戟",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "华硕灵光岛",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-e3648d1d2b8e2590",
+    "name" : "华硕灵光岛 AP202",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-e58fc89983548301",
+    "name" : "瓦尔基里 VK03-M",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "未知玩家",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-e78dec63e0e13b5d",
+    "name" : "未知玩家 幻翼",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-e98e35d0851ec674",
+    "name" : "乔思伯 D34",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "酷方",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-e9ba48c96cf664d9",
+    "name" : "酷方 C34PRO",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "爱国者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-ed25ba648f7bf7c8",
+    "name" : "爱国者 星璨辰",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "骨伽凌空",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-ef649da7f4a34dca",
+    "name" : "骨伽凌空 V235",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "cougarV235" : "骨伽凌空V235"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-f2eb3714ded501dd",
+    "name" : "ROG GR701 创世神",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "七彩虹",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-f36ff697523b7f4d",
+    "name" : "七彩虹 C25A",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "colorfulC25A" : "七彩虹 C25A"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "追风者",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · white",
+    "id" : "aesthetic-case-fbeac353cd2eb7a",
+    "name" : "追风者 EVOLV X2 MATRIX",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "phanteksEvolvX2Matrix" : "追风者 EVOLV X2 MATRIX"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "case",
+    "detail_raw" : "机箱 · new · black",
+    "id" : "aesthetic-case-fd3df663a73845bd",
+    "name" : "联立 VISION COMPACT",
+    "specs" : {
+      "aesthetic_role" : "case",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "机箱",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "酷冷至尊挑战者",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-1e8294423e191450",
+    "name" : "酷冷至尊挑战者 V4",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · used · white",
+    "id" : "aesthetic-cooler-214d9e1edb71ce37",
+    "name" : "展域 SE360（二手）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联立隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-22b62fd793734989",
+    "name" : "联立隐流 2 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联立隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-29435ce3045b9c5a",
+    "name" : "联立隐流 1 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "lianliV150INF" : "联力 V150INF",
+        "visionMin" : "联立 Vison Min",
+        "whiteMinimal" : "未知玩家 幻翼",
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-33930924dbd542ba",
+    "name" : "ROG 龙王 4 代水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-33f07b7d7c44a547",
+    "name" : "乔思伯 TX-360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD",
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-3bd8fb10cdf8ac5c",
+    "name" : "利民 LV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "九州风神",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-3ee0ea0a212f172c",
+    "name" : "九州风神 冰元素 360 ARGB 水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-3f9d1e69867adc4c",
+    "name" : "展域 SE360（全新供货）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "超频三",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-425ff75bacea428f",
+    "name" : "超频三 RZ620M X 风冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-4a6ad9ea7ec2eac7",
+    "name" : "展域 SE360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-557312c819b7a736",
+    "name" : "展域 SE360（全新）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-5930a7c130466fbe",
+    "name" : "瓦尔基里 N360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "九州风神",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-5b34c5e9467186a",
+    "name" : "九州风神 冰元素 360 ARGB 水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "超频三",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-5c7a941ab88144d",
+    "name" : "超频三 RZ620M X 风冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-5de5cd345106b126",
+    "name" : "钛坦 LA300",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-6249f7155785b917",
+    "name" : "钛坦 LG600 240 水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-62e0e4efde43e1ca",
+    "name" : "ROG 龙王 4 代水冷颜值版",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-66f80bdf9b2dd8a",
+    "name" : "展域 SE360（全新供货）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-6864f537ec2091c5",
+    "name" : "展域 SE360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-68b8a7cf34cbe8d8",
+    "name" : "ROG 龙王 4 代水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-6f0706d18701412",
+    "name" : "利民 AE360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟",
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-7c5f39b30d194a8b",
+    "name" : "利民 MV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联立隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-7eedcad0b0695c1c",
+    "name" : "联立隐流 1 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "lianliV150INF" : "联力 V150INF",
+        "visionMin" : "联立 Vison Min",
+        "whiteMinimal" : "未知玩家 幻翼",
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-809ed2d15e6b3ae0",
+    "name" : "利民 PV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "colorfulC25A" : "七彩虹 C25A",
+        "cougarV235" : "骨伽凌空V235"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-833b927a5d797aa5",
+    "name" : "利民 MV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-83625478ba133485",
+    "name" : "瓦尔基里 DQ125 双塔 6 热管风冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-8c6c0d1d3587b8f0",
+    "name" : "利民 AE360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟",
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-92469b70ec575802",
+    "name" : "利民 PV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "colorfulC25A" : "七彩虹 C25A",
+        "cougarV235" : "骨伽凌空V235"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "利民",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-9b842430d564f21e",
+    "name" : "利民 LV360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "酷冷至尊挑战者",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-9e5aef3beb44de72",
+    "name" : "酷冷至尊挑战者 V4",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-a3a966978ef23c41",
+    "name" : "乔思伯 TX-360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD",
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦幻世",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-a49d1cd58a1ac50a",
+    "name" : "钛坦幻世 360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "titanStarship" : "钛坦星舟"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-a4c97a4538342b8c",
+    "name" : "ROG 龙王 4 代水冷颜值版",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-a5fe1aacb3462186",
+    "name" : "展域 SE360（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联力隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-aeba168721f8fb1",
+    "name" : "联力隐流 1 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "lianliO11DMiniV2" : "联力 O11D MINI V2"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · used · black",
+    "id" : "aesthetic-cooler-afabd66482a2da75",
+    "name" : "展域 SE360（二手）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "鑫谷冰智",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-b29f3d40d94df91",
+    "name" : "鑫谷冰智 360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "超频三",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-b6d6bb74d346ba6a",
+    "name" : "超频三 巨浪 360 ARGB",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-c9b879a3eb42d788",
+    "name" : "展域 SE360（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "鑫谷冰智",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-ca1b4a7eb45e1793",
+    "name" : "鑫谷冰智 360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦幻世",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-ca7b1a915a7e2d28",
+    "name" : "钛坦幻世 360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "titanStarship" : "钛坦星舟"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联力隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-cf30efbce32c36b3",
+    "name" : "联力隐流 1 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "lianliO11DMiniV2" : "联力 O11D MINI V2"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-d0d79a09e239bb35",
+    "name" : "钛坦 LG600",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库",
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO",
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-d30afbac81b4596b",
+    "name" : "瓦尔基里 DQ125 双塔 6 热管风冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-d36d1eea60936684",
+    "name" : "瓦尔基里 B360-GT",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-da6b2a57b5214404",
+    "name" : "钛坦 LA300",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "展域",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-e2501f63f9e4e6f8",
+    "name" : "展域 SE360（全新）",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "hyteY70" : "HYTE Y70 鱼缸机箱",
+        "panorama" : "ROG 创世神 701",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-e366003282681342",
+    "name" : "瓦尔基里 B360-GT",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-eb5537b134750955",
+    "name" : "钛坦 LG600 240 水冷",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "钛坦",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-ede15972ea65ecf7",
+    "name" : "钛坦 LG600",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库",
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO",
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "超频三",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · white",
+    "id" : "aesthetic-cooler-f0045920600eb92c",
+    "name" : "超频三 巨浪 360 ARGB",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "瓦尔基里",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-f9857ea128da29fc",
+    "name" : "瓦尔基里 N360",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "联立隐流",
+    "category" : "cooler",
+    "detail_raw" : "CPU 散热器 · new · black",
+    "id" : "aesthetic-cooler-fda1fe5e758d35ef",
+    "name" : "联立隐流 2 代",
+    "specs" : {
+      "aesthetic_role" : "cooler",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "asusAP202" : "华硕灵光岛 AP202",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "CPU 散热器",
+      "supports_hot_cpu" : true
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-1003542f0360f177",
+    "name" : "丛林豹星际积木 V4 无屏 × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-1004419cab66779a",
+    "name" : "丛林豹星际积木 V4 无屏 × 3",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-129550f5b542a047",
+    "name" : "乔思伯 ZA360 × 3 + ZA240 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-13bc0678a78d6e84",
+    "name" : "乔思伯 ZA360 × 2 + ZA240 × 1 + ZA120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-13d48a50d93b39dd",
+    "name" : "联立 4 代积木 LED 风扇 × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-1516309715fadc7a",
+    "name" : "棱镜 8 Pro × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "hangjiaGX750C" : "航嘉 GX750C 挑战者"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-1655734d0474c872",
+    "name" : "棱镜 8 Pro × 5",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-1826ebfddffa5f54",
+    "name" : "棱镜 8 Pro × 9",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "cougarV235" : "骨伽凌空V235",
+        "hangjiaS960" : "航嘉 S960",
+        "hangjiaS960V2" : "航嘉 S960 V2",
+        "lianliO11DMiniV2" : "联力 O11D MINI V2",
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R",
+        "titanStarship" : "钛坦星舟",
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "魔方",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-1da3c94593ce1fdd",
+    "name" : "魔方 U360 × 3 + 魔方 U120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX",
+        "xingcanChenAir" : "爱国者 星璨辰 Air",
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-22cb00f3a1c2867b",
+    "name" : "丛林豹星际积木 V4 LCD × 3",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-249c3409c3c97996",
+    "name" : "丛林豹星际积木 V4 LCD × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-2736396074525da",
+    "name" : "丛林豹星际积木 V4 无屏 × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · new · white",
+    "id" : "aesthetic-extra-28aa26ed6e3237d6",
+    "name" : "ROG 大力神支架（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立一代积木风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-2babe77e7af5e41",
+    "name" : "联立一代积木风扇 6 把 + 无线发射器",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-2fe924195e0fbb2",
+    "name" : "联立 4 代积木 LED 风扇 4 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-31bce99e2eea227e",
+    "name" : "乔思伯 ZA240 × 2 + ZA120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "外置霓虹线",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "定制线材 · new · white",
+    "id" : "aesthetic-extra-34250c5c229ed31f",
+    "name" : "外置霓虹线",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "定制线材",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · new · black",
+    "id" : "aesthetic-extra-3abca5355ed50ab4",
+    "name" : "ROG 大力神支架（闲鱼全新）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-3b0e2b2530e147d8",
+    "name" : "乔思伯 ZA360 2 把 + ZA240 1 把 + ZA120 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力积木一代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-3c279411e906f310",
+    "name" : "联力积木一代风扇 10 把 × 169 元",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库",
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-436698efad8585a3",
+    "name" : "联立 4 代积木 LED 风扇 × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立四代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-44580a8159c51463",
+    "name" : "联立四代风扇 8 把 + 无线发射器",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-45149507a8665812",
+    "name" : "联力 4 代积木 LCD 风扇 × 5",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-47c82750236c0362",
+    "name" : "联立 LCD 积木风扇 4 把 + LED 积木风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-49a2629b2ad952d9",
+    "name" : "丛林豹星际积木 V4（带屏 5 把 + 无屏 3 把）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-4a8c94584e25343e",
+    "name" : "棱镜 8 Pro × 7",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-4c47782e621a13de",
+    "name" : "棱镜 8 Pro × 12",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "魔方",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-4d35d7e468186ba3",
+    "name" : "魔方 U360 × 3 + 魔方 U120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "sugonCiyuanCangPX" : "鑫谷次元仓 PX",
+        "xingcanChenAir" : "爱国者 星璨辰 Air",
+        "xingcanChenScreen" : "爱国者星璨辰 屏显版"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-4d44fa440f30e19b",
+    "name" : "棱镜 8 Pro × 8",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aigoXuanYingG20" : "爱国者 炫影 G20"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-4dabba1d864b5f85",
+    "name" : "联立 4 代积木 LED 风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "定制线材 · new · white",
+    "id" : "aesthetic-extra-5573b266d7d7167e",
+    "name" : "联立 4 代霓虹线",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "定制线材",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-581dd183b352e59c",
+    "name" : "丛林豹星际积木 V4 无屏 × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-5b977745bf81e5e0",
+    "name" : "乔思伯 ZA240 × 2 + ZA120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboD34" : "乔思伯 D34"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-5e88c7ad7eaa1ba",
+    "name" : "乔思伯 ZA360 2 把 + ZA240 1 把 + ZA120 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-5e8cc77eae2b1df4",
+    "name" : "联立 4 代积木 LED 风扇 4 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-5f735621cd3d7a41",
+    "name" : "乔思伯 ZA360 3 把 + ZA240 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "外置霓虹线",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "定制线材 · new · black",
+    "id" : "aesthetic-extra-63bfa5ad7dd5465d",
+    "name" : "外置霓虹线",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "定制线材",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-64f464320493a2af",
+    "name" : "棱镜 8 Pro × 6",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "lianliV150INF" : "联力 V150INF",
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH",
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-656ca6daf7c52d3c",
+    "name" : "棱镜 8 Pro × 10",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aocShockingBow" : "AOC 震天弓",
+        "hangjiaGX750C" : "航嘉 GX750C 挑战者"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · new · white",
+    "id" : "aesthetic-extra-70c560a4a9150ed5",
+    "name" : "ROG 大力神支架",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "图灵智显",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "副屏 · new · white",
+    "id" : "aesthetic-extra-79180a36c98d4b76",
+    "name" : "图灵智显 8.8 寸副屏",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "phanteksNV7" : "追风者 NV7",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "副屏",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · used · black",
+    "id" : "aesthetic-extra-7cab1288f120173f",
+    "name" : "ROG 大力神支架（二手）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-824e3c0fc7f03741",
+    "name" : "乔思伯 ZA360 × 3 + ZA240 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboTK4" : "乔思伯 TK4"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-832dc15b5bad097",
+    "name" : "棱镜 8 Pro × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "colorfulC25A" : "七彩虹 C25A",
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh",
+        "jonsboTK1" : "乔思伯 TK-1",
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · used · white",
+    "id" : "aesthetic-extra-850a4f30dc2b059",
+    "name" : "ROG 大力神支架（二手）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "海中神",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-856f71c84cb1c74b",
+    "name" : "海中神 ZA 风扇组合",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "图灵智显",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "副屏 · used · black",
+    "id" : "aesthetic-extra-87af799df4ebfa86",
+    "name" : "图灵智显 8.8 寸副屏（二手）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "used",
+      "display_category" : "副屏",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-8a89b4d958980911",
+    "name" : "棱镜 8 Pro × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "colorfulC25A" : "七彩虹 C25A",
+        "coolermasterMF400Mesh" : "酷冷至尊 MF400 Mesh",
+        "jonsboTK1" : "乔思伯 TK-1",
+        "phanteksXTV3Breeze" : "追风者 XT V3 小清风"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-8fd3fcd3f04b80c0",
+    "name" : "联力 4 代积木 LED 风扇 × 7",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "海中神",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-919fc23967556665",
+    "name" : "海中神 ZA 风扇组合",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG",
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-93a83dace3dc1aa4",
+    "name" : "联立 LCD 积木风扇 4 把 + LED 积木风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-9444cd20abc27e80",
+    "name" : "联立 4 代积木 LCD 风扇 4 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-9448249c6d9e6ff1",
+    "name" : "丛林豹星际积木 V4 无屏 × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusAP202" : "华硕灵光岛 AP202",
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-967d18535748fe50",
+    "name" : "棱镜 8 Pro × 5",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "wanjiaWenjieMin" : "玩嘉问界MIN"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-96997df978aa198",
+    "name" : "丛林豹星际积木 V4（带屏 4 把 + 无屏 3 把）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-9736a9554372dba6",
+    "name" : "乔思伯 ZA360 × 2 + ZA240 × 1 + ZA120 × 1",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "jonsboD33Wood" : "乔思伯 D33 WOOD"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-9d5461514dec846b",
+    "name" : "联立 4 代积木 LED 风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-a28695c036cb72a2",
+    "name" : "联立 4 代积木 LCD 风扇 4 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-a6d8c14f5e2f405a",
+    "name" : "棱镜 4 Pro × 9",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "图灵智显",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "副屏 · used · white",
+    "id" : "aesthetic-extra-ab69d8952ce8b088",
+    "name" : "图灵智显 8.8 寸副屏（二手）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "used",
+      "display_category" : "副屏",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-ac296dbad4730e76",
+    "name" : "棱镜 8 Pro × 9",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "cougarV235" : "骨伽凌空V235",
+        "hangjiaS960" : "航嘉 S960",
+        "hangjiaS960V2" : "航嘉 S960 V2",
+        "lianliO11DMiniV2" : "联力 O11D MINI V2",
+        "msiVIXTA300R" : "微星 MPG VIXTA 300R",
+        "titanStarship" : "钛坦星舟",
+        "valkyrieVK03M" : "瓦尔基里 VK03-M"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立一代积木风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-aeff343403037583",
+    "name" : "联立一代积木风扇 6 把 + 无线发射器",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-b368384f6b58b258",
+    "name" : "丛林豹星际积木 V4 LCD × 4",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ZA360",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-b62d789ae1020ecd",
+    "name" : "ZA360 风扇 3 把 + ZA120 风扇 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力积木四代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-b9451dad6c1c1a2e",
+    "name" : "联力积木四代风扇 7 把（按 200 元/把估算）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "phanteksEvolvS2" : "追风者 EVOLV S2",
+        "phanteksEvolvX2Matrix" : "追风者 EVOLV X2 MATRIX"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "乔思伯",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-bb7cbdde8919183",
+    "name" : "乔思伯 ZA360 3 把 + ZA240 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "xingcanChen" : "星璨辰"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-bbe079c7a2ad45d",
+    "name" : "联立 4 代积木 LCD 风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-bdfcd0310e36b9bf",
+    "name" : "丛林豹星际积木 V4（带屏 5 把 + 无屏 3 把）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-c15e6c164aab63d5",
+    "name" : "丛林豹星际积木 V4 LCD × 3",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立四代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-c1a7fbe7705e4f9d",
+    "name" : "联立四代风扇 8 把 + 无线发射器",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-cef0018b74508c7a",
+    "name" : "丛林豹星际积木 V4（带屏 4 把 + 无屏 3 把）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-cfe91e7323cfd96d",
+    "name" : "棱镜 8 Pro × 6",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "lianliV150INF" : "联力 V150INF",
+        "unknownPlayerP80Mesh" : "未知玩家P80 MESH",
+        "wanjiaDreamerScreen" : "玩嘉 梦想家副屏版",
+        "whiteMinimal" : "未知玩家 幻翼"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-d04019a4c101bba0",
+    "name" : "棱镜 8 Pro × 7",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "fangtangC34Pro" : "方糖机械大师 酷方 C34PRO"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力积木一代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-d19fedd0ca27b02e",
+    "name" : "联力积木一代风扇 10 把 × 169 元",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "asusTUF502Ammo" : "华硕 TUF 502 弹药库",
+        "lianliO11EVORGB" : "联力 O11 EVO RGB"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ROG",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "显卡支架 · new · black",
+    "id" : "aesthetic-extra-d231f582002c317b",
+    "name" : "ROG 大力神支架",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "显卡支架",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "丛林豹星际积木",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-d3ab7e57810e95c",
+    "name" : "丛林豹星际积木 V4 无屏 × 3",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hyteY70" : "HYTE Y70 鱼缸机箱"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-dbfe5ff9b725e678",
+    "name" : "棱镜 4 Pro × 9",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "hangjiaG63Waraxe" : "航嘉 G63 战戟"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-dc236e4b1ef4611f",
+    "name" : "联立 4 代积木 LCD 风扇 3 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "panorama" : "ROG 创世神 701"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "图灵智显",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "副屏 · new · black",
+    "id" : "aesthetic-extra-e5158879d5149c54",
+    "name" : "图灵智显 8.8 寸副屏",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT",
+        "phanteksNV7" : "追风者 NV7",
+        "visionMin" : "联立 Vison Min"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "副屏",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-e7495764906c121c",
+    "name" : "棱镜 8 Pro × 12",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "phanteksNV7" : "追风者 NV7"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "棱镜",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-e9e96dbcf0b7c5f5",
+    "name" : "棱镜 8 Pro × 8",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "aigoXuanYingG20" : "爱国者 炫影 G20"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联立",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "定制线材 · new · black",
+    "id" : "aesthetic-extra-f075919d062914bc",
+    "name" : "联立 4 代霓虹线",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "blackKnight" : "联立 VISION COMPACT"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "定制线材",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力积木四代风扇",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-f0bdd9dd0fb46fec",
+    "name" : "联力积木四代风扇 7 把（按 200 元/把估算）",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "phanteksEvolvS2" : "追风者 EVOLV S2",
+        "phanteksEvolvX2Matrix" : "追风者 EVOLV X2 MATRIX"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "ZA360",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-f2c5c6b4e2643d0f",
+    "name" : "ZA360 风扇 3 把 + ZA120 风扇 1 把",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "bo400" : "乔思伯 BO400",
+        "bo400cg" : "乔思伯 BO400CG"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · white",
+    "id" : "aesthetic-extra-f727ca3fd8b1cf54",
+    "name" : "联力 4 代积木 LCD 风扇 × 5",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "white",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  },
+  {
+    "brand" : "联力",
+    "category" : "aesthetic_extra",
+    "detail_raw" : "风扇套装 · new · black",
+    "id" : "aesthetic-extra-f746f3147b2685e",
+    "name" : "联力 4 代积木 LED 风扇 × 7",
+    "specs" : {
+      "aesthetic_role" : "extra",
+      "aesthetic_styles" : {
+        "rogGR801" : "ROG GR801 幻世神"
+      },
+      "color" : "black",
+      "condition" : "new",
+      "display_category" : "风扇套装",
+      "supports_hot_cpu" : false
+    }
+  }
+]

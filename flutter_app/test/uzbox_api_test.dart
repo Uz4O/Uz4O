@@ -39,4 +39,25 @@ void main() {
       750,
     );
   });
+
+  test('review request sends only configuration text', () async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => server.close(force: true));
+    server.listen((request) async {
+      expect(request.method, 'POST');
+      expect(request.uri.path, '/v1/review/analyze');
+      final body = jsonDecode(await utf8.decoder.bind(request).join());
+      expect(body, {'text': 'CPU：i5-12400F\n显卡：RTX 4060'});
+      request.response.headers.contentType = ContentType.json;
+      request.response.write(jsonEncode({'risk_level': 'pass'}));
+      await request.response.close();
+    });
+
+    final api = UzBoxApi(
+      baseUri: Uri.parse('http://${server.address.host}:${server.port}'),
+    );
+
+    final response = await api.reviewText('CPU：i5-12400F\n显卡：RTX 4060');
+    expect(response['risk_level'], 'pass');
+  });
 }

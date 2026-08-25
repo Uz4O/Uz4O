@@ -10,35 +10,6 @@ private enum ConfigReviewState {
     case error(String)
 }
 
-enum ConfigReviewDirection: String, CaseIterable, Identifiable {
-    case fps, aaa, balanced, office
-
-    var id: String { rawValue }
-    var title: String {
-        switch self {
-        case .fps: "FPS"
-        case .aaa: "3A"
-        case .balanced: "均衡"
-        case .office: "办公"
-        }
-    }
-}
-
-enum ConfigReviewResolution: String, CaseIterable, Identifiable {
-    case fullHD = "1080p"
-    case twoK = "1440p"
-    case fourK = "2160p"
-
-    var id: String { rawValue }
-    var title: String {
-        switch self {
-        case .fullHD: "1080P"
-        case .twoK: "2K"
-        case .fourK: "4K"
-        }
-    }
-}
-
 enum ConfigReviewPartCategory: String, CaseIterable, Identifiable {
     case cpu
     case motherboard
@@ -71,10 +42,7 @@ enum ConfigReviewPartCategory: String, CaseIterable, Identifiable {
         }
     }
 
-    func filters(selectedCPU: String) -> [HardwareCatalogFilter] {
-        if self == .motherboard, !selectedCPU.isEmpty {
-            return HardwareCatalog.motherboardFilters(compatibleWithCPU: selectedCPU)
-        }
+    func filters() -> [HardwareCatalogFilter] {
         return HardwareCatalog.filters(for: title)
     }
 }
@@ -83,9 +51,6 @@ struct ConfigReviewDraft {
     private var models = Dictionary(
         uniqueKeysWithValues: ConfigReviewPartCategory.allCases.map { ($0, "") }
     )
-    var direction: ConfigReviewDirection = .balanced
-    var resolution: ConfigReviewResolution = .twoK
-
     var completedPartCount: Int {
         ConfigReviewPartCategory.allCases.filter {
             !model(for: $0).isEmpty
@@ -115,6 +80,21 @@ struct ConfigReviewDraft {
 
     mutating func setModel(_ value: String, for category: ConfigReviewPartCategory) {
         models[category] = value
+    }
+
+    mutating func prefill(with components: [String: ConfigReviewDetectedComponentDTO]) {
+        let categories: [String: ConfigReviewPartCategory] = [
+            "cpu": .cpu,
+            "gpu": .gpu,
+            "motherboard": .motherboard,
+            "ram": .memory,
+            "storage": .storage,
+            "psu": .powerSupply
+        ]
+        for (role, component) in components {
+            guard let category = categories[role] else { continue }
+            setModel(component.name, for: category)
+        }
     }
 }
 
@@ -146,7 +126,11 @@ struct ConfigReviewView: View {
             case .result(let result):
                 ConfigReviewResultView(
                     result: result,
-                    onBack: { state = .landing }
+                    onBack: { state = .landing },
+                    onEdit: {
+                        draft.prefill(with: result.detectedComponents)
+                        state = .manualEntry
+                    }
                 )
             case .error(let message):
                 ConfigReviewErrorView(
@@ -173,11 +157,7 @@ struct ConfigReviewView: View {
 
         Task {
             do {
-                let result = try await AppAPIClient().analyzeConfigReviewText(
-                    text,
-                    direction: draft.direction.rawValue,
-                    resolution: draft.resolution.rawValue
-                )
+                let result = try await AppAPIClient().analyzeConfigReviewText(text)
                 guard requestID == activeRequestID else { return }
                 state = .result(result)
             } catch {
@@ -196,17 +176,14 @@ struct ConfigReviewView: View {
             defer { selectedImageItem = nil }
 
             do {
-                guard let data = try await item.loadTransferable(type: Data.self) else {
+                guard let sourceData = try await item.loadTransferable(type: Data.self),
+                      let data = normalizedReviewJPEGData(sourceData) else {
                     guard requestID == activeRequestID else { return }
-                    state = .error("没有读取到图片内容")
+                    state = .error("图片读取或压缩失败，请换一张清晰截图后重试")
                     return
                 }
 
-                let result = try await AppAPIClient().analyzeConfigReviewImage(
-                    imageData: data,
-                    direction: draft.direction.rawValue,
-                    resolution: draft.resolution.rawValue
-                )
+                let result = try await AppAPIClient().analyzeConfigReviewImage(imageData: data)
                 guard requestID == activeRequestID else { return }
                 state = .result(result)
             } catch {
@@ -219,6 +196,29 @@ struct ConfigReviewView: View {
     private func cancelReview() {
         requestID = UUID()
         state = .landing
+    }
+
+    private func normalizedReviewJPEGData(_ data: Data) -> Data? {
+        guard let image = UIImage(data: data) else { return nil }
+        let maxDimension: CGFloat = 2_400
+        let scale = min(1, maxDimension / max(image.size.width, image.size.height))
+        let targetSize = CGSize(
+            width: max(1, image.size.width * scale),
+            height: max(1, image.size.height * scale)
+        )
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        format.opaque = true
+        let normalized = UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+        let uploadLimit = 8 * 1024 * 1024
+        for quality in [0.82, 0.68, 0.54] {
+            if let compressed = normalized.jpegData(compressionQuality: quality), compressed.count <= uploadLimit {
+                return compressed
+            }
+        }
+        return nil
     }
 }
 
@@ -233,7 +233,7 @@ private struct ConfigReviewLandingView: View {
                 ConfigReviewLandingTopBar(onBack: onBack)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("配置排雷")
+                    Text("配置搭配评估")
                         .font(.system(size: 42, weight: .black))
                         .foregroundStyle(.black)
 
@@ -265,7 +265,7 @@ private struct ConfigReviewLandingView: View {
                         .padding(.top, 4)
                     }
                 }
-                .padding(.top, 34)
+                .padding(.top, 30)
 
                 Divider()
                     .overlay(ConfigReviewPalette.divider)
@@ -441,12 +441,6 @@ private struct ConfigReviewManualEntryView: View {
                     .foregroundStyle(ConfigReviewPalette.secondary)
                     .padding(.top, 8)
 
-                ConfigReviewContextSelector(
-                    direction: $draft.direction,
-                    resolution: $draft.resolution
-                )
-                .padding(.top, 24)
-
                 VStack(spacing: 0) {
                     ForEach(ConfigReviewPartCategory.allCases) { category in
                         ConfigReviewPartInputRow(
@@ -480,7 +474,7 @@ private struct ConfigReviewManualEntryView: View {
         .sheet(item: $selectedCategory) { category in
             ConfigReviewHardwarePicker(
                 category: category,
-                filters: category.filters(selectedCPU: draft.model(for: .cpu)),
+                filters: category.filters(),
                 selectedValue: modelBinding(for: category)
             )
             .presentationDetents([.large])
@@ -495,36 +489,6 @@ private struct ConfigReviewManualEntryView: View {
         )
     }
 
-}
-
-private struct ConfigReviewContextSelector: View {
-    @Binding var direction: ConfigReviewDirection
-    @Binding var resolution: ConfigReviewResolution
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("主要用途")
-                .font(.system(size: 15, weight: .bold))
-            Picker("主要用途", selection: $direction) {
-                ForEach(ConfigReviewDirection.allCases) { item in
-                    Text(item.title).tag(item)
-                }
-            }
-            .pickerStyle(.segmented)
-
-            if direction != .office {
-                Text("目标分辨率")
-                    .font(.system(size: 15, weight: .bold))
-                    .padding(.top, 4)
-                Picker("目标分辨率", selection: $resolution) {
-                    ForEach(ConfigReviewResolution.allCases) { item in
-                        Text(item.title).tag(item)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-        }
-    }
 }
 
 private struct ConfigReviewPartInputRow: View {
@@ -588,7 +552,7 @@ private struct ConfigReviewManualSubmitBar: View {
 
             Button(action: onSubmit) {
                 HStack(spacing: 14) {
-                    Text("开始排雷")
+                    Text("开始评估")
                     Image(systemName: "arrow.right")
                 }
                 .font(.system(size: 16, weight: .bold))
@@ -712,7 +676,7 @@ private struct ConfigReviewLoadingView: View {
                 HStack {
                     ConfigReviewBackButton(action: onBack)
                     Spacer()
-                    Text("配置排雷")
+                    Text("配置搭配评估")
                         .font(.system(size: 17, weight: .bold))
                     Spacer()
                     Color.clear.frame(width: 32, height: 32)
@@ -765,7 +729,7 @@ private struct ConfigReviewLoadingView: View {
                     ConfigReviewProgressRow(number: "01", title: "读取配件型号", status: .completed)
                     ConfigReviewProgressRow(number: "02", title: "检查兼容性", status: progress > 0.36 ? .completed : .waiting)
                     ConfigReviewProgressRow(number: "03", title: "评估搭配与性能", status: progress > 0.58 ? .active : .waiting)
-                    ConfigReviewProgressRow(number: "04", title: "整理购买建议", status: .waiting, showsDivider: false)
+                    ConfigReviewProgressRow(number: "04", title: "整理修改建议", status: .waiting, showsDivider: false)
                 }
                 .padding(.top, 10)
 
@@ -865,6 +829,7 @@ private struct ConfigReviewProgressIcon: View {
 private struct ConfigReviewResultView: View {
     let result: ConfigReviewResponseDTO
     let onBack: () -> Void
+    let onEdit: () -> Void
 
     @State private var showsCopiedMessage = false
 
@@ -873,7 +838,13 @@ private struct ConfigReviewResultView: View {
     }
 
     private var conclusionTitle: String {
-        switch riskLevel {
+        if result.pairingRating.status == "failed" {
+            return "存在硬性问题"
+        }
+        if result.pairingRating.status == "incomplete" {
+            return "信息待补全"
+        }
+        return switch riskLevel {
         case .pass: "这套配置可以买"
         case .error: "建议先别买"
         case .warning: "建议修改后再买"
@@ -884,13 +855,37 @@ private struct ConfigReviewResultView: View {
         result.findings.filter { $0.level != "pass" }
     }
 
+    private var actionItems: [ConfigReviewRecommendationDTO] {
+        if !result.recommendations.isEmpty {
+            return result.recommendations
+        }
+        return riskFindings.map { finding in
+            ConfigReviewRecommendationDTO(
+                severity: finding.level == "error" ? "required" : "recommended",
+                title: finding.title,
+                reason: finding.detail,
+                action: "按问题说明确认或调整对应配件，再重新评估。",
+                expectedImpact: "降低当前配置中已识别的搭配风险。",
+                componentIds: []
+            )
+        }
+    }
+
+    private var detectedComponents: [ConfigReviewDetectedComponentDTO] {
+        let roleOrder = ["cpu", "motherboard", "gpu", "ram", "storage", "psu"]
+        return result.detectedComponents.values.sorted {
+            (roleOrder.firstIndex(of: $0.role) ?? roleOrder.count)
+                < (roleOrder.firstIndex(of: $1.role) ?? roleOrder.count)
+        }
+    }
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
                     ConfigReviewBackButton(action: onBack)
                     Spacer()
-                    Text("排雷报告")
+                    Text("配置评估报告")
                         .font(.system(size: 17, weight: .bold))
                     Spacer()
                     ShareLink(item: result.replyText) {
@@ -922,7 +917,7 @@ private struct ConfigReviewResultView: View {
                 ConfigReviewResultMetrics(
                     pairingRating: result.pairingRating,
                     performanceRating: result.performanceRating,
-                    findingCount: riskFindings.count
+                    recommendationCount: actionItems.count
                 )
                 .padding(.top, 28)
 
@@ -932,17 +927,31 @@ private struct ConfigReviewResultView: View {
                 }
                 .padding(.top, 24)
 
-                Text(riskFindings.isEmpty ? "检查结果" : "先处理这 \(riskFindings.count) 个问题")
+                if !detectedComponents.isEmpty {
+                    Text("已识别配件")
+                        .font(.system(size: 25, weight: .black))
+                        .foregroundStyle(.black)
+                        .padding(.top, 38)
+
+                    VStack(spacing: 0) {
+                        ForEach(detectedComponents) { component in
+                            ConfigReviewDetectedComponentRow(component: component)
+                        }
+                    }
+                    .padding(.top, 10)
+                }
+
+                Text(actionItems.isEmpty ? "检查结果" : "修改建议清单 · \(actionItems.count) 项")
                     .font(.system(size: 25, weight: .black))
                     .foregroundStyle(.black)
                     .padding(.top, 42)
 
                 VStack(spacing: 0) {
-                    ForEach(Array(riskFindings.enumerated()), id: \.element.id) { index, finding in
-                        ConfigReviewFindingRow(index: index + 1, finding: finding)
+                    ForEach(Array(actionItems.enumerated()), id: \.element.id) { index, recommendation in
+                        ConfigReviewRecommendationRow(index: index + 1, recommendation: recommendation)
                     }
 
-                    if riskFindings.isEmpty {
+                    if actionItems.isEmpty {
                         HStack(spacing: 12) {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 13, weight: .bold))
@@ -956,6 +965,14 @@ private struct ConfigReviewResultView: View {
                     }
                 }
                 .padding(.top, 12)
+
+                if !detectedComponents.isEmpty {
+                    Button(action: onEdit) {
+                        ConfigReviewSecondaryActionLabel(title: "按识别结果修改")
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 24)
+                }
 
                 if !result.webSources.isEmpty {
                     Text("联网补全来源")
@@ -1008,7 +1025,7 @@ private struct ConfigReviewResultView: View {
         }
         .safeAreaInset(edge: .bottom) {
             ConfigReviewResultActionBar(
-                findingCount: riskFindings.count,
+                recommendationCount: actionItems.count,
                 onCopy: copyReply
             )
         }
@@ -1044,20 +1061,15 @@ private struct ConfigReviewResultView: View {
 private struct ConfigReviewResultMetrics: View {
     let pairingRating: ConfigReviewRatingDTO
     let performanceRating: ConfigReviewRatingDTO
-    let findingCount: Int
-
-    private func value(_ rating: ConfigReviewRatingDTO) -> String {
-        guard let score = rating.score else { return "待补全" }
-        return "\(score) 分"
-    }
+    let recommendationCount: Int
 
     var body: some View {
         HStack(spacing: 0) {
-            ConfigReviewMetric(title: "搭配", value: value(pairingRating))
+            ConfigReviewMetric(title: "搭配", value: pairingRating.displayValue)
             Divider().frame(height: 42).overlay(ConfigReviewPalette.divider)
-            ConfigReviewMetric(title: "性能", value: performanceRating.grade ?? "待补全")
+            ConfigReviewMetric(title: "性能", value: performanceRating.displayValue)
             Divider().frame(height: 42).overlay(ConfigReviewPalette.divider)
-            ConfigReviewMetric(title: "风险项", value: "\(findingCount) 个")
+            ConfigReviewMetric(title: "建议", value: "\(recommendationCount) 项")
         }
     }
 }
@@ -1081,7 +1093,7 @@ private struct ConfigReviewRatingCard: View {
                 Text(title)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.secondary)
-                Text(rating.score.map { "\($0) 分" } ?? "暂无评分")
+                Text(rating.displayValue)
                     .font(.system(size: 28, weight: .black))
                     .foregroundStyle(.black)
                 Text(confidenceTitle)
@@ -1122,9 +1134,62 @@ private struct ConfigReviewMetric: View {
     }
 }
 
-private struct ConfigReviewFindingRow: View {
+private struct ConfigReviewDetectedComponentRow: View {
+    let component: ConfigReviewDetectedComponentDTO
+
+    private var roleTitle: String {
+        [
+            "cpu": "CPU",
+            "gpu": "显卡",
+            "motherboard": "主板",
+            "ram": "内存",
+            "storage": "硬盘",
+            "psu": "电源"
+        ][component.role] ?? component.role
+    }
+
+    private var confidenceTitle: String {
+        switch component.confidence {
+        case "exact": "精确匹配"
+        case "partial": "部分匹配"
+        case "web": "联网补全"
+        default: "待确认"
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Text(roleTitle)
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(ConfigReviewPalette.secondary)
+                .frame(width: 48, alignment: .leading)
+            Text(component.name)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.black)
+                .lineLimit(1)
+            Spacer(minLength: 8)
+            Text(confidenceTitle)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(ConfigReviewPalette.muted)
+        }
+        .padding(.vertical, 13)
+        .overlay(alignment: .bottom) {
+            Divider().overlay(ConfigReviewPalette.divider)
+        }
+    }
+}
+
+private struct ConfigReviewRecommendationRow: View {
     let index: Int
-    let finding: ConfigReviewFindingDTO
+    let recommendation: ConfigReviewRecommendationDTO
+
+    private var severityTitle: String {
+        switch recommendation.severity {
+        case "required": "必须修改"
+        case "optional": "购买前确认"
+        default: "建议修改"
+        }
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 18) {
@@ -1138,13 +1203,26 @@ private struct ConfigReviewFindingRow: View {
             .frame(width: 82, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(finding.title)
+                Text(severityTitle)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(ConfigReviewPalette.secondary)
+                Text(recommendation.title)
                     .font(.system(size: 17, weight: .black))
                     .foregroundStyle(.black)
-                Text(finding.detail)
+                Text("原因：\(recommendation.reason)")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.secondary)
                     .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("怎么改：\(recommendation.action)")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.black)
+                    .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("改后：\(recommendation.expectedImpact)")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(ConfigReviewPalette.muted)
+                    .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
@@ -1158,7 +1236,7 @@ private struct ConfigReviewFindingRow: View {
 }
 
 private struct ConfigReviewResultActionBar: View {
-    let findingCount: Int
+    let recommendationCount: Int
     let onCopy: () -> Void
 
     var body: some View {
@@ -1167,7 +1245,7 @@ private struct ConfigReviewResultActionBar: View {
                 Text("已为你整理好回复话术")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(ConfigReviewPalette.secondary)
-                Text("\(findingCount) 个修改建议")
+                Text("\(recommendationCount) 项修改建议")
                     .font(.system(size: 22, weight: .black))
                     .foregroundStyle(.black)
             }
@@ -1205,7 +1283,7 @@ private struct ConfigReviewErrorView: View {
             ConfigReviewBackButton(action: onBack)
                 .padding(.top, 8)
 
-            Text("没有完成排雷")
+            Text("没有完成评估")
                 .font(.system(size: 38, weight: .black))
                 .foregroundStyle(.black)
                 .padding(.top, 44)

@@ -2,7 +2,9 @@ import SwiftUI
 
 struct MyBuildsView: View {
     let hardwareProfile: HardwareProfile
+    let accessToken: String?
     let onOpenPlan: () -> Void
+    let onOpenSavedUpgrade: (SavedUpgradePlanDTO) -> Void
     let onCreate: () -> Void
     let onOpenComputerProfile: () -> Void
     let onOpenUpgrade: () -> Void
@@ -11,6 +13,7 @@ struct MyBuildsView: View {
 
     @Binding var selectedSection: ConfigHubSection
     @State private var diyBuilds = DIYBuildStore.load()
+    @State private var savedUpgradePlans: [SavedUpgradePlanDTO] = []
 
     var body: some View {
         GeometryReader { proxy in
@@ -47,11 +50,20 @@ struct MyBuildsView: View {
 
                         switch selectedSection {
                         case .aiBuilds:
-                            AIBuildsSection(
-                                plans: AppMockData.savedPlans + diyBuilds.map(\.asBuildPlan),
-                                onOpenPlan: onOpenPlan,
-                                onCreate: onCreate
-                            )
+                            VStack(spacing: 30) {
+                                if !savedUpgradePlans.isEmpty {
+                                    SavedUpgradePlansSection(
+                                        plans: savedUpgradePlans,
+                                        onOpen: onOpenSavedUpgrade
+                                    )
+                                }
+
+                                AIBuildsSection(
+                                    plans: AppMockData.savedPlans + diyBuilds.map(\.asBuildPlan),
+                                    onOpenPlan: onOpenPlan,
+                                    onCreate: onCreate
+                                )
+                            }
                         case .currentComputer:
                             CurrentComputerSection(
                                 hardwareProfile: hardwareProfile,
@@ -73,6 +85,69 @@ struct MyBuildsView: View {
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
             .onAppear { diyBuilds = DIYBuildStore.load() }
+            .task(id: accessToken) {
+                guard let accessToken else {
+                    savedUpgradePlans = []
+                    return
+                }
+                savedUpgradePlans = (try? await AppAPIClient().savedUpgradePlans(token: accessToken)) ?? []
+            }
+        }
+    }
+}
+
+private struct SavedUpgradePlansSection: View {
+    let plans: [SavedUpgradePlanDTO]
+    let onOpen: (SavedUpgradePlanDTO) -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ConfigSectionHeader(
+                title: "已保存的升级方案",
+                subtitle: "按目标游戏和帧率重新查看",
+                trailing: "\(plans.count) 个"
+            )
+            .padding(.bottom, 12)
+
+            ForEach(Array(plans.enumerated()), id: \.element.id) { index, saved in
+                Button { onOpen(saved) } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "arrow.up.forward.square")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(AppTheme.primaryText)
+                            .frame(width: 32, height: 32)
+                            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
+
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(saved.title)
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundStyle(AppTheme.primaryText)
+                                .lineLimit(1)
+                            Text(saved.plan.summary)
+                                .font(.system(size: 11, weight: .regular))
+                                .foregroundStyle(AppTheme.secondaryText)
+                                .lineLimit(1)
+                        }
+
+                        Spacer(minLength: 8)
+
+                        Text("¥\(saved.totalPrice ?? saved.plan.totalEstimatedPrice)")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundStyle(AppTheme.primaryText)
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(AppTheme.secondaryText)
+                    }
+                    .contentShape(Rectangle())
+                    .padding(.vertical, 14)
+                }
+                .buttonStyle(.plain)
+
+                if index != plans.count - 1 {
+                    ConfigDivider(leftPadding: 44)
+                }
+            }
         }
     }
 }
@@ -422,7 +497,9 @@ private extension DIYStoredBuild {
             storage: "Samsung 990 PRO · 1TB · PCIe 4.0",
             powerSupply: "Corsair RM750e · 750W · 80+ Gold"
         ),
+        accessToken: nil,
         onOpenPlan: {},
+        onOpenSavedUpgrade: { _ in },
         onCreate: {},
         onOpenComputerProfile: {},
         onOpenUpgrade: {},

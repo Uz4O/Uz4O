@@ -37,6 +37,11 @@ def request_identity(request: BuildRequest) -> Tuple[str, dict]:
         "cpu_preference": request.cpu_preference,
         "specified_cpu": request.specified_cpu,
         "specified_gpu": request.specified_gpu,
+        "aesthetic_style": (
+            request.aesthetic_style.model_dump(mode="json")
+            if request.aesthetic_style is not None
+            else None
+        ),
         "notes": request.notes,
     }
     encoded = json.dumps(

@@ -385,12 +385,15 @@ def list_saved_builds(
     account_id: str,
     limit: Optional[int] = None,
     offset: int = 0,
+    use_case: Optional[str] = None,
 ) -> List[SavedBuild]:
     statement = (
         select(SavedBuild)
         .where(SavedBuild.account_id == account_id)
         .order_by(SavedBuild.created_at.desc(), SavedBuild.id.desc())
     )
+    if use_case is not None:
+        statement = statement.where(SavedBuild.use_case == use_case)
     if offset:
         statement = statement.offset(offset)
     if limit is not None:

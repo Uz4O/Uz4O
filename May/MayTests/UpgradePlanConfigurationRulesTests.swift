@@ -12,11 +12,32 @@ struct UpgradePlanConfigurationRulesTests {
         )
         assertEqual(
             UpgradeGoal.selectableCases.map(\.title),
-            ["帮我判断短板", "游戏帧率和画质"],
-            "Only diagnosis and gaming should remain as selectable upgrade goals."
+            ["游戏帧率和画质"],
+            "Gaming should be the only supported upgrade goal."
         )
         assertEqual(configuration.step, .computer, "Upgrade advice should begin with the current computer.")
         assertEqual(configuration.goal, .gaming, "The preview should begin with the selected gaming direction.")
+        assertEqual(
+            configuration.missingRequiredHardwareTitles,
+            ["内存"],
+            "The first step should report every unresolved required hardware category."
+        )
+        assertEqual(configuration.hasRequiredHardwareSelection, false, "All five hardware categories should be required.")
+
+        var hardwareValidation = configuration
+        hardwareValidation.apply(.skipped)
+        assertEqual(
+            hardwareValidation.missingRequiredHardwareTitles,
+            ["CPU", "显卡", "主板", "内存", "电源"],
+            "An empty profile should name all five required hardware categories."
+        )
+        hardwareValidation.setValue("i7-14700", for: "CPU")
+        hardwareValidation.setValue("RTX 5080", for: "显卡")
+        assertEqual(
+            hardwareValidation.missingRequiredHardwareTitles,
+            ["主板", "内存", "电源"],
+            "A partial profile should name only the remaining hardware categories."
+        )
         assertEqual(configuration.selectedGamesDisplay, "还没有选择游戏", "Upgrade advice should not preselect games for the user.")
         assertEqual(configuration.hasRequiredGameSelection, false, "Gaming upgrades should require at least one selected game.")
         assertEqual(configuration.frameLimit, nil, "Frame limit should be unavailable until the user selects a game.")
@@ -64,8 +85,8 @@ struct UpgradePlanConfigurationRulesTests {
 
         assertEqual(
             UpgradePlanConfiguration.categories.map(\.title),
-            ["CPU", "显卡", "主板", "内存", "硬盘", "电源"],
-            "Upgrade plan should use the same selectable hardware categories as performance testing."
+            ["CPU", "显卡", "主板", "内存", "电源"],
+            "Upgrade advice should require five hardware categories and omit storage."
         )
 
         configuration.setValue("RTX 4070", for: "显卡")
@@ -85,6 +106,7 @@ struct UpgradePlanConfigurationRulesTests {
         configuration.apply(savedProfile)
 
         assertEqual(configuration.hardwareProfile, savedProfile, "Upgrade plan should apply the complete saved computer profile.")
+        assertEqual(configuration.hasRequiredHardwareSelection, true, "A complete five-part profile should pass first-step validation.")
 
         configuration.goal = .gaming
         configuration.selectedGames = ["CS2"]
@@ -95,7 +117,6 @@ struct UpgradePlanConfigurationRulesTests {
         assertEqual(request.current.gpu, "rtx-5080", "Upgrade requests should send the catalog GPU ID.")
         assertEqual(request.current.motherboard, "gigabyte-b860-ds3h", "Upgrade requests should send the catalog motherboard ID.")
         assertEqual(request.current.ram, "ram-6000-cl30", "Upgrade requests should send the catalog RAM ID.")
-        assertEqual(request.current.storage, "sn850x", "Upgrade requests should send the catalog storage ID.")
         assertEqual(request.current.psu, "psu-corsair-rm750e", "Upgrade requests should send the catalog PSU ID.")
         assertEqual(request.games, ["cs2"], "Upgrade requests should send canonical game IDs.")
         assertEqual(request.resolution, "4k", "Upgrade requests should send the backend resolution value.")
@@ -118,6 +139,28 @@ struct UpgradePlanConfigurationRulesTests {
         assertEqual(currentResponse.resolution, "1080p", "Current responses should preserve the backend resolution.")
         assertEqual(currentResponse.targetFps, 500, "Current responses should decode the target FPS.")
         assertEqual(currentResponse.gameResults.first?.afterFps, 410, "Current responses should decode game results.")
+
+        let saveRequest = SaveUpgradePlanRequestDTO(
+            title: "CS2 1080P 500 帧升级方案",
+            plan: currentResponse,
+            budget: currentResponse.budget,
+            totalPrice: currentResponse.totalEstimatedPrice,
+            useCase: "游戏升级"
+        )
+        let encodedSaveRequest = try JSONEncoder().encode(saveRequest)
+        let saveObject = try JSONSerialization.jsonObject(with: encodedSaveRequest) as? [String: Any]
+        let encodedPlan = saveObject?["plan"] as? [String: Any]
+        assertEqual(saveObject?["total_price"] as? Int, 2200, "Save requests should use the backend total_price key.")
+        assertEqual(encodedPlan?["totalEstimatedPrice"] as? Int, 2200, "The complete typed plan should be nested in the save request.")
+
+        var savedResponseObject = saveObject ?? [:]
+        savedResponseObject["id"] = "saved-upgrade-1"
+        savedResponseObject["created_at"] = "2026-08-24T10:00:00Z"
+        savedResponseObject["updated_at"] = "2026-08-24T10:00:00Z"
+        let savedResponseData = try JSONSerialization.data(withJSONObject: savedResponseObject)
+        let savedResponse = try decoder.decode(SavedUpgradePlanDTO.self, from: savedResponseData)
+        assertEqual(savedResponse.id, "saved-upgrade-1", "Saved upgrade responses should decode as a typed plan.")
+        assertEqual(savedResponse.plan.gameResults.first?.afterFps, 410, "Saved plans should preserve nested game results.")
 
         print("UpgradePlanConfigurationRulesTests passed")
     }

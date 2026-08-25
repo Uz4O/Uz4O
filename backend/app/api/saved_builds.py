@@ -50,12 +50,19 @@ router = APIRouter(prefix="/v1/builds", tags=["saved-builds"])
 def read_saved_builds(
     limit: int = Query(default=50, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
+    use_case: Optional[str] = Query(default=None, min_length=1, max_length=64),
     account: Account = Depends(get_current_account),
     session: Session = Depends(get_session),
 ) -> List[SavedBuildResponse]:
     return [
         _saved_build_response(build)
-        for build in list_saved_builds(session, account.id, limit=limit, offset=offset)
+        for build in list_saved_builds(
+            session,
+            account.id,
+            limit=limit,
+            offset=offset,
+            use_case=use_case,
+        )
     ]
 
 

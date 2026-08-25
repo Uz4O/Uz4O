@@ -209,6 +209,6 @@ enum AestheticGeneratedCatalog {
     }
 
     private static func alternative(_ name: String, _ price: Int, _ detail: String) -> AestheticStyleAlternative {
-        AestheticStyleAlternative(id: name, name: name, price: price, detail: detail)
+        AestheticStyleAlternative(id: name, name: name, price: price, whitePrice: nil, detail: detail)
     }
 }

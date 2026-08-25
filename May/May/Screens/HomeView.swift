@@ -71,14 +71,7 @@ struct HomeView: View {
                         onSwipeFeature: selectFeature
                     )
                     .padding(.top, 18)
-                    .modifier(
-                        HomeDepthDropReveal(
-                            isVisible: isContentVisible,
-                            delay: 0.08,
-                            horizontalOffset: -10,
-                            roll: -1.6
-                        )
-                    )
+                    .opacity(isContentVisible ? 1 : 0)
 
                     HomeFeatureSelector(
                         features: features,
@@ -90,14 +83,7 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 24)
-                    .modifier(
-                        HomeDepthDropReveal(
-                            isVisible: isContentVisible,
-                            delay: 0.26,
-                            horizontalOffset: 8,
-                            roll: 1.2
-                        )
-                    )
+                    .opacity(isContentVisible ? 1 : 0)
 
                     HomeBuildStyleSection(
                         styles: AestheticBuildStyle.featured,
@@ -106,14 +92,7 @@ struct HomeView: View {
                         }
                     )
                     .padding(.top, 34)
-                    .modifier(
-                        HomeDepthDropReveal(
-                            isVisible: isContentVisible,
-                            delay: 0.44,
-                            horizontalOffset: -6,
-                            roll: -0.8
-                        )
-                    )
+                    .opacity(isContentVisible ? 1 : 0)
                 }
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.bottom, 112)
@@ -145,48 +124,6 @@ struct HomeView: View {
             .font(.system(size: 28, weight: .heavy))
             .foregroundStyle(.black)
             .opacity(isWordmarkVisible ? 1 : 0)
-    }
-}
-
-private struct HomeDepthDropReveal: ViewModifier {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    let isVisible: Bool
-    let delay: Double
-    let horizontalOffset: CGFloat
-    let roll: Double
-
-    func body(content: Content) -> some View {
-        content
-            .opacity(isVisible ? 1 : 0)
-            .blur(radius: isVisible || reduceMotion ? 0 : 8)
-            .scaleEffect(isVisible || reduceMotion ? 1 : 1.08, anchor: .top)
-            .rotation3DEffect(
-                isVisible || reduceMotion ? .zero : .degrees(-17),
-                axis: (x: 1, y: 0, z: 0),
-                anchor: .top,
-                perspective: 0.72
-            )
-            .rotationEffect(isVisible || reduceMotion ? .zero : .degrees(roll))
-            .offset(
-                x: isVisible || reduceMotion ? 0 : horizontalOffset,
-                y: isVisible || reduceMotion ? 0 : -54
-            )
-            .shadow(
-                color: Color.black.opacity(isVisible || reduceMotion ? 0 : 0.18),
-                radius: isVisible || reduceMotion ? 0 : 22,
-                x: 0,
-                y: isVisible || reduceMotion ? 0 : 18
-            )
-            .animation(revealAnimation, value: isVisible)
-    }
-
-    private var revealAnimation: Animation {
-        if reduceMotion {
-            return .easeOut(duration: 0.16).delay(delay)
-        }
-        return .spring(response: 0.78, dampingFraction: 0.70, blendDuration: 0.10)
-            .delay(delay)
     }
 }
 
