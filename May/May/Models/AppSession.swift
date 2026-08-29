@@ -160,6 +160,7 @@ final class AppSession: ObservableObject {
             return
         }
 
+        #if !targetEnvironment(simulator)
         let appleUserID = (try? appleUserStore.load()) ?? nil
         if let appleUserID {
             if let state = await appleCredentialState(for: appleUserID),
@@ -169,6 +170,7 @@ final class AppSession: ObservableObject {
                 return
             }
         }
+        #endif
 
         do {
             let account = try await api.currentAccount(token: accessToken)

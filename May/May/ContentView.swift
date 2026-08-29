@@ -18,7 +18,6 @@ struct ContentView: View {
     @State private var onboardingProfile: OnboardingProfile
     @State private var selectedConfigSection = ConfigHubSection.defaultSelection
     @State private var presentedFullScreen: FullScreenRoute?
-    @State private var diyBuildOption: BuildOptionDTO?
     @State private var showsSplash = true
     @State private var isHomeWordmarkVisible: Bool
     @State private var isHomeContentVisible: Bool
@@ -129,7 +128,6 @@ struct ContentView: View {
                     onboardingProfile: $onboardingProfile,
                     selectedTab: $selectedTab,
                     selectedConfigSection: $selectedConfigSection,
-                    diyBuildOption: $diyBuildOption,
                     isHomeWordmarkVisible: isHomeWordmarkVisible,
                     isHomeContentVisible: isHomeContentVisible,
                     isTabBarVisible: isMainTabBarVisible,
@@ -154,8 +152,7 @@ struct ContentView: View {
             AIBuildFlowView(
                 returnTarget: returnTarget,
                 accessToken: session.accessToken,
-                onClose: { closeFullScreen(returningTo: returnTarget) },
-                onEditInDIY: editInDIY
+                onClose: { closeFullScreen(returningTo: returnTarget) }
             )
         case .aestheticBuild(let styleID):
             AestheticBuildFlowView(
@@ -194,16 +191,9 @@ struct ContentView: View {
         presentedFullScreen = nil
     }
 
-    private func editInDIY(_ option: BuildOptionDTO) {
-        diyBuildOption = option
-        selectedTab = .diy
-        presentedFullScreen = nil
-    }
-
     private func resetAfterLogout() {
         selectedTab = .home
         selectedConfigSection = ConfigHubSection.defaultSelection
-        diyBuildOption = nil
         presentedFullScreen = nil
         appPhase = .login
     }
@@ -259,7 +249,6 @@ private struct MainTabView: View {
     @Binding var onboardingProfile: OnboardingProfile
     @Binding var selectedTab: AppTab
     @Binding var selectedConfigSection: ConfigHubSection
-    @Binding var diyBuildOption: BuildOptionDTO?
 
     let isHomeWordmarkVisible: Bool
     let isHomeContentVisible: Bool
@@ -308,7 +297,10 @@ private struct MainTabView: View {
             .tag(AppTab.styles)
 
             NavigationStack {
-                DIYView(importedBuild: $diyBuildOption, accessToken: session.accessToken)
+                ToolsView(
+                    onOpenPerformanceTest: { onPresentFullScreen(.performanceTest(.diy)) },
+                    onOpenBudget: { onPresentFullScreen(.aiBuild(.fromAIBuild)) }
+                )
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
@@ -432,7 +424,6 @@ private struct AIBuildFlowView: View {
     let returnTarget: BuildResultReturnTarget
     let accessToken: String?
     let onClose: () -> Void
-    let onEditInDIY: (BuildOptionDTO) -> Void
 
     @State private var response: BuildOptionsResponseDTO?
     @State private var selectedOption: BuildOptionDTO?
@@ -512,7 +503,6 @@ private struct AIBuildFlowView: View {
                             token: accessToken
                         )
                     },
-                    onEditInDIY: { onEditInDIY(selectedOption) }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(AppTheme.background.ignoresSafeArea())

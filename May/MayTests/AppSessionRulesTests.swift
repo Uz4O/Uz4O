@@ -22,6 +22,11 @@ struct AppSessionRulesTests {
             "apple-user-id",
             "Apple user identifiers must be stored separately from access tokens."
         )
+        assertContains(
+            sessionSource,
+            "#if !targetEnvironment(simulator)",
+            "Simulator launches must not treat unavailable Apple credential state as a revoked session."
+        )
 
         let apiSource = try! String(
             contentsOfFile: "May/May/Networking/AppAPIClient.swift",
