@@ -10,12 +10,12 @@ from app.catalog.rule_specs import GPU_PERFORMANCE, OFFICE_ONLY_GPU_RULE_SPECS
 from app.catalog.seed import extract_catalog_components, read_catalog_components
 
 
-def test_current_swift_catalog_extracts_733_components() -> None:
+def test_current_swift_catalog_extracts_732_components() -> None:
     catalog_path = Path("../May/May/Models/HardwareCatalog.swift")
 
     components = extract_catalog_components(catalog_path)
 
-    assert len(components) == 733
+    assert len(components) == 732
     assert {component.category for component in components} == {
         "cpu",
         "gpu",
@@ -24,7 +24,7 @@ def test_current_swift_catalog_extracts_733_components() -> None:
         "storage",
         "psu",
     }
-    assert len({component.id for component in components}) == 733
+    assert len({component.id for component in components}) == 732
 
     cpus = [component for component in components if component.category == "cpu"]
     gpus = [component for component in components if component.category == "gpu"]
@@ -81,8 +81,9 @@ def test_current_cpu_whitelist_includes_productivity_additions() -> None:
         prices[component_id].used_price is None
         for component_id in expected_new_prices.keys() - expected_used_prices.keys()
     )
+    assert prices["i5-14600kf"].new_tray_price == 1499
+    assert prices["i5-14600kf"].used_price is None
     assert {
-        "i5-14600kf",
         "i7-14700kf",
         "i9-14900kf",
         "u5-225f",

@@ -130,6 +130,7 @@ enum AIBuildDirection: String, CaseIterable, Identifiable {
 
 enum AIBuildFlowRules {
     static let lowBudgetThreshold = 4000
+    static let gpuPreferenceMinimumBudget = 8000
 
     private static let fpsGames: Set<String> = ["瓦罗兰特", "CS2", "PUBG", "永劫无间"]
     private static let balancedGames: Set<String> = ["暗区突围", "NBA2K", "穿越火线"]
@@ -195,6 +196,14 @@ enum AIBuildFlowRules {
 
     static func usesLowBudgetMode(budget: Int, ownedParts: Set<AIBuildOwnedPart>) -> Bool {
         budget < lowBudgetThreshold && !ownedParts.contains(where: \.isHighValue)
+    }
+
+    static func shouldShowGPUPreference(
+        budget: Int,
+        useCase: String,
+        hasOwnedGPU: Bool
+    ) -> Bool {
+        budget >= gpuPreferenceMinimumBudget && useCase == "游戏" && !hasOwnedGPU
     }
 
     static func lowBudgetDefaults(useCase: String) -> AIBuildLowBudgetDefaults {

@@ -18,6 +18,21 @@ struct ProfileInteractionRulesTests {
             "Contact and complaint row should open the in-app feedback screen."
         )
 
+        let contactSource = try! String(
+            contentsOfFile: "May/May/Screens/ContactComplaintView.swift",
+            encoding: .utf8
+        )
+        assertContains(
+            contactSource,
+            "openURL(url) { accepted in",
+            "Contact submissions should observe whether the mail URL was accepted."
+        )
+        assertContains(
+            contactSource,
+            "未能打开邮件应用",
+            "Contact submissions should explain how to proceed when mail cannot open."
+        )
+
         let contentSource = try! String(
             contentsOfFile: "May/May/ContentView.swift",
             encoding: .utf8

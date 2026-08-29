@@ -44,6 +44,18 @@ struct UsedGPUAlternativeRecommendation {
     let gamingPerformanceGainPercent: Int?
 }
 
+struct CPUPlatformReplacementRecommendation {
+    let componentID: String
+    let referencePrice: Int
+    let part: PCPart
+}
+
+struct CPUPlatformAlternativeRecommendation {
+    let replacementParts: [CPUPlatformReplacementRecommendation]
+    let priceDifference: Int
+    let performanceGainPercent: Int
+}
+
 struct BuildPerformanceContext: Sendable {
     let cpuID: String
     let gpuID: String
@@ -64,6 +76,7 @@ struct BuildPlan: Identifiable {
     let createdAt: String
     let parts: [PCPart]
     let usedGPUAlternative: UsedGPUAlternativeRecommendation?
+    let cpuPlatformAlternative: CPUPlatformAlternativeRecommendation?
     let performanceContext: BuildPerformanceContext?
 
     init(
@@ -74,6 +87,7 @@ struct BuildPlan: Identifiable {
         createdAt: String,
         parts: [PCPart],
         usedGPUAlternative: UsedGPUAlternativeRecommendation? = nil,
+        cpuPlatformAlternative: CPUPlatformAlternativeRecommendation? = nil,
         performanceContext: BuildPerformanceContext? = nil
     ) {
         self.name = name
@@ -83,7 +97,148 @@ struct BuildPlan: Identifiable {
         self.createdAt = createdAt
         self.parts = parts
         self.usedGPUAlternative = usedGPUAlternative
+        self.cpuPlatformAlternative = cpuPlatformAlternative
         self.performanceContext = performanceContext
+    }
+}
+
+extension SavedConfigurationPlanDTO {
+    init(kind: SavedConfigurationKind, plan: BuildPlan) {
+        let hasAppliedGPUAlternative = plan.usedGPUAlternative.map { alternative in
+            plan.parts.contains { $0.category == "显卡" && $0.model == alternative.model }
+        } ?? false
+        let hasAppliedCPUPlatformAlternative = plan.cpuPlatformAlternative.map { alternative in
+            guard let replacementCPU = alternative.replacementParts.first(
+                where: { $0.part.category == "CPU" }
+            ) else { return false }
+            return plan.parts.contains {
+                $0.category == "CPU" && $0.model == replacementCPU.part.model
+            }
+        } ?? false
+        self.init(
+            version: 1,
+            kind: kind,
+            name: plan.name,
+            budget: plan.budget,
+            totalPrice: plan.totalPrice,
+            useCase: plan.useCase,
+            createdAt: plan.createdAt,
+            parts: plan.parts.map {
+                SavedConfigurationPartDTO(
+                    category: $0.category,
+                    model: $0.model,
+                    price: $0.price,
+                    condition: $0.condition
+                )
+            },
+            usedGPUAlternative: hasAppliedGPUAlternative ? nil : plan.usedGPUAlternative.map {
+                SavedConfigurationGPUAlternativeDTO(
+                    componentID: $0.componentID,
+                    model: $0.model,
+                    referencePrice: $0.referencePrice,
+                    priceDifference: $0.priceDifference,
+                    performanceComparison: $0.performanceComparison,
+                    gamingPerformanceGainPercent: $0.gamingPerformanceGainPercent
+                )
+            },
+            cpuPlatformAlternative: hasAppliedCPUPlatformAlternative
+                ? nil
+                : plan.cpuPlatformAlternative.map {
+                    SavedConfigurationCPUPlatformAlternativeDTO(
+                        replacementParts: $0.replacementParts.map {
+                            SavedConfigurationCPUPlatformReplacementDTO(
+                                componentID: $0.componentID,
+                                category: $0.part.category,
+                                model: $0.part.model,
+                                referencePrice: $0.referencePrice,
+                                condition: $0.part.condition
+                            )
+                        },
+                        priceDifference: $0.priceDifference,
+                        performanceGainPercent: $0.performanceGainPercent
+                    )
+                },
+            performanceContext: plan.performanceContext.map {
+                SavedConfigurationPerformanceContextDTO(
+                    cpuID: $0.cpuID,
+                    gpuID: $0.gpuID,
+                    gameIDs: $0.gameIDs,
+                    unavailableGameNames: $0.unavailableGameNames
+                )
+            }
+        )
+    }
+
+    var model: BuildPlan {
+        BuildPlan(
+            name: name,
+            budget: budget,
+            totalPrice: totalPrice,
+            useCase: useCase,
+            createdAt: createdAt,
+            parts: parts.map {
+                PCPart(
+                    category: $0.category,
+                    model: $0.model,
+                    price: $0.price,
+                    condition: $0.condition,
+                    icon: savedPartIcon(for: $0.category),
+                    accent: $0.category == "CPU" ? .blue : AppTheme.primaryText
+                )
+            },
+            usedGPUAlternative: usedGPUAlternative.map {
+                UsedGPUAlternativeRecommendation(
+                    componentID: $0.componentID,
+                    model: $0.model,
+                    referencePrice: $0.referencePrice,
+                    priceDifference: $0.priceDifference,
+                    performanceComparison: $0.performanceComparison,
+                    gamingPerformanceGainPercent: $0.gamingPerformanceGainPercent
+                )
+            },
+            cpuPlatformAlternative: cpuPlatformAlternative.map {
+                CPUPlatformAlternativeRecommendation(
+                    replacementParts: $0.replacementParts.map {
+                        CPUPlatformReplacementRecommendation(
+                            componentID: $0.componentID,
+                            referencePrice: $0.referencePrice,
+                            part: PCPart(
+                                category: $0.category,
+                                model: $0.model,
+                                price: formattedBuildPrice($0.referencePrice),
+                                condition: $0.condition,
+                                icon: savedPartIcon(for: $0.category),
+                                accent: $0.category == "CPU" ? .blue : AppTheme.primaryText
+                            )
+                        )
+                    },
+                    priceDifference: $0.priceDifference,
+                    performanceGainPercent: $0.performanceGainPercent
+                )
+            },
+            performanceContext: performanceContext.map {
+                BuildPerformanceContext(
+                    cpuID: $0.cpuID,
+                    gpuID: $0.gpuID,
+                    gameIDs: $0.gameIDs,
+                    unavailableGameNames: $0.unavailableGameNames
+                )
+            }
+        )
+    }
+}
+
+private func savedPartIcon(for category: String) -> String {
+    switch category {
+    case "CPU": "cpu"
+    case "显卡": "display"
+    case "主板": "memorychip"
+    case "内存": "rectangle.stack"
+    case "硬盘", "固态硬盘": "externaldrive"
+    case "电源": "bolt"
+    case "散热", "散热器": "fan"
+    case "机箱": "shippingbox"
+    default: "desktopcomputer"
     }
 }
 
@@ -170,6 +325,7 @@ extension BuildOptionDTO {
             parts: BuildPartRoleDTO.allCases.map { part(for: $0).model }
                 + (details.extras ?? []).map(\.model),
             usedGPUAlternative: details.usedGpuAlternative?.model,
+            cpuPlatformAlternative: details.cpuPlatformAlternative?.model,
             performanceContext: performanceContext
         )
     }
@@ -271,6 +427,22 @@ private extension UsedGPUAlternativeDTO {
             priceDifference: priceDifference,
             performanceComparison: performanceComparison,
             gamingPerformanceGainPercent: gamingPerformanceGainPercent
+        )
+    }
+}
+
+private extension CPUPlatformAlternativeDTO {
+    var model: CPUPlatformAlternativeRecommendation {
+        CPUPlatformAlternativeRecommendation(
+            replacementParts: replacementParts.map {
+                CPUPlatformReplacementRecommendation(
+                    componentID: $0.componentId,
+                    referencePrice: $0.referencePrice,
+                    part: $0.model
+                )
+            },
+            priceDifference: priceDifference,
+            performanceGainPercent: performanceGainPercent
         )
     }
 }
@@ -386,12 +558,6 @@ enum AppMockData {
             parts: Array(parts.prefix(6)) + [stylePart]
         )
     }
-
-    static let savedPlans = [
-        samplePlan,
-        BuildPlan(name: "5000 办公剪辑配置", budget: "5000 档", totalPrice: "¥ 5188", useCase: "办公 / 轻剪辑", createdAt: "昨天 21:08", parts: parts),
-        BuildPlan(name: "万元 4K 游戏配置", budget: "10000+ 档", totalPrice: "¥ 10880", useCase: "4K 游戏 / 直播", createdAt: "5 月 29 日", parts: parts)
-    ]
 
     static let beginnerTopics = [
         "如何确定预算",

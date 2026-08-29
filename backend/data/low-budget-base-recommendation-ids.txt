@@ -14,13 +14,13 @@ base-psu-750w-gold
 base-ssd-fanxiang-s500-pro-512gb
 base-ssd-fanxiang-s790e-1tb
 i5-12600kf
+i5-14600kf
 msi-b760m-a
 r5-5600
 r5-5600x
 r5-7500f
 r5-9600x
 r7-7800x3d
-rtx-4060
 rtx-4060-ti
 rtx-4070
 rtx-4070-super
@@ -32,3 +32,4 @@ rx-7800-xt
 rx-7900-xt
 rx-9060-xt-8gb
 rx-9070-gre
+thermalright-ax120-se

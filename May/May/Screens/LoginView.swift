@@ -67,7 +67,8 @@ struct LoginView: View {
             guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
                   let nonce = currentNonce,
                   let identityTokenData = credential.identityToken,
-                  let identityToken = String(data: identityTokenData, encoding: .utf8) else {
+                  let identityToken = String(data: identityTokenData, encoding: .utf8),
+                  !credential.user.isEmpty else {
                 currentNonce = nil
                 requestError = "无法读取 Apple 身份凭证，请重试"
                 return
@@ -85,7 +86,8 @@ struct LoginView: View {
                     try await session.loginWithApple(
                         identityToken: identityToken,
                         authorizationCode: authorizationCode,
-                        nonce: nonce
+                        nonce: nonce,
+                        appleUserID: credential.user
                     )
                     onLogin()
                 } catch {
@@ -98,7 +100,7 @@ struct LoginView: View {
                authorizationError.code == .canceled {
                 return
             }
-            requestError = error.localizedDescription
+            requestError = appleAuthorizationErrorMessage(error)
         }
     }
 
@@ -107,6 +109,25 @@ struct LoginView: View {
             get: { requestError != nil },
             set: { if !$0 { requestError = nil } }
         )
+    }
+}
+
+private func appleAuthorizationErrorMessage(_ error: Error) -> String {
+    guard let authorizationError = error as? ASAuthorizationError else {
+        return error.localizedDescription
+    }
+
+    switch authorizationError.code {
+    case .unknown:
+        #if targetEnvironment(simulator)
+        return "当前运行在 iOS 模拟器，Apple 账户授权可能不可用。请先在模拟器“设置”完成 Apple 账户验证；更稳妥的是使用已登录 Apple ID 的真实 iPhone 或 TestFlight 测试。"
+        #else
+        return "Apple 登录暂时不可用，请确认设备已登录 Apple ID、网络正常后重试。"
+        #endif
+    case .invalidResponse, .notHandled, .failed:
+        return "Apple 登录暂时不可用，请确认设备已登录 Apple ID、网络正常后重试。"
+    default:
+        return "Apple 登录暂时不可用，请稍后重试。"
     }
 }
 

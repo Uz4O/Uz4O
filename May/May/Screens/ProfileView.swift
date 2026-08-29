@@ -6,13 +6,16 @@ struct ProfileView: View {
     let onOpenBuilds: () -> Void
     let onOpenComputerProfile: () -> Void
     let onOpenContactComplaint: () -> Void
+    let onLogout: () -> Void
     let onAccountDeleted: () -> Void
 
     @State private var presentedLegalDocument: LegalDocument?
     @State private var showsAccountDeletion = false
+    @State private var logoutError: String?
 
     private let accountItems = [
-        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案", isAvailable: true)
+        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案", isAvailable: true),
+        ProfileItem(title: "退出登录", icon: "rectangle.portrait.and.arrow.right", subtitle: "仅退出当前设备", isAvailable: true)
     ]
 
     private let helpItems = [
@@ -90,6 +93,14 @@ struct ProfileView: View {
         .sheet(isPresented: $showsAccountDeletion) {
             AccountDeletionView(session: session, onDeleted: onAccountDeleted)
         }
+        .alert("退出登录失败", isPresented: Binding(
+            get: { logoutError != nil },
+            set: { if !$0 { logoutError = nil } }
+        )) {
+            Button("知道了", role: .cancel) {}
+        } message: {
+            Text(logoutError ?? "请稍后重试")
+        }
     }
 
     private var profileSummary: String {
@@ -103,6 +114,13 @@ struct ProfileView: View {
         switch title {
         case "我的配置单":
             onOpenBuilds()
+        case "退出登录":
+            do {
+                try session.logout()
+                onLogout()
+            } catch {
+                logoutError = error.localizedDescription
+            }
         case "用户协议":
             presentedLegalDocument = .userAgreement
         case "隐私政策":
@@ -202,6 +220,7 @@ private struct ProfileSection: View {
         onOpenBuilds: {},
         onOpenComputerProfile: {},
         onOpenContactComplaint: {},
+        onLogout: {},
         onAccountDeleted: {}
     )
 }

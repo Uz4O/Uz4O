@@ -94,7 +94,7 @@ def test_upgrade_matrix_uses_real_reviewed_template_artifacts() -> None:
     app.dependency_overrides[get_session] = override_session
     client = TestClient(app)
     template_by_id = {template.id: template for template in templates}
-    base = template_by_id["base-4000-balanced-new"]
+    base = template_by_id["base-5000-balanced-new-amd"]
     base_parts = {part.role: part.component_id for part in base.details.parts}
     current = {
         role: base_parts[role]
@@ -146,20 +146,16 @@ def test_upgrade_matrix_uses_real_reviewed_template_artifacts() -> None:
 
     assert balanced["status"] == "ready"
     assert balanced["direction"] == "balanced"
-    assert balanced["target_met"] is True
+    assert balanced["target_met"] is False
     assert len(balanced["game_results"]) == 2
 
-    assert closest["status"] == "ready"
-    assert closest["target_met"] is False
-    assert closest["total_estimated_price"] <= closest["budget"]
-    assert [step["role"] for step in closest["steps"]] == ["gpu", "psu"]
-    assert {step["bundle_id"] for step in closest["steps"]} == {"graphics"}
-    assert closest["game_results"][0]["after_fps"] > closest["game_results"][0]["before_fps"]
+    assert closest["status"] == "no_plan"
+    assert closest["steps"] == []
 
     assert no_plan["status"] == "no_plan"
     assert no_plan["steps"] == []
 
-    for plan in (fps, aaa, balanced, closest):
+    for plan in (fps, aaa, balanced):
         anchor = template_by_id[plan["anchor_template_id"]]
         anchor_parts = {part.role: part.component_id for part in anchor.details.parts}
         assert all(

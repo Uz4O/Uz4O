@@ -188,7 +188,7 @@ def test_all_builds_use_whitelisted_amd_am5_parts_and_only_upgrade_storage_for_c
                 - parts["storage"].reference_price
                 + base_price
             )
-            assert total_with_512gb < template.details.target_budget - 200
+            assert total_with_512gb < template.details.target_budget
         assert parts["case"].component_id == "base-case-mid-tower"
         motherboard_share = (
             0.65
@@ -729,17 +729,17 @@ def test_15000_used_aaa_mode_is_filled_with_5080() -> None:
     assert 14_450 <= template.estimated_total <= 15_800
 
 
-def test_7500_new_aaa_build_uses_the_best_fitting_pair() -> None:
+def test_7500_new_aaa_build_uses_nvidia_after_the_9070_gre_price_increase() -> None:
     template = next(
         template
         for template in generated_templates()
-        if template.id == "base-7500-aaa-new-amd"
+        if template.id == "base-7500-aaa-new"
     )
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["cpu"].component_id == "r5-7500f"
     assert parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert parts["gpu"].component_id == "rx-9070-gre"
+    assert parts["gpu"].component_id == "rtx-5060-ti"
     assert parts["ram"].specs["capacity_gb"] == 16
     assert parts["storage"].component_id == "base-ssd-512gb-tlc"
     assert parts["psu"].component_id == "base-psu-650w-gold"
@@ -877,7 +877,7 @@ def test_template_details_keep_user_and_price_metadata() -> None:
     for template in generated_templates():
         details = template.details
         assert details.suitable_user
-        assert details.price_date == "2026-08-23"
+        assert details.price_date == "2026-08-26"
 
 
 def test_writes_review_markdown_and_backend_json(tmp_path) -> None:

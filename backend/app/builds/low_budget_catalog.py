@@ -34,7 +34,7 @@ SkipReason = Literal[
     "generation_error",
 ]
 
-PRICE_DATE = "2026-08-22"
+PRICE_DATE = "2026-08-26"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
 DIRECTIONS: Tuple[Direction, ...] = ("fps", "aaa", "balanced")
 PURCHASE_MODES: Tuple[PurchaseMode, ...] = ("new", "used", "mixed")
@@ -65,6 +65,7 @@ CPU_SOCKET = {
     "r5-7500f": "AM5",
     "r5-9600x": "AM5",
     "i5-12600kf": "LGA1700",
+    "i5-14600kf": "LGA1700",
     "r7-9700x": "AM5",
     "r7-7800x3d": "AM5",
     "r7-9800x3d": "AM5",
@@ -112,10 +113,13 @@ LOW_BUDGET_STORAGE_IDS = {
 }
 CUSTOMIZATION_SUPPORT_IDS = LOW_BUDGET_STORAGE_IDS | {
     "base-ddr4-32gb-3200",
+    "i5-14600kf",
+    "thermalright-ax120-se",
 }
+ALTERNATIVE_ONLY_CPU_IDS = {"i5-14600kf"}
 AM4_VALUE_BOARD_ID = "asus-a520m-k"
 AM4_PCIE4_BOARD_ID = "asus-b550m-plus"
-A520_MAX_BUILD_BUDGET = 4_000
+LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
 
 
 @dataclass(frozen=True)
@@ -487,16 +491,25 @@ def _select_candidate(
         (5_000, "aaa", "mixed", "nvidia"): "asus-b550m-plus",
     }.get((budget, direction, purchase_mode, gpu_vendor))
     for cpu in cpus:
+        if cpu.component_id in ALTERNATIVE_ONLY_CPU_IDS:
+            continue
         if budget >= 6_000 and cpu.component_id in {"r5-5600", "r5-5600x"}:
             continue
         if not _condition_is_allowed(cpu, conditions["cpu"]):
             continue
         cooler_id = (
-            "base-cooler-dual-tower-6-heatpipe"
+            LEGACY_AM4_COOLER_ID
+            if cpu.component_id in {"r5-5600", "r5-5600x"}
+            else "base-cooler-dual-tower-6-heatpipe"
             if "x3d" in cpu.component_id or cpu.component_id == "i5-12600kf"
             else "base-cooler-6-heatpipe"
         )
         cooler = support_parts[cooler_id]
+        effective_conditions = (
+            {**conditions, "cooler": "new"}
+            if cpu.component_id in {"r5-5600", "r5-5600x"}
+            else conditions
+        )
         value_motherboard = (
             _cheapest_adequate_motherboard(
                 cpu.component_id,
@@ -573,16 +586,11 @@ def _select_candidate(
                 ):
                     continue
                 if cpu.specs["socket"] == "AM4":
-                    preferred_board_id = (
-                        AM4_VALUE_BOARD_ID
-                        if budget <= A520_MAX_BUILD_BUDGET
-                        and GPU_PERFORMANCE[gpu.component_id]
-                        <= GPU_PERFORMANCE["rx-7650-gre"]
-                        else AM4_PCIE4_BOARD_ID
-                    )
                     if (
-                        preferred_board_id in available_am4_board_ids
-                        and motherboard.component_id != preferred_board_id
+                        GPU_PERFORMANCE[gpu.component_id]
+                        > GPU_PERFORMANCE["rx-7650-gre"]
+                        and AM4_PCIE4_BOARD_ID in available_am4_board_ids
+                        and motherboard.component_id != AM4_PCIE4_BOARD_ID
                     ):
                         continue
                 minimum_gpu_cpu_performance = GPU_MIN_CPU_PERFORMANCE.get(
@@ -638,7 +646,7 @@ def _select_candidate(
                         "case": support_parts["base-case-mid-tower"],
                     }
                     if any(
-                        not _condition_is_allowed(part, conditions[role])
+                        not _condition_is_allowed(part, effective_conditions[role])
                         for role, part in fixed_parts.items()
                     ):
                         continue
@@ -646,7 +654,7 @@ def _select_candidate(
                     parts = []
                     for role in PART_ROLE_ORDER:
                         part = fixed_parts[role]
-                        condition = conditions[role]
+                        condition = effective_conditions[role]
                         price = part.price(condition)
                         assert price is not None
                         parts.append(_template_part(role, part, condition, price))

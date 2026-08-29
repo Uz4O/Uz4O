@@ -6,10 +6,12 @@ from app.builds.customization import (
     CustomizationError,
     _validate_cooler,
     _validate_gpu_vendor,
+    component_allowed_for_request,
     customization_candidates,
     customize_template,
     customized_budget_limit,
     deterministic_customization,
+    motherboard_supports_cpu,
 )
 from app.builds.models import BuildTemplate
 from app.builds.selection_cache import request_identity
@@ -41,6 +43,32 @@ def test_explicit_default_capacity_still_requires_exact_customization() -> None:
     )
 
     assert request.requires_customization is True
+
+
+def test_14600kf_is_reserved_for_the_7500f_platform_alternative() -> None:
+    cpu = HardwareComponent(
+        id="i5-14600kf",
+        category="cpu",
+        name="i5-14600KF",
+        brand="Intel",
+        detail_raw="14代 Raptor Lake Refresh · LGA1700",
+        specs={"socket": "LGA1700", "perf_index": 84, "tdp": 181},
+        is_recommended=True,
+        status="active",
+    )
+
+    assert not component_allowed_for_request(
+        BuildRequest(budget=7000, use_case="游戏"),
+        cpu,
+    )
+    assert not component_allowed_for_request(
+        BuildRequest(
+            budget=7000,
+            use_case="游戏",
+            specified_cpu="14600KF",
+        ),
+        cpu,
+    )
 
 
 def test_customization_rejects_entry_board_for_high_end_x3d_cpu() -> None:
@@ -121,6 +149,25 @@ def test_hot_cpu_requires_dual_tower_six_heatpipe_cooler() -> None:
 
     with pytest.raises(CustomizationError, match="双塔六热管"):
         _validate_cooler({"cpu": cpu, "cooler": cooler})
+
+
+def test_5600_series_requires_new_ax120_se() -> None:
+    cpu = BuildTemplatePart.model_validate(
+        part("cpu", "r5-5600x", "R5 5600X", 820, {"tdp": 65})
+    )
+    generic = BuildTemplatePart.model_validate(
+        part("cooler", "base-cooler-6-heatpipe", "六热管风冷", 100, {"heatpipes": 6})
+    )
+    ax120 = BuildTemplatePart.model_validate(
+        {
+            **part("cooler", "thermalright-ax120-se", "利民 AX120 SE", 69, {"heatpipes": 4}),
+            "condition": "new",
+        }
+    )
+
+    with pytest.raises(CustomizationError, match="AX120 SE"):
+        _validate_cooler({"cpu": cpu, "cooler": generic})
+    _validate_cooler({"cpu": cpu, "cooler": ax120})
 
 
 def test_customization_rejects_option_more_than_200_below_budget() -> None:
@@ -430,6 +477,9 @@ def test_customization_applies_storage_and_wifi_without_exceeding_low_budget_lim
 
 def test_customization_adds_separate_adapter_for_a520m_k() -> None:
     components, prices = catalog(motherboard_id="asus-a520m-k")
+    template = base_template(motherboard_id="asus-a520m-k")
+    gpu = next(part for part in template.details["parts"] if part["role"] == "gpu")
+    gpu["specs"]["perf_index"] = 43
     option = customize_template(
         BuildRequest(
             budget=4000,
@@ -437,7 +487,7 @@ def test_customization_adds_separate_adapter_for_a520m_k() -> None:
             direction="balanced",
             needs_wireless_network=True,
         ),
-        base_template(motherboard_id="asus-a520m-k"),
+        template,
         {},
         components,
         prices,
@@ -451,10 +501,10 @@ def test_customization_adds_separate_adapter_for_a520m_k() -> None:
     assert option.details.extras[0].reference_price == 50
 
 
-def test_customization_rejects_a520_at_4500_and_above() -> None:
+def test_customization_rejects_a520_above_7650_gre_gpu_performance() -> None:
     components, prices = catalog(motherboard_id="asus-a520m-k")
 
-    with pytest.raises(CustomizationError, match="4500元及以上"):
+    with pytest.raises(CustomizationError, match="7650 GRE"):
         customize_template(
             BuildRequest(
                 budget=4500,
@@ -468,6 +518,20 @@ def test_customization_rejects_a520_at_4500_and_above() -> None:
             source="template",
             validate_budget=False,
         )
+
+
+def test_a520_allows_7650_gre_class_gpu_without_a_budget_cap() -> None:
+    template = base_template(motherboard_id="asus-a520m-k")
+    parts = {part["role"]: BuildTemplatePart.model_validate(part) for part in template.details["parts"]}
+    parts["gpu"] = parts["gpu"].model_copy(
+        update={
+            "component_id": "rx-7650-gre",
+            "name": "RX 7650 GRE",
+            "specs": {"vendor": "AMD", "perf_index": 43, "tdp": 230},
+        }
+    )
+
+    assert motherboard_supports_cpu(parts)
 
 
 def test_customization_does_not_charge_again_for_integrated_wifi() -> None:
@@ -667,6 +731,15 @@ def am4_template() -> BuildTemplate:
             },
         }
     )
+    parts["cooler"].update(
+        {
+            "component_id": "thermalright-ax120-se",
+            "name": "利民 AX120 SE",
+            "condition": "new",
+            "reference_price": 69,
+            "specs": {"heatpipes": 4, "towers": 1},
+        }
+    )
     template.components = {
         role: part["component_id"] for role, part in parts.items()
     }
@@ -744,6 +817,12 @@ def catalog(
         ),
         component("base-psu-650w-gold", "psu", "650W Gold", {"watt": 650}),
         component("base-cooler-6-heatpipe", "cooler", "6 Heatpipe Cooler", {}),
+        component(
+            "thermalright-ax120-se",
+            "cooler",
+            "利民 AX120 SE",
+            {"heatpipes": 4, "towers": 1},
+        ),
         component("base-case-mid-tower", "case", "Mid Tower Case", {}),
     ]
     new_prices = {
@@ -764,6 +843,7 @@ def catalog(
         "base-ssd-fanxiang-s790e-1tb": 968,
         "base-psu-650w-gold": 200,
         "base-cooler-6-heatpipe": 100,
+        "thermalright-ax120-se": 69,
         "base-case-mid-tower": 100,
     }
     return (

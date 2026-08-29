@@ -1,0 +1,209 @@
+:root {
+  --p2m-duration: 1720ms;
+  --p2m-ease-flight: cubic-bezier(0.18, 0.86, 0.24, 1);
+  --p2m-ease-morph: cubic-bezier(0.22, 0.78, 0.18, 1);
+  --p2m-ease-impact: cubic-bezier(0.34, 0, 0.18, 1);
+  --p2m-ease-settle: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#logo-root svg {
+  overflow: hidden;
+}
+
+#mark {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: p2m-mark-stage var(--p2m-duration) linear both;
+}
+
+#ball,
+#u-fill,
+#z-fill,
+#u-draw,
+#z-draw {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#ball {
+  animation: p2m-ball var(--p2m-duration) linear both;
+}
+
+#u-fill {
+  animation: p2m-u-morph var(--p2m-duration) linear both;
+}
+
+#z-fill {
+  animation: p2m-z-morph var(--p2m-duration) linear both;
+}
+
+#u-draw,
+#z-draw {
+  stroke-dasharray: 1 1.2;
+  stroke-dashoffset: 1.1;
+  stroke-width: 100;
+  vector-effect: none;
+}
+
+#u-draw {
+  opacity: 0;
+}
+
+#z-draw {
+  animation: p2m-z-draw var(--p2m-duration) linear both;
+}
+
+@keyframes p2m-ball {
+  0%,
+  3% {
+    opacity: 1;
+    transform: translateY(0) scaleX(1) scaleY(1);
+    filter: blur(0.6px);
+  }
+  3% {
+    animation-timing-function: cubic-bezier(0.18, 0.86, 0.24, 1); /* --p2m-ease-flight */
+  }
+  26% {
+    opacity: 1;
+    transform: translateY(-544px) scaleX(0.88) scaleY(1.14);
+    filter: blur(0);
+  }
+  42% {
+    opacity: 0.9;
+    transform: translateY(-544px) scaleX(0.74) scaleY(0.92);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1); /* --p2m-ease-impact */
+  }
+  50% {
+    opacity: 0;
+    transform: translateY(-544px) scaleX(0.42) scaleY(0.68);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-544px) scaleX(0.42) scaleY(0.68);
+  }
+}
+
+@keyframes p2m-u-morph {
+  0%,
+  22% {
+    opacity: 0;
+    transform: scale(0.01);
+  }
+  24% {
+    opacity: 1;
+    transform: scale(0.22);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1); /* --p2m-ease-impact */
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 0.78, 0.18, 1); /* --p2m-ease-morph */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes p2m-u-draw {
+  0%,
+  22% {
+    opacity: 0;
+    stroke-dashoffset: 1.1;
+    transform: scale(0.01);
+  }
+  24% {
+    opacity: 0.26;
+    stroke-dashoffset: 0.88;
+    transform: scale(0.22);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1); /* --p2m-ease-impact */
+  }
+  50% {
+    opacity: 0.62;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 0.78, 0.18, 1); /* --p2m-ease-morph */
+  }
+  58% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes p2m-z-morph {
+  0%,
+  40% {
+    opacity: 0;
+    transform: scale(0.01);
+  }
+  42% {
+    opacity: 0;
+    transform: scale(0.20);
+    animation-timing-function: cubic-bezier(0.34, 0, 0.18, 1); /* --p2m-ease-impact */
+  }
+  60% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  64% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 0.78, 0.18, 1); /* --p2m-ease-morph */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes p2m-z-draw {
+  0%,
+  40% {
+    opacity: 0;
+    stroke-dashoffset: 1.1;
+    transform: scale(0.01);
+  }
+  42% {
+    opacity: 1;
+    stroke-dashoffset: 0.98;
+    transform: scale(0.20);
+    animation-timing-function: cubic-bezier(0.38, 0, 0.62, 1); /* eased z handoff */
+  }
+  64% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 0.78, 0.18, 1); /* --p2m-ease-morph */
+  }
+  71% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes p2m-mark-stage {
+  0%,
+  64% {
+    transform: scale(1);
+  }
+  68% {
+    transform: scale(0.985);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* --p2m-ease-settle */
+  }
+  72%,
+  100% {
+    transform: scale(1);
+  }
+}

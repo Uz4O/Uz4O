@@ -1398,15 +1398,6 @@
       "status": "review"
     },
     {
-      "app_id": "rx-9060-xt-12gb",
-      "app_name": "RX 9060 XT (12GB)",
-      "source_id": null,
-      "source_slug": null,
-      "source_name": null,
-      "device_type": "desktop",
-      "status": "review"
-    },
-    {
       "app_id": "rx-9060-xt-16gb",
       "app_name": "RX 9060 XT (16GB)",
       "source_id": null,

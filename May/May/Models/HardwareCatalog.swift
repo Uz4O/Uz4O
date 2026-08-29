@@ -181,7 +181,6 @@ enum HardwareCatalog {
         HardwareCatalogItem(id: "rx-9070-xt", name: "RX 9070 XT", brand: "AMD", detail: "AMD"),
         HardwareCatalogItem(id: "rx-9070-gre", name: "RX 9070 GRE", brand: "AMD", detail: "AMD"),
         HardwareCatalogItem(id: "rx-9060-xt-8gb", name: "RX 9060 XT (8GB)", brand: "AMD", detail: "AMD"),
-        HardwareCatalogItem(id: "rx-9060-xt-12gb", name: "RX 9060 XT (12GB)", brand: "AMD", detail: "AMD"),
         HardwareCatalogItem(id: "rx-9060-xt-16gb", name: "RX 9060 XT (16GB)", brand: "AMD", detail: "AMD"),
         HardwareCatalogItem(id: "rx-7900-xtx", name: "RX 7900 XTX", brand: "AMD", detail: "AMD"),
         HardwareCatalogItem(id: "rx-7900-xt", name: "RX 7900 XT", brand: "AMD", detail: "AMD"),
@@ -215,7 +214,7 @@ enum HardwareCatalog {
     ]
 
     static let motherboards: [HardwareCatalogItem] = [
-        HardwareCatalogItem(id: "msi-b760m-a", name: "B760M-A", brand: "微星", detail: "Intel · LGA1700 · B760"),
+        HardwareCatalogItem(id: "msi-b760m-a", name: "B760M-A DDR4", brand: "微星", detail: "Intel · LGA1700 · B760"),
         HardwareCatalogItem(id: "gigabyte-b860-ds3h", name: "B860 DS3H", brand: "技嘉", detail: "Intel · LGA1851 · B860"),
         HardwareCatalogItem(id: "gigabyte-b860-ds3h-wifi6e", name: "B860 DS3H WIFI6E", brand: "技嘉", detail: "Intel · LGA1851 · B860"),
         HardwareCatalogItem(id: "gigabyte-b860-eagle-wifi6e", name: "B860 EAGLE WIFI6E", brand: "技嘉", detail: "Intel · LGA1851 · B860"),

@@ -220,7 +220,7 @@ def test_real_catalog_generates_three_aesthetic_options_and_keeps_ai_cooler() ->
         parts = {part["role"]: part for part in details["parts"]}
         assert details["aesthetic_style_name"] == "航嘉 S960"
         assert details["appearance_total"] == canonical_total
-        assert details["price_date"] == "2026-08-24"
+        assert details["price_date"] == "2026-08-26"
         assert parts["case"]["component_id"].startswith("aesthetic-case-")
         assert not parts["cooler"]["component_id"].startswith("aesthetic-")
         assert details["extras"][-1]["name"] == "棱镜 8 Pro × 9"

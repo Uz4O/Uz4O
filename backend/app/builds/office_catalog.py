@@ -20,7 +20,7 @@ Profile = Literal["general", "media", "cuda"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 
-PRICE_DATE = "2026-08-22"
+PRICE_DATE = "2026-08-26"
 BUDGET_TIERS = tuple(range(6_000, 30_001, 1_000))
 LOW_BUDGET_TIERS = (3_000, 4_000, 5_000)
 PART_ROLES = (

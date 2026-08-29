@@ -20,7 +20,7 @@ WHITELIST = [
     {"target_id": "rtx-5090-d", "name": "RTX 5090 D"},
     {"target_id": "rtx-5090-d-v2", "name": "RTX 5090 D V2"},
     {"target_id": "rx-9060-xt-8gb", "name": "RX 9060 XT 8G"},
-    {"target_id": "rx-9060-xt-12gb", "name": "RX 9060 XT 12G"},
+    {"target_id": "rx-9060-xt-16gb", "name": "RX 9060 XT 16G"},
 ]
 
 

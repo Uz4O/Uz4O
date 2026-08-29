@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Uz logo</title>
+  <desc id="desc">A black rounded U joined to a compact lowercase z.</desc>
+  <g id="logo" fill="#000000" fill-rule="nonzero" shape-rendering="geometricPrecision">
+    <g id="mark">
+      <circle id="ball" cx="397" cy="1044" r="50" fill="#000000" opacity="0"/>
+      <path id="u-fill" d="M 227 256 H 287 C 301 256 312 269 312 286 V 568 C 312 612 350 642 397 642 C 444 642 482 612 482 568 V 395 C 482 374 499 357 520 357 H 556 C 578 357 593 374 593 395 V 440 C 593 451 590 459 587 465 V 570 C 587 667 504 740 397 740 C 290 740 202 674 202 570 V 286 C 202 269 213 256 227 256 Z"/>
+      <path id="z-fill" d="M 520 357 H 777 C 797 357 815 370 826 389 C 837 408 837 433 829 452 C 825 461 820 470 814 477 L 684 630 C 678 637 675 644 681 648 H 816 C 826 650 837 660 841 669 V 711 C 841 728 830 739 816 739 H 631 C 603 739 580 711 572 677 C 572 652 579 633 594 613 L 709 474 C 715 466 715 458 707 453 C 704 451 701 450 697 450 H 602 C 594 450 587 457 587 465 V 395 C 587 374 571 357 550 357 Z"/>
+    </g>
+    <g id="draw-guides" fill="none" stroke="#000000" pointer-events="none">
+      <path id="u-draw" d="M 257 310 V 568 C 257 640 318 692 397 692 C 476 692 532 640 532 568 V 411" pathLength="1" stroke-width="100" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+      <path id="z-draw" d="M 536 405 H 774 L 623 694 H 793" pathLength="1" stroke-width="91" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+    </g>
+  </g>
+</svg>

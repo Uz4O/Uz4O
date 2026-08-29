@@ -32,12 +32,12 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, ".background(Color.white", "Part icon tiles should be white.")
         assertContains(
             modelSource,
-            "name: details.direction.resultTitle",
+            "name: details.aestheticStyleName.map",
             "The result title should describe the gaming focus without exposing template wording."
         )
         assertContains(
             modelSource,
-            "useCase: details.direction.resultSubtitle",
+            "useCase: details.aestheticStyleName.map",
             "The hero should use a short beginner-friendly direction summary."
         )
         assertContains(viewSource, "PerformanceCard(", "The result should show the performance card.")
@@ -60,19 +60,19 @@ struct BuildResultContentRulesTests {
                 "Hard-coded FPS must not return to generated build details."
             )
         }
-        assertContains(viewSource, "PartsListCard(plan: plan", "The parts should use the reference list card.")
+        assertContains(viewSource, "PartsListCard(", "The parts should use the reference list card.")
         assertContains(
             viewSource,
-            "if let alternative = plan.usedGPUAlternative",
+            "plan.usedGPUAlternative",
             "All-new NVIDIA results should show a maintained used 40-series alternative when available."
         )
-        assertContains(viewSource, "Text(\"显卡替代建议\")", "The alternative should be clearly separated from the configured parts.")
+        assertContains(viewSource, "显卡替代建议", "The alternative should be clearly separated from the configured parts.")
         assertContains(
             viewSource,
-            "此建议不改变上方全新配置，也不计入总价",
+            "不计入当前总价",
             "The used-card suggestion must not be mistaken for part of the all-new total."
         )
-        assertContains(viewSource, "TotalPriceSection(totalPrice: plan.totalPrice)", "The total should have its own full-width row.")
+        assertContains(viewSource, "TotalPriceSection(totalPrice:", "The total should have its own full-width row.")
         assertContains(viewSource, "Text(plan.useCase)", "The header should keep the short plan subtitle.")
         assertContains(viewSource, "Text(\"游戏性能表现\")", "The performance card title should match the reference.")
         assertContains(viewSource, "\"1080P 电竞\"", "The esports performance metric should remain visible.")
@@ -81,6 +81,46 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, "title: \"保存为图片\"", "The result should support saving a complete image.")
         assertContains(viewSource, "title: \"进入DIY界面编辑\"", "AI builds should be editable in DIY.")
         assertContains(viewSource, "ImageRenderer(", "The saved image should render the complete result card.")
+        assertContains(
+            viewSource,
+            "PHPhotoLibrary.shared().performChanges",
+            "Result image saves should use PhotoKit's completion-based write API."
+        )
+        assertContains(
+            viewSource,
+            "if success",
+            "Result image saves should only report success after PhotoKit confirms the write."
+        )
+        assertContains(
+            viewSource,
+            "error?.localizedDescription",
+            "Result image save failures should explain the system error when available."
+        )
+        assertNotContains(
+            viewSource,
+            "UIImageWriteToSavedPhotosAlbum",
+            "Result image saves should not use the fire-and-forget UIKit API."
+        )
+        assertContains(
+            diyViewSource,
+            "PHPhotoLibrary.shared().performChanges",
+            "DIY image saves should use PhotoKit's completion-based write API."
+        )
+        assertContains(
+            diyViewSource,
+            "if success",
+            "DIY image saves should only report success after PhotoKit confirms the write."
+        )
+        assertContains(
+            diyViewSource,
+            "error?.localizedDescription",
+            "DIY image save failures should explain the system error when available."
+        )
+        assertNotContains(
+            diyViewSource,
+            "UIImageWriteToSavedPhotosAlbum",
+            "DIY image saves should not use the fire-and-forget UIKit API."
+        )
         assertContains(viewSource, ".frame(maxWidth: 420)", "The result actions should fill phones without growing too wide on larger screens.")
         assertContains(
             contentViewSource,
@@ -89,7 +129,7 @@ struct BuildResultContentRulesTests {
         )
         assertContains(
             contentViewSource,
-            "DIYView(importedBuild: $diyBuildOption)",
+            "DIYView(importedBuild: $diyBuildOption, accessToken: session.accessToken)",
             "The DIY tab should receive the pending AI option."
         )
         assertContains(
@@ -109,7 +149,7 @@ struct BuildResultContentRulesTests {
         )
         assertOrdered(
             viewSource,
-            "TotalPriceSection(totalPrice: plan.totalPrice)",
+            "TotalPriceSection(totalPrice:",
             "title: \"保存为图片\"",
             "The total row must appear above the result actions."
         )

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from types import SimpleNamespace
 
 import pytest
@@ -259,6 +260,84 @@ def test_used_40_series_alternative_only_applies_to_all_new_nvidia_builds() -> N
     assert build_service.recommend_used_40_series_gpu(
         details.model_copy(update={"gpu_vendor": "amd"}),
         maintained_used_40_series_prices(),
+    ) is None
+
+
+def test_recommends_complete_ddr4_14600kf_platform_for_7500f() -> None:
+    details = new_nvidia_details("rtx-5070", "RTX 5070", 6999)
+    parts = {part.role: part for part in details.parts}
+    parts["cpu"].component_id = "r5-7500f"
+    parts["cpu"].name = "R5 7500F"
+    parts["cpu"].reference_price = 600
+    parts["cpu"].specs = {"socket": "AM5", "tdp": 88, "perf_index": 60}
+    parts["motherboard"].reference_price = 700
+    parts["ram"].reference_price = 1600
+    parts["ram"].specs = {"type": "DDR5", "capacity_gb": 16}
+    parts["cooler"].reference_price = 100
+    parts["psu"].reference_price = 299
+    parts["psu"].specs = {"watt": 650}
+    parts["gpu"].specs = {"tdp": 250, "perf_index": 75}
+
+    component_specs = {
+        "i5-14600kf": ("cpu", "i5-14600KF", {"socket": "LGA1700", "tdp": 181, "perf_index": 84}),
+        "msi-b760m-a": ("motherboard", "微星 B760M-A", {"socket": "LGA1700", "mem_type": "DDR4"}),
+        "base-ddr4-16gb-3200": ("ram", "DDR4 8GB×2 3200", {"type": "DDR4", "capacity_gb": 16}),
+        "base-cooler-dual-tower-6-heatpipe": ("cooler", "双塔6热管风冷", {"heatpipes": 6, "towers": 2}),
+        "base-psu-750w-gold": ("psu", "安耐美 GN750W V3 750W", {"watt": 750}),
+    }
+    components = [
+        SimpleNamespace(
+            id=component_id,
+            category=category,
+            name=name,
+            specs=specs,
+            status="active",
+            is_recommended=True,
+        )
+        for component_id, (category, name, specs) in component_specs.items()
+    ]
+    prices = [
+        SimpleNamespace(
+            component_id=component_id,
+            price_range_low=used_price,
+            price_range_high=new_price,
+            source="test",
+            approved_at=datetime(2026, 8, 26, tzinfo=timezone.utc),
+        )
+        for component_id, used_price, new_price in (
+            ("i5-14600kf", None, 1499),
+            ("msi-b760m-a", 550, 850),
+            ("base-ddr4-16gb-3200", 400, 500),
+            ("base-cooler-dual-tower-6-heatpipe", 100, 150),
+            ("base-psu-750w-gold", 249, 359),
+        )
+    ]
+
+    alternative = build_service.recommend_14600kf_platform(
+        details,
+        components,
+        prices,
+    )
+
+    assert alternative is not None
+    replacement_parts = {part.role: part for part in alternative.replacement_parts}
+    assert set(replacement_parts) == {"cpu", "motherboard", "ram", "cooler", "psu"}
+    assert replacement_parts["cpu"].component_id == "i5-14600kf"
+    assert replacement_parts["cpu"].condition == "new"
+    assert replacement_parts["cpu"].reference_price == 1499
+    assert replacement_parts["motherboard"].specs["mem_type"] == "DDR4"
+    assert replacement_parts["ram"].specs["type"] == "DDR4"
+    assert replacement_parts["cooler"].specs["towers"] == 2
+    assert replacement_parts["psu"].specs["watt"] == 750
+    assert alternative.performance_gain_percent == 40
+    assert alternative.price_difference == 59
+
+
+def test_does_not_recommend_14600kf_platform_without_7500f() -> None:
+    assert build_service.recommend_14600kf_platform(
+        new_nvidia_details("rtx-5060", "RTX 5060", 3299),
+        [],
+        [],
     ) is None
 
 

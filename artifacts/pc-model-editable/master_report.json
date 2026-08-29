@@ -1,0 +1,28 @@
+{
+  "source": "/Users/may/Downloads/a309ee981bff2c584723e66281aa9699.glb",
+  "source_sha256": "42eae4f04a584c69ff23636dd7dccb16a4504da73137b56378b48b9eb888e74a",
+  "blend": "/Users/may/Documents/AI装机/artifacts/pc-model-editable/pc_high_fidelity_master.blend",
+  "object_count": 1,
+  "vertices": 942610,
+  "edges": 2430273,
+  "polygons": 1499858,
+  "materials": [
+    "Material.001"
+  ],
+  "bounds_min": [
+    -0.3362700045108795,
+    -0.21481414139270782,
+    -2.8862164214160657e-08
+  ],
+  "bounds_max": [
+    0.46445900201797485,
+    0.2697770297527313,
+    0.7808191776275635
+  ],
+  "dimensions": [
+    0.8007290363311768,
+    0.48459118604660034,
+    0.7808191776275635
+  ],
+  "geometry_changed": false
+}

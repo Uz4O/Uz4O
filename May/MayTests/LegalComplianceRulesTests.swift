@@ -22,15 +22,19 @@ struct LegalComplianceRulesTests {
         assertEqual(LegalContact.operatorName, "孙裕凤", "Operator metadata must stay consistent.")
         assertEqual(LegalContact.email, "youz66811@gmail.com", "Contact metadata must stay consistent.")
 
-        let userAgreement = try! String(contentsOfFile: "May/May/Legal/UserAgreement.md", encoding: .utf8)
-        let privacyPolicy = try! String(contentsOfFile: "May/May/Legal/PrivacyPolicy.md", encoding: .utf8)
-        let thirdPartyList = try! String(contentsOfFile: "May/May/Legal/ThirdPartySharingList.md", encoding: .utf8)
+        let userAgreement = try! String(contentsOfFile: "May/Legal/UserAgreement.md", encoding: .utf8)
+        let privacyPolicy = try! String(contentsOfFile: "May/Legal/PrivacyPolicy.md", encoding: .utf8)
+        let thirdPartyList = try! String(contentsOfFile: "May/Legal/ThirdPartySharingList.md", encoding: .utf8)
         for legalText in [userAgreement, privacyPolicy, thirdPartyList] {
             assertNotContains(legalText, "社区", "Launch legal text must not describe removed community features.")
             assertNotContains(legalText, "帖子", "Launch legal text must not describe removed community posts.")
             assertNotContains(legalText, "评论", "Launch legal text must not describe removed community comments.")
             assertNotContains(legalText, "屏蔽", "Launch legal text must not describe removed community blocks.")
         }
+        assertContains(privacyPolicy, "相册“仅添加”权限", "The privacy policy must disclose photo-library writes.")
+        assertContains(privacyPolicy, "压缩并上传", "The privacy policy must disclose configuration image uploads.")
+        assertContains(privacyPolicy, "当前版本不提供硬件档案跨设备同步", "Local-only hardware data must not be described as synced.")
+        assertContains(thirdPartyList, "不得向正式用户发布", "Missing provider disclosures must remain a launch blocker.")
         print("LegalComplianceRulesTests passed")
     }
 

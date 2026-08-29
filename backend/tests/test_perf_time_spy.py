@@ -39,7 +39,7 @@ def test_5090_d_v2_uses_the_delta_force_ratio_estimate() -> None:
 
 
 def test_other_ambiguous_or_missing_chart_variants_are_not_guessed() -> None:
-    assert gpu_time_spy_score("rx-9060-xt-12gb") is None
+    assert gpu_time_spy_score("rx-9060-xt-16gb") == 16565
     assert gpu_time_spy_score("rx-6750-gre") is None
 
 

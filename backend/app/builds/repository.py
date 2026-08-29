@@ -43,6 +43,8 @@ DETAILED_CONDITIONS = {
 DETAILED_DIRECTION_TAGS = {"fps": "FPS", "aaa": "3A", "balanced": "均衡"}
 DETAILED_PURCHASE_TAGS = {"new": "全新", "used": "二手", "mixed": "混合采购"}
 DETAILED_GPU_VENDOR_TAGS = {"nvidia": "NVIDIA", "amd": "AMD", "intel": "Intel"}
+LEGACY_AM4_CPU_IDS = {"r5-5600", "r5-5600x"}
+LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
 MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL = 200
 MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE = 300
 
@@ -215,7 +217,12 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     actual_conditions = {
         role: part.condition for role, part in parts_by_role.items()
     }
-    if actual_conditions != DETAILED_CONDITIONS[details.purchase_mode]:
+    expected_conditions = dict(DETAILED_CONDITIONS[details.purchase_mode])
+    if parts_by_role["cpu"].component_id in LEGACY_AM4_CPU_IDS:
+        expected_conditions["cooler"] = "new"
+        if parts_by_role["cooler"].component_id != LEGACY_AM4_COOLER_ID:
+            errors.append(f"{template.id}: R5 5600/5600X must use AX120 SE")
+    if actual_conditions != expected_conditions:
         errors.append(f"{template.id}: conditions do not match purchase mode")
 
     if details.target_budget != template.budget_min:

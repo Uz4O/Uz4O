@@ -9,6 +9,8 @@ struct ContactComplaintView: View {
     @State private var description = ""
     @State private var contact = ""
     @State private var showsEmptyDescriptionAlert = false
+    @State private var feedbackMessage = ""
+    @State private var showsFeedback = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -49,6 +51,11 @@ struct ContactComplaintView: View {
             Button("知道了", role: .cancel) {}
         } message: {
             Text("描述越具体，我们越容易定位问题。")
+        }
+        .alert("联系与投诉", isPresented: $showsFeedback) {
+            Button("好的", role: .cancel) {}
+        } message: {
+            Text(feedbackMessage)
         }
     }
 
@@ -247,9 +254,22 @@ struct ContactComplaintView: View {
             URLQueryItem(name: "body", value: body)
         ]
 
-        if let url = components.url {
-            openURL(url)
+        guard let url = components.url else {
+            presentFeedback("无法生成邮件链接，请直接发送邮件至 \(LegalContact.email)")
+            return
         }
+
+        openURL(url) { accepted in
+            guard !accepted else { return }
+            Task { @MainActor in
+                presentFeedback("未能打开邮件应用，请直接发送邮件至 \(LegalContact.email)")
+            }
+        }
+    }
+
+    private func presentFeedback(_ message: String) {
+        feedbackMessage = message
+        showsFeedback = true
     }
 }
 

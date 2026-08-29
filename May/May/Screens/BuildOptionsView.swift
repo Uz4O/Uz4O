@@ -104,8 +104,6 @@ private struct BuildOptionCard: View {
         switch gpu.componentId {
         case "rx-9060-xt-8gb":
             return "9060XT 8G"
-        case "rx-9060-xt-12gb":
-            return "9060XT 12G"
         case "rx-9060-xt-16gb":
             return "9060XT 16G"
         default:

@@ -38,6 +38,31 @@ struct AIBuildFlowRulesTests {
             "Low-budget office builds should stay new-first and balanced."
         )
         assertEqual(
+            AIBuildFlowRules.shouldShowGPUPreference(budget: 7_999, useCase: "游戏", hasOwnedGPU: false),
+            false,
+            "GPU vendor preference should stay hidden below 8000 yuan."
+        )
+        assertEqual(
+            AIBuildFlowRules.shouldShowGPUPreference(budget: 8_000, useCase: "游戏", hasOwnedGPU: false),
+            true,
+            "Every gaming direction should expose GPU vendor preference from 8000 yuan."
+        )
+        assertEqual(
+            AIBuildFlowRules.shouldShowGPUPreference(budget: 30_000, useCase: "游戏", hasOwnedGPU: false),
+            true,
+            "GPU vendor preference should have no upper budget limit."
+        )
+        assertEqual(
+            AIBuildFlowRules.shouldShowGPUPreference(budget: 10_000, useCase: "办公", hasOwnedGPU: false),
+            false,
+            "Pure office builds should not expose a gaming GPU vendor choice."
+        )
+        assertEqual(
+            AIBuildFlowRules.shouldShowGPUPreference(budget: 10_000, useCase: "游戏", hasOwnedGPU: true),
+            false,
+            "Owned-GPU builds should not ask for another GPU vendor."
+        )
+        assertEqual(
             AIBuildFlowRules.recommendedDirection(for: ["CS2", "瓦罗兰特"]),
             .fps,
             "FPS-only games should recommend the high-frame-rate direction."
@@ -141,6 +166,16 @@ struct AIBuildFlowRulesTests {
             buildViewSource,
             "PreferenceSegmentGroup(title: \"存储大小\", options: storageSizeOptions",
             "The hardware step should expose storage independently from memory."
+        )
+        assertContains(
+            buildViewSource,
+            "title: \"显卡品牌偏好\"",
+            "The fourth step should expose GPU vendor preference when eligible."
+        )
+        assertContains(
+            buildViewSource,
+            "gpuPreference: gpuPreference",
+            "The selected GPU vendor should be forwarded to the backend."
         )
         assertContains(
             buildViewSource,

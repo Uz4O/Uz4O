@@ -5,10 +5,12 @@ import UIKit
 struct DIYView: View {
     @Binding var importedBuild: BuildOptionDTO?
     @State private var showsBuilder: Bool
+    let accessToken: String?
 
-    init(importedBuild: Binding<BuildOptionDTO?>) {
+    init(importedBuild: Binding<BuildOptionDTO?>, accessToken: String?) {
         _importedBuild = importedBuild
         _showsBuilder = State(initialValue: importedBuild.wrappedValue != nil)
+        self.accessToken = accessToken
     }
 
     var body: some View {
@@ -16,6 +18,7 @@ struct DIYView: View {
             if showsBuilder {
                 DIYBuilderView(
                     importedBuild: $importedBuild,
+                    accessToken: accessToken,
                     onBack: {
                         withAnimation(.easeInOut(duration: 0.34)) {
                             showsBuilder = false
@@ -54,6 +57,7 @@ private struct DIYBuilderView: View {
     private let apiClient = AppAPIClient()
 
     @Binding var importedBuild: BuildOptionDTO?
+    let accessToken: String?
     let onBack: () -> Void
     @State private var selectedComponents: [String: CatalogComponentDTO] = [:]
     @State private var catalogComponents: [CatalogComponentDTO] = []
@@ -66,6 +70,7 @@ private struct DIYBuilderView: View {
     @State private var recommendedPSUWatt: Int?
     @State private var feedbackMessage = ""
     @State private var showsFeedback = false
+    @State private var isSavingConfiguration = false
 
     var body: some View {
         GeometryReader { proxy in
@@ -234,7 +239,7 @@ private struct DIYBuilderView: View {
             .buttonStyle(.plain)
 
             Button(action: saveToMyBuilds) {
-                Label("保存到我的配置单", systemImage: "bookmark")
+                Label(isSavingConfiguration ? "正在保存" : "保存到我的配置单", systemImage: "bookmark")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -242,6 +247,7 @@ private struct DIYBuilderView: View {
                     .background(DIYTheme.primary, in: RoundedRectangle(cornerRadius: 15))
             }
             .buttonStyle(.plain)
+            .disabled(isSavingConfiguration)
         }
     }
 
@@ -265,30 +271,50 @@ private struct DIYBuilderView: View {
     }
 
     private func saveToMyBuilds() {
-        let parts = components.compactMap { slot -> DIYStoredPart? in
+        let parts = components.compactMap { slot -> PCPart? in
             guard let selected = selectedComponents[slot.id] else { return nil }
-            return DIYStoredPart(
+            let model = [selected.brand, selected.name]
+                .filter { !$0.isEmpty }
+                .joined(separator: " ")
+            return PCPart(
                 category: slot.title,
-                name: selected.name,
-                brand: selected.brand,
-                price: catalogPrices[selected.id]?.referencePrice
+                model: model,
+                price: catalogPrices[selected.id].map { "¥ \($0.referencePrice)" } ?? "待定",
+                condition: "DIY",
+                icon: slot.icon,
+                accent: DIYTheme.primary
             )
         }
         guard !parts.isEmpty else {
             presentFeedback("请先选择至少一个配件")
             return
         }
+        guard let accessToken else {
+            presentFeedback("登录状态已失效，请重新登录")
+            return
+        }
 
-        DIYBuildStore.save(
-            DIYStoredBuild(
-                id: UUID(),
-                createdAt: Date(),
-                totalPrice: totalPrice,
-                recommendedPsuWatt: recommendedPSUWatt,
-                parts: parts
-            )
+        let plan = BuildPlan(
+            name: "DIY 自定义配置",
+            budget: "自定义",
+            totalPrice: totalPrice > 0 ? "¥\(totalPrice)" : "待选择",
+            useCase: recommendedPSUWatt.map { "推荐电源瓦数 \($0)W" } ?? "自定义装机",
+            createdAt: Date().formatted(date: .abbreviated, time: .shortened),
+            parts: parts
         )
-        presentFeedback("已保存到“我的配置单”")
+        isSavingConfiguration = true
+        Task {
+            do {
+                _ = try await apiClient.saveConfiguration(
+                    SavedConfigurationPlanDTO(kind: .diy, plan: plan),
+                    token: accessToken
+                )
+                presentFeedback("已保存到“我的配置单”")
+            } catch {
+                presentFeedback("保存失败：\(error.localizedDescription)")
+            }
+            isSavingConfiguration = false
+        }
     }
 
     @MainActor
@@ -323,11 +349,25 @@ private struct DIYBuilderView: View {
 
         PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
             guard status == .authorized || status == .limited else {
-                Task { @MainActor in presentFeedback("没有相册保存权限") }
+                Task { @MainActor in
+                    presentFeedback("没有相册添加权限，请在设置中允许 UzBox 访问照片")
+                }
                 return
             }
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-            Task { @MainActor in presentFeedback("配置图片已保存到相册") }
+
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                let message: String
+                if success {
+                    message = "配置图片已保存到相册"
+                } else if let detail = error?.localizedDescription, !detail.isEmpty {
+                    message = "保存失败：\(detail)"
+                } else {
+                    message = "保存失败：系统未能写入相册，请稍后重试"
+                }
+                Task { @MainActor in presentFeedback(message) }
+            }
         }
     }
 
@@ -1265,5 +1305,5 @@ private struct DIYComponent: Identifiable {
 }
 
 #Preview {
-    DIYView(importedBuild: .constant(nil))
+    DIYView(importedBuild: .constant(nil), accessToken: nil)
 }

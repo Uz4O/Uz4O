@@ -10,19 +10,25 @@ struct BuildResultView: View {
     @State private var performanceState: BuildPerformanceLoadState
     @State private var performanceCache: [String: BuildPerformanceLoadState]
     @State private var isUsingGPUAlternative = false
+    @State private var isUsingCPUPlatformAlternative = false
+    @State private var isSavingConfiguration = false
+    @State private var hasSavedConfiguration = false
 
     let plan: BuildPlan
     let onBack: () -> Void
+    let onSave: ((BuildPlan) async throws -> Void)?
     let onEditInDIY: (() -> Void)?
 
     init(
         plan: BuildPlan,
         initialPerformanceState: BuildPerformanceLoadState? = nil,
         onBack: @escaping () -> Void,
+        onSave: ((BuildPlan) async throws -> Void)? = nil,
         onEditInDIY: (() -> Void)? = nil
     ) {
         self.plan = plan
         self.onBack = onBack
+        self.onSave = onSave
         self.onEditInDIY = onEditInDIY
         _performanceState = State(initialValue: initialPerformanceState ?? .idle)
 
@@ -44,6 +50,19 @@ struct BuildResultView: View {
     }
 
     private var activePerformanceContext: BuildPerformanceContext? {
+        if isUsingCPUPlatformAlternative,
+           let alternative = plan.cpuPlatformAlternative,
+           let replacementCPU = alternative.replacementParts.first(
+               where: { $0.part.category == "CPU" }
+           ),
+           let context = plan.performanceContext {
+            return BuildPerformanceContext(
+                cpuID: replacementCPU.componentID,
+                gpuID: context.gpuID,
+                gameIDs: context.gameIDs,
+                unavailableGameNames: context.unavailableGameNames
+            )
+        }
         guard isUsingGPUAlternative,
               let alternative = plan.usedGPUAlternative,
               let context = plan.performanceContext else {
@@ -58,29 +77,54 @@ struct BuildResultView: View {
     }
 
     private var displayedTotalPrice: String {
-        guard isUsingGPUAlternative,
-              let alternative = plan.usedGPUAlternative,
-              let originalTotal = Int(plan.totalPrice.filter(\.isNumber)) else {
+        guard let originalTotal = Int(plan.totalPrice.filter(\.isNumber)) else {
             return plan.totalPrice
         }
-        return "¥ \((originalTotal + alternative.priceDifference).formatted(.number.grouping(.automatic)))"
+        let priceDifference = if isUsingCPUPlatformAlternative {
+            plan.cpuPlatformAlternative?.priceDifference ?? 0
+        } else if isUsingGPUAlternative {
+            plan.usedGPUAlternative?.priceDifference ?? 0
+        } else {
+            0
+        }
+        return "¥ \((originalTotal + priceDifference).formatted(.number.grouping(.automatic)))"
     }
 
     private var displayedPlan: BuildPlan {
-        guard isUsingGPUAlternative, let alternative = plan.usedGPUAlternative else {
-            return plan
-        }
-        let parts = plan.parts.map { part in
-            guard part.category == "显卡" else { return part }
-            return PCPart(
-                id: part.id,
-                category: part.category,
-                model: alternative.model,
-                price: "¥ \(alternative.referencePrice.formatted(.number.grouping(.automatic)))",
-                condition: "二手",
-                icon: part.icon,
-                accent: part.accent
+        var parts = plan.parts
+        if isUsingCPUPlatformAlternative,
+           let alternative = plan.cpuPlatformAlternative {
+            let replacements = Dictionary(
+                uniqueKeysWithValues: alternative.replacementParts.map {
+                    ($0.part.category, $0.part)
+                }
             )
+            parts = parts.map { part in
+                guard let replacement = replacements[part.category] else { return part }
+                return PCPart(
+                    id: part.id,
+                    category: replacement.category,
+                    model: replacement.model,
+                    price: replacement.price,
+                    condition: replacement.condition,
+                    icon: replacement.icon,
+                    accent: replacement.accent
+                )
+            }
+        } else if isUsingGPUAlternative,
+                  let alternative = plan.usedGPUAlternative {
+            parts = parts.map { part in
+                guard part.category == "显卡" else { return part }
+                return PCPart(
+                    id: part.id,
+                    category: part.category,
+                    model: alternative.model,
+                    price: "¥ \(alternative.referencePrice.formatted(.number.grouping(.automatic)))",
+                    condition: "二手",
+                    icon: part.icon,
+                    accent: part.accent
+                )
+            }
         }
         return BuildPlan(
             name: plan.name,
@@ -89,7 +133,8 @@ struct BuildResultView: View {
             useCase: plan.useCase,
             createdAt: plan.createdAt,
             parts: parts,
-            usedGPUAlternative: alternative,
+            usedGPUAlternative: plan.usedGPUAlternative,
+            cpuPlatformAlternative: plan.cpuPlatformAlternative,
             performanceContext: activePerformanceContext
         )
     }
@@ -113,11 +158,32 @@ struct BuildResultView: View {
                     isGPUAlternativeApplied: isUsingGPUAlternative,
                     onToggleGPUAlternative: {
                         withAnimation(.easeInOut(duration: 0.2)) {
+                            isUsingCPUPlatformAlternative = false
                             isUsingGPUAlternative.toggle()
+                        }
+                    },
+                    isCPUPlatformAlternativeApplied: isUsingCPUPlatformAlternative,
+                    onToggleCPUPlatformAlternative: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isUsingGPUAlternative = false
+                            isUsingCPUPlatformAlternative.toggle()
                         }
                     }
                 )
                 TotalPriceSection(totalPrice: displayedTotalPrice)
+
+                if onSave != nil {
+                    ResultActionButton(
+                        title: hasSavedConfiguration
+                            ? "已保存到我的配置单"
+                            : (isSavingConfiguration ? "正在保存" : "保存到我的配置单"),
+                        systemName: hasSavedConfiguration ? "checkmark" : "bookmark",
+                        isPrimary: true,
+                        action: saveConfiguration
+                    )
+                    .disabled(isSavingConfiguration || hasSavedConfiguration)
+                    .frame(maxWidth: 420)
+                }
 
                 HStack(spacing: 12) {
                     ResultActionButton(
@@ -154,6 +220,12 @@ struct BuildResultView: View {
         }
         .task(id: activePerformanceContext?.requestKey) {
             await loadPerformance()
+        }
+        .onChange(of: isUsingGPUAlternative) { _, _ in
+            hasSavedConfiguration = false
+        }
+        .onChange(of: isUsingCPUPlatformAlternative) { _, _ in
+            hasSavedConfiguration = false
         }
         .alert("配置方案", isPresented: $showsFeedback) {
             Button("好的", role: .cancel) {}
@@ -194,7 +266,8 @@ struct BuildResultView: View {
             content: BuildResultShareCard(
                 plan: displayedPlan,
                 performanceState: performanceState,
-                isGPUAlternativeApplied: isUsingGPUAlternative
+                isGPUAlternativeApplied: isUsingGPUAlternative,
+                isCPUPlatformAlternativeApplied: isUsingCPUPlatformAlternative
             )
                 .frame(width: 430)
         )
@@ -207,17 +280,46 @@ struct BuildResultView: View {
 
         PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
             guard status == .authorized || status == .limited else {
-                Task { @MainActor in presentFeedback("没有相册保存权限") }
+                Task { @MainActor in
+                    presentFeedback("没有相册添加权限，请在设置中允许 UzBox 访问照片")
+                }
                 return
             }
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-            Task { @MainActor in presentFeedback("配置图片已保存到相册") }
+
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }) { success, error in
+                let message: String
+                if success {
+                    message = "配置图片已保存到相册"
+                } else if let detail = error?.localizedDescription, !detail.isEmpty {
+                    message = "保存失败：\(detail)"
+                } else {
+                    message = "保存失败：系统未能写入相册，请稍后重试"
+                }
+                Task { @MainActor in presentFeedback(message) }
+            }
         }
     }
 
     private func presentFeedback(_ message: String) {
         feedbackMessage = message
         showsFeedback = true
+    }
+
+    private func saveConfiguration() {
+        guard let onSave, !isSavingConfiguration else { return }
+        isSavingConfiguration = true
+        Task {
+            do {
+                try await onSave(displayedPlan)
+                hasSavedConfiguration = true
+                presentFeedback("已保存到“我的配置单”")
+            } catch {
+                presentFeedback("保存失败：\(error.localizedDescription)")
+            }
+            isSavingConfiguration = false
+        }
     }
 
     @MainActor
@@ -267,6 +369,7 @@ private struct BuildResultShareCard: View {
     let plan: BuildPlan
     let performanceState: BuildPerformanceLoadState
     let isGPUAlternativeApplied: Bool
+    let isCPUPlatformAlternativeApplied: Bool
 
     var body: some View {
         VStack(spacing: 16) {
@@ -285,7 +388,9 @@ private struct BuildResultShareCard: View {
                 isVisible: true,
                 hasRevealed: true,
                 isGPUAlternativeApplied: isGPUAlternativeApplied,
-                onToggleGPUAlternative: nil
+                onToggleGPUAlternative: nil,
+                isCPUPlatformAlternativeApplied: isCPUPlatformAlternativeApplied,
+                onToggleCPUPlatformAlternative: nil
             )
             TotalPriceSection(totalPrice: plan.totalPrice)
         }
@@ -670,12 +775,137 @@ private struct UsedGPUAlternativeCard: View {
     }
 }
 
+private struct CPUPlatformAlternativeCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var isExpanded = false
+
+    let alternative: CPUPlatformAlternativeRecommendation
+    let isApplied: Bool
+    let onToggle: (() -> Void)?
+
+    private var cpu: CPUPlatformReplacementRecommendation? {
+        alternative.replacementParts.first { $0.part.category == "CPU" }
+    }
+
+    private var priceComparison: String {
+        if alternative.priceDifference > 0 {
+            return "整机多 ¥\(alternative.priceDifference.formatted())"
+        }
+        if alternative.priceDifference < 0 {
+            return "整机省 ¥\((-alternative.priceDifference).formatted())"
+        }
+        return "整机同价"
+    }
+
+    private var replacementSummary: String {
+        alternative.replacementParts.map(\.part.category).joined(separator: "、")
+    }
+
+    private var expansionAnimation: Animation {
+        reduceMotion ? .easeOut(duration: 0.12) : .smooth(duration: 0.36)
+    }
+
+    private var expansionTransition: AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .opacity.combined(with: .scale(scale: 0.985, anchor: .top))
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(expansionAnimation) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(isApplied ? "已切换平台" : "更强平台替代")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(ResultColors.secondaryText)
+
+                        Text("全新 \(cpu?.part.model ?? "i5-14600KF") · ¥\((cpu?.referencePrice ?? 1499).formatted())")
+                            .font(.system(size: 13.5, weight: .semibold))
+                            .foregroundStyle(.black)
+                            .lineLimit(1)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(ResultColors.secondaryText)
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isExpanded ? "收起 CPU 平台替代建议" : "展开 CPU 平台替代建议")
+
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 7) {
+                    Divider()
+                        .overlay(ResultColors.divider)
+                        .padding(.vertical, 2)
+
+                    Text("综合 CPU 性能约 +\(alternative.performanceGainPercent)% · \(priceComparison)")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    Text("本次同步更换：\(replacementSummary)")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    Text("7500F：当前性能较弱，但 AM5 后续升级空间更大。")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    Text("14600KF：当前性能更强，但 LGA1700 后续升级空间较小；以后升级通常需要连同 CPU、主板和内存一起更换。")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    if let onToggle {
+                        Button(action: onToggle) {
+                            Text(isApplied ? "恢复 7500F 平台" : "切换到 14600KF 平台")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(isApplied ? Color.black : Color.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 36)
+                                .background(
+                                    isApplied ? Color.white : Color.black,
+                                    in: RoundedRectangle(cornerRadius: 9)
+                                )
+                                .overlay {
+                                    if isApplied {
+                                        RoundedRectangle(cornerRadius: 9)
+                                            .stroke(ResultColors.divider, lineWidth: 1)
+                                    }
+                                }
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 3)
+                    }
+                }
+                .padding(.top, 7)
+                .transition(expansionTransition)
+            }
+        }
+        .animation(expansionAnimation, value: isExpanded)
+        .padding(11)
+        .background(
+            Color(red: 0.95, green: 0.95, blue: 0.96),
+            in: RoundedRectangle(cornerRadius: 10)
+        )
+        .padding(.bottom, 10)
+    }
+}
+
 private struct PartsListCard: View {
     let plan: BuildPlan
     let isVisible: Bool
     let hasRevealed: Bool
     let isGPUAlternativeApplied: Bool
     let onToggleGPUAlternative: (() -> Void)?
+    let isCPUPlatformAlternativeApplied: Bool
+    let onToggleCPUPlatformAlternative: (() -> Void)?
 
     var body: some View {
         ResultCard(verticalPadding: 16, horizontalPadding: 16) {
@@ -693,6 +923,14 @@ private struct PartsListCard: View {
                             .easeOut(duration: 0.24).delay(0.08 + Double(index) * 0.025),
                             value: hasRevealed
                         )
+
+                    if part.category == "CPU", let alternative = plan.cpuPlatformAlternative {
+                        CPUPlatformAlternativeCard(
+                            alternative: alternative,
+                            isApplied: isCPUPlatformAlternativeApplied,
+                            onToggle: onToggleCPUPlatformAlternative
+                        )
+                    }
 
                     if part.category == "显卡", let alternative = plan.usedGPUAlternative {
                         UsedGPUAlternativeCard(

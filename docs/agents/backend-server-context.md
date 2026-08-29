@@ -1,6 +1,24 @@
 # Backend and Server Context
 
-Last verified: 2026-08-23.
+Last verified: 2026-08-26.
+
+## i5-14600KF DDR4 Platform Alternative and Low-Budget Rules (Deployed 2026-08-26)
+
+- `i5-14600KF` is back in the approved CPU whitelist at an all-new price of `1499` yuan with no invented used price. It is reserved for a user-selectable platform alternative and does not silently replace existing base-build CPUs.
+- Every returned build whose main CPU is R5 7500F now includes a complete alternative containing i5-14600KF, MSI B760M-A DDR4, same-capacity dual-channel DDR4-3200 memory, and a dual-tower six-heatpipe cooler. If the 181W CPU raises the calculated PSU requirement, the response also replaces the PSU with the cheapest reviewed adequate model.
+- The iOS result page places the alternative card directly below the CPU. It shows the project CPU-performance gain of about `40%`, recalculates the total and game-performance CPU when selected, and explains that 7500F is slower today but has the stronger AM5 upgrade path, while 14600KF is faster today but a later major upgrade usually requires replacing CPU, motherboard, and memory together.
+- Production smoke verification passed at `7500` yuan all-new 3A: the main build uses R5 7500F and the alternative returns all-new i5-14600KF `1499`, B760M-A DDR4 `850`, DDR4 8GB×2 `500`, and dual-tower cooling `150`; the platform is `51` yuan cheaper for that configuration. At `8500` yuan with RX 9070 GRE, the alternative correctly adds a 750W PSU because the original 650W unit is insufficient for 14600KF.
+- The previously completed low-budget rules are deployed with the same release: R5 5600/5600X always uses an all-new Thermalright AX120 SE at `69` yuan; ASUS A520M-K is `339` yuan all-new and is allowed only through RX 7650 GRE-class GPU performance. A public `4500` yuan balanced 16GB/512GB request returns all three modes; the all-new option is `4735` yuan with 5600X, A520M-K, and AX120 SE.
+- Production now has `494` active templates, `6626` hardware components, and `5984` approved component prices. Catalog readiness is `ready: true`, public health is HTTP 200, and the user-confirmed AMD GPU whitelist prices were rechecked in production.
+- Deployment backup: `/opt/ai-builder-api/backups/cpu-platform-20260826-1700`.
+
+## AMD GPU Price and RX 9060 XT Model Correction (Deployed 2026-08-26)
+
+- User-confirmed all-new prices are RX 7650 GRE `2199`, RX 7700 XT `2699`, RX 9060 XT 8GB `3099`, RX 9060 XT 16GB `3099`, RX 9070 GRE `4699`, and RX 9070 XT `6999` yuan. RX 7800 XT is discontinued and has no all-new price.
+- The nonexistent RX 9060 XT 12GB entry was retired and removed from production prices. RX 9060 XT 16GB is the canonical model with the retained `2200` yuan used reference price, project performance index `55`, and 200W TDP.
+- Low-budget, high-budget, and office artifacts were regenerated with price date `2026-08-26`. Production contains `491` active templates; none uses RX 9060 XT 12GB or RX 7800 XT as an all-new GPU.
+- Production verification passed: `ai-builder-api.service` is active, public health and catalog readiness return HTTP 200, catalog readiness is `ready: true`, and a public `5000` yuan balanced request returned all three purchase modes with the updated prices.
+- Deployment backup: `/opt/ai-builder-api/backups/amd-gpu-price-20260826-133425`.
 
 ## Direction Allocation and DDR4 Dual-Channel Gate (Deployed 2026-08-23)
 

@@ -12,6 +12,7 @@ struct AIBuildOptionsInput {
     let allowsFlexibleBudget: Bool
     let noGPUBuild: Bool
     let ownedGPUModel: String?
+    let gpuPreference: String?
 }
 
 struct AIBuildView: View {
@@ -43,6 +44,7 @@ struct AIBuildView: View {
     @State private var selectedStorageSize = "1TB"
     @State private var allowsFlexibleBudget = false
     @State private var selectedAestheticStyleID = AestheticBuildStyle.featured[0].id
+    @State private var selectedGPUPreference = "AI 智能选择"
 
     let onBack: () -> Void
     let onComplete: (BuildOptionsResponseDTO, [String]) -> Void
@@ -65,7 +67,8 @@ struct AIBuildView: View {
                 storageSize: input.storageSize,
                 allowsFlexibleBudget: input.allowsFlexibleBudget,
                 noGPUBuild: input.noGPUBuild,
-                ownedGPUModel: input.ownedGPUModel
+                ownedGPUModel: input.ownedGPUModel,
+                gpuPreference: input.gpuPreference
             )
         }
     ) {
@@ -112,6 +115,7 @@ struct AIBuildView: View {
     ]
     private let memorySizeOptions = ["16GB", "32GB"]
     private let storageSizeOptions = ["512GB", "1TB", "2TB"]
+    private let gpuPreferenceOptions = ["AI 智能选择", "指定N卡", "指定A卡"]
     private var visibleSteps: [AIBuildStep] {
         AIBuildFlowRules.visibleSteps(
             budget: Int(budget),
@@ -143,6 +147,19 @@ struct AIBuildView: View {
 
     private var recommendedDirection: AIBuildDirection {
         AIBuildFlowRules.recommendedDirection(for: selectedGames)
+    }
+
+    private var showsGPUPreference: Bool {
+        AIBuildFlowRules.shouldShowGPUPreference(
+            budget: Int(budget),
+            useCase: selectedUseCase,
+            hasOwnedGPU: usesNoGpuBuild
+        )
+    }
+
+    private var gpuPreference: String? {
+        guard showsGPUPreference else { return nil }
+        return ["指定N卡": "NVIDIA", "指定A卡": "AMD"][selectedGPUPreference]
     }
 
     var body: some View {
@@ -333,6 +350,13 @@ struct AIBuildView: View {
                     selectedID: $selectedAestheticStyleID
                 )
             }
+            if showsGPUPreference {
+                PreferenceSegmentGroup(
+                    title: "显卡品牌偏好",
+                    options: gpuPreferenceOptions,
+                    selected: $selectedGPUPreference
+                )
+            }
             PreferenceSegmentGroup(title: "内存大小", options: memorySizeOptions, selected: $selectedMemorySize)
             PreferenceSegmentGroup(title: "存储大小", options: storageSizeOptions, selected: $selectedStorageSize)
             if Int(budget) < 10_000 {
@@ -426,7 +450,8 @@ struct AIBuildView: View {
             noGPUBuild: usesNoGpuBuild,
             ownedGPUModel: usesNoGpuBuild
                 ? ownedGPUModel.trimmingCharacters(in: .whitespacesAndNewlines)
-                : nil
+                : nil,
+            gpuPreference: gpuPreference
         )
         let minimumGenerationEnd = Date().addingTimeInterval(minimumGenerationDuration)
         let completionStart = minimumGenerationEnd.addingTimeInterval(-completionAnimationDuration)

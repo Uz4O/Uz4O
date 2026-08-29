@@ -9,6 +9,8 @@ asus-x870e-neo
 base-case-mid-tower
 base-cooler-6-heatpipe
 base-cooler-dual-tower-6-heatpipe
+base-ddr4-16gb-3200
+base-ddr4-32gb-3200
 base-ddr5-16gb-6000-c28
 base-ddr5-32gb-6000-c28
 base-psu-1000w-gold
@@ -20,6 +22,8 @@ base-psu-850w-gold
 base-ssd-1tb-tlc
 base-ssd-2tb-tlc
 base-ssd-512gb-tlc
+i5-14600kf
+msi-b760m-a
 msi-b850m-power
 msi-x870e-ace-max
 msi-x870e-edge-ti
@@ -43,5 +47,6 @@ rx-7700-xt
 rx-7800-xt
 rx-7900-xt
 rx-7900-xtx
+rx-9060-xt-16gb
 rx-9070-gre
 rx-9070-xt

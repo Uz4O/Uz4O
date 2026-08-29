@@ -40,9 +40,10 @@ gpu,rtx-5070,微星 RTX5070白魔龙 3X,NVIDIA,6999,5999,6999,1,0,high_budget_ba
 gpu,rtx-5070-ti,微星 RTX5070TI万图师 3X,NVIDIA,9799,7299,9799,1,0,high_budget_base_catalog
 gpu,rtx-5080,微星 RTX5080万图师 3X,NVIDIA,13499,10500,13499,1,0,high_budget_base_catalog
 gpu,rtx-5090-d-v2,七彩虹 5090D ADOC 24G V2,NVIDIA,22999,19000,22999,1,0,high_budget_base_catalog
-gpu,rx-7700-xt,RX 7700 XT,AMD,2600,2000,2600,1,0,high_budget_base_catalog
-gpu,rx-7800-xt,RX 7800 XT,AMD,3700,2700,3700,1,0,high_budget_base_catalog
+gpu,rx-7700-xt,RX 7700 XT,AMD,2699,2000,2699,1,0,high_budget_base_catalog
+gpu,rx-7800-xt,RX 7800 XT,AMD,2700,2700,,1,0,high_budget_base_catalog
 gpu,rx-7900-xt,RX 7900 XT,AMD,3200,3200,,1,0,high_budget_base_catalog
 gpu,rx-7900-xtx,RX 7900 XTX,AMD,4500,4500,,1,0,high_budget_base_catalog
-gpu,rx-9070-gre,RX 9070 GRE,AMD,3500,3500,3500,1,0,high_budget_base_catalog
-gpu,rx-9070-xt,蓝宝石 9070XT 16G 脉动,AMD,4950,4000,4950,1,0,high_budget_base_catalog
+gpu,rx-9060-xt-16gb,RX 9060 XT 16G,AMD,3099,2200,3099,1,0,high_budget_base_catalog
+gpu,rx-9070-gre,RX 9070 GRE,AMD,4699,3500,4699,1,0,high_budget_base_catalog
+gpu,rx-9070-xt,蓝宝石 9070XT 16G 脉动,AMD,6999,4000,6999,1,0,high_budget_base_catalog

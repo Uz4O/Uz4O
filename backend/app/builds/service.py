@@ -12,6 +12,11 @@ from pydantic import (
 
 from app.builds.models import BuildTemplate
 from app.catalog.models import ComponentPrice, GPUWhitelistPrice, HardwareComponent
+from app.catalog.rule_specs import (
+    CPU_PERFORMANCE,
+    minimum_psu_watt_for_specs,
+    psu_supports_gpu_power_connector,
+)
 from app.compat.engine import BuildSelection, evaluate_compatibility
 from app.compat.engine import CompatibilityResult
 from app.perf.time_spy import GPU_TIME_SPY_SCORES
@@ -335,6 +340,21 @@ class UsedGPUAlternative(BaseModel):
     gaming_performance_gain_percent: int = Field(default=0, ge=0)
 
 
+class CPUPlatformAlternative(BaseModel):
+    replacement_parts: List[BuildTemplatePart]
+    price_difference: int
+    performance_gain_percent: int = Field(ge=0)
+
+    @model_validator(mode="after")
+    def require_complete_unique_platform_parts(self) -> "CPUPlatformAlternative":
+        roles = [part.role for part in self.replacement_parts]
+        if len(roles) != len(set(roles)):
+            raise ValueError("CPU platform replacement parts must have unique roles")
+        if not {"cpu", "motherboard", "ram", "cooler"}.issubset(roles):
+            raise ValueError("CPU platform replacement is incomplete")
+        return self
+
+
 class BuildTemplateDetails(BaseModel):
     target_budget: int = Field(ge=0)
     direction: Literal["fps", "aaa", "balanced"]
@@ -346,6 +366,10 @@ class BuildTemplateDetails(BaseModel):
         exclude_if=lambda value: not value,
     )
     used_gpu_alternative: Optional[UsedGPUAlternative] = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    cpu_platform_alternative: Optional[CPUPlatformAlternative] = Field(
         default=None,
         exclude_if=lambda value: value is None,
     )
@@ -457,6 +481,184 @@ def recommend_used_40_series_gpu(
         gaming_performance_gain_percent=round(
             (candidate_score - current_score) * 100 / current_score
         ),
+    )
+
+
+CPU_PLATFORM_ALTERNATIVE_IDS = {
+    "cpu": "i5-14600kf",
+    "motherboard": "msi-b760m-a",
+    "cooler": "base-cooler-dual-tower-6-heatpipe",
+}
+CPU_PLATFORM_ALTERNATIVE_RAM_IDS = {
+    16: "base-ddr4-16gb-3200",
+    32: "base-ddr4-32gb-3200",
+}
+
+
+def recommend_14600kf_platform(
+    details: BuildTemplateDetails,
+    components: Iterable[HardwareComponent],
+    prices: Iterable[ComponentPrice],
+) -> Optional[CPUPlatformAlternative]:
+    current_parts = {part.role: part for part in details.parts}
+    current_cpu = current_parts.get("cpu")
+    current_ram = current_parts.get("ram")
+    current_gpu = current_parts.get("gpu")
+    current_psu = current_parts.get("psu")
+    if (
+        current_cpu is None
+        or current_cpu.component_id != "r5-7500f"
+        or current_ram is None
+        or current_gpu is None
+        or current_psu is None
+    ):
+        return None
+
+    ram_id = CPU_PLATFORM_ALTERNATIVE_RAM_IDS.get(
+        current_ram.specs.get("capacity_gb")
+    )
+    if ram_id is None:
+        return None
+
+    components_by_id = {component.id: component for component in components}
+    prices_by_id = {price.component_id: price for price in prices}
+    replacement_specs = (
+        ("cpu", CPU_PLATFORM_ALTERNATIVE_IDS["cpu"], "new"),
+        (
+            "motherboard",
+            CPU_PLATFORM_ALTERNATIVE_IDS["motherboard"],
+            current_parts["motherboard"].condition,
+        ),
+        ("ram", ram_id, current_ram.condition),
+        (
+            "cooler",
+            CPU_PLATFORM_ALTERNATIVE_IDS["cooler"],
+            current_parts["cooler"].condition,
+        ),
+    )
+    replacements = []
+    for role, component_id, condition in replacement_specs:
+        replacement = _platform_replacement_part(
+            role,
+            component_id,
+            condition,
+            components_by_id,
+            prices_by_id,
+        )
+        if replacement is None:
+            return None
+        replacements.append(replacement)
+
+    cpu_tdp = replacements[0].specs.get("tdp")
+    gpu_tdp = current_gpu.specs.get("tdp")
+    psu_watt = current_psu.specs.get("watt")
+    if not all(type(value) is int for value in (cpu_tdp, gpu_tdp, psu_watt)):
+        return None
+    required_psu_watt = minimum_psu_watt_for_specs(
+        cpu_tdp,
+        current_gpu.component_id,
+        gpu_tdp,
+    )
+    if psu_watt < required_psu_watt:
+        psu_replacement = _cheapest_platform_psu(
+            required_psu_watt,
+            current_gpu.component_id,
+            current_psu.condition,
+            components_by_id,
+            prices_by_id,
+        )
+        if psu_replacement is None:
+            return None
+        replacements.append(psu_replacement)
+
+    replaced_roles = {part.role for part in replacements}
+    original_price = sum(
+        current_parts[role].reference_price for role in replaced_roles
+    )
+    performance_gain = round(
+        (
+            CPU_PERFORMANCE[CPU_PLATFORM_ALTERNATIVE_IDS["cpu"]]
+            - CPU_PERFORMANCE[current_cpu.component_id]
+        )
+        * 100
+        / CPU_PERFORMANCE[current_cpu.component_id]
+    )
+    return CPUPlatformAlternative(
+        replacement_parts=replacements,
+        price_difference=sum(part.reference_price for part in replacements)
+        - original_price,
+        performance_gain_percent=performance_gain,
+    )
+
+
+def _platform_replacement_part(
+    role: str,
+    component_id: str,
+    condition: str,
+    components_by_id: Dict[str, HardwareComponent],
+    prices_by_id: Dict[str, ComponentPrice],
+) -> Optional[BuildTemplatePart]:
+    component = components_by_id.get(component_id)
+    price = prices_by_id.get(component_id)
+    if (
+        component is None
+        or price is None
+        or component.category != role
+        or component.status != "active"
+        or not component.is_recommended
+    ):
+        return None
+    reference_price = (
+        price.price_range_high if condition == "new" else price.price_range_low
+    )
+    if reference_price is None:
+        return None
+    return BuildTemplatePart(
+        role=role,
+        component_id=component.id,
+        name=component.name,
+        condition=condition,
+        reference_price=reference_price,
+        price_source=price.source,
+        price_date=price.approved_at.date().isoformat(),
+        specs=dict(component.specs),
+    )
+
+
+def _cheapest_platform_psu(
+    required_watt: int,
+    gpu_id: str,
+    condition: str,
+    components_by_id: Dict[str, HardwareComponent],
+    prices_by_id: Dict[str, ComponentPrice],
+) -> Optional[BuildTemplatePart]:
+    candidates = []
+    for component in components_by_id.values():
+        watt = component.specs.get("watt")
+        if (
+            component.category != "psu"
+            or type(watt) is not int
+            or watt < required_watt
+            or not psu_supports_gpu_power_connector(gpu_id, component.specs)
+        ):
+            continue
+        part = _platform_replacement_part(
+            "psu",
+            component.id,
+            condition,
+            components_by_id,
+            prices_by_id,
+        )
+        if part is not None:
+            candidates.append(part)
+    return min(
+        candidates,
+        key=lambda part: (
+            int(part.specs.get("watt", 0)),
+            part.reference_price,
+            part.component_id,
+        ),
+        default=None,
     )
 
 
@@ -754,7 +956,7 @@ def _office_workload_matches(
     if workload is None:
         return True
     office_tags = {tag for tag in template.tags if tag.startswith("office-")}
-    return not office_tags or f"office-{workload}" in office_tags
+    return f"office-{workload}" in office_tags
 
 
 def _structured_template_matches(

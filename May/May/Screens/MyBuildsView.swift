@@ -3,7 +3,7 @@ import SwiftUI
 struct MyBuildsView: View {
     let hardwareProfile: HardwareProfile
     let accessToken: String?
-    let onOpenPlan: () -> Void
+    let onOpenPlan: (SavedConfigurationDTO) -> Void
     let onOpenSavedUpgrade: (SavedUpgradePlanDTO) -> Void
     let onCreate: () -> Void
     let onOpenComputerProfile: () -> Void
@@ -12,8 +12,10 @@ struct MyBuildsView: View {
     var onBack: (() -> Void)? = nil
 
     @Binding var selectedSection: ConfigHubSection
-    @State private var diyBuilds = DIYBuildStore.load()
+    @State private var savedConfigurations: [SavedConfigurationDTO] = []
     @State private var savedUpgradePlans: [SavedUpgradePlanDTO] = []
+    @State private var loadError: String?
+    @State private var pendingDeletion: PendingSavedBuildDeletion?
 
     var body: some View {
         GeometryReader { proxy in
@@ -51,16 +53,25 @@ struct MyBuildsView: View {
                         switch selectedSection {
                         case .aiBuilds:
                             VStack(spacing: 30) {
+                                if let loadError {
+                                    Text(loadError)
+                                        .font(.appBody)
+                                        .foregroundStyle(AppTheme.error)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+
                                 if !savedUpgradePlans.isEmpty {
                                     SavedUpgradePlansSection(
                                         plans: savedUpgradePlans,
-                                        onOpen: onOpenSavedUpgrade
+                                        onOpen: onOpenSavedUpgrade,
+                                        onDelete: requestDeletion
                                     )
                                 }
 
                                 AIBuildsSection(
-                                    plans: AppMockData.savedPlans + diyBuilds.map(\.asBuildPlan),
+                                    plans: savedConfigurations,
                                     onOpenPlan: onOpenPlan,
+                                    onDelete: requestDeletion,
                                     onCreate: onCreate
                                 )
                             }
@@ -84,21 +95,74 @@ struct MyBuildsView: View {
             }
             .frame(maxWidth: .infinity)
             .background(AppTheme.background.ignoresSafeArea())
-            .onAppear { diyBuilds = DIYBuildStore.load() }
             .task(id: accessToken) {
-                guard let accessToken else {
-                    savedUpgradePlans = []
-                    return
+                await loadSavedBuilds()
+            }
+            .confirmationDialog(
+                "删除配置？",
+                isPresented: Binding(
+                    get: { pendingDeletion != nil },
+                    set: { if !$0 { pendingDeletion = nil } }
+                ),
+                titleVisibility: .visible
+            ) {
+                Button("删除", role: .destructive) {
+                    Task { await deletePendingBuild() }
                 }
-                savedUpgradePlans = (try? await AppAPIClient().savedUpgradePlans(token: accessToken)) ?? []
+                Button("取消", role: .cancel) { pendingDeletion = nil }
+            } message: {
+                Text("删除后将无法恢复“\(pendingDeletion?.title ?? "该配置")”。")
             }
         }
     }
+
+    private func requestDeletion(id: String, title: String) {
+        pendingDeletion = PendingSavedBuildDeletion(id: id, title: title)
+    }
+
+    @MainActor
+    private func loadSavedBuilds() async {
+        guard let accessToken else {
+            savedConfigurations = []
+            savedUpgradePlans = []
+            loadError = "登录状态已失效，请重新登录"
+            return
+        }
+        do {
+            let api = AppAPIClient()
+            savedConfigurations = try await api.savedConfigurations(token: accessToken)
+            savedUpgradePlans = try await api.savedUpgradePlans(token: accessToken)
+            loadError = nil
+        } catch {
+            loadError = "配置加载失败：\(error.localizedDescription)"
+        }
+    }
+
+    @MainActor
+    private func deletePendingBuild() async {
+        guard let pendingDeletion, let accessToken else { return }
+        do {
+            try await AppAPIClient().deleteSavedBuild(id: pendingDeletion.id, token: accessToken)
+            savedConfigurations.removeAll { $0.id == pendingDeletion.id }
+            savedUpgradePlans.removeAll { $0.id == pendingDeletion.id }
+            self.pendingDeletion = nil
+            loadError = nil
+        } catch {
+            self.pendingDeletion = nil
+            loadError = "删除失败：\(error.localizedDescription)"
+        }
+    }
+}
+
+private struct PendingSavedBuildDeletion {
+    let id: String
+    let title: String
 }
 
 private struct SavedUpgradePlansSection: View {
     let plans: [SavedUpgradePlanDTO]
     let onOpen: (SavedUpgradePlanDTO) -> Void
+    let onDelete: (String, String) -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -110,39 +174,51 @@ private struct SavedUpgradePlansSection: View {
             .padding(.bottom, 12)
 
             ForEach(Array(plans.enumerated()), id: \.element.id) { index, saved in
-                Button { onOpen(saved) } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: "arrow.up.forward.square")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(AppTheme.primaryText)
-                            .frame(width: 32, height: 32)
-                            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
-
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(saved.title)
-                                .font(.system(size: 15, weight: .bold))
+                HStack(spacing: 8) {
+                    Button { onOpen(saved) } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "arrow.up.forward.square")
+                                .font(.system(size: 15, weight: .semibold))
                                 .foregroundStyle(AppTheme.primaryText)
-                                .lineLimit(1)
-                            Text(saved.plan.summary)
-                                .font(.system(size: 11, weight: .regular))
+                                .frame(width: 32, height: 32)
+                                .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 9))
+
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(saved.title)
+                                    .font(.system(size: 15, weight: .bold))
+                                    .foregroundStyle(AppTheme.primaryText)
+                                    .lineLimit(1)
+                                Text(saved.plan.summary)
+                                    .font(.system(size: 11, weight: .regular))
+                                    .foregroundStyle(AppTheme.secondaryText)
+                                    .lineLimit(1)
+                            }
+
+                            Spacer(minLength: 8)
+
+                            Text("¥\(saved.totalPrice ?? saved.plan.totalEstimatedPrice)")
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundStyle(AppTheme.primaryText)
+
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(AppTheme.secondaryText)
-                                .lineLimit(1)
                         }
-
-                        Spacer(minLength: 8)
-
-                        Text("¥\(saved.totalPrice ?? saved.plan.totalEstimatedPrice)")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                            .foregroundStyle(AppTheme.primaryText)
-
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(AppTheme.secondaryText)
+                        .contentShape(Rectangle())
+                        .padding(.vertical, 14)
                     }
-                    .contentShape(Rectangle())
-                    .padding(.vertical, 14)
+                    .buttonStyle(.plain)
+
+                    Button(role: .destructive) {
+                        onDelete(saved.id, saved.title)
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(AppTheme.error)
+                            .frame(width: 32, height: 32)
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
 
                 if index != plans.count - 1 {
                     ConfigDivider(leftPadding: 44)
@@ -167,8 +243,9 @@ private struct ConfigHubSegmentedPicker: View {
 }
 
 private struct AIBuildsSection: View {
-    let plans: [BuildPlan]
-    let onOpenPlan: () -> Void
+    let plans: [SavedConfigurationDTO]
+    let onOpenPlan: (SavedConfigurationDTO) -> Void
+    let onDelete: (String, String) -> Void
     let onCreate: () -> Void
 
     var body: some View {
@@ -176,7 +253,7 @@ private struct AIBuildsSection: View {
             if plans.isEmpty {
                 EmptyBuildState(onCreate: onCreate)
             } else {
-                ConfigPlanList(plans: plans, onOpenPlan: onOpenPlan)
+                ConfigPlanList(plans: plans, onOpenPlan: onOpenPlan, onDelete: onDelete)
             }
         }
         .padding(.top, 22)
@@ -184,8 +261,9 @@ private struct AIBuildsSection: View {
 }
 
 private struct ConfigPlanList: View {
-    let plans: [BuildPlan]
-    let onOpenPlan: () -> Void
+    let plans: [SavedConfigurationDTO]
+    let onOpenPlan: (SavedConfigurationDTO) -> Void
+    let onDelete: (String, String) -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -196,8 +274,12 @@ private struct ConfigPlanList: View {
             )
             .padding(.bottom, 22)
 
-            ForEach(Array(plans.enumerated()), id: \.element.id) { index, plan in
-                SavedPlanRow(plan: plan, onOpen: onOpenPlan)
+            ForEach(Array(plans.enumerated()), id: \.element.id) { index, saved in
+                SavedPlanRow(
+                    saved: saved,
+                    onOpen: { onOpenPlan(saved) },
+                    onDelete: { onDelete(saved.id, saved.title) }
+                )
 
                 if index != plans.count - 1 {
                     ConfigDivider(leftPadding: 48)
@@ -262,12 +344,16 @@ private struct EmptyBuildState: View {
 }
 
 private struct SavedPlanRow: View {
-    let plan: BuildPlan
+    let saved: SavedConfigurationDTO
     let onOpen: () -> Void
+    let onDelete: () -> Void
+
+    private var plan: SavedConfigurationPlanDTO { saved.plan }
 
     var body: some View {
-        Button(action: onOpen) {
-            HStack(alignment: .center, spacing: 12) {
+        HStack(spacing: 8) {
+            Button(action: onOpen) {
+                HStack(alignment: .center, spacing: 12) {
                 Image(systemName: "doc.text")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(AppTheme.primaryText)
@@ -297,7 +383,7 @@ private struct SavedPlanRow: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.78)
 
-                    Text(plan.createdAt)
+                    Text(String(saved.createdAt.prefix(16)).replacingOccurrences(of: "T", with: " "))
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(AppTheme.secondaryText)
                 }
@@ -305,11 +391,20 @@ private struct SavedPlanRow: View {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(AppTheme.secondaryText)
+                }
+                .contentShape(Rectangle())
+                .padding(.vertical, 15)
             }
-            .contentShape(Rectangle())
-            .padding(.vertical, 15)
+            .buttonStyle(.plain)
+
+            Button(role: .destructive, action: onDelete) {
+                Image(systemName: "trash")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(AppTheme.error)
+                    .frame(width: 32, height: 32)
+            }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
     }
 }
 
@@ -447,46 +542,6 @@ private struct ConfigDivider: View {
     }
 }
 
-private extension DIYStoredBuild {
-    var asBuildPlan: BuildPlan {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "zh_CN")
-        dateFormatter.dateFormat = "M月d日 HH:mm"
-
-        return BuildPlan(
-            name: "DIY 自定义配置",
-            budget: "自定义",
-            totalPrice: totalPrice > 0 ? "¥\(totalPrice)" : "待选择",
-            useCase: recommendedPsuWatt.map { "推荐电源瓦数 \($0)W" } ?? "自定义装机",
-            createdAt: dateFormatter.string(from: createdAt),
-            parts: parts.map { part in
-                PCPart(
-                    category: part.category,
-                    model: "\(part.brand) \(part.name)",
-                    price: part.price.map { "¥\($0)" } ?? "待定",
-                    condition: "DIY",
-                    icon: icon(for: part.category),
-                    accent: AppTheme.primaryText
-                )
-            }
-        )
-    }
-
-    private func icon(for category: String) -> String {
-        switch category {
-        case "CPU": return "cpu"
-        case "显卡": return "display"
-        case "主板": return "memorychip"
-        case "内存": return "rectangle.stack"
-        case "固态硬盘": return "externaldrive"
-        case "电源": return "bolt"
-        case "散热器": return "fan"
-        case "机箱": return "shippingbox"
-        default: return "desktopcomputer"
-        }
-    }
-}
-
 #Preview {
     MyBuildsView(
         hardwareProfile: HardwareProfile(
@@ -498,7 +553,7 @@ private extension DIYStoredBuild {
             powerSupply: "Corsair RM750e · 750W · 80+ Gold"
         ),
         accessToken: nil,
-        onOpenPlan: {},
+        onOpenPlan: { _ in },
         onOpenSavedUpgrade: { _ in },
         onCreate: {},
         onOpenComputerProfile: {},

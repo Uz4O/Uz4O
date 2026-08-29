@@ -29,7 +29,7 @@ PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 GpuVendor = Literal["nvidia", "amd"]
 
-PRICE_DATE = "2026-08-23"
+PRICE_DATE = "2026-08-26"
 BUDGET_TIERS = [
     *range(7_500, 10_001, 500),
     *range(11_000, 30_001, 1_000),
@@ -103,6 +103,14 @@ AAA_EXTREME_MAX_MOTHERBOARD_BUDGET_SHARE = 0.65
 AAA_EXTREME_MAX_MOTHERBOARD_STEP_UP = 10_000
 MAX_10000_PLUS_BUDGET_OVERAGE = 800
 MINIMUM_650W_GPU_TDP = 140
+PLATFORM_ALTERNATIVE_SUPPORT_IDS = {
+    "base-cooler-dual-tower-6-heatpipe",
+    "base-ddr4-16gb-3200",
+    "base-ddr4-32gb-3200",
+    "base-psu-750w-gold",
+    "i5-14600kf",
+    "msi-b760m-a",
+}
 
 
 @dataclass(frozen=True)
@@ -1445,6 +1453,7 @@ def _write_recommendation_ids(
             for template in templates
             for component_id in template.components.values()
         }
+        | PLATFORM_ALTERNATIVE_SUPPORT_IDS
     )
     path.write_text("\n".join(component_ids) + "\n", encoding="utf-8")
 

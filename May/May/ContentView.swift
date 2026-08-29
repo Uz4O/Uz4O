@@ -27,10 +27,10 @@ struct ContentView: View {
     init() {
         let session = AppSession()
         _session = StateObject(wrappedValue: session)
-        _appPhase = State(initialValue: session.isAuthenticated ? .main : .login)
-        _isHomeWordmarkVisible = State(initialValue: !session.isAuthenticated)
-        _isHomeContentVisible = State(initialValue: !session.isAuthenticated)
-        _isMainTabBarVisible = State(initialValue: !session.isAuthenticated)
+        _appPhase = State(initialValue: .login)
+        _isHomeWordmarkVisible = State(initialValue: false)
+        _isHomeContentVisible = State(initialValue: false)
+        _isMainTabBarVisible = State(initialValue: false)
         let savedHardwareProfile = HardwareProfileStore().load()
         _onboardingProfile = State(
             initialValue: OnboardingProfile(
@@ -61,8 +61,21 @@ struct ContentView: View {
             fullScreenDestination(for: route)
         }
         .onAppear {
-            if session.isAuthenticated, appPhase == .login {
-                appPhase = .main
+            if !session.isRestoringSession && session.isAuthenticated && appPhase == .login {
+                enterMainApp()
+            }
+        }
+        .onChange(of: session.isAuthenticated) { _, isAuthenticated in
+            if isAuthenticated {
+                enterMainApp()
+            } else {
+                resetAfterLogout()
+            }
+        }
+        .task {
+            await session.restoreStoredSession()
+            if session.isAuthenticated {
+                enterMainApp()
             }
         }
     }
@@ -121,6 +134,7 @@ struct ContentView: View {
                     isHomeContentVisible: isHomeContentVisible,
                     isTabBarVisible: isMainTabBarVisible,
                     onPresentFullScreen: { presentedFullScreen = $0 },
+                    onLogout: resetAfterLogout,
                     onAccountDeleted: resetAfterAccountDeletion
                 )
                 .transition(
@@ -139,6 +153,7 @@ struct ContentView: View {
         case .aiBuild(let returnTarget):
             AIBuildFlowView(
                 returnTarget: returnTarget,
+                accessToken: session.accessToken,
                 onClose: { closeFullScreen(returningTo: returnTarget) },
                 onEditInDIY: editInDIY
             )
@@ -149,10 +164,15 @@ struct ContentView: View {
                     AestheticBuildStyle.all.first { $0.id == styleID }
                         ?? AestheticBuildStyle.all[0]
                 ).buildSelection(color: .black, selectedAlternativeIDs: [:]),
+                accessToken: session.accessToken,
                 onClose: { presentedFullScreen = nil }
             )
         case .aestheticOverview(let styleID):
-            AestheticStyleRouteView(styleID: styleID, onClose: { presentedFullScreen = nil })
+            AestheticStyleRouteView(
+                styleID: styleID,
+                accessToken: session.accessToken,
+                onClose: { presentedFullScreen = nil }
+            )
         case .performanceTest(let returnTab):
             GamePerformanceView(
                 savedHardwareProfile: onboardingProfile.hardwareProfile,
@@ -180,8 +200,17 @@ struct ContentView: View {
         presentedFullScreen = nil
     }
 
+    private func resetAfterLogout() {
+        selectedTab = .home
+        selectedConfigSection = ConfigHubSection.defaultSelection
+        diyBuildOption = nil
+        presentedFullScreen = nil
+        appPhase = .login
+    }
+
     private func resetAfterAccountDeletion() {
         hardwareProfileStore.clear()
+        DIYBuildStore.clear()
         onboardingProfile = .skipped
         selectedTab = .home
         presentedFullScreen = nil
@@ -199,8 +228,8 @@ private enum MainRoute: Hashable {
     case upgrade
     case configReview
     case compatibility
-    case buildResult
     case builds
+    case savedBuild(SavedConfigurationDTO)
     case savedUpgrade(SavedUpgradePlanDTO)
     case contactComplaint
 }
@@ -236,6 +265,7 @@ private struct MainTabView: View {
     let isHomeContentVisible: Bool
     let isTabBarVisible: Bool
     let onPresentFullScreen: (FullScreenRoute) -> Void
+    let onLogout: () -> Void
     let onAccountDeleted: () -> Void
 
     @State private var homePath: [MainRoute] = []
@@ -278,7 +308,7 @@ private struct MainTabView: View {
             .tag(AppTab.styles)
 
             NavigationStack {
-                DIYView(importedBuild: $diyBuildOption)
+                DIYView(importedBuild: $diyBuildOption, accessToken: session.accessToken)
                     .toolbar(.hidden, for: .navigationBar)
             }
             .tabItem {
@@ -294,6 +324,7 @@ private struct MainTabView: View {
                     onOpenBuilds: { profilePath.append(.builds) },
                     onOpenComputerProfile: { profilePath.append(.computerProfile) },
                     onOpenContactComplaint: { profilePath.append(.contactComplaint) },
+                    onLogout: onLogout,
                     onAccountDeleted: onAccountDeleted
                 )
                 .toolbar(.hidden, for: .navigationBar)
@@ -320,7 +351,7 @@ private struct MainTabView: View {
             MyBuildsView(
                 hardwareProfile: onboardingProfile.hardwareProfile,
                 accessToken: session.accessToken,
-                onOpenPlan: { path.wrappedValue.append(.buildResult) },
+                onOpenPlan: { path.wrappedValue.append(.savedBuild($0)) },
                 onOpenSavedUpgrade: { path.wrappedValue.append(.savedUpgrade($0)) },
                 onCreate: {
                     selectedConfigSection = .currentComputer
@@ -360,9 +391,9 @@ private struct MainTabView: View {
         case .compatibility:
             CompatibilityView(onBack: { pop(path) })
                 .toolbar(.hidden, for: .navigationBar)
-        case .buildResult:
+        case .savedBuild(let savedBuild):
             BuildResultView(
-                plan: AppMockData.samplePlan,
+                plan: savedBuild.plan.model,
                 onBack: { pop(path) }
             )
             .toolbar(.hidden, for: .navigationBar)
@@ -399,6 +430,7 @@ private struct AIBuildFlowView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let returnTarget: BuildResultReturnTarget
+    let accessToken: String?
     let onClose: () -> Void
     let onEditInDIY: (BuildOptionDTO) -> Void
 
@@ -406,6 +438,7 @@ private struct AIBuildFlowView: View {
     @State private var selectedOption: BuildOptionDTO?
     @State private var selectedPerformanceGames: [String] = []
     @State private var prefetchedPerformanceStates: [String: BuildPerformanceLoadState] = [:]
+    @State private var selectionError: String?
 
     var body: some View {
         ZStack {
@@ -470,6 +503,15 @@ private struct AIBuildFlowView: View {
                             }
                         }
                     },
+                    onSave: { plan in
+                        guard let accessToken else {
+                            throw APIError.http(status: 401, message: "登录状态已失效，请重新登录")
+                        }
+                        _ = try await AppAPIClient().saveConfiguration(
+                            SavedConfigurationPlanDTO(kind: .ai, plan: plan),
+                            token: accessToken
+                        )
+                    },
                     onEditInDIY: { onEditInDIY(selectedOption) }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -477,6 +519,17 @@ private struct AIBuildFlowView: View {
                 .transition(resultTransition)
                 .zIndex(2)
             }
+        }
+        .alert(
+            "选择确认失败",
+            isPresented: Binding(
+                get: { selectionError != nil },
+                set: { if !$0 { selectionError = nil } }
+            )
+        ) {
+            Button("好的", role: .cancel) {}
+        } message: {
+            Text(selectionError ?? "配置仍可查看和保存，请稍后重试")
         }
     }
 
@@ -494,7 +547,11 @@ private struct AIBuildFlowView: View {
     private func confirmSelection(_ option: BuildOptionDTO) {
         guard let selectionID = option.selectionId else { return }
         Task {
-            try? await AppAPIClient().selectBuildOption(selectionID: selectionID)
+            do {
+                try await AppAPIClient().selectBuildOption(selectionID: selectionID)
+            } catch {
+                selectionError = "配置仍可查看和保存。\(error.localizedDescription)"
+            }
         }
     }
 
@@ -539,6 +596,7 @@ private struct AIBuildFlowView: View {
 
 private struct AestheticStyleRouteView: View {
     let styleID: String
+    let accessToken: String?
     let onClose: () -> Void
 
     @State private var showsBuildFlow = false
@@ -549,6 +607,7 @@ private struct AestheticStyleRouteView: View {
             AestheticBuildFlowView(
                 styleID: styleID,
                 appearanceSelection: appearanceSelection,
+                accessToken: accessToken,
                 onClose: onClose
             )
         } else {
@@ -567,6 +626,7 @@ private struct AestheticStyleRouteView: View {
 }
 
 private struct AestheticBuildFlowView: View {
+    let accessToken: String?
     let onClose: () -> Void
     @State private var flow: AestheticBuildFlow
     @State private var response: BuildOptionsResponseDTO?
@@ -577,8 +637,10 @@ private struct AestheticBuildFlowView: View {
     init(
         styleID: String,
         appearanceSelection: AestheticBuildSelection,
+        accessToken: String?,
         onClose: @escaping () -> Void
     ) {
+        self.accessToken = accessToken
         self.onClose = onClose
         _flow = State(
             initialValue: AestheticBuildFlow(
@@ -617,6 +679,15 @@ private struct AestheticBuildFlowView: View {
                         if response?.options.count == 1 {
                             response = nil
                         }
+                    },
+                    onSave: { plan in
+                        guard let accessToken else {
+                            throw APIError.http(status: 401, message: "登录状态已失效，请重新登录")
+                        }
+                        _ = try await AppAPIClient().saveConfiguration(
+                            SavedConfigurationPlanDTO(kind: .ai, plan: plan),
+                            token: accessToken
+                        )
                     }
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -647,7 +718,7 @@ private struct AestheticBuildFlowView: View {
         .animation(.easeOut(duration: 0.22), value: response != nil)
         .animation(.easeOut(duration: 0.22), value: selectedOption != nil)
         .alert(
-            "生成失败",
+            "操作失败",
             isPresented: Binding(
                 get: { generationError != nil },
                 set: { if !$0 { generationError = nil } }
@@ -701,7 +772,11 @@ private struct AestheticBuildFlowView: View {
         selectedOption = option
         guard let selectionID = option.selectionId else { return }
         Task {
-            try? await AppAPIClient().selectBuildOption(selectionID: selectionID)
+            do {
+                try await AppAPIClient().selectBuildOption(selectionID: selectionID)
+            } catch {
+                generationError = "配置仍可查看和保存。\(error.localizedDescription)"
+            }
         }
     }
 }

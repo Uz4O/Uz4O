@@ -41,6 +41,7 @@ from app.builds.service import (
     classify_game_direction,
     match_build_template,
     rank_build_templates,
+    recommend_14600kf_platform,
     recommend_used_40_series_gpu,
     resolve_aesthetic_style,
     rules_fallback_response,
@@ -272,10 +273,18 @@ def get_build_options(
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
     gpu_prices = list_gpu_whitelist_prices(session)
+    if not catalog_loaded:
+        components = list_components(session)
+        prices = list_component_prices(session)
     for option in options:
         option.details.used_gpu_alternative = recommend_used_40_series_gpu(
             option.details,
             gpu_prices,
+        )
+        option.details.cpu_platform_alternative = recommend_14600kf_platform(
+            option.details,
+            components,
+            prices,
         )
     return BuildOptionsResponse(
         direction=direction,
@@ -561,6 +570,12 @@ def generate_build(
             list_component_prices(session),
         )
         if fallback is not None:
+            if fallback.details is not None:
+                fallback.details.cpu_platform_alternative = recommend_14600kf_platform(
+                    fallback.details,
+                    list_components(session),
+                    list_component_prices(session),
+                )
             return fallback
         return ai_pending_response(
             ai_provider_configured=bool(http_request.app.state.settings.ai_provider_api_key)
@@ -576,5 +591,10 @@ def generate_build(
         response.details.used_gpu_alternative = recommend_used_40_series_gpu(
             response.details,
             list_gpu_whitelist_prices(session),
+        )
+        response.details.cpu_platform_alternative = recommend_14600kf_platform(
+            response.details,
+            list_components(session),
+            list_component_prices(session),
         )
     return response

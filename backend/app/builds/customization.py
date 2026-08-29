@@ -21,6 +21,7 @@ from app.builds.service import (
 from app.catalog.models import ComponentPrice, HardwareComponent
 from app.catalog.rule_specs import (
     GPU_MIN_CPU_PERFORMANCE,
+    GPU_PERFORMANCE,
     is_cpu_gpu_pairing_allowed,
     minimum_psu_watt_for_specs,
     psu_supports_gpu_power_connector,
@@ -49,7 +50,8 @@ VALUE_STORAGE_IDS = {
     "1TB": "base-ssd-fanxiang-s790e-1tb",
 }
 A520_WIFI_EXCEPTION_ID = "asus-a520m-k"
-A520_MAX_BUILD_BUDGET = 4_000
+A520_MAX_GPU_PERFORMANCE = GPU_PERFORMANCE["rx-7650-gre"]
+LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
 WEAK_HIGH_END_AM5_MOTHERBOARD_IDS = {"asus-prime-b650m-k"}
 HIGH_END_AM5_CPU_IDS = {"r7-9800x3d", "r7-9850x3d"}
 LEGACY_AM4_CPU_IDS = {"r5-5600", "r5-5600x"}
@@ -122,6 +124,10 @@ def customization_candidates(
             continue
         if request.use_case not in template.use_cases:
             continue
+        if request.use_case == "办公":
+            workload_tag = f"office-{classify_office_workload(request.office_apps)}"
+            if workload_tag not in template.tags:
+                continue
         if details.direction != request.direction or details.purchase_mode != purchase_mode:
             continue
         if details.target_budget > adjacent_reviewed_budget(request.budget):
@@ -146,6 +152,18 @@ def customization_candidates(
         candidates.append((template, total))
         if preview_totals is not None:
             preview_totals.append(total)
+
+    if request.use_case == "办公" and candidates:
+        latest_reviewed_budget = max(
+            BuildTemplateDetails.model_validate(template.details).target_budget
+            for template, _ in candidates
+        )
+        candidates = [
+            (template, total)
+            for template, total in candidates
+            if BuildTemplateDetails.model_validate(template.details).target_budget
+            == latest_reviewed_budget
+        ]
 
     floor = customized_budget_floor(request)
     limit = customized_budget_limit(request)
@@ -416,6 +434,18 @@ def _search_customization(
                 price_by_component_id,
             )
         ]
+        if role == "cooler" and "new" not in role_conditions:
+            role_candidates[role].extend(
+                part
+                for part in _priced_candidates(
+                    request,
+                    role,
+                    "new",
+                    components_by_id,
+                    price_by_component_id,
+                )
+                if part.component_id == LEGACY_AM4_COOLER_ID
+            )
     if any(not role_candidates[role] for role in role_candidates):
         return None
 
@@ -786,6 +816,12 @@ def _required_cooler_candidates(
     cpu: BuildTemplatePart,
     candidates: List[BuildTemplatePart],
 ) -> List[BuildTemplatePart]:
+    if cpu.component_id in LEGACY_AM4_CPU_IDS:
+        return [
+            cooler
+            for cooler in candidates
+            if cooler.component_id == LEGACY_AM4_COOLER_ID
+        ]
     hot_cpu = (
         cpu.component_id in {"r7-7800x3d", "r7-9800x3d", "r7-9850x3d"}
         or isinstance(cpu.specs.get("tdp"), int)
@@ -832,6 +868,8 @@ def component_allowed_for_request(
         and request.specified_cpu
         and not _matches_specified_model(request.specified_cpu, component)
     ):
+        return False
+    if component.id == "i5-14600kf":
         return False
     if (
         component.category == "gpu"
@@ -1119,12 +1157,9 @@ def _validate_motherboard_policy(
     request: BuildRequest,
     parts: Dict[str, BuildTemplatePart],
 ) -> None:
-    if (
-        request.budget > A520_MAX_BUILD_BUDGET
-        and parts["motherboard"].component_id == A520_WIFI_EXCEPTION_ID
-    ):
-        raise CustomizationError("4500元及以上配置不能使用 A520 主板")
     if not motherboard_supports_cpu(parts):
+        if parts["motherboard"].component_id == A520_WIFI_EXCEPTION_ID:
+            raise CustomizationError("A520M-K 只能搭配 RX 7650 GRE 同级或更低性能显卡")
         raise CustomizationError("9800X3D/9850X3D 不能使用入门级 B650M-K 主板")
 
 
@@ -1132,8 +1167,15 @@ def motherboard_supports_cpu(
     parts: Dict[str, BuildTemplatePart],
 ) -> bool:
     return not (
-        parts["cpu"].component_id in HIGH_END_AM5_CPU_IDS
-        and parts["motherboard"].component_id in WEAK_HIGH_END_AM5_MOTHERBOARD_IDS
+        (
+            parts["cpu"].component_id in HIGH_END_AM5_CPU_IDS
+            and parts["motherboard"].component_id in WEAK_HIGH_END_AM5_MOTHERBOARD_IDS
+        )
+        or (
+            parts["motherboard"].component_id == A520_WIFI_EXCEPTION_ID
+            and parts["gpu"].specs.get("perf_index", A520_MAX_GPU_PERFORMANCE + 1)
+            > A520_MAX_GPU_PERFORMANCE
+        )
     )
 
 
@@ -1180,6 +1222,13 @@ def _validate_psu(parts: Dict[str, BuildTemplatePart]) -> None:
 def _validate_cooler(parts: Dict[str, BuildTemplatePart]) -> None:
     cpu = parts["cpu"]
     cooler = parts["cooler"]
+    if cpu.component_id in LEGACY_AM4_CPU_IDS:
+        if (
+            cooler.component_id != LEGACY_AM4_COOLER_ID
+            or cooler.condition != "new"
+        ):
+            raise CustomizationError("R5 5600/5600X 必须使用全新利民 AX120 SE 散热器")
+        return
     heatpipes = cooler.specs.get("heatpipes")
     if isinstance(heatpipes, int) and heatpipes < 6:
         raise CustomizationError("散热器至少需要六热管")

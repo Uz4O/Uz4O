@@ -5,7 +5,6 @@ arc-b580-12gb
 asus-a520m-k
 asus-b860m-k
 base-case-mid-tower
-base-cooler-6-heatpipe
 base-cooler-dual-tower-6-heatpipe
 base-ddr4-16gb-3200
 base-ddr5-16gb-6000-c30
@@ -34,6 +33,7 @@ rtx-5070-ti
 rtx-5080
 rx-7650-gre
 rx-7700-xt
+thermalright-ax120-se
 u5-245k
 u5-250-plus
 u7-265k

@@ -248,6 +248,23 @@
     "price_date": "2026-08-05"
   },
   {
+    "id": "thermalright-ax120-se",
+    "category": "cooler",
+    "name": "利民 AX120 SE",
+    "brand": "利民",
+    "detail_raw": "AX120 SE · 单塔 · 4热管 · 风冷",
+    "specs": {
+      "cooling_type": "air",
+      "heatpipes": 4,
+      "towers": 1
+    },
+    "used_price": null,
+    "new_price": 69,
+    "used_source": "",
+    "new_source": "用户于2026-08-26确认的全新参考价",
+    "price_date": "2026-08-26"
+  },
+  {
     "id": "base-cooler-6-heatpipe",
     "category": "cooler",
     "name": "6热管风冷",
