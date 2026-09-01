@@ -107,50 +107,6 @@ struct HardwarePickerSheet: View {
                 .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 11))
             }
 
-            if filters.count > 1 {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(filters) { filter in
-                            Button {
-                                selectedFilterTitle = filter.title
-                                selectedGroupTitle = filter.groups.first?.title ?? ""
-                            } label: {
-                                Text(filter.title)
-                                    .font(.system(size: 12, weight: selectedFilterTitle == filter.title ? .bold : .semibold))
-                                    .foregroundStyle(selectedFilterTitle == filter.title ? AppTheme.primaryText : AppTheme.secondaryText)
-                                    .padding(.horizontal, 12)
-                                    .frame(height: 32)
-                                    .background(selectedFilterTitle == filter.title ? AppTheme.surface : AppTheme.softSurface, in: Capsule())
-                                    .overlay(Capsule().stroke(selectedFilterTitle == filter.title ? AppTheme.primaryText : AppTheme.border, lineWidth: selectedFilterTitle == filter.title ? 1.2 : 1))
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.vertical, 1)
-                }
-            }
-
-            if let groups = activeFilter?.groups, groups.count > 1 {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(groups) { group in
-                            Button {
-                                selectedGroupTitle = group.title
-                            } label: {
-                                Text(group.title)
-                                    .font(.system(size: 12, weight: selectedGroupTitle == group.title ? .bold : .semibold))
-                                    .foregroundStyle(selectedGroupTitle == group.title ? .white : AppTheme.secondaryText)
-                                    .padding(.horizontal, 12)
-                                    .frame(height: 30)
-                                    .background(selectedGroupTitle == group.title ? AppTheme.primaryText : AppTheme.softSurface, in: Capsule())
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.vertical, 1)
-                }
-            }
-
             HStack(spacing: 10) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 14, weight: .semibold))
@@ -159,14 +115,81 @@ struct HardwarePickerSheet: View {
                 TextField("搜索型号", text: $searchText)
                     .font(.appBody)
                     .textInputAutocapitalization(.never)
+
+                if !searchText.isEmpty {
+                    Button {
+                        searchText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(AppTheme.secondaryText)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("清除搜索")
+                }
             }
             .padding(.horizontal, 14)
             .frame(height: 40)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.border, lineWidth: 1))
+            .background(AppTheme.softSurface, in: RoundedRectangle(cornerRadius: 12))
+
+            if filters.count > 1 || (activeFilter?.groups.count ?? 0) > 1 {
+                VStack(spacing: 0) {
+                    if filters.count > 1 {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(filters) { filter in
+                                    Button {
+                                        selectedFilterTitle = filter.title
+                                        selectedGroupTitle = filter.groups.first?.title ?? ""
+                                    } label: {
+                                        Text(filter.title)
+                                            .font(.system(size: 13, weight: selectedFilterTitle == filter.title ? .bold : .semibold))
+                                            .foregroundStyle(selectedFilterTitle == filter.title ? .white : Color.black.opacity(0.48))
+                                            .padding(.horizontal, 11)
+                                            .frame(height: 34)
+                                            .background(selectedFilterTitle == filter.title ? Color.black : Color.clear, in: RoundedRectangle(cornerRadius: 8))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        .frame(height: 42)
+                    }
+
+                    if filters.count > 1, (activeFilter?.groups.count ?? 0) > 1 {
+                        Rectangle()
+                            .fill(Color.black.opacity(0.10))
+                            .frame(height: 1)
+                    }
+
+                    if let groups = activeFilter?.groups, groups.count > 1 {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(groups) { group in
+                                    Button {
+                                        selectedGroupTitle = group.title
+                                    } label: {
+                                        Text(group.title)
+                                            .font(.system(size: 13, weight: selectedGroupTitle == group.title ? .bold : .semibold))
+                                            .foregroundStyle(selectedGroupTitle == group.title ? .white : Color.black.opacity(0.48))
+                                            .padding(.horizontal, 11)
+                                            .frame(height: 34)
+                                            .background(selectedGroupTitle == group.title ? Color.black : Color.clear, in: RoundedRectangle(cornerRadius: 8))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                        }
+                        .frame(height: 42)
+                    }
+
+                    Rectangle()
+                        .fill(Color.black.opacity(0.14))
+                        .frame(height: 1)
+                }
+            }
 
             ScrollView(showsIndicators: false) {
-                LazyVStack(alignment: .leading, spacing: 8, pinnedViews: []) {
+                LazyVStack(alignment: .leading, spacing: 0, pinnedViews: []) {
                     ForEach(visibleItems) { item in
                         Button {
                             selectedValue = item.name
@@ -192,7 +215,8 @@ struct HardwarePickerSheet: View {
             }
         }
         .padding(.horizontal, 20)
-        .background(AppTheme.background)
+        .background(AppTheme.surface)
+        .presentationBackground(AppTheme.surface)
     }
 }
 
@@ -223,16 +247,29 @@ private struct HardwarePickerRow: View {
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(AppTheme.success)
+                    .foregroundStyle(AppTheme.primaryText)
             }
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .frame(minHeight: 48)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isSelected ? AppTheme.primaryText : AppTheme.border, lineWidth: isSelected ? 1.3 : 1)
-        )
+        .padding(.vertical, 8)
+        .frame(minHeight: 52)
+        .background {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(AppTheme.softSurface)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(AppTheme.border, lineWidth: 1)
+                    }
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if !isSelected {
+                Rectangle()
+                    .fill(Color.black.opacity(0.14))
+                    .frame(height: 1)
+                    .padding(.leading, 14)
+            }
+        }
     }
 }

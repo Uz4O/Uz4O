@@ -27,9 +27,7 @@ struct BuildResultContentRulesTests {
         )
         assertContains(viewSource, "Text(part.model)", "The component model should be shown directly.")
         assertContains(viewSource, "part.price.replacingOccurrences", "The component price should be shown directly.")
-        assertContains(viewSource, "Text(part.condition)", "The new or used condition should be shown directly.")
-        assertContains(viewSource, ".foregroundStyle(.black)", "Part symbols should be black.")
-        assertContains(viewSource, ".background(Color.white", "Part icon tiles should be white.")
+        assertNotContains(viewSource, "Text(part.condition)", "The compact reference list should not show condition badges.")
         assertContains(
             modelSource,
             "name: details.aestheticStyleName.map",
@@ -40,7 +38,9 @@ struct BuildResultContentRulesTests {
             "useCase: details.aestheticStyleName.map",
             "The hero should use a short beginner-friendly direction summary."
         )
-        assertContains(viewSource, "PerformanceCard(", "The result should show the performance card.")
+        assertContains(viewSource, "ResultBudgetSummary(", "The result should lead with the budget summary.")
+        assertContains(viewSource, "Text(\"方案总价\")", "The budget summary should label the generated total.")
+        assertContains(viewSource, "Text(\"根据你的需求生成的装机方案\")", "The header should match the reference subtitle.")
         assertContains(
             viewSource,
             "AppAPIClient().estimatePerformance(",
@@ -61,6 +61,7 @@ struct BuildResultContentRulesTests {
             )
         }
         assertContains(viewSource, "PartsListCard(", "The parts should use the reference list card.")
+        assertContains(viewSource, "Label(\"兼容性检查通过\"", "The list should show compatibility status.")
         assertContains(
             viewSource,
             "plan.usedGPUAlternative",
@@ -79,7 +80,8 @@ struct BuildResultContentRulesTests {
         assertContains(viewSource, "\"4K 高画质\"", "The high-quality performance metric should remain visible.")
         assertNotContains(viewSource, "保存配置单", "The removed save-build action should not return.")
         assertContains(viewSource, "title: \"保存为图片\"", "The result should support saving a complete image.")
-        assertContains(viewSource, "title: \"进入DIY界面编辑\"", "AI builds should be editable in DIY.")
+        assertContains(viewSource, "isSavingConfiguration ? \"保存中\" : \"保存配置\"", "The primary action should match the reference.")
+        assertContains(viewSource, ".safeAreaInset(edge: .bottom", "The result actions should remain fixed above the home indicator.")
         assertContains(viewSource, "ImageRenderer(", "The saved image should render the complete result card.")
         assertContains(
             viewSource,

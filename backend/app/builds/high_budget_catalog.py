@@ -29,7 +29,7 @@ PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 GpuVendor = Literal["nvidia", "amd"]
 
-PRICE_DATE = "2026-08-26"
+PRICE_DATE = "2026-09-01"
 BUDGET_TIERS = [
     *range(7_500, 10_001, 500),
     *range(11_000, 30_001, 1_000),
@@ -110,6 +110,14 @@ PLATFORM_ALTERNATIVE_SUPPORT_IDS = {
     "base-psu-750w-gold",
     "i5-14600kf",
     "msi-b760m-a",
+}
+COOLER_BY_CPU_ID = {
+    "r5-7500f": "valkyrie-cq125",
+    "r5-9600x": "base-cooler-6-heatpipe",
+    "r7-9700x": "base-cooler-6-heatpipe",
+    "r7-7800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9850x3d": "base-cooler-dual-tower-6-heatpipe",
 }
 
 
@@ -742,8 +750,6 @@ def _select_candidate(
     for cpu in cpus:
         if required_8000_used_aaa and cpu.component_id != "r7-7800x3d":
             continue
-        if direction == "aaa" and cpu.component_id == "r7-9850x3d":
-            continue
         if (
             budget >= 9_500
             and direction == "fps"
@@ -760,11 +766,7 @@ def _select_candidate(
         cpu_price = cpu.price(conditions["cpu"])
         if cpu_price is None:
             continue
-        cooler_id = (
-            "base-cooler-dual-tower-6-heatpipe"
-            if "x3d" in cpu.component_id
-            else "base-cooler-6-heatpipe"
-        )
+        cooler_id = COOLER_BY_CPU_ID[cpu.component_id]
         cooler = support_parts[cooler_id]
         value_motherboard = (
             _cheapest_adequate_motherboard(
@@ -917,7 +919,41 @@ def _select_candidate(
                     if len(parts) != len(PART_ROLE_ORDER):
                         continue
 
+                    if _higher_core_fits_with_no_core_regression(
+                        budget=budget,
+                        cpu=cpu,
+                        gpu=gpu,
+                        motherboard=motherboard,
+                        cpus=cpus,
+                        gpus=gpus,
+                        motherboards=motherboards,
+                        support_parts=support_parts,
+                        ram=ram,
+                        storage=storage,
+                        case=support_parts["base-case-mid-tower"],
+                        conditions=conditions,
+                        max_motherboard_price=max_motherboard_price,
+                        max_budget_shortfall=max_budget_shortfall,
+                        allow_early_9850x3d=allow_early_9850x3d,
+                    ):
+                        continue
+
                     total = sum(part.reference_price for part in parts)
+                    if storage_id != "base-ssd-512gb-tlc":
+                        baseline_storage_price = support_parts[
+                            "base-ssd-512gb-tlc"
+                        ].price(conditions["storage"])
+                        if (
+                            baseline_storage_price is None
+                            or total - next(
+                                part.reference_price
+                                for part in parts
+                                if part.role == "storage"
+                            )
+                            + baseline_storage_price
+                            >= budget
+                        ):
+                            continue
                     max_overage = (
                         MAX_10000_PLUS_BUDGET_OVERAGE
                         if budget >= 10_000
@@ -961,6 +997,128 @@ def _select_candidate(
             f"No valid base build for budget={budget}, direction={direction}, mode={purchase_mode}"
         )
     return best
+
+
+def _higher_core_fits_with_no_core_regression(
+    *,
+    budget: int,
+    cpu: PricedPart,
+    gpu: PricedPart,
+    motherboard: PricedPart,
+    cpus: Sequence[PricedPart],
+    gpus: Sequence[PricedPart],
+    motherboards: Sequence[PricedPart],
+    support_parts: Dict[str, PricedPart],
+    ram: PricedPart,
+    storage: PricedPart,
+    case: PricedPart,
+    conditions: Dict[str, Condition],
+    max_motherboard_price: float,
+    max_budget_shortfall: int,
+    allow_early_9850x3d: bool,
+) -> bool:
+    current_performance = (
+        CPU_PERFORMANCE[cpu.component_id],
+        GPU_PERFORMANCE[gpu.component_id],
+    )
+    max_total = budget + (
+        MAX_10000_PLUS_BUDGET_OVERAGE if budget >= 10_000 else 500
+    )
+    min_total = budget - max_budget_shortfall
+    fixed_total = sum(
+        part.price(conditions[role]) or 0
+        for role, part in (
+            ("ram", ram),
+            ("storage", storage),
+            ("case", case),
+        )
+    )
+    core_candidates = []
+    for candidate_cpu in cpus:
+        if (
+            candidate_cpu.component_id == "r7-9850x3d"
+            and budget < 18_000
+            and not allow_early_9850x3d
+        ):
+            continue
+        for candidate_gpu in gpus:
+            candidate_performance = (
+                CPU_PERFORMANCE[candidate_cpu.component_id],
+                GPU_PERFORMANCE[candidate_gpu.component_id],
+            )
+            if not (
+                candidate_performance[0] >= current_performance[0]
+                and candidate_performance[1] >= current_performance[1]
+                and candidate_performance != current_performance
+            ):
+                continue
+            if candidate_gpu.brand != gpu.brand:
+                continue
+            if not is_cpu_gpu_pairing_allowed(
+                candidate_cpu.component_id,
+                candidate_gpu.component_id,
+            ):
+                continue
+            cpu_price = candidate_cpu.price(conditions["cpu"])
+            gpu_price = candidate_gpu.price(conditions["gpu"])
+            if cpu_price is None or gpu_price is None:
+                continue
+            cooler = support_parts[COOLER_BY_CPU_ID[candidate_cpu.component_id]]
+            cooler_price = cooler.price(conditions["cooler"])
+            if cooler_price is None:
+                continue
+            required_psu = minimum_psu_watt(
+                candidate_cpu.component_id,
+                candidate_gpu.component_id,
+            )
+            psu = _smallest_psu(
+                required_psu,
+                conditions["psu"],
+                support_parts,
+                candidate_gpu.component_id,
+            )
+            if psu is None or psu.price(conditions["psu"]) is None:
+                continue
+            core_candidates.append(
+                (
+                    cpu_price,
+                    gpu_price,
+                    psu.price(conditions["psu"]),
+                    cooler_price,
+                    candidate_cpu,
+                )
+            )
+
+    for cpu_price, gpu_price, psu_price, cooler_price, candidate_cpu in core_candidates:
+        for candidate_motherboard in motherboards:
+            board_price = candidate_motherboard.price(conditions["motherboard"])
+            if board_price is None or board_price > max_motherboard_price:
+                continue
+            if candidate_motherboard.specs.get("socket") != candidate_cpu.specs.get("socket"):
+                continue
+            if (
+                candidate_motherboard.specs.get("chipset") == "B850"
+                and candidate_motherboard.component_id not in ALLOWED_B850_MOTHERBOARDS
+            ):
+                continue
+            if (
+                candidate_motherboard.component_id == "asus-prime-b650m-k"
+                and candidate_cpu.component_id in {"r7-9800x3d", "r7-9850x3d"}
+            ):
+                continue
+            total = fixed_total + cpu_price + gpu_price + board_price + psu_price + cooler_price
+            if min_total <= total <= max_total:
+                return True
+    return False
+
+
+def _higher_cpu_fits_with_no_core_regression(**kwargs) -> bool:
+    """Backward-compatible name for callers outside the generator."""
+    kwargs.setdefault("gpus", (kwargs["gpu"],))
+    kwargs.setdefault("max_motherboard_price", float("inf"))
+    kwargs.setdefault("max_budget_shortfall", MAX_BUDGET_SHORTFALL)
+    kwargs.setdefault("allow_early_9850x3d", False)
+    return _higher_core_fits_with_no_core_regression(**kwargs)
 
 
 def _focus_performance(candidate: Candidate, direction: Direction) -> int:
@@ -1063,7 +1221,7 @@ def _score_candidate(
 
 
 def _has_legacy_mining_risk(gpu_id: str) -> bool:
-    return gpu_id.startswith(("rtx-30", "rx-6"))
+    return gpu_id.startswith(("gtx-", "rtx-30", "rx-6"))
 
 
 def _build_template(
@@ -1170,7 +1328,11 @@ def _smallest_psu(
                 or psu_supports_gpu_power_connector(gpu_id, part.specs)
             )
         ),
-        key=lambda part: int(part.specs["watt"]),
+        key=lambda part: (
+            int(part.specs["watt"]),
+            int(part.price(condition)),
+            part.component_id,
+        ),
     )
     return next(
         (part for part in psus if int(part.specs["watt"]) >= required_watt),
@@ -1224,7 +1386,7 @@ def _support_candidates(
 
 def _candidate_gpu_vendor(candidate: Candidate) -> GpuVendor:
     gpu = candidate.parts_by_role["gpu"]
-    return "nvidia" if gpu.component_id.startswith("rtx-") else "amd"
+    return "nvidia" if gpu.component_id.startswith(("gtx-", "rtx-")) else "amd"
 
 
 def _load_catalog() -> Tuple[
@@ -1306,9 +1468,9 @@ def _load_gpu_parts(path: Path) -> List[PricedPart]:
                 component_id=component_id,
                 category="gpu",
                 name=row["name"],
-                brand="NVIDIA" if component_id.startswith("rtx-") else "AMD",
+                brand="NVIDIA" if component_id.startswith(("gtx-", "rtx-")) else "AMD",
                 specs={
-                    "vendor": "NVIDIA" if component_id.startswith("rtx-") else "AMD",
+                    "vendor": "NVIDIA" if component_id.startswith(("gtx-", "rtx-")) else "AMD",
                     "perf_index": GPU_PERFORMANCE[component_id],
                     "tdp": GPU_TDP[component_id],
                 },

@@ -213,6 +213,94 @@ struct PerformanceEstimateRequestDTO: Encodable {
     let games: [String]
 }
 
+struct DisplayMatchRequestDTO: Encodable {
+    let cpuID: String
+    let gpuID: String
+    let games: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case cpuID = "cpu_id"
+        case gpuID = "gpu_id"
+        case games
+    }
+}
+
+struct DisplayMatchResponseDTO: Decodable {
+    let status: String
+    let gpuID: String
+    let gpuName: String
+    let resolution: String
+    let refreshRate: Int
+    let size: String
+    let adaptiveSync: String
+    let title: String
+    let summary: String
+    let reasons: [String]
+    let games: [String]
+    let disclaimer: String
+
+    enum CodingKeys: String, CodingKey {
+        case status
+        case gpuID = "gpu_id"
+        case gpuName = "gpu_name"
+        case resolution
+        case refreshRate = "refresh_rate"
+        case size
+        case adaptiveSync = "adaptive_sync"
+        case title
+        case summary
+        case reasons
+        case games
+        case disclaimer
+    }
+}
+
+struct PerformanceComparisonRequestDTO: Encodable {
+    let category: String
+    let leftId: String
+    let rightId: String
+
+    enum CodingKeys: String, CodingKey {
+        case category
+        case leftId = "left_id"
+        case rightId = "right_id"
+    }
+}
+
+struct PerformanceComparisonHardwareDTO: Decodable {
+    let id: String
+    let name: String
+    let benchmarkScore: Double
+    let relativePercent: Double
+}
+
+struct PerformanceComparisonResponseDTO: Decodable {
+    let category: String
+    let benchmark: String
+    let left: PerformanceComparisonHardwareDTO
+    let right: PerformanceComparisonHardwareDTO
+    let strongerId: String?
+    let strongerName: String?
+    let strongerByPercent: Double
+    let summary: String
+}
+
+struct PerformanceLadderItemDTO: Decodable, Identifiable {
+    let rank: Int
+    let id: String
+    let name: String
+    let brand: String
+    let benchmarkScore: Double
+    let relativePercent: Double
+}
+
+struct PerformanceLadderResponseDTO: Decodable {
+    let category: String
+    let benchmark: String
+    let referenceName: String
+    let items: [PerformanceLadderItemDTO]
+}
+
 struct GamePerformanceResultDTO: Decodable {
     let game: String
     let averageFps: Int
@@ -544,6 +632,45 @@ struct AppAPIClient {
                 resolution: resolution,
                 games: gameIDs
             )
+        )
+    }
+
+    func displayMatch(
+        cpuID: String,
+        gpuID: String,
+        gameIDs: [String]
+    ) async throws -> DisplayMatchResponseDTO {
+        try await request(
+            path: "/v1/perf/display-match",
+            method: "POST",
+            body: DisplayMatchRequestDTO(
+                cpuID: cpuID,
+                gpuID: gpuID,
+                games: gameIDs
+            )
+        )
+    }
+
+    func comparePerformance(
+        category: String,
+        leftID: String,
+        rightID: String
+    ) async throws -> PerformanceComparisonResponseDTO {
+        try await request(
+            path: "/v1/perf/compare",
+            method: "POST",
+            body: PerformanceComparisonRequestDTO(
+                category: category,
+                leftId: leftID,
+                rightId: rightID
+            )
+        )
+    }
+
+    func performanceLadder(category: String) async throws -> PerformanceLadderResponseDTO {
+        try await request(
+            path: "/v1/perf/ladder?category=\(category)",
+            method: "GET"
         )
     }
 

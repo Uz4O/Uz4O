@@ -1,5 +1,5 @@
 import json
-from typing import Generator, Tuple
+from typing import Generator, Literal, Tuple
 
 from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import StreamingResponse
@@ -8,7 +8,19 @@ from sqlalchemy.orm import Session
 from app.core.rate_limit import high_cost_rate_limit
 from app.core.response_cache import response_cache_key
 from app.db import get_session
-from app.perf.service import PerfEstimateRequest, PerfEstimateResponse, estimate_performance
+from app.perf.service import (
+    DisplayMatchRequest,
+    DisplayMatchResponse,
+    PerfEstimateRequest,
+    PerfEstimateResponse,
+    PerformanceComparisonRequest,
+    PerformanceComparisonResponse,
+    PerformanceLadderResponse,
+    build_display_match,
+    compare_performance,
+    estimate_performance,
+    performance_ladder,
+)
 
 
 router = APIRouter(
@@ -16,6 +28,32 @@ router = APIRouter(
     tags=["performance"],
     dependencies=[Depends(high_cost_rate_limit)],
 )
+
+
+@router.post("/compare", response_model=PerformanceComparisonResponse)
+def compare_perf(
+    payload: PerformanceComparisonRequest,
+    session: Session = Depends(get_session),
+) -> PerformanceComparisonResponse:
+    return compare_performance(session, payload)
+
+
+@router.get("/ladder", response_model=PerformanceLadderResponse)
+def get_performance_ladder(
+    category: Literal["gpu", "cpu"],
+    session: Session = Depends(get_session),
+) -> PerformanceLadderResponse:
+    return performance_ladder(session, category)
+
+
+@router.post("/display-match", response_model=DisplayMatchResponse)
+def match_display(
+    payload: DisplayMatchRequest,
+    http_request: Request,
+    response: Response,
+    session: Session = Depends(get_session),
+) -> DisplayMatchResponse:
+    return build_display_match(session, payload)
 
 
 @router.post("/estimate", response_model=PerfEstimateResponse)
@@ -78,3 +116,4 @@ def _cached_or_estimate(
 def _sse(event: str, data: dict) -> str:
     encoded = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
     return f"event: {event}\ndata: {encoded}\n\n"
+    build_display_match,

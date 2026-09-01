@@ -5,6 +5,7 @@ from app.perf.time_spy import (
     effective_performance_score,
     generated_gpu_performance_score,
     gpu_time_spy_score,
+    gpu_time_spy_percent,
     has_time_spy_scores,
 )
 
@@ -36,6 +37,12 @@ def test_chart_scores_cover_exact_nvidia_amd_and_intel_catalog_ids() -> None:
 
 def test_5090_d_v2_uses_the_delta_force_ratio_estimate() -> None:
     assert gpu_time_spy_score("rtx-5090-d-v2") == 47000
+
+
+def test_user_confirmed_5090_ladder_percentages_override_raw_scores() -> None:
+    assert gpu_time_spy_percent("rtx-5090") == 100.0
+    assert gpu_time_spy_percent("rtx-5090-d") == 100.0
+    assert gpu_time_spy_percent("rtx-5090-d-v2") == 98.9
 
 
 def test_other_ambiguous_or_missing_chart_variants_are_not_guessed() -> None:

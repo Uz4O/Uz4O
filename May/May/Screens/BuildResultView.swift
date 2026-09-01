@@ -90,6 +90,14 @@ struct BuildResultView: View {
         return "¥ \((originalTotal + priceDifference).formatted(.number.grouping(.automatic)))"
     }
 
+    private var displayedBudget: Int? {
+        Int(plan.budget.filter(\.isNumber))
+    }
+
+    private var displayedTotal: Int? {
+        Int(displayedTotalPrice.filter(\.isNumber))
+    }
+
     private var displayedPlan: BuildPlan {
         var parts = plan.parts
         if isUsingCPUPlatformAlternative,
@@ -141,16 +149,17 @@ struct BuildResultView: View {
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 16) {
+            VStack(spacing: 0) {
                 resultHeader
-                    .padding(.bottom, 4)
 
-                PerformanceCard(
-                    state: performanceState,
-                    onRetry: {
-                        Task { await loadPerformance() }
-                    }
+                ResultBudgetSummary(
+                    total: displayedTotal,
+                    budget: displayedBudget
                 )
+
+                Divider()
+                    .overlay(ResultColors.divider)
+
                 PartsListCard(
                     plan: displayedPlan,
                     isVisible: isVisible,
@@ -171,49 +180,16 @@ struct BuildResultView: View {
                     }
                 )
                 TotalPriceSection(totalPrice: displayedTotalPrice)
-
-                if onSave != nil {
-                    ResultActionButton(
-                        title: hasSavedConfiguration
-                            ? "已保存到我的配置单"
-                            : (isSavingConfiguration ? "正在保存" : "保存到我的配置单"),
-                        systemName: hasSavedConfiguration ? "checkmark" : "bookmark",
-                        isPrimary: true,
-                        action: saveConfiguration
-                    )
-                    .disabled(isSavingConfiguration || hasSavedConfiguration)
-                    .frame(maxWidth: 420)
-                }
-
-                HStack(spacing: 12) {
-                    ResultActionButton(
-                        title: "保存为图片",
-                        systemName: "photo",
-                        isPrimary: false,
-                        action: saveConfigurationImage
-                    )
-
-                    if let onEditInDIY {
-                        ResultActionButton(
-                            title: "进入DIY界面编辑",
-                            systemName: "wrench.and.screwdriver",
-                            isPrimary: true,
-                            action: onEditInDIY
-                        )
-                    }
-                }
-                .frame(maxWidth: 420)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, 2)
-                .padding(.bottom, 22)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 14)
             .opacity(isVisible ? 1 : 0)
             .offset(y: isVisible ? 0 : 8)
             .animation(.easeOut(duration: 0.28), value: hasRevealed)
         }
-        .background(Color(red: 0.985, green: 0.985, blue: 0.985).ignoresSafeArea())
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            resultActions
+        }
+        .background(Color.white.ignoresSafeArea())
+        .toolbar(.hidden, for: .tabBar)
         .onAppear {
             guard !reduceMotion else { return }
             hasRevealed = true
@@ -238,25 +214,59 @@ struct BuildResultView: View {
         HStack(alignment: .top, spacing: 14) {
             Button(action: onBack) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 24, weight: .medium))
+                    .font(.system(size: 21, weight: .medium))
                     .foregroundStyle(.black)
-                    .frame(width: 28, height: 38)
+                    .frame(width: 26, height: 34)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("返回")
 
             VStack(alignment: .leading, spacing: 5) {
                 Text("配置方案详情")
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.black)
 
-                Text(plan.useCase)
+                Text("根据你的需求生成的装机方案")
                     .font(.system(size: 13))
                     .foregroundStyle(ResultColors.secondaryText)
-                    .lineLimit(2)
             }
 
             Spacer()
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 14)
+        .padding(.bottom, 28)
+    }
+
+    private var resultActions: some View {
+        HStack(spacing: 10) {
+            ResultActionButton(
+                title: "保存为图片",
+                systemName: "photo",
+                isPrimary: false,
+                action: saveConfigurationImage
+            )
+
+            if onSave != nil {
+                ResultActionButton(
+                    title: hasSavedConfiguration
+                        ? "已保存"
+                        : (isSavingConfiguration ? "保存中" : "保存配置"),
+                    systemName: hasSavedConfiguration ? "checkmark" : "archivebox",
+                    isPrimary: true,
+                    action: saveConfiguration
+                )
+                .disabled(isSavingConfiguration || hasSavedConfiguration)
+            }
+        }
+        .frame(maxWidth: 420)
+        .padding(.horizontal, 24)
+        .padding(.top, 12)
+        .padding(.bottom, 10)
+        .frame(maxWidth: .infinity)
+        .background(.white)
+        .overlay(alignment: .top) {
+            Divider().overlay(ResultColors.divider)
         }
     }
 
@@ -351,17 +361,107 @@ private struct ResultActionButton: View {
     var body: some View {
         Button(action: action) {
             Label(title, systemImage: systemName)
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(isPrimary ? Color.white : Color.black)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
-                .background(isPrimary ? Color.black : Color.white, in: RoundedRectangle(cornerRadius: AppTheme.controlRadius))
+                .background {
+                    LinearGradient(
+                        colors: isPrimary
+                            ? [Color(red: 0.09, green: 0.09, blue: 0.09), .black]
+                            : [.white, Color(red: 0.97, green: 0.97, blue: 0.98)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
                 .overlay {
-                    RoundedRectangle(cornerRadius: AppTheme.controlRadius)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(ResultColors.divider, lineWidth: isPrimary ? 0 : 1)
                 }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ResultActionButtonStyle())
+    }
+}
+
+private struct ResultActionButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.99 : 1)
+            .offset(y: configuration.isPressed ? 2 : 0)
+            .shadow(
+                color: .black.opacity(configuration.isPressed ? 0.06 : 0.14),
+                radius: configuration.isPressed ? 1 : 4,
+                x: 0,
+                y: configuration.isPressed ? 1 : 3
+            )
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+}
+
+private struct ResultBudgetSummary: View {
+    let total: Int?
+    let budget: Int?
+
+    private var remaining: Int? {
+        guard let total, let budget else { return nil }
+        return budget - total
+    }
+
+    private var progress: Double {
+        guard let total, let budget, budget > 0 else { return 0 }
+        return min(max(Double(total) / Double(budget), 0), 1)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("方案总价")
+                .font(.system(size: 14))
+                .foregroundStyle(ResultColors.secondaryText)
+
+            Text(total.map(currency) ?? "--")
+                .font(.system(size: 38, weight: .bold))
+                .foregroundStyle(.black)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+
+            HStack {
+                budgetLabel
+                Spacer()
+                remainingLabel
+            }
+            .font(.system(size: 14))
+
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(ResultColors.progressTrack)
+                    Capsule()
+                        .fill(.black)
+                        .frame(width: proxy.size.width * progress)
+                }
+            }
+            .frame(height: 5)
+        }
+        .padding(.horizontal, 30)
+        .padding(.bottom, 14)
+    }
+
+    private var budgetLabel: Text {
+        Text("预算 ").foregroundStyle(ResultColors.secondaryText)
+            + Text(budget.map(currency) ?? "--").bold().foregroundStyle(.black)
+    }
+
+    private var remainingLabel: Text {
+        guard let remaining else {
+            return Text("剩余 --").foregroundStyle(ResultColors.secondaryText)
+        }
+        let title = remaining >= 0 ? "剩余 " : "超出 "
+        return Text(title).foregroundStyle(ResultColors.secondaryText)
+            + Text(currency(abs(remaining))).bold().foregroundStyle(.black)
+    }
+
+    private func currency(_ value: Int) -> String {
+        "¥\(value.formatted(.number.grouping(.automatic)))"
     }
 }
 
@@ -372,17 +472,23 @@ private struct BuildResultShareCard: View {
     let isCPUPlatformAlternativeApplied: Bool
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 5) {
                 Text("配置方案详情")
-                    .font(.system(size: 24, weight: .bold))
-                Text(plan.useCase)
+                    .font(.system(size: 20, weight: .bold))
+                Text("根据你的需求生成的装机方案")
                     .font(.system(size: 13))
                     .foregroundStyle(ResultColors.secondaryText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, 28)
 
-            PerformanceCard(state: performanceState)
+            ResultBudgetSummary(
+                total: Int(plan.totalPrice.filter(\.isNumber)),
+                budget: Int(plan.budget.filter(\.isNumber))
+            )
+
+            Divider().overlay(ResultColors.divider)
             PartsListCard(
                 plan: plan,
                 isVisible: true,
@@ -394,9 +500,9 @@ private struct BuildResultShareCard: View {
             )
             TotalPriceSection(totalPrice: plan.totalPrice)
         }
-        .padding(16)
+        .padding(.top, 16)
         .foregroundStyle(.black)
-        .background(Color(red: 0.985, green: 0.985, blue: 0.985))
+        .background(Color.white)
     }
 }
 
@@ -636,20 +742,22 @@ private struct TotalPriceSection: View {
     let totalPrice: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("总计")
+        HStack {
+            Text("合计")
                 .font(.system(size: 13))
                 .foregroundStyle(ResultColors.secondaryText)
-
+            Spacer()
             Text(totalPrice.replacingOccurrences(of: "¥ ", with: "¥"))
-                .font(.system(size: 36, weight: .bold))
+                .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(.black)
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 2)
-        .padding(.top, 4)
+        .padding(.horizontal, 30)
+        .frame(height: 48)
+        .overlay(alignment: .top) {
+            Divider().overlay(ResultColors.divider)
+        }
     }
 }
 
@@ -663,12 +771,12 @@ private struct UsedGPUAlternativeCard: View {
 
     private var priceComparison: String {
         if alternative.priceDifference > 0 {
-            return "多 ¥\(alternative.priceDifference.formatted())"
+            return "+¥\(alternative.priceDifference.formatted())"
         }
         if alternative.priceDifference < 0 {
-            return "省 ¥\((-alternative.priceDifference).formatted())"
+            return "-¥\((-alternative.priceDifference).formatted())"
         }
-        return "同价"
+        return "¥0"
     }
 
     private var performanceComparison: String {
@@ -700,20 +808,24 @@ private struct UsedGPUAlternativeCard: View {
                 HStack(spacing: 10) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(isApplied ? "已替换" : "更强替代")
-                            .font(.system(size: 11, weight: .semibold))
+                            .font(.system(size: 10.5, weight: .semibold))
                             .foregroundStyle(ResultColors.secondaryText)
 
-                        Text("二手 \(alternative.model) · ¥\(alternative.referencePrice.formatted())")
-                            .font(.system(size: 13.5, weight: .semibold))
-                            .foregroundStyle(.black)
+                        Text("\(alternative.model) · 二手")
+                            .font(.system(size: 12.5, weight: .semibold))
+                            .foregroundStyle(ResultColors.secondaryText)
                             .lineLimit(1)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Image(systemName: "chevron.down")
+                    Text(priceComparison)
+                        .font(.system(size: 12.5, weight: .semibold))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    Image(systemName: "chevron.right")
                         .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(ResultColors.secondaryText)
-                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
                 }
                 .contentShape(Rectangle())
             }
@@ -766,12 +878,13 @@ private struct UsedGPUAlternativeCard: View {
             }
         }
         .animation(expansionAnimation, value: isExpanded)
-        .padding(11)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
         .background(
-            Color(red: 0.95, green: 0.95, blue: 0.96),
+            ResultColors.alternativeBackground,
             in: RoundedRectangle(cornerRadius: 10)
         )
-        .padding(.bottom, 10)
+        .padding(.bottom, 9)
     }
 }
 
@@ -789,12 +902,12 @@ private struct CPUPlatformAlternativeCard: View {
 
     private var priceComparison: String {
         if alternative.priceDifference > 0 {
-            return "整机多 ¥\(alternative.priceDifference.formatted())"
+            return "+¥\(alternative.priceDifference.formatted())"
         }
         if alternative.priceDifference < 0 {
-            return "整机省 ¥\((-alternative.priceDifference).formatted())"
+            return "-¥\((-alternative.priceDifference).formatted())"
         }
-        return "整机同价"
+        return "¥0"
     }
 
     private var replacementSummary: String {
@@ -820,20 +933,24 @@ private struct CPUPlatformAlternativeCard: View {
                 HStack(spacing: 10) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(isApplied ? "已切换平台" : "更强平台替代")
-                            .font(.system(size: 11, weight: .semibold))
+                            .font(.system(size: 10.5, weight: .semibold))
                             .foregroundStyle(ResultColors.secondaryText)
 
-                        Text("全新 \(cpu?.part.model ?? "i5-14600KF") · ¥\((cpu?.referencePrice ?? 1499).formatted())")
-                            .font(.system(size: 13.5, weight: .semibold))
-                            .foregroundStyle(.black)
+                        Text("\(cpu?.part.model ?? "i5-14600KF") · 全新")
+                            .font(.system(size: 12.5, weight: .semibold))
+                            .foregroundStyle(ResultColors.secondaryText)
                             .lineLimit(1)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Image(systemName: "chevron.down")
+                    Text(priceComparison)
+                        .font(.system(size: 12.5, weight: .semibold))
+                        .foregroundStyle(ResultColors.secondaryText)
+
+                    Image(systemName: "chevron.right")
                         .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(ResultColors.secondaryText)
-                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
                 }
                 .contentShape(Rectangle())
             }
@@ -889,12 +1006,13 @@ private struct CPUPlatformAlternativeCard: View {
             }
         }
         .animation(expansionAnimation, value: isExpanded)
-        .padding(11)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
         .background(
-            Color(red: 0.95, green: 0.95, blue: 0.96),
+            ResultColors.alternativeBackground,
             in: RoundedRectangle(cornerRadius: 10)
         )
-        .padding(.bottom, 10)
+        .padding(.bottom, 9)
     }
 }
 
@@ -908,101 +1026,80 @@ private struct PartsListCard: View {
     let onToggleCPUPlatformAlternative: (() -> Void)?
 
     var body: some View {
-        ResultCard(verticalPadding: 16, horizontalPadding: 16) {
-            VStack(alignment: .leading, spacing: 0) {
-                Text("配件清单")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(.black)
-                    .padding(.bottom, 9)
+        VStack(alignment: .leading, spacing: 0) {
+            Text("配置清单")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.black)
+                .padding(.top, 18)
+                .padding(.bottom, 7)
 
-                ForEach(Array(plan.parts.enumerated()), id: \.element.id) { index, part in
-                    ResultPartRow(part: part)
-                        .opacity(isVisible ? 1 : 0)
-                        .offset(y: isVisible ? 0 : 10)
-                        .animation(
-                            .easeOut(duration: 0.24).delay(0.08 + Double(index) * 0.025),
-                            value: hasRevealed
-                        )
+            Label("兼容性检查通过", systemImage: "checkmark.circle")
+                .font(.system(size: 12))
+                .foregroundStyle(ResultColors.secondaryText)
+                .padding(.bottom, 10)
 
-                    if part.category == "CPU", let alternative = plan.cpuPlatformAlternative {
-                        CPUPlatformAlternativeCard(
-                            alternative: alternative,
-                            isApplied: isCPUPlatformAlternativeApplied,
-                            onToggle: onToggleCPUPlatformAlternative
-                        )
-                    }
+            ForEach(Array(plan.parts.enumerated()), id: \.element.id) { index, part in
+                ResultPartRow(part: part)
+                    .opacity(isVisible ? 1 : 0)
+                    .offset(y: isVisible ? 0 : 10)
+                    .animation(
+                        .easeOut(duration: 0.24).delay(0.08 + Double(index) * 0.025),
+                        value: hasRevealed
+                    )
 
-                    if part.category == "显卡", let alternative = plan.usedGPUAlternative {
-                        UsedGPUAlternativeCard(
-                            alternative: alternative,
-                            isApplied: isGPUAlternativeApplied,
-                            onToggle: onToggleGPUAlternative
-                        )
-                    }
+                if part.category == "CPU", let alternative = plan.cpuPlatformAlternative {
+                    CPUPlatformAlternativeCard(
+                        alternative: alternative,
+                        isApplied: isCPUPlatformAlternativeApplied,
+                        onToggle: onToggleCPUPlatformAlternative
+                    )
+                }
 
-                    if part.id != plan.parts.last?.id {
-                        Divider()
-                            .overlay(ResultColors.divider)
-                    }
+                if part.category == "显卡", let alternative = plan.usedGPUAlternative {
+                    UsedGPUAlternativeCard(
+                        alternative: alternative,
+                        isApplied: isGPUAlternativeApplied,
+                        onToggle: onToggleGPUAlternative
+                    )
+                }
+
+                if part.id != plan.parts.last?.id {
+                    Divider()
+                        .overlay(ResultColors.divider)
                 }
             }
         }
+        .padding(.horizontal, 30)
     }
 }
 
 private struct ResultPartRow: View {
     let part: PCPart
 
-    private var conditionColor: Color {
-        part.condition == "全新"
-            ? Color(red: 0.10, green: 0.39, blue: 0.70)
-            : Color(red: 0.18, green: 0.48, blue: 0.21)
-    }
-
-    private var conditionBackground: Color {
-        part.condition == "全新"
-            ? Color(red: 0.91, green: 0.95, blue: 1.00)
-            : Color(red: 0.92, green: 0.97, blue: 0.92)
-    }
-
     var body: some View {
         HStack(spacing: 14) {
-            Image(systemName: part.icon)
-                .font(.system(size: 27, weight: .regular))
-                .symbolRenderingMode(.monochrome)
-                .foregroundStyle(.black)
-                .frame(width: 48, height: 48)
-
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 8) {
-                    Text(part.category)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.black)
-
-                    Text(part.condition)
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(conditionColor)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(conditionBackground, in: Capsule())
-                }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(part.category)
+                    .font(.system(size: 11.5))
+                    .foregroundStyle(ResultColors.secondaryText)
 
                 Text(part.model)
-                    .font(.system(size: 13.5))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.black)
-                    .lineLimit(2)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Text(part.price.replacingOccurrences(of: "¥ ", with: "¥"))
-                .font(.system(size: 17, weight: .medium))
+                .font(.system(size: 14.5, weight: .semibold))
                 .foregroundStyle(.black)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .fixedSize()
         }
-        .frame(minHeight: 72)
+        .frame(minHeight: 49)
     }
 }
 
@@ -1025,6 +1122,8 @@ private enum ResultColors {
     static let divider = Color(red: 0.86, green: 0.87, blue: 0.89)
     static let gaugeTrack = Color(red: 0.86, green: 0.87, blue: 0.89)
     static let secondaryText = Color(red: 0.40, green: 0.43, blue: 0.50)
+    static let progressTrack = Color(red: 0.81, green: 0.82, blue: 0.85)
+    static let alternativeBackground = Color(red: 0.96, green: 0.96, blue: 0.97)
 }
 
 #Preview {

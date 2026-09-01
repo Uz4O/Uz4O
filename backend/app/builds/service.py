@@ -420,7 +420,7 @@ class BuildTemplateDetails(BaseModel):
         if vendor not in {"nvidia", "amd", "intel"}:
             vendor = (
                 "nvidia"
-                if component_id.startswith("rtx-")
+                if component_id.startswith(("gtx-", "rtx-"))
                 else "intel"
                 if component_id.startswith("arc-")
                 else "amd"
@@ -1027,7 +1027,7 @@ def _template_gpu_vendor(template: BuildTemplate) -> Optional[str]:
     gpu_id = (template.components or {}).get("gpu", "")
     if not gpu_id:
         return None
-    if gpu_id.startswith("rtx-"):
+    if gpu_id.startswith(("gtx-", "rtx-")):
         return "nvidia"
     if gpu_id.startswith("arc-"):
         return "intel"

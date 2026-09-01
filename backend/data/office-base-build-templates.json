@@ -1,6 +1,6 @@
 [
   {
-    "id": "office-3000-strongest-used",
+    "id": "office-3000-strongest-mixed",
     "title": "3000元 综合性能优先办公配置",
     "budget_min": 3000,
     "budget_max": 3999,
@@ -9,8 +9,8 @@
     ],
     "tags": [
       "均衡",
-      "二手",
-      "AMD",
+      "混合采购",
+      "NVIDIA",
       "office-general",
       "office-media",
       "office-cuda",
@@ -29,27 +29,27 @@
     "components": {
       "cpu": "r5-5600x",
       "motherboard": "asus-a520m-k",
-      "gpu": "rx-7650-gre",
+      "gpu": "gtx-1080-ti",
       "ram": "base-ddr4-16gb-3200",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-550w",
+      "psu": "base-psu-650w-gold",
       "cooler": "thermalright-ax120-se",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 3498,
+    "estimated_total": 3315,
     "explanation": "5000元以下直接复用同档位现有综合性能最强的审核配置。",
     "details": {
       "target_budget": 3000,
       "direction": "balanced",
-      "purchase_mode": "used",
-      "gpu_vendor": "amd",
+      "purchase_mode": "mixed",
+      "gpu_vendor": "nvidia",
       "parts": [
         {
           "role": "cpu",
           "component_id": "r5-5600x",
           "name": "R5 5600X",
           "condition": "used",
-          "reference_price": 720,
+          "reference_price": 650,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
@@ -62,8 +62,8 @@
           "role": "motherboard",
           "component_id": "asus-a520m-k",
           "name": "华硕 A520M-K",
-          "condition": "used",
-          "reference_price": 230,
+          "condition": "new",
+          "reference_price": 339,
           "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-07",
           "specs": {
@@ -74,16 +74,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rx-7650-gre",
-          "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
+          "component_id": "gtx-1080-ti",
+          "name": "GTX 1080 Ti",
           "condition": "used",
-          "reference_price": 1400,
+          "reference_price": 949,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
-            "vendor": "AMD",
-            "perf_index": 43,
-            "tdp": 230
+            "vendor": "NVIDIA",
+            "perf_index": 38,
+            "tdp": 250
           }
         },
         {
@@ -91,9 +91,9 @@
           "component_id": "base-ddr4-16gb-3200",
           "name": "DDR4 8GB×2 3200",
           "condition": "used",
-          "reference_price": 400,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 450,
+          "price_source": "用户于2026-08-30确认的DDR4 8GB×2二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "type": "DDR4",
             "capacity_gb": 16,
@@ -105,9 +105,9 @@
           "role": "storage",
           "component_id": "base-ssd-fanxiang-s500-pro-512gb",
           "name": "梵想 S500 Pro 512GB",
-          "condition": "used",
-          "reference_price": 400,
-          "price_source": "用户2026-08-07提供的二手参考价",
+          "condition": "new",
+          "reference_price": 509,
+          "price_source": "用户2026-08-07提供的当前参考价",
           "price_date": "2026-08-07",
           "specs": {
             "capacity_gb": 512,
@@ -116,24 +116,24 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-550w",
-          "name": "玄武 550 V4 550W",
-          "condition": "used",
-          "reference_price": 199,
-          "price_source": "用户2026-08-05提供的当前参考价",
+          "component_id": "base-psu-650w-gold",
+          "name": "安耐美 GN650 V3 650W",
+          "condition": "new",
+          "reference_price": 299,
+          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
           "price_date": "2026-08-05",
           "specs": {
-            "watt": 550
+            "watt": 650
           }
         },
         {
           "role": "cooler",
           "component_id": "thermalright-ax120-se",
           "name": "利民 AX120 SE",
-          "condition": "new",
-          "reference_price": 69,
-          "price_source": "用户于2026-08-26确认的全新参考价",
-          "price_date": "2026-08-26",
+          "condition": "used",
+          "reference_price": 39,
+          "price_source": "用户于2026-08-30确认的利民 AX120 SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 4,
@@ -154,7 +154,7 @@
         }
       ],
       "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -188,13 +188,13 @@
       "cpu": "i5-12600kf",
       "motherboard": "msi-b760m-a",
       "gpu": "rx-7650-gre",
-      "ram": "base-ddr4-16gb-3200",
+      "ram": "base-ddr4-16gb-3600",
       "storage": "base-ssd-fanxiang-s500-pro-512gb",
       "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "cooler": "base-cooler-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 4079,
+    "estimated_total": 4246,
     "explanation": "5000元以下直接复用同档位现有综合性能最强的审核配置。",
     "details": {
       "target_budget": 4000,
@@ -235,9 +235,9 @@
           "component_id": "rx-7650-gre",
           "name": "华硕 ATS RX7650GRE O10G巨齿鲨",
           "condition": "used",
-          "reference_price": 1400,
+          "reference_price": 1499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "AMD",
             "perf_index": 43,
@@ -246,12 +246,171 @@
         },
         {
           "role": "ram",
+          "component_id": "base-ddr4-16gb-3600",
+          "name": "DDR4 8GB×2 3600",
+          "condition": "used",
+          "reference_price": 499,
+          "price_source": "用户于2026-08-30确认的DDR4 8GB×2 3600二手参考价",
+          "price_date": "2026-08-30",
+          "specs": {
+            "type": "DDR4",
+            "capacity_gb": 16,
+            "speed_mhz": 3600,
+            "modules": 2,
+            "usage_scope": "fps"
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-fanxiang-s500-pro-512gb",
+          "name": "梵想 S500 Pro 512GB",
+          "condition": "used",
+          "reference_price": 400,
+          "price_source": "用户2026-08-07提供的二手参考价",
+          "price_date": "2026-08-07",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "used",
+          "reference_price": 249,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-6-heatpipe",
+          "name": "酷里奥 A60 ARGB",
+          "condition": "used",
+          "reference_price": 69,
+          "price_source": "用户于2026-08-31确认的酷里奥 A60 ARGB 二手参考价",
+          "price_date": "2026-08-31",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 1
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
+      "price_date": "2026-08-30"
+    }
+  },
+  {
+    "id": "office-5000-strongest-used",
+    "title": "5000元 综合性能优先办公配置",
+    "budget_min": 5000,
+    "budget_max": 5999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "二手",
+      "AMD",
+      "office-general",
+      "office-media",
+      "office-cuda",
+      "After Effects",
+      "AutoCAD",
+      "Blender",
+      "DaVinci Resolve",
+      "MATLAB",
+      "Office",
+      "Photoshop",
+      "Premiere",
+      "WPS",
+      "剪映",
+      "本地 AI"
+    ],
+    "components": {
+      "cpu": "i5-12600kf",
+      "motherboard": "msi-b760m-a",
+      "gpu": "rx-7700-xt",
+      "ram": "base-ddr4-16gb-3200",
+      "storage": "base-ssd-fanxiang-s500-pro-512gb",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 4998,
+    "explanation": "5000元以下直接复用同档位现有综合性能最强的审核配置。",
+    "details": {
+      "target_budget": 5000,
+      "direction": "balanced",
+      "purchase_mode": "used",
+      "gpu_vendor": "amd",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "i5-12600kf",
+          "name": "i5-12600KF",
+          "condition": "used",
+          "reference_price": 900,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "LGA1700",
+            "perf_index": 68,
+            "tdp": 150
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b760m-a",
+          "name": "微星 B760M-A",
+          "condition": "used",
+          "reference_price": 550,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-07",
+          "specs": {
+            "socket": "LGA1700",
+            "mem_type": "DDR4",
+            "chipset": "B760"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rx-7700-xt",
+          "name": "RX 7700 XT",
+          "condition": "used",
+          "reference_price": 2300,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-30",
+          "specs": {
+            "vendor": "AMD",
+            "perf_index": 55,
+            "tdp": 245
+          }
+        },
+        {
+          "role": "ram",
           "component_id": "base-ddr4-16gb-3200",
           "name": "DDR4 8GB×2 3200",
           "condition": "used",
-          "reference_price": 400,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 450,
+          "price_source": "用户于2026-08-30确认的DDR4 8GB×2二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "type": "DDR4",
             "capacity_gb": 16,
@@ -286,16 +445,16 @@
         },
         {
           "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "component_id": "base-cooler-6-heatpipe",
+          "name": "酷里奥 A60 ARGB",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 69,
+          "price_source": "用户于2026-08-31确认的酷里奥 A60 ARGB 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
-            "towers": 2
+            "towers": 1
           }
         },
         {
@@ -312,165 +471,7 @@
         }
       ],
       "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-26"
-    }
-  },
-  {
-    "id": "office-5000-strongest-mixed",
-    "title": "5000元 综合性能优先办公配置",
-    "budget_min": 5000,
-    "budget_max": 5999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "混合采购",
-      "AMD",
-      "office-general",
-      "office-media",
-      "office-cuda",
-      "After Effects",
-      "AutoCAD",
-      "Blender",
-      "DaVinci Resolve",
-      "MATLAB",
-      "Office",
-      "Photoshop",
-      "Premiere",
-      "WPS",
-      "剪映",
-      "本地 AI"
-    ],
-    "components": {
-      "cpu": "i5-12600kf",
-      "motherboard": "msi-b760m-a",
-      "gpu": "rx-7700-xt",
-      "ram": "base-ddr4-16gb-3200",
-      "storage": "base-ssd-fanxiang-s500-pro-512gb",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 5198,
-    "explanation": "5000元以下直接复用同档位现有综合性能最强的审核配置。",
-    "details": {
-      "target_budget": 5000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
-      "gpu_vendor": "amd",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "i5-12600kf",
-          "name": "i5-12600KF",
-          "condition": "used",
-          "reference_price": 900,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
-          "specs": {
-            "socket": "LGA1700",
-            "perf_index": 68,
-            "tdp": 150
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b760m-a",
-          "name": "微星 B760M-A",
-          "condition": "new",
-          "reference_price": 850,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-07",
-          "specs": {
-            "socket": "LGA1700",
-            "mem_type": "DDR4",
-            "chipset": "B760"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rx-7700-xt",
-          "name": "RX 7700 XT",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
-          "specs": {
-            "vendor": "AMD",
-            "perf_index": 55,
-            "tdp": 245
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr4-16gb-3200",
-          "name": "DDR4 8GB×2 3200",
-          "condition": "used",
-          "reference_price": 400,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR4",
-            "capacity_gb": 16,
-            "speed_mhz": 3200,
-            "modules": 2
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-fanxiang-s500-pro-512gb",
-          "name": "梵想 S500 Pro 512GB",
-          "condition": "new",
-          "reference_price": 509,
-          "price_source": "用户2026-08-07提供的当前参考价",
-          "price_date": "2026-08-07",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "5000元以下优先复用现有综合性能最强方案的办公用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -501,7 +502,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6238,
+    "estimated_total": 6387,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -548,7 +549,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -602,11 +603,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -627,7 +628,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -654,11 +655,11 @@
       "gpu": "arc-a770-16gb",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6380,
+    "estimated_total": 6428,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -705,7 +706,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -743,12 +744,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -756,11 +757,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -781,7 +782,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -812,7 +813,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6388,
+    "estimated_total": 6497,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -859,7 +860,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -910,11 +911,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -935,7 +936,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -965,7 +966,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6238,
+    "estimated_total": 6387,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1012,7 +1013,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -1066,11 +1067,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1091,7 +1092,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1117,11 +1118,11 @@
       "gpu": "arc-a770-16gb",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6380,
+    "estimated_total": 6428,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1168,7 +1169,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -1206,12 +1207,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -1219,11 +1220,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1244,7 +1245,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1274,7 +1275,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6388,
+    "estimated_total": 6497,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1321,7 +1322,7 @@
           "condition": "used",
           "reference_price": 1300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -1372,11 +1373,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1397,7 +1398,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1424,11 +1425,11 @@
       "gpu": "rtx-5060",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6230,
+    "estimated_total": 6278,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1475,7 +1476,7 @@
           "condition": "used",
           "reference_price": 2650,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -1513,12 +1514,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -1526,11 +1527,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1551,7 +1552,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1582,7 +1583,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6328,
+    "estimated_total": 6437,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 6000,
@@ -1629,7 +1630,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -1680,11 +1681,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1705,7 +1706,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1736,7 +1737,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7297,
+    "estimated_total": 7446,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -1783,7 +1784,7 @@
           "condition": "new",
           "reference_price": 1400,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 40,
@@ -1837,11 +1838,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -1862,7 +1863,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -1889,11 +1890,11 @@
       "gpu": "rtx-4060-ti",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7380,
+    "estimated_total": 7428,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -1940,7 +1941,7 @@
           "condition": "used",
           "reference_price": 2300,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -1978,12 +1979,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -1991,11 +1992,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2016,7 +2017,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2047,7 +2048,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7178,
+    "estimated_total": 7287,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2094,7 +2095,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2145,11 +2146,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2170,7 +2171,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2193,14 +2194,14 @@
     "components": {
       "cpu": "u5-245k",
       "motherboard": "asus-b860m-k",
-      "gpu": "arc-b580-12gb",
+      "gpu": "arc-a770-16gb",
       "ram": "office-ddr5-16gb-7200-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-750w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7398,
+    "estimated_total": 7047,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2242,16 +2243,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "arc-b580-12gb",
-          "name": "Intel Arc B580 12GB",
+          "component_id": "arc-a770-16gb",
+          "name": "Intel Arc A770 16GB",
           "condition": "new",
-          "reference_price": 2500,
+          "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
-            "tdp": 190
+            "tdp": 225
           }
         },
         {
@@ -2301,11 +2302,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2326,7 +2327,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2352,11 +2353,11 @@
       "gpu": "arc-b580-12gb",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 6580,
+    "estimated_total": 6628,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2403,7 +2404,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2441,12 +2442,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -2454,11 +2455,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2479,7 +2480,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2509,7 +2510,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7178,
+    "estimated_total": 7287,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2556,7 +2557,7 @@
           "condition": "used",
           "reference_price": 1500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -2607,11 +2608,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2632,7 +2633,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2663,7 +2664,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7329,
+    "estimated_total": 7438,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2710,7 +2711,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -2761,11 +2762,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2786,7 +2787,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2817,7 +2818,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7387,
+    "estimated_total": 7496,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 7000,
@@ -2864,7 +2865,7 @@
           "condition": "used",
           "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -2915,11 +2916,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -2940,7 +2941,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -2971,7 +2972,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8348,
+    "estimated_total": 8497,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3018,7 +3019,7 @@
           "condition": "new",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -3072,11 +3073,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3097,7 +3098,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3124,11 +3125,11 @@
       "gpu": "rtx-4070",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8379,
+    "estimated_total": 8427,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3175,7 +3176,7 @@
           "condition": "used",
           "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -3213,12 +3214,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -3226,11 +3227,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3251,7 +3252,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3282,7 +3283,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8328,
+    "estimated_total": 8437,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3329,7 +3330,7 @@
           "condition": "used",
           "reference_price": 2650,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 50,
@@ -3380,11 +3381,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3405,7 +3406,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3435,7 +3436,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8348,
+    "estimated_total": 8497,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3482,7 +3483,7 @@
           "condition": "new",
           "reference_price": 2000,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -3536,11 +3537,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3561,7 +3562,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3585,14 +3586,14 @@
     "components": {
       "cpu": "u5-245k",
       "motherboard": "asus-b860m-k",
-      "gpu": "rtx-5060-ti",
+      "gpu": "rtx-5060",
       "ram": "office-ddr5-16gb-7200-c36",
       "storage": "base-ssd-512gb-tlc",
       "psu": "base-psu-650w-gold",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8437,
+    "estimated_total": 8286,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3634,16 +3635,16 @@
         },
         {
           "role": "gpu",
-          "component_id": "rtx-5060-ti",
-          "name": "技嘉 RTX5060TI WF2MAX OC8G风魔MAX",
+          "component_id": "rtx-5060",
+          "name": "微星 RTX5060幻影师 2X",
           "condition": "new",
-          "reference_price": 3599,
+          "reference_price": 3299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
-            "perf_index": 60,
-            "tdp": 180
+            "perf_index": 50,
+            "tdp": 145
           }
         },
         {
@@ -3693,11 +3694,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3718,7 +3719,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3749,7 +3750,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8179,
+    "estimated_total": 8288,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3796,7 +3797,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -3847,11 +3848,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -3872,7 +3873,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -3903,7 +3904,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 7788,
+    "estimated_total": 7897,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 8000,
@@ -3950,7 +3951,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4001,11 +4002,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4026,7 +4027,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -4057,7 +4058,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8848,
+    "estimated_total": 8997,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4104,7 +4105,7 @@
           "condition": "new",
           "reference_price": 2500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -4158,11 +4159,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4183,7 +4184,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -4210,11 +4211,11 @@
       "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8780,
+    "estimated_total": 8828,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4261,7 +4262,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4299,12 +4300,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -4312,11 +4313,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4337,14 +4338,14 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
     "id": "office-9000-general-mixed",
     "title": "9000元 日常与平面办公 混合采购配置",
     "budget_min": 9000,
-    "budget_max": 10999,
+    "budget_max": 11999,
     "use_cases": [
       "办公"
     ],
@@ -4368,7 +4369,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9378,
+    "estimated_total": 9487,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4415,7 +4416,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4466,11 +4467,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4491,7 +4492,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -4521,7 +4522,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8848,
+    "estimated_total": 8997,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4568,7 +4569,7 @@
           "condition": "new",
           "reference_price": 2500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "Intel Arc",
             "perf_index": 50,
@@ -4622,11 +4623,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4647,7 +4648,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -4673,11 +4674,11 @@
       "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8780,
+    "estimated_total": 8828,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4724,7 +4725,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4762,12 +4763,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -4775,11 +4776,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4800,14 +4801,14 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
     "id": "office-9000-media-mixed",
     "title": "9000元 视频剪辑 混合采购配置",
     "budget_min": 9000,
-    "budget_max": 10999,
+    "budget_max": 11999,
     "use_cases": [
       "办公"
     ],
@@ -4830,7 +4831,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9378,
+    "estimated_total": 9487,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4877,7 +4878,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -4928,11 +4929,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -4953,7 +4954,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -4975,7 +4976,7 @@
       "本地 AI"
     ],
     "components": {
-      "cpu": "u7-265k",
+      "cpu": "u5-250-plus",
       "motherboard": "msi-pro-b860m-a",
       "gpu": "rtx-5060-ti",
       "ram": "office-ddr5-16gb-7200-c36",
@@ -4984,7 +4985,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9496,
+    "estimated_total": 9296,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -4994,18 +4995,18 @@
       "parts": [
         {
           "role": "cpu",
-          "component_id": "u7-265k",
-          "name": "Ultra 7 265K",
+          "component_id": "u5-250-plus",
+          "name": "Ultra 5 250 Plus",
           "condition": "new",
-          "reference_price": 1799,
+          "reference_price": 1450,
           "price_source": "cpu-whitelist-prices-2026-07-07.csv",
           "price_date": "2026-07-20",
           "specs": {
-            "generation": "15代酷睿Ultra",
-            "platform": "Arrow Lake",
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
             "socket": "LGA1851",
-            "perf_index": 99,
-            "tdp": 181
+            "perf_index": 83,
+            "tdp": 125
           }
         },
         {
@@ -5031,7 +5032,7 @@
           "condition": "new",
           "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -5085,11 +5086,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5110,7 +5111,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -5137,11 +5138,11 @@
       "gpu": "rtx-4070-super",
       "ram": "base-ddr5-16gb-6000-c30",
       "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-650w-gold",
+      "psu": "xuanwu-650se",
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 8780,
+    "estimated_total": 8828,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -5188,7 +5189,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -5226,12 +5227,12 @@
         },
         {
           "role": "psu",
-          "component_id": "base-psu-650w-gold",
-          "name": "安耐美 GN650 V3 650W",
+          "component_id": "xuanwu-650se",
+          "name": "玄武 650SE 650W",
           "condition": "used",
-          "reference_price": 200,
-          "price_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
-          "price_date": "2026-08-05",
+          "reference_price": 139,
+          "price_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+          "price_date": "2026-08-30",
           "specs": {
             "watt": 650
           }
@@ -5239,11 +5240,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5264,14 +5265,14 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
     "id": "office-9000-cuda-mixed",
     "title": "9000元 3D与CUDA 混合采购配置",
     "budget_min": 9000,
-    "budget_max": 10999,
+    "budget_max": 11999,
     "use_cases": [
       "办公"
     ],
@@ -5295,7 +5296,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9378,
+    "estimated_total": 9487,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 9000,
@@ -5342,7 +5343,7 @@
           "condition": "used",
           "reference_price": 3700,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -5393,11 +5394,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5418,7 +5419,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -5449,7 +5450,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9947,
+    "estimated_total": 10096,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 10000,
@@ -5496,7 +5497,7 @@
           "condition": "new",
           "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -5550,11 +5551,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5575,7 +5576,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -5606,7 +5607,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 9947,
+    "estimated_total": 10096,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 10000,
@@ -5653,7 +5654,7 @@
           "condition": "new",
           "reference_price": 3599,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 60,
@@ -5707,11 +5708,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5732,7 +5733,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -5763,7 +5764,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 11128,
+    "estimated_total": 11237,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -5810,7 +5811,7 @@
           "condition": "used",
           "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -5861,11 +5862,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -5886,161 +5887,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
-    }
-  },
-  {
-    "id": "office-11000-general-mixed",
-    "title": "11000元 日常与平面办公 混合采购配置",
-    "budget_min": 11000,
-    "budget_max": 12999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "混合采购",
-      "NVIDIA",
-      "office-general",
-      "Office",
-      "WPS",
-      "Photoshop",
-      "AutoCAD"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 11737,
-    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 11000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "new",
-          "reference_price": 1200,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070",
-          "name": "微星 RTX5070白魔龙 3X",
-          "condition": "used",
-          "reference_price": 5999,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 75,
-            "tdp": 250
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "new",
-          "reference_price": 699,
-          "price_source": "用户2026-08-05提供的当前参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -6070,7 +5917,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 11128,
+    "estimated_total": 11237,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6117,7 +5964,7 @@
           "condition": "used",
           "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6168,11 +6015,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -6193,160 +6040,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
-    }
-  },
-  {
-    "id": "office-11000-media-mixed",
-    "title": "11000元 视频剪辑 混合采购配置",
-    "budget_min": 11000,
-    "budget_max": 11999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "混合采购",
-      "NVIDIA",
-      "office-media",
-      "Premiere",
-      "DaVinci Resolve",
-      "剪映"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 11737,
-    "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 11000,
-      "direction": "balanced",
-      "purchase_mode": "mixed",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "new",
-          "reference_price": 1200,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070",
-          "name": "微星 RTX5070白魔龙 3X",
-          "condition": "used",
-          "reference_price": 5999,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 75,
-            "tdp": 250
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "new",
-          "reference_price": 699,
-          "price_source": "用户2026-08-05提供的当前参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "new",
-          "reference_price": 359,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 当前参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -6377,7 +6071,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 11578,
+    "estimated_total": 11687,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 11000,
@@ -6424,7 +6118,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -6475,11 +6169,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -6500,14 +6194,168 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
-    "id": "office-11000-cuda-mixed",
-    "title": "11000元 3D与CUDA 混合采购配置",
-    "budget_min": 11000,
-    "budget_max": 11999,
+    "id": "office-12000-general-used",
+    "title": "12000元 日常与平面办公 二手配置",
+    "budget_min": 12000,
+    "budget_max": 15999,
+    "use_cases": [
+      "办公"
+    ],
+    "tags": [
+      "均衡",
+      "二手",
+      "NVIDIA",
+      "office-general",
+      "Office",
+      "WPS",
+      "Photoshop",
+      "AutoCAD"
+    ],
+    "components": {
+      "cpu": "u7-270-plus",
+      "motherboard": "msi-b860m-mortar",
+      "gpu": "rtx-5070-ti",
+      "ram": "base-ddr5-16gb-6000-c30",
+      "storage": "base-ssd-512gb-tlc",
+      "psu": "base-psu-750w-gold",
+      "cooler": "base-cooler-dual-tower-6-heatpipe",
+      "case": "base-case-mid-tower"
+    },
+    "estimated_total": 12537,
+    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "details": {
+      "target_budget": 12000,
+      "direction": "balanced",
+      "purchase_mode": "used",
+      "gpu_vendor": "nvidia",
+      "parts": [
+        {
+          "role": "cpu",
+          "component_id": "u7-270-plus",
+          "name": "Ultra 7 270 Plus",
+          "condition": "used",
+          "reference_price": 2000,
+          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "generation": "酷睿Ultra",
+            "platform": "200 Plus",
+            "socket": "LGA1851",
+            "perf_index": 95,
+            "tdp": 125
+          }
+        },
+        {
+          "role": "motherboard",
+          "component_id": "msi-b860m-mortar",
+          "name": "微星 MAG B860M MORTAR WIFI",
+          "condition": "used",
+          "reference_price": 900,
+          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-07-20",
+          "specs": {
+            "platform": "Intel",
+            "socket": "LGA1851",
+            "chipset": "B860",
+            "mem_type": "DDR5",
+            "form_factor": "micro_atx"
+          }
+        },
+        {
+          "role": "gpu",
+          "component_id": "rtx-5070-ti",
+          "name": "微星 RTX5070TI万图师 3X",
+          "condition": "used",
+          "reference_price": 7299,
+          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
+          "price_date": "2026-08-30",
+          "specs": {
+            "vendor": "NVIDIA",
+            "perf_index": 85,
+            "tdp": 300
+          }
+        },
+        {
+          "role": "ram",
+          "component_id": "base-ddr5-16gb-6000-c30",
+          "name": "DDR5 16GB 6000 C30",
+          "condition": "used",
+          "reference_price": 1300,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "type": "DDR5",
+            "capacity_gb": 16,
+            "speed_mhz": 6000,
+            "cas_latency": 30
+          }
+        },
+        {
+          "role": "storage",
+          "component_id": "base-ssd-512gb-tlc",
+          "name": "宏碁掠夺者 GM7 512GB",
+          "condition": "used",
+          "reference_price": 500,
+          "price_source": "用户2026-08-05提供的二手参考价",
+          "price_date": "2026-08-05",
+          "specs": {
+            "capacity_gb": 512,
+            "type": "NVMe",
+            "flash_type": "TLC"
+          }
+        },
+        {
+          "role": "psu",
+          "component_id": "base-psu-750w-gold",
+          "name": "安耐美 GN750W V3 750W",
+          "condition": "used",
+          "reference_price": 249,
+          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
+          "price_date": "2026-08-06",
+          "specs": {
+            "watt": 750
+          }
+        },
+        {
+          "role": "cooler",
+          "component_id": "base-cooler-dual-tower-6-heatpipe",
+          "name": "超频3 RZ700D",
+          "condition": "used",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
+          "specs": {
+            "cooling_type": "air",
+            "heatpipes": 6,
+            "towers": 2
+          }
+        },
+        {
+          "role": "case",
+          "component_id": "base-case-mid-tower",
+          "name": "普通中塔机箱",
+          "condition": "used",
+          "reference_price": 80,
+          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+          "price_date": "2026-07-07",
+          "specs": {
+            "form_factor": "atx_mid_tower"
+          }
+        }
+      ],
+      "suitable_user": "主要使用日常与平面办公软件的个人用户",
+      "price_date": "2026-08-30"
+    }
+  },
+  {
+    "id": "office-12000-general-mixed",
+    "title": "12000元 日常与平面办公 混合采购配置",
+    "budget_min": 12000,
+    "budget_max": 12999,
     "use_cases": [
       "办公"
     ],
@@ -6515,11 +6363,11 @@
       "均衡",
       "混合采购",
       "NVIDIA",
-      "office-cuda",
-      "Blender",
-      "After Effects",
-      "MATLAB",
-      "本地 AI"
+      "office-general",
+      "Office",
+      "WPS",
+      "Photoshop",
+      "AutoCAD"
     ],
     "components": {
       "cpu": "u7-270-plus",
@@ -6531,10 +6379,10 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 11737,
-    "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
+    "estimated_total": 11846,
+    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
-      "target_budget": 11000,
+      "target_budget": 12000,
       "direction": "balanced",
       "purchase_mode": "mixed",
       "gpu_vendor": "nvidia",
@@ -6578,7 +6426,7 @@
           "condition": "used",
           "reference_price": 5999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -6629,165 +6477,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "cooling_type": "air",
-            "heatpipes": 6,
-            "towers": 2
-          }
-        },
-        {
-          "role": "case",
-          "component_id": "base-case-mid-tower",
-          "name": "普通中塔机箱",
-          "condition": "used",
-          "reference_price": 80,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "form_factor": "atx_mid_tower"
-          }
-        }
-      ],
-      "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
-    }
-  },
-  {
-    "id": "office-12000-general-used",
-    "title": "12000元 日常与平面办公 二手配置",
-    "budget_min": 12000,
-    "budget_max": 15999,
-    "use_cases": [
-      "办公"
-    ],
-    "tags": [
-      "均衡",
-      "二手",
-      "NVIDIA",
-      "office-general",
-      "Office",
-      "WPS",
-      "Photoshop",
-      "AutoCAD"
-    ],
-    "components": {
-      "cpu": "u7-270-plus",
-      "motherboard": "msi-b860m-mortar",
-      "gpu": "rtx-5070-ti",
-      "ram": "base-ddr5-16gb-6000-c30",
-      "storage": "base-ssd-512gb-tlc",
-      "psu": "base-psu-750w-gold",
-      "cooler": "base-cooler-dual-tower-6-heatpipe",
-      "case": "base-case-mid-tower"
-    },
-    "estimated_total": 12428,
-    "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
-    "details": {
-      "target_budget": 12000,
-      "direction": "balanced",
-      "purchase_mode": "used",
-      "gpu_vendor": "nvidia",
-      "parts": [
-        {
-          "role": "cpu",
-          "component_id": "u7-270-plus",
-          "name": "Ultra 7 270 Plus",
-          "condition": "used",
-          "reference_price": 2000,
-          "price_source": "cpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "generation": "酷睿Ultra",
-            "platform": "200 Plus",
-            "socket": "LGA1851",
-            "perf_index": 95,
-            "tdp": 125
-          }
-        },
-        {
-          "role": "motherboard",
-          "component_id": "msi-b860m-mortar",
-          "name": "微星 MAG B860M MORTAR WIFI",
-          "condition": "used",
-          "reference_price": 900,
-          "price_source": "motherboard-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-07-20",
-          "specs": {
-            "platform": "Intel",
-            "socket": "LGA1851",
-            "chipset": "B860",
-            "mem_type": "DDR5",
-            "form_factor": "micro_atx"
-          }
-        },
-        {
-          "role": "gpu",
-          "component_id": "rtx-5070-ti",
-          "name": "微星 RTX5070TI万图师 3X",
-          "condition": "used",
-          "reference_price": 7299,
-          "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
-          "specs": {
-            "vendor": "NVIDIA",
-            "perf_index": 85,
-            "tdp": 300
-          }
-        },
-        {
-          "role": "ram",
-          "component_id": "base-ddr5-16gb-6000-c30",
-          "name": "DDR5 16GB 6000 C30",
-          "condition": "used",
-          "reference_price": 1300,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
-          "specs": {
-            "type": "DDR5",
-            "capacity_gb": 16,
-            "speed_mhz": 6000,
-            "cas_latency": 30
-          }
-        },
-        {
-          "role": "storage",
-          "component_id": "base-ssd-512gb-tlc",
-          "name": "宏碁掠夺者 GM7 512GB",
-          "condition": "used",
-          "reference_price": 500,
-          "price_source": "用户2026-08-05提供的二手参考价",
-          "price_date": "2026-08-05",
-          "specs": {
-            "capacity_gb": 512,
-            "type": "NVMe",
-            "flash_type": "TLC"
-          }
-        },
-        {
-          "role": "psu",
-          "component_id": "base-psu-750w-gold",
-          "name": "安耐美 GN750W V3 750W",
-          "condition": "used",
-          "reference_price": 249,
-          "price_source": "用户2026-08-06提供的安耐美 GN750W V3 二手参考价",
-          "price_date": "2026-08-06",
-          "specs": {
-            "watt": 750
-          }
-        },
-        {
-          "role": "cooler",
-          "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
-          "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -6808,7 +6502,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -6838,7 +6532,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12428,
+    "estimated_total": 12537,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -6885,7 +6579,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -6936,11 +6630,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -6961,7 +6655,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -6991,7 +6685,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12687,
+    "estimated_total": 12796,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7038,7 +6732,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7089,11 +6783,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7114,7 +6808,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7145,7 +6839,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12607,
+    "estimated_total": 12756,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7192,7 +6886,7 @@
           "condition": "new",
           "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -7246,11 +6940,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7271,7 +6965,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7302,7 +6996,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12428,
+    "estimated_total": 12537,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7349,7 +7043,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7400,11 +7094,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7425,7 +7119,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7456,7 +7150,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 12687,
+    "estimated_total": 12796,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 12000,
@@ -7503,7 +7197,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7554,11 +7248,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7579,7 +7273,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7610,7 +7304,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13407,
+    "estimated_total": 13556,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -7657,7 +7351,7 @@
           "condition": "new",
           "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -7711,11 +7405,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7736,7 +7430,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7767,7 +7461,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13037,
+    "estimated_total": 13146,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -7814,7 +7508,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -7865,11 +7559,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -7890,7 +7584,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -7920,7 +7614,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13407,
+    "estimated_total": 13556,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -7967,7 +7661,7 @@
           "condition": "new",
           "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -8021,11 +7715,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8046,7 +7740,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8076,7 +7770,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13037,
+    "estimated_total": 13146,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8123,7 +7817,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -8174,11 +7868,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8199,7 +7893,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8230,7 +7924,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13407,
+    "estimated_total": 13556,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8277,7 +7971,7 @@
           "condition": "new",
           "reference_price": 6999,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 75,
@@ -8331,11 +8025,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8356,7 +8050,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8387,7 +8081,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 13037,
+    "estimated_total": 13146,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 13000,
@@ -8434,7 +8128,7 @@
           "condition": "used",
           "reference_price": 7299,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -8485,11 +8179,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8510,7 +8204,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8540,7 +8234,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15589,
+    "estimated_total": 15698,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 15000,
@@ -8587,7 +8281,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -8638,11 +8332,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8663,7 +8357,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8694,7 +8388,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15407,
+    "estimated_total": 15556,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 15000,
@@ -8741,7 +8435,7 @@
           "condition": "new",
           "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -8795,11 +8489,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8820,7 +8514,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -8851,7 +8545,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15589,
+    "estimated_total": 15698,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 15000,
@@ -8898,7 +8592,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -8949,11 +8643,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -8974,7 +8668,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9005,7 +8699,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 15688,
+    "estimated_total": 15797,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 15000,
@@ -9052,7 +8746,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9103,11 +8797,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9128,7 +8822,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9159,7 +8853,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16207,
+    "estimated_total": 16356,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9206,7 +8900,7 @@
           "condition": "new",
           "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -9260,11 +8954,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9285,7 +8979,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9316,7 +9010,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16039,
+    "estimated_total": 16148,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9363,7 +9057,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9414,11 +9108,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9439,7 +9133,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9470,7 +9164,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16538,
+    "estimated_total": 16647,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9517,7 +9211,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9568,11 +9262,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9593,7 +9287,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9623,7 +9317,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16207,
+    "estimated_total": 16356,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9670,7 +9364,7 @@
           "condition": "new",
           "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -9724,11 +9418,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9749,7 +9443,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9779,7 +9473,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16039,
+    "estimated_total": 16148,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9826,7 +9520,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -9877,11 +9571,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -9902,7 +9596,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -9932,7 +9626,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16538,
+    "estimated_total": 16647,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -9979,7 +9673,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10030,11 +9724,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10055,7 +9749,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10086,7 +9780,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16207,
+    "estimated_total": 16356,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -10133,7 +9827,7 @@
           "condition": "new",
           "reference_price": 9799,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 85,
@@ -10187,11 +9881,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10212,7 +9906,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10243,7 +9937,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16039,
+    "estimated_total": 16148,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -10290,7 +9984,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10341,11 +10035,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10366,7 +10060,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10397,7 +10091,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 16538,
+    "estimated_total": 16647,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 16000,
@@ -10444,7 +10138,7 @@
           "condition": "used",
           "reference_price": 10500,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10495,11 +10189,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "used",
-          "reference_price": 100,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 209,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10520,7 +10214,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10551,7 +10245,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 19407,
+    "estimated_total": 19556,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 19000,
@@ -10598,7 +10292,7 @@
           "condition": "new",
           "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10652,11 +10346,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10677,7 +10371,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10708,7 +10402,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 20207,
+    "estimated_total": 20356,
     "explanation": "按日常与平面办公负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 20000,
@@ -10755,7 +10449,7 @@
           "condition": "new",
           "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10809,11 +10503,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10834,7 +10528,7 @@
         }
       ],
       "suitable_user": "主要使用日常与平面办公软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -10864,7 +10558,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 20207,
+    "estimated_total": 20356,
     "explanation": "按视频剪辑负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 20000,
@@ -10911,7 +10605,7 @@
           "condition": "new",
           "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -10965,11 +10659,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -10990,7 +10684,7 @@
         }
       ],
       "suitable_user": "主要使用视频剪辑软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   },
   {
@@ -11021,7 +10715,7 @@
       "cooler": "base-cooler-dual-tower-6-heatpipe",
       "case": "base-case-mid-tower"
     },
-    "estimated_total": 20207,
+    "estimated_total": 20356,
     "explanation": "按3D与CUDA负载选择 CPU 和显卡，固定16GB内存与512GB TLC固态。",
     "details": {
       "target_budget": 20000,
@@ -11068,7 +10762,7 @@
           "condition": "new",
           "reference_price": 13499,
           "price_source": "gpu-whitelist-prices-2026-07-07.csv",
-          "price_date": "2026-08-26",
+          "price_date": "2026-08-30",
           "specs": {
             "vendor": "NVIDIA",
             "perf_index": 95,
@@ -11122,11 +10816,11 @@
         {
           "role": "cooler",
           "component_id": "base-cooler-dual-tower-6-heatpipe",
-          "name": "双塔6热管风冷",
+          "name": "超频3 RZ700D",
           "condition": "new",
-          "reference_price": 150,
-          "price_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-          "price_date": "2026-07-07",
+          "reference_price": 299,
+          "price_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+          "price_date": "2026-08-31",
           "specs": {
             "cooling_type": "air",
             "heatpipes": 6,
@@ -11147,7 +10841,7 @@
         }
       ],
       "suitable_user": "主要使用3D与CUDA软件的个人用户",
-      "price_date": "2026-08-26"
+      "price_date": "2026-08-30"
     }
   }
 ]

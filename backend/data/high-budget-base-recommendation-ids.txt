@@ -50,3 +50,5 @@ rx-7900-xtx
 rx-9060-xt-16gb
 rx-9070-gre
 rx-9070-xt
+valkyrie-cq125
+xuanwu-650se

@@ -45,6 +45,24 @@ DETAILED_PURCHASE_TAGS = {"new": "全新", "used": "二手", "mixed": "混合采
 DETAILED_GPU_VENDOR_TAGS = {"nvidia": "NVIDIA", "amd": "AMD", "intel": "Intel"}
 LEGACY_AM4_CPU_IDS = {"r5-5600", "r5-5600x"}
 LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
+COOLER_BY_CPU_ID = {
+    "r5-5600": LEGACY_AM4_COOLER_ID,
+    "r5-5600x": LEGACY_AM4_COOLER_ID,
+    "r5-7500f": "valkyrie-cq125",
+    "r5-9600x": "base-cooler-6-heatpipe",
+    "r7-9700x": "base-cooler-6-heatpipe",
+    "i5-12600kf": "base-cooler-6-heatpipe",
+    "i5-14600kf": "base-cooler-dual-tower-6-heatpipe",
+    "i5-14400f": "base-cooler-dual-tower-6-heatpipe",
+    "i7-13700kf": "base-cooler-dual-tower-6-heatpipe",
+    "u5-245k": "base-cooler-dual-tower-6-heatpipe",
+    "u5-250-plus": "base-cooler-dual-tower-6-heatpipe",
+    "u7-265k": "base-cooler-dual-tower-6-heatpipe",
+    "u7-270-plus": "base-cooler-dual-tower-6-heatpipe",
+    "r7-7800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9850x3d": "base-cooler-dual-tower-6-heatpipe",
+}
 MAX_DETAILED_TEMPLATE_BUDGET_SHORTFALL = 200
 MAX_DETAILED_TEMPLATE_BUDGET_OVERAGE = 300
 
@@ -218,10 +236,10 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
         role: part.condition for role, part in parts_by_role.items()
     }
     expected_conditions = dict(DETAILED_CONDITIONS[details.purchase_mode])
-    if parts_by_role["cpu"].component_id in LEGACY_AM4_CPU_IDS:
-        expected_conditions["cooler"] = "new"
-        if parts_by_role["cooler"].component_id != LEGACY_AM4_COOLER_ID:
-            errors.append(f"{template.id}: R5 5600/5600X must use AX120 SE")
+    expected_cooler = COOLER_BY_CPU_ID.get(parts_by_role["cpu"].component_id)
+    if expected_cooler is not None:
+        if parts_by_role["cooler"].component_id != expected_cooler:
+            errors.append(f"{template.id}: CPU must use its assigned cooler")
     if actual_conditions != expected_conditions:
         errors.append(f"{template.id}: conditions do not match purchase mode")
 
@@ -275,7 +293,7 @@ def _validate_detailed_template(template: BuildTemplateInput, errors: List[str])
     gpu_id = parts_by_role["gpu"].component_id
     expected_gpu_vendor = (
         "nvidia"
-        if gpu_id.startswith("rtx-")
+        if gpu_id.startswith(("gtx-", "rtx-"))
         else "intel"
         if gpu_id.startswith("arc-")
         else "amd"

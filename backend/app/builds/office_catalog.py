@@ -20,7 +20,7 @@ Profile = Literal["general", "media", "cuda"]
 PurchaseMode = Literal["new", "used", "mixed"]
 Condition = Literal["new", "used"]
 
-PRICE_DATE = "2026-08-26"
+PRICE_DATE = "2026-08-30"
 BUDGET_TIERS = tuple(range(6_000, 30_001, 1_000))
 LOW_BUDGET_TIERS = (3_000, 4_000, 5_000)
 PART_ROLES = (
@@ -362,7 +362,11 @@ def _smallest_psu(
             and part.price(condition) is not None
             and int(part.specs.get("watt", 0)) >= required
         ),
-        key=lambda part: int(part.specs["watt"]),
+        key=lambda part: (
+            int(part.specs["watt"]),
+            int(part.price(condition)),
+            part.component_id,
+        ),
     )
     return psus[0] if psus else None
 
@@ -470,7 +474,7 @@ def _template_signature(template: BuildTemplateInput) -> Tuple[str, ...]:
 
 
 def _gpu_vendor(component_id: str) -> Literal["nvidia", "amd", "intel"]:
-    if component_id.startswith("rtx-"):
+    if component_id.startswith(("gtx-", "rtx-")):
         return "nvidia"
     if component_id.startswith("arc-"):
         return "intel"

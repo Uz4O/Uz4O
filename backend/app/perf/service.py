@@ -29,12 +29,20 @@ from app.perf.profiles import (
 from app.perf.pubg_reference import pubg_cpu_average_fps
 from app.perf.repository import get_performance_estimates
 from app.perf.time_spy import (
+    GPU_TIME_SPY_SCORES,
     effective_performance_score,
     generated_gpu_performance_score,
+    gpu_time_spy_comparison_percent,
     gpu_time_spy_score,
+    gpu_time_spy_percent,
     has_time_spy_scores,
 )
-from app.perf.valorant_reference import valorant_cpu_average_fps
+from app.perf.valorant_reference import (
+    CPU_TIER_LIST,
+    valorant_cpu_average_fps,
+    valorant_cpu_benchmark_score,
+    valorant_cpu_performance_percent,
+)
 
 
 PerfStatus = Literal["ready", "partial", "needs_more_data"]
@@ -68,6 +76,278 @@ class PerfEstimateResponse(BaseModel):
     missing_data: List[str]
     missing_games: List[str]
     game_results: List[GamePerfEstimate]
+
+
+class DisplayMatchRequest(BaseModel):
+    cpu_id: str = Field(min_length=1, max_length=160)
+    gpu_id: str = Field(min_length=1, max_length=160)
+    games: List[str] = Field(min_length=1, max_length=15)
+
+
+class DisplayMatchResponse(BaseModel):
+    status: Literal["ready", "needs_more_data"]
+    gpu_id: str
+    gpu_name: str
+    resolution: Resolution
+    refresh_rate: int
+    size: str
+    panel: str
+    adaptive_sync: str
+    title: str
+    summary: str
+    reasons: List[str]
+    games: List[str]
+    disclaimer: str
+
+
+class PerformanceComparisonRequest(BaseModel):
+    category: Literal["gpu", "cpu"]
+    left_id: str = Field(min_length=1, max_length=160)
+    right_id: str = Field(min_length=1, max_length=160)
+
+
+class PerformanceComparisonHardware(BaseModel):
+    id: str
+    name: str
+    benchmark_score: float
+    relative_percent: float
+
+
+class PerformanceComparisonResponse(BaseModel):
+    category: Literal["gpu", "cpu"]
+    benchmark: Literal["time_spy", "valorant"]
+    left: PerformanceComparisonHardware
+    right: PerformanceComparisonHardware
+    stronger_id: Optional[str]
+    stronger_name: Optional[str]
+    stronger_by_percent: float
+    summary: str
+
+
+class PerformanceLadderItem(BaseModel):
+    rank: int
+    id: str
+    name: str
+    brand: str
+    benchmark_score: float
+    relative_percent: float
+
+
+class PerformanceLadderResponse(BaseModel):
+    category: Literal["gpu", "cpu"]
+    benchmark: Literal["time_spy", "valorant", "truebottleneck"]
+    reference_name: str
+    items: List[PerformanceLadderItem]
+
+
+def build_display_match(session: Session, request: DisplayMatchRequest) -> DisplayMatchResponse:
+    components = {
+        component.id: component
+        for component in get_components_by_ids(session, [request.cpu_id, request.gpu_id])
+    }
+    cpu = components.get(request.cpu_id)
+    gpu = components.get(request.gpu_id)
+    if cpu is None or cpu.category != "cpu":
+        raise HTTPException(status_code=422, detail="CPU 型号不受支持")
+    if gpu is None or gpu.category != "gpu":
+        raise HTTPException(status_code=422, detail="显卡型号不受支持")
+    component = gpu
+    games = _requested_games(request.games)
+    gpu_score = hardware_performance_score(
+        component.id, component.category, component.name, component.specs
+    )
+    cpu_score = hardware_performance_score(cpu.id, cpu.category, cpu.name, cpu.specs)
+    if gpu_score is None or cpu_score is None:
+        raise HTTPException(status_code=422, detail="所选 CPU 或显卡暂无可用性能数据")
+
+    cpu_heavy = any(APPROVED_GAME_PROFILES[game].load_type.value == "cpu" for game in games)
+    gpu_heavy = any(APPROVED_GAME_PROFILES[game].load_type.value == "gpu" for game in games)
+    if cpu_heavy and not gpu_heavy:
+        resolution: Resolution = "1080p"
+        refresh_rate = 240 if gpu_score >= 60 and cpu_score >= 80 else 165 if gpu_score >= 40 and cpu_score >= 60 else 144
+        size, panel = "24 英寸", "Fast IPS"
+        reasons = ["当前游戏以电竞/CPU 负载为主，优先高刷新率和低延迟。"]
+    elif gpu_heavy and not cpu_heavy:
+        resolution = "4k" if gpu_score >= 85 else "2k" if gpu_score >= 50 else "1080p"
+        refresh_rate = 144 if resolution == "4k" else 165 if resolution == "2k" else 144
+        size = "32 英寸" if resolution == "4k" else "27 英寸" if resolution == "2k" else "24 英寸"
+        panel = "Fast IPS"
+        reasons = ["当前游戏更吃显卡，优先把预算放在分辨率和画质表现上。"]
+    else:
+        resolution = "2k" if gpu_score >= 50 else "1080p"
+        refresh_rate = 165 if gpu_score >= 65 and cpu_score >= 60 else 144
+        size = "27 英寸" if resolution == "2k" else "24 英寸"
+        panel = "Fast IPS"
+        reasons = ["游戏类型混合，取分辨率、画质和高刷体验的平衡。"]
+
+    return DisplayMatchResponse(
+        status="ready",
+        gpu_id=component.id,
+        gpu_name=component.name,
+        resolution=resolution,
+        refresh_rate=refresh_rate,
+        size=size,
+        panel=panel,
+        adaptive_sync="需要支持 Adaptive-Sync（FreeSync / G-SYNC Compatible）",
+        title=f"推荐 {resolution.upper()} {refresh_rate}Hz",
+        summary=f"{component.name} 更适合 {size} {resolution.upper()} {refresh_rate}Hz 显示器。",
+        reasons=reasons + [f"已同时参考 {cpu.name} 的 CPU 性能，避免高刷游戏只看显卡。"],
+        games=games,
+        disclaimer="这是按显卡性能与所选游戏类型给出的规格建议，不代表具体品牌或型号。",
+    )
+
+
+def performance_ladder(
+    session: Session,
+    category: Literal["gpu", "cpu"],
+) -> PerformanceLadderResponse:
+    if category == "cpu":
+        return PerformanceLadderResponse(
+            category="cpu",
+            benchmark="truebottleneck",
+            reference_name="AMD Ryzen 7 9850X3D",
+            items=[
+                PerformanceLadderItem(
+                    rank=rank,
+                    id=component_id,
+                    name=name,
+                    brand=brand,
+                    benchmark_score=percent,
+                    relative_percent=percent,
+                )
+                for rank, (component_id, name, brand, percent) in enumerate(
+                    CPU_TIER_LIST,
+                    start=1,
+                )
+            ],
+        )
+
+    if category == "gpu":
+        benchmark = "time_spy"
+        reference_name = "RTX 5090"
+        scores = [
+            (component_id, float(score), gpu_time_spy_percent(component_id))
+            for component_id, score in GPU_TIME_SPY_SCORES.items()
+        ]
+    components = get_components_by_ids(
+        session,
+        [component_id for component_id, _, _ in scores],
+    )
+    components_by_id = {component.id: component for component in components}
+    ranked = sorted(
+        (
+            (component, score, percent)
+            for component_id, score, percent in scores
+            if score is not None
+            and percent is not None
+            and (component := components_by_id.get(component_id)) is not None
+            and component.category == category
+        ),
+        key=lambda row: (-row[2], row[0].id),
+    )
+    return PerformanceLadderResponse(
+        category=category,
+        benchmark=benchmark,
+        reference_name=reference_name,
+        items=[
+            PerformanceLadderItem(
+                rank=rank,
+                id=component.id,
+                name=component.name,
+                brand=component.brand,
+                benchmark_score=score,
+                relative_percent=percent,
+            )
+            for rank, (component, score, percent) in enumerate(ranked, start=1)
+        ],
+    )
+
+
+def compare_performance(
+    session: Session,
+    request: PerformanceComparisonRequest,
+) -> PerformanceComparisonResponse:
+    components = get_components_by_ids(session, [request.left_id, request.right_id])
+    by_id = {component.id: component for component in components}
+    left = by_id.get(request.left_id)
+    right = by_id.get(request.right_id)
+    if left is None or right is None:
+        raise HTTPException(status_code=422, detail="硬件型号不受支持")
+    if left.category != request.category or right.category != request.category:
+        raise HTTPException(status_code=422, detail="对比型号类别不匹配")
+
+    if request.category == "gpu":
+        benchmark = "time_spy"
+        left_score = gpu_time_spy_score(left.id)
+        right_score = gpu_time_spy_score(right.id)
+        left_percent = gpu_time_spy_percent(left.id)
+        right_percent = gpu_time_spy_percent(right.id)
+        left_comparison_score = gpu_time_spy_comparison_percent(left.id)
+        right_comparison_score = gpu_time_spy_comparison_percent(right.id)
+    else:
+        benchmark = "valorant"
+        left_score = valorant_cpu_benchmark_score(left.id)
+        right_score = valorant_cpu_benchmark_score(right.id)
+        left_percent = valorant_cpu_performance_percent(left.id)
+        right_percent = valorant_cpu_performance_percent(right.id)
+        left_comparison_score = left_score
+        right_comparison_score = right_score
+
+    if None in (
+        left_score,
+        right_score,
+        left_percent,
+        right_percent,
+        left_comparison_score,
+        right_comparison_score,
+    ):
+        raise HTTPException(status_code=422, detail="所选型号暂无可用性能数据")
+
+    left_result = PerformanceComparisonHardware(
+        id=left.id,
+        name=left.name,
+        benchmark_score=left_score,
+        relative_percent=left_percent,
+    )
+    right_result = PerformanceComparisonHardware(
+        id=right.id,
+        name=right.name,
+        benchmark_score=right_score,
+        relative_percent=right_percent,
+    )
+    if left_comparison_score == right_comparison_score:
+        return PerformanceComparisonResponse(
+            category=request.category,
+            benchmark=benchmark,
+            left=left_result,
+            right=right_result,
+            stronger_id=None,
+            stronger_name=None,
+            stronger_by_percent=0,
+            summary="两者性能相当",
+        )
+
+    stronger, weaker = (
+        (left_result, right_result)
+        if left_comparison_score > right_comparison_score
+        else (right_result, left_result)
+    )
+    stronger_score, weaker_score = (
+        (left_comparison_score, right_comparison_score)
+        if left_comparison_score > right_comparison_score
+        else (right_comparison_score, left_comparison_score)
+    )
+    delta = round((stronger_score / weaker_score - 1) * 100, 1)
+    return PerformanceComparisonResponse(
+        category=request.category,
+        benchmark=benchmark,
+        left=left_result,
+        right=right_result,
+        stronger_id=stronger.id,
+        stronger_name=stronger.name,
+        stronger_by_percent=delta,
+        summary=f"{stronger.name} 比 {weaker.name} 强 {delta:.1f}%",
+    )
 
 
 def estimate_generated_game_fps(

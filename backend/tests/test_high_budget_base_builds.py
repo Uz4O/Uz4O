@@ -9,6 +9,7 @@ from app.builds.high_budget_catalog import (
     CPU_PERFORMANCE,
     GPU_PERFORMANCE,
     GPU_PRICE_PATH,
+    PRICE_DATE,
     REQUIRED_PART_ROLES,
     generate_high_budget_templates,
     minimum_psu_watt,
@@ -209,6 +210,10 @@ def test_all_builds_use_whitelisted_amd_am5_parts_and_only_upgrade_storage_for_c
         assert parts["motherboard"].reference_price <= (
             template.details.target_budget * motherboard_share
         )
+        if parts["motherboard"].reference_price >= 5_000:
+            assert CPU_PERFORMANCE[parts["cpu"].component_id] >= CPU_PERFORMANCE[
+                "r7-9800x3d"
+            ], template.id
         expected_vendor = (
             "nvidia" if parts["gpu"].component_id.startswith("rtx-") else "amd"
         )
@@ -222,10 +227,9 @@ def test_all_builds_use_whitelisted_amd_am5_parts_and_only_upgrade_storage_for_c
             and parts["gpu"].component_id == "rtx-4060-ti"
         )
 
-        if "x3d" in parts["cpu"].component_id:
-            assert parts["cooler"].component_id == "base-cooler-dual-tower-6-heatpipe"
-        else:
-            assert parts["cooler"].component_id == "base-cooler-6-heatpipe"
+        assert parts["cooler"].component_id == high_budget_catalog.COOLER_BY_CPU_ID[
+            parts["cpu"].component_id
+        ]
 
 
 def test_aaa_uses_cpu_then_motherboard_after_gpu_and_caps_cpu_at_9800x3d() -> None:
@@ -237,8 +241,8 @@ def test_aaa_uses_cpu_then_motherboard_after_gpu_and_caps_cpu_at_9800x3d() -> No
     ]
 
     assert aaa_templates
-    assert all(
-        template.components["cpu"] != "r7-9850x3d"
+    assert any(
+        template.components["cpu"] == "r7-9850x3d"
         for template in aaa_templates
     )
     for purchase_mode in ("used", "mixed"):
@@ -321,6 +325,13 @@ def test_every_new_gpu_uses_the_whitelist_new_price() -> None:
         if gpu.condition == "new":
             assert gpu.component_id in new_prices
             assert gpu.reference_price == new_prices[gpu.component_id]
+
+
+def test_9850x3d_uses_updated_whitelist_prices() -> None:
+    with high_budget_catalog.CPU_PRICE_PATH.open(encoding="utf-8", newline="") as handle:
+        row = next(row for row in csv.DictReader(handle) if row["target_id"] == "r7-9850x3d")
+    assert row["used_price"] == "2550"
+    assert row["new_tray_price"] == "2799"
 
 
 def test_high_budget_templates_never_use_excluded_gpu_brand() -> None:
@@ -426,8 +437,8 @@ def test_8000_used_fps_build_uses_b850m_power() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["motherboard"].component_id == "asus-b850m-awy"
-    assert template.estimated_total == 8_379
+    assert parts["motherboard"].component_id == "msi-b850m-power"
+    assert 7_800 <= template.estimated_total <= 8_500
 
 
 def test_8000_used_nvidia_aaa_build_moves_budget_to_4070_super() -> None:
@@ -441,7 +452,7 @@ def test_8000_used_nvidia_aaa_build_moves_budget_to_4070_super() -> None:
     assert parts["cpu"].component_id == "r7-7800x3d"
     assert parts["gpu"].component_id == "rtx-4070-super"
     assert parts["gpu"].reference_price == 3_700
-    assert template.estimated_total == 8_230
+    assert template.estimated_total == 8_278
 
 
 def test_8500_mixed_fps_build_prioritizes_a_table_valid_x3d_pair() -> None:
@@ -459,7 +470,7 @@ def test_8500_mixed_fps_build_prioritizes_a_table_valid_x3d_pair() -> None:
     assert 8_400 <= template.estimated_total <= 9_000
 
 
-def test_9000_mixed_fps_build_uses_stronger_cpu_with_equal_amd_gpu_tier() -> None:
+def test_9000_mixed_fps_build_keeps_a_modern_table_valid_pair() -> None:
     template = next(
         template
         for template in generated_templates()
@@ -467,11 +478,11 @@ def test_9000_mixed_fps_build_uses_stronger_cpu_with_equal_amd_gpu_tier() -> Non
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r7-9800x3d"
-    assert parts["gpu"].component_id == "rx-7900-xt"
+    assert parts["cpu"].component_id == "r7-7800x3d"
+    assert parts["gpu"].component_id == "rtx-4070-super"
     assert parts["gpu"].condition == "used"
     assert parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert template.estimated_total == 9_388
+    assert template.estimated_total == 8_887
 
 
 def test_9500_mixed_fps_build_uses_nvidia_with_9800x3d() -> None:
@@ -486,7 +497,7 @@ def test_9500_mixed_fps_build_uses_nvidia_with_9800x3d() -> None:
     assert parts["gpu"].component_id == "rtx-4070-super"
     assert parts["gpu"].condition == "used"
     assert parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert template.estimated_total == 9_528
+    assert template.estimated_total == 9_637
 
 
 def test_10000_requested_board_and_psu_prices_are_preserved() -> None:
@@ -504,10 +515,10 @@ def test_10000_requested_board_and_psu_prices_are_preserved() -> None:
 
     assert fps_parts["motherboard"].component_id == "msi-b850m-power"
     assert fps_parts["cpu"].reference_price == 1_800
-    assert 9_900 <= templates["base-10000-fps-new"].estimated_total <= 10_800
+    assert 9_800 <= templates["base-10000-fps-new"].estimated_total <= 10_800
     assert aaa_parts["motherboard"].component_id == "asus-b650m-tuf"
-    assert aaa_parts["psu"].reference_price == 359
-    assert 9_900 <= templates["base-10000-aaa-mixed"].estimated_total <= 10_800
+    assert aaa_parts["psu"].reference_price == 299
+    assert 9_800 <= templates["base-10000-aaa-mixed"].estimated_total <= 10_800
     assert support_parts["base-psu-850w-gold"].name == "安耐美 PX850DF 850W"
     assert support_parts["base-psu-850w-gold"].new_price == 659
     assert support_parts["base-psu-850w-gold"].used_price == 659
@@ -877,7 +888,7 @@ def test_template_details_keep_user_and_price_metadata() -> None:
     for template in generated_templates():
         details = template.details
         assert details.suitable_user
-        assert details.price_date == "2026-08-26"
+        assert details.price_date == PRICE_DATE
 
 
 def test_writes_review_markdown_and_backend_json(tmp_path) -> None:

@@ -52,6 +52,24 @@ VALUE_STORAGE_IDS = {
 A520_WIFI_EXCEPTION_ID = "asus-a520m-k"
 A520_MAX_GPU_PERFORMANCE = GPU_PERFORMANCE["rx-7650-gre"]
 LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
+COOLER_BY_CPU_ID = {
+    "r5-5600": LEGACY_AM4_COOLER_ID,
+    "r5-5600x": LEGACY_AM4_COOLER_ID,
+    "r5-7500f": "valkyrie-cq125",
+    "r5-9600x": "base-cooler-6-heatpipe",
+    "r7-9700x": "base-cooler-6-heatpipe",
+    "i5-12600kf": "base-cooler-6-heatpipe",
+    "i5-14600kf": "base-cooler-dual-tower-6-heatpipe",
+    "i5-14400f": "base-cooler-dual-tower-6-heatpipe",
+    "i7-13700kf": "base-cooler-dual-tower-6-heatpipe",
+    "u5-245k": "base-cooler-dual-tower-6-heatpipe",
+    "u5-250-plus": "base-cooler-dual-tower-6-heatpipe",
+    "u7-265k": "base-cooler-dual-tower-6-heatpipe",
+    "u7-270-plus": "base-cooler-dual-tower-6-heatpipe",
+    "r7-7800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9850x3d": "base-cooler-dual-tower-6-heatpipe",
+}
 WEAK_HIGH_END_AM5_MOTHERBOARD_IDS = {"asus-prime-b650m-k"}
 HIGH_END_AM5_CPU_IDS = {"r7-9800x3d", "r7-9850x3d"}
 LEGACY_AM4_CPU_IDS = {"r5-5600", "r5-5600x"}
@@ -372,7 +390,7 @@ def deterministic_customization(
             continue
         if _core_is_dominated(
             _core_performance({part.role: part for part in option.details.parts}),
-            feasible_core_baselines,
+            reviewed_core_baselines,
         ):
             continue
         valid.append(option)
@@ -383,7 +401,7 @@ def deterministic_customization(
         components_by_id,
         price_by_component_id,
         minimum_direction_performance,
-        feasible_core_baselines,
+        reviewed_core_baselines,
     )
     if searched is not None:
         valid.append(searched)
@@ -396,7 +414,7 @@ def _search_customization(
     components_by_id: Dict[str, HardwareComponent],
     price_by_component_id: Dict[str, ComponentPrice],
     minimum_performance: int,
-    feasible_core_baselines: List[tuple[int, int]],
+    core_baselines: List[tuple[int, int]],
 ) -> Optional[BuildOptionResponse]:
     if not candidates:
         return None
@@ -529,7 +547,7 @@ def _search_customization(
         core_parts = {"cpu": cpu, "gpu": gpu}
         if _direction_performance(details.direction, core_parts) < minimum_performance:
             continue
-        if _core_is_dominated(_core_performance(core_parts), feasible_core_baselines):
+        if _core_is_dominated(_core_performance(core_parts), core_baselines):
             continue
 
         memory_type = motherboard.specs.get("mem_type")
@@ -816,11 +834,12 @@ def _required_cooler_candidates(
     cpu: BuildTemplatePart,
     candidates: List[BuildTemplatePart],
 ) -> List[BuildTemplatePart]:
-    if cpu.component_id in LEGACY_AM4_CPU_IDS:
+    required_cooler_id = COOLER_BY_CPU_ID.get(cpu.component_id)
+    if required_cooler_id is not None:
         return [
             cooler
             for cooler in candidates
-            if cooler.component_id == LEGACY_AM4_COOLER_ID
+            if cooler.component_id == required_cooler_id
         ]
     hot_cpu = (
         cpu.component_id in {"r7-7800x3d", "r7-9800x3d", "r7-9850x3d"}
@@ -890,7 +909,7 @@ def component_allowed_for_request(
             component.category == "gpu"
             and requested_gpu in {"nvidia", "n卡", "英伟达"}
         ):
-            return component.id.startswith("rtx-")
+            return component.id.startswith(("gtx-", "rtx-"))
         return not (
             component.category == "gpu"
             and component.id in OFFICE_ONLY_GPU_IDS
@@ -903,7 +922,7 @@ def component_allowed_for_request(
         if component.id not in OFFICE_GPU_IDS:
             return False
         if classify_office_workload(request.office_apps) == "cuda":
-            return component.id.startswith("rtx-")
+            return component.id.startswith(("gtx-", "rtx-"))
     return True
 
 
@@ -1189,13 +1208,13 @@ def _validate_am5_memory(parts: Dict[str, BuildTemplatePart]) -> None:
 
 def _validate_ddr4_memory(parts: Dict[str, BuildTemplatePart]) -> None:
     if not ddr4_memory_policy_allows(parts["ram"]):
-        raise CustomizationError("DDR4 内存必须使用双通道 3200 规格")
+        raise CustomizationError("DDR4 内存必须使用双通道 3200/3600 规格")
 
 
 def ddr4_memory_policy_allows(ram: BuildTemplatePart) -> bool:
     specs = ram.specs
     return specs.get("type") != "DDR4" or (
-        specs.get("modules") == 2 and specs.get("speed_mhz") == 3200
+        specs.get("modules") == 2 and specs.get("speed_mhz") in {3200, 3600}
     )
 
 
@@ -1222,12 +1241,14 @@ def _validate_psu(parts: Dict[str, BuildTemplatePart]) -> None:
 def _validate_cooler(parts: Dict[str, BuildTemplatePart]) -> None:
     cpu = parts["cpu"]
     cooler = parts["cooler"]
-    if cpu.component_id in LEGACY_AM4_CPU_IDS:
-        if (
-            cooler.component_id != LEGACY_AM4_COOLER_ID
-            or cooler.condition != "new"
-        ):
-            raise CustomizationError("R5 5600/5600X 必须使用全新利民 AX120 SE 散热器")
+    required_cooler_id = COOLER_BY_CPU_ID.get(cpu.component_id)
+    if required_cooler_id is not None:
+        if cooler.component_id != required_cooler_id:
+            if required_cooler_id == LEGACY_AM4_COOLER_ID:
+                raise CustomizationError("R5 5600/5600X 必须使用利民 AX120 SE 散热器")
+            if required_cooler_id == "base-cooler-dual-tower-6-heatpipe":
+                raise CustomizationError("当前高热 CPU 必须使用双塔六热管散热器")
+            raise CustomizationError("当前 CPU 未使用指定散热器")
         return
     heatpipes = cooler.specs.get("heatpipes")
     if isinstance(heatpipes, int) and heatpipes < 6:
@@ -1313,7 +1334,7 @@ def _primary_performance(template: BuildTemplate) -> int:
 
 def _gpu_vendor(gpu: BuildTemplatePart) -> str:
     vendor = str(gpu.specs.get("vendor", "")).lower()
-    if vendor == "nvidia" or gpu.component_id.startswith("rtx-"):
+    if vendor == "nvidia" or gpu.component_id.startswith(("gtx-", "rtx-")):
         return "nvidia"
     if "intel" in vendor or gpu.component_id.startswith("arc-"):
         return "intel"

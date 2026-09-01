@@ -178,6 +178,14 @@ struct ContentView: View {
                     presentedFullScreen = nil
                 }
             )
+        case .displayMatch(let returnTab):
+            DisplayMatchView(
+                savedHardwareProfile: onboardingProfile.hardwareProfile,
+                onBack: {
+                    selectedTab = returnTab
+                    presentedFullScreen = nil
+                }
+            )
         }
     }
 
@@ -229,6 +237,7 @@ private enum FullScreenRoute: Identifiable, Equatable {
     case aestheticBuild(styleID: String)
     case aestheticOverview(styleID: String)
     case performanceTest(AppTab)
+    case displayMatch(AppTab)
 
     var id: String {
         switch self {
@@ -240,6 +249,8 @@ private enum FullScreenRoute: Identifiable, Equatable {
             return "aesthetic-overview-\(styleID)"
         case .performanceTest(let returnTab):
             return "performance-test-\(returnTab)"
+        case .displayMatch(let returnTab):
+            return "display-match-\(returnTab)"
         }
     }
 }
@@ -298,8 +309,8 @@ private struct MainTabView: View {
 
             NavigationStack {
                 ToolsView(
-                    onOpenPerformanceTest: { onPresentFullScreen(.performanceTest(.diy)) },
-                    onOpenBudget: { onPresentFullScreen(.aiBuild(.fromAIBuild)) }
+                    onOpenDisplayMatch: { onPresentFullScreen(.displayMatch(.diy)) },
+                    accessToken: session.accessToken
                 )
                     .toolbar(.hidden, for: .navigationBar)
             }

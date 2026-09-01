@@ -112,8 +112,9 @@ struct ConfigReviewView: View {
             case .landing:
                 ConfigReviewLandingView(
                     selectedImageItem: $selectedImageItem,
+                    draft: $draft,
                     onBack: onBack,
-                    onManualEntry: { state = .manualEntry }
+                    onSubmit: startManualReview
                 )
             case .manualEntry:
                 ConfigReviewManualEntryView(
@@ -224,80 +225,111 @@ struct ConfigReviewView: View {
 
 private struct ConfigReviewLandingView: View {
     @Binding var selectedImageItem: PhotosPickerItem?
+    @Binding var draft: ConfigReviewDraft
     let onBack: () -> Void
-    let onManualEntry: () -> Void
+    let onSubmit: () -> Void
+    @State private var selectedCategory: ConfigReviewPartCategory?
+
+    private let hardwareRows: [(icon: String, title: String)] = [
+        ("cpu", "CPU / 主板"),
+        ("rectangle.on.rectangle", "显卡"),
+        ("memorychip", "内存"),
+        ("internaldrive", "硬盘"),
+        ("bolt", "电源"),
+        ("fanblades", "散热 / 机箱")
+    ]
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
                 ConfigReviewLandingTopBar(onBack: onBack)
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("配置搭配评估")
-                        .font(.system(size: 42, weight: .black))
-                        .foregroundStyle(.black)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("当前功能")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(ConfigReviewPalette.secondary)
 
-                    Text("商家配置先别急着买，帮你看懂搭配风险和实际性能")
-                        .font(.system(size: 15, weight: .medium))
+                    Text("配置排雷")
+                        .font(.system(size: 29, weight: .black))
+                        .foregroundStyle(.black)
+                        .padding(.top, 10)
+
+                    Text("识别兼容与性能问题，判断配置能不能买")
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(ConfigReviewPalette.secondary)
                         .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(.top, 18)
-
-                ConfigReviewNumberedSection(number: "01") {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("上传配置单")
-                            .font(.system(size: 28, weight: .black))
-                            .foregroundStyle(.black)
-
-                        Text("支持截图、照片和聊天记录")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(ConfigReviewPalette.secondary)
-
-                        Text("配置截图  ·  配置单照片  ·  聊天记录")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(ConfigReviewPalette.muted)
-
-                        PhotosPicker(selection: $selectedImageItem, matching: .images) {
-                            ConfigReviewPrimaryActionLabel(title: "选择图片")
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.top, 4)
-                    }
-                }
-                .padding(.top, 30)
-
-                Divider()
-                    .overlay(ConfigReviewPalette.divider)
-                    .padding(.top, 28)
-
-                ConfigReviewNumberedSection(number: "02") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("填写配置")
-                            .font(.system(size: 28, weight: .black))
-                            .foregroundStyle(.black)
-
-                        Text("逐项选择配件型号，不需要填写价格")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(ConfigReviewPalette.secondary)
-
-                        ConfigReviewEntryPreview(onOpen: onManualEntry)
-                            .padding(.top, 4)
-
-                        Button(action: onManualEntry) {
-                            ConfigReviewSecondaryActionLabel(title: "填写配置")
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.top, 4)
-                    }
+                        .padding(.top, 6)
                 }
                 .padding(.top, 26)
 
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("我的配置")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundStyle(.black)
+
+                    Text("点击选择或修改硬件型号")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(ConfigReviewPalette.secondary)
+                        .padding(.top, 5)
+
+                    ConfigReviewHardwareRows(
+                        rows: hardwareRows,
+                        onOpen: { category in selectedCategory = category },
+                        draft: draft
+                    )
+                        .padding(.top, 11)
+                }
+                .padding(.top, 36)
+
+                Text("快速导入配置")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.black)
+                    .padding(.top, 30)
+
+                PhotosPicker(selection: $selectedImageItem, matching: .images) {
+                    ConfigReviewImportRow()
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 12)
+
+                Button(action: onSubmit) {
+                    HStack(spacing: 16) {
+                        Text("开始排雷")
+                        Image(systemName: "arrow.right")
+                    }
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(Color.black, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .disabled(!draft.canSubmit)
+                .opacity(draft.canSubmit ? 1 : 0.3)
+                .padding(.horizontal, 2)
+                .padding(.top, 26)
+
                 Color.clear
-                    .frame(height: 24)
+                    .frame(height: 20)
             }
             .padding(.horizontal, 28)
         }
+        .sheet(item: $selectedCategory) { category in
+            HardwarePickerSheet(
+                title: category.title,
+                icon: category.icon,
+                filters: category.filters(),
+                selectedValue: modelBinding(for: category)
+            )
+            .presentationDetents([.large])
+        }
+    }
+
+    private func modelBinding(for category: ConfigReviewPartCategory) -> Binding<String> {
+        Binding(
+            get: { draft.model(for: category) },
+            set: { draft.setModel($0, for: category) }
+        )
     }
 }
 
@@ -313,58 +345,40 @@ private struct ConfigReviewLandingTopBar: View {
     }
 }
 
-private struct ConfigReviewNumberedSection<Content: View>: View {
-    let number: String
-    @ViewBuilder let content: () -> Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .firstTextBaseline, spacing: 16) {
-                Text(number)
-                    .font(.system(size: 32, weight: .bold))
-                Text("/")
-                    .font(.system(size: 27, weight: .medium))
-            }
-            .foregroundStyle(ConfigReviewPalette.number)
-
-            content()
-        }
-    }
-}
-
-private struct ConfigReviewEntryPreview: View {
-    let onOpen: () -> Void
-
-    private let rows = [
-        ("cpu", "CPU / 主板", "选择型号"),
-        ("display", "显卡 / 内存", "选择型号"),
-        ("bolt", "硬盘 / 电源", "选择型号")
-    ]
+private struct ConfigReviewHardwareRows: View {
+    let rows: [(icon: String, title: String)]
+    let onOpen: (ConfigReviewPartCategory) -> Void
+    let draft: ConfigReviewDraft
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(rows.enumerated()), id: \.offset) { index, row in
-                Button(action: onOpen) {
-                    HStack(spacing: 14) {
-                        Image(systemName: row.0)
-                            .font(.system(size: 17, weight: .semibold))
-                            .frame(width: 28)
+                let category = ConfigReviewPartCategory.allCases[index]
+                Button { onOpen(category) } label: {
+                    HStack(spacing: 20) {
+                        Image(systemName: row.icon)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(.black)
+                            .frame(width: 36, height: 36)
+                            .background(Color(white: 0.965), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
 
-                        Text(row.1)
-                            .font(.system(size: 15, weight: .bold))
+                        Text(row.title)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.black)
 
-                        Spacer()
+                        Spacer(minLength: 8)
 
-                        Text(row.2)
+                        Text(draft.model(for: category).isEmpty ? "未选择" : draft.model(for: category))
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(ConfigReviewPalette.muted)
 
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .bold))
+                            .font(.system(size: 15, weight: .bold))
                             .foregroundStyle(ConfigReviewPalette.muted)
+                            .frame(width: 20)
                     }
-                    .foregroundStyle(.black)
-                    .frame(height: 48)
+                    .padding(.horizontal, 14)
+                    .frame(height: 60)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -374,6 +388,42 @@ private struct ConfigReviewEntryPreview: View {
                 }
             }
         }
+        .micro3DSurface(cornerRadius: 20, showsTopHighlight: false)
+        .padding(.horizontal, -4)
+    }
+}
+
+private struct ConfigReviewImportRow: View {
+    var body: some View {
+        HStack(spacing: 20) {
+            Image(systemName: "camera")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.black)
+                .frame(width: 36, height: 36)
+                .background(Color(white: 0.965), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("从图片识别配置")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.black)
+
+                Text("配置单、商品图、聊天记录都可以")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(ConfigReviewPalette.muted)
+            }
+
+            Spacer(minLength: 8)
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(ConfigReviewPalette.muted)
+                .frame(width: 20)
+        }
+        .padding(.horizontal, 14)
+        .frame(maxWidth: .infinity)
+        .frame(height: 64)
+        .micro3DSurface(cornerRadius: 20, showsTopHighlight: false)
+        .padding(.horizontal, -4)
     }
 }
 
@@ -1313,9 +1363,9 @@ private struct ConfigReviewBackButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: "chevron.left")
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(.black)
-                .frame(width: 32, height: 32)
+                .frame(width: 28, height: 28)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("返回")

@@ -34,7 +34,7 @@ SkipReason = Literal[
     "generation_error",
 ]
 
-PRICE_DATE = "2026-08-26"
+PRICE_DATE = "2026-08-30"
 BUDGET_TIERS = list(range(3_000, 7_001, 500))
 DIRECTIONS: Tuple[Direction, ...] = ("fps", "aaa", "balanced")
 PURCHASE_MODES: Tuple[PurchaseMode, ...] = ("new", "used", "mixed")
@@ -115,11 +115,22 @@ CUSTOMIZATION_SUPPORT_IDS = LOW_BUDGET_STORAGE_IDS | {
     "base-ddr4-32gb-3200",
     "i5-14600kf",
     "thermalright-ax120-se",
+    "valkyrie-cq125",
 }
 ALTERNATIVE_ONLY_CPU_IDS = {"i5-14600kf"}
 AM4_VALUE_BOARD_ID = "asus-a520m-k"
 AM4_PCIE4_BOARD_ID = "asus-b550m-plus"
 LEGACY_AM4_COOLER_ID = "thermalright-ax120-se"
+COOLER_BY_CPU_ID = {
+    "r5-7500f": "valkyrie-cq125",
+    "r5-9600x": "base-cooler-6-heatpipe",
+    "r7-9700x": "base-cooler-6-heatpipe",
+    "i5-12600kf": "base-cooler-6-heatpipe",
+    "i5-14600kf": "base-cooler-dual-tower-6-heatpipe",
+    "r7-7800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9800x3d": "base-cooler-dual-tower-6-heatpipe",
+    "r7-9850x3d": "base-cooler-dual-tower-6-heatpipe",
+}
 
 
 @dataclass(frozen=True)
@@ -478,6 +489,9 @@ def _select_candidate(
         and _condition_is_allowed(motherboard, conditions["motherboard"])
     }
     reviewed_gpu = {
+        (3_000, "fps", "used"): "gtx-1080-ti",
+        (3_000, "aaa", "used"): "gtx-1080-ti",
+        (3_000, "balanced", "used"): "gtx-1080-ti",
         (5_000, "fps", "new"): "rx-7650-gre",
         (5_000, "fps", "mixed"): "rx-9060-xt-8gb",
     }.get((budget, direction, purchase_mode))
@@ -497,19 +511,14 @@ def _select_candidate(
             continue
         if not _condition_is_allowed(cpu, conditions["cpu"]):
             continue
-        cooler_id = (
+        cooler_id = COOLER_BY_CPU_ID.get(
+            cpu.component_id,
             LEGACY_AM4_COOLER_ID
             if cpu.component_id in {"r5-5600", "r5-5600x"}
-            else "base-cooler-dual-tower-6-heatpipe"
-            if "x3d" in cpu.component_id or cpu.component_id == "i5-12600kf"
-            else "base-cooler-6-heatpipe"
+            else "base-cooler-dual-tower-6-heatpipe",
         )
         cooler = support_parts[cooler_id]
-        effective_conditions = (
-            {**conditions, "cooler": "new"}
-            if cpu.component_id in {"r5-5600", "r5-5600x"}
-            else conditions
-        )
+        effective_conditions = conditions
         value_motherboard = (
             _cheapest_adequate_motherboard(
                 cpu.component_id,
@@ -661,6 +670,12 @@ def _select_candidate(
 
                     saw_complete_candidate = True
                     total = sum(part.reference_price for part in parts)
+                    if (
+                        direction == "fps"
+                        and ram.component_id == "base-ddr4-16gb-3600"
+                        and total > budget + 300
+                    ):
+                        continue
                     max_overage = (
                         MINIMUM_3000_TIER_OVERAGE
                         if budget == 3_000
@@ -721,6 +736,9 @@ def _score_candidate(
     ram_capacity = (
         int(parts["ram"].specs.get("capacity_gb", 0)) if "ram" in parts else 0
     )
+    ram_speed_score = (
+        int(parts["ram"].specs.get("speed_mhz", 0)) if "ram" in parts else 0
+    )
     ram_latency_score = (
         -int(parts["ram"].specs.get("cas_latency", 99))
         if "ram" in parts
@@ -746,6 +764,7 @@ def _score_candidate(
                 modern_gpu_rank,
                 candidate.cpu_performance,
                 candidate.gpu_performance,
+                ram_speed_score,
                 -candidate.total,
                 motherboard_tier_score,
                 motherboard_model_score,
@@ -760,6 +779,7 @@ def _score_candidate(
                 candidate.cpu_performance,
                 gpu_priority,
                 candidate.gpu_performance,
+                ram_speed_score,
                 -candidate.total,
                 motherboard_tier_score,
                 motherboard_model_score,
@@ -774,6 +794,7 @@ def _score_candidate(
             motherboard_tier_score,
             motherboard_model_score,
             ram_capacity,
+            ram_speed_score,
             ram_latency_score,
             -old_gpu_risk,
             -candidate.total,
@@ -805,7 +826,7 @@ def _score_candidate(
 
 
 def _has_legacy_mining_risk(gpu_id: str) -> bool:
-    return gpu_id.startswith(("rtx-30", "rx-6"))
+    return gpu_id.startswith(("gtx-", "rtx-30", "rx-6"))
 
 
 def _build_template(
@@ -913,7 +934,11 @@ def _smallest_psu(
             and isinstance(part.specs.get("watt"), int)
             and _condition_is_allowed(part, condition)
         ),
-        key=lambda part: int(part.specs["watt"]),
+        key=lambda part: (
+            int(part.specs["watt"]),
+            int(part.price(condition)),
+            part.component_id,
+        ),
     )
     return next(
         (part for part in psus if int(part.specs["watt"]) >= required_watt),
@@ -969,7 +994,7 @@ def _support_candidates(
 
 def _candidate_gpu_vendor(candidate: Candidate) -> GpuVendor:
     gpu = candidate.parts_by_role["gpu"]
-    return "nvidia" if gpu.component_id.startswith("rtx-") else "amd"
+    return "nvidia" if gpu.component_id.startswith(("gtx-", "rtx-")) else "amd"
 
 
 def _load_catalog() -> Tuple[
@@ -1049,7 +1074,7 @@ def _load_gpu_parts(path: Path) -> List[PricedPart]:
         component_id = row["target_id"]
         if component_id not in GPU_PERFORMANCE:
             continue
-        is_nvidia = component_id.startswith("rtx-")
+        is_nvidia = component_id.startswith(("gtx-", "rtx-"))
         parts.append(
             PricedPart(
                 component_id=component_id,

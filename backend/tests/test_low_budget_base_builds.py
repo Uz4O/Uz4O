@@ -130,6 +130,23 @@ def test_4500_plus_public_options_return_all_three_modes_when_capacity_fits() ->
             yield session
 
     app.dependency_overrides[get_session] = override_session
+    low_budget_response = TestClient(app).post(
+        "/v1/build/options",
+        json={
+            "budget": 3000,
+            "use_case": "游戏",
+            "game_categories": ["CS2"],
+            "direction": "fps",
+        },
+    )
+
+    assert low_budget_response.status_code == 200
+    low_budget_body = low_budget_response.json()
+    assert len(low_budget_body["options"]) == 1
+    assert low_budget_body["options"][0]["template_id"] == "base-3000-fps-used"
+    assert low_budget_body["options"][0]["estimated_total"] == 2_986
+    assert low_budget_body["unavailable_modes"] == ["new", "mixed"]
+
     response = TestClient(app).post(
         "/v1/build/options",
         json={
@@ -179,7 +196,7 @@ def test_4500_plus_public_options_return_all_three_modes_when_capacity_fits() ->
     low_budget_special_game = TestClient(app).post(
         "/v1/build/options",
         json={
-            "budget": 5100,
+            "budget": 5200,
             "use_case": "游戏",
             "game_categories": ["PUBG"],
             "memory_size": "16GB",
@@ -300,14 +317,12 @@ def test_every_template_has_eight_source_priced_parts_and_an_exact_total() -> No
             assert part.price_source == source
 
 
-def test_purchase_conditions_follow_the_three_modes_with_new_ax120_for_5600() -> None:
+def test_purchase_conditions_follow_the_three_modes() -> None:
     for template in generated_templates():
         actual = {
             part.role: part.condition for part in template.details.parts
         }
         expected = dict(EXPECTED_CONDITIONS[template.details.purchase_mode])
-        if template.components["cpu"] in {"r5-5600", "r5-5600x"}:
-            expected["cooler"] = "new"
         assert actual == expected
 
 
@@ -347,7 +362,9 @@ def test_generated_parts_are_compatible_and_new_slots_are_available() -> None:
             == "base-ssd-fanxiang-s500-pro-512gb"
         )
         expected_vendor = (
-            "nvidia" if parts["gpu"].component_id.startswith("rtx-") else "amd"
+            "nvidia"
+            if parts["gpu"].component_id.startswith(("gtx-", "rtx-"))
+            else "amd"
         )
         assert template.details.gpu_vendor == expected_vendor
         if parts["gpu"].condition == "new" and parts["gpu"].component_id.startswith(
@@ -365,8 +382,9 @@ def test_generated_parts_are_compatible_and_new_slots_are_available() -> None:
             )
         if parts["cpu"].component_id in {"r5-5600", "r5-5600x"}:
             assert parts["cooler"].component_id == "thermalright-ax120-se"
-            assert parts["cooler"].condition == "new"
-            assert parts["cooler"].reference_price == 69
+            assert parts["cooler"].reference_price == (
+                69 if parts["cooler"].condition == "new" else 39
+            )
 
 
 def test_6000_plus_builds_do_not_use_5600_series_cpus() -> None:
@@ -700,8 +718,8 @@ def test_6500_mixed_fps_build_keeps_a_table_valid_cpu_priority() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "r7-7800x3d"
-    assert parts["gpu"].component_id == "rx-7700-xt"
+    assert parts["cpu"].component_id == "r5-9600x"
+    assert parts["gpu"].component_id == "rx-7800-xt"
     assert not parts["gpu"].component_id.startswith(("rtx-30", "rx-6"))
     assert 6_400 <= template.estimated_total <= 7_000
 
@@ -726,6 +744,9 @@ def test_support_components_use_current_user_models_and_prices() -> None:
     assert boards["asus-b550m-plus"].new_price == 750
     assert support_parts["base-ddr4-32gb-3200"].used_price == 550
     assert support_parts["base-ddr4-32gb-3200"].new_price == 750
+    assert support_parts["base-ddr4-16gb-3200"].used_price == 450
+    assert support_parts["base-ddr4-16gb-3600"].used_price == 499
+    assert support_parts["base-ddr4-16gb-3600"].new_price == 759
     assert support_parts["base-ddr5-16gb-6000-c28"].used_price == 1350
     assert support_parts["base-ddr5-16gb-6000-c28"].new_price == 1650
     assert support_parts["base-ssd-512gb-tlc"].name == "宏碁掠夺者 GM7 512GB"
@@ -747,7 +768,11 @@ def test_support_components_use_current_user_models_and_prices() -> None:
     assert support_parts["base-ssd-fanxiang-s790e-1tb"].used_price == 750
     assert support_parts["base-ssd-fanxiang-s790e-1tb"].new_price == 968
     assert support_parts["base-psu-550w"].name == "玄武 550 V4 550W"
+    assert support_parts["base-psu-550w"].used_price == 109
     assert support_parts["base-psu-550w"].new_price == 199
+    assert support_parts["xuanwu-650se"].name == "玄武 650SE 650W"
+    assert support_parts["xuanwu-650se"].used_price == 139
+    assert support_parts["xuanwu-650se"].new_price is None
     assert support_parts["base-psu-650w-gold"].name == "安耐美 GN650 V3 650W"
     assert support_parts["base-psu-650w-gold"].used_price == 200
     assert support_parts["base-psu-650w-gold"].new_price == 299
@@ -775,18 +800,62 @@ def test_amd_gpu_prices_match_the_latest_user_review() -> None:
     with GPU_PRICE_PATH.open(encoding="utf-8", newline="") as handle:
         rows = {row["target_id"]: row for row in csv.DictReader(handle)}
 
-    assert rows["rx-7800-xt"]["used_price"] == "2700"
+    expected_used_prices = {
+        "rx-6750-gre": "1699",
+        "rx-7650-gre": "1499",
+        "rx-7700-xt": "2300",
+        "rx-7800-xt": "2799",
+        "rx-7900-xt": "3999",
+        "rx-7900-xtx": "5399",
+        "rx-9060-xt-8gb": "2299",
+        "rx-9060-xt-16gb": "2899",
+        "rx-9070-gre": "3699",
+        "rx-9070-xt": "5099",
+    }
+    assert {
+        component_id: rows[component_id]["used_price"]
+        for component_id in expected_used_prices
+    } == expected_used_prices
     assert rows["rx-7800-xt"]["new_price"] == ""
-    assert rows["rx-9070-gre"]["used_price"] == "3500"
     assert rows["rx-9070-gre"]["new_price"] == "4699"
     assert rows["rx-9070-xt"]["new_price"] == "6999"
-    assert rows["rx-9060-xt-8gb"]["used_price"] == "2000"
     assert rows["rx-9060-xt-8gb"]["new_price"] == "3099"
-    assert rows["rx-9060-xt-16gb"]["used_price"] == "2200"
     assert rows["rx-9060-xt-16gb"]["new_price"] == "3099"
     assert "rx-9060-xt-12gb" not in rows
     assert rows["rx-7700-xt"]["new_price"] == "2699"
     assert rows["rx-7650-gre"]["new_price"] == "2199"
+
+
+def test_latest_lowest_used_build_uses_the_reviewed_1080_ti_parts() -> None:
+    template = next(
+        template
+        for template in generated_templates()
+        if template.id == "base-3000-balanced-used"
+    )
+    parts = {part.role: part for part in template.details.parts}
+
+    assert template.estimated_total == 2937
+    assert parts["cpu"].component_id == "r5-5600x"
+    assert parts["cpu"].reference_price == 650
+    assert parts["gpu"].component_id == "gtx-1080-ti"
+    assert parts["gpu"].reference_price == 949
+    assert parts["ram"].reference_price == 450
+    assert parts["psu"].component_id == "xuanwu-650se"
+    assert parts["psu"].reference_price == 139
+    assert parts["cooler"].reference_price == 39
+
+
+def test_low_budget_fps_prefers_reviewed_ddr4_3600_when_it_fits() -> None:
+    template = next(
+        template
+        for template in generated_templates()
+        if template.id == "base-3000-fps-used"
+    )
+    parts = {part.role: part for part in template.details.parts}
+
+    assert parts["ram"].component_id == "base-ddr4-16gb-3600"
+    assert parts["ram"].reference_price == 499
+    assert template.estimated_total == 2986
 
 
 def test_5000_used_aaa_uses_the_strongest_table_valid_option() -> None:
@@ -801,7 +870,7 @@ def test_5000_used_aaa_uses_the_strongest_table_valid_option() -> None:
     assert parts["gpu"].component_id == "rtx-5060-ti"
     assert parts["gpu"].reference_price == 3099
     assert parts["motherboard"].component_id == "asus-b550m-plus"
-    assert template.estimated_total == 5418
+    assert template.estimated_total == 5307
 
 
 def test_5000_fps_new_uses_reviewed_rx_7650_gre_option() -> None:
@@ -814,8 +883,9 @@ def test_5000_fps_new_uses_reviewed_rx_7650_gre_option() -> None:
 
     assert parts["gpu"].component_id == "rx-7650-gre"
     assert parts["gpu"].reference_price == 2199
+    assert parts["ram"].component_id == "base-ddr4-16gb-3600"
     assert parts["psu"].component_id == "base-psu-550w"
-    assert template.estimated_total == 5146
+    assert template.estimated_total == 4994
 
 
 def test_5000_fps_mixed_uses_reviewed_rx_9060_xt_8gb_option() -> None:
@@ -827,8 +897,8 @@ def test_5000_fps_mixed_uses_reviewed_rx_9060_xt_8gb_option() -> None:
     parts = {part.role: part for part in template.details.parts}
 
     assert parts["gpu"].component_id == "rx-9060-xt-8gb"
-    assert parts["gpu"].reference_price == 2000
-    assert template.estimated_total == 5138
+    assert parts["gpu"].reference_price == 2299
+    assert template.estimated_total == 5487
 
 
 def test_b760m_a_is_the_available_lga1700_base_board() -> None:
@@ -848,8 +918,9 @@ def test_5000_mixed_amd_aaa_uses_12600kf_to_fund_a_stronger_gpu() -> None:
     )
     parts = {part.role: part for part in template.details.parts}
 
-    assert parts["cpu"].component_id == "i5-12600kf"
+    assert parts["cpu"].component_id == "r5-5600x"
     assert parts["gpu"].component_id == "rx-7700-xt"
+    assert parts["motherboard"].component_id == "asus-b550m-plus"
 
 
 def test_4000_fps_used_falls_back_to_rx_7650_gre_when_3070_ti_power_does_not_fit() -> None:
@@ -875,7 +946,7 @@ def test_3500_fps_used_avoids_legacy_mining_risk_when_modern_gpu_fits() -> None:
 
     assert parts["gpu"].component_id == "rx-7650-gre"
     assert not parts["gpu"].component_id.startswith(("rtx-30", "rx-6"))
-    assert parts["gpu"].reference_price == 1_400
+    assert parts["gpu"].reference_price == 1_499
 
 
 def test_4500_fps_used_uses_the_12600kf_pairing_column() -> None:
@@ -889,8 +960,8 @@ def test_4500_fps_used_uses_the_12600kf_pairing_column() -> None:
     assert parts["cpu"].component_id == "i5-12600kf"
     assert parts["motherboard"].component_id == "msi-b760m-a"
     assert parts["motherboard"].reference_price == 550
-    assert parts["gpu"].component_id == "rx-7700-xt"
-    assert template.estimated_total == 4679
+    assert parts["gpu"].component_id == "rx-9060-xt-8gb"
+    assert template.estimated_total == 4918
 
 
 def test_3060_ti_is_removed_from_the_gpu_whitelist() -> None:
@@ -934,6 +1005,10 @@ def test_rtx_3070_ti_uses_at_least_750w_power_supply() -> None:
     )
 
 
+def test_gtx_1080_ti_uses_at_least_650w_power_supply() -> None:
+    assert minimum_psu_watt("r5-5600x", "gtx-1080-ti") == 650
+
+
 def test_5000_aaa_reviewed_builds_remain_table_valid() -> None:
     templates = {item.id: item for item in generated_templates()}
 
@@ -946,9 +1021,9 @@ def test_5000_aaa_reviewed_builds_remain_table_valid() -> None:
 
     assert used_parts["gpu"].component_id == "rtx-5060-ti"
     assert used_parts["motherboard"].component_id == "asus-b550m-plus"
-    assert mixed_parts["cpu"].component_id == "i5-12600kf"
+    assert mixed_parts["cpu"].component_id == "r5-5600x"
     assert mixed_parts["gpu"].component_id == "rx-7700-xt"
-    assert mixed_parts["motherboard"].component_id == "msi-b760m-a"
+    assert mixed_parts["motherboard"].component_id == "asus-b550m-plus"
     assert mixed_parts["psu"].component_id == "base-psu-750w-gold"
 
 
@@ -1061,7 +1136,7 @@ def test_reference_export_uses_the_generated_snapshot_after_source_mutation(
     mutated_cpu_path = tmp_path / CPU_PRICE_PATH.name
     original = CPU_PRICE_PATH.read_text(encoding="utf-8")
     mutated = original.replace(
-        "r5-5600x,R5 5600X,720,820",
+        "r5-5600x,R5 5600X,650,820",
         "r5-5600x,R5 5600X,1,2",
     )
     assert mutated != original

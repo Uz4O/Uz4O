@@ -8,8 +8,8 @@ motherboard,asus-x870e-glacial,华硕 ROG X870E GLACIAL 冰川,华硕,11500,9000
 motherboard,asus-x870e-hero,华硕 ROG X870E DARK HERO,华硕,4700,4000,4700,1,0,high_budget_base_catalog
 motherboard,asus-x870e-neo,华硕 ROG X870E NEO,华硕,3400,3000,3400,1,0,high_budget_base_catalog
 case,base-case-mid-tower,普通中塔机箱,通用规格,100,80,100,1,0,high_budget_base_catalog
-cooler,base-cooler-6-heatpipe,6热管风冷,通用规格,100,70,100,1,0,high_budget_base_catalog
-cooler,base-cooler-dual-tower-6-heatpipe,双塔6热管风冷,通用规格,150,100,150,1,0,high_budget_base_catalog
+cooler,base-cooler-6-heatpipe,酷里奥 A60 ARGB,酷里奥,129,69,129,1,0,high_budget_base_catalog
+cooler,base-cooler-dual-tower-6-heatpipe,超频3 RZ700D,超频3,299,209,299,1,0,high_budget_base_catalog
 ram,base-ddr5-16gb-6000-c28,DDR5 16GB 6000 C28,通用规格,1650,1350,1650,1,0,high_budget_base_catalog
 ram,base-ddr5-32gb-6000-c28,DDR5 32GB 6000 C28,通用规格,3300,2700,3300,1,0,high_budget_base_catalog
 psu,base-psu-1000w-gold,安耐美 PX1000DF 1000W,安耐美,859,859,859,1,0,high_budget_base_catalog
@@ -31,7 +31,7 @@ cpu,r5-9600x,R5 9600X,AMD,1050,950,1050,1,0,high_budget_base_catalog
 cpu,r7-7800x3d,R7 7800X3D,AMD,1800,1650,1800,1,0,high_budget_base_catalog
 cpu,r7-9700x,R7 9700X,AMD,1500,1300,1500,1,0,high_budget_base_catalog
 cpu,r7-9800x3d,R7 9800X3D,AMD,2500,2400,2500,1,0,high_budget_base_catalog
-cpu,r7-9850x3d,R7 9850X3D,AMD,3100,2800,3100,1,0,high_budget_base_catalog
+cpu,r7-9850x3d,R7 9850X3D,AMD,2799,2550,2799,1,0,high_budget_base_catalog
 gpu,rtx-4070-super,RTX 4070 SUPER,NVIDIA,3700,3700,,1,0,high_budget_base_catalog
 gpu,rtx-4070-ti-super,RTX 4070 Ti SUPER,NVIDIA,4799,4799,,1,0,high_budget_base_catalog
 gpu,rtx-4090-d,RTX 4090 D,NVIDIA,15500,15500,,1,0,high_budget_base_catalog
@@ -40,10 +40,12 @@ gpu,rtx-5070,微星 RTX5070白魔龙 3X,NVIDIA,6999,5999,6999,1,0,high_budget_ba
 gpu,rtx-5070-ti,微星 RTX5070TI万图师 3X,NVIDIA,9799,7299,9799,1,0,high_budget_base_catalog
 gpu,rtx-5080,微星 RTX5080万图师 3X,NVIDIA,13499,10500,13499,1,0,high_budget_base_catalog
 gpu,rtx-5090-d-v2,七彩虹 5090D ADOC 24G V2,NVIDIA,22999,19000,22999,1,0,high_budget_base_catalog
-gpu,rx-7700-xt,RX 7700 XT,AMD,2699,2000,2699,1,0,high_budget_base_catalog
-gpu,rx-7800-xt,RX 7800 XT,AMD,2700,2700,,1,0,high_budget_base_catalog
-gpu,rx-7900-xt,RX 7900 XT,AMD,3200,3200,,1,0,high_budget_base_catalog
-gpu,rx-7900-xtx,RX 7900 XTX,AMD,4500,4500,,1,0,high_budget_base_catalog
-gpu,rx-9060-xt-16gb,RX 9060 XT 16G,AMD,3099,2200,3099,1,0,high_budget_base_catalog
-gpu,rx-9070-gre,RX 9070 GRE,AMD,4699,3500,4699,1,0,high_budget_base_catalog
-gpu,rx-9070-xt,蓝宝石 9070XT 16G 脉动,AMD,6999,4000,6999,1,0,high_budget_base_catalog
+gpu,rx-7700-xt,RX 7700 XT,AMD,2699,2300,2699,1,0,high_budget_base_catalog
+gpu,rx-7800-xt,RX 7800 XT,AMD,2799,2799,,1,0,high_budget_base_catalog
+gpu,rx-7900-xt,RX 7900 XT,AMD,3999,3999,,1,0,high_budget_base_catalog
+gpu,rx-7900-xtx,RX 7900 XTX,AMD,5399,5399,,1,0,high_budget_base_catalog
+gpu,rx-9060-xt-16gb,RX 9060 XT 16G,AMD,3099,2899,3099,1,0,high_budget_base_catalog
+gpu,rx-9070-gre,RX 9070 GRE,AMD,4699,3699,4699,1,0,high_budget_base_catalog
+gpu,rx-9070-xt,蓝宝石 9070XT 16G 脉动,AMD,6999,5099,6999,1,0,high_budget_base_catalog
+cooler,valkyrie-cq125,瓦尔基里 CQ125,瓦尔基里,109,59,109,1,0,high_budget_base_catalog
+psu,xuanwu-650se,玄武 650SE 650W,玄武,139,139,,1,0,high_budget_base_catalog

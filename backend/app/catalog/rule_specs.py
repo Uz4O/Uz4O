@@ -17,6 +17,7 @@ CPU_RULE_SPECS = {
 }
 
 GPU_RULE_SPECS = {
+    "gtx-1080-ti": {"perf_index": 38, "tdp": 250},
     "rtx-3060-ti": {"perf_index": 50, "tdp": 200},
     "rx-6750-gre": {"perf_index": 43, "tdp": 250},
     "rx-7700-xt": {"perf_index": 55, "tdp": 245},
@@ -166,6 +167,7 @@ CPU_GPU_PAIRING_TIER = {
 }
 SPECIAL_5600_CPU_IDS = {"r5-5600", "r5-5600x"}
 GPU_PAIRING_TIER = {
+    "gtx-1080-ti": 0,
     "rx-6750-gre": 0,
     "rx-7650-gre": 0,
     "rtx-4060": 0,

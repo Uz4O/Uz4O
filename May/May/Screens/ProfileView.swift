@@ -14,18 +14,11 @@ struct ProfileView: View {
     @State private var logoutError: String?
 
     private let accountItems = [
-        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案", isAvailable: true),
-        ProfileItem(title: "退出登录", icon: "rectangle.portrait.and.arrow.right", subtitle: "仅退出当前设备", isAvailable: true)
+        ProfileItem(title: "我的配置单", icon: "doc.text", subtitle: "查看保存过的方案", isAvailable: true)
     ]
 
-    private let helpItems = [
-        ProfileItem(title: "用户协议", icon: "doc.plaintext", isAvailable: true),
-        ProfileItem(title: "隐私政策", icon: "lock.shield", isAvailable: true),
-        ProfileItem(title: "第三方信息共享清单", icon: "square.stack.3d.up", isAvailable: true),
-        ProfileItem(title: "联系与投诉", icon: "paperplane", subtitle: LegalContact.email, isAvailable: true)
-    ]
-
-    private let destructiveItems = [
+    private let accountActionItems = [
+        ProfileItem(title: "退出登录", icon: "rectangle.portrait.and.arrow.right", subtitle: "仅退出当前设备", isAvailable: true),
         ProfileItem(
             title: "注销账号",
             icon: "person.crop.circle.badge.minus",
@@ -33,6 +26,13 @@ struct ProfileView: View {
             isAvailable: true,
             isDestructive: true
         )
+    ]
+
+    private let helpItems = [
+        ProfileItem(title: "用户协议", icon: "doc.plaintext", isAvailable: true),
+        ProfileItem(title: "隐私政策", icon: "lock.shield", isAvailable: true),
+        ProfileItem(title: "第三方信息共享清单", icon: "square.stack.3d.up", isAvailable: true),
+        ProfileItem(title: "联系与投诉", icon: "paperplane", subtitle: LegalContact.email, isAvailable: true)
     ]
 
     var body: some View {
@@ -74,7 +74,7 @@ struct ProfileView: View {
 
                         ProfileSection(title: "我的方案", items: accountItems, action: action)
                         ProfileSection(title: "设置与帮助", items: helpItems, action: action)
-                        ProfileSection(title: nil, items: destructiveItems, action: action)
+                        ProfileSection(title: nil, items: accountActionItems, action: action)
                     }
                     .frame(width: contentWidth)
                     .padding(.top, 18)
@@ -83,7 +83,7 @@ struct ProfileView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .background(AppTheme.background.ignoresSafeArea())
+            .background(Color(red: 0.975, green: 0.985, blue: 0.985).ignoresSafeArea())
         }
         .sheet(item: $presentedLegalDocument) { document in
             NavigationStack {

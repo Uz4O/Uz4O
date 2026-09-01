@@ -5,17 +5,19 @@ arc-b580-12gb
 asus-a520m-k
 asus-b860m-k
 base-case-mid-tower
+base-cooler-6-heatpipe
 base-cooler-dual-tower-6-heatpipe
 base-ddr4-16gb-3200
+base-ddr4-16gb-3600
 base-ddr5-16gb-6000-c30
 base-psu-1000w-gold
-base-psu-550w
 base-psu-650w-gold
 base-psu-750w-gold
 base-psu-850w-gold
 base-ssd-512gb-tlc
 base-ssd-fanxiang-s500-pro-512gb
 base-ssd-fanxiang-s790e-1tb
+gtx-1080-ti
 i5-12600kf
 msi-b760m-a
 msi-b860m-mortar
@@ -38,3 +40,4 @@ u5-245k
 u5-250-plus
 u7-265k
 u7-270-plus
+xuanwu-650se

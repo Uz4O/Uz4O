@@ -140,11 +140,11 @@
       "speed_mhz": 3200,
       "modules": 2
     },
-    "used_price": 400,
+    "used_price": 450,
     "new_price": 500,
-    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
+    "used_source": "用户于2026-08-30确认的DDR4 8GB×2二手参考价",
     "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "price_date": "2026-07-07"
+    "price_date": "2026-08-30"
   },
   {
     "id": "base-ddr4-32gb-3200",
@@ -163,6 +163,25 @@
     "used_source": "用户于2026-08-21确认的DDR4 16GB x2二手参考价",
     "new_source": "用户于2026-08-21确认的DDR4 16GB x2全新参考价",
     "price_date": "2026-08-21"
+  },
+  {
+    "id": "base-ddr4-16gb-3600",
+    "category": "ram",
+    "name": "DDR4 8GB×2 3600",
+    "brand": "通用规格",
+    "detail_raw": "DDR4 · 16GB（8GB x2）· 3600MHz",
+    "specs": {
+      "type": "DDR4",
+      "capacity_gb": 16,
+      "speed_mhz": 3600,
+      "modules": 2,
+      "usage_scope": "fps"
+    },
+    "used_price": 499,
+    "new_price": 759,
+    "used_source": "用户于2026-08-30确认的DDR4 8GB×2 3600二手参考价",
+    "new_source": "用户于2026-08-30确认的DDR4 8GB×2 3600全新参考价",
+    "price_date": "2026-08-30"
   },
   {
     "id": "base-ssd-fanxiang-s500-pro-512gb",
@@ -258,45 +277,62 @@
       "heatpipes": 4,
       "towers": 1
     },
-    "used_price": null,
+    "used_price": 39,
     "new_price": 69,
-    "used_source": "",
+    "used_source": "用户于2026-08-30确认的利民 AX120 SE 二手参考价",
     "new_source": "用户于2026-08-26确认的全新参考价",
-    "price_date": "2026-08-26"
+    "price_date": "2026-08-30"
   },
   {
     "id": "base-cooler-6-heatpipe",
     "category": "cooler",
-    "name": "6热管风冷",
-    "brand": "通用规格",
-    "detail_raw": "单塔 · 6热管 · 风冷",
+    "name": "酷里奥 A60 ARGB",
+    "brand": "酷里奥",
+    "detail_raw": "A60 ARGB · 单塔 · 6热管 · 风冷",
     "specs": {
       "cooling_type": "air",
       "heatpipes": 6,
       "towers": 1
     },
-    "used_price": 70,
-    "new_price": 100,
-    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "price_date": "2026-07-07"
+    "used_price": 69,
+    "new_price": 129,
+    "used_source": "用户于2026-08-31确认的酷里奥 A60 ARGB 二手参考价",
+    "new_source": "用户于2026-08-31确认的酷里奥 A60 ARGB 全新参考价",
+    "price_date": "2026-08-31"
   },
   {
     "id": "base-cooler-dual-tower-6-heatpipe",
     "category": "cooler",
-    "name": "双塔6热管风冷",
-    "brand": "通用规格",
-    "detail_raw": "双塔 · 6热管 · 风冷",
+    "name": "超频3 RZ700D",
+    "brand": "超频3",
+    "detail_raw": "RZ700D · 双塔 · 6热管 · 风冷",
     "specs": {
       "cooling_type": "air",
       "heatpipes": 6,
       "towers": 2
     },
-    "used_price": 100,
-    "new_price": 150,
-    "used_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "new_source": "china-pc-build-advisor REFERENCE.md 用户历史参考价",
-    "price_date": "2026-07-07"
+    "used_price": 209,
+    "new_price": 299,
+    "used_source": "用户于2026-08-31确认的超频3 RZ700D 二手参考价",
+    "new_source": "用户于2026-08-31确认的超频3 RZ700D 全新参考价",
+    "price_date": "2026-08-31"
+  },
+  {
+    "id": "valkyrie-cq125",
+    "category": "cooler",
+    "name": "瓦尔基里 CQ125",
+    "brand": "瓦尔基里",
+    "detail_raw": "CQ125 · 单塔 · 6热管 · 风冷",
+    "specs": {
+      "cooling_type": "air",
+      "heatpipes": 6,
+      "towers": 1
+    },
+    "used_price": 59,
+    "new_price": 109,
+    "used_source": "用户于2026-08-31确认的瓦尔基里 CQ125 二手参考价",
+    "new_source": "用户于2026-08-31确认的瓦尔基里 CQ125 全新参考价",
+    "price_date": "2026-08-31"
   },
   {
     "id": "base-case-mid-tower",
@@ -322,11 +358,11 @@
     "specs": {
       "watt": 550
     },
-    "used_price": 199,
+    "used_price": 109,
     "new_price": 199,
-    "used_source": "用户2026-08-05提供的当前参考价",
+    "used_source": "用户于2026-08-30确认的玄武 550 V4 二手参考价",
     "new_source": "用户2026-08-05提供的当前参考价",
-    "price_date": "2026-08-05"
+    "price_date": "2026-08-30"
   },
   {
     "id": "base-psu-650w-gold",
@@ -342,6 +378,21 @@
     "used_source": "用户2026-08-05提供的安耐美 GN650 V3 二手参考价",
     "new_source": "用户2026-08-05提供的安耐美 GN650 V3 当前参考价",
     "price_date": "2026-08-05"
+  },
+  {
+    "id": "xuanwu-650se",
+    "category": "psu",
+    "name": "玄武 650SE 650W",
+    "brand": "玄武",
+    "detail_raw": "650SE · 650W",
+    "specs": {
+      "watt": 650
+    },
+    "used_price": 139,
+    "new_price": null,
+    "used_source": "用户于2026-08-30确认的玄武 650SE 二手参考价",
+    "new_source": "",
+    "price_date": "2026-08-30"
   },
   {
     "id": "base-psu-750w-gold",

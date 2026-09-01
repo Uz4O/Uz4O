@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+  <defs>
+    <filter id="phoneShadow" x="-30%" y="-20%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#111111" flood-opacity="0.16"/>
+    </filter>
+    <filter id="cardShadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="10" flood-color="#111111" flood-opacity="0.07"/>
+    </filter>
+    <style>
+      .ui { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", sans-serif; fill: #111214; }
+      .nav { font-size: 18px; font-weight: 650; }
+      .hero { font-size: 28px; font-weight: 750; letter-spacing: -0.6px; }
+      .subtitle { font-size: 14px; font-weight: 450; fill: #777A80; }
+      .cardTitle { font-size: 17px; font-weight: 650; }
+      .cardNote { font-size: 12px; font-weight: 450; fill: #8A8D92; }
+      .button { font-size: 16px; font-weight: 650; }
+      .micro { font-size: 11px; font-weight: 600; fill: #9B9EA3; letter-spacing: 1.2px; }
+    </style>
+  </defs>
+
+  <rect width="1536" height="1024" fill="#F2F2F0"/>
+  <circle cx="148" cy="104" r="160" fill="#FFFFFF" opacity="0.72"/>
+  <circle cx="1390" cy="925" r="230" fill="#E8E8E5" opacity="0.8"/>
+
+  <!-- Phone 1: symptom selection -->
+  <g transform="translate(40 72)" filter="url(#phoneShadow)">
+    <rect width="410" height="880" rx="58" fill="#080808"/>
+    <rect x="9" y="9" width="392" height="862" rx="50" fill="#FFFFFF"/>
+    <rect x="144" y="18" width="122" height="34" rx="17" fill="#050505"/>
+    <text class="ui" x="35" y="42" font-size="15" font-weight="650">9:41</text>
+    <path d="M330 34c7-8 20-8 27 0M335 39c4-4 12-4 17 0" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="365" y="26" width="19" height="11" rx="3" fill="none" stroke="#111" stroke-width="1.8"/>
+    <rect x="367" y="28" width="14" height="7" rx="2" fill="#111"/>
+
+    <circle cx="42" cy="87" r="23" fill="#F7F7F6" filter="url(#cardShadow)"/>
+    <path d="M47 78l-9 9 9 9" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="ui nav" x="205" y="93" text-anchor="middle">开机故障排查</text>
+
+    <text class="ui hero" x="29" y="151">先别慌，我们</text>
+    <text class="ui hero" x="29" y="185">一步步检查</text>
+    <text class="ui subtitle" x="29" y="215">选择最接近你电脑的情况</text>
+
+    <g transform="translate(29 250)" filter="url(#cardShadow)">
+      <rect width="352" height="82" rx="22" fill="#FFFFFF" stroke="#ECECEA"/>
+      <circle cx="41" cy="41" r="22" fill="#F3F3F1"/>
+      <path d="M32 44h18M34 37h14M37 31h8M35 49v5M47 49v5" stroke="#111" stroke-width="2.2" stroke-linecap="round"/>
+      <text class="ui cardTitle" x="78" y="36">完全没反应</text>
+      <text class="ui cardNote" x="78" y="57">风扇和灯都不亮</text>
+      <path d="M324 35l6 6-6 6" fill="none" stroke="#B5B7BA" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(29 345)" filter="url(#cardShadow)">
+      <rect width="352" height="82" rx="22" fill="#0B0B0C"/>
+      <circle cx="41" cy="41" r="22" fill="#242426"/>
+      <rect x="31" y="32" width="20" height="16" rx="3" fill="none" stroke="#FFF" stroke-width="2"/>
+      <path d="M37 53h8M41 48v5" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+      <text x="78" y="36" font-family="-apple-system, PingFang SC, sans-serif" font-size="17" font-weight="650" fill="#FFF">风扇转，但没有画面</text>
+      <text x="78" y="57" font-family="-apple-system, PingFang SC, sans-serif" font-size="12" fill="#B5B5B7">电脑启动了，显示器没信号</text>
+      <path d="M324 35l6 6-6 6" fill="none" stroke="#FFF" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(29 440)" filter="url(#cardShadow)">
+      <rect width="352" height="82" rx="22" fill="#FFFFFF" stroke="#ECECEA"/>
+      <circle cx="41" cy="41" r="22" fill="#F3F3F1"/>
+      <path d="M48 33a12 12 0 10 2 15M48 33v8h-8" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text class="ui cardTitle" x="78" y="36">开机后反复重启</text>
+      <text class="ui cardNote" x="78" y="57">启动几秒后又自动关机</text>
+      <path d="M324 35l6 6-6 6" fill="none" stroke="#B5B7BA" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(29 535)" filter="url(#cardShadow)">
+      <rect width="352" height="82" rx="22" fill="#FFFFFF" stroke="#ECECEA"/>
+      <circle cx="41" cy="41" r="22" fill="#F3F3F1"/>
+      <rect x="31" y="32" width="20" height="18" rx="3" fill="none" stroke="#111" stroke-width="2"/>
+      <circle cx="36" cy="41" r="2.2" fill="#D99B32"/>
+      <circle cx="43" cy="41" r="2.2" fill="#D99B32"/>
+      <circle cx="50" cy="41" r="2.2" fill="#D99B32"/>
+      <text class="ui cardTitle" x="78" y="36">主板故障灯一直亮</text>
+      <text class="ui cardNote" x="78" y="57">CPU、DRAM、VGA 或 BOOT</text>
+      <path d="M324 35l6 6-6 6" fill="none" stroke="#B5B7BA" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+
+    <text class="ui micro" x="29" y="665">已选择 · 无画面</text>
+    <rect x="29" y="791" width="352" height="58" rx="29" fill="#09090A"/>
+    <text x="205" y="827" text-anchor="middle" font-family="-apple-system, PingFang SC, sans-serif" font-size="16" font-weight="650" fill="#FFF">开始排查  →</text>
+  </g>
+
+  <!-- Phone 2: one-question flow -->
+  <g transform="translate(563 72)" filter="url(#phoneShadow)">
+    <rect width="410" height="880" rx="58" fill="#080808"/>
+    <rect x="9" y="9" width="392" height="862" rx="50" fill="#FFFFFF"/>
+    <rect x="144" y="18" width="122" height="34" rx="17" fill="#050505"/>
+    <text class="ui" x="35" y="42" font-size="15" font-weight="650">9:41</text>
+    <circle cx="42" cy="87" r="23" fill="#F7F7F6" filter="url(#cardShadow)"/>
+    <path d="M47 78l-9 9 9 9" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="ui nav" x="205" y="93" text-anchor="middle">开机故障排查</text>
+
+    <text class="ui micro" x="29" y="145">第 2 / 5 步</text>
+    <rect x="29" y="161" width="352" height="5" rx="3" fill="#ECECE9"/>
+    <rect x="29" y="161" width="141" height="5" rx="3" fill="#101011"/>
+    <text class="ui hero" x="29" y="220">显示器线</text>
+    <text class="ui hero" x="29" y="254">接在哪里？</text>
+    <text class="ui subtitle" x="29" y="281">查看机箱背面的视频线位置</text>
+
+    <g transform="translate(56 307)">
+      <rect width="298" height="214" rx="28" fill="#F4F4F2"/>
+      <rect x="56" y="25" width="186" height="164" rx="18" fill="#171718"/>
+      <rect x="72" y="41" width="154" height="47" rx="10" fill="#2A2A2C"/>
+      <rect x="84" y="53" width="24" height="11" rx="2" fill="#BFC0C2"/>
+      <rect x="115" y="53" width="24" height="11" rx="2" fill="#BFC0C2"/>
+      <circle cx="201" cy="64" r="9" fill="#55565A"/>
+      <rect x="72" y="111" width="154" height="56" rx="10" fill="#F8F8F7"/>
+      <rect x="92" y="128" width="39" height="13" rx="3" fill="#141415"/>
+      <rect x="140" y="128" width="39" height="13" rx="3" fill="#141415"/>
+      <circle cx="199" cy="135" r="6" fill="#41A26D"/>
+      <path d="M86 85L32 103" stroke="#C48A29" stroke-width="2" stroke-dasharray="5 5"/>
+      <text class="ui" x="2" y="98" font-size="11" font-weight="600" fill="#A9721E">主板接口</text>
+      <path d="M179 146l65 26" stroke="#111" stroke-width="2" stroke-dasharray="5 5"/>
+      <text class="ui" x="207" y="193" font-size="11" font-weight="600">显卡接口</text>
+    </g>
+
+    <g transform="translate(29 552)" filter="url(#cardShadow)">
+      <rect width="352" height="70" rx="20" fill="#FFFFFF" stroke="#E5E5E2" stroke-width="1.2"/>
+      <circle cx="32" cy="35" r="9" fill="none" stroke="#B9BBBE" stroke-width="2"/>
+      <text class="ui cardTitle" x="57" y="42">主板接口</text>
+    </g>
+    <g transform="translate(29 635)" filter="url(#cardShadow)">
+      <rect width="352" height="70" rx="20" fill="#0A0A0B"/>
+      <circle cx="32" cy="35" r="10" fill="#FFF"/>
+      <circle cx="32" cy="35" r="4.5" fill="#0A0A0B"/>
+      <text x="57" y="42" font-family="-apple-system, PingFang SC, sans-serif" font-size="17" font-weight="650" fill="#FFF">独立显卡接口</text>
+      <path d="M319 30l6 6-6 6" fill="none" stroke="#FFF" stroke-width="2.2" stroke-linecap="round"/>
+    </g>
+    <rect x="29" y="791" width="352" height="58" rx="29" fill="#09090A"/>
+    <text x="205" y="827" text-anchor="middle" font-family="-apple-system, PingFang SC, sans-serif" font-size="16" font-weight="650" fill="#FFF">继续  →</text>
+  </g>
+
+  <!-- Phone 3: guided action -->
+  <g transform="translate(1086 72)" filter="url(#phoneShadow)">
+    <rect width="410" height="880" rx="58" fill="#080808"/>
+    <rect x="9" y="9" width="392" height="862" rx="50" fill="#FFFFFF"/>
+    <rect x="144" y="18" width="122" height="34" rx="17" fill="#050505"/>
+    <text class="ui" x="35" y="42" font-size="15" font-weight="650">9:41</text>
+    <circle cx="42" cy="87" r="23" fill="#F7F7F6" filter="url(#cardShadow)"/>
+    <path d="M47 78l-9 9 9 9" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="ui nav" x="205" y="93" text-anchor="middle">优先检查</text>
+
+    <g transform="translate(29 130)" filter="url(#cardShadow)">
+      <rect width="352" height="112" rx="24" fill="#111112"/>
+      <circle cx="44" cy="42" r="22" fill="#29292B"/>
+      <path d="M34 42h20M44 32v20" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/>
+      <text x="78" y="39" font-family="-apple-system, PingFang SC, sans-serif" font-size="18" font-weight="700" fill="#FFF">视频线可能接错位置</text>
+      <text x="78" y="64" font-family="-apple-system, PingFang SC, sans-serif" font-size="12" fill="#B8B8BA">预计检查时间 1 分钟</text>
+      <rect x="78" y="78" width="92" height="20" rx="10" fill="#2B2B2D"/>
+      <text x="124" y="92" text-anchor="middle" font-family="-apple-system, PingFang SC, sans-serif" font-size="10" font-weight="600" fill="#E5E5E6">最可能原因</text>
+    </g>
+
+    <g transform="translate(29 260)" filter="url(#cardShadow)">
+      <rect width="352" height="356" rx="26" fill="#FFFFFF" stroke="#E9E9E6"/>
+      <circle cx="40" cy="42" r="19" fill="#111112"/>
+      <text x="40" y="47" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" font-weight="700" fill="#FFF">01</text>
+      <text class="ui" x="70" y="38" font-size="17" font-weight="700">将视频线连接到</text>
+      <text class="ui" x="70" y="61" font-size="17" font-weight="700">独立显卡</text>
+      <text class="ui cardNote" x="24" y="92">机箱背面横向接口通常属于独立显卡</text>
+
+      <g transform="translate(24 115)">
+        <rect width="142" height="150" rx="19" fill="#F3F3F1"/>
+        <rect x="34" y="24" width="74" height="95" rx="10" fill="#1B1B1C"/>
+        <rect x="44" y="36" width="54" height="23" rx="5" fill="#353537"/>
+        <path d="M71 59v25" stroke="#D8932B" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="71" cy="92" r="11" fill="#D8932B"/>
+        <path d="M66 87l10 10M76 87L66 97" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+        <text class="ui" x="71" y="137" text-anchor="middle" font-size="12" font-weight="650" fill="#A66C17">不要接这里</text>
+      </g>
+      <g transform="translate(186 115)">
+        <rect width="142" height="150" rx="19" fill="#F3F3F1"/>
+        <rect x="34" y="24" width="74" height="95" rx="10" fill="#1B1B1C"/>
+        <rect x="44" y="75" width="54" height="25" rx="5" fill="#FFFFFF"/>
+        <path d="M71 101v9" stroke="#3B9E68" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="71" cy="117" r="11" fill="#3B9E68"/>
+        <path d="M66 117l4 4 7-9" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text class="ui" x="71" y="137" text-anchor="middle" font-size="12" font-weight="650" fill="#287A4E">接到显卡</text>
+      </g>
+      <text class="ui subtitle" x="24" y="297">重新连接后，确认显示器输入源</text>
+      <text class="ui subtitle" x="24" y="319">与线材类型一致。</text>
+    </g>
+
+    <g transform="translate(29 633)">
+      <rect width="352" height="62" rx="18" fill="#FFF7E8" stroke="#F3DFC0"/>
+      <circle cx="29" cy="31" r="13" fill="#E5A33A"/>
+      <text x="29" y="36" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" font-weight="800" fill="#FFF">!</text>
+      <text x="52" y="27" font-family="-apple-system, PingFang SC, sans-serif" font-size="12" font-weight="650" fill="#805617">操作前请先关闭电脑</text>
+      <text x="52" y="45" font-family="-apple-system, PingFang SC, sans-serif" font-size="12" fill="#9B702D">同时关闭显示器电源</text>
+    </g>
+
+    <text class="ui micro" x="29" y="730">已完成 2 项检查</text>
+    <rect x="29" y="774" width="166" height="58" rx="29" fill="#FFFFFF" stroke="#DADAD7" stroke-width="1.5"/>
+    <text class="ui button" x="112" y="810" text-anchor="middle">还没解决</text>
+    <rect x="207" y="774" width="174" height="58" rx="29" fill="#09090A"/>
+    <text x="294" y="810" text-anchor="middle" font-family="-apple-system, PingFang SC, sans-serif" font-size="16" font-weight="650" fill="#FFF">已解决  ✓</text>
+  </g>
+</svg>

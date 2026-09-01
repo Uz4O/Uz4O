@@ -242,6 +242,33 @@ def test_ready_response_contains_average_fps_only() -> None:
     }
 
 
+def test_display_match_endpoint_returns_monitor_specification() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component("r7-9800x3d", "cpu", name="R7 9800X3D", specs={"perf_index": 100}),
+                catalog_component("rtx-5070", "gpu", name="RTX 5070"),
+            ],
+        )
+
+    response = make_client(["cyberpunk-2077"], setup=setup).post(
+        "/v1/perf/display-match",
+        json={
+            "cpu_id": "r7-9800x3d",
+            "gpu_id": "rtx-5070",
+            "games": ["cyberpunk-2077"],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["resolution"] == "2k"
+    assert body["refresh_rate"] == 165
+    assert body["size"] == "27 英寸"
+    assert body["panel"] == "Fast IPS"
+
+
 def test_5090_d_v2_response_contains_estimated_time_spy_score() -> None:
     def setup(session):
         seed_hardware_components(
@@ -260,6 +287,32 @@ def test_5090_d_v2_response_contains_estimated_time_spy_score() -> None:
     ).json()
 
     assert body["gpu_time_spy_score"] == 47000
+
+
+def test_gpu_ladder_endpoint_returns_flat_confirmed_ranking() -> None:
+    def setup(session):
+        seed_hardware_components(
+            session,
+            [
+                catalog_component("rtx-5090", "gpu", name="RTX 5090"),
+                catalog_component("rtx-5090-d", "gpu", name="RTX 5090 D"),
+                catalog_component("rtx-5080", "gpu", name="RTX 5080"),
+            ],
+        )
+
+    response = make_client(setup=setup).get("/v1/perf/ladder?category=gpu")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["reference_name"] == "RTX 5090"
+    assert [
+        (item["rank"], item["id"], item["relative_percent"])
+        for item in body["items"]
+    ] == [
+        (1, "rtx-5090", 100.0),
+        (2, "rtx-5090-d", 100.0),
+        (3, "rtx-5080", 69.5),
+    ]
 
 
 def test_time_spy_score_drives_the_gpu_axis_when_all_models_are_mapped() -> None:

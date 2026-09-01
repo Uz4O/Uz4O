@@ -4,14 +4,14 @@ from app.perf.models import HardwarePerformanceProfile
 
 
 # User-provided 3DMark Time Spy chart, dated 2025-07-07. Exact chart matches
-# are used directly. The RTX 5090 D V2 estimate is derived from its measured
-# Delta Force ratio against the RTX 5090 D and is intentionally rounded.
+# are used directly. RTX 5090 and RTX 5090 D share the confirmed 47539-point
+# gaming baseline and therefore both normalize to 100%.
 GPU_TIME_SPY_SCORES: Dict[str, int] = {
     "arc-b580-12gb": 14688,
     "arc-b570-10gb": 12610,
     "arc-a770-16gb": 13243,
     "arc-a580-8gb": 10309,
-    "rtx-5090": 47187,
+    "rtx-5090": 47539,
     "rtx-5090-d": 47539,
     "rtx-5090-d-v2": 47000,
     "rtx-5080": 33018,
@@ -84,10 +84,35 @@ GPU_TIME_SPY_SCORES: Dict[str, int] = {
 
 REFERENCE_TIME_SPY_SCORE = 10_626
 REFERENCE_GENERATED_GPU_SCORE = 40
+GPU_COMPARISON_REFERENCE_SCORE = 47_539
+GPU_TIME_SPY_PERCENT_OVERRIDES = {
+    "rtx-5090": 100.0,
+    "rtx-5090-d": 100.0,
+}
 
 
 def gpu_time_spy_score(component_id: str) -> Optional[int]:
     return GPU_TIME_SPY_SCORES.get(component_id)
+
+
+def gpu_time_spy_percent(component_id: str) -> Optional[float]:
+    override = GPU_TIME_SPY_PERCENT_OVERRIDES.get(component_id)
+    if override is not None:
+        return override
+    exact_percent = gpu_time_spy_comparison_percent(component_id)
+    if exact_percent is None:
+        return None
+    return round(exact_percent, 1)
+
+
+def gpu_time_spy_comparison_percent(component_id: str) -> Optional[float]:
+    override = GPU_TIME_SPY_PERCENT_OVERRIDES.get(component_id)
+    if override is not None:
+        return override
+    score = gpu_time_spy_score(component_id)
+    if score is None:
+        return None
+    return score / GPU_COMPARISON_REFERENCE_SCORE * 100
 
 
 def generated_gpu_performance_score(

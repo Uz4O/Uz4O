@@ -1,6 +1,27 @@
 # Backend and Server Context
 
-Last verified: 2026-08-26.
+Last verified: 2026-08-31.
+
+## Core-First Budget Fill and 9850X3D Price Update (2026-08-31)
+
+- Deterministic base generation now treats CPU/GPU pairs as the protected core: a non-dominated CPU/GPU upgrade is considered before any motherboard step-up, and a lower-performing core cannot be selected merely to buy a high-priced motherboard.
+- The hard budget floor remains `total >= budget - 200`; motherboard upgrades are only considered after the core pair and locked capacities are fixed.
+- R7 9850X3D whitelist references are `2799` yuan new and `2550` yuan used. High-budget artifacts were regenerated with 350 templates.
+- The 26000 yuan / 3A / 1TB audit checked 54 purchase-direction-capacity combinations: 51 returned valid options, while the three 16GB all-new combinations correctly returned `no_option` because no reviewed 8-part combination fits the hard budget window. The corresponding 32GB combinations all returned valid options without a low-CPU/high-price-board regression.
+
+## Low-Budget Used Parts and DDR4 FPS Memory Update (Deployed 2026-08-30)
+
+- User-confirmed used references are R5 5600X `650`, GTX 1080 Ti `949`, 玄武 550 V4 550W `109`, 玄武 650SE 650W `139`, Thermalright AX120 SE `39`, and DDR4 8GB×2 3200 `450` yuan.
+- GTX 1080 Ti uses the existing canonical `gtx-1080-ti` catalog ID, project performance index `38`, and 250W TDP. R5 5600X + GTX 1080 Ti requires at least 650W, so the reviewed `3000` yuan used template selects 玄武 650SE rather than the cheaper 550W unit.
+- DDR4 8GB×2 3600 is available at `499/759` yuan used/new and is preferred for DDR4 FPS templates only when it remains within the normal budget ceiling; other directions retain the cheaper 3200 tier by default.
+- Low-budget, high-budget, and office artifacts were regenerated and deployed. The lowest reviewed used build is `base-3000-balanced-used` at `2937` yuan with DDR4-3200; the FPS variant is `base-3000-fps-used` at `2986` yuan with DDR4-3600. Both use R5 5600X, GTX 1080 Ti, 玄武 650SE, and a used AX120 SE.
+- Production contains `503` active templates, `6628` hardware components, and `5987` approved component prices. `ai-builder-api.service` is active; local and public health/readiness checks pass with `ready: true`; a public `3000` yuan FPS request returns the `2986` yuan used template with the reviewed condition-specific prices.
+- Deployment backup: `/opt/ai-builder-api/backups/used-ddr4-20260830-182324` (`files.tgz` and `catalog.dump`).
+
+## AMD GPU Used Price Update (Deployed 2026-08-30)
+
+- User-confirmed used reference prices are RX 6750 GRE `1699`, RX 7650 GRE `1499`, RX 7700 XT `2300`, RX 7800 XT `2799`, RX 7900 XT `3999`, RX 7900 XTX `5399`, RX 9060 XT 8GB `2299`, RX 9060 XT 16GB `2899`, RX 9070 GRE `3699`, and RX 9070 XT `5099` yuan.
+- Low-budget, high-budget, and office artifacts were regenerated and deployed with price date `2026-08-30`. Production whitelist rows and public catalog-backed recommendations use these prices; deployment counts, verification, and backup are recorded in the section above.
 
 ## i5-14600KF DDR4 Platform Alternative and Low-Budget Rules (Deployed 2026-08-26)
 

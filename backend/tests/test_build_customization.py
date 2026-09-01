@@ -417,6 +417,73 @@ def test_customization_does_not_lower_core_performance_to_buy_a_pricier_board() 
     assert option is None
 
 
+def test_aaa_customization_does_not_trade_cpu_for_flagship_board() -> None:
+    components, prices = catalog()
+    components.update(
+        {
+            "r7-7800x3d": component(
+                "r7-7800x3d", "cpu", "R7 7800X3D", {"socket": "AM5", "perf_index": 90, "tdp": 120}
+            ),
+            "rtx-5080": component(
+                "rtx-5080", "gpu", "RTX 5080", {"vendor": "NVIDIA", "perf_index": 95, "tdp": 360}
+            ),
+            "asus-x870e-hero": component(
+                "asus-x870e-hero", "motherboard", "X870E HERO", {"socket": "AM5", "mem_type": "DDR5", "chipset": "X870E"}
+            ),
+            "msi-x870e-godlike-max": component(
+                "msi-x870e-godlike-max", "motherboard", "X870E GODLIKE MAX", {"socket": "AM5", "mem_type": "DDR5", "chipset": "X870E"}
+            ),
+            "base-psu-850w-gold": component(
+                "base-psu-850w-gold", "psu", "850W Gold", {"watt": 850}
+            ),
+            "base-cooler-dual-tower-6-heatpipe": component(
+                "base-cooler-dual-tower-6-heatpipe", "cooler", "Dual Tower Cooler", {"heatpipes": 6, "towers": 2}
+            ),
+        }
+    )
+    prices.update(
+        {
+            component_id: price(component_id, value)
+            for component_id, value in {
+                "r7-7800x3d": 1800,
+                "rtx-5080": 13499,
+                "asus-x870e-hero": 4700,
+                "msi-x870e-godlike-max": 7000,
+                "base-psu-850w-gold": 659,
+                "base-cooler-dual-tower-6-heatpipe": 299,
+            }.items()
+        }
+    )
+
+    def configured(template, cpu_id, cpu_name, cpu_price, board_id, board_name, board_price):
+        parts = {item["role"]: item for item in template.details["parts"]}
+        parts["cpu"].update({"component_id": cpu_id, "name": cpu_name, "reference_price": cpu_price, "specs": dict(components[cpu_id].specs)})
+        parts["motherboard"].update({"component_id": board_id, "name": board_name, "reference_price": board_price, "specs": dict(components[board_id].specs)})
+        parts["gpu"].update({"component_id": "rtx-5080", "name": "RTX 5080", "reference_price": 13499, "specs": dict(components["rtx-5080"].specs)})
+        parts["psu"].update({"component_id": "base-psu-850w-gold", "name": "850W Gold", "reference_price": 659, "specs": dict(components["base-psu-850w-gold"].specs)})
+        parts["cooler"].update({"component_id": "base-cooler-dual-tower-6-heatpipe", "name": "Dual Tower Cooler", "reference_price": 299, "specs": dict(components["base-cooler-dual-tower-6-heatpipe"].specs)})
+        template.details["parts"] = list(parts.values())
+        template.components = {item["role"]: item["component_id"] for item in parts.values()}
+        return template
+
+    stronger = configured(base_template(direction="aaa"), "r7-9800x3d", "R7 9800X3D", 2500, "asus-x870e-hero", "X870E HERO", 4700)
+    weaker = configured(base_template(direction="aaa"), "r7-7800x3d", "R7 7800X3D", 1800, "msi-x870e-godlike-max", "X870E GODLIKE MAX", 7000)
+    stronger.id = "aaa-stronger-below-floor"
+    weaker.id = "aaa-weaker-in-window"
+
+    option = deterministic_customization(
+        BuildRequest(budget=26_000, use_case="游戏", direction="aaa", memory_size="16GB", storage_size="1TB"),
+        [stronger, weaker],
+        components,
+        prices,
+    )
+
+    assert option is not None
+    parts = {part.role: part for part in option.details.parts}
+    assert parts["cpu"].component_id == "r7-9800x3d"
+    assert parts["motherboard"].component_id == "msi-x870e-godlike-max"
+
+
 def test_mixed_search_can_buy_new_cooler_and_case_to_reach_budget_floor() -> None:
     components, prices = catalog()
     mixed = base_template(direction="balanced")

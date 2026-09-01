@@ -13,7 +13,7 @@ enum AppTab: String, CaseIterable {
         case .home:
             return isSelected ? "house.fill" : "house"
         case .styles:
-            return isSelected ? "square.grid.2x2.fill" : "square.grid.2x2"
+            return isSelected ? "paintpalette.fill" : "paintpalette"
         case .diy:
             return isSelected ? "briefcase.fill" : "briefcase"
         case .profile:
