@@ -221,3 +221,127 @@ enum AIBuildFlowRules {
         )
     }
 }
+
+/// Pure paging rules shared by the AI build wizard and its focused tests.
+/// Pages are zero-based: budget = 0, games = 1, preferences = 2, capacity = 3.
+enum AIBuildPagerRules {
+    static let pageCount = 4
+    static let defaultThresholdRatio = 0.18
+    static let defaultRubberBandFactor = 0.22
+
+    static let gamesPage = 1
+    static let preferencesPage = 2
+
+    static func clampedPage(_ page: Int, pageCount: Int = Self.pageCount) -> Int {
+        guard pageCount > 0 else { return 0 }
+        return min(max(page, 0), pageCount - 1)
+    }
+
+    /// Keeps a page-following drag within one page and adds resistance when
+    /// pulling beyond the first or last page.
+    static func dragOffset(
+        translation: Double,
+        currentPage: Int,
+        pageExtent: Double,
+        pageCount: Int = Self.pageCount,
+        rubberBandFactor: Double = Self.defaultRubberBandFactor
+    ) -> Double {
+        guard pageCount > 0, translation.isFinite, pageExtent.isFinite else { return 0 }
+        let extent = abs(pageExtent)
+        guard extent > 0 else { return 0 }
+
+        let page = clampedPage(currentPage, pageCount: pageCount)
+        let clampedTranslation = min(max(translation, -extent), extent)
+        let isOutward = (page == 0 && clampedTranslation > 0)
+            || (page == pageCount - 1 && clampedTranslation < 0)
+        guard isOutward else { return clampedTranslation }
+
+        let factor = min(max(rubberBandFactor, 0), 1)
+        return clampedTranslation * factor
+    }
+
+    static func dragProgress(
+        translation: Double,
+        currentPage: Int,
+        pageExtent: Double,
+        pageCount: Int = Self.pageCount,
+        rubberBandFactor: Double = Self.defaultRubberBandFactor
+    ) -> Double {
+        let extent = abs(pageExtent)
+        guard extent > 0, extent.isFinite else { return 0 }
+        return dragOffset(
+            translation: translation,
+            currentPage: currentPage,
+            pageExtent: extent,
+            pageCount: pageCount,
+            rubberBandFactor: rubberBandFactor
+        ) / extent
+    }
+
+    /// Chooses the adjacent page after release. A negative translation means
+    /// an upward swipe (forward); a positive translation means backward.
+    static func targetPage(
+        currentPage: Int,
+        translation: Double,
+        pageExtent: Double,
+        pageCount: Int = Self.pageCount,
+        thresholdRatio: Double = Self.defaultThresholdRatio,
+        selectedGameCount: Int? = nil
+    ) -> Int {
+        let current = clampedPage(currentPage, pageCount: pageCount)
+        let extent = abs(pageExtent)
+        guard pageCount > 1, translation.isFinite, extent > 0, extent.isFinite else { return current }
+
+        let ratio = min(max(thresholdRatio, 0), 1)
+        guard abs(translation) >= extent * ratio, translation != 0 else { return current }
+
+        let direction = translation < 0 ? 1 : -1
+        let candidate = clampedPage(current + direction, pageCount: pageCount)
+        guard candidate != current else { return current }
+
+        guard let selectedGameCount else { return candidate }
+        return canAdvance(
+            from: current,
+            to: candidate,
+            selectedGameCount: selectedGameCount,
+            pageCount: pageCount
+        ) ? candidate : current
+    }
+
+    /// Validates a settled transition. Every transition is exactly one page;
+    /// the games page cannot advance to preferences without a game selected.
+    static func canAdvance(
+        from currentPage: Int,
+        to targetPage: Int,
+        selectedGameCount: Int,
+        pageCount: Int = Self.pageCount
+    ) -> Bool {
+        guard pageCount > 0,
+              currentPage >= 0, currentPage < pageCount,
+              targetPage >= 0, targetPage < pageCount,
+              abs(targetPage - currentPage) == 1 else {
+            return false
+        }
+
+        if currentPage == gamesPage,
+           targetPage == preferencesPage,
+           selectedGameCount <= 0 {
+            return false
+        }
+        return true
+    }
+
+    static func canAdvance(
+        from currentPage: Int,
+        to targetPage: Int,
+        selectedGames: [String],
+        pageCount: Int = Self.pageCount
+    ) -> Bool {
+        canAdvance(
+            from: currentPage,
+            to: targetPage,
+            selectedGameCount: selectedGames.count,
+            pageCount: pageCount
+        )
+    }
+}

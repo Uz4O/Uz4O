@@ -15,7 +15,7 @@ struct AIBuildOptionsInput {
     let gpuPreference: String?
 }
 
-struct AIBuildView: View {
+struct AIBuildLegacyView: View {
     typealias LoadOptions = (AIBuildOptionsInput) async throws -> BuildOptionsResponseDTO
     typealias PrepareResults = @MainActor (BuildOptionsResponseDTO, [String]) async -> Void
 
@@ -504,7 +504,7 @@ struct AIBuildView: View {
 
 }
 
-private struct AIBuildGeneratingView: View {
+struct AIBuildGeneratingView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var progress = 3
     @State private var isPulsing = false
@@ -1133,7 +1133,7 @@ private struct BudgetSection: View {
     }
 }
 
-private struct BudgetStepButton: View {
+struct BudgetStepButton: View {
     let systemName: String
     let isEnabled: Bool
     let action: () -> Void
@@ -1315,7 +1315,7 @@ struct GameArtworkTile: View {
     }
 }
 
-private struct GameArtworkCollage: View {
+struct GameArtworkCollage: View {
     private let rows = [
         ["GameArtworkPUBG", "GameArtworkValorant"],
         ["GameArtworkBlackMythWukong", "GameArtworkCyberpunk2077"]

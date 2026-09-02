@@ -12,6 +12,84 @@ struct AIBuildFlowRulesTests {
             encoding: .utf8
         )
 
+        let pageExtent = 100.0
+        assertEqual(
+            AIBuildPagerRules.dragOffset(
+                translation: -160,
+                currentPage: 1,
+                pageExtent: pageExtent
+            ),
+            -pageExtent,
+            "An in-range forward drag should clamp to one page."
+        )
+        assertEqual(
+            AIBuildPagerRules.dragOffset(
+                translation: 160,
+                currentPage: 0,
+                pageExtent: pageExtent
+            ),
+            pageExtent * AIBuildPagerRules.defaultRubberBandFactor,
+            "Pulling past the first page should use a resistant rubber-band offset."
+        )
+        assertEqual(
+            AIBuildPagerRules.dragOffset(
+                translation: -160,
+                currentPage: AIBuildPagerRules.pageCount - 1,
+                pageExtent: pageExtent
+            ),
+            -pageExtent * AIBuildPagerRules.defaultRubberBandFactor,
+            "Pushing past the last page should use a resistant rubber-band offset."
+        )
+        assertEqual(
+            AIBuildPagerRules.targetPage(
+                currentPage: 1,
+                translation: -17,
+                pageExtent: pageExtent
+            ),
+            1,
+            "A drag below the release threshold should return to the current page."
+        )
+        assertEqual(
+            AIBuildPagerRules.targetPage(
+                currentPage: 1,
+                translation: -18,
+                pageExtent: pageExtent
+            ),
+            2,
+            "A threshold-sized upward drag should advance one page."
+        )
+        assertEqual(
+            AIBuildPagerRules.targetPage(
+                currentPage: 1,
+                translation: -1_000,
+                pageExtent: pageExtent
+            ),
+            2,
+            "A fast drag must advance at most one page."
+        )
+        assertEqual(
+            AIBuildPagerRules.targetPage(
+                currentPage: 1,
+                translation: -1_000,
+                pageExtent: pageExtent,
+                selectedGameCount: 0
+            ),
+            1,
+            "The games page must not advance to preferences without a game."
+        )
+        assertTrue(
+            AIBuildPagerRules.canAdvance(from: 1, to: 2, selectedGames: ["CS2"]),
+            "A selected game should allow the games-to-preferences transition."
+        )
+        assertTrue(
+            !AIBuildPagerRules.canAdvance(from: 1, to: 2, selectedGames: []),
+            "An empty game selection should block the games-to-preferences transition."
+        )
+        assertTrue(
+            !AIBuildPagerRules.canAdvance(from: 0, to: 2, selectedGames: ["CS2"]),
+            "Pager transitions must never skip a page."
+        )
+
         assertEqual(
             AIBuildFlowRules.visibleSteps(budget: 3900, ownedParts: []),
             [.budget, .scenario],
@@ -329,6 +407,10 @@ struct AIBuildFlowRulesTests {
         guard actual == expected else {
             fatalError("\(message)\nExpected: \(expected)\nActual: \(actual)")
         }
+    }
+
+    private static func assertTrue(_ value: Bool, _ message: String) {
+        guard value else { fatalError(message) }
     }
 
     private static func assertContains(_ text: String, _ fragment: String, _ message: String) {

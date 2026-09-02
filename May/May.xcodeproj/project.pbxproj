@@ -6,6 +6,9 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6C5036D82FC9451000C96065 /* May.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = May.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,6 +109,8 @@
 			);
 			mainGroup = 6C5036CF2FC9451000C96065;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6C5036D92FC9451000C96065 /* Products */;
 			projectDirPath = "";
@@ -354,6 +359,8 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+
 	};
 	rootObject = 6C5036D02FC9451000C96065 /* Project object */;
 }
