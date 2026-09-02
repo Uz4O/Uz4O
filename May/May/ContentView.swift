@@ -107,7 +107,9 @@ struct ContentView: View {
 
     @ViewBuilder
     private var appDestination: some View {
-        if !hasCompletedLaunchIntro, appPhase == .login {
+        if ProcessInfo.processInfo.arguments.contains("-UITestWizard") {
+            AIBuildView(onBack: {}, onComplete: { _, _ in })
+        } else if !hasCompletedLaunchIntro, appPhase == .login {
             LaunchIntroView {
                 hasCompletedLaunchIntro = true
             }

@@ -148,7 +148,15 @@ struct AIBuildView: View {
 
                     GeometryReader { pagerProxy in
                         pager(height: pagerProxy.size.height)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            // The page stack is taller than the viewport. Keep
+                            // the clip boundary tied to this GeometryReader so
+                            // the next page cannot peek into the current one.
+                            .frame(
+                                width: pagerProxy.size.width,
+                                height: pagerProxy.size.height,
+                                alignment: .top
+                            )
+                            .clipped()
                             .contentShape(Rectangle())
                             .simultaneousGesture(pagerGesture(height: pagerProxy.size.height))
                     }
@@ -305,7 +313,9 @@ struct AIBuildView: View {
                     collapseProgress: heroTransition == .preference ? 0 : collapseAmount(for: 2, height: height),
                     gameCardOpacity: currentStep == .purchase && dragOffset < 0 ? 1 - progress : 1,
                     hidesPreferenceCard: heroTransition == .preference,
-                    hidesGameSummaryCard: heroTransition == .games,
+                    hidesGameSummaryCard: currentStep.rawValue >= AIBuildStep.purchase.rawValue
+                        || heroTransition == .games
+                        || heroTransition == .preference,
                     contentOpacity: gamesThirdPageOpacity
                 )
                 .padding(.top, 44)
@@ -614,6 +624,7 @@ private enum AIHeroAnchorID: Hashable {
     case budgetFull
     case budgetMini
     case gamesGrid
+    case gamesSummary
     case preferenceFull
     case preferenceSummary
 }
@@ -658,6 +669,8 @@ private struct AIHeroMorphOverlay: View {
     let usesNoGpuBuild: Bool
     let ownedGPUModel: String
     let gameOptions: [String]
+
+    private let gameDockOffset: CGFloat = 2
 
     var body: some View {
         GeometryReader { proxy in
@@ -707,58 +720,73 @@ private struct AIHeroMorphOverlay: View {
                     )
                     .opacity(dockedTravel.opacity)
                 } else if transition == .preference {
-                    let frame = interpolate(pair.source, pair.target, progress)
-                    let collapse = isForward ? aiClamp(progress) : 1 - aiClamp(progress)
-                    let fullSize = isForward ? pair.source.size : pair.target.size
-                    let compactSize = isForward ? pair.target.size : pair.source.size
-                    let targetScale = aiClamp(compactSize.width / max(fullSize.width, 1))
-                    let projectedHeightRatio = aiClamp(
-                        compactSize.height / max(fullSize.height * targetScale, 1)
-                    )
-                    let finalAngle = min(
-                        82,
-                        max(69, CGFloat(acos(Double(projectedHeightRatio)) * 180 / .pi))
-                    )
+                    ZStack {
+                        if let budgetFrame = budgetDockFrame(in: proxy) {
+                            fixedBudgetCard(
+                                frame: budgetFrame,
+                                in: proxy
+                            )
+                        }
+                        fixedGameCard(in: proxy)
 
-                    AITravelingHeroCard(
-                        transition: .preference,
-                        compactness: collapse,
-                        budget: budget,
-                        selectedGames: selectedGames,
-                        artworkNames: artworkNames,
-                        selectedBuildPreference: selectedBuildPreference,
-                        chassisColorPreference: chassisColorPreference,
-                        needsWirelessNetwork: needsWirelessNetwork
-                    )
-                    .frame(width: max(fullSize.width, 1), height: max(fullSize.height, 1))
-                    .scaleEffect(
-                        heroScale(collapse, targetScale: targetScale),
-                        anchor: .bottom
-                    )
-                    .rotation3DEffect(
-                        .degrees(Double(heroAngle(collapse, finalAngle: finalAngle))),
-                        axis: (x: 1, y: 0, z: 0),
-                        anchor: .bottom,
-                        perspective: 0.78
-                    )
-                    .shadow(
-                        color: .black.opacity(0.16 - 0.09 * collapse),
-                        radius: 18 - 10 * collapse,
-                        y: 11 - 7 * collapse
-                    )
-                    .position(
-                        x: frame.midX,
-                        y: frame.maxY - fullSize.height / 2 + heroLift(collapse)
-                    )
+                        let frame = interpolate(pair.source, pair.target, progress)
+                        let collapse = isForward ? aiClamp(progress) : 1 - aiClamp(progress)
+                        let fullSize = isForward ? pair.source.size : pair.target.size
+                        let compactSize = isForward ? pair.target.size : pair.source.size
+                        let targetScale = aiClamp(compactSize.width / max(fullSize.width, 1))
+                        let finalAngle: CGFloat = 69
+                        let perspectiveHeight = compactSize.height / max(
+                            0.1,
+                            CGFloat(cos(Double(finalAngle) * .pi / 180))
+                        )
+                        let targetHeightScale = perspectiveHeight / max(fullSize.height, 1)
+                        let widthScale = heroScale(collapse, targetScale: targetScale)
+                        let heightScale = 1 + (targetHeightScale - 1)
+                            * aiSmoothStep(collapse / 0.95)
+
+                        AITravelingHeroCard(
+                            transition: .preference,
+                            compactness: collapse,
+                            budget: budget,
+                            selectedGames: selectedGames,
+                            artworkNames: artworkNames,
+                            selectedBuildPreference: selectedBuildPreference,
+                            chassisColorPreference: chassisColorPreference,
+                            needsWirelessNetwork: needsWirelessNetwork
+                        )
+                        .frame(width: max(fullSize.width, 1), height: max(fullSize.height, 1))
+                        .scaleEffect(x: widthScale, y: heightScale, anchor: .bottom)
+                        .rotation3DEffect(
+                            .degrees(Double(heroAngle(collapse, finalAngle: finalAngle))),
+                            axis: (x: 1, y: 0, z: 0),
+                            anchor: .bottom,
+                            perspective: 0.78
+                        )
+                        .shadow(
+                            color: .black.opacity(0.16 - 0.09 * collapse),
+                            radius: 18 - 10 * collapse,
+                            y: 11 - 7 * collapse
+                        )
+                        .position(
+                            x: frame.midX,
+                            y: frame.maxY - fullSize.height / 2 + heroLift(collapse)
+                        )
+                        .zIndex(11)
+                    }
                 } else if transition == .games {
                     ZStack {
-                        fixedBudgetCard(frame: pair.target, in: proxy)
+                        let dockFrame = pair.target.offsetBy(dx: 0, dy: gameDockOffset)
+
+                        fixedBudgetCard(
+                            frame: pair.target,
+                            in: proxy
+                        )
 
                         AIGamesCardMorph(
                             progress: progress,
                             isForward: isForward,
                             sourceFrame: pair.source,
-                            targetFrame: pair.target,
+                            targetFrame: dockFrame,
                             selectedGames: selectedGames,
                             options: gameOptions,
                             artworkNames: artworkNames
@@ -824,6 +852,62 @@ private struct AIHeroMorphOverlay: View {
         }
     }
 
+    @ViewBuilder
+    private func fixedGameCard(in proxy: GeometryProxy) -> some View {
+        if let targetFrame = gameCardTargetFrame(in: proxy),
+           let gridAnchor = anchors[.gamesGrid] {
+            // Keep the real games-grid dimensions as the morph source. Using
+            // the compact target dimensions here makes the back-face artwork
+            // receive the large-card pre-scale twice and stretch vertically.
+            let sourceFrame = proxy[gridAnchor]
+
+            AIGamesCardMorph(
+                progress: 1,
+                isForward: true,
+                sourceFrame: sourceFrame,
+                targetFrame: targetFrame,
+                selectedGames: selectedGames,
+                options: gameOptions,
+                artworkNames: artworkNames
+            )
+            .zIndex(10)
+        }
+    }
+
+    private func gameCardTargetFrame(in proxy: GeometryProxy) -> CGRect? {
+        // The persistent game card must keep the same compact footprint it
+        // had after the second-to-third-page morph. The page-three summary is
+        // only a 160x34 layout hint; using it as the target shrinks the game
+        // card again and makes it appear to drift during the next transition.
+        guard let budgetFrame = budgetDockFrame(in: proxy) else { return nil }
+        return budgetFrame.offsetBy(dx: 0, dy: gameDockOffset)
+    }
+
+    private func gamesSummaryDockFrame(in proxy: GeometryProxy) -> CGRect? {
+        guard let summaryAnchor = anchors[.gamesSummary],
+              let budgetFrame = budgetDockFrame(in: proxy) else { return nil }
+        let summaryFrame = proxy[summaryAnchor].offsetBy(
+            dx: 0,
+            dy: CGFloat(settledPage - AIBuildStep.purchase.rawValue) * pageHeight
+                - dragOffset
+        )
+        return CGRect(
+            x: summaryFrame.minX,
+            y: budgetFrame.maxY + gameDockOffset - summaryFrame.height,
+            width: summaryFrame.width,
+            height: summaryFrame.height
+        )
+    }
+
+    private func budgetDockFrame(in proxy: GeometryProxy) -> CGRect? {
+        guard let budgetAnchor = anchors[.budgetMini] else { return nil }
+        return proxy[budgetAnchor].offsetBy(
+            dx: 0,
+            dy: CGFloat(settledPage - AIBuildStep.scenario.rawValue) * pageHeight
+                - dragOffset
+        )
+    }
+
     private func framePair(
         for transition: AIHeroTransition,
         in proxy: GeometryProxy
@@ -859,7 +943,21 @@ private struct AIHeroMorphOverlay: View {
         case .preference:
             guard let full = restingRect(.preferenceFull, page: 2),
                   let summary = restingRect(.preferenceSummary, page: 3) else { return nil }
-            return isForward ? (full, summary) : (summary, full)
+            let alignedSummary: CGRect
+            if let gameSummary = gamesSummaryDockFrame(in: proxy) {
+                // Land on the same compact footprint as the persistent games
+                // card, with its visible bottom edge four points above the
+                // target frame used by the games morph.
+                alignedSummary = CGRect(
+                    x: gameSummary.minX,
+                    y: gameSummary.minY - 4,
+                    width: gameSummary.width,
+                    height: gameSummary.height
+                )
+            } else {
+                alignedSummary = summary
+            }
+            return isForward ? (full, alignedSummary) : (alignedSummary, full)
         }
     }
 
@@ -965,24 +1063,26 @@ private struct AIGamesCardMorph: View {
     var body: some View {
         let morphProgress = isForward ? aiClamp(progress) : 1 - aiClamp(progress)
         let cardTarget = targetFrame
-        // The final game card is intentionally a little smaller than the
-        // budget card so the lower card reads as a real stacked layer.
+        let finalAngle = CGFloat(69)
+        let projectedHeight = max(1, cardTarget.height - 6)
+        let perspectiveHeight = projectedHeight / max(0.1, CGFloat(cos(Double(finalAngle) * .pi / 180)))
+        // Match the budget card width exactly and end just above it, leaving
+        // one clean lower edge visible without side slivers.
         let targetSize = CGSize(
-            width: max(1, cardTarget.width - 10),
-            height: max(1, cardTarget.height - 6)
+            width: max(1, cardTarget.width),
+            height: perspectiveHeight
         )
-        // Shrink the shared surface continuously while it turns, ending just
-        // inside the compact budget-card footprint.
+        // Shrink the shared surface continuously while it turns. The y scale
+        // compensates for the shared 3D perspective so the visible height
+        // matches the fixed budget card rather than collapsing to a sliver.
         let sizeProgress = aiSmoothStep(morphProgress / 0.95)
         let dockProgress = aiSmoothStep((morphProgress - 0.55) / 0.45)
-        let cornerRadius = 24 - 12 * dockProgress
+        let cornerRadius = 24 - 2 * dockProgress
         let widthScale = 1 + (targetSize.width / max(sourceFrame.width, 1) - 1) * sizeProgress
         let heightScale = 1 + (targetSize.height / max(sourceFrame.height, 1) - 1) * sizeProgress
-        let center = CGPoint(
-            x: sourceFrame.midX + (cardTarget.midX - sourceFrame.midX) * morphProgress,
-            y: sourceFrame.midY + (cardTarget.midY - sourceFrame.midY) * morphProgress
-                - 2 * sizeProgress
-        )
+        let bottom = sourceFrame.maxY
+            + (cardTarget.maxY - sourceFrame.maxY) * morphProgress
+            - 4 * dockProgress
 
         AIGamesDoubleSidedCard(
             options: options,
@@ -993,14 +1093,22 @@ private struct AIGamesCardMorph: View {
             cornerRadius: cornerRadius
         )
         .frame(width: max(sourceFrame.width, 1), height: max(sourceFrame.height, 1))
-        .scaleEffect(x: widthScale, y: heightScale, anchor: .center)
-        .rotationEffect(.degrees(-5 * Double(dockProgress)))
+        .scaleEffect(x: widthScale, y: heightScale, anchor: .bottom)
+        .rotation3DEffect(
+            .degrees(Double(finalAngle * dockProgress)),
+            axis: (x: 1, y: 0, z: 0),
+            anchor: .bottom,
+            perspective: 0.78
+        )
         .shadow(
             color: .black.opacity(0.12 + 0.10 * aiSmoothStep(morphProgress / 0.15)),
             radius: 16 - 7 * sizeProgress,
             y: 10 - 5 * sizeProgress
         )
-        .position(x: center.x, y: center.y)
+        .position(
+            x: sourceFrame.midX + (cardTarget.midX - sourceFrame.midX) * morphProgress,
+            y: bottom - sourceFrame.height / 2
+        )
         .zIndex(10)
         .allowsHitTesting(false)
     }
@@ -1180,21 +1288,17 @@ private struct AITravelingHeroCard: View {
     }
 
     private var gamesCompact: some View {
-        HStack(spacing: 8) {
-            Text("已选 \(selectedGames.count) 款")
-                .font(.system(size: 12, weight: .semibold))
-                .lineLimit(1)
-            HStack(spacing: 5) {
-                ForEach(Array(selectedGames.prefix(selectedGames.count > 4 ? 3 : 4)), id: \.self) { game in
-                    gameImage(for: game)
-                }
-                if selectedGames.count > 4 {
-                    Text("+\(selectedGames.count - 3)")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(Color(red: 0.30, green: 0.36, blue: 0.46))
-                }
+        HStack(spacing: 5) {
+            ForEach(Array(selectedGames.prefix(3)), id: \.self) { game in
+                gameImage(for: game)
             }
-            Spacer(minLength: 2)
+            if selectedGames.count > 3 {
+                Text("…")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(Color(red: 0.42, green: 0.45, blue: 0.50))
+                    .frame(width: 28, height: 28)
+                    .background(Color(red: 0.90, green: 0.91, blue: 0.93), in: RoundedRectangle(cornerRadius: 7))
+            }
         }
         .padding(.horizontal, 13)
     }
@@ -1867,9 +1971,26 @@ private struct AIGameCardSurface<Content: View>: View {
             .padding(12)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(Color.white)
-                    .shadow(color: .black.opacity(0.11), radius: 18, y: 9)
+                ZStack(alignment: .top) {
+                    ForEach(Array(stride(from: 1, through: 0, by: -1)), id: \.self) { layer in
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(Color.white.opacity(0.96 - Double(layer) * 0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                            )
+                            .offset(y: CGFloat(layer + 1) * 8)
+                            .shadow(color: .black.opacity(0.10), radius: 8, y: 5)
+                    }
+
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                                .stroke(Color.black.opacity(0.045), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.12), radius: 18, y: 10)
+                }
             )
     }
 }
@@ -1878,34 +1999,43 @@ private struct AIGameSelectionBack: View {
     let selectedGames: [String]
     let artworkNames: [String: String]
 
-    var body: some View {
-        HStack(spacing: 9) {
-            Text("已选 \(selectedGames.count) 款")
-                .font(.system(size: 15, weight: .semibold))
-                .lineLimit(1)
+    private var iconSize: CGFloat {
+        switch selectedGames.count {
+        case 1...2: 88
+        case 3: 80
+        default: 72
+        }
+    }
 
-            HStack(spacing: 6) {
-                ForEach(Array(selectedGames.prefix(4)), id: \.self) { game in
-                    gameImage(for: game)
-                }
+    var body: some View {
+        HStack(spacing: 10) {
+            ForEach(Array(selectedGames.prefix(3)), id: \.self) { game in
+                gameImage(for: game)
             }
-            Spacer(minLength: 0)
+            if selectedGames.count > 3 {
+                Text("…")
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundStyle(Color(red: 0.42, green: 0.45, blue: 0.50))
+                    .frame(width: iconSize, height: iconSize)
+                    .background(Color(red: 0.90, green: 0.91, blue: 0.93), in: RoundedRectangle(cornerRadius: 8))
+            }
         }
         .padding(.horizontal, 8)
         .frame(maxWidth: 420, minHeight: 52)
+        .scaleEffect(y: 4.0)
     }
 
     @ViewBuilder
     private func gameImage(for game: String) -> some View {
         if game == "什么都玩" {
             GameArtworkCollage()
-                .frame(width: 30, height: 30)
+                .frame(width: iconSize, height: iconSize)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } else if let name = artworkNames[game] {
             Image(name)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 30, height: 30)
+                .frame(width: iconSize, height: iconSize)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         }
     }
@@ -2002,6 +2132,7 @@ private struct AIPreferenceWizardPage: View {
                 games: selectedGameNames,
                 artworkNames: artworkNames
             )
+            .aiHeroAnchor(.gamesSummary)
             .opacity(hidesGameSummaryCard ? 0 : gameCardOpacity)
             .padding(.top, 8)
             .offset(y: -20)
@@ -2037,8 +2168,7 @@ private struct AIGameSummaryCard: View {
     let games: [String]
     let artworkNames: [String: String]
 
-    private var shownGames: [String] { Array(games.prefix(4)) }
-    private var overflow: Int { max(0, games.count - 3) }
+    private var shownGames: [String] { Array(games.prefix(3)) }
 
     var body: some View {
         ZStack {
@@ -2050,23 +2180,18 @@ private struct AIGameSummaryCard: View {
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.black.opacity(0.05), lineWidth: 1))
                 .shadow(color: .black.opacity(0.11), radius: 9, y: 6)
 
-            HStack(spacing: 9) {
-                Text("已选 \(games.count) 款")
-                    .font(.system(size: 12, weight: .semibold))
-                    .lineLimit(1)
-
-                HStack(spacing: 5) {
-                    ForEach(Array(shownGames.prefix(games.count > 4 ? 3 : 4)), id: \.self) { game in
-                        gameImage(for: game)
-                    }
-                    if games.count > 4 {
-                        Text("+\(overflow)")
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(Color(red: 0.30, green: 0.36, blue: 0.46))
-                    }
+            HStack(spacing: 5) {
+                ForEach(shownGames, id: \.self) { game in
+                    gameImage(for: game)
+                }
+                if games.count > 3 {
+                    Text("…")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(Color(red: 0.42, green: 0.45, blue: 0.50))
+                        .frame(width: 22, height: 22)
+                        .background(Color(red: 0.90, green: 0.91, blue: 0.93), in: RoundedRectangle(cornerRadius: 6))
                 }
             }
-            .padding(.horizontal, 13)
         }
         .frame(width: 160, height: 34)
         .rotationEffect(.degrees(-5))
